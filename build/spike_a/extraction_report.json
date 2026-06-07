@@ -1,0 +1,4915 @@
+{
+  "source": "TC_DL",
+  "files": [
+    {
+      "file": "10. Bieu 7 Danh sách KĐV (NAS).doc",
+      "status": "skipped-legacy",
+      "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "status": "ok",
+      "headings": 26,
+      "tables": 52,
+      "paragraphs": 493,
+      "media_parts": 4,
+      "embedded_ole": 0,
+      "formulas_found": 50,
+      "formulas_ole": 0,
+      "formulas_omml": 50,
+      "formula_detail": [
+        {
+          "fid": "F001",
+          "kind": "omml",
+          "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt",
+          "in_table": false,
+          "latex": "∆P_{0}=ρ×g×h (1)"
+        },
+        {
+          "fid": "F002",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+          "in_table": false,
+          "latex": "P_{c}=\\frac{\\sum{M_{c}×g×\\left( 1-\\frac{ρ_{a}}{ρ_{M,c}} \\right)+γ×C_{c}}}{A_{0,c}\\left( 1+λ_{c} \\right)\\left[ 1+\\left( α_{p,c}+α_{x,c} \\right)×\\left( t_{c}-t_{r} \\right) \\right]}+\\left( ρ_{f}-ρ_{a} \\right)×g×h+P_{vac} (2)"
+        },
+        {
+          "fid": "F003",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+          "in_table": false,
+          "latex": "ρ_{a}=\\frac{3,484 4×P_{at}-H×\\left( 0,002 52×t-0,020 582 \\right)}{1 000×\\left( t+273,15 \\right)} (3)"
+        },
+        {
+          "fid": "F004",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+          "in_table": false,
+          "latex": "ρ=\\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} (4)"
+        },
+        {
+          "fid": "F005",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+          "in_table": false,
+          "latex": "∆P=\\left| ρ \\right|+U (5)"
+        },
+        {
+          "fid": "F006",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "Y=a+b×X"
+        },
+        {
+          "fid": "F007",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "\\hat{x}=\\frac{\\sum{x_{i}}}{n}"
+        },
+        {
+          "fid": "F008",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "\\hat{y}=\\frac{\\sum{y_{i}}}{n}"
+        },
+        {
+          "fid": "F009",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b=\\frac{\\sum{\\left( x_{i}-\\hat{x} \\right)\\left( y_{i}-\\hat{y} \\right)}}{\\sum{\\left( x_{i}-\\hat{x} \\right)^{2}}}"
+        },
+        {
+          "fid": "F010",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "a=\\hat{y}-b×\\hat{x}"
+        },
+        {
+          "fid": "F011",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ai}=\\sqrt{S_{a}^{2}+x_{i}^{2}S_{b}^{2}+2x_{i}S_{a}S_{b}r\\left( a,b \\right)}"
+        },
+        {
+          "fid": "F012",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{a}=S_{y}×\\sqrt{\\frac{\\sum{x_{i}^{2}}}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}} }"
+        },
+        {
+          "fid": "F013",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{b}=S_{y}×\\sqrt{\\frac{n}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}}}"
+        },
+        {
+          "fid": "F014",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{y}=\\sqrt{\\frac{\\sum{\\left( y_{i}-a-bx_{i} \\right)}}{n-2}}"
+        },
+        {
+          "fid": "F015",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "r\\left( a,b \\right)=-\\frac{\\sum{x_{i}}}{\\sqrt{n\\sum{x_{i}^{2}}}}"
+        },
+        {
+          "fid": "F016",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ch1}=\\frac{U_{ch1}}{k}"
+        },
+        {
+          "fid": "F017",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{amb}=\\frac{U_{amb}}{k}"
+        },
+        {
+          "fid": "F018",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F019",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}"
+        },
+        {
+          "fid": "F020",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{1}=a+b×p"
+        },
+        {
+          "fid": "F021",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{A_{0,c}}"
+        },
+        {
+          "fid": "F022",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}"
+        },
+        {
+          "fid": "F023",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{λ_{c}}"
+        },
+        {
+          "fid": "F024",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}"
+        },
+        {
+          "fid": "F025",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{M_{c}}"
+        },
+        {
+          "fid": "F026",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}"
+        },
+        {
+          "fid": "F027",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{5}=p×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{U_{t}}{\\sqrt{2}}"
+        },
+        {
+          "fid": "F028",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{6}=p_{c}×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{∆}{2}"
+        },
+        {
+          "fid": "F029",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{7}=\\frac{p_{c}}{g}×\\frac{U_{g}}{3}"
+        },
+        {
+          "fid": "F030",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{8}=\\frac{p}{\\left( ρ_{M_{c}}-ρ_{a} \\right)}×\\frac{U_{ρ_{a}}}{k}"
+        },
+        {
+          "fid": "F031",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{9}=ρ_{f}×g×\\frac{U_{∆h}}{k}"
+        },
+        {
+          "fid": "F032",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{10}=p×sinθ_{c}×\\frac{U_{θ_{c}}}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F033",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}"
+        },
+        {
+          "fid": "F034",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{r}=\\frac{r}{\\sqrt{6}}"
+        },
+        {
+          "fid": "F035",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{r}=\\frac{r}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F036",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "f_{0}=max\\left{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right}"
+        },
+        {
+          "fid": "F037",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{f0}=\\frac{f_{0}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F038",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{up,j}=\\left| \\left( x_{3,j}-x_{3,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
+        },
+        {
+          "fid": "F039",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{down,j}=\\left| \\left( x_{4,j}-x_{4,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
+        },
+        {
+          "fid": "F040",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{mean,j}=max\\left{ b^{'}_{up,j}-b^{'}_{down,j} \\right}"
+        },
+        {
+          "fid": "F041",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{b^{'}}=\\frac{b^{'}_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F042",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{up,j}=\\left| \\left( x_{5,j}-x_{5,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
+        },
+        {
+          "fid": "F043",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{down,j}=\\left| \\left( x_{6,j}-x_{6,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
+        },
+        {
+          "fid": "F044",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{mean,j}=max\\left{ b_{up,j}-b_{down,j} \\right}"
+        },
+        {
+          "fid": "F045",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{b}=\\frac{b_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F046",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "h_{mean,j}=\\frac{1}{n}\\left{ \\left| \\left( x_{2,j}-x_{1,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|+\\left| \\left( x_{4,j}-x_{3,0} \\right)-\\left( x_{3,j}-x_{3,0} \\right) \\right|+\\left| \\left( x_{6,j}-x_{5,0} \\right)-\\left( x_{5,j}-x_{5,0} \\right) \\right| \\right}"
+        },
+        {
+          "fid": "F047",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{h}=\\frac{h_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F048",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{bk}=\\sqrt{u_{r}^{2}+u_{f_{0}}^{2}+u_{b^{'}}^{2}+u_{b}^{2}+u_{h}^{2}}"
+        },
+        {
+          "fid": "F049",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{c}=\\sqrt{u_{a}^{2}+u_{c}^{2}+u_{bk}^{2}}"
+        },
+        {
+          "fid": "F050",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "U_{c}=k×u_{c}"
+        }
+      ]
+    },
+    {
+      "file": "4. Bieu 1 Kiem dinh-Hieu chuan 2022 NAS 12.2022.doc",
+      "status": "skipped-legacy",
+      "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
+    },
+    {
+      "file": "6. Bieu 3 Danh muc chuan mau 2022 NAS.xls",
+      "status": "skipped-legacy",
+      "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
+    },
+    {
+      "file": "7. Biểu 4 Danh mục QT 2022 NAS.doc",
+      "status": "skipped-legacy",
+      "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
+    },
+    {
+      "file": "QTKD 1.061 2021 ND V2.docx",
+      "status": "ok",
+      "headings": 14,
+      "tables": 8,
+      "paragraphs": 279,
+      "media_parts": 6,
+      "embedded_ole": 4,
+      "formulas_found": 4,
+      "formulas_ole": 4,
+      "formulas_omml": 0,
+      "formula_detail": [
+        {
+          "fid": "F001",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
+          "in_table": true,
+          "latex": "\\DeltaP_{cd} = P_{m} - P_{cd}",
+          "ole": "word/embeddings/oleObject1.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image2.wmf",
+          "img_bytes": 914,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 292
+          }
+        },
+        {
+          "fid": "F002",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "\\DeltaP_{cd}",
+          "ole": "word/embeddings/oleObject2.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image3.wmf",
+          "img_bytes": 828,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F003",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "P_{cd}",
+          "ole": "word/embeddings/oleObject3.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image4.wmf",
+          "img_bytes": 722,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 223
+          }
+        },
+        {
+          "fid": "F004",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "P_{m}",
+          "ole": "word/embeddings/oleObject4.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image5.wmf",
+          "img_bytes": 716,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 218
+          }
+        }
+      ]
+    },
+    {
+      "file": "QTKD 1.062 2021 ND.docx",
+      "status": "ok",
+      "headings": 13,
+      "tables": 6,
+      "paragraphs": 238,
+      "media_parts": 2,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": []
+    },
+    {
+      "file": "QTKD 1.063 2021 BPL.docx",
+      "status": "ok",
+      "headings": 13,
+      "tables": 6,
+      "paragraphs": 235,
+      "media_parts": 2,
+      "embedded_ole": 0,
+      "formulas_found": 3,
+      "formulas_ole": 0,
+      "formulas_omml": 3,
+      "formula_detail": [
+        {
+          "fid": "F001",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật",
+          "in_table": false,
+          "latex": "V_{pl}=500- V_{đ}"
+        },
+        {
+          "fid": "F002",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật",
+          "in_table": false,
+          "latex": "V_{pl}"
+        },
+        {
+          "fid": "F003",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật",
+          "in_table": false,
+          "latex": "V_{đ}"
+        }
+      ]
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "status": "ok",
+      "headings": 26,
+      "tables": 20,
+      "paragraphs": 325,
+      "media_parts": 19,
+      "embedded_ole": 18,
+      "formulas_found": 35,
+      "formulas_ole": 18,
+      "formulas_omml": 17,
+      "formula_detail": [
+        {
+          "fid": "F001",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+          "in_table": false,
+          "latex": "τ=τ_{t}\\frac{η_{t}}{η}"
+        },
+        {
+          "fid": "F002",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+          "in_table": false,
+          "latex": "\\tau = \\tau_{t} \\times \\frac{\\eta_{t}}{\\eta}",
+          "ole": "word/embeddings/oleObject1.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image3.wmf",
+          "img_bytes": 1246,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 276
+          }
+        },
+        {
+          "fid": "F003",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+          "in_table": false,
+          "latex": "τ"
+        },
+        {
+          "fid": "F004",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+          "in_table": false,
+          "latex": "τ_{t}"
+        },
+        {
+          "fid": "F005",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+          "in_table": false,
+          "latex": "η"
+        },
+        {
+          "fid": "F006",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+          "in_table": false,
+          "latex": "η_{t}"
+        },
+        {
+          "fid": "F007",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+          "in_table": false,
+          "latex": "V=V_{t}\\frac{η_{t}}{η}"
+        },
+        {
+          "fid": "F008",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+          "in_table": false,
+          "latex": "V = V_{t} \\times \\frac{\\eta_{t}}{\\eta}",
+          "ole": "word/embeddings/oleObject2.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image4.wmf",
+          "img_bytes": 1246,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 276
+          }
+        },
+        {
+          "fid": "F009",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+          "in_table": false,
+          "latex": "V"
+        },
+        {
+          "fid": "F010",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+          "in_table": false,
+          "latex": "V_{t}"
+        },
+        {
+          "fid": "F011",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+          "in_table": false,
+          "latex": "η"
+        },
+        {
+          "fid": "F012",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+          "in_table": false,
+          "latex": "η_{t}"
+        },
+        {
+          "fid": "F013",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": true,
+          "latex": "\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}",
+          "ole": "word/embeddings/oleObject3.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image5.wmf",
+          "img_bytes": 1174,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 276
+          }
+        },
+        {
+          "fid": "F014",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": true,
+          "latex": "\\Delta_{1} = P - P_{c1}",
+          "ole": "word/embeddings/oleObject4.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image6.wmf",
+          "img_bytes": 970,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 263
+          }
+        },
+        {
+          "fid": "F015",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": true,
+          "latex": "\\Delta_{2} = P - P_{c2}",
+          "ole": "word/embeddings/oleObject5.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image7.wmf",
+          "img_bytes": 970,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 263
+          }
+        },
+        {
+          "fid": "F016",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "\\Delta",
+          "ole": "word/embeddings/oleObject6.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image8.wmf",
+          "img_bytes": 598,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 201
+          }
+        },
+        {
+          "fid": "F017",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "Δ_{i}"
+        },
+        {
+          "fid": "F018",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "\\Delta_{1},\\Delta_{2}",
+          "ole": "word/embeddings/oleObject7.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image9.wmf",
+          "img_bytes": 752,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 246
+          }
+        },
+        {
+          "fid": "F019",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "Δ_{i}"
+        },
+        {
+          "fid": "F020",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "P_{c1},P_{c2}",
+          "ole": "word/embeddings/oleObject8.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image10.wmf",
+          "img_bytes": 864,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 256
+          }
+        },
+        {
+          "fid": "F021",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "Δ_{i}"
+        },
+        {
+          "fid": "F022",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "P",
+          "ole": "word/embeddings/oleObject9.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image11.wmf",
+          "img_bytes": 598,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 201
+          }
+        },
+        {
+          "fid": "F023",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "P_{i}"
+        },
+        {
+          "fid": "F024",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": true,
+          "latex": "P = P_{0}",
+          "ole": "word/embeddings/oleObject10.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image12.wmf",
+          "img_bytes": 828,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F025",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "P_{0}",
+          "ole": "word/embeddings/oleObject11.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image13.wmf",
+          "img_bytes": 716,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 218
+          }
+        },
+        {
+          "fid": "F026",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "Δ_{i}"
+        },
+        {
+          "fid": "F027",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": true,
+          "latex": "P = P_{0} \\times \\frac{g_{d}}{g_{0}}",
+          "ole": "word/embeddings/oleObject12.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image14.wmf",
+          "img_bytes": 1362,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 293
+          }
+        },
+        {
+          "fid": "F028",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "g_{0}",
+          "ole": "word/embeddings/oleObject13.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image15.wmf",
+          "img_bytes": 716,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 218
+          }
+        },
+        {
+          "fid": "F029",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "Δ_{i}"
+        },
+        {
+          "fid": "F030",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "g_{d}",
+          "ole": "word/embeddings/oleObject14.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image16.wmf",
+          "img_bytes": 716,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 218
+          }
+        },
+        {
+          "fid": "F031",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "Δ_{i}"
+        },
+        {
+          "fid": "F032",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": false,
+          "latex": "\\delta",
+          "ole": "word/embeddings/oleObject15.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image17.wmf",
+          "img_bytes": 598,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 201
+          }
+        },
+        {
+          "fid": "F033",
+          "kind": "ole",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+          "in_table": true,
+          "latex": "\\delta = \\frac{\\Delta}{P} \\times 100",
+          "ole": "word/embeddings/oleObject16.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image18.wmf",
+          "img_bytes": 1124,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 250
+          }
+        },
+        {
+          "fid": "F034",
+          "kind": "ole",
+          "section": "Mẫu biên bản kiểm định",
+          "in_table": false,
+          "latex": "\\frac{g_{d}}{g_{0}} = ................",
+          "ole": "word/embeddings/oleObject17.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image19.wmf",
+          "img_bytes": 1350,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 340
+          }
+        },
+        {
+          "fid": "F035",
+          "kind": "ole",
+          "section": "Mẫu biên bản kiểm định (không đạt cấp cho đơn vị)",
+          "in_table": false,
+          "latex": "\\frac{g_{d}}{g_{0}} = ................",
+          "ole": "word/embeddings/oleObject18.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image19.wmf",
+          "img_bytes": 1350,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 340
+          }
+        }
+      ]
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "status": "ok",
+      "headings": 30,
+      "tables": 81,
+      "paragraphs": 492,
+      "media_parts": 197,
+      "embedded_ole": 210,
+      "formulas_found": 210,
+      "formulas_ole": 210,
+      "formulas_omml": 0,
+      "formula_detail": [
+        {
+          "fid": "F001",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.3 Kiểm tra thời gian quay tự do của píttông",
+          "in_table": true,
+          "latex": "\\tau = \\tau_{t}\\frac{\\eta_{t}}{\\eta}",
+          "ole": "word/embeddings/oleObject1.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image4.wmf",
+          "img_bytes": 1092,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 269
+          }
+        },
+        {
+          "fid": "F002",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.3 Kiểm tra thời gian quay tự do của píttông",
+          "in_table": false,
+          "latex": "\\tau",
+          "ole": "word/embeddings/oleObject2.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image5.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F003",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.3 Kiểm tra thời gian quay tự do của píttông",
+          "in_table": false,
+          "latex": "\\tau_{t}",
+          "ole": "word/embeddings/oleObject3.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image6.wmf",
+          "img_bytes": 712,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 214
+          }
+        },
+        {
+          "fid": "F004",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.3 Kiểm tra thời gian quay tự do của píttông",
+          "in_table": false,
+          "latex": "\\eta",
+          "ole": "word/embeddings/oleObject4.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image7.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F005",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.3 Kiểm tra thời gian quay tự do của píttông",
+          "in_table": false,
+          "latex": "\\eta_{t}",
+          "ole": "word/embeddings/oleObject5.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image8.wmf",
+          "img_bytes": 712,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 214
+          }
+        },
+        {
+          "fid": "F006",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.4 Kiểm tra tốc độ hạ của píttông",
+          "in_table": true,
+          "latex": "V = V_{t}\\frac{\\eta_{t}}{\\eta}",
+          "ole": "word/embeddings/oleObject6.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image9.wmf",
+          "img_bytes": 1162,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 267
+          }
+        },
+        {
+          "fid": "F007",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.4 Kiểm tra tốc độ hạ của píttông",
+          "in_table": false,
+          "latex": "V",
+          "ole": "word/embeddings/oleObject7.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image10.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 196
+          }
+        },
+        {
+          "fid": "F008",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.4 Kiểm tra tốc độ hạ của píttông",
+          "in_table": false,
+          "latex": "V_{t}",
+          "ole": "word/embeddings/oleObject8.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image11.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F009",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.4 Kiểm tra tốc độ hạ của píttông",
+          "in_table": false,
+          "latex": "\\eta",
+          "ole": "word/embeddings/oleObject9.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image7.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F010",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.4 Kiểm tra tốc độ hạ của píttông",
+          "in_table": false,
+          "latex": "\\eta_{t}",
+          "ole": "word/embeddings/oleObject10.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image8.wmf",
+          "img_bytes": 712,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 214
+          }
+        },
+        {
+          "fid": "F011",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "M = P \\times A_{0} \\times \\frac{g_{0}}{g} \\times (1 + \\frac{\\rho_{a}}{\\rho_{Mt}})",
+          "ole": "word/embeddings/oleObject11.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image12.wmf",
+          "img_bytes": 1814,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 374
+          }
+        },
+        {
+          "fid": "F012",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\rho_{a}",
+          "ole": "word/embeddings/oleObject12.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image13.wmf",
+          "img_bytes": 712,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 214
+          }
+        },
+        {
+          "fid": "F013",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\rho_{Mt}",
+          "ole": "word/embeddings/oleObject13.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image14.wmf",
+          "img_bytes": 718,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 219
+          }
+        },
+        {
+          "fid": "F014",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "\\Delta_{Mi} = \\frac{|M_{i} - M|}{M}",
+          "ole": "word/embeddings/oleObject14.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image15.wmf",
+          "img_bytes": 1288,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 287
+          }
+        },
+        {
+          "fid": "F015",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "P_{s,i} = \\frac{\\sum_{}^{}M_{i,s}g(1 - \\frac{\\rho_{a}}{\\rho_{Ms}}) + \\gammaC_{s}}{A_{0s}(1 + \\lambda_{s}P_{s,i})[1 + (\\alpha_{p,s} + \\alpha_{c,s})(t_{s} - t_{r})]} + (\\rho_{f} - \\rho_{a})gh",
+          "ole": "word/embeddings/oleObject15.bin",
+          "ole_bytes": 4096,
+          "img": "word/media/image16.wmf",
+          "img_bytes": 3244,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 785
+          }
+        },
+        {
+          "fid": "F016",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\sum_{}^{}M_{i,s}",
+          "ole": "word/embeddings/oleObject16.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image17.wmf",
+          "img_bytes": 942,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 243
+          }
+        },
+        {
+          "fid": "F017",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\rho_{a}",
+          "ole": "word/embeddings/oleObject17.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image13.wmf",
+          "img_bytes": 712,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 214
+          }
+        },
+        {
+          "fid": "F018",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\rho_{Ms}",
+          "ole": "word/embeddings/oleObject18.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image18.wmf",
+          "img_bytes": 718,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 219
+          }
+        },
+        {
+          "fid": "F019",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\gamma",
+          "ole": "word/embeddings/oleObject19.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image19.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F020",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "C_{s}",
+          "ole": "word/embeddings/oleObject20.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image20.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F021",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "A_{0s}",
+          "ole": "word/embeddings/oleObject21.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image21.wmf",
+          "img_bytes": 816,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 218
+          }
+        },
+        {
+          "fid": "F022",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\lambda_{s}",
+          "ole": "word/embeddings/oleObject22.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image22.wmf",
+          "img_bytes": 712,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 214
+          }
+        },
+        {
+          "fid": "F023",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\alpha_{p,s},\\alpha_{c,s}",
+          "ole": "word/embeddings/oleObject23.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image23.wmf",
+          "img_bytes": 972,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 263
+          }
+        },
+        {
+          "fid": "F024",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "t_{s}",
+          "ole": "word/embeddings/oleObject24.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image24.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F025",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "t_{r}",
+          "ole": "word/embeddings/oleObject25.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image25.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F026",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\rho_{f}",
+          "ole": "word/embeddings/oleObject26.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image26.wmf",
+          "img_bytes": 712,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 214
+          }
+        },
+        {
+          "fid": "F027",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "\\rho_{a} = \\frac{3,4848P_{a} - 0,009 \\times H \\times e^{0,061 \\times t}}{t + 273,15}",
+          "ole": "word/embeddings/oleObject27.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image27.wmf",
+          "img_bytes": 2018,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 429
+          }
+        },
+        {
+          "fid": "F028",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "P_{a}",
+          "ole": "word/embeddings/oleObject28.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image28.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F029",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "H",
+          "ole": "word/embeddings/oleObject29.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image29.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 196
+          }
+        },
+        {
+          "fid": "F030",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "t",
+          "ole": "word/embeddings/oleObject30.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image30.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 196
+          }
+        },
+        {
+          "fid": "F031",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "P_{abs} = P_{s,i} + \\mu",
+          "ole": "word/embeddings/oleObject31.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image31.wmf",
+          "img_bytes": 1088,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 275
+          }
+        },
+        {
+          "fid": "F032",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "P_{abs}",
+          "ole": "word/embeddings/oleObject32.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image32.wmf",
+          "img_bytes": 726,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 223
+          }
+        },
+        {
+          "fid": "F033",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\mu",
+          "ole": "word/embeddings/oleObject33.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image33.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F034",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "P_{m} = P_{s,i} \\pm (\\rho_{f} - \\rho_{a})g\\Deltah",
+          "ole": "word/embeddings/oleObject34.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image34.wmf",
+          "img_bytes": 1268,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 339
+          }
+        },
+        {
+          "fid": "F035",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "p_{e}",
+          "ole": "word/embeddings/oleObject35.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image35.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F036",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "P_{m} = P_{abs} \\pm \\rho_{f}g\\Deltah",
+          "ole": "word/embeddings/oleObject36.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image36.wmf",
+          "img_bytes": 1022,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 299
+          }
+        },
+        {
+          "fid": "F037",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\Deltah",
+          "ole": "word/embeddings/oleObject37.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image37.wmf",
+          "img_bytes": 700,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 202
+          }
+        },
+        {
+          "fid": "F038",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "A_{0t,i}",
+          "ole": "word/embeddings/oleObject38.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image38.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 228
+          }
+        },
+        {
+          "fid": "F039",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "A_{0t,i}(1 + \\lambda_{t}P_{s,i}) = \\frac{\\sum_{}^{}M_{t,i}g(1 - \\frac{\\rho_{a}}{\\rho_{Mt}}) + \\gammaC_{t}}{P_{s,i}[1 + (\\alpha_{p,t} + \\alpha_{c,t})(t_{t} - t_{r})]} + \\frac{(\\rho_{f} - \\rho_{a})gh}{P_{s,i}}",
+          "ole": "word/embeddings/oleObject39.bin",
+          "ole_bytes": 4096,
+          "img": "word/media/image39.wmf",
+          "img_bytes": 3968,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 839
+          }
+        },
+        {
+          "fid": "F040",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\sum_{}^{}M_{t,i}",
+          "ole": "word/embeddings/oleObject40.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image40.wmf",
+          "img_bytes": 942,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 243
+          }
+        },
+        {
+          "fid": "F041",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\rho_{Mt}",
+          "ole": "word/embeddings/oleObject41.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image14.wmf",
+          "img_bytes": 718,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 219
+          }
+        },
+        {
+          "fid": "F042",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "C_{t}",
+          "ole": "word/embeddings/oleObject42.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image41.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F043",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\lambda_{t}",
+          "ole": "word/embeddings/oleObject43.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image42.wmf",
+          "img_bytes": 712,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 214
+          }
+        },
+        {
+          "fid": "F044",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\alpha_{p,t},\\alpha_{c,t}",
+          "ole": "word/embeddings/oleObject44.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image43.wmf",
+          "img_bytes": 972,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 263
+          }
+        },
+        {
+          "fid": "F045",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "t_{t}",
+          "ole": "word/embeddings/oleObject45.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image44.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F046",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "t_{r}",
+          "ole": "word/embeddings/oleObject46.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image25.wmf",
+          "img_bytes": 710,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 213
+          }
+        },
+        {
+          "fid": "F047",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "X_{i} = P_{s,i}",
+          "ole": "word/embeddings/oleObject47.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image45.wmf",
+          "img_bytes": 958,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 252
+          }
+        },
+        {
+          "fid": "F048",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "Y_{i} = A_{0t,i}",
+          "ole": "word/embeddings/oleObject48.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image46.wmf",
+          "img_bytes": 964,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 257
+          }
+        },
+        {
+          "fid": "F049",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "R = \\frac{n\\sum_{}^{}X_{i}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}}{}",
+          "ole": "word/embeddings/oleObject49.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image47.wmf",
+          "img_bytes": 2388,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 691
+          }
+        },
+        {
+          "fid": "F050",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "a = \\frac{\\sum_{}^{}X_{i}^{2}\\sum_{}^{}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}^{2}}{n\\sum_{}^{}X_{i}^{2} - (\\sum_{}^{}X_{i})^{2}}",
+          "ole": "word/embeddings/oleObject50.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image48.wmf",
+          "img_bytes": 2126,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 538
+          }
+        },
+        {
+          "fid": "F051",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "b = \\frac{n\\sum_{}^{}X_{i}\\sum_{}^{}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}}{n\\sum_{}^{}X_{i}^{2} - (\\sum_{}^{}X_{i})^{2}}",
+          "ole": "word/embeddings/oleObject51.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image49.wmf",
+          "img_bytes": 2020,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 531
+          }
+        },
+        {
+          "fid": "F052",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "A_{0t} = \\overline{A} = \\frac{\\sum_{i = 1}^{n}A_{0t,i}}{n}",
+          "ole": "word/embeddings/oleObject52.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image50.wmf",
+          "img_bytes": 2036,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 343
+          }
+        },
+        {
+          "fid": "F053",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": false,
+          "latex": "\\geq",
+          "ole": "word/embeddings/oleObject53.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image51.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F054",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "A_{0t} = a",
+          "ole": "word/embeddings/oleObject54.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image52.wmf",
+          "img_bytes": 930,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 230
+          }
+        },
+        {
+          "fid": "F055",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "in_table": true,
+          "latex": "\\lambda = \\frac{b}{A_{0t}}",
+          "ole": "word/embeddings/oleObject55.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image53.wmf",
+          "img_bytes": 1212,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 247
+          }
+        },
+        {
+          "fid": "F056",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{A} =",
+          "ole": "word/embeddings/oleObject56.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image54.wmf",
+          "img_bytes": 2022,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 366
+          }
+        },
+        {
+          "fid": "F057",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{A}(p) = \\frac{u_{A}}{A_{0t}} \\times p",
+          "ole": "word/embeddings/oleObject57.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image55.wmf",
+          "img_bytes": 1584,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 309
+          }
+        },
+        {
+          "fid": "F058",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "\\geq",
+          "ole": "word/embeddings/oleObject58.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image51.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F059",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "S_{y} =",
+          "ole": "word/embeddings/oleObject59.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image56.wmf",
+          "img_bytes": 2014,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 376
+          }
+        },
+        {
+          "fid": "F060",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "S_{a} = S_{y} \\times",
+          "ole": "word/embeddings/oleObject60.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image57.wmf",
+          "img_bytes": 2218,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 475
+          }
+        },
+        {
+          "fid": "F061",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "S_{b} = S_{y} \\times",
+          "ole": "word/embeddings/oleObject61.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image58.wmf",
+          "img_bytes": 1934,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 419
+          }
+        },
+        {
+          "fid": "F062",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "r(a,b) = - \\frac{\\sum_{}^{}X_{i}}{}",
+          "ole": "word/embeddings/oleObject62.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image59.wmf",
+          "img_bytes": 1864,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 353
+          }
+        },
+        {
+          "fid": "F063",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{A,i} =",
+          "ole": "word/embeddings/oleObject63.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image60.wmf",
+          "img_bytes": 1634,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 445
+          }
+        },
+        {
+          "fid": "F064",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{A}(p) = \\frac{u_{A,i}}{A_{0t}} \\times p",
+          "ole": "word/embeddings/oleObject64.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image61.wmf",
+          "img_bytes": 1696,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 319
+          }
+        },
+        {
+          "fid": "F065",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{s}(p)",
+          "ole": "word/embeddings/oleObject65.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image62.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F066",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{1}(p)",
+          "ole": "word/embeddings/oleObject66.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image63.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F067",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{1}(p) = p_{0,s} + \\frac{u(p_{s})}{p_{s}} \\times p",
+          "ole": "word/embeddings/oleObject67.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image64.wmf",
+          "img_bytes": 1750,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 358
+          }
+        },
+        {
+          "fid": "F068",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "p_{0,s}",
+          "ole": "word/embeddings/oleObject68.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image65.wmf",
+          "img_bytes": 822,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 223
+          }
+        },
+        {
+          "fid": "F069",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{2}(p)",
+          "ole": "word/embeddings/oleObject69.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image66.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F070",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{2}(p) = \\frac{p}{A_{0,s}} + \\frac{U(A_{0,s})}{k}",
+          "ole": "word/embeddings/oleObject70.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image67.wmf",
+          "img_bytes": 1958,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 356
+          }
+        },
+        {
+          "fid": "F071",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{3}(p)",
+          "ole": "word/embeddings/oleObject71.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image68.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F072",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{3}(p) = - p^{2} + \\frac{U(\\lambda_{s})}{k}",
+          "ole": "word/embeddings/oleObject72.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image69.wmf",
+          "img_bytes": 1708,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 326
+          }
+        },
+        {
+          "fid": "F073",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{4}(p)",
+          "ole": "word/embeddings/oleObject73.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image70.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F074",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{4}(p) = \\frac{p}{M_{s}} + \\frac{U(M_{s})}{k}",
+          "ole": "word/embeddings/oleObject74.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image71.wmf",
+          "img_bytes": 1638,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 336
+          }
+        },
+        {
+          "fid": "F075",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{5}(p)",
+          "ole": "word/embeddings/oleObject75.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image72.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F076",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{5}(p) = p \\times (\\alpha_{p,s} + \\alpha_{c,s}) \\times \\frac{U(t)}{}",
+          "ole": "word/embeddings/oleObject76.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image73.wmf",
+          "img_bytes": 1894,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 385
+          }
+        },
+        {
+          "fid": "F077",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{6}(p)",
+          "ole": "word/embeddings/oleObject77.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image74.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F078",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{6}(p) = p_{s} \\times U(\\alpha_{p,s} - \\alpha_{c,s}) \\times \\frac{\\Deltat}{2}",
+          "ole": "word/embeddings/oleObject78.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image75.wmf",
+          "img_bytes": 1624,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 387
+          }
+        },
+        {
+          "fid": "F079",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{7}(p)",
+          "ole": "word/embeddings/oleObject79.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image76.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F080",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "U(g) = 10^{ - 5} \\times g,k = 3",
+          "ole": "word/embeddings/oleObject80.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image77.wmf",
+          "img_bytes": 1108,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 283
+          }
+        },
+        {
+          "fid": "F081",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{7}(p) = \\frac{p_{s}}{g} \\times \\frac{U(g)}{k}",
+          "ole": "word/embeddings/oleObject81.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image78.wmf",
+          "img_bytes": 1520,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 318
+          }
+        },
+        {
+          "fid": "F082",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "\\theta",
+          "ole": "word/embeddings/oleObject82.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image79.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F083",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{8}(p)",
+          "ole": "word/embeddings/oleObject83.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image80.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F084",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "U(\\rho_{a}) = 5 \\times 10^{ - 2} \\times \\rho_{a},k = 3",
+          "ole": "word/embeddings/oleObject84.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image81.wmf",
+          "img_bytes": 1362,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 332
+          }
+        },
+        {
+          "fid": "F085",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{8}(p) = \\frac{p}{\\rho_{Ms} - \\rho_{a}} \\times \\frac{U(\\rho_{a})}{k}",
+          "ole": "word/embeddings/oleObject85.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image82.wmf",
+          "img_bytes": 1832,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 373
+          }
+        },
+        {
+          "fid": "F086",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{9}(p)",
+          "ole": "word/embeddings/oleObject86.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image83.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F087",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{9}(p) = \\rho_{f} \\times g \\times \\frac{U(\\Deltah)}{k}",
+          "ole": "word/embeddings/oleObject87.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image84.wmf",
+          "img_bytes": 1630,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 319
+          }
+        },
+        {
+          "fid": "F088",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{10}(p)",
+          "ole": "word/embeddings/oleObject88.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image85.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F089",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "F' = F \\times cos\\theta",
+          "ole": "word/embeddings/oleObject89.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image86.wmf",
+          "img_bytes": 948,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 239
+          }
+        },
+        {
+          "fid": "F090",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "\\theta < 0,5'",
+          "ole": "word/embeddings/oleObject90.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image87.wmf",
+          "img_bytes": 828,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 223
+          }
+        },
+        {
+          "fid": "F091",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "\\theta",
+          "ole": "word/embeddings/oleObject91.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image88.wmf",
+          "img_bytes": 594,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 197
+          }
+        },
+        {
+          "fid": "F092",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "U(\\theta) = 5,82 \\times 10^{ - 4}rad",
+          "ole": "word/embeddings/oleObject92.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image89.wmf",
+          "img_bytes": 1220,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 293
+          }
+        },
+        {
+          "fid": "F093",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{10}(p) = p \\times sin\\theta_{s} \\times \\frac{U(\\theta_{s})}{}",
+          "ole": "word/embeddings/oleObject93.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image90.wmf",
+          "img_bytes": 1988,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 364
+          }
+        },
+        {
+          "fid": "F094",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{11}(p)",
+          "ole": "word/embeddings/oleObject94.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image91.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F095",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{11}(p) = \\frac{p_{s} \\times \\rho_{a}}{\\rho_{Ms}^{2}} \\times \\frac{U(\\rho_{Ms})}{k}",
+          "ole": "word/embeddings/oleObject95.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image92.wmf",
+          "img_bytes": 1972,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 407
+          }
+        },
+        {
+          "fid": "F096",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{12}(p)",
+          "ole": "word/embeddings/oleObject96.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image93.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F097",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{12}(p) = \\frac{p_{s} \\times A_{0s} \\times k}{M_{s}} \\times \\frac{U(\\rho_{f})}{k}",
+          "ole": "word/embeddings/oleObject97.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image94.wmf",
+          "img_bytes": 2140,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 405
+          }
+        },
+        {
+          "fid": "F098",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{13}(p)",
+          "ole": "word/embeddings/oleObject98.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image95.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F099",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{13}(p) = \\frac{p_{s} \\times \\gamma \\times k}{g \\times M_{s}} \\times \\frac{U(C_{s})}{k}",
+          "ole": "word/embeddings/oleObject99.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image96.wmf",
+          "img_bytes": 1862,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 393
+          }
+        },
+        {
+          "fid": "F100",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{14}(p)",
+          "ole": "word/embeddings/oleObject100.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image97.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F101",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{14}(p) = \\frac{p \\times C_{s}}{g \\times M_{s}} \\times \\frac{U(\\gamma)}{k}",
+          "ole": "word/embeddings/oleObject101.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image98.wmf",
+          "img_bytes": 1828,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 364
+          }
+        },
+        {
+          "fid": "F102",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{s}(p)",
+          "ole": "word/embeddings/oleObject102.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image99.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F103",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{s}(p) =",
+          "ole": "word/embeddings/oleObject103.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image100.wmf",
+          "img_bytes": 1884,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 340
+          }
+        },
+        {
+          "fid": "F104",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{15}(p)",
+          "ole": "word/embeddings/oleObject104.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image101.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F105",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{15}(p) = \\frac{p}{A_{0,t}} + \\frac{U(A_{0,t})}{k}",
+          "ole": "word/embeddings/oleObject105.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image102.wmf",
+          "img_bytes": 1964,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 361
+          }
+        },
+        {
+          "fid": "F106",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{16}(p)",
+          "ole": "word/embeddings/oleObject106.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image103.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F107",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{16}(p) = - p^{2} \\times \\frac{U(\\lambda_{t})}{k}",
+          "ole": "word/embeddings/oleObject107.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image104.wmf",
+          "img_bytes": 1714,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 331
+          }
+        },
+        {
+          "fid": "F108",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{17}(p)",
+          "ole": "word/embeddings/oleObject108.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image105.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F109",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{17}(p) = \\frac{p}{M_{t}} \\times \\frac{U(M_{t})}{k}",
+          "ole": "word/embeddings/oleObject109.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image106.wmf",
+          "img_bytes": 1644,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 341
+          }
+        },
+        {
+          "fid": "F110",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{18}(p)",
+          "ole": "word/embeddings/oleObject110.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image107.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F111",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "U(t) = 2^{\\circ}C",
+          "ole": "word/embeddings/oleObject111.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image108.wmf",
+          "img_bytes": 844,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 233
+          }
+        },
+        {
+          "fid": "F112",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{18}(p) = p \\times (\\alpha_{p,t} + \\alpha_{c,t}) \\times \\frac{U(t)}{}",
+          "ole": "word/embeddings/oleObject112.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image109.wmf",
+          "img_bytes": 1902,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 390
+          }
+        },
+        {
+          "fid": "F113",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{19}(p)",
+          "ole": "word/embeddings/oleObject113.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image110.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F114",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{19}(p) = p \\times U(\\alpha_{p,t} + \\alpha_{c,t}) \\times \\frac{\\Deltat}{}",
+          "ole": "word/embeddings/oleObject114.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image111.wmf",
+          "img_bytes": 1824,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 386
+          }
+        },
+        {
+          "fid": "F115",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{20}(p)",
+          "ole": "word/embeddings/oleObject115.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image112.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F116",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{20}(p) = \\frac{p}{g} \\times \\frac{U(g)}{k}",
+          "ole": "word/embeddings/oleObject116.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image113.wmf",
+          "img_bytes": 1408,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 305
+          }
+        },
+        {
+          "fid": "F117",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{21}(p)",
+          "ole": "word/embeddings/oleObject117.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image114.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F118",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{21}(p) = \\frac{p}{\\rho_{Mt} - \\rho_{a}} \\times \\frac{U(\\rho_{a})}{k}",
+          "ole": "word/embeddings/oleObject118.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image115.wmf",
+          "img_bytes": 1840,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 378
+          }
+        },
+        {
+          "fid": "F119",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{22}(p)",
+          "ole": "word/embeddings/oleObject119.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image116.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F120",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{22}(p) = p \\times sin\\theta_{t} \\times \\frac{U(\\theta_{t})}{}",
+          "ole": "word/embeddings/oleObject120.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image117.wmf",
+          "img_bytes": 1988,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 364
+          }
+        },
+        {
+          "fid": "F121",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{23}(p)",
+          "ole": "word/embeddings/oleObject121.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image118.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F122",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{23}(p) = \\frac{p \\times \\rho_{a}}{\\rho_{Mt}^{2}} \\times \\frac{U(\\rho_{Mt})}{k}",
+          "ole": "word/embeddings/oleObject122.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image119.wmf",
+          "img_bytes": 1952,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 389
+          }
+        },
+        {
+          "fid": "F123",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{24}(p)",
+          "ole": "word/embeddings/oleObject123.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image120.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F124",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{24}(p) = \\frac{p_{s} \\times \\gamma}{g \\times M_{t}} \\times \\frac{U(C_{t})}{k}",
+          "ole": "word/embeddings/oleObject124.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image121.wmf",
+          "img_bytes": 1848,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 382
+          }
+        },
+        {
+          "fid": "F125",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": false,
+          "latex": "u_{25}(p)",
+          "ole": "word/embeddings/oleObject125.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image122.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F126",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{25}(p) = \\frac{p \\times C_{t}}{g \\times M_{t}} \\times \\frac{U(\\gamma)}{k}",
+          "ole": "word/embeddings/oleObject126.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image123.wmf",
+          "img_bytes": 1828,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 364
+          }
+        },
+        {
+          "fid": "F127",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{s}(p) =",
+          "ole": "word/embeddings/oleObject127.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image124.wmf",
+          "img_bytes": 1890,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 345
+          }
+        },
+        {
+          "fid": "F128",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "u_{c}(p) =",
+          "ole": "word/embeddings/oleObject128.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image125.wmf",
+          "img_bytes": 1474,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 391
+          }
+        },
+        {
+          "fid": "F129",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "U = k \\times u_{c}(p)",
+          "ole": "word/embeddings/oleObject129.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image126.wmf",
+          "img_bytes": 960,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 251
+          }
+        },
+        {
+          "fid": "F130",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g)",
+          "ole": "word/embeddings/oleObject130.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image127.wmf",
+          "img_bytes": 1484,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 303
+          }
+        },
+        {
+          "fid": "F131",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "\\delta = \\frac{}{p}",
+          "ole": "word/embeddings/oleObject131.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image128.wmf",
+          "img_bytes": 1544,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 324
+          }
+        },
+        {
+          "fid": "F132",
+          "kind": "ole",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+          "in_table": true,
+          "latex": "\\delta = \\frac{U(p)}{p}",
+          "ole": "word/embeddings/oleObject132.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image129.wmf",
+          "img_bytes": 1110,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 240
+          }
+        },
+        {
+          "fid": "F133",
+          "kind": "ole",
+          "section": "Mẫu biên bản kiểm định",
+          "in_table": false,
+          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g) =",
+          "ole": "word/embeddings/oleObject133.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image130.wmf",
+          "img_bytes": 1494,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 309
+          }
+        },
+        {
+          "fid": "F134",
+          "kind": "ole",
+          "section": "Mẫu biên bản kiểm định (không đạt)",
+          "in_table": false,
+          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g) =",
+          "ole": "word/embeddings/oleObject134.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image130.wmf",
+          "img_bytes": 1494,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 309
+          }
+        },
+        {
+          "fid": "F135",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{i}(p)",
+          "ole": "word/embeddings/oleObject135.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image131.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F136",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{i}(p),",
+          "ole": "word/embeddings/oleObject136.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image132.wmf",
+          "img_bytes": 856,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 244
+          }
+        },
+        {
+          "fid": "F137",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{i}^{2}(p),^{}",
+          "ole": "word/embeddings/oleObject137.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image133.wmf",
+          "img_bytes": 992,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 279
+          }
+        },
+        {
+          "fid": "F138",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{1}(p)",
+          "ole": "word/embeddings/oleObject138.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image134.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F139",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "p_{0,s} + \\frac{u(p_{s})}{p_{s}} \\times p",
+          "ole": "word/embeddings/oleObject139.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image135.wmf",
+          "img_bytes": 1590,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 314
+          }
+        },
+        {
+          "fid": "F140",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{2}(p)",
+          "ole": "word/embeddings/oleObject140.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image136.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F141",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p}{2A_{0,s}}",
+          "ole": "word/embeddings/oleObject141.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image137.wmf",
+          "img_bytes": 1112,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 245
+          }
+        },
+        {
+          "fid": "F142",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{3}(p)",
+          "ole": "word/embeddings/oleObject142.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image138.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F143",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\lambda_{s},",
+          "ole": "word/embeddings/oleObject143.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image139.wmf",
+          "img_bytes": 850,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 240
+          }
+        },
+        {
+          "fid": "F144",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p^{2}}{2}",
+          "ole": "word/embeddings/oleObject144.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image140.wmf",
+          "img_bytes": 896,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 231
+          }
+        },
+        {
+          "fid": "F145",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{4}(p)",
+          "ole": "word/embeddings/oleObject145.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image141.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F146",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p}{2M_{s}}",
+          "ole": "word/embeddings/oleObject146.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image142.wmf",
+          "img_bytes": 1000,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 235
+          }
+        },
+        {
+          "fid": "F147",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{5}(p)",
+          "ole": "word/embeddings/oleObject147.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image143.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F148",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "t_{s},^{\\circ}C",
+          "ole": "word/embeddings/oleObject148.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image144.wmf",
+          "img_bytes": 930,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 230
+          }
+        },
+        {
+          "fid": "F149",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times (\\alpha_{p,s} + \\alpha_{c,s})}{}",
+          "ole": "word/embeddings/oleObject149.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image145.wmf",
+          "img_bytes": 1598,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 315
+          }
+        },
+        {
+          "fid": "F150",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{6}(p)",
+          "ole": "word/embeddings/oleObject150.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image146.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F151",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\begin{matrix} (\\alpha_{ps} + \\alpha_{cs}), \\\\ 1/^{\\circ}C \\end{matrix}",
+          "ole": "word/embeddings/oleObject151.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image147.wmf",
+          "img_bytes": 1242,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 299
+          }
+        },
+        {
+          "fid": "F152",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times \\Deltat}{}",
+          "ole": "word/embeddings/oleObject152.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image148.wmf",
+          "img_bytes": 1114,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 242
+          }
+        },
+        {
+          "fid": "F153",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{7}(p)",
+          "ole": "word/embeddings/oleObject153.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image149.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F154",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p}{3g}",
+          "ole": "word/embeddings/oleObject154.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image150.wmf",
+          "img_bytes": 884,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 218
+          }
+        },
+        {
+          "fid": "F155",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{8}(p)",
+          "ole": "word/embeddings/oleObject155.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image151.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F156",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "r_{a},^{}",
+          "ole": "word/embeddings/oleObject156.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image152.wmf",
+          "img_bytes": 966,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 256
+          }
+        },
+        {
+          "fid": "F157",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p}{3(\\rho_{Ms} - \\rho_{a})}",
+          "ole": "word/embeddings/oleObject157.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image153.wmf",
+          "img_bytes": 1162,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 282
+          }
+        },
+        {
+          "fid": "F158",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{9}(p)",
+          "ole": "word/embeddings/oleObject158.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image154.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F159",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\Deltah,",
+          "ole": "word/embeddings/oleObject159.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image155.wmf",
+          "img_bytes": 812,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 212
+          }
+        },
+        {
+          "fid": "F160",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{\\rho_{f} \\times g}{3}",
+          "ole": "word/embeddings/oleObject160.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image156.wmf",
+          "img_bytes": 1108,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 243
+          }
+        },
+        {
+          "fid": "F161",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{10}(p)",
+          "ole": "word/embeddings/oleObject161.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image157.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F162",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\theta,^{\\circ}",
+          "ole": "word/embeddings/oleObject162.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image158.wmf",
+          "img_bytes": 806,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 208
+          }
+        },
+        {
+          "fid": "F163",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times sin\\theta}{}",
+          "ole": "word/embeddings/oleObject163.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image159.wmf",
+          "img_bytes": 1326,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 252
+          }
+        },
+        {
+          "fid": "F164",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{11}(p)",
+          "ole": "word/embeddings/oleObject164.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image160.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F165",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\rho_{Ms},^{}",
+          "ole": "word/embeddings/oleObject165.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image161.wmf",
+          "img_bytes": 974,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 262
+          }
+        },
+        {
+          "fid": "F166",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times \\rho_{a}}{2 \\times \\rho_{Ms}^{2}}",
+          "ole": "word/embeddings/oleObject166.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image162.wmf",
+          "img_bytes": 1406,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 283
+          }
+        },
+        {
+          "fid": "F167",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{12}(p)",
+          "ole": "word/embeddings/oleObject167.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image163.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F168",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\rho_{f},^{}",
+          "ole": "word/embeddings/oleObject168.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image164.wmf",
+          "img_bytes": 966,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 257
+          }
+        },
+        {
+          "fid": "F169",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times A_{0s} \\times \\Deltah}{2 \\times M_{s}}",
+          "ole": "word/embeddings/oleObject169.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image165.wmf",
+          "img_bytes": 1398,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 292
+          }
+        },
+        {
+          "fid": "F170",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{13}(p)",
+          "ole": "word/embeddings/oleObject170.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image166.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F171",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "C_{s},",
+          "ole": "word/embeddings/oleObject171.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image167.wmf",
+          "img_bytes": 824,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 224
+          }
+        },
+        {
+          "fid": "F172",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times \\gamma}{2 \\times g \\times M_{s}}",
+          "ole": "word/embeddings/oleObject172.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image168.wmf",
+          "img_bytes": 1262,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 264
+          }
+        },
+        {
+          "fid": "F173",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{14}(p)",
+          "ole": "word/embeddings/oleObject173.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image169.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F174",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\gamma,^{2}",
+          "ole": "word/embeddings/oleObject174.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image170.wmf",
+          "img_bytes": 840,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F175",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times C_{s}}{2 \\times g \\times M_{s}}",
+          "ole": "word/embeddings/oleObject175.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image171.wmf",
+          "img_bytes": 1280,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 281
+          }
+        },
+        {
+          "fid": "F176",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\begin{matrix} \\sum_{i = 1}^{14}u_{i}^{2} = ^{2} \\\\ U_{Bs} = \\end{matrix}",
+          "ole": "word/embeddings/oleObject176.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image172.wmf",
+          "img_bytes": 2136,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 444
+          }
+        },
+        {
+          "fid": "F177",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{i}(p)",
+          "ole": "word/embeddings/oleObject177.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image131.wmf",
+          "img_bytes": 830,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 229
+          }
+        },
+        {
+          "fid": "F178",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{i}(p),",
+          "ole": "word/embeddings/oleObject178.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image132.wmf",
+          "img_bytes": 856,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 244
+          }
+        },
+        {
+          "fid": "F179",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{i}^{2}(p),^{}",
+          "ole": "word/embeddings/oleObject179.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image133.wmf",
+          "img_bytes": 992,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 279
+          }
+        },
+        {
+          "fid": "F180",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{15}(p)",
+          "ole": "word/embeddings/oleObject180.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image173.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F181",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p}{2A_{0,t}}",
+          "ole": "word/embeddings/oleObject181.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image174.wmf",
+          "img_bytes": 1112,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 245
+          }
+        },
+        {
+          "fid": "F182",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{16}(p)",
+          "ole": "word/embeddings/oleObject182.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image175.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F183",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\lambda_{t},",
+          "ole": "word/embeddings/oleObject183.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image176.wmf",
+          "img_bytes": 850,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 240
+          }
+        },
+        {
+          "fid": "F184",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p^{2}}{2}",
+          "ole": "word/embeddings/oleObject184.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image140.wmf",
+          "img_bytes": 896,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 231
+          }
+        },
+        {
+          "fid": "F185",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{17}(p)",
+          "ole": "word/embeddings/oleObject185.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image177.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F186",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p}{2M_{t}}",
+          "ole": "word/embeddings/oleObject186.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image178.wmf",
+          "img_bytes": 1000,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 235
+          }
+        },
+        {
+          "fid": "F187",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{18}(p)",
+          "ole": "word/embeddings/oleObject187.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image179.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F188",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "t_{t},^{\\circ}C",
+          "ole": "word/embeddings/oleObject188.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image180.wmf",
+          "img_bytes": 930,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 230
+          }
+        },
+        {
+          "fid": "F189",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times (\\alpha_{p,t} + \\alpha_{c,t})}{}",
+          "ole": "word/embeddings/oleObject189.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image181.wmf",
+          "img_bytes": 1598,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 315
+          }
+        },
+        {
+          "fid": "F190",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{19}(p)",
+          "ole": "word/embeddings/oleObject190.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image182.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F191",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\begin{matrix} (\\alpha_{p,t} + \\alpha_{c,t}), \\\\ 1/^{\\circ}C \\end{matrix}",
+          "ole": "word/embeddings/oleObject191.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image183.wmf",
+          "img_bytes": 1354,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 309
+          }
+        },
+        {
+          "fid": "F192",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times \\Deltat}{}",
+          "ole": "word/embeddings/oleObject192.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image148.wmf",
+          "img_bytes": 1114,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 242
+          }
+        },
+        {
+          "fid": "F193",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{20}(p)",
+          "ole": "word/embeddings/oleObject193.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image184.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F194",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p}{3g}",
+          "ole": "word/embeddings/oleObject194.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image150.wmf",
+          "img_bytes": 884,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 218
+          }
+        },
+        {
+          "fid": "F195",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{21}(p)",
+          "ole": "word/embeddings/oleObject195.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image185.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F196",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "r_{a},^{}",
+          "ole": "word/embeddings/oleObject196.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image152.wmf",
+          "img_bytes": 966,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 256
+          }
+        },
+        {
+          "fid": "F197",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p}{3(\\rho_{Mt} - \\rho_{a})}",
+          "ole": "word/embeddings/oleObject197.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image186.wmf",
+          "img_bytes": 1162,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 282
+          }
+        },
+        {
+          "fid": "F198",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{22}(p)",
+          "ole": "word/embeddings/oleObject198.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image187.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F199",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\theta,^{\\circ}",
+          "ole": "word/embeddings/oleObject199.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image158.wmf",
+          "img_bytes": 806,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 208
+          }
+        },
+        {
+          "fid": "F200",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times sin\\theta}{}",
+          "ole": "word/embeddings/oleObject200.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image159.wmf",
+          "img_bytes": 1326,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 252
+          }
+        },
+        {
+          "fid": "F201",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{23}(p)",
+          "ole": "word/embeddings/oleObject201.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image188.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F202",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\rho_{Mt},^{}",
+          "ole": "word/embeddings/oleObject202.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image189.wmf",
+          "img_bytes": 974,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 262
+          }
+        },
+        {
+          "fid": "F203",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times \\rho_{a}}{2 \\times \\rho_{Mt}^{2}}",
+          "ole": "word/embeddings/oleObject203.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image190.wmf",
+          "img_bytes": 1406,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 283
+          }
+        },
+        {
+          "fid": "F204",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{24}(p)",
+          "ole": "word/embeddings/oleObject204.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image191.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F205",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "C_{t},",
+          "ole": "word/embeddings/oleObject205.bin",
+          "ole_bytes": 3072,
+          "img": "word/media/image192.wmf",
+          "img_bytes": 824,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 224
+          }
+        },
+        {
+          "fid": "F206",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times \\gamma}{2 \\times g \\times M_{t}}",
+          "ole": "word/embeddings/oleObject206.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image193.wmf",
+          "img_bytes": 1262,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 264
+          }
+        },
+        {
+          "fid": "F207",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "u_{25}(p)",
+          "ole": "word/embeddings/oleObject207.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image194.wmf",
+          "img_bytes": 838,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F208",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\gamma,^{2}",
+          "ole": "word/embeddings/oleObject208.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image170.wmf",
+          "img_bytes": 840,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 234
+          }
+        },
+        {
+          "fid": "F209",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\frac{p \\times C_{t}}{2 \\times g \\times M_{t}}",
+          "ole": "word/embeddings/oleObject209.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image195.wmf",
+          "img_bytes": 1280,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 281
+          }
+        },
+        {
+          "fid": "F210",
+          "kind": "ole",
+          "section": "(Quy định)",
+          "in_table": true,
+          "latex": "\\begin{matrix} \\sum_{i = 15}^{25}u_{i}^{2} = ^{2} \\\\ U_{Bt} = \\end{matrix}",
+          "ole": "word/embeddings/oleObject210.bin",
+          "ole_bytes": 3584,
+          "img": "word/media/image196.wmf",
+          "img_bytes": 2142,
+          "mtef": {
+            "ok": true,
+            "reason": "ok",
+            "version": 5,
+            "bytes": 449
+          }
+        }
+      ]
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "status": "ok",
+      "headings": 25,
+      "tables": 51,
+      "paragraphs": 482,
+      "media_parts": 6,
+      "embedded_ole": 0,
+      "formulas_found": 49,
+      "formulas_ole": 0,
+      "formulas_omml": 49,
+      "formula_detail": [
+        {
+          "fid": "F001",
+          "kind": "omml",
+          "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt",
+          "in_table": false,
+          "latex": "∆P_{0}=ρ×g×h (1)"
+        },
+        {
+          "fid": "F002",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+          "in_table": false,
+          "latex": "P_{c}=\\frac{\\sum{M_{c}×g×\\left( 1-\\frac{ρ_{a}}{ρ_{M,c}} \\right)+γ×C_{c}}}{A_{0,c}\\left( 1+λ_{c} \\right)\\left[ 1+\\left( α_{p,c}+α_{x,c} \\right)×\\left( t-t_{r} \\right) \\right]}+\\left( ρ_{f}-ρ_{a} \\right)×g×h+P_{vac} (2)"
+        },
+        {
+          "fid": "F003",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+          "in_table": false,
+          "latex": "ρ_{a}=\\frac{3,484 4×P_{at}-H×\\left( 0,002 52×t-0,020 582 \\right)}{1 000×\\left( t+273,15 \\right)} (3)"
+        },
+        {
+          "fid": "F004",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+          "in_table": false,
+          "latex": "∆P=\\left| \\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} \\right|+U_{c} (4)"
+        },
+        {
+          "fid": "F005",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "Y=a+b×X"
+        },
+        {
+          "fid": "F006",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "\\hat{x}=\\frac{\\sum{x_{i}}}{n}"
+        },
+        {
+          "fid": "F007",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "\\hat{y}=\\frac{\\sum{y_{i}}}{n}"
+        },
+        {
+          "fid": "F008",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b=\\frac{\\sum{\\left( x_{i}-\\hat{x} \\right)\\left( y_{i}-\\hat{y} \\right)}}{\\sum{\\left( x_{i}-\\hat{x} \\right)^{2}}}"
+        },
+        {
+          "fid": "F009",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "a=\\hat{y}-b×\\hat{x}"
+        },
+        {
+          "fid": "F010",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ai}=\\sqrt{S_{a}^{2}+x_{i}^{2}S_{b}^{2}+2x_{i}S_{a}S_{b}r\\left( a,b \\right)}"
+        },
+        {
+          "fid": "F011",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{a}=S_{y}×\\sqrt{\\frac{\\sum{x_{i}^{2}}}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}} }"
+        },
+        {
+          "fid": "F012",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{b}=S_{y}×\\sqrt{\\frac{n}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}}}"
+        },
+        {
+          "fid": "F013",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{y}=\\sqrt{\\frac{\\sum{\\left( y_{i}-a-bx_{i} \\right)}}{n-2}}"
+        },
+        {
+          "fid": "F014",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "r\\left( a,b \\right)=-\\frac{\\sum{x_{i}}}{\\sqrt{n\\sum{x_{i}^{2}}}}"
+        },
+        {
+          "fid": "F015",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ch1}=\\frac{U_{ch1}}{k}"
+        },
+        {
+          "fid": "F016",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{amb}=\\frac{U_{amb}}{k}"
+        },
+        {
+          "fid": "F017",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F018",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}"
+        },
+        {
+          "fid": "F019",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{1}=a+b×p"
+        },
+        {
+          "fid": "F020",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{A_{0,c}}"
+        },
+        {
+          "fid": "F021",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}"
+        },
+        {
+          "fid": "F022",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{λ_{c}}"
+        },
+        {
+          "fid": "F023",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}"
+        },
+        {
+          "fid": "F024",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{M_{c}}"
+        },
+        {
+          "fid": "F025",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}"
+        },
+        {
+          "fid": "F026",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{5}=p×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{U_{t}}{\\sqrt{2}}"
+        },
+        {
+          "fid": "F027",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{6}=p_{c}×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{∆}{2}"
+        },
+        {
+          "fid": "F028",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{7}=\\frac{p_{c}}{g}×\\frac{U_{g}}{3}"
+        },
+        {
+          "fid": "F029",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{8}=\\frac{p}{\\left( ρ_{M_{c}}-ρ_{a} \\right)}×\\frac{U_{ρ_{a}}}{k}"
+        },
+        {
+          "fid": "F030",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{9}=ρ_{f}×g×\\frac{U_{∆h}}{k}"
+        },
+        {
+          "fid": "F031",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{10}=p×sinθ_{c}×\\frac{U_{θ_{c}}}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F032",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}"
+        },
+        {
+          "fid": "F033",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{r}=\\frac{r}{\\sqrt{6}}"
+        },
+        {
+          "fid": "F034",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{r}=\\frac{r}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F035",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "f_{0}=max\\left{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right}"
+        },
+        {
+          "fid": "F036",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{f0}=\\frac{f_{0}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F037",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{up,j}=\\left| \\left( x_{3,j}-x_{3,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
+        },
+        {
+          "fid": "F038",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{down,j}=\\left| \\left( x_{4,j}-x_{4,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
+        },
+        {
+          "fid": "F039",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{mean,j}=max\\left{ b^{'}_{up,j}-b^{'}_{down,j} \\right}"
+        },
+        {
+          "fid": "F040",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{b^{'}}=\\frac{b^{'}_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F041",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{up,j}=\\left| \\left( x_{5,j}-x_{5,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
+        },
+        {
+          "fid": "F042",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{down,j}=\\left| \\left( x_{6,j}-x_{6,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
+        },
+        {
+          "fid": "F043",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{mean,j}=max\\left{ b_{up,j}-b_{down,j} \\right}"
+        },
+        {
+          "fid": "F044",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{b}=\\frac{b_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F045",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "h_{mean,j}=\\frac{1}{n}\\left{ \\left| \\left( x_{2,j}-x_{1,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|+\\left| \\left( x_{4,j}-x_{3,0} \\right)-\\left( x_{3,j}-x_{3,0} \\right) \\right|+\\left| \\left( x_{6,j}-x_{5,0} \\right)-\\left( x_{5,j}-x_{5,0} \\right) \\right| \\right}"
+        },
+        {
+          "fid": "F046",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{h}=\\frac{h_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F047",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{bk}=\\sqrt{u_{r}^{2}+u_{f_{0}}^{2}+u_{b^{'}}^{2}+u_{b}^{2}+u_{h}^{2}}"
+        },
+        {
+          "fid": "F048",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{c}=\\sqrt{u_{a}^{2}+u_{c}^{2}+u_{bk}^{2}}"
+        },
+        {
+          "fid": "F049",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "U_{c}=k×u_{c}"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "docx_processed": 7,
+    "legacy_skipped": 4,
+    "formulas_found": 351,
+    "formulas_ole_mathtype": 232,
+    "formulas_omml_native": 119,
+    "ole_with_image": 232,
+    "ole_mtef_recoverable": 232,
+    "ole_mtef_rate": 1.0,
+    "ole_latex_converted": 232,
+    "ole_latex_rate": 1.0,
+    "omml_latex_converted": 119,
+    "omml_latex_rate": 1.0,
+    "formulas_latex_total": 351,
+    "latex_rate_total": 1.0
+  }
+}

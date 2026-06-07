@@ -1,0 +1,166 @@
+# docker-compose.yml — QTKĐ RAG full stack
+#
+# ── Khởi động lần đầu ──────────────────────────────────────────────────────
+#   make up            → build images + start tất cả services (~10-20 phút, tải models)
+#   make pull-model    → tải LLM qwen2.5:1.5b vào Ollama (~940MB)
+#   make index         → index build/spike_a/ vào Qdrant (chạy 1 lần)
+#
+# ── Sử dụng hằng ngày ──────────────────────────────────────────────────────
+#   make up            → start (không rebuild)
+#   make down          → dừng tất cả
+#   make logs          → xem log realtime
+#   make index         → re-index khi thêm tài liệu mới
+#
+# ── Ports ──────────────────────────────────────────────────────────────────
+#   :7861  → Gradio chat UI  (http://localhost:7861)
+#   :8010  → Embedding API   (BAAI/bge-m3)
+#   :8011  → Reranker API    (BAAI/bge-reranker-v2-m3)
+#   :6333  → Qdrant          (vector database)
+#   :11434 → Ollama          (LLM: qwen2.5:1.5b)
+#
+# ── Lưu ý macOS ────────────────────────────────────────────────────────────
+#   Docker trên Mac không dùng được Apple Silicon GPU.
+#   Nếu muốn dùng GPU Metal: cài Ollama native (brew install ollama),
+#   chạy `ollama serve`, rồi trong .env đặt:
+#     OLLAMA_URL=http://host.docker.internal:11434/v1/chat/completions
+#   Sau đó bỏ comment service `ollama` bên dưới.
+#
+# ── Lưu ý Linux + NVIDIA GPU ───────────────────────────────────────────────
+#   Bỏ comment phần deploy.resources trong service `ollama` để dùng GPU.
+#   Yêu cầu: nvidia-container-toolkit đã cài.
+
+services:
+
+  # ── Vector Database ─────────────────────────────────────────────────────────
+  qdrant:
+    image: qdrant/qdrant:v1.10.1
+    container_name: qtkd-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant_storage:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/6333' 2>/dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  # ── Embedding service: BAAI/bge-m3 (1024-dim) ──────────────────────────────
+  embedding:
+    build:
+      context: docker/inference
+      dockerfile: Dockerfile
+      args:
+        MODE: embedding
+        EMBEDDING_MODEL: BAAI/bge-m3
+    image: qtkd-embedding:local
+    container_name: qtkd-embedding
+    environment:
+      MODE: embedding
+      EMBEDDING_MODEL: BAAI/bge-m3
+      PORT: "8010"
+    ports:
+      - "8010:8010"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8010/health')"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  # ── Reranker service: BAAI/bge-reranker-v2-m3 ──────────────────────────────
+  reranker:
+    build:
+      context: docker/inference
+      dockerfile: Dockerfile
+      args:
+        MODE: reranker
+        RERANKER_MODEL: BAAI/bge-reranker-v2-m3
+    image: qtkd-reranker:local
+    container_name: qtkd-reranker
+    environment:
+      MODE: reranker
+      RERANKER_MODEL: BAAI/bge-reranker-v2-m3
+      PORT: "8011"
+    ports:
+      - "8011:8011"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8011/health')"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  # ── LLM: Ollama (qwen2.5:1.5b dev / qwen2.5:7b prod) ─────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: qtkd-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    environment:
+      OLLAMA_HOST: "0.0.0.0"
+    restart: unless-stopped
+    # ── NVIDIA GPU: bỏ comment để dùng RTX 5060 ──────────────────────────────
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  # ── Gradio Chat App ─────────────────────────────────────────────────────────
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: qtkd-app:local
+    container_name: qtkd-app
+    ports:
+      - "7861:7861"
+    volumes:
+      - ./build/spike_a:/app/build/spike_a:ro   # pre-built Markdown (read-only)
+      - ./TC_DL:/app/TC_DL:ro                   # source .docx files (read-only)
+    environment:
+      EMBED_URL: http://embedding:8010/v1/embeddings
+      RERANK_URL: http://reranker:8011/v1/rerank
+      QDRANT_URL: http://qdrant:6333
+      OLLAMA_URL: http://ollama:11434/v1/chat/completions
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:1.5b}
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      embedding:
+        condition: service_healthy
+      reranker:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── One-time Indexer (chạy: make index) ────────────────────────────────────
+  indexer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: qtkd-app:local
+    container_name: qtkd-indexer
+    volumes:
+      - ./build/spike_a:/app/build/spike_a:ro
+    environment:
+      EMBED_URL: http://embedding:8010/v1/embeddings
+      QDRANT_URL: http://qdrant:6333
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      embedding:
+        condition: service_healthy
+    profiles: ["tools"]
+    command: ["python", "-m", "index.embed_store", "--force"]
+
+volumes:
+  qdrant_storage:   # Qdrant data persists across restarts
+  ollama_data:      # Downloaded LLM models persist across restarts

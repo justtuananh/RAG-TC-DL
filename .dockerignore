@@ -1,0 +1,28 @@
+# Python environments
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+
+# Source documents & generated output (mounted as volumes at runtime)
+TC_DL/
+build/
+
+# Dev / test artifacts
+.git/
+.gitignore
+*.log
+*.tmp
+
+# IDE
+.vscode/
+.idea/
+
+# Docs (not needed in image)
+docs/
+*.md
+!requirements*.txt

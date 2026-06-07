@@ -1,0 +1,27 @@
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env / secrets
+.env
+.env.local
+
+# kotaemon runtime data (sibling repo; ignore if ever present here)
+ktem_app_data/
+
+# Docker model cache (TEI/inference data dir, if mounted locally)
+tei-data/
+
+# Note: TC_DL/ (source docs) and build/ (extracted markdown) are intentionally
+# tracked per project decision — keep the repo PRIVATE because TC_DL contains
+# internal documents (incl. an inspector/personnel list).

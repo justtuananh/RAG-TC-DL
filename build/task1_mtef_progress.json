@@ -1,0 +1,50 @@
+{
+  "total_bins": 232,
+  "gem_success": 232,
+  "latex_success": 232,
+  "fail_count": 0,
+  "success_rate_pct": 100.0,
+  "sample_outputs": [
+    {
+      "file": "QTKD_1.061_2021_ND_V2/F001.bin",
+      "latex": "\\DeltaP_{cd} = P_{m} - P_{cd}"
+    },
+    {
+      "file": "QTKD_1.061_2021_ND_V2/F002.bin",
+      "latex": "\\DeltaP_{cd}"
+    },
+    {
+      "file": "QTKD_1.061_2021_ND_V2/F003.bin",
+      "latex": "P_{cd}"
+    },
+    {
+      "file": "QTKD_1.061_2021_ND_V2/F004.bin",
+      "latex": "P_{m}"
+    },
+    {
+      "file": "QTKD_1.071_2022_FINAL/F002.bin",
+      "latex": "\\tau = \\tau_{t} \\times \\frac{\\eta_{t}}{\\eta}"
+    },
+    {
+      "file": "QTKD_1.071_2022_FINAL/F008.bin",
+      "latex": "V = V_{t} \\times \\frac{\\eta_{t}}{\\eta}"
+    },
+    {
+      "file": "QTKD_1.071_2022_FINAL/F013.bin",
+      "latex": "\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}"
+    },
+    {
+      "file": "QTKD_1.071_2022_FINAL/F014.bin",
+      "latex": "\\Delta_{1} = P - P_{c1}"
+    },
+    {
+      "file": "QTKD_1.071_2022_FINAL/F015.bin",
+      "latex": "\\Delta_{2} = P - P_{c2}"
+    },
+    {
+      "file": "QTKD_1.071_2022_FINAL/F016.bin",
+      "latex": "\\Delta"
+    }
+  ],
+  "issues": []
+}

@@ -1,0 +1,9 @@
+# Stage 2-3 dependencies (indexing + retrieval + Gradio app)
+# Install via: pip install -r requirements-app.txt
+# Used by: Dockerfile (app container), docker/indexer
+
+qdrant-client>=1.7,<2.0
+gradio>=4.39,<5.0
+rank-bm25>=0.2.2
+requests>=2.31
+lxml>=5.0

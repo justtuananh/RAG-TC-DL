@@ -1,0 +1,10 @@
+# Spike A — structural + formula extraction (lightweight, offline)
+olefile>=0.47      # read MathType "Equation Native" (MTEF) streams from OLE objects
+lxml>=5.0          # parse word/document.xml in document order
+scikit-image>=0.21 # QA gate SSIM (image similarity scoring for formula render comparison)
+
+# Task 3 — retrieval + UI (run in kotaemon/.venv)
+# qdrant-client==1.10.1  (already in kotaemon/.venv — matches Qdrant server v1.10.1)
+# gradio>=4.39           (already in kotaemon/.venv)
+rank-bm25>=0.2.2   # BM25 in-memory index for hybrid retrieval (MIT)
+# requests, rank_bm25, gradio installed via: cd kotaemon && uv pip install rank-bm25
