@@ -199,8 +199,6 @@ def retrieve(
     query: str,
     top_k: int = TOP_K,
     top_n: int = 5,
-    *,
-    _timing: dict[str, float] | None = None,
 ) -> list[dict]:
     """Full hybrid pipeline: route → expand → embed + BM25 → RRF → rerank → parent.
 
@@ -209,26 +207,14 @@ def retrieve(
       rerank_score   : float (from bge-reranker, scored on parent text)
       rrf_score      : float (pre-rerank fusion score)
       parent_payload : parent section payload (attached by rerank_hits)
-
-    Optional _timing dict is populated with sub-component milliseconds:
-      embed_ms, search_ms, rerank_ms, total_ms
     """
-    import time
-
     from .bm25_index import bm25_search
     from .router import route
 
-    t0 = time.perf_counter()
-
     expanded = _expand_query(query)
-
-    t_embed = time.perf_counter()
     vec = embed_query(expanded)
-    embed_ms = (time.perf_counter() - t_embed) * 1000
-
     file_stem = route(query)
 
-    t_search = time.perf_counter()
     dense_hits = dense_search(vec, top_k=top_k, file_stem=file_stem)
     bm25_hits = bm25_search(expanded, top_k=top_k, file_stem=file_stem)
 
@@ -236,18 +222,6 @@ def retrieve(
     if file_stem and (len(dense_hits) + len(bm25_hits) < 6):
         dense_hits = dense_search(vec, top_k=top_k)
         bm25_hits = bm25_search(expanded, top_k=top_k)
-    search_ms = (time.perf_counter() - t_search) * 1000
 
     fused = _filter_noise(rrf_fuse(dense_hits, bm25_hits))[:RERANK_POOL]
-
-    t_rerank = time.perf_counter()
-    results = rerank_hits(query, fused, top_n=top_n)
-    rerank_ms = (time.perf_counter() - t_rerank) * 1000
-
-    if _timing is not None:
-        _timing["embed_ms"] = round(embed_ms, 1)
-        _timing["search_ms"] = round(search_ms, 1)
-        _timing["rerank_ms"] = round(rerank_ms, 1)
-        _timing["total_ms"] = round((time.perf_counter() - t0) * 1000, 1)
-
-    return results
+    return rerank_hits(query, fused, top_n=top_n)

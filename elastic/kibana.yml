@@ -1,9 +1,0 @@
-# elastic/kibana.yml — mounted vào /usr/share/kibana/config/kibana.yml
-server.host: "0.0.0.0"
-server.publicBaseUrl: "http://localhost:5601"
-
-elasticsearch.hosts: ["http://elasticsearch:9200"]
-
-# Tắt strict CSP để Lens visualization render được inline scripts
-csp.strict: false
-csp.warnLegacyBrowsers: false

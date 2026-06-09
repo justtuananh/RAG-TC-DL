@@ -140,14 +140,12 @@ services:
     volumes:
       - ./build/spike_a:/app/build/spike_a:ro   # pre-built Markdown (read-only)
       - ./TC_DL:/app/TC_DL:ro                   # source .docx files (read-only)
-      - ./logs:/app/logs                         # performance logs → accessible to Elastic Agent on host
     environment:
       EMBED_URL: http://embedding:8010/v1/embeddings
       RERANK_URL: http://reranker:8011/v1/rerank
       QDRANT_URL: http://qdrant:6333
       OLLAMA_URL: http://ollama:11434/v1/chat/completions
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
-      LOG_DIR: /app/logs
     depends_on:
       qdrant:
         condition: service_healthy

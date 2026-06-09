@@ -19,7 +19,6 @@ import html as html_mod
 import json
 import os
 import sys
-import time
 from pathlib import Path
 
 import gradio as gr
@@ -27,11 +26,7 @@ import markdown as _md
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
-from monitoring.logger import log_query
-from monitoring.system_metrics import start_collector
 from retrieval.retriever import retrieve
-
-start_collector()
 
 # ── Config ────────────────────────────────────────────────────────────────────
 OLLAMA_URL   = os.getenv("OLLAMA_URL",   "http://localhost:11434/v1/chat/completions")
@@ -247,44 +242,20 @@ def bot_fn(history: list):
     )
     prior = history[:-1]
 
-    t_start = time.perf_counter()
-    retrieval_ms = 0.0
-    llm_ms = 0.0
-    token_count = 0
-
-    def _log(doc_count: int = 0, error: str | None = None) -> None:
-        log_query(
-            question=query,
-            model=OLLAMA_MODEL,
-            top_k=20,
-            top_n=5,
-            doc_count=doc_count,
-            retrieval_ms=retrieval_ms,
-            llm_ms=llm_ms,
-            total_ms=(time.perf_counter() - t_start) * 1000,
-            tokens=token_count,
-            error=error,
-        )
-
     history = history + [{"role": "assistant", "content": "*⏳ Đang nhúng câu hỏi (embedding)…*"}]
     yield history, gr.update()
 
     history[-1]["content"] = "*🔍 Đang tìm kiếm trong tài liệu QTKĐ (hybrid)…*"
     yield history, gr.update()
-    t0 = time.perf_counter()
     try:
         results = retrieve(query, top_k=20, top_n=5)
     except Exception as e:
-        retrieval_ms = (time.perf_counter() - t0) * 1000
         history[-1]["content"] = f"❌ Lỗi tìm kiếm: {e}"
-        _log(error=str(e))
         yield history, gr.update()
         return
-    retrieval_ms = (time.perf_counter() - t0) * 1000
 
     if not results:
         history[-1]["content"] = "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ."
-        _log()
         yield history, build_doc_viewer_html([])
         return
 
@@ -298,22 +269,16 @@ def bot_fn(history: list):
 
     # Stream LLM
     partial = ""
-    t_llm = time.perf_counter()
     try:
         for delta in _stream_ollama(messages):
             partial += delta
-            token_count += 1
             history[-1]["content"] = partial
             yield history, gr.update()
     except Exception as e:
-        llm_ms = (time.perf_counter() - t_llm) * 1000
         history[-1]["content"] = (partial or "") + f"\n\n❌ Lỗi LLM: {e}"
-        _log(doc_count=len(results), error=str(e))
         yield history, gr.update()
         return
-    llm_ms = (time.perf_counter() - t_llm) * 1000
 
-    _log(doc_count=len(results))
     history[-1]["content"] = partial + citations_md
     yield history, gr.update()
 
