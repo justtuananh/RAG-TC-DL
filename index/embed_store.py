@@ -216,13 +216,14 @@ def query(text: str, top_k: int = 5, parents_only: bool = False) -> None:
             key="is_parent", match=MatchValue(value=True)
         )])
 
-    hits = client.search(
+    result = client.query_points(
         collection_name=COLLECTION,
-        query_vector=vec,
+        query=vec,
         limit=top_k,
         query_filter=filt,
         with_payload=True,
     )
+    hits = result.points
 
     print(f"\nQuery: '{text}'")
     print(f"{'─'*60}")

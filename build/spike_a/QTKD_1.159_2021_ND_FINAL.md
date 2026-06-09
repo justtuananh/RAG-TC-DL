@@ -910,7 +910,7 @@ h0 là độ cao so với mực nước biển, m.
 6.3.3.3 Sai số áp suất tính theo gia tốc trọng trường tại nơi đo (g) so với áp suất danh nghĩa (gs):
 
 
-| $\Deltap = \frac{M}{A0t} \times (g_{s} - g)$ |  |
+| [công thức không đọc được] |  |
 | --- | --- |
 
 
@@ -1092,7 +1092,7 @@ A.3.3 Xác định độ chính xác
 
 U(p) = (với k = 2)
 
-$\Deltap = \frac{M}{A0t} \times (g_{s} - g) =$
+[công thức không đọc được]
 
 Độ chính xác: d =
 
@@ -1248,7 +1248,7 @@ B.3.3 Xác định độ chính xác
 
 U(p) = (với k = 2)
 
-$\Deltap = \frac{M}{A0t} \times (g_{s} - g) =$
+[công thức không đọc được]
 
 Độ chính xác: d =
 

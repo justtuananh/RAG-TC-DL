@@ -57,3 +57,23 @@ test-embed:
 # Smoke test Qdrant collection
 test-qdrant:
 	curl -s localhost:6333/collections/qtkd_rag | python3 -m json.tool | grep vectors_count
+
+# ── Monitoring ────────────────────────────────────────────────────────────────
+
+# Khởi động Elastic stack (ES + Kibana + Filebeat)
+mon-up:
+	docker compose -f docker-compose.monitoring.yml up -d
+
+mon-down:
+	docker compose -f docker-compose.monitoring.yml down
+
+mon-logs:
+	docker compose -f docker-compose.monitoring.yml logs -f
+
+# Tạo Kibana data views + dashboard (chạy 1 lần sau khi Kibana sẵn sàng)
+kibana-setup:
+	python3 elastic/setup_kibana.py
+
+# Xem 20 dòng log RAG cuối (pretty-print JSON)
+tail-logs:
+	python3 -c "import pathlib,json; f=pathlib.Path('logs/rag_app.jsonl'); lines=f.read_text(encoding='utf-8').splitlines()[-20:] if f.exists() else []; [print(json.dumps(json.loads(l),ensure_ascii=False,indent=2)) for l in lines]"

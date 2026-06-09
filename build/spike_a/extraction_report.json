@@ -2,7 +2,7 @@
   "source": "TC_DL",
   "files": [
     {
-      "file": "10. Bieu 7 Danh sách KĐV (NAS).doc",
+      "file": "10. Bieu 7 Danh sách KĐV (NAS).doc",
       "status": "skipped-legacy",
       "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
     },
@@ -381,7 +381,7 @@
       "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
     },
     {
-      "file": "7. Biểu 4 Danh mục QT 2022 NAS.doc",
+      "file": "7. Biểu 4 Danh mục QT 2022 NAS.doc",
       "status": "skipped-legacy",
       "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
     },
@@ -3164,7 +3164,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g)",
+          "latex": null,
           "ole": "word/embeddings/oleObject130.bin",
           "ole_bytes": 3584,
           "img": "word/media/image127.wmf",
@@ -3215,7 +3215,7 @@
           "kind": "ole",
           "section": "Mẫu biên bản kiểm định",
           "in_table": false,
-          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g) =",
+          "latex": null,
           "ole": "word/embeddings/oleObject133.bin",
           "ole_bytes": 3584,
           "img": "word/media/image130.wmf",
@@ -3232,7 +3232,7 @@
           "kind": "ole",
           "section": "Mẫu biên bản kiểm định (không đạt)",
           "in_table": false,
-          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g) =",
+          "latex": null,
           "ole": "word/embeddings/oleObject134.bin",
           "ole_bytes": 3584,
           "img": "word/media/image130.wmf",
@@ -4905,11 +4905,11 @@
     "ole_with_image": 232,
     "ole_mtef_recoverable": 232,
     "ole_mtef_rate": 1.0,
-    "ole_latex_converted": 232,
-    "ole_latex_rate": 1.0,
+    "ole_latex_converted": 229,
+    "ole_latex_rate": 0.9871,
     "omml_latex_converted": 119,
     "omml_latex_rate": 1.0,
-    "formulas_latex_total": 351,
-    "latex_rate_total": 1.0
+    "formulas_latex_total": 348,
+    "latex_rate_total": 0.9915
   }
 }

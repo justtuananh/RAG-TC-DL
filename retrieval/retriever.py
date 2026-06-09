@@ -55,14 +55,14 @@ def dense_search(
     conditions = [FieldCondition(key="is_parent", match=MatchValue(value=False))]
     if file_stem:
         conditions.append(FieldCondition(key="file_stem", match=MatchValue(value=file_stem)))
-    hits = client.search(
+    result = client.query_points(
         collection_name=COLLECTION,
-        query_vector=vec,
+        query=vec,
         query_filter=Filter(must=conditions),
         limit=top_k,
         with_payload=True,
     )
-    return [{"id": h.id, "score": h.score, "payload": h.payload} for h in hits]
+    return [{"id": h.id, "score": h.score, "payload": h.payload} for h in result.points]
 
 
 _LEXICON: dict[str, str] = {
@@ -195,7 +195,13 @@ def rrf_fuse(
     return fused
 
 
-def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
+def retrieve(
+    query: str,
+    top_k: int = TOP_K,
+    top_n: int = 5,
+    *,
+    _timing: dict[str, float] | None = None,
+) -> list[dict]:
     """Full hybrid pipeline: route → expand → embed + BM25 → RRF → rerank → parent.
 
     Returns list of top_n hit dicts, each with:
@@ -203,14 +209,26 @@ def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
       rerank_score   : float (from bge-reranker, scored on parent text)
       rrf_score      : float (pre-rerank fusion score)
       parent_payload : parent section payload (attached by rerank_hits)
+
+    Optional _timing dict is populated with sub-component milliseconds:
+      embed_ms, search_ms, rerank_ms, total_ms
     """
+    import time
+
     from .bm25_index import bm25_search
     from .router import route
 
+    t0 = time.perf_counter()
+
     expanded = _expand_query(query)
+
+    t_embed = time.perf_counter()
     vec = embed_query(expanded)
+    embed_ms = (time.perf_counter() - t_embed) * 1000
+
     file_stem = route(query)
 
+    t_search = time.perf_counter()
     dense_hits = dense_search(vec, top_k=top_k, file_stem=file_stem)
     bm25_hits = bm25_search(expanded, top_k=top_k, file_stem=file_stem)
 
@@ -218,7 +236,18 @@ def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
     if file_stem and (len(dense_hits) + len(bm25_hits) < 6):
         dense_hits = dense_search(vec, top_k=top_k)
         bm25_hits = bm25_search(expanded, top_k=top_k)
+    search_ms = (time.perf_counter() - t_search) * 1000
 
     fused = _filter_noise(rrf_fuse(dense_hits, bm25_hits))[:RERANK_POOL]
-    # rerank_hits now reranks on parent text and attaches parent_payload
-    return rerank_hits(query, fused, top_n=top_n)
+
+    t_rerank = time.perf_counter()
+    results = rerank_hits(query, fused, top_n=top_n)
+    rerank_ms = (time.perf_counter() - t_rerank) * 1000
+
+    if _timing is not None:
+        _timing["embed_ms"] = round(embed_ms, 1)
+        _timing["search_ms"] = round(search_ms, 1)
+        _timing["rerank_ms"] = round(rerank_ms, 1)
+        _timing["total_ms"] = round((time.perf_counter() - t0) * 1000, 1)
+
+    return results

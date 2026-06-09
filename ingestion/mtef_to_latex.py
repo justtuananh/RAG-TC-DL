@@ -31,12 +31,21 @@ from lxml import etree
 # 1. Ruby gem invocation
 # ---------------------------------------------------------------------------
 
-_GEM_PATHS = [
-    os.path.expanduser("~/.gem/ruby/2.6.0"),
-    "/Library/Ruby/Gems/2.6.0",
-    "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/gems/2.6.0",
-]
-_GEM_PATH_ENV = ":".join(_GEM_PATHS)
+import platform as _platform
+
+if _platform.system() == "Windows":
+    _GEM_PATHS = [
+        r"C:\Ruby40-x64\lib\ruby\gems\4.0.0",
+        os.path.expanduser(r"~\.local\share\gem\ruby\4.0.0"),
+    ]
+    _GEM_PATH_ENV = ";".join(_GEM_PATHS)
+else:
+    _GEM_PATHS = [
+        os.path.expanduser("~/.gem/ruby/2.6.0"),
+        "/Library/Ruby/Gems/2.6.0",
+        "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/gems/2.6.0",
+    ]
+    _GEM_PATH_ENV = ":".join(_GEM_PATHS)
 
 _RUBY_SNIPPET = r"""
 require 'mathtype_to_mathml'

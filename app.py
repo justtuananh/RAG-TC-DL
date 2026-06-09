@@ -1,4 +1,4 @@
-"""QTKĐ RAG Chatbot — Gradio 4.x, KaTeX formulas + doc viewer with passage highlight.
+"""QTKĐ RAG Chatbot — Gradio 5.x, KaTeX formulas + doc viewer with passage highlight.
 
 Run:
   /path/to/kotaemon/.venv/bin/python app.py
@@ -19,6 +19,7 @@ import html as html_mod
 import json
 import os
 import sys
+import time
 from pathlib import Path
 
 import gradio as gr
@@ -26,7 +27,11 @@ import markdown as _md
 import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
+from monitoring.logger import log_query
+from monitoring.system_metrics import start_collector
 from retrieval.retriever import retrieve
+
+start_collector()
 
 # ── Config ────────────────────────────────────────────────────────────────────
 OLLAMA_URL   = os.getenv("OLLAMA_URL",   "http://localhost:11434/v1/chat/completions")
@@ -84,17 +89,22 @@ def _build_context_and_citations(results: list[dict]) -> tuple[str, str]:
     return context_str, citations_md
 
 
-def _build_messages(query: str, context_str: str, prior: list[list]) -> list[dict]:
+def _build_messages(query: str, context_str: str, prior: list[dict]) -> list[dict]:
     msgs: list[dict] = [
         {"role": "system", "content": SYSTEM_TMPL.format(context=context_str)}
     ]
-    for turn in prior[-HISTORY_TURNS:]:
-        user_msg, bot_msg = turn[0], turn[1]
-        if user_msg:
-            msgs.append({"role": "user", "content": user_msg})
-        if bot_msg:
-            clean = bot_msg.split("\n\n---\n\n")[0].strip()
-            msgs.append({"role": "assistant", "content": clean})
+    for msg in prior[-(HISTORY_TURNS * 2):]:
+        role = msg.get("role")
+        content = msg.get("content") or ""
+        if isinstance(content, list):
+            content = " ".join(
+                p if isinstance(p, str) else (p.get("text", "") if isinstance(p, dict) else "")
+                for p in content
+            )
+        if role == "assistant":
+            content = content.split("\n\n---\n\n")[0].strip()
+        if role in ("user", "assistant") and content:
+            msgs.append({"role": role, "content": content})
     msgs.append({"role": "user", "content": query})
     return msgs
 
@@ -221,33 +231,60 @@ def build_doc_viewer_html(results: list[dict]) -> str:
 # ── Gradio event handlers ──────────────────────────────────────────────────────
 
 def user_fn(user_message: str, history: list) -> tuple[str, list]:
-    return "", history + [[user_message, None]]
+    return "", history + [{"role": "user", "content": user_message}]
 
 
 def bot_fn(history: list):
     """Generator → yields (chatbot_history, doc_viewer_html)."""
-    if not history or history[-1][0] is None:
+    if not history or history[-1].get("role") != "user":
         yield history, gr.update()
         return
 
-    query = history[-1][0]
+    raw = history[-1]["content"]
+    query = raw if isinstance(raw, str) else " ".join(
+        p if isinstance(p, str) else (p.get("text", "") if isinstance(p, dict) else "")
+        for p in raw
+    )
     prior = history[:-1]
 
-    # 1. Embedding + BM25 + RRF + rerank (hybrid pipeline)
-    history[-1][1] = "*⏳ Đang nhúng câu hỏi (embedding)…*"
+    t_start = time.perf_counter()
+    retrieval_ms = 0.0
+    llm_ms = 0.0
+    token_count = 0
+
+    def _log(doc_count: int = 0, error: str | None = None) -> None:
+        log_query(
+            question=query,
+            model=OLLAMA_MODEL,
+            top_k=20,
+            top_n=5,
+            doc_count=doc_count,
+            retrieval_ms=retrieval_ms,
+            llm_ms=llm_ms,
+            total_ms=(time.perf_counter() - t_start) * 1000,
+            tokens=token_count,
+            error=error,
+        )
+
+    history = history + [{"role": "assistant", "content": "*⏳ Đang nhúng câu hỏi (embedding)…*"}]
     yield history, gr.update()
 
-    history[-1][1] = "*🔍 Đang tìm kiếm trong tài liệu QTKĐ (hybrid)…*"
+    history[-1]["content"] = "*🔍 Đang tìm kiếm trong tài liệu QTKĐ (hybrid)…*"
     yield history, gr.update()
+    t0 = time.perf_counter()
     try:
         results = retrieve(query, top_k=20, top_n=5)
     except Exception as e:
-        history[-1][1] = f"❌ Lỗi tìm kiếm: {e}"
+        retrieval_ms = (time.perf_counter() - t0) * 1000
+        history[-1]["content"] = f"❌ Lỗi tìm kiếm: {e}"
+        _log(error=str(e))
         yield history, gr.update()
         return
+    retrieval_ms = (time.perf_counter() - t0) * 1000
 
     if not results:
-        history[-1][1] = "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ."
+        history[-1]["content"] = "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ."
+        _log()
         yield history, build_doc_viewer_html([])
         return
 
@@ -256,23 +293,28 @@ def bot_fn(history: list):
     context_str, citations_md = _build_context_and_citations(results)
     messages = _build_messages(query, context_str, prior)
 
-    history[-1][1] = "*💭 Đang tổng hợp câu trả lời…*"
+    history[-1]["content"] = "*💭 Đang tổng hợp câu trả lời…*"
     yield history, doc_html  # ← sources appear here
 
-    # 3. Stream LLM
+    # Stream LLM
     partial = ""
+    t_llm = time.perf_counter()
     try:
         for delta in _stream_ollama(messages):
             partial += delta
-            history[-1][1] = partial
+            token_count += 1
+            history[-1]["content"] = partial
             yield history, gr.update()
     except Exception as e:
-        history[-1][1] = (partial or "") + f"\n\n❌ Lỗi LLM: {e}"
+        llm_ms = (time.perf_counter() - t_llm) * 1000
+        history[-1]["content"] = (partial or "") + f"\n\n❌ Lỗi LLM: {e}"
+        _log(doc_count=len(results), error=str(e))
         yield history, gr.update()
         return
+    llm_ms = (time.perf_counter() - t_llm) * 1000
 
-    # 4. Append citations
-    history[-1][1] = partial + citations_md
+    _log(doc_count=len(results))
+    history[-1]["content"] = partial + citations_md
     yield history, gr.update()
 
 
@@ -421,12 +463,7 @@ EXAMPLES = [
 # ── UI ────────────────────────────────────────────────────────────────────────
 
 def build_ui() -> gr.Blocks:
-    with gr.Blocks(
-        title="QTKĐ Chatbot",
-        css=CSS,
-        js=_JS_KATEX_OBSERVER,
-        theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate"),
-    ) as demo:
+    with gr.Blocks(title="QTKĐ Chatbot") as demo:
 
         gr.Markdown(
             "# 📐 QTKĐ Chatbot — Tra cứu Quy trình Kiểm định\n"
@@ -441,8 +478,6 @@ def build_ui() -> gr.Blocks:
                     label="Chat",
                     elem_id="qtkd-chat",
                     height=480,
-                    show_copy_button=True,
-                    bubble_full_width=False,
                     latex_delimiters=LATEX_DELIMITERS,
                     placeholder=(
                         "Bắt đầu bằng cách nhập câu hỏi về quy trình kiểm định.\n\n"
@@ -490,4 +525,7 @@ if __name__ == "__main__":
         server_port=7861,
         share=False,
         show_error=True,
+        theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate"),
+        css=CSS,
+        js=_JS_KATEX_OBSERVER,
     )

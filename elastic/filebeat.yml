@@ -1,0 +1,55 @@
+# elastic/filebeat.yml — ship rag_app.jsonl + system_metrics.jsonl → Elasticsearch
+#
+# Filebeat 8.x filestream: index routing phải qua output.elasticsearch.indices,
+# không dùng index: tại input level (bị ignored với filestream).
+
+filebeat.inputs:
+
+  # ── RAG query logs ────────────────────────────────────────────────────────────
+  - type: filestream
+    id: rag-app-logs
+    paths:
+      - /app/logs/rag_app.jsonl
+    parsers:
+      - ndjson:
+          target: ""
+          add_error_key: true
+          overwrite_keys: true
+    processors:
+      - add_fields:
+          target: ""
+          fields:
+            fb_dest: rag
+
+  # ── System metrics ────────────────────────────────────────────────────────────
+  - type: filestream
+    id: system-metrics
+    paths:
+      - /app/logs/system_metrics.jsonl
+    parsers:
+      - ndjson:
+          target: ""
+          add_error_key: true
+          overwrite_keys: true
+    processors:
+      - add_fields:
+          target: ""
+          fields:
+            fb_dest: system
+
+# ── Output: route bằng fb_dest ────────────────────────────────────────────────
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  indices:
+    - index: "logs-rag-default"
+      when.equals:
+        fb_dest: "rag"
+    - index: "metrics-system-default"
+      when.equals:
+        fb_dest: "system"
+
+setup.ilm.enabled: false
+setup.template.enabled: false
+
+logging.level: info
+logging.to_files: false

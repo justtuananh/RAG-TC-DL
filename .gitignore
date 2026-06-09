@@ -25,3 +25,6 @@ tei-data/
 # Note: TC_DL/ (source docs) and build/ (extracted markdown) are intentionally
 # tracked per project decision — keep the repo PRIVATE because TC_DL contains
 # internal documents (incl. an inspector/personnel list).
+
+# Performance logs (generated at runtime, can be large)
+logs/*.jsonl

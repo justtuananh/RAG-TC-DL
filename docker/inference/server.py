@@ -36,13 +36,20 @@ _reranker: CrossEncoder | None = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global _embedder, _reranker
+    import torch
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device == "cuda":
+        log.info("GPU: %s (VRAM %.1f GB)", torch.cuda.get_device_name(0),
+                 torch.cuda.get_device_properties(0).total_memory / 1e9)
+    else:
+        log.warning("CUDA not available — running on CPU")
     if MODE == "reranker":
-        log.info("Loading reranker: %s", RERANKER_MODEL)
-        _reranker = CrossEncoder(RERANKER_MODEL, max_length=512)
+        log.info("Loading reranker: %s on %s", RERANKER_MODEL, device)
+        _reranker = CrossEncoder(RERANKER_MODEL, max_length=512, device=device)
         log.info("Reranker ready")
     else:
-        log.info("Loading embedding model: %s", EMBEDDING_MODEL)
-        _embedder = SentenceTransformer(EMBEDDING_MODEL)
+        log.info("Loading embedding model: %s on %s", EMBEDDING_MODEL, device)
+        _embedder = SentenceTransformer(EMBEDDING_MODEL, device=device)
         log.info("Embedding model ready (dim=%d)", _embedder.get_sentence_embedding_dimension())
     yield
 
