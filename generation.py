@@ -124,16 +124,36 @@ def build_messages(query: str, context_str: str, prior: list[list]) -> list[dict
     return msgs
 
 
+def _native_chat_url(url: str) -> str:
+    """Map URL OpenAI-compat (.../v1/chat/completions) → Ollama native /api/chat.
+
+    Giữ nguyên host từ env cũ (.env / docker-compose đặt OLLAMA_URL dạng /v1);
+    URL đã là /api/chat thì giữ nguyên.
+    """
+    return url.replace("/v1/chat/completions", "/api/chat")
+
+
 def stream_ollama(messages: list[dict]):
-    """Stream SSE từ Ollama, yield từng content delta. Đọc OLLAMA_MODEL module-global."""
+    """Stream từ Ollama NATIVE /api/chat (JSON lines), yield từng content delta.
+
+    VÌ SAO không dùng /v1/chat/completions: endpoint OpenAI-compat BỎ QUA trường
+    "options" → num_ctx=8192/num_predict=1024 chưa bao giờ tới server; model chạy
+    ctx mặc định 4096 (xác nhận qua /api/ps trong lúc eval đang gửi 8192). Prompt
+    ~4,3k token bị Ollama CẮT TỪ ĐẦU — mất system prompt + nguồn [1][2] → citation
+    hỏng, fact đầu ngữ cảnh biến mất, 500 cận biên. /api/chat tôn trọng options
+    per-request. Đọc OLLAMA_MODEL module-global tại thời điểm gọi.
+    """
     resp = requests.post(
-        OLLAMA_URL,
+        _native_chat_url(OLLAMA_URL),
         json={
             "model": OLLAMA_MODEL,
             "messages": messages,
             "stream": True,
-            "temperature": 0.1,
-            "options": {"num_ctx": NUM_CTX, "num_predict": MAX_NEW_TOKENS},
+            "options": {
+                "num_ctx": NUM_CTX,
+                "num_predict": MAX_NEW_TOKENS,
+                "temperature": 0.1,
+            },
         },
         stream=True,
         timeout=OLLAMA_TIMEOUT,
@@ -142,13 +162,12 @@ def stream_ollama(messages: list[dict]):
     for line in resp.iter_lines():
         if not line:
             continue
-        raw = line.decode("utf-8")
-        if not raw.startswith("data: ") or raw == "data: [DONE]":
-            continue
         try:
-            chunk = json.loads(raw[6:])
-            delta = chunk["choices"][0]["delta"].get("content", "")
-            if delta:
-                yield delta
-        except (json.JSONDecodeError, KeyError):
+            chunk = json.loads(line.decode("utf-8"))
+        except json.JSONDecodeError:
             continue
+        delta = (chunk.get("message") or {}).get("content", "")
+        if delta:
+            yield delta
+        if chunk.get("done"):
+            break
