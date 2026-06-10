@@ -173,6 +173,9 @@ def main() -> None:
     parser.add_argument("--answer-file", default="eval/answer_set.jsonl")
     parser.add_argument("--category", default=None, help="Chỉ chạy 1 category.")
     parser.add_argument("--limit", type=int, default=None, help="Giới hạn số câu (smoke).")
+    parser.add_argument("--dump", default=None,
+                        help="Ghi record từng câu (answer + chấm điểm) ra JSONL để soi "
+                             "hậu kiểm (vd cờ ảo giác là token nào).")
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -225,6 +228,8 @@ def main() -> None:
                 print(f"  [{it['id']}] LỖI sinh: {e}")
                 ans = ""
             rec = scoring.score_question(it, ans, retrieved)
+            rec["question"] = it["question"]
+            rec["answer"] = ans
             records.append(rec)
             if args.verbose:
                 cov = "—" if rec["coverage"] is None else f"{rec['coverage']:.2f}"
@@ -234,6 +239,12 @@ def main() -> None:
         agg = _aggregate(records)
         aggs[model] = agg
         _print_model_report(model, agg)
+        if args.dump:
+            dump_path = Path(args.dump.replace("{model}", model.replace(":", "_")))
+            with dump_path.open("w", encoding="utf-8") as f:
+                for rec in records:
+                    f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+            print(f"  → dump: {dump_path}")
 
     _print_side_by_side(aggs)
 
