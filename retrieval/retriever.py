@@ -99,12 +99,46 @@ def _expand_query(query: str) -> str:
     return (query + " " + " ".join(extras)) if extras else query
 
 
+# Văn bản đưa vào cross-encoder: service reranker cắt ở 512 token (~1500 ký tự) nên
+# CAP 1400 + breadcrumb vẫn lọt cửa sổ; BACK = phần ngữ cảnh phía trước child match.
+RERANK_DOC_CAP = 1400
+RERANK_DOC_BACK = 200
+
+
+def _rerank_doc(payload: dict, parent: dict | None) -> str:
+    """Dựng document cho cross-encoder từ một ứng viên (chỉ dùng lúc rerank,
+    KHÔNG lưu vào store — text trong payload/Qdrant giữ nguyên).
+
+    Hai cơ chế đo được trên bộ MISS (2026-06-11):
+    1. Tiền tố "file — breadcrumb": mục tiêu đề-đúng nhưng body không nhắc tên
+       thiết bị (4.1 Điều kiện kiểm định = bullet đơn vị) bị cross-encoder chấm
+       thua mục anh em giàu chữ có tên thiết bị → thêm cùng tiền tố cho MỌI ứng
+       viên thì tín hiệu tên file/thiết bị cân bằng (Q12: 8→2, Q18: 8→2, Q22: 5→3).
+    2. Cửa sổ neo theo CHILD: section dài (6.3.3 của 1.159 ≈ 7,6k ký tự) bị server
+       cắt ở 512 token TRƯỚC khi thấy nội dung trả lời — lấy cửa sổ quanh vị trí
+       child match thay vì đầu section (Q39: 9→1, Q48: 7→1; công thức của Q48 nằm
+       ở ký tự 1857, ngoài cửa sổ cũ).
+    """
+    text = parent["text"] if parent else payload["text"]
+    if len(text) > RERANK_DOC_CAP:
+        child = payload["text"]
+        idx = text.find(child[:80])
+        if idx < 0:
+            idx = 0
+        heading = text.split("\n", 1)[0]
+        start = max(0, idx - RERANK_DOC_BACK)
+        window = text[start : start + RERANK_DOC_CAP]
+        text = (heading + "\n…" + window) if start > 0 else window
+    return f"{payload['file_stem']} — {payload['section_path']}\n{text}"
+
+
 def rerank_hits(query: str, hits: list[dict], top_n: int = 5) -> list[dict]:
     """Rerank on PARENT section text for richer context; attach parent_payload.
 
     Deduplicates by parent_id (one child per section), fetches parent text,
     scores with bge-reranker-v2-m3, returns top_n child hits ordered by
     parent relevance.  Falls back to child text when parent is unavailable.
+    Documents are built by _rerank_doc (breadcrumb prefix + child-anchored window).
     """
     if not hits:
         return []
@@ -124,7 +158,7 @@ def rerank_hits(query: str, hits: list[dict], top_n: int = 5) -> list[dict]:
         pid = h["payload"].get("parent_id")
         parent = fetch_parent(pid) if pid else None
         parent_payloads.append(parent)
-        documents.append(parent["text"] if parent else h["payload"]["text"])
+        documents.append(_rerank_doc(h["payload"], parent))
 
     resp = requests.post(
         RERANK_URL,
