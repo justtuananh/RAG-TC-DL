@@ -70,6 +70,10 @@ _LEXICON: dict[str, str] = {
     # truy vấn embed + BM25 (reranker vẫn nhận query gốc). Nhắm khẩu ngữ/paraphrase
     # và thuật ngữ song ngữ Việt–Anh trong các QTKĐ áp suất.
     "điều kiện môi trường": "điều kiện kiểm định nhiệt độ độ ẩm áp suất khí quyển",
+    # Chiều ngược lại: hỏi bằng ĐÚNG tiêu đề mục 4.1/5.1 ("Điều kiện kiểm định") nhưng
+    # body mục đó chỉ là bullet đơn vị (Nhiệt độ/Độ ẩm/…) không lặp lại tiêu đề —
+    # Q18 dense=36/bm25=22 nên không lọt phễu top_k=20. Khung mục này có ở MỌI QTKĐ.
+    "điều kiện kiểm định": "điều kiện môi trường nhiệt độ độ ẩm áp suất khí quyển",
     "sai số cho phép": "sai số giới hạn dung sai độ chính xác cấp chính xác",
     "thời gian quay tự do": "thời gian quay tự do píttông kiểm tra kỹ thuật độ nhớt",
     "độ chênh áp": "độ chênh áp blowdown chênh lệch áp suất đóng áp suất chỉnh đặt",
