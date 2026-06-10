@@ -74,6 +74,11 @@ _LEXICON: dict[str, str] = {
     # body mục đó chỉ là bullet đơn vị (Nhiệt độ/Độ ẩm/…) không lặp lại tiêu đề —
     # Q18 dense=36/bm25=22 nên không lọt phễu top_k=20. Khung mục này có ở MỌI QTKĐ.
     "điều kiện kiểm định": "điều kiện môi trường nhiệt độ độ ẩm áp suất khí quyển",
+    # Khẩu ngữ hỏi thẳng đại lượng môi trường (không nói "điều kiện") — kéo về mục
+    # 4.1/5.1; "môi trường"/"tương đối" trong trigger giữ cho câu hỏi HIỆU CHỈNH
+    # nhiệt độ ("nhiệt độ lệch", "hiệu chỉnh nhiệt độ") không bị kích nhầm.
+    "nhiệt độ môi trường": "điều kiện kiểm định nhiệt độ môi trường độ ẩm",
+    "độ ẩm tương đối": "điều kiện kiểm định độ ẩm tương đối nhiệt độ môi trường",
     "sai số cho phép": "sai số giới hạn dung sai độ chính xác cấp chính xác",
     "thời gian quay tự do": "thời gian quay tự do píttông kiểm tra kỹ thuật độ nhớt",
     "độ chênh áp": "độ chênh áp blowdown chênh lệch áp suất đóng áp suất chỉnh đặt",
@@ -245,6 +250,35 @@ def rrf_fuse(
     return fused
 
 
+def _merge_per_file(reranked: list[dict], stems: frozenset[str], top_n: int) -> list[dict]:
+    """Ghép kết quả đã rerank cho câu hỏi đa-file: BẢO ĐẢM mỗi file có đại diện.
+
+    Cross-encoder chấm điểm theo độ khớp bề mặt nên file có cụm từ vựng trùng
+    câu hỏi nhiều hơn vẫn có thể chiếm hết top_n — quota tối thiểu mỗi file
+    (top_n // số file, ≥1) lấy theo thứ tự rerank trong file đó; phần dư bù bằng
+    thứ tự rerank toàn cục; cuối cùng sắp lại theo rerank_score để [n] ổn định.
+    """
+    by_file: dict[str, list[dict]] = {}
+    for h in reranked:
+        by_file.setdefault(h["payload"]["file_stem"], []).append(h)
+
+    quota = max(1, top_n // max(len(stems), 1))
+    chosen: list[dict] = []
+    chosen_ids: set[int] = set()
+    for s in sorted(stems):
+        for h in by_file.get(s, [])[:quota]:
+            chosen.append(h)
+            chosen_ids.add(id(h))
+    for h in reranked:
+        if len(chosen) >= top_n:
+            break
+        if id(h) not in chosen_ids:
+            chosen.append(h)
+            chosen_ids.add(id(h))
+    chosen.sort(key=lambda h: h.get("rerank_score", 0.0), reverse=True)
+    return chosen[:top_n]
+
+
 def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
     """Full hybrid pipeline: route → expand → embed + BM25 → RRF → rerank → parent.
 
@@ -255,12 +289,27 @@ def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
       parent_payload : parent section payload (attached by rerank_hits)
     """
     from .bm25_index import bm25_search
-    from .router import route
+    from .router import route_files
 
     expanded = _expand_query(query)
     vec = embed_query(expanded)
-    file_stem = route(query)
+    stems = route_files(query)
 
+    # Câu so sánh ≥2 thiết bị: chạy phễu RIÊNG cho từng file rồi rerank chung.
+    # Một phễu toàn-kho duy nhất bị cụm từ vựng áp đảo (3 file áp kế píttông)
+    # đè bẹp file thiểu số — đo Q115/Q116: top-5 không còn chunk 'van an toàn'
+    # nào → fact (20±5)/(65±15) vắng khỏi ngữ cảnh → model từ chối oan.
+    if len(stems) >= 2:
+        fused: list[dict] = []
+        per_file_pool = max(top_n * 2, RERANK_POOL // len(stems))
+        for s in sorted(stems):
+            dh = dense_search(vec, top_k=top_k, file_stem=s)
+            bh = bm25_search(expanded, top_k=top_k, file_stem=s)
+            fused.extend(_filter_noise(rrf_fuse(dh, bh))[:per_file_pool])
+        reranked = rerank_hits(query, fused, top_n=len(fused))
+        return _merge_per_file(reranked, stems, top_n)
+
+    file_stem = next(iter(stems)) if stems else None
     dense_hits = dense_search(vec, top_k=top_k, file_stem=file_stem)
     bm25_hits = bm25_search(expanded, top_k=top_k, file_stem=file_stem)
 

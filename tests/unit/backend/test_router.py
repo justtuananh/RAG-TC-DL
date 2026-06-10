@@ -8,7 +8,7 @@ Mapping number→stem được set thẳng (bỏ qua bước scroll Qdrant).
 import pytest
 
 import retrieval.router as router_mod
-from retrieval.router import _NUMBER_RE, route
+from retrieval.router import _NUMBER_RE, route, route_files
 
 
 @pytest.fixture
@@ -75,3 +75,10 @@ def test_number_re_pattern():
     assert _NUMBER_RE.search("6.3") is None  # chỉ 1 chữ số sau dấu chấm
     assert _NUMBER_RE.search("0.05") is None  # chỉ 2 chữ số
     assert _NUMBER_RE.search("1400") is None  # không có dấu chấm
+
+
+def test_route_files_returns_all_distinct_stems(mapping):
+    stems = route_files("so sánh van an toàn (1.061) và áp kế píttông tiêu chuẩn")
+    assert stems == frozenset({mapping["1.061"], mapping["1.159"]})
+    assert route_files("không có gì") == frozenset()
+    assert route_files("kiểm định bình phân ly") == frozenset({mapping["1.063"]})

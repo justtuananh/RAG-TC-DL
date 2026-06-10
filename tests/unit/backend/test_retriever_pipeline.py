@@ -42,7 +42,7 @@ def test_pipeline_dedups_by_parent_and_sorts(monkeypatch):
     monkeypatch.setattr(
         "retrieval.bm25_index.bm25_search", lambda q, top_k=50, file_stem=None: bm25
     )
-    monkeypatch.setattr("retrieval.router.route", lambda q: None)
+    monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset())
     monkeypatch.setattr(
         R,
         "fetch_parent",
@@ -82,7 +82,9 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
     monkeypatch.setattr(R, "embed_query", lambda q: [0.0] * 1024)
     monkeypatch.setattr(R, "dense_search", dense_search)
     monkeypatch.setattr("retrieval.bm25_index.bm25_search", bm25_search)
-    monkeypatch.setattr("retrieval.router.route", lambda q: "QTKD_1.061_2021_ND_V2")
+    monkeypatch.setattr(
+        "retrieval.router.route_files", lambda q: frozenset({"QTKD_1.061_2021_ND_V2"})
+    )
     monkeypatch.setattr(
         R, "fetch_parent", lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"}
     )
@@ -100,3 +102,39 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
 def test_rerank_hits_empty_returns_empty():
     # Không gọi mạng (return sớm) — an toàn dưới network-guard.
     assert R.rerank_hits("q", []) == []
+
+
+@responses.activate
+def test_multi_file_query_runs_per_file_funnels(monkeypatch):
+    """Câu so sánh 2 thiết bị → phễu RIÊNG từng file, mỗi file có đại diện top-5."""
+    calls = {"dense": [], "bm25": []}
+
+    def _c(cid, pid, stem):
+        h = _child(cid, pid)
+        h["payload"]["file_stem"] = stem
+        return h
+
+    def dense_search(vec, top_k=50, file_stem=None):
+        calls["dense"].append(file_stem)
+        return [_c(f"{file_stem}-d{i}", f"{file_stem}-p{i}", file_stem) for i in range(3)]
+
+    def bm25_search(q, top_k=50, file_stem=None):
+        calls["bm25"].append(file_stem)
+        return []
+
+    monkeypatch.setattr(R, "embed_query", lambda q: [0.0] * 1024)
+    monkeypatch.setattr(R, "dense_search", dense_search)
+    monkeypatch.setattr("retrieval.bm25_index.bm25_search", bm25_search)
+    monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset({"FILE_A", "FILE_B"}))
+    monkeypatch.setattr(
+        R, "fetch_parent", lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"}
+    )
+    responses.add_callback(
+        responses.POST, RERANK_URL, callback=_rerank_callback, content_type="application/json"
+    )
+
+    out = R.retrieve("so sánh A và B", top_k=50, top_n=4)
+
+    assert sorted(c for c in calls["dense"] if c) == ["FILE_A", "FILE_B"]
+    files = [h["payload"]["file_stem"] for h in out]
+    assert set(files) == {"FILE_A", "FILE_B"}  # quota: cả 2 file đều có mặt

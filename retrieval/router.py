@@ -77,14 +77,13 @@ def _ensure_mapping() -> dict[str, str]:
     return _number_to_stem
 
 
-def route(query: str) -> str | None:
-    """Return file_stem if query clearly targets EXACTLY one QTKĐ file, else None.
+def route_files(query: str) -> frozenset[str]:
+    """Tập file_stem phân biệt mà query nhắc tới (số QTKĐ tường minh + alias).
 
-    Gom MỌI tín hiệu (số QTKĐ tường minh + alias thiết bị) thành tập stem phân
-    biệt. Đúng 1 stem → ghim file đó; 0 hoặc ≥2 (câu so sánh nhiều thiết bị,
-    hoặc số và alias mâu thuẫn) → None = tìm toàn kho. Trước đây tín hiệu ĐẦU
-    TIÊN thắng nên câu so sánh "van an toàn (1.061) và áp kế (1.159)" bị ghim
-    1 file, nửa kia không bao giờ được retrieve (đo: 2 wrong_refusal cross_file).
+    Rỗng = không tín hiệu; 1 phần tử = ghim file; ≥2 = câu so sánh nhiều thiết bị
+    → retriever chạy phễu RIÊNG cho từng file (một phễu chung bị cụm từ vựng áp
+    đảo — 3 file áp kế píttông — đè bẹp file thiểu số: đo Q115/Q116 top-5 không
+    còn chunk 1.061 nào dù query nhắc 'van an toàn').
     """
     mapping = _ensure_mapping()
     q = query.lower()
@@ -99,7 +98,18 @@ def route(query: str) -> str | None:
             stem = mapping.get(number)
             if stem:
                 stems.add(stem)
+    return frozenset(stems)
 
+
+def route(query: str) -> str | None:
+    """Return file_stem if query clearly targets EXACTLY one QTKĐ file, else None.
+
+    Đúng 1 stem → ghim file đó; 0 hoặc ≥2 (câu so sánh nhiều thiết bị, hoặc số
+    và alias mâu thuẫn) → None. Trước đây tín hiệu ĐẦU TIÊN thắng nên câu so
+    sánh "van an toàn (1.061) và áp kế (1.159)" bị ghim 1 file, nửa kia không
+    bao giờ được retrieve (đo: 2 wrong_refusal cross_file).
+    """
+    stems = route_files(query)
     if len(stems) == 1:
         return next(iter(stems))
     return None
