@@ -1,6 +1,7 @@
 """QTKĐ file-stem router — retrieval.router.route + _NUMBER_RE.
 
-Ưu tiên: số QTKĐ rõ ràng (1.061) > alias thiết bị (van an toàn). Không tín hiệu → None.
+ĐÚNG 1 tín hiệu phân biệt (số QTKĐ hoặc alias thiết bị) → ghim file; 0 hoặc ≥2
+(câu so sánh nhiều thiết bị / số mâu thuẫn alias) → None = tìm toàn kho.
 Mapping number→stem được set thẳng (bỏ qua bước scroll Qdrant).
 """
 
@@ -15,6 +16,7 @@ def mapping(monkeypatch):
     m = {
         "1.061": "QTKD_1.061_2021_ND_V2",
         "1.063": "QTKD_1.063_2021_BPL",
+        "1.159": "QTKD_1.159_2021_ND_FINAL",
         "1.160": "QTKD_1.160_2021_ND_FINAL",
         "1.190": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
     }
@@ -34,9 +36,26 @@ def test_device_alias(mapping):
     assert route("dpi610") == mapping["1.190"]
 
 
-def test_number_beats_alias(mapping):
-    # Có cả alias "van an toàn"(1.061) lẫn số 1.063 → số thắng.
-    assert route("van an toàn theo 1.063") == mapping["1.063"]
+def test_alias_spelling_variants(mapping):
+    # "píttông" (có dấu í) và đảo trật tự "pittông áp kế" đều phải bắt được 1.159.
+    assert route("áp kế píttông tiêu chuẩn") == mapping["1.159"]
+    assert route("thời gian quay tự do pittông áp kế") == mapping["1.159"]
+
+
+def test_number_with_matching_alias_stays_pinned(mapping):
+    # Số + alias CÙNG file → vẫn 1 tín hiệu phân biệt → ghim.
+    assert route("điều kiện kiểm định bình phân ly QTKĐ 1.063") == mapping["1.063"]
+
+
+def test_conflicting_number_and_alias_returns_none(mapping):
+    # Alias "van an toàn"(1.061) mâu thuẫn số 1.063 → mơ hồ → toàn kho.
+    assert route("van an toàn theo 1.063") is None
+
+
+def test_multi_device_comparison_returns_none(mapping):
+    # Câu so sánh 2 thiết bị: ghim 1 file làm nửa kia không bao giờ retrieve được.
+    assert route("so sánh nhiệt độ khi kiểm định van an toàn (1.061) và 1.159") is None
+    assert route("độ ẩm của van an toàn so với áp kế píttông tiêu chuẩn") is None
 
 
 def test_no_signal_returns_none(mapping):
