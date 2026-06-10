@@ -14,7 +14,9 @@ def test_system_prompt_carries_contract():
     assert (
         "Không tìm thấy thông tin này trong các tài liệu QTKĐ được cung cấp." in sys_msg["content"]
     )
-    assert "Giữ nguyên công thức LaTeX" in sys_msg["content"]
+    # G2 đổi câu chữ quy tắc công thức — pin theo lõi bất biến của contract.
+    assert "Công thức LaTeX" in sys_msg["content"]
+    assert "chép đúng dạng inline" in sys_msg["content"]
     assert "NGỮ CẢNH XYZ" in sys_msg["content"]
 
 
