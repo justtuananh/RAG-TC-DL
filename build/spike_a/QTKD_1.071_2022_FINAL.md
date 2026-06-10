@@ -186,9 +186,7 @@ AKC được ghép nối với H3000 cần kiểm định như tại Hình 1.
 
 AKCH3000 cần kiểm địnhAKCH3000 cần kiểm định
 
-
-## Hình 1. Sơ đồ kết nối AKC và H3000 cần kiểm định
-
+Hình 1. Sơ đồ kết nối AKC và H3000 cần kiểm định
 
 
 # 5 Tiến hành kiểm định
@@ -390,9 +388,7 @@ Sai số tương đối $\delta$ được tính theo công thức sau:
 | --- | --- |
 
 
-
-# Sai số tương đối của H3000 không được vượt quá ± 0,1 %.
-
+Sai số tương đối của H3000 không được vượt quá ± 0,1 %.
 
 
 # 6 Xử lý chung
