@@ -47,6 +47,12 @@ def normalize_text(s: str) -> str:
     for ch in _NBSP:
         t = t.replace(ch, " ")
     t = t.lower()
+    # Chính tả đơn vị tương đương trong corpus: docx ghi "oC" (chữ o thượng tiêu
+    # bị phẳng hoá), model hay viết "°C"; "min" (tiêu đề bảng) ≡ "phút". Không
+    # gộp thì câu trả lời đúng-nguyên-văn bị chấm sai (đo Q108: '2 °C' bị cờ ảo
+    # giác dù nguồn ghi '2 oC/h'; gold Q113/Q121 tự bị cờ '2 phút').
+    t = t.replace("°c", "oc")
+    t = re.sub(r"\bmin\b", "phút", t)
     # "0,15" → "0.15" (chỉ dấu phẩy GIỮA hai chữ số)
     t = re.sub(r"(?<=\d),(?=\d)", ".", t)
     # "1 400" → "1400" (gộp nhóm 3 chữ số)
@@ -187,6 +193,22 @@ def is_refusal(answer: str) -> bool:
     return normalize_text(REFUSAL_CORE) in normalize_text(answer)
 
 
+def _grounded_as_table_cell(token_norm: str, raw_context: str) -> bool:
+    """Số trong bảng Markdown đứng RIÊNG trong ô ('| 2 |'), đơn vị nằm ở TIÊU ĐỀ
+    cột ('…, min') — phép dán số-liền-đơn-vị không bao giờ khớp được. Gold tự bị
+    cờ ('2 phút' của Q113/Q121) ⇒ đây là lỗi thước đo. Chỉ chấp nhận khi phần số
+    của claim xuất hiện như MỘT Ô BẢNG trọn vẹn (giữ precision với số trong văn
+    xuôi)."""
+    m = re.match(r"[\d.,]+", token_norm)
+    if not m:
+        return False
+    num = m.group(0)
+    for variant in {num, num.replace(".", ",")}:
+        if re.search(rf"\|\s*{re.escape(variant)}\s*\|", raw_context):
+            return True
+    return False
+
+
 def hallucination_flags(required_facts: list[dict], answer: str, retrieved: list[dict]) -> dict:
     """Heuristic thận trọng (ưu tiên precision): tách các 'claim đo lường' (số kèm
     đơn vị) trong answer; cái nào KHÔNG có trong toàn bộ ngữ cảnh đã retrieve → cờ
@@ -199,7 +221,7 @@ def hallucination_flags(required_facts: list[dict], answer: str, retrieved: list
     for m in NUMBER_UNIT_RE.finditer(clean):
         token = m.group(0)
         tnorm = normalize_number(token)
-        if tnorm and tnorm not in ctx_norm:
+        if tnorm and tnorm not in ctx_norm and not _grounded_as_table_cell(tnorm, context):
             flagged.append(token.strip())
     return {"count": len(flagged), "flagged": flagged}
 

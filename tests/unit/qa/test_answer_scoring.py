@@ -173,3 +173,35 @@ def test_score_question_lookup_full_coverage():
     assert rec["coverage"] == 1.0
     assert rec["citation"]["accuracy_strict"] == 1.0
     assert rec["refusal_correct"] is True  # không cần từ chối, và không từ chối
+
+
+# ── Sửa thước đo 2026-06-11 (gold-self-test từng phạt chính gold) ──────────────
+
+
+def test_normalize_degree_c_equals_oc():
+    # Corpus ghi "oC" (chữ o thượng tiêu bị phẳng); model hay viết "°C".
+    assert normalize_number("2 °C") == normalize_number("2 oC")
+
+
+def test_normalize_min_equals_phut():
+    assert normalize_number("2 min") == normalize_number("2 phút")
+    # r/min hai phía chuẩn hoá giống nhau → substring vẫn khớp
+    assert normalize_number("30 r/min") == normalize_number("30 r/min")
+
+
+def test_hallucination_table_cell_grounding():
+    # Số nằm riêng trong Ô BẢNG, đơn vị ở tiêu đề cột → không được cờ.
+    retrieved = [
+        {
+            "payload": {
+                "file_stem": "f",
+                "section_path": "s",
+                "text": "| DN | Thời gian, min |\n| --- | --- |\n| ≤ 50 | 2 |",
+            }
+        }
+    ]
+    h = hallucination_flags([], "Thời gian thử tối thiểu là 2 phút [1].", retrieved)
+    assert h["count"] == 0
+    # Số KHÔNG có trong bảng lẫn văn xuôi → vẫn cờ (giữ precision).
+    h2 = hallucination_flags([], "Thời gian thử là 7 phút [1].", retrieved)
+    assert h2["count"] == 1
