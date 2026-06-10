@@ -19,6 +19,30 @@ def test_removes_noise_sections():
     ]
 
 
+def test_removes_bare_appendix_paths():
+    # 1.062/1.063: form mẫu nằm trong BODY của "# Phụ lục A/B" → path trần,
+    # thoát marker chuỗi; predicate phải chặn (honeypot reranker, Q12/Q18/Q22).
+    hits = [
+        _h("Phụ lục A"),
+        _h("Phụ lục B"),
+        _h("4 Điều kiện và chuẩn bị kiểm định > 4.1 Điều kiện kiểm định"),
+    ]
+    out = _filter_noise(hits)
+    assert [h["payload"]["section_path"] for h in out] == [
+        "4 Điều kiện và chuẩn bị kiểm định > 4.1 Điều kiện kiểm định"
+    ]
+
+
+def test_keeps_real_appendix_content():
+    # Nội dung thật: tiêu đề riêng (1.160/1.190) hoặc mục lồng SÂU HƠN dưới phụ lục
+    # — không được chặn oan.
+    hits = [
+        _h("Đánh giá độ không đảm bảo đo"),
+        _h("Phụ lục D > D.1 Công thức tính"),
+    ]
+    assert _filter_noise(hits) == hits
+
+
 def test_keeps_all_clean():
     hits = [_h("1 Phạm vi áp dụng"), _h("2 Tài liệu viện dẫn")]
     assert _filter_noise(hits) == hits

@@ -160,14 +160,17 @@ def fetch_parent(parent_id_hex: str) -> dict | None:
     return None
 
 
-from retrieval._constants import NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS
+from retrieval._constants import (
+    NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS,
+    is_noise_path as _is_noise_path,
+)
 
 
 def _filter_noise(hits: list[dict]) -> list[dict]:
     """Remove boilerplate form/template sections before reranking."""
     return [
         h for h in hits
-        if not any(m in h["payload"].get("section_path", "") for m in _NOISE_PATH_MARKERS)
+        if not _is_noise_path(h["payload"].get("section_path", ""))
     ]
 
 
