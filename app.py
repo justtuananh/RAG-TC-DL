@@ -25,9 +25,11 @@ import markdown as _md
 sys.path.insert(0, str(Path(__file__).parent))
 from retrieval.retriever import retrieve
 from generation import (
+    REFUSAL_SENTENCE as _REFUSAL_SENTENCE,
     build_context_and_citations as _build_context_and_citations,
     build_messages as _build_messages,
     enforce_refusal_stop as _enforce_refusal_stop,
+    is_calculation_request as _is_calculation_request,
     stream_ollama as _stream_ollama,
 )
 
@@ -136,6 +138,13 @@ def bot_fn(history: list):
 
     query = history[-1][0]
     prior = history[:-1]
+
+    # 0. Lookup-only: yêu cầu tính toán với số liệu cho sẵn → từ chối tất định,
+    #    không retrieve, không gọi LLM (7b lúc chịu từ chối lúc thay số tính tiếp).
+    if _is_calculation_request(query):
+        history[-1][1] = _REFUSAL_SENTENCE
+        yield history, gr.update()
+        return
 
     # 1. Embedding + BM25 + RRF + rerank (hybrid pipeline)
     history[-1][1] = "*⏳ Đang nhúng câu hỏi (embedding)…*"

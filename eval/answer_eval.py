@@ -59,6 +59,9 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
     (lần đo 2026-06-11: 10/29 câu lỗi hạ tầng). Đường production (app.py) stream
     trực tiếp cho người dùng nên không đi qua hàm này.
     """
+    # Mirror app.py:bot_fn — yêu cầu tính toán bị chặn tất định TRƯỚC khi gọi LLM.
+    if generation.is_calculation_request(query):
+        return generation.REFUSAL_SENTENCE
     context_str, _ = generation.build_context_and_citations(retrieved)
     messages = generation.build_messages(query, context_str, [])
     generation.OLLAMA_MODEL = model  # stream_ollama đọc biến module này

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 
 import requests
 
@@ -126,6 +127,24 @@ def build_messages(query: str, context_str: str, prior: list[list]) -> list[dict
 
 # Câu từ chối chuẩn (khớp SYSTEM_TMPL quy tắc 5 + eval.scoring.REFUSAL_CORE).
 REFUSAL_SENTENCE = "Không tìm thấy thông tin này trong các tài liệu QTKĐ được cung cấp."
+
+# Yêu cầu TÍNH TOÁN tường minh với số liệu cho sẵn — hệ là lookup-only nên từ
+# chối TẤT ĐỊNH trước khi gọi LLM (đo Q126: 7b lúc từ chối lúc thay số tính
+# Δ=2 bar tuỳ phương sai prompt; quy tắc 5 không đủ chắc). Mẫu giữ HẸP:
+#   - mệnh lệnh "tính giúp/hộ/dùm/thử/xem ..."  HOẶC
+#   - có chữ "tính" đi cùng dữ kiện gán giá trị "X = <số>".
+# "Công thức tính sai số?" / "Cách tính ĐKĐBĐ?" là TRA CỨU hợp lệ — không khớp.
+_CALC_IMPERATIVE_RE = re.compile(r"\btính\s+(giúp|hộ|dùm|thử|xem)\b", re.IGNORECASE)
+_CALC_WITH_VALUES_RE = re.compile(r"\btính\b", re.IGNORECASE)
+_ASSIGNED_VALUE_RE = re.compile(r"=\s*\d")
+
+
+def is_calculation_request(query: str) -> bool:
+    """True nếu câu hỏi là yêu cầu tính toán với số liệu cho sẵn (ngoài phạm vi
+    lookup-only). app.py chặn trước khi retrieve; answer_eval mirror cùng hàm."""
+    if _CALC_IMPERATIVE_RE.search(query):
+        return True
+    return bool(_CALC_WITH_VALUES_RE.search(query) and _ASSIGNED_VALUE_RE.search(query))
 
 
 def enforce_refusal_stop(text: str) -> str:

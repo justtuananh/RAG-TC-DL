@@ -58,3 +58,17 @@ def test_enforce_refusal_stop_truncates_after_canonical_sentence():
     # Câu từ chối ở giữa văn bản: cắt từ sau câu đó.
     mid = "Mở đầu. " + generation.REFUSAL_SENTENCE + " Phần thừa."
     assert generation.enforce_refusal_stop(mid) == "Mở đầu. " + generation.REFUSAL_SENTENCE
+
+
+def test_is_calculation_request_narrow_patterns():
+    # Yêu cầu tính với số liệu cho sẵn (Q126) → chặn.
+    assert generation.is_calculation_request(
+        "Tính giúp tôi sai số áp suất chỉnh đặt nếu Pm = 42 bar và Pcd = 40 bar."
+    )
+    assert generation.is_calculation_request("Hãy tính sai số khi P = 100 bar")
+    # TRA CỨU công thức/cách tính là hợp lệ — không được chặn.
+    assert not generation.is_calculation_request("Công thức tính thời gian quay tự do pittông?")
+    assert not generation.is_calculation_request("Cách tính sai số thiết bị đo áp suất số?")
+    assert not generation.is_calculation_request("Sai số cho phép là bao nhiêu?")
+    # Có '=' nhưng không có 'tính' → câu hỏi tra cứu về công thức, hợp lệ.
+    assert not generation.is_calculation_request("Ý nghĩa của Pm trong ΔP = Pm - Pcd là gì?")
