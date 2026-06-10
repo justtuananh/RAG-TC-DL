@@ -72,7 +72,7 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
         try:
             out = "".join(generation.stream_ollama(messages))
             if out.strip():
-                return out
+                return generation.enforce_refusal_stop(out)
             err = "rỗng"
         except Exception as e:  # noqa: BLE001 — gom mọi lỗi hạ tầng để retry
             err = str(e)[:90]

@@ -27,6 +27,7 @@ from retrieval.retriever import retrieve
 from generation import (
     build_context_and_citations as _build_context_and_citations,
     build_messages as _build_messages,
+    enforce_refusal_stop as _enforce_refusal_stop,
     stream_ollama as _stream_ollama,
 )
 
@@ -174,7 +175,8 @@ def bot_fn(history: list):
         yield history, gr.update()
         return
 
-    # 4. Append citations
+    # 4. Cắt phần "tính tiếp" sau câu từ chối chuẩn (nếu có) rồi gắn citations
+    partial = _enforce_refusal_stop(partial)
     history[-1][1] = partial + citations_md
     yield history, gr.update()
 

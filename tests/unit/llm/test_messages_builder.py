@@ -49,3 +49,14 @@ def test_empty_turn_slots_skipped():
     roles = [m["role"] for m in msgs]
     assert roles.count("assistant") == 0
     assert any(m["content"] == "chỉ user" for m in msgs)
+
+
+def test_enforce_refusal_stop_truncates_after_canonical_sentence():
+    # Q126 đo được: model ghi câu từ chối rồi vẫn thay số tính tiếp (Δ=2 bar).
+    tail = generation.REFUSAL_SENTENCE + "\n\nTuy nhiên, thay số: 42 - 40 = 2 bar."
+    assert generation.enforce_refusal_stop(tail) == generation.REFUSAL_SENTENCE
+    # Không chứa câu từ chối → giữ nguyên.
+    assert generation.enforce_refusal_stop("Trả lời bình thường [1].") == "Trả lời bình thường [1]."
+    # Câu từ chối ở giữa văn bản: cắt từ sau câu đó.
+    mid = "Mở đầu. " + generation.REFUSAL_SENTENCE + " Phần thừa."
+    assert generation.enforce_refusal_stop(mid) == "Mở đầu. " + generation.REFUSAL_SENTENCE
