@@ -18,6 +18,7 @@ from __future__ import annotations
 import html as html_mod
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -41,12 +42,68 @@ NHIỆM VỤ: Trả lời câu hỏi DỰA HOÀN TOÀN vào NGỮ CẢNH bên d�
 
 QUY TẮC:
 1. Dẫn nguồn rõ ràng bằng ký hiệu [1], [2], ... tương ứng với từng nguồn.
-2. Giữ nguyên công thức LaTeX ($...$) từ nguồn — không viết lại, không tính toán.
+2. Giữ nguyên công thức LaTeX từ nguồn — không viết lại, không tính toán.
+   - Công thức inline: dùng $...$ (ví dụ: $P_{cd}$)
+   - Công thức display (xuống dòng): dùng $$...$$ (ví dụ: $$\frac{\Delta P}{P} \times 100\%$$)
+   - KHÔNG dùng \[...\] hay dấu ngoặc vuông [ ] để bao công thức.
 3. Trả lời bằng tiếng Việt, ngắn gọn, chính xác.
 4. Nếu ngữ cảnh KHÔNG chứa thông tin cần thiết, trả lời: "Không tìm thấy thông tin này trong các tài liệu QTKĐ được cung cấp."
 
 NGỮ CẢNH:
 {context}"""
+
+
+# ── LaTeX normalizer ─────────────────────────────────────────────────────────
+
+_RE_DISPLAY          = re.compile(r'\$\$(.*?)\$\$', re.DOTALL)
+_RE_INLINE           = re.compile(r'(?<!\$)\$(?!\$)((?:[^$\n\\]|\\.)*)(?<!\$)\$(?!\$)')
+_RE_CODE_MATH        = re.compile(r'`(\$.*?\$)`')
+# \[...\]  standard LaTeX display math
+_RE_BACKSLASH_DISP   = re.compile(r'\\\[(.*?)\\\]', re.DOTALL)
+# \(...\)  standard LaTeX inline math
+_RE_BACKSLASH_INLINE = re.compile(r'\\\((.*?)\\\)')
+# [ \n content \n ]  — model uses bare brackets as display math delimiter
+_RE_BRACKET_DISP     = re.compile(r'(?m)^\[$\n(.*?)\n^\]$', re.DOTALL)
+
+
+def _fix_latex(text: str) -> str:
+    """Normalize LLM LaTeX output so KaTeX can render it.
+
+    Local models (Ollama) produce several broken patterns:
+    - double-escaped backslashes: \\frac  →  \frac
+    - bare bracket display math: [\n...\n]  →  $$...$$
+    - standard LaTeX environments: \[...\] and \(...\)  →  $$...$$ / $...$
+    - formula wrapped in backticks: `$...$`  →  $...$
+    """
+    # 1. Unwrap backtick-wrapped formulas: `$...$` → $...$
+    text = _RE_CODE_MATH.sub(r'\1', text)
+
+    # 2. Convert bare-bracket display math  [ \n ... \n ]  →  $$ ... $$
+    text = _RE_BRACKET_DISP.sub(
+        lambda m: '$$\n' + m.group(1).replace('\\\\', '\\') + '\n$$', text
+    )
+
+    # 3. Convert \[...\] → $$...$$
+    text = _RE_BACKSLASH_DISP.sub(
+        lambda m: '$$' + m.group(1).replace('\\\\', '\\') + '$$', text
+    )
+
+    # 4. Convert \(...\) → $...$
+    text = _RE_BACKSLASH_INLINE.sub(
+        lambda m: '$' + m.group(1).replace('\\\\', '\\') + '$', text
+    )
+
+    # 5. Fix double backslashes inside $$...$$
+    text = _RE_DISPLAY.sub(
+        lambda m: '$$' + m.group(1).replace('\\\\', '\\') + '$$', text
+    )
+
+    # 6. Fix double backslashes inside $...$
+    text = _RE_INLINE.sub(
+        lambda m: '$' + m.group(1).replace('\\\\', '\\') + '$', text
+    )
+
+    return text
 
 
 # ── Context + citations builder ───────────────────────────────────────────────
@@ -86,7 +143,7 @@ def _build_context_and_citations(results: list[dict]) -> tuple[str, str]:
 
 def _build_messages(query: str, context_str: str, prior: list[dict]) -> list[dict]:
     msgs: list[dict] = [
-        {"role": "system", "content": SYSTEM_TMPL.format(context=context_str)}
+        {"role": "system", "content": SYSTEM_TMPL.replace("{context}", context_str)}
     ]
     for msg in prior[-(HISTORY_TURNS * 2):]:
         role = msg.get("role")
@@ -279,7 +336,7 @@ def bot_fn(history: list):
         yield history, gr.update()
         return
 
-    history[-1]["content"] = partial + citations_md
+    history[-1]["content"] = _fix_latex(partial) + citations_md
     yield history, gr.update()
 
 
@@ -390,8 +447,10 @@ mark.qtkd-hl {
 """
 
 LATEX_DELIMITERS = [
-    {"left": "$$", "right": "$$", "display": True},
-    {"left": "$", "right": "$", "display": False},
+    {"left": "$$",   "right": "$$",   "display": True},
+    {"left": "\\[",  "right": "\\]",  "display": True},
+    {"left": "$",    "right": "$",    "display": False},
+    {"left": "\\(",  "right": "\\)",  "display": False},
 ]
 
 # MutationObserver: re-run KaTeX auto-render whenever .qtkd-viewer content changes
@@ -402,8 +461,10 @@ _JS_KATEX_OBSERVER = """
         if (el && window.renderMathInElement) {
             window.renderMathInElement(el, {
                 delimiters: [
-                    {left: '$$', right: '$$', display: true},
-                    {left: '$',  right: '$',  display: false}
+                    {left: '$$',  right: '$$',  display: true},
+                    {left: '\\\\[', right: '\\\\]', display: true},
+                    {left: '$',   right: '$',   display: false},
+                    {left: '\\\\(', right: '\\\\)', display: false}
                 ],
                 throwOnError: false,
                 ignoredTags: ['script','noscript','style','textarea','code']

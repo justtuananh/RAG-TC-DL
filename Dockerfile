@@ -17,7 +17,6 @@ COPY retrieval/ retrieval/
 COPY index/ index/
 COPY eval/ eval/
 COPY vendor/ vendor/
-COPY monitoring/ monitoring/
 
 EXPOSE 7861
 
