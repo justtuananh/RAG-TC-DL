@@ -268,28 +268,36 @@ kỳ vọng). Một câu tính là *hit* nếu kết quả khớp đúng file v�
 **recall@{1,3,5,10}, nDCG@k, MRR**. Tiêu chí đạt: **recall@5 ≥ 0.85**.
 *(Mode B kotaemon có tầng truy hồi riêng, không nằm trong harness này.)*
 
-### Kết quả hiện tại — 2026-06-07 (Phase 0→3), hybrid
-| Metric | Giá trị |
-|---|---|
-| **recall@5** | **0.909 (50/55)** ✅ **PASS** (≥ 0.85) |
-| recall@10 | 0.982 (54/55) |
-| nDCG@5 | 0.799 |
-| MRR | 0.771 |
-| MISS | 1 (Q39) |
+### Kết quả hiện tại — 2026-06-11 (đợt R1–R6), hybrid
+| Metric | 2026-06-07 | **2026-06-11** |
+|---|---|---|
+| **recall@5** | 0.909 (50/55) | **1.000 (55/55)** ✅ |
+| recall@10 | 0.982 | **1.000** |
+| recall@1 | 0.655 | **0.782** |
+| nDCG@5 | 0.799 | **0.908** |
+| MRR | 0.771 | **0.876** |
+| Bộ gold mở rộng (10 câu chưa từng tune) | — | recall@5 = 1.000, MRR 0.925 |
 
-**Tiến trình:** Baseline (BGE-M3, Phase 2 tắt) = recall@5 **0.709 (39/55)** ❌ → sau 3 cải tiến →
-**0.909 (50/55)** ✅:
-- **Phase 1** — rerank trên **parent text** (thay vì child).
-- **Phase 2** — *lexicon expansion* (mở rộng từ khoá truy vấn, vd "điều kiện môi trường" → "nhiệt độ độ ẩm áp suất").
-- **Phase 3** — sửa bug `_heading_level()` (phân loại sai bullet thành heading) → re-extract → re-index (1674 points).
+**recall@5 theo từng tài liệu: 7/7 file = 1.00** (QTKD_1.063 từ 0.67 → 1.00).
 
-### recall@5 theo từng tài liệu
-| File | Kết quả | | File | Kết quả |
-|---|---|---|---|---|
-| QTKD_1.061 | 9/9 (1.00) | | QTKD_1.159 | 9/10 (0.90) |
-| QTKD_1.062 | 6/7 (0.86) | | QTKD_1.160 | 6/6 (1.00) |
-| QTKD_1.063 | **4/6 (0.67)** ⚠ yếu nhất | | QTKD_1.190 | 8/9 (0.89) |
-| QTKD_1.071 | 8/8 (1.00) | | | |
+**Tiến trình:** 0.709 → 0.909 (Phase 1–3, 2026-06-07: parent-rerank, lexicon, sửa heading) →
+**1.000** (R1–R6, 2026-06-11):
+- **R1** — chặn boilerplate "Phụ lục A/B" trần (form MẪU BIÊN BẢN nằm trong body heading
+  trần ở 1.061/62/63 → honeypot cho cross-encoder; predicate `is_noise_path` dùng chung).
+- **R2** — lexicon "điều kiện kiểm định" → từ vựng body (cầu tiêu-đề→nội-dung).
+- **R3** — document rerank = breadcrumb `file — mục` + cửa sổ 1400 ký tự neo theo child
+  (server reranker cắt 512 token → mục dài bị chấm mù phần chứa đáp án).
+- **R4/R6** — router gom MỌI tín hiệu file; câu so sánh ≥2 thiết bị chạy phễu RIÊNG
+  từng file + quota đại diện trong top-5 (trước đây bị ghim 1 file → nửa kia không bao
+  giờ được retrieve).
+- **R5** — guard heading mở rộng (câu kết thúc `.`/caption Hình/Bảng) → re-extract +
+  re-index 1.071 (guardrail 351 span $LaTeX$ byte-identical).
+
+> Chất lượng CÂU TRẢ LỜI (qwen2.5:7b, 29 câu khó, cùng backend + cùng scorer):
+> coverage 0.725→**0.877**, citation_strict 0.806→**0.857**, ảo giác 0.069→**0.034**,
+> từ chối oan 4→**1** — chi tiết tại [`result_eval.md`](result_eval.md).
+> Lưu ý hạ tầng: endpoint OpenAI-compat `/v1` của Ollama **bỏ qua `options`** →
+> `generation.py` nay gọi native `/api/chat` (num_ctx/num_predict có hiệu lực thật).
 
 ### Chạy lại eval
 ```bash
