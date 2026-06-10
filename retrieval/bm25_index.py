@@ -33,11 +33,7 @@ def tokenize(text: str) -> list[str]:
 
 # ── index build ───────────────────────────────────────────────────────────────
 
-_NOISE_PATH_MARKERS = (
-    "Mẫu biên bản", "Mẫu Biên bản",
-    "Mẫu giấy", "Mẫu Giấy",
-    "(Quy định)",
-)
+from retrieval._constants import NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS
 
 
 def _is_noise(payload: dict) -> bool:

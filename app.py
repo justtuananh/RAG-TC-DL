@@ -16,116 +16,19 @@ Services (all local Docker, already running):
 from __future__ import annotations
 
 import html as html_mod
-import json
-import os
 import sys
 from pathlib import Path
 
 import gradio as gr
 import markdown as _md
-import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
 from retrieval.retriever import retrieve
-
-# ── Config ────────────────────────────────────────────────────────────────────
-OLLAMA_URL   = os.getenv("OLLAMA_URL",   "http://localhost:11434/v1/chat/completions")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:1.5b")
-OLLAMA_TIMEOUT = 120
-HISTORY_TURNS = 3
-MAX_CONTEXT_CHARS = 1800
-
-SYSTEM_TMPL = """Bạn là trợ lý tra cứu quy trình kiểm định đo lường (QTKĐ) của Cục Tiêu chuẩn Đo lường Chất lượng Việt Nam.
-
-NHIỆM VỤ: Trả lời câu hỏi DỰA HOÀN TOÀN vào NGỮ CẢNH bên dưới. Không được bịa thêm thông tin ngoài ngữ cảnh.
-
-QUY TẮC:
-1. Dẫn nguồn rõ ràng bằng ký hiệu [1], [2], ... tương ứng với từng nguồn.
-2. Giữ nguyên công thức LaTeX ($...$) từ nguồn — không viết lại, không tính toán.
-3. Trả lời bằng tiếng Việt, ngắn gọn, chính xác.
-4. Nếu ngữ cảnh KHÔNG chứa thông tin cần thiết, trả lời: "Không tìm thấy thông tin này trong các tài liệu QTKĐ được cung cấp."
-
-NGỮ CẢNH:
-{context}"""
-
-
-# ── Context + citations builder ───────────────────────────────────────────────
-
-def _build_context_and_citations(results: list[dict]) -> tuple[str, str]:
-    ctx_parts: list[str] = []
-    cite_parts: list[str] = []
-
-    for i, r in enumerate(results, 1):
-        p = r["payload"]
-        pp = r.get("parent_payload")
-        file_stem = p["file_stem"]
-        section_path = p["section_path"]
-        child_text = p["text"]
-
-        ctx_text = pp["text"] if pp else child_text
-        if len(ctx_text) > MAX_CONTEXT_CHARS:
-            ctx_text = ctx_text[:MAX_CONTEXT_CHARS] + "…"
-
-        ctx_parts.append(
-            f"[{i}] Nguồn: {file_stem} — {section_path}\n---\n{ctx_text}"
-        )
-
-        snippet = child_text[:220].replace("\n", " ")
-        if len(child_text) > 220:
-            snippet += "…"
-        cite_parts.append(
-            f"**[{i}]** `{file_stem}` • {section_path}\n> {snippet}"
-        )
-
-    context_str = "\n\n---\n\n".join(ctx_parts)
-    citations_md = (
-        "\n\n---\n\n**📎 Nguồn tham khảo:**\n\n" + "\n\n".join(cite_parts)
-    )
-    return context_str, citations_md
-
-
-def _build_messages(query: str, context_str: str, prior: list[list]) -> list[dict]:
-    msgs: list[dict] = [
-        {"role": "system", "content": SYSTEM_TMPL.format(context=context_str)}
-    ]
-    for turn in prior[-HISTORY_TURNS:]:
-        user_msg, bot_msg = turn[0], turn[1]
-        if user_msg:
-            msgs.append({"role": "user", "content": user_msg})
-        if bot_msg:
-            clean = bot_msg.split("\n\n---\n\n")[0].strip()
-            msgs.append({"role": "assistant", "content": clean})
-    msgs.append({"role": "user", "content": query})
-    return msgs
-
-
-def _stream_ollama(messages: list[dict]):
-    resp = requests.post(
-        OLLAMA_URL,
-        json={
-            "model": OLLAMA_MODEL,
-            "messages": messages,
-            "stream": True,
-            "temperature": 0.1,
-            "options": {"num_ctx": 8192},
-        },
-        stream=True,
-        timeout=OLLAMA_TIMEOUT,
-    )
-    resp.raise_for_status()
-    for line in resp.iter_lines():
-        if not line:
-            continue
-        raw = line.decode("utf-8")
-        if not raw.startswith("data: ") or raw == "data: [DONE]":
-            continue
-        try:
-            chunk = json.loads(raw[6:])
-            delta = chunk["choices"][0]["delta"].get("content", "")
-            if delta:
-                yield delta
-        except (json.JSONDecodeError, KeyError):
-            continue
+from generation import (
+    build_context_and_citations as _build_context_and_citations,
+    build_messages as _build_messages,
+    stream_ollama as _stream_ollama,
+)
 
 
 # ── Markdown → HTML renderer (for doc viewer) ─────────────────────────────────

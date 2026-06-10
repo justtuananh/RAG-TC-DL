@@ -1,0 +1,37 @@
+name: CI
+
+# Chỉ chạy TẦNG CLOUD-FEASIBLE của harness: lint + fidelity guard + unit test (mock).
+#
+# CỐ TÌNH KHÔNG chạy trên CI (cần tài nguyên không có trên runner cloud, dự án offline):
+#   • integration / services  → cần Docker stack (Qdrant/Ollama) + model bge (GPU/tải nặng)
+#   • eval (make eval)         → cần stack thật + 55 câu (chậm)
+#   • ruby                     → cần Ruby + gem mathtype_to_mathml (_GEM_PATHS macOS 2.6)
+#   • inference model thật     → GPU/offline (test server.py dùng model GIẢ nên vẫn chạy)
+#
+# Fidelity guard chạy được vì build/spike_a/ (report + *.md) đã được commit.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # requirements-dev.txt ghim huggingface_hub<1.0 và qdrant-client==1.10.1 để
+      # tương thích với code (gradio 4.x + QdrantClient.search). Không cài
+      # requirements.txt (scikit-image nặng, không cần cho unit tier).
+      - name: Cài đặt phụ thuộc (cloud-feasible)
+        run: pip install -r requirements-app.txt -r requirements-dev.txt
+
+      # `make check PY=python` = đúng cổng chạy local → "xanh local ⇒ xanh CI".
+      - name: Lint + fidelity + unit tests
+        run: make check PY=python

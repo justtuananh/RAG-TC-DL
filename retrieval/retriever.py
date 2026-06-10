@@ -66,8 +66,21 @@ def dense_search(
 
 
 _LEXICON: dict[str, str] = {
-    # "điều kiện môi trường" maps to bullets found in all "Điều kiện kiểm định" sections
+    # Cầu nối từ vựng: trigger (substring, lowercase) → cụm đồng nghĩa nối thêm vào
+    # truy vấn embed + BM25 (reranker vẫn nhận query gốc). Nhắm khẩu ngữ/paraphrase
+    # và thuật ngữ song ngữ Việt–Anh trong các QTKĐ áp suất.
     "điều kiện môi trường": "điều kiện kiểm định nhiệt độ độ ẩm áp suất khí quyển",
+    "sai số cho phép": "sai số giới hạn dung sai độ chính xác cấp chính xác",
+    "thời gian quay tự do": "thời gian quay tự do píttông kiểm tra kỹ thuật độ nhớt",
+    "độ chênh áp": "độ chênh áp blowdown chênh lệch áp suất đóng áp suất chỉnh đặt",
+    "áp suất chỉnh đặt": "áp suất chỉnh đặt set pressure áp suất mở van",
+    "thử thủy tĩnh": "thử thủy tĩnh kiểm tra độ kín chịu tải thời gian tối thiểu",
+    "kẹp chì": "kẹp chì niêm phong dấu niêm phong kiểm tra bên ngoài",
+    "thiết bị chuẩn": "phương tiện kiểm định thiết bị chuẩn áp kế chuẩn",
+    "số lần đo": "số lần đo số loạt đo số điểm đo chu trình kiểm định",
+    "chu kỳ kiểm định": "chu kỳ kiểm định định kỳ thời hạn tháng xử lý chung",
+    "diện tích hiệu dụng": "diện tích hiệu dụng píttông xác định đo lường",
+    "van xả áp": "van an toàn van xả áp suất safety valve",
 }
 
 
@@ -147,11 +160,7 @@ def fetch_parent(parent_id_hex: str) -> dict | None:
     return None
 
 
-_NOISE_PATH_MARKERS = (
-    "Mẫu biên bản", "Mẫu Biên bản",
-    "Mẫu giấy", "Mẫu Giấy",
-    "(Quy định)",
-)
+from retrieval._constants import NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS
 
 
 def _filter_noise(hits: list[dict]) -> list[dict]:

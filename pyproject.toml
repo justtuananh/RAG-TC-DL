@@ -1,0 +1,41 @@
+# Cấu hình test + lint cho harness QA của QTKĐ RAG.
+#
+# CHỈ có các bảng [tool.*] — KHÔNG có [build-system] — nên repo KHÔNG bị biến
+# thành package cài được; nó giữ nguyên quy ước hai venv + requirements*.txt.
+#
+# Test interpreter là .venv-dev (xem requirements-dev.txt). pythonpath=["."] cho
+# phép import retrieval/ index/ ingestion/ app / eval.run_eval / scripts từ test
+# mà không cần cài đặt repo.
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "-q --strict-markers --strict-config"
+testpaths = ["tests"]
+pythonpath = ["."]
+markers = [
+    "unit: test thuần Python, mọi I/O đã mock; chạy mọi nơi kể cả CI (tự gán theo thư mục tests/unit).",
+    "integration: cần Docker stack thật (embedding/rerank/qdrant/ollama); KHÔNG chạy ở CI (tự gán theo tests/integration).",
+    "services: cần service mạng (alias dùng bởi fixture require_services).",
+    "gpu: cần GPU hoặc load model thật.",
+    "ruby: cần Ruby + gem mathtype_to_mathml (Stage-1 OLE→LaTeX) (tự gán theo tests/ruby).",
+    "slow: chạy lâu (eval đủ bộ, full-corpus).",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Không lint code sinh tự động / vendored / dữ liệu nguồn.
+extend-exclude = ["vendor", "build", ".venv", ".venv-dev", "TC_DL", "docs"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+ignore = [
+    "E501",   # độ dài dòng: nhiều docstring/chú thích tiếng Việt dài — để formatter lo
+    "E741",   # tên biến 1 ký tự (l, O, I): code dùng biến vòng lặp ngắn có chủ đích
+    "B008",   # gọi hàm trong default arg: pattern của FastAPI/pydantic
+    # ambiguous-unicode: tiếng Việt có dấu + token ⟦Fxxx⟧ + ký hiệu toán (∆, ρ, ×) là CỐ Ý
+    "RUF001", "RUF002", "RUF003",
+]
+
+[tool.ruff.format]
+quote-style = "preserve"
