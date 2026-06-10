@@ -149,6 +149,10 @@ def stream_ollama(messages: list[dict]):
             "model": OLLAMA_MODEL,
             "messages": messages,
             "stream": True,
+            # Giữ model trong RAM giữa các request — mặc định 5m hay bị evict giữa
+            # phiên/lô dài; mỗi lần reload 7b dưới áp lực RAM là một cửa sổ dễ bị
+            # OOM-kill → Ollama 500 (đo: 42 lần 500/4h, log 'signal: killed').
+            "keep_alive": "30m",
             "options": {
                 "num_ctx": NUM_CTX,
                 "num_predict": MAX_NEW_TOKENS,

@@ -50,7 +50,7 @@ def _available_models() -> set[str]:
         return set()
 
 
-def _answer(query: str, retrieved: list[dict], model: str, retries: int = 2) -> str:
+def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> str:
     """Sinh câu trả lời cho model chỉ định, dùng cùng ngữ cảnh đã retrieve.
 
     Retry khi lỗi hạ tầng (Ollama 500 / read-timeout / trả rỗng): trên CPU,
@@ -66,7 +66,9 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 2) -> 
     for attempt in range(retries + 1):
         if attempt:
             print(f"    ↻ retry {attempt}/{retries} (lỗi trước: {err})")
-            time.sleep(8 * attempt)
+            # Backoff dài dần: 500 đến từ OOM-kill lúc reload model — cần thời gian
+            # cho RAM hạ nhiệt, không phải retry dồn dập (Q101 từng trượt 3×500/53s).
+            time.sleep(12 * attempt)
         try:
             out = "".join(generation.stream_ollama(messages))
             if out.strip():
