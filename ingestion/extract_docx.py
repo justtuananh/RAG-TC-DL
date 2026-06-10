@@ -125,6 +125,31 @@ def _heading_level(p) -> int | None:
     return None
 
 
+_CAPTION_RE = re.compile(r"(?:Hình|Bảng)\s+\d")
+
+
+def _is_body_masquerading_as_heading(text: str) -> bool:
+    """Đoạn văn bị tác giả gán style Heading trong .docx nhưng thực chất là body.
+
+    Bốn dấu hiệu (đối chiếu 0 false-positive trên toàn bộ heading thật của 7 file):
+      - bullet ("- ", "– ");
+      - câu dài có dấu chấm giữa chừng;
+      - KẾT THÚC bằng "." / ";" — heading thật không bao giờ (bắt câu tiêu chí
+        "Sai số tương đối của H3000 không được vượt quá ± 0,1 %." từng bị hoisted
+        khỏi mục 5.3 thành heading riêng → fact ±0,1 % biến mất khỏi parent 5.3);
+      - caption "Hình N…"/"Bảng N…" ("Hình 1. Sơ đồ kết nối AKC và H3000…").
+    """
+    t = text.strip()
+    return (
+        t.startswith("- ")
+        or t.startswith("– ")
+        or (len(t) > 80 and ". " in t)
+        or t.endswith(".")
+        or t.endswith(";")
+        or bool(_CAPTION_RE.match(t))
+    )
+
+
 def _inline(el, rels, formulas, section_path, *, in_table=False, counter=None):
     """Render the inline content of a paragraph/cell in document order.
 
@@ -226,15 +251,9 @@ def extract_docx(path: str) -> DocResult:
             n_paragraphs += 1
             level = _heading_level(child)
             text = _inline(child, rels, formulas, section_path, counter=counter)
-            # Guard: body text accidentally formatted with a heading style.
-            # Catches (a) bullet-prefixed items ("- text") and (b) full sentences
-            # with internal periods — both common in QTKD_1.071 where list items
-            # and section bodies were given heading2/heading3 styles in the source doc.
-            if level is not None and (
-                text.startswith("- ")
-                or text.startswith("– ")
-                or (len(text) > 80 and ". " in text)
-            ):
+            # Guard: body text accidentally formatted with a heading style
+            # (bullet / câu / caption) — see _is_body_masquerading_as_heading.
+            if level is not None and _is_body_masquerading_as_heading(text):
                 level = None
             if level is not None and text:
                 n_headings += 1

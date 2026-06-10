@@ -61,3 +61,42 @@ def test_table_md_escapes_pipe():
         "</w:tbl>"
     )
     assert "a\\|b" in _table_md(tbl, {}, [], [], [0])
+
+
+# ── Guard: body giả dạng heading ──────────────────────────────────────────────
+
+from ingestion.extract_docx import _is_body_masquerading_as_heading  # noqa: E402
+
+
+def test_guard_demotes_sentence_heading():
+    # Chuỗi THẬT từ QTKD_1.071: câu tiêu chí bị style Heading1 trong .docx,
+    # hoisted khỏi mục 5.3 → fact ±0,1 % không còn trong parent 5.3.
+    assert _is_body_masquerading_as_heading(
+        "Sai số tương đối của H3000 không được vượt quá ± 0,1 %."
+    )
+
+
+def test_guard_demotes_figure_caption():
+    assert _is_body_masquerading_as_heading("Hình 1. Sơ đồ kết nối AKC và H3000 cần kiểm định")
+    assert _is_body_masquerading_as_heading("Bảng 3 - Số loạt đo, số lượng điểm đo")
+
+
+def test_guard_demotes_bullets_and_long_sentences():
+    assert _is_body_masquerading_as_heading("- Nhiệt độ môi trường: (23 ± 5) oC;")
+    assert _is_body_masquerading_as_heading(
+        "Sau khi đã tiến hành các bước kiểm tra tại 5.2, tạo áp suất tới áp suất "
+        "giới hạn và chịu tải 15 min. Độ tụt áp suất phải đạt yêu cầu"
+    )
+
+
+def test_guard_keeps_real_headings():
+    for h in [
+        "1 Phạm vi áp dụng",
+        "6.2.3 Kiểm tra thời gian quay tự do của píttông",
+        "Phụ lục A",
+        "(Quy định)",
+        "Mẫu biên bản kiểm định (không đạt cấp cho đơn vị)",
+        "Đánh giá độ không đảm bảo đo",
+        "Áp kế pít tông kiểu H3000-SP-70/700",
+    ]:
+        assert not _is_body_masquerading_as_heading(h), h
