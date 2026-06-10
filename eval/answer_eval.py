@@ -50,12 +50,42 @@ def _available_models() -> set[str]:
         return set()
 
 
-def _answer(query: str, retrieved: list[dict], model: str) -> str:
-    """Sinh câu trả lời cho model chỉ định, dùng cùng ngữ cảnh đã retrieve."""
+def _answer(query: str, retrieved: list[dict], model: str, retries: int = 2) -> str:
+    """Sinh câu trả lời cho model chỉ định, dùng cùng ngữ cảnh đã retrieve.
+
+    Retry khi lỗi hạ tầng (Ollama 500 / read-timeout / trả rỗng): trên CPU,
+    qwen2.5:7b chạy lô dài hay trả 500 từng đợt — không retry thì 1/3 số câu bị
+    chấm 0 oan và mọi metric thành nhiễu hạ tầng thay vì chất lượng model
+    (lần đo 2026-06-11: 10/29 câu lỗi hạ tầng). Đường production (app.py) stream
+    trực tiếp cho người dùng nên không đi qua hàm này.
+    """
     context_str, _ = generation.build_context_and_citations(retrieved)
     messages = generation.build_messages(query, context_str, [])
     generation.OLLAMA_MODEL = model  # stream_ollama đọc biến module này
-    return "".join(generation.stream_ollama(messages))
+    err = ""
+    for attempt in range(retries + 1):
+        if attempt:
+            print(f"    ↻ retry {attempt}/{retries} (lỗi trước: {err})")
+            time.sleep(8 * attempt)
+        try:
+            out = "".join(generation.stream_ollama(messages))
+            if out.strip():
+                return out
+            err = "rỗng"
+        except Exception as e:  # noqa: BLE001 — gom mọi lỗi hạ tầng để retry
+            err = str(e)[:90]
+    print(f"    ✗ bỏ cuộc sau {retries} retry: {err}")
+    return ""
+
+
+def _warmup(model: str) -> None:
+    """Nạp model trước lô đo (tránh read-timeout giả ở câu đầu khi model nguội)."""
+    generation.OLLAMA_MODEL = model
+    try:
+        for _ in generation.stream_ollama([{"role": "user", "content": "OK?"}]):
+            break  # chỉ cần token đầu — model đã nạp
+    except Exception as e:  # noqa: BLE001
+        print(f"  ⚠ warm-up {model}: {e}")
 
 
 # ── tổng hợp báo cáo ──────────────────────────────────────────────────────────
@@ -184,6 +214,7 @@ def main() -> None:
     aggs: dict[str, dict] = {}
     for model in models:
         print(f"\n💬 Sinh câu trả lời với {model}…")
+        _warmup(model)
         records: list[dict] = []
         for it in items:
             retrieved = retrieved_by_id[it["id"]]

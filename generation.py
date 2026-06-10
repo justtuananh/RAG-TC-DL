@@ -21,7 +21,9 @@ import requests
 # ── Config LLM ────────────────────────────────────────────────────────────────
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/v1/chat/completions")
 OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:1.5b")
-OLLAMA_TIMEOUT = 120
+# Read-timeout tới token ĐẦU TIÊN: trên CPU, prompt-eval 4–5k token mất >120s khi
+# model nguội → 120 gây "Read timed out" giả. GPU prod không bị ảnh hưởng (vài giây).
+OLLAMA_TIMEOUT = int(os.getenv("OLLAMA_TIMEOUT", "300"))
 HISTORY_TURNS = 3
 
 # Ngân sách ngữ cảnh: ĐO THỰC NGHIỆM (answer_eval) cho thấy nhồi ngữ cảnh lớn phản tác
