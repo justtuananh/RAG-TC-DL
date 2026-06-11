@@ -8,7 +8,8 @@ chạy local. Mục tiêu prod: 1 máy đơn **RTX 5060 8GB**, mở rộng từ 
 
 > **Hai cách triển khai (ngang nhau):**
 > - **Mode A — Docker (stack standalone):** một lệnh `make up` dựng `app.py` + Qdrant + dịch vụ
->   embedding/reranker + Ollama. Đây là đường đã được **đo chất lượng** (eval recall@5 = 0.909).
+>   embedding/reranker + Ollama. Đây là đường đã được **đo chất lượng** (eval recall@5 = **1.000**,
+>   55/55 — xem §5).
 > - **Mode B — kotaemon (UI tương tác):** chạy giao diện kotaemon trên host với Chroma + adapter
 >   `kotaemon_ext/`, phong phú cho quản lý tài liệu & chat.
 
@@ -51,12 +52,12 @@ ro lớn nhất của dự án — *độ chính xác công thức là mối qua
 | Lớp | Thành phần | Ghi chú |
 |---|---|---|
 | **Giao diện** | **A:** `app.py` (Gradio 4.x, repo này) · **B:** [kotaemon](https://github.com/Cinnamon/kotaemon) (Apache-2.0) | Cả hai chạy `:7861` |
-| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | `qwen2.5:1.5b` (dev) / `qwen2.5:7b` (prod), `:11434` |
+| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | `qwen2.5:1.5b` (dev) / `qwen2.5:7b` (prod), `:11434`; `generation.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
 | **Embedding** | **bge-m3** (1024 chiều) qua **inference server tự viết** | `docker/inference/server.py` (FastAPI + sentence-transformers), `:8010`, `/v1/embeddings` |
-| **Reranker** | **bge-reranker-v2-m3** qua cùng server (CrossEncoder) | `:8011`, `/v1/rerank` (Cohere-style — khớp `retriever.py` & `QTKDReranking`) |
+| **Reranker** | **bge-reranker-v2-m3** qua cùng server (CrossEncoder) | `:8011`, `/v1/rerank` (Cohere-style); env `RERANKER_MAX_LENGTH` (mặc định 1024) |
 | **Vector store** | **A: Qdrant** `:6333` (collection `qtkd_rag`) · **B: Chroma** (nhúng) | `VECTOR_SIZE = 1024` |
 | **Trích xuất công thức** | Python `lxml` + `olefile`; **Ruby gem `mathtype_to_mathml`**; XSLT `vendor/xsltml/mml2tex.xsl` | OLE MathType → LaTeX |
-| **Hybrid retrieval** | **A:** `retrieval/` (dense + BM25 + RRF k=60 + rerank) · **B:** kotaemon built-in | |
+| **Hybrid retrieval** | **A:** `retrieval/` (router → lexicon → dense + BM25 → RRF k=60 → rerank trên parent → parent) · **B:** kotaemon built-in | |
 | **Adapter (Mode B)** | `kotaemon_ext/` | `QTKDDocxReader` (reader), `QTKDReranking` (reranker) |
 
 ### Hai mode triển khai
@@ -68,9 +69,9 @@ cho cả hai mode; chỉ khác phần UI + vector store + tầng truy hồi.
 | Khởi chạy | `make up` (1 lệnh) | `.venv/bin/python app.py` (trong `../kotaemon`) |
 | UI | `app.py` Gradio `:7861` | kotaemon Gradio `:7861` |
 | Vector store | **Qdrant** `:6333` | **Chroma** (nhúng) |
-| Truy hồi | `retrieval/`: dense + BM25 → RRF → rerank → parent | kotaemon hybrid + `QTKDReranking` |
+| Truy hồi | `retrieval/`: router → lexicon → dense + BM25 → RRF → rerank (parent) → parent | kotaemon hybrid + `QTKDReranking` |
 | Nạp tài liệu | `ingestion.spike_a` (host) → `build/spike_a/` → `indexer` | `QTKDDocxReader` chạy khi upload |
-| Eval | **Có** (recall@5 = 0.909, xem §5) | Không qua harness này |
+| Eval | **Có** — retrieval recall@5 = 1.000 + answer-quality (xem §5) | Không qua harness này |
 | Điểm mạnh | Tái lập, 1 lệnh, đã đo chất lượng | UI quản lý file/chat phong phú |
 
 > Repo này (`RAG_TC_DL`) cung cấp **ingestion / index / retrieval / eval** và adapter
@@ -149,6 +150,9 @@ không có vấn đề tương thích).
 - **macOS:** Docker không dùng được GPU Apple Silicon. Nên chạy **Ollama native** (`brew install
   ollama` + `ollama serve`), comment service `ollama` trong compose và đặt
   `OLLAMA_URL=http://host.docker.internal:11434/v1/chat/completions`.
+  > Đặt env dạng `/v1/...` cho tương thích; `generation.py` **tự map sang native `/api/chat`**
+  > lúc gọi — vì endpoint OpenAI-compat `/v1` của Ollama **bỏ qua trường `options`** (num_ctx /
+  > num_predict không có hiệu lực, prompt dài bị cắt từ đầu — đo 2026-06-11). Có unit-test ghim.
 - **Linux + RTX 5060 (Blackwell, sm_120):** cần **`nvidia-container-toolkit`**, bỏ comment khối
   `deploy.resources` của service `ollama`, và driver/toolkit **CUDA 12.8+**. Embedding & reranker
   chạy **CPU** là đủ (theo `docs/PLAN.md`), giữ VRAM cho LLM.
@@ -215,10 +219,12 @@ flowchart TB
     D["TC_DL/*.docx"] -->|"ingestion.spike_a (host + Ruby gem)"| MD["build/spike_a/*.md<br/>+ extraction_report.json"]
     MD -->|"make index → index.embed_store"| QD[("Qdrant qtkd_rag<br/>:6333")]
     EMB["embedding :8010 · bge-m3<br/>(custom FastAPI)"] -. embed .-> QD
-    Q["Câu hỏi tiếng Việt"] --> RET["retrieval.retriever<br/>dense + BM25 → RRF → rerank → parent"]
+    Q["Câu hỏi tiếng Việt"] --> GUARD{"yêu cầu tính toán?<br/>(is_calculation_request)"}
+    GUARD -->|"có → từ chối tất định"| APP
+    GUARD -->|"không"| RET["retrieval.retriever<br/>router → lexicon → dense + BM25 → RRF → rerank(parent) → parent"]
     QD -. "tìm child chunks" .-> RET
     RK["reranker :8011<br/>bge-reranker-v2-m3"] -. rerank .-> RET
-    RET --> OL["Ollama :11434 · qwen2.5"]
+    RET --> OL["Ollama :11434 · qwen2.5<br/>(native /api/chat)"]
     OL --> APP["app.py · Gradio :7861<br/>trả lời + trích dẫn"]
 ```
 
@@ -252,6 +258,9 @@ flowchart TB
   thức inline**.
 - **Truy hồi** lấy child chunk liên quan → rerank cross-encoder (`:8011`) → ghép context → Ollama
   sinh đáp án **chỉ dựa trên context**, tiếng Việt, **không tính lại công thức**, kèm trích dẫn.
+- **Lookup-only được cưỡng chế TẤT ĐỊNH** (Mode A): câu yêu cầu tính toán có số liệu cho sẵn bị
+  từ chối **trước khi** retrieve (`is_calculation_request`); mọi nội dung model viết thêm sau câu
+  từ chối chuẩn bị cắt (`enforce_refusal_stop`) — không trông vào model tự tuân prompt.
 - **Độ trung thực công thức thuộc về `ingestion/`** — không phụ thuộc framework truy hồi.
 
 ### Kho tài liệu & trạng thái
@@ -300,12 +309,26 @@ kỳ vọng). Một câu tính là *hit* nếu kết quả khớp đúng file v�
 > `generation.py` nay gọi native `/api/chat` (num_ctx/num_predict có hiệu lực thật).
 
 ### Chạy lại eval
+
+**Retrieval** (recall@k + nDCG + MRR — cần `:8010`/`:8011`/`:6333` + `kotaemon/.venv`):
 ```bash
-make eval                                   # = python -m eval.run_eval --mode hybrid (host, kotaemon/.venv)
-python -m eval.run_eval --mode both -v      # so sánh hybrid vs dense, in section_path mỗi hit
-python -m eval.run_eval --debug-miss        # với mỗi câu trượt: in rank từng tầng (dense/bm25/fused/rerank)
+make eval                                          # = run_eval --mode hybrid (55 câu)
+python -m eval.run_eval --mode both -v             # so sánh hybrid vs dense, in section_path mỗi hit
+python -m eval.run_eval --debug-miss               # mỗi câu trượt: rank từng tầng (dense/bm25/fused/rerank)
+python -m eval.run_eval --eval-file eval/eval_set_ext.jsonl   # bộ gold MỞ RỘNG 10 câu (chống overfit)
 ```
-Yêu cầu: service `:8010`/`:8011`/`:6333` đang chạy (qua `make up`) + `kotaemon/.venv` trên host.
+
+**Answer-quality** (coverage / citation / refusal / ảo giác — cần thêm Ollama `:11434` + model đã pull):
+```bash
+make answer-eval                                   # so 1.5b vs 7b (29 câu khó, eval/answer_set.jsonl)
+make answer-eval-dev                               # chỉ 1.5b (nhanh)
+python -m eval.answer_eval --model qwen2.5:7b -v --dump /tmp/rec_{model}.jsonl   # chấm prod + dump từng câu
+```
+> ⚠ Số answer-quality chỉ đáng tin trên **qwen2.5:7b** (1.5b không ghi `[n]` — model-bound) và
+> trên backend ổn định (GPU prod, hoặc Ollama native; 7b trong Docker-VM hay bị OOM-kill → 500).
+
+Yêu cầu: service `:8010`/`:8011`/`:6333` (+ `:11434` cho answer-eval) đang chạy + `kotaemon/.venv`
+trên host. `make check` (115+ unit test + guard công thức 351/351) là cổng CI không cần Docker.
 Lịch sử số liệu lưu ở [`result_eval.md`](result_eval.md).
 
 ---
