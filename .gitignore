@@ -32,3 +32,5 @@ tei-data/
 logs/*.jsonl
 QA.xlsx
 ~$QA.xlsx
+
+MiccoRAG-v3/
