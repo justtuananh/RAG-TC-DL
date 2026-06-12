@@ -25,6 +25,12 @@ _DEVICE_ALIASES: dict[str, str] = {
     "bình phân ly": "1.063",
     "h3000": "1.071",
     "áp kế pittông tiêu chuẩn": "1.159",
+    # Biến thể chính tả thực tế trong câu hỏi: "píttông" (có dấu í) và đảo trật tự
+    # "pittông áp kế" — thiếu chúng, câu so sánh 2 thiết bị chỉ bắt được 1 tín hiệu
+    # và bị ghim nhầm 1 file (đo trên answer-set Q115–Q117).
+    "áp kế píttông tiêu chuẩn": "1.159",
+    "pittông áp kế": "1.159",
+    "píttông áp kế": "1.159",
     "thiết bị đo áp suất số": "1.160",
     "akkđ": "1.160",
     "dpi 610": "1.190",
@@ -71,29 +77,39 @@ def _ensure_mapping() -> dict[str, str]:
     return _number_to_stem
 
 
-def route(query: str) -> str | None:
-    """Return file_stem if query clearly targets one QTKĐ file, else None.
+def route_files(query: str) -> frozenset[str]:
+    """Tập file_stem phân biệt mà query nhắc tới (số QTKĐ tường minh + alias).
 
-    Priority:
-    1. Explicit QTKĐ number in query (highest confidence).
-    2. Device-name alias (medium confidence).
-    Returns None when no signal found → caller falls back to full-corpus search.
+    Rỗng = không tín hiệu; 1 phần tử = ghim file; ≥2 = câu so sánh nhiều thiết bị
+    → retriever chạy phễu RIÊNG cho từng file (một phễu chung bị cụm từ vựng áp
+    đảo — 3 file áp kế píttông — đè bẹp file thiểu số: đo Q115/Q116 top-5 không
+    còn chunk 1.061 nào dù query nhắc 'van an toàn').
     """
     mapping = _ensure_mapping()
     q = query.lower()
 
-    # Highest confidence: explicit number like "1.061", "1.160"
-    m = _NUMBER_RE.search(q)
-    if m:
-        stem = mapping.get(m.group(1))
+    stems: set[str] = set()
+    for num in _NUMBER_RE.findall(q):
+        stem = mapping.get(num)
         if stem:
-            return stem
-
-    # Medium confidence: device alias
+            stems.add(stem)
     for alias, number in _DEVICE_ALIASES.items():
         if alias in q:
             stem = mapping.get(number)
             if stem:
-                return stem
+                stems.add(stem)
+    return frozenset(stems)
 
+
+def route(query: str) -> str | None:
+    """Return file_stem if query clearly targets EXACTLY one QTKĐ file, else None.
+
+    Đúng 1 stem → ghim file đó; 0 hoặc ≥2 (câu so sánh nhiều thiết bị, hoặc số
+    và alias mâu thuẫn) → None. Trước đây tín hiệu ĐẦU TIÊN thắng nên câu so
+    sánh "van an toàn (1.061) và áp kế (1.159)" bị ghim 1 file, nửa kia không
+    bao giờ được retrieve (đo: 2 wrong_refusal cross_file).
+    """
+    stems = route_files(query)
+    if len(stems) == 1:
+        return next(iter(stems))
     return None

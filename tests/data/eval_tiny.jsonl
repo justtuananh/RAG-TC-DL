@@ -1,0 +1,4 @@
+{"id": 1, "question": "Sai số cho phép của áp suất chỉnh đặt van an toàn là bao nhiêu?", "expected": [{"file_stem": "QTKD_1.061_2021_ND_V2", "section_path": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường"}]}
+{"id": 2, "question": "Kiểm tra bên ngoài van an toàn cần đáp ứng những yêu cầu gì?", "expected": [{"file_stem": "QTKD_1.061_2021_ND_V2", "section_path": "6 Tiến hành kiểm định > 6.1 Kiểm tra bên ngoài"}]}
+{"id": 4, "question": "Độ chênh áp tối đa của van an toàn là bao nhiêu phần trăm?", "expected": [{"file_stem": "QTKD_1.061_2021_ND_V2", "section_path": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường"}]}
+{"id": 5, "question": "Điều kiện môi trường khi tiến hành kiểm định van an toàn?", "expected": [{"file_stem": "QTKD_1.061_2021_ND_V2", "section_path": "5 Điều kiện và chuẩn bị kiểm định > 5.1 Điều kiện kiểm định"}]}

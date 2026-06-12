@@ -104,7 +104,7 @@ Gradio web UI on :7861                ← hybrid search → rerank → Ollama an
 | Embedding  | 8010  | OpenAI-compat `/v1/embeddings`, **1024-dim** (bge-m3) |
 | Reranker   | 8011  | `/v1/rerank` (bge-reranker-v2-m3)                |
 | Qdrant     | 6333  | collection `qtkd_rag` (cosine, 1024 dims)        |
-| Ollama     | 11434 | `/v1/chat/completions`, model `qwen2.5:1.5b` (dev; prod target qwen2.5:7b) |
+| Ollama     | 11434 | **native `/api/chat`** (generation.py tự map từ env OLLAMA_URL dạng `/v1`), model `qwen2.5:1.5b` (dev; prod target qwen2.5:7b). KHÔNG quay lại `/v1/chat/completions`: endpoint đó BỎ QUA `options` → num_ctx/num_predict không có hiệu lực (đo 2026-06-11). |
 
 Note: ports/models are **hardcoded** as module-level constants in `app.py`, `retriever.py`,
 `bm25_index.py`, `embed_store.py` — change them in all relevant files together. The PLAN doc

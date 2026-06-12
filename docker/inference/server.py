@@ -7,9 +7,11 @@ Endpoints:
   POST /v1/rerank       — query: str, documents: list[str], top_n: int, model: str
 
 Env:
-  EMBEDDING_MODEL   default: BAAI/bge-large-en-v1.5
-  RERANKER_MODEL    default: BAAI/bge-reranker-v2-m3
-  PORT              default: 8000
+  EMBEDDING_MODEL      default: BAAI/bge-large-en-v1.5
+  RERANKER_MODEL       default: BAAI/bge-reranker-v2-m3
+  RERANKER_MAX_LENGTH  default: 1024 — token cap của cross-encoder; 512 cắt mất
+                       nội dung section dài (đo được Q39/Q48 bị giáng hạng vì vậy)
+  PORT                 default: 8000
 """
 
 import os
@@ -27,6 +29,7 @@ log = logging.getLogger(__name__)
 
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5")
 RERANKER_MODEL  = os.getenv("RERANKER_MODEL",  "BAAI/bge-reranker-v2-m3")
+RERANKER_MAX_LENGTH = int(os.getenv("RERANKER_MAX_LENGTH", "1024"))
 MODE            = os.getenv("MODE", "embedding")   # "embedding" | "reranker"
 
 _embedder: SentenceTransformer | None = None
@@ -44,8 +47,8 @@ async def lifespan(app: FastAPI):
     else:
         log.warning("CUDA not available — running on CPU")
     if MODE == "reranker":
-        log.info("Loading reranker: %s on %s", RERANKER_MODEL, device)
-        _reranker = CrossEncoder(RERANKER_MODEL, max_length=512, device=device)
+        log.info("Loading reranker: %s on %s (max_length=%d)", RERANKER_MODEL, RERANKER_MAX_LENGTH, device)
+        _reranker = CrossEncoder(RERANKER_MODEL, max_length=RERANKER_MAX_LENGTH, device=device)
         log.info("Reranker ready")
     else:
         log.info("Loading embedding model: %s on %s", EMBEDDING_MODEL, device)

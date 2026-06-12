@@ -24,7 +24,6 @@ from pathlib import Path
 
 import gradio as gr
 import markdown as _md
-import requests
 
 sys.path.insert(0, str(Path(__file__).parent))
 from retrieval.retriever import retrieve
@@ -188,6 +187,14 @@ def _stream_ollama(messages: list[dict]):
                 yield delta
         except (json.JSONDecodeError, KeyError):
             continue
+from generation import (
+    REFUSAL_SENTENCE as _REFUSAL_SENTENCE,
+    build_context_and_citations as _build_context_and_citations,
+    build_messages as _build_messages,
+    enforce_refusal_stop as _enforce_refusal_stop,
+    is_calculation_request as _is_calculation_request,
+    stream_ollama as _stream_ollama,
+)
 
 
 # ── Markdown → HTML renderer (for doc viewer) ─────────────────────────────────
@@ -299,6 +306,13 @@ def bot_fn(history: list):
     )
     prior = history[:-1]
 
+    # 0. Lookup-only: yêu cầu tính toán với số liệu cho sẵn → từ chối tất định,
+    #    không retrieve, không gọi LLM (7b lúc chịu từ chối lúc thay số tính tiếp).
+    if _is_calculation_request(query):
+        history[-1][1] = _REFUSAL_SENTENCE
+        yield history, gr.update()
+        return
+
     history = history + [{"role": "assistant", "content": "*⏳ Đang nhúng câu hỏi (embedding)…*"}]
     yield history, gr.update()
 
@@ -337,6 +351,9 @@ def bot_fn(history: list):
         return
 
     history[-1]["content"] = _fix_latex(partial) + citations_md
+    # 4. Cắt phần "tính tiếp" sau câu từ chối chuẩn (nếu có) rồi gắn citations
+    partial = _enforce_refusal_stop(partial)
+    history[-1][1] = partial + citations_md
     yield history, gr.update()
 
 

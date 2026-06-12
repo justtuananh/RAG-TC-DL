@@ -1,0 +1,10 @@
+{"question": "Chu kỳ kiểm định của van an toàn là bao lâu?", "expected": [{"file_stem": "QTKD_1.061_2021_ND_V2", "section_path": "7 Xử lý chung"}]}
+{"question": "Chu kỳ kiểm định bàn tạo áp theo QTKĐ 1.062 là bao nhiêu tháng?", "expected": [{"file_stem": "QTKD_1.062_2021_ND", "section_path": "6 Xử lý chung"}]}
+{"question": "Chu kỳ kiểm định của bình phân ly là bao nhiêu tháng?", "expected": [{"file_stem": "QTKD_1.063_2021_BPL", "section_path": "6 Xử lý chung"}]}
+{"question": "Chu kỳ kiểm định của thiết bị DPI 610 là bao lâu?", "expected": [{"file_stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "section_path": "6 Xử lý chung"}]}
+{"question": "Hệ số a và b khi đánh giá độ không đảm bảo đo thiết bị đo áp suất số được xác định bằng phương pháp nào?", "expected": [{"file_stem": "QTKD_1.160_2021_ND_FINAL", "section_path": "Đánh giá độ không đảm bảo đo"}]}
+{"question": "QTKĐ 1.159 viện dẫn tài liệu nào?", "expected": [{"file_stem": "QTKD_1.159_2021_ND_FINAL", "section_path": "2 Tài liệu viện dẫn"}]}
+{"question": "Khi kiểm tra độ kín hệ thống tạo môi trường áp suất của áp kế pittông tiêu chuẩn, tốc độ hạ Vt1 không được lớn hơn bao nhiêu phần trăm tốc độ hạ Vt2?", "expected": [{"file_stem": "QTKD_1.159_2021_ND_FINAL", "section_path": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.2 Kiểm tra độ kín của hệ thống tạo môi trường áp suất"}]}
+{"question": "Các phép kiểm định áp kế pít tông H3000 gồm những phép nào?", "expected": [{"file_stem": "QTKD_1.071_2022_FINAL", "section_path": "2 Các phép kiểm định"}]}
+{"question": "ĐKĐBĐ diện tích hiệu dụng khi xác định độ chính xác áp kế pittông tiêu chuẩn lấy từ giấy chứng nhận hiệu chuẩn với hệ số phủ bằng bao nhiêu?", "expected": [{"file_stem": "QTKD_1.159_2021_ND_FINAL", "section_path": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác"}]}
+{"question": "Chu kỳ kiểm định của thiết bị đo áp suất số AKKĐ là bao lâu?", "expected": [{"file_stem": "QTKD_1.160_2021_ND_FINAL", "section_path": "6 Xử lý chung"}]}

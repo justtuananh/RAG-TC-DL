@@ -33,16 +33,14 @@ def tokenize(text: str) -> list[str]:
 
 # ── index build ───────────────────────────────────────────────────────────────
 
-_NOISE_PATH_MARKERS = (
-    "Mẫu biên bản", "Mẫu Biên bản",
-    "Mẫu giấy", "Mẫu Giấy",
-    "(Quy định)",
+from retrieval._constants import (
+    NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS,
+    is_noise_path as _is_noise_path,
 )
 
 
 def _is_noise(payload: dict) -> bool:
-    sp = payload.get("section_path", "")
-    return any(m in sp for m in _NOISE_PATH_MARKERS)
+    return _is_noise_path(payload.get("section_path", ""))
 
 
 def _corpus_text(payload: dict) -> str:

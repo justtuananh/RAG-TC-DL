@@ -58,17 +58,14 @@ def _hit_rank(results: list[dict], expected_list: list[dict]) -> int | None:
 # ── retrieval pipelines ───────────────────────────────────────────────────────
 
 def run_hybrid(query: str, top_n: int = 10) -> list[dict]:
-    """Hybrid pipeline: route → lexicon expand → embed + BM25 → RRF → parent-rerank."""
-    expanded = _expand_query(query)
-    vec = embed_query(expanded)
-    file_stem = route(query)
-    dense_hits = dense_search(vec, top_k=TOP_K, file_stem=file_stem)
-    bm25_hits = bm25_search(expanded, top_k=TOP_K, file_stem=file_stem)
-    if file_stem and (len(dense_hits) + len(bm25_hits) < 6):
-        dense_hits = dense_search(vec, top_k=TOP_K)
-        bm25_hits = bm25_search(expanded, top_k=TOP_K)
-    fused = _filter_noise(rrf_fuse(dense_hits, bm25_hits))[:RERANK_POOL]
-    return rerank_hits(query, fused, top_n=top_n)
+    """Hybrid pipeline = ĐÚNG đường production (qua production_retrieve) — chống drift.
+
+    Trước đây hàm này viết lại phễu với top_k=50; nay gọi thẳng retrieve() của app
+    (top_k=20) nên `make eval` đo đúng recall mà người dùng nhận. `_debug_miss` bên
+    dưới vẫn soi từng stage (cố ý nhân bản phễu CHỈ để chẩn đoán).
+    """
+    from eval._pipeline import production_retrieve
+    return production_retrieve(query, top_n=top_n)
 
 
 def run_dense(query: str, top_n: int = 10) -> list[dict]:

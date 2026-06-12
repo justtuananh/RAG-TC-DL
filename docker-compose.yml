@@ -90,6 +90,10 @@ services:
     environment:
       MODE: reranker
       RERANKER_MODEL: BAAI/bge-reranker-v2-m3
+      # 512 cắt mất nội dung section dài trước khi cross-encoder kịp thấy
+      # (đo được Q39/Q48 bị giáng hạng). retrieval đã tự cắt doc ≈1.5k ký tự
+      # quanh child match nên 1024 là dư an toàn.
+      RERANKER_MAX_LENGTH: "1024"
       PORT: "8011"
     ports:
       - "8011:8011"
@@ -118,6 +122,12 @@ services:
       - ollama_data:/root/.ollama
     environment:
       OLLAMA_HOST: "0.0.0.0"
+      # Mặc định Ollama nạp model với ctx 4096 — NHỎ hơn num_ctx=8192 mà
+      # generation.py yêu cầu; endpoint /v1 (OpenAI-compat) lại BỎ QUA trường
+      # "options" nên prompt dài bị cắt từ ĐẦU (mất system prompt + nguồn [1][2]).
+      # generation.py nay gọi /api/chat (options được tôn trọng); env này là
+      # lưới an toàn cho mọi client /v1 khác.
+      OLLAMA_CONTEXT_LENGTH: "8192"
     restart: unless-stopped
     # ── NVIDIA GPU: bỏ comment để dùng RTX 5060 ──────────────────────────────
     deploy:
