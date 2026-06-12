@@ -30,3 +30,5 @@ tei-data/
 
 # Performance logs (generated at runtime, can be large)
 logs/*.jsonl
+QA.xlsx
+~$QA.xlsx

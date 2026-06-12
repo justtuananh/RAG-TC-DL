@@ -8,3 +8,5 @@ markdown>=3.5
 rank-bm25>=0.2.2
 requests>=2.31
 lxml>=5.0
+fastapi>=0.110
+uvicorn>=0.27

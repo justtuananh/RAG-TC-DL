@@ -13,6 +13,8 @@ RUN pip install --no-cache-dir -r requirements-app.txt
 
 # Copy source (TC_DL/ and build/spike_a/ are mounted as volumes at runtime)
 COPY app.py .
+COPY api_server.py .
+COPY generation.py .
 COPY retrieval/ retrieval/
 COPY index/ index/
 COPY eval/ eval/

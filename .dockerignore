@@ -1,3 +1,7 @@
+# Frontend build artifacts (node_modules rất nặng, không cần trong context Python)
+frontend/node_modules/
+frontend/dist/
+
 # Python environments
 .venv/
 __pycache__/

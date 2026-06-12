@@ -47,7 +47,7 @@ async def lifespan(app: FastAPI):
     else:
         log.warning("CUDA not available — running on CPU")
     if MODE == "reranker":
-        log.info("Loading reranker: %s on %s (max_length=%d)", RERANKER_MODEL, RERANKER_MAX_LENGTH, device)
+        log.info("Loading reranker: %s on %s (max_length=%d)", RERANKER_MODEL, device, RERANKER_MAX_LENGTH)
         _reranker = CrossEncoder(RERANKER_MODEL, max_length=RERANKER_MAX_LENGTH, device=device)
         log.info("Reranker ready")
     else:

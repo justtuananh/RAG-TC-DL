@@ -169,6 +169,50 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # ── FastAPI Backend cho React frontend ─────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: qtkd-app:local
+    container_name: qtkd-api
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./build/spike_a:/app/build/spike_a:ro
+      - ./TC_DL:/app/TC_DL:ro
+      - ./api_server.py:/app/api_server.py:ro
+      - ./generation.py:/app/generation.py:ro
+      - ./retrieval:/app/retrieval:ro
+    environment:
+      EMBED_URL: http://embedding:8010/v1/embeddings
+      RERANK_URL: http://reranker:8011/v1/rerank
+      QDRANT_URL: http://qdrant:6333
+      OLLAMA_URL: http://ollama:11434/api/chat
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
+    command: ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8080"]
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      embedding:
+        condition: service_healthy
+      reranker:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── React Frontend (nginx serve + proxy /api → api:8080) ────────────────────
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    image: qtkd-frontend:local
+    container_name: qtkd-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
   # ── One-time Indexer (chạy: make index) ────────────────────────────────────
   indexer:
     build:
