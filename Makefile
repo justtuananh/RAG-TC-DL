@@ -23,12 +23,19 @@ status:
 pull-model:
 	docker compose exec ollama ollama pull qwen2.5:1.5b
 
+pull-model-3b:
+	docker compose exec ollama ollama pull qwen2.5:3b
+
 pull-model-7b:
 	docker compose exec ollama ollama pull qwen2.5:7b
 
-# Index tất cả .md trong build/spike_a/ vào Qdrant (chạy 1 lần hoặc khi thêm doc)
+# Index tất cả .md trong build/spike_a/ vào Qdrant — incremental (skip file đã có)
 index:
 	docker compose --profile tools run --rm indexer
+
+# Re-index toàn bộ (xóa và tạo lại từ đầu)
+reindex:
+	docker compose --profile tools run --rm indexer python -m index.embed_store --force
 
 # ── Maintenance ───────────────────────────────────────────────────────────────
 

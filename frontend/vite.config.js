@@ -15,10 +15,21 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          "react-core": ["react", "react-dom"],
-          "markdown": ["react-markdown", "remark-math", "rehype-katex", "rehype-raw"],
-          "katex": ["katex"],
+        manualChunks: (id) => {
+          if (id.includes("/node_modules/react/") || id.includes("/node_modules/react-dom/")) {
+            return "react-core";
+          }
+          if (
+            id.includes("/node_modules/react-markdown/") ||
+            id.includes("/node_modules/remark-math/") ||
+            id.includes("/node_modules/rehype-katex/") ||
+            id.includes("/node_modules/rehype-raw/")
+          ) {
+            return "markdown";
+          }
+          if (id.includes("/node_modules/katex/")) {
+            return "katex";
+          }
         },
       },
     },

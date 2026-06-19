@@ -15,7 +15,6 @@ Env:
 """
 
 import os
-import time
 import logging
 from contextlib import asynccontextmanager
 from typing import Any
@@ -27,10 +26,10 @@ from sentence_transformers import SentenceTransformer, CrossEncoder
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger(__name__)
 
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5")
-RERANKER_MODEL  = os.getenv("RERANKER_MODEL",  "BAAI/bge-reranker-v2-m3")
+EMBEDDING_MODEL     = os.getenv("EMBEDDING_MODEL", "BAAI/bge-large-en-v1.5")
+RERANKER_MODEL      = os.getenv("RERANKER_MODEL",  "BAAI/bge-reranker-v2-m3")
 RERANKER_MAX_LENGTH = int(os.getenv("RERANKER_MAX_LENGTH", "1024"))
-MODE            = os.getenv("MODE", "embedding")   # "embedding" | "reranker"
+MODE                = os.getenv("MODE", "embedding")
 
 _embedder: SentenceTransformer | None = None
 _reranker: CrossEncoder | None = None

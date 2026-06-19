@@ -258,7 +258,7 @@ Thời gian quay tự do của pít tông được xác định trong các đi�
 
 Trong trường hợp chênh lệch nhiệt độ pít tông/xi lanh lớn hơn 3 oC so với nhiệt độ tiêu chuẩn do nhà sản xuất quy định, thời gian quay tự do được tính như sau:
 
-$ τ=τ_{t}\frac{η_{t}}{η} $ $\tau = \tau_{t} \times \frac{\eta_{t}}{\eta}$
+$ τ=τ_{t}\frac{η_{t}}{η} $ [công thức không đọc được]
 
 Trong đó:
 
@@ -296,7 +296,7 @@ Tốc độ hạ của pít tông được xác định trong các điều kiệ
 
 Trường hợp chênh lệch nhiệt độ pít tông so với nhiệt độ tiêu chuẩn lớn hơn 2 oC thì tốc độ hạ của pít tông tính như sau:
 
-$ V=V_{t}\frac{η_{t}}{η} $ $V = V_{t} \times \frac{\eta_{t}}{\eta}$
+$ V=V_{t}\frac{η_{t}}{η} $ [công thức không đọc được]
 
 Trong đó:
 
@@ -341,50 +341,50 @@ Sau đó, thực hiện tương tự các thao tác như trên nhưng quay đĩa
 - Sai số trong cả 3 trường hợp nêu trên đều được xác định theo các công thức sau:
 
 
-|  | $\Delta = \frac{\Delta_{1} + \Delta_{2}}{2}$ |  |
+|  | [công thức không đọc được] |  |
 | --- | --- | --- |
-|  | $\Delta_{1} = P - P_{c1}$ |  |
-|  | $\Delta_{2} = P - P_{c2}$ |  |
+|  | [công thức không đọc được] |  |
+|  | [công thức không đọc được] |  |
 
 
 Trong đó:
 
-$\Delta$ $ Δ_{i} $ - Sai số đo, bar;
+[công thức không đọc được] $ Δ_{i} $ - Sai số đo, bar;
 
-$\Delta_{1},\Delta_{2}$ $ Δ_{i} $ - Lần lượt là sai số đo của lần đo thứ nhất và thứ hai, bar;
+[công thức không đọc được] $ Δ_{i} $ - Lần lượt là sai số đo của lần đo thứ nhất và thứ hai, bar;
 
-$P_{c1},P_{c2}$ $ Δ_{i} $ - Lần lượt là giá trị chỉ thị trên AKC tại lần đo thứ nhất và thứ hai, bar;
+[công thức không đọc được] $ Δ_{i} $ - Lần lượt là giá trị chỉ thị trên AKC tại lần đo thứ nhất và thứ hai, bar;
 
-$P$ $ P_{i} $ - Giá trị áp suất danh nghĩa tạo bởi H3000 tương ứng với giá trị gia tốc trọng trường tại nơi đo, bar.
+[công thức không đọc được] $ P_{i} $ - Giá trị áp suất danh nghĩa tạo bởi H3000 tương ứng với giá trị gia tốc trọng trường tại nơi đo, bar.
 
 Nếu bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường tại nơi đo thì giá trị P tính bằng tổng giá trị áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra:
 
 
-| $P = P_{0}$ |  |
+| [công thức không đọc được] |  |
 | --- | --- |
 
 
 Trong đó:
 
-$P_{0}$ $ Δ_{i} $ - Giá trị tổng áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra, bar.
+[công thức không đọc được] $ Δ_{i} $ - Giá trị tổng áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra, bar.
 
 Trường hợp bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường khác với gia tốc trọng trường tại nơi đo, giá trị P được tính theo công thức sau:
 
 
-| $P = P_{0} \times \frac{g_{d}}{g_{0}}$ |  |
+| [công thức không đọc được] |  |
 | --- | --- |
 
 
 Trong đó:
 
-$g_{0}$ $ Δ_{i} $ - Gia tốc trọng trường được sử dụng để khắc độ quả cân áp suất, m/s2;
+[công thức không đọc được] $ Δ_{i} $ - Gia tốc trọng trường được sử dụng để khắc độ quả cân áp suất, m/s2;
 
-$g_{d}$ $ Δ_{i} $ - Gia tốc trọng trường tại nơi đo, m/s2.
+[công thức không đọc được] $ Δ_{i} $ - Gia tốc trọng trường tại nơi đo, m/s2.
 
-Sai số tương đối $\delta$ được tính theo công thức sau:
+Sai số tương đối [công thức không đọc được] được tính theo công thức sau:
 
 
-| $\delta = \frac{\Delta}{P} \times 100$ |  |
+| [công thức không đọc được] |  |
 | --- | --- |
 
 
@@ -507,7 +507,7 @@ Kiểm tra độ nhạy: (Đạt/ Không đạt)
 
 A.3 Kiểm tra đo lường:
 
-Tỷ số gia tốc trọng trường: $\frac{g_{d}}{g_{0}} = ................$
+Tỷ số gia tốc trọng trường: [công thức không đọc được]
 
 Phụ lục A (kết thúc)
 
@@ -647,7 +647,7 @@ Kiểm tra độ nhạy: (Đạt/ Không đạt)
 
 B.3 Kiểm tra đo lường:
 
-Tỷ số gia tốc trọng trường: $\frac{g_{d}}{g_{0}} = ................$
+Tỷ số gia tốc trọng trường: [công thức không đọc được]
 
 Phụ lục B (kết thúc)
 

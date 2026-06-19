@@ -96,7 +96,22 @@ def embed_chunks_batched(chunks: list[Chunk]) -> list[list[float]]:
             c.text
             for c in batch
         ]
-        vecs = embed_texts(texts)
+        try:
+            vecs = embed_texts(texts)
+        except requests.exceptions.HTTPError as exc:
+            if exc.response is not None and exc.response.status_code == 500:
+                # GPU OOM or transient service error — retry one chunk at a time
+                print(f"\n  [warn] batch {i // BATCH_SIZE} HTTP 500, retrying 1-by-1 …")
+                time.sleep(2)
+                vecs = []
+                for j, text in enumerate(texts):
+                    try:
+                        vecs.extend(embed_texts([text]))
+                    except Exception as inner:
+                        print(f"\n  [warn] chunk {i + j} failed solo ({inner}), using zero vector")
+                        vecs.append([0.0] * VECTOR_SIZE)
+            else:
+                raise
         all_vectors.extend(vecs)
         print(f"  embedded {min(i + BATCH_SIZE, len(chunks))}/{len(chunks)}", end="\r")
     print()

@@ -34,3 +34,10 @@ QA.xlsx
 ~$QA.xlsx
 
 MiccoRAG-v3/
+
+# Frontend
+node_modules/
+frontend/dist/
+dist/
+frontend/.env.local
+frontend/.env.production

@@ -60,6 +60,7 @@ services:
       MODE: embedding
       EMBEDDING_MODEL: BAAI/bge-m3
       PORT: "8010"
+      PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
     ports:
       - "8010:8010"
     restart: unless-stopped
@@ -72,10 +73,10 @@ services:
               capabilities: [gpu]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8010/health')"]
-      interval: 20s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 600s
 
   # ── Reranker service: BAAI/bge-reranker-v2-m3 ──────────────────────────────
   reranker:
@@ -95,6 +96,7 @@ services:
       # quanh child match nên 1024 là dư an toàn.
       RERANKER_MAX_LENGTH: "1024"
       PORT: "8011"
+      PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
     ports:
       - "8011:8011"
     restart: unless-stopped
@@ -107,10 +109,10 @@ services:
               capabilities: [gpu]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8011/health')"]
-      interval: 20s
-      timeout: 5s
-      retries: 5
-      start_period: 60s
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 600s
 
   # ── LLM: Ollama (qwen2.5:1.5b dev / qwen2.5:7b prod) ─────────────────────
   ollama:
@@ -120,6 +122,9 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
     environment:
       OLLAMA_HOST: "0.0.0.0"
       # Mặc định Ollama nạp model với ctx 4096 — NHỎ hơn num_ctx=8192 mà
@@ -128,6 +133,12 @@ services:
       # generation.py nay gọi /api/chat (options được tôn trọng); env này là
       # lưới an toàn cho mọi client /v1 khác.
       OLLAMA_CONTEXT_LENGTH: "8192"
+      # Buộc offload tất cả layers lên GPU (tránh Ollama tự partial-offload khi
+      # ước tính VRAM không đủ). qwen2.5:3b ~2GB fits trong ~3.5GB VRAM còn lại.
+      OLLAMA_NUM_GPU: "999"
+      # Giữ model trên GPU mãi mãi — embedding/reranker sẽ tự nhả VRAM sau idle,
+      # nhường lại cho Ollama thay vì Ollama unload rồi reload lại.
+      OLLAMA_KEEP_ALIVE: "-1"
     restart: unless-stopped
     # ── NVIDIA GPU: bỏ comment để dùng RTX 5060 ──────────────────────────────
     deploy:
@@ -171,10 +182,7 @@ services:
 
   # ── FastAPI Backend cho React frontend ─────────────────────────────────────
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: qtkd-app:local
+    image: qtkd-app:local   # reuse image built by `app` service
     container_name: qtkd-api
     ports:
       - "8080:8080"
@@ -215,13 +223,11 @@ services:
 
   # ── One-time Indexer (chạy: make index) ────────────────────────────────────
   indexer:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: qtkd-app:local
+    image: qtkd-app:local   # reuse image built by `app` service
     container_name: qtkd-indexer
     volumes:
       - ./build/spike_a:/app/build/spike_a:ro
+      - ./index:/app/index:ro   # live-reload code without image rebuild
     environment:
       EMBED_URL: http://embedding:8010/v1/embeddings
       QDRANT_URL: http://qdrant:6333
@@ -231,7 +237,7 @@ services:
       embedding:
         condition: service_healthy
     profiles: ["tools"]
-    command: ["python", "-m", "index.embed_store", "--force"]
+    command: ["python", "-m", "index.embed_store"]
 
 volumes:
   qdrant_storage:   # Qdrant data persists across restarts

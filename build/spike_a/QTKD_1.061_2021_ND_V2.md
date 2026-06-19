@@ -249,17 +249,17 @@ Tăng áp suất hệ thống một cách từ từ đến điểm áp suất ch
 Sai số của áp suất chỉnh đặt được xác định theo công thức sau:
 
 
-|  | $\DeltaP_{cd} = P_{m} - P_{cd}$ |  |
+|  | [công thức không đọc được] |  |
 | --- | --- | --- |
 
 
 trong đó:
 
-$\DeltaP_{cd}$ - sai số của áp suất chỉnh đặt, Pa;
+[công thức không đọc được] - sai số của áp suất chỉnh đặt, Pa;
 
-$P_{cd}$ - áp suất chỉnh đặt, Pa;
+[công thức không đọc được] - áp suất chỉnh đặt, Pa;
 
-$P_{m}$ - áp suất mở van, Pa.
+[công thức không đọc được] - áp suất mở van, Pa.
 
 Giá trị cho phép của sai số áp suất chỉnh đặt bằng ± 3% áp suất chỉnh đặt của van nhưng không nhỏ hơn ± 0,15 bar.
 

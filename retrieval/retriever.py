@@ -165,13 +165,26 @@ def rerank_hits(query: str, hits: list[dict], top_n: int = 5) -> list[dict]:
         parent_payloads.append(parent)
         documents.append(_rerank_doc(h["payload"], parent))
 
-    resp = requests.post(
-        RERANK_URL,
-        json={"query": query, "documents": documents, "top_n": len(documents)},
-        timeout=RERANK_TIMEOUT,
-    )
-    resp.raise_for_status()
-    results = resp.json()["results"]
+    try:
+        resp = requests.post(
+            RERANK_URL,
+            json={"query": query, "documents": documents, "top_n": len(documents)},
+            timeout=RERANK_TIMEOUT,
+        )
+        resp.raise_for_status()
+        results = resp.json()["results"]
+    except Exception as exc:
+        # Reranker unavailable — fall back to RRF ordering
+        import logging
+        logging.getLogger(__name__).warning("Reranker failed (%s), falling back to RRF order", exc)
+        out = []
+        for i, h in enumerate(unique_hits[:top_n]):
+            h2 = dict(h)
+            h2["rerank_score"] = h2.get("rrf_score", 0.0)
+            h2["parent_payload"] = parent_payloads[i]
+            out.append(h2)
+        return out
+
     results.sort(key=lambda x: x["relevance_score"], reverse=True)
 
     out = []
