@@ -3,7 +3,7 @@ import { FileText } from "lucide-react";
 
 export default function DocPanel({ sources }) {
   return (
-    <div className="flex flex-col flex-[4] min-w-0 bg-slate-50">
+    <aside className="flex flex-col flex-[4] min-w-0 bg-slate-50" aria-label="Tài liệu nguồn">
       {/* Panel header */}
       <div className="flex-shrink-0 h-12 px-4 flex items-center gap-2 border-b border-slate-200 bg-white">
         <FileText size={15} className="text-slate-500" />
@@ -25,16 +25,16 @@ export default function DocPanel({ sources }) {
           ))
         )}
       </div>
-    </div>
+    </aside>
   );
 }
 
 function EmptyDocPanel() {
   return (
     <div className="flex flex-col items-center justify-center h-full py-12 text-center">
-      <div className="text-4xl mb-3 opacity-40">📄</div>
-      <p className="text-sm text-slate-400 font-medium">Kết quả tìm kiếm</p>
-      <p className="text-xs text-slate-400 mt-1">sẽ hiển thị ở đây sau khi hỏi</p>
+      <div className="text-4xl mb-3 opacity-40" aria-hidden="true">📄</div>
+      <p className="text-sm text-slate-500 font-medium">Kết quả tìm kiếm</p>
+      <p className="text-xs text-slate-500 mt-1">sẽ hiển thị ở đây sau khi hỏi</p>
     </div>
   );
 }

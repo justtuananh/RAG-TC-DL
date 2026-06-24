@@ -59,7 +59,7 @@ export default function SourceCard({ source }) {
           <code className="bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-[11px] font-mono font-semibold truncate max-w-[140px]">
             {file_stem}
           </code>
-          <span className="text-slate-400 text-[10px]">
+          <span className="text-slate-500 text-[11px]">
             {KIND_ICON[kind] || "·"} {kind}
           </span>
           <div className="ml-auto flex-shrink-0">
@@ -68,7 +68,7 @@ export default function SourceCard({ source }) {
         </div>
 
         {/* Row 2: section path */}
-        <div className="flex items-center gap-1 text-[11px] text-red-500 italic">
+        <div className="flex items-center gap-1 text-[11px] text-slate-500">
           <FolderIcon />
           <span className="truncate" title={section_path}>
             {section_path.replace(/ > /g, " › ")}
@@ -92,9 +92,11 @@ export default function SourceCard({ source }) {
           <>
             <button
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center gap-1 text-xs text-blue-600 font-medium hover:text-blue-800 transition-colors"
+              className="flex items-center gap-1 text-xs text-blue-600 font-medium hover:text-blue-800 transition-colors py-1.5"
+              aria-expanded={expanded}
+              aria-label={expanded ? "Thu gọn tài liệu nguồn" : "Xem tài liệu nguồn đầy đủ"}
             >
-              {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
+              {expanded ? <ChevronUp size={13} aria-hidden="true" /> : <ChevronDown size={13} aria-hidden="true" />}
               {expanded ? "Thu gọn" : "Xem"}
             </button>
 

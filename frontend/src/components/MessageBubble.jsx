@@ -23,7 +23,7 @@ export default function MessageBubble({ message }) {
   return (
     <div className="flex justify-start animate-fade-in-up">
       {/* Avatar */}
-      <div className="flex-shrink-0 w-7 h-7 rounded-full bg-primary-100 border border-primary-200 flex items-center justify-center text-sm mr-2 mt-1">
+      <div className="flex-shrink-0 w-7 h-7 rounded-full bg-primary-100 border border-primary-200 flex items-center justify-center text-sm mr-2 mt-1" aria-hidden="true">
         📐
       </div>
 
@@ -65,7 +65,7 @@ export default function MessageBubble({ message }) {
 
 function TypingIndicator() {
   return (
-    <div className="flex items-center gap-1 py-1">
+    <div className="flex items-center gap-1 py-1" role="status" aria-label="Đang xử lý câu trả lời">
       {[0, 1, 2].map((i) => (
         <span
           key={i}
@@ -73,12 +73,6 @@ function TypingIndicator() {
           style={{ animation: `typingDot 1.2s infinite ${i * 0.2}s` }}
         />
       ))}
-      <style>{`
-        @keyframes typingDot {
-          0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-          30% { transform: translateY(-4px); opacity: 1; }
-        }
-      `}</style>
     </div>
   );
 }

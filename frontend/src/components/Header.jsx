@@ -15,7 +15,7 @@ export default function Header({ onClear, hasMessages }) {
 
       {/* Online indicator */}
       <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full">
-        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+        <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" aria-hidden="true" />
         <span className="text-xs font-medium text-green-700">Đang hoạt động</span>
       </div>
 
@@ -23,7 +23,7 @@ export default function Header({ onClear, hasMessages }) {
       {hasMessages && (
         <button
           onClick={onClear}
-          className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-red-600 hover:bg-red-50 border border-slate-200 rounded-lg transition-colors"
+          className="flex items-center gap-1.5 px-3 min-h-[44px] text-xs font-medium bg-white text-slate-600 hover:text-red-600 hover:bg-red-50 border border-slate-200 rounded-lg transition-colors"
         >
           <Trash2 size={13} />
           Xóa lịch sử

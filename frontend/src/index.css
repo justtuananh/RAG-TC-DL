@@ -17,7 +17,7 @@
   /* ── Scrollbar ── */
   .chat-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #CBD5E1 transparent;
+    scrollbar-color: theme('colors.slate.300') transparent;
   }
   .chat-scrollbar::-webkit-scrollbar { width: 6px; }
   .chat-scrollbar::-webkit-scrollbar-track { background: transparent; }
@@ -30,12 +30,9 @@
     font-size: 1.05em !important;
   }
 
-  /* ── Display math block — matches code.html .formula-block ── */
+  /* ── Display math block ── */
   .katex-display {
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
-    border-left: 3px solid #3b82f6;
-    border-radius: 8px;
+    @apply bg-slate-50 border border-slate-200 rounded-lg;
     padding: 14px 18px !important;
     margin: 12px 0 !important;
     overflow-x: auto;
@@ -48,14 +45,6 @@
   .katex-display > .katex {
     font-size: 1.1em !important;
   }
-
-  /* Inside teal source card — keep formula readable on dark bg */
-  .bg-teal-700 .katex-display {
-    background: rgba(255, 255, 255, 0.12);
-    border-color: rgba(255, 255, 255, 0.25);
-    border-left-color: rgba(255, 255, 255, 0.6);
-    color: white;
-  }
 }
 
 @layer utilities {
@@ -67,4 +56,19 @@
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes typingDot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30%           { transform: translateY(-4px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-pulse { animation: none; }
+
+  @keyframes typingDot {
+    0%, 100% { opacity: 0.5; }
+    30%      { opacity: 1; }
+  }
 }

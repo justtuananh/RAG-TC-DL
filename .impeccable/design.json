@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-22T00:00:00Z",
+  "title": "Design System: QTKĐ Chatbot",
+  "extensions": {
+    "colorMeta": {
+      "instrument-blue": {
+        "role": "primary",
+        "displayName": "Instrument Blue",
+        "canonical": "#2563EB",
+        "tonalRamp": ["#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD", "#DBEAFE"]
+      },
+      "instrument-blue-deep": {
+        "role": "primary",
+        "displayName": "Instrument Blue Deep",
+        "canonical": "#1D4ED8",
+        "tonalRamp": ["#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD", "#DBEAFE"]
+      },
+      "instrument-blue-light": {
+        "role": "primary",
+        "displayName": "Instrument Blue Light",
+        "canonical": "#DBEAFE",
+        "tonalRamp": ["#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD", "#DBEAFE"]
+      },
+      "instrument-blue-subtle": {
+        "role": "primary",
+        "displayName": "Instrument Blue Subtle",
+        "canonical": "#EFF6FF",
+        "tonalRamp": ["#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD", "#EFF6FF"]
+      },
+      "instrument-blue-text": {
+        "role": "primary",
+        "displayName": "Instrument Blue Text",
+        "canonical": "#1E40AF",
+        "tonalRamp": ["#1E3A8A", "#1E40AF", "#1D4ED8", "#2563EB", "#3B82F6", "#60A5FA", "#93C5FD", "#DBEAFE"]
+      },
+      "surface-base": {
+        "role": "neutral",
+        "displayName": "Surface Base",
+        "canonical": "#F8FAFC",
+        "tonalRamp": ["#0F172A", "#1E293B", "#334155", "#475569", "#64748B", "#94A3B8", "#CBD5E1", "#F8FAFC"]
+      },
+      "surface-elevated": {
+        "role": "neutral",
+        "displayName": "Lab White",
+        "canonical": "#FFFFFF",
+        "tonalRamp": ["#0F172A", "#1E293B", "#334155", "#475569", "#64748B", "#94A3B8", "#CBD5E1", "#FFFFFF"]
+      },
+      "ink-primary": {
+        "role": "neutral",
+        "displayName": "Ink Primary",
+        "canonical": "#0F172A",
+        "tonalRamp": ["#0F172A", "#1E293B", "#334155", "#475569", "#64748B", "#94A3B8", "#CBD5E1", "#F8FAFC"]
+      },
+      "ink-tertiary": {
+        "role": "neutral",
+        "displayName": "Ink Tertiary",
+        "canonical": "#64748B",
+        "tonalRamp": ["#0F172A", "#1E293B", "#334155", "#475569", "#64748B", "#94A3B8", "#CBD5E1", "#F8FAFC"]
+      },
+      "state-success-indicator": {
+        "role": "tertiary",
+        "displayName": "Status Green",
+        "canonical": "#22C55E",
+        "tonalRamp": ["#052E16", "#14532D", "#15803D", "#16A34A", "#22C55E", "#4ADE80", "#86EFAC", "#DCFCE7"]
+      },
+      "state-error-text": {
+        "role": "tertiary",
+        "displayName": "Error Red",
+        "canonical": "#B91C1C",
+        "tonalRamp": ["#450A0A", "#7F1D1D", "#991B1B", "#B91C1C", "#DC2626", "#EF4444", "#FCA5A5", "#FEF2F2"]
+      }
+    },
+    "typographyMeta": {
+      "title": { "displayName": "Title", "purpose": "App header only. One instance per page." },
+      "body": { "displayName": "Body", "purpose": "Message content, source panel prose, example buttons. The reading voice." },
+      "label": { "displayName": "Label", "purpose": "Panel headers, ghost button text, section titles in source prose." },
+      "meta": { "displayName": "Meta", "purpose": "Rerank scores, section path breadcrumbs, kind annotations. High-density layer." },
+      "mono": { "displayName": "Mono", "purpose": "Calibration document IDs and file stems. Bold for scan-ability in tight badge contexts." }
+    },
+    "shadows": [
+      {
+        "name": "ambient-low",
+        "value": "0 1px 2px 0 rgba(0,0,0,0.05)",
+        "purpose": "Applied at rest on header, message bubbles, and source cards. Structural layer separation."
+      },
+      {
+        "name": "interactive-lift",
+        "value": "0 4px 6px -1px rgba(0,0,0,0.10), 0 2px 4px -2px rgba(0,0,0,0.10)",
+        "purpose": "Source cards on hover only. Communicates interactivity. Resets to ambient-low on mouse-leave."
+      }
+    ],
+    "motion": [
+      { "name": "duration-fast", "value": "150ms", "purpose": "State transitions: button hover, input focus, card hover." },
+      { "name": "duration-message", "value": "250ms", "purpose": "Message bubble entrance (fade-up)." },
+      { "name": "duration-typing", "value": "1200ms", "purpose": "Typing indicator dot cycle (infinite, staggered 200ms per dot)." },
+      { "name": "ease-standard", "value": "ease", "purpose": "Default easing for state transitions." },
+      { "name": "ease-out", "value": "cubic-bezier(0.0, 0.0, 0.2, 1)", "purpose": "Message entrance and content reveals." }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "640px", "purpose": "Below this width, DocPanel collapses or hides." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (Send)",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "44x44px icon-only button for query submission. Square, Instrument Blue, 12px radius.",
+      "html": "<button class=\"ds-btn-primary\" aria-label=\"Gui cau hoi\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><line x1=\"22\" y1=\"2\" x2=\"11\" y2=\"13\"/><polygon points=\"22 2 15 22 11 13 2 9 22 2\"/></svg></button>",
+      "css": ".ds-btn-primary { width: 44px; height: 44px; background: #2563EB; color: white; border: none; border-radius: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background-color 150ms ease; } .ds-btn-primary:hover { background: #1D4ED8; } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px #EFF6FF, 0 0 0 5px #DBEAFE; } .ds-btn-primary:disabled { background: #E2E8F0; cursor: not-allowed; }"
+    },
+    {
+      "name": "Ghost Button (Clear)",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Utility/destructive action. Transparent at rest, red on hover.",
+      "html": "<button class=\"ds-btn-ghost\"><svg width=\"13\" height=\"13\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><polyline points=\"3 6 5 6 21 6\"/><path d=\"M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2\"/></svg>Xoa lich su</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: transparent; color: #64748B; border: 1px solid #E2E8F0; border-radius: 8px; font-size: 12px; font-weight: 500; font-family: system-ui, sans-serif; cursor: pointer; transition: color 150ms ease, background-color 150ms ease; } .ds-btn-ghost:hover { color: #B91C1C; background: #FEF2F2; } .ds-btn-ghost:focus-visible { outline: 2px solid #DBEAFE; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-text",
+      "description": "Query input textarea. 12px radius, Lab White, Ink Tertiary placeholder (AA-compliant).",
+      "html": "<textarea class=\"ds-input\" placeholder=\"Nhap cau hoi ve quy trinh kiem dinh do luong...\" rows=\"1\"></textarea>",
+      "css": ".ds-input { width: 100%; resize: none; border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px 16px; font-size: 14px; font-family: system-ui, sans-serif; color: #1E293B; background: #FFFFFF; min-height: 44px; max-height: 128px; line-height: 1.6; transition: border-color 150ms ease, box-shadow 150ms ease; box-sizing: border-box; } .ds-input::placeholder { color: #64748B; } .ds-input:focus { outline: none; border-color: #DBEAFE; box-shadow: 0 0 0 3px #EFF6FF; } .ds-input:disabled { opacity: 0.6; cursor: not-allowed; }"
+    },
+    {
+      "name": "Source Citation Chip",
+      "kind": "chip",
+      "refersTo": "source-chip",
+      "description": "Inline citation in assistant messages. [n] number + document ID in monospace.",
+      "html": "<span class=\"ds-source-chip\"><span class=\"ds-source-chip-idx\">[1]</span><span class=\"ds-source-chip-stem\">QTKD_1.061</span></span>",
+      "css": ".ds-source-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; background: #EFF6FF; border: 1px solid #DBEAFE; border-radius: 9999px; font-size: 12px; font-weight: 500; color: #1E40AF; font-family: system-ui, sans-serif; } .ds-source-chip-idx { font-weight: 700; } .ds-source-chip-stem { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; font-weight: 600; }"
+    },
+    {
+      "name": "Source Card",
+      "kind": "card",
+      "refersTo": "source-card",
+      "description": "Expandable document source card. File badge, section path, rerank score, parent context on expand.",
+      "html": "<div class=\"ds-source-card\"><div class=\"ds-sc-row\"><span class=\"ds-sc-idx\">[1]</span><code class=\"ds-sc-file\">QTKD_1.061</code><span class=\"ds-sc-kind\">paragraph</span><span class=\"ds-sc-score\">0.421</span></div><div class=\"ds-sc-path\"><svg width=\"11\" height=\"11\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z\"/></svg>Pham vi ap dung &#x203A; Yeu cau ky thuat</div></div>",
+      "css": ".ds-source-card { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: border-color 150ms ease, box-shadow 150ms ease; overflow: hidden; } .ds-source-card:hover { border-color: #93C5FD; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.10), 0 2px 4px -2px rgba(0,0,0,0.10); } .ds-sc-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; } .ds-sc-idx { color: #2563EB; font-size: 12px; font-weight: 700; width: 20px; flex-shrink: 0; font-family: system-ui, sans-serif; } .ds-sc-file { background: #DBEAFE; color: #1E40AF; padding: 2px 8px; border-radius: 4px; font-family: ui-monospace, monospace; font-size: 11px; font-weight: 600; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } .ds-sc-kind { color: #94A3B8; font-size: 10px; font-family: system-ui, sans-serif; } .ds-sc-score { margin-left: auto; background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; font-size: 11px; font-weight: 700; padding: 2px 6px; border-radius: 4px; font-family: system-ui, sans-serif; flex-shrink: 0; } .ds-sc-path { display: flex; align-items: center; gap: 4px; font-size: 11px; color: #64748B; font-style: italic; font-family: system-ui, sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }"
+    },
+    {
+      "name": "Message Bubble — User",
+      "kind": "custom",
+      "refersTo": "message-user",
+      "description": "Right-aligned user query. Instrument Blue fill, directional tail top-right (4px).",
+      "html": "<div class=\"ds-msg-row-user\"><div class=\"ds-msg-user\">Sai so cho phep cua ap ke theo QTKD 1.061 la bao nhieu?</div></div>",
+      "css": ".ds-msg-row-user { display: flex; justify-content: flex-end; } .ds-msg-user { max-width: 75%; padding: 12px 16px; background: #2563EB; color: #FFFFFF; font-size: 14px; line-height: 1.6; border-radius: 16px; border-top-right-radius: 4px; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); font-family: system-ui, sans-serif; }"
+    },
+    {
+      "name": "Message Bubble — Assistant",
+      "kind": "custom",
+      "refersTo": "message-assistant",
+      "description": "Left-aligned assistant answer with avatar. Lab White, directional tail top-left (4px).",
+      "html": "<div class=\"ds-msg-row-assistant\"><div class=\"ds-msg-avatar\">&#x1F4D0;</div><div class=\"ds-msg-assistant\">Theo QTKD 1.061 muc 2.3, sai so cho phep khong vuot qua <strong>plus-minus 1%</strong> gia tri cuoi thang do.</div></div>",
+      "css": ".ds-msg-row-assistant { display: flex; align-items: flex-start; gap: 8px; } .ds-msg-avatar { width: 28px; height: 28px; border-radius: 50%; background: #EFF6FF; border: 1px solid #DBEAFE; display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; margin-top: 4px; } .ds-msg-assistant { max-width: 85%; padding: 12px 16px; background: #FFFFFF; color: #1E293B; font-size: 14px; line-height: 1.6; border-radius: 16px; border-top-left-radius: 4px; border: 1px solid #E2E8F0; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); font-family: system-ui, sans-serif; }"
+    },
+    {
+      "name": "Formula Block",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "KaTeX display math container. Full four-side border (never border-left stripe). Scrolls on overflow.",
+      "html": "<div class=\"ds-formula-block\">&#x03B4;<sub>max</sub> = &#xB1;1% &middot; U<sub>max</sub></div>",
+      "css": ".ds-formula-block { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 14px 18px; margin: 12px 0; overflow-x: auto; overflow-y: hidden; text-align: center; font-size: 1.1em; letter-spacing: 0.02em; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Calibration Bench",
+    "overview": "This is a metrologist's workstation, not a chat product. The Calibration Bench means a technician's workspace where every element occupies a known position, serves a measurement function, and nothing decorates for its own sake. A user arrives with an instrument, a procedure number, and a question — the interface must disappear into that task the moment they start typing.\n\nThe visual system is restrained by discipline, not laziness. Slate neutrals hold the field. Instrument Blue appears exactly where it belongs — on primary actions, focus states, and navigational anchors — and nowhere else. Formulas are first-class content: rendered with precision, visually distinguished by a full container border (never a side stripe), and never recomputed or approximated downstream.\n\nThis system rejects three wrong registers: the Vietnamese government-portal aesthetic (colored section headers, red/gold/green palette, small crowded type), generic chat-clone minimalism (centered bubble UI, consumer curves), and enterprise-dashboard weight (navy-grey walls, data tables without hierarchy).",
+    "keyCharacteristics": [
+      "System font throughout — no custom typefaces competing with technical content",
+      "Two surface levels exactly (page bg, elevated panel/card) — no deeper layering",
+      "Instrument Blue on 10% or less of visible surface at any time — action and state only, never fill",
+      "Formulas distinguished by full four-side border + background tint — never by a left-side stripe",
+      "Monospace for calibration IDs and file stems — code-legibility is functional, not decorative",
+      "Flat at rest; minimal lift on hover — the interface recedes"
+    ],
+    "rules": [
+      {
+        "name": "The One Instrument Rule",
+        "body": "Instrument Blue is the only non-neutral, non-semantic color permitted. It appears on 10% or less of visible surface at any time. A second accent anywhere is a violation.",
+        "section": "colors"
+      },
+      {
+        "name": "The Semantic Confinement Rule",
+        "body": "Error Red, Success Green, and Warning Amber appear only when conveying their explicit semantic state. Using red for navigational labels or green for decorative badges is prohibited.",
+        "section": "colors"
+      },
+      {
+        "name": "The Scale Floor Rule",
+        "body": "Nothing below 10px. Every new metadata annotation starts at 11px (Meta role).",
+        "section": "typography"
+      },
+      {
+        "name": "The Monospace Discipline Rule",
+        "body": "Monospace is reserved for calibration document identifiers, file stems, and inline code only.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-at-Rest Rule",
+        "body": "Every surface ships at Ambient Low or flat. Interactive Lift appears only in direct response to user hover or focus.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Instrument Blue (#2563EB) exclusively on primary interactive elements.",
+      "Do give formula blocks a full four-side border (border: 1px solid #E2E8F0). Never a border-left stripe.",
+      "Do set placeholder and hint text to Ink Tertiary (#64748B) or darker for WCAG 2.1 AA compliance.",
+      "Do keep section path text at Ink Tertiary (#64748B) — navigational breadcrumb, not error state.",
+      "Do apply prefers-reduced-motion overrides for all animations.",
+      "Do use Monospace role for all calibration document identifiers and file stems.",
+      "Do keep shadows at Ambient Low at rest; Interactive Lift applies on hover/focus only."
+    ],
+    "donts": [
+      "Don't use border-left or border-right greater than 1px as a colored accent on any element. The current border-left: 3px on .katex-display is a violation to fix.",
+      "Don't use text-red-500 or any error-state color for non-error content. Fix SourceCard section path to Ink Tertiary.",
+      "Don't use Ink Muted (#94A3B8) for any text that must be read — fails WCAG AA on Lab White.",
+      "Don't use gradient text (background-clip: text with a gradient).",
+      "Don't use Instrument Blue as a background fill for panels or containers.",
+      "Don't introduce a second accent color anywhere in the interface.",
+      "Don't make this look like a Vietnamese government portal: no colored headers, no red/gold/green palette.",
+      "Don't make this look like a generic consumer chat clone.",
+      "Don't use numbered section markers or tiny uppercase tracked eyebrows as new-screen scaffold.",
+      "Don't nest cards."
+    ]
+  }
+}

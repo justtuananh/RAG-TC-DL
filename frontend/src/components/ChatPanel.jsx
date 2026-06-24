@@ -30,7 +30,7 @@ export default function ChatPanel({ messages, isStreaming, statusText, examples,
   return (
     <div className="flex flex-col flex-[6] min-w-0 border-r border-slate-200 bg-white">
       {/* Message list */}
-      <div className="flex-1 overflow-y-auto chat-scrollbar px-4 py-4 space-y-4">
+      <div className="flex-1 overflow-y-auto chat-scrollbar px-4 py-4 space-y-4" role="log" aria-label="Cuộc hội thoại" aria-live="polite">
         {isEmpty ? (
           <EmptyState examples={examples} onExample={(q) => onSend(q)} />
         ) : (
@@ -41,7 +41,7 @@ export default function ChatPanel({ messages, isStreaming, statusText, examples,
 
         {/* Status bar */}
         {statusText && (
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-primary-50 border border-primary-100 w-fit animate-fade-in-up">
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-primary-50 border border-primary-100 w-fit animate-fade-in-up" role="status">
             <Loader2 size={13} className="animate-spin text-primary-500 flex-shrink-0" />
             <span className="text-xs text-primary-700 font-medium">{statusText}</span>
           </div>
@@ -55,8 +55,9 @@ export default function ChatPanel({ messages, isStreaming, statusText, examples,
         <div className="flex gap-2 items-end">
           <textarea
             ref={textareaRef}
-            className="flex-1 resize-none rounded-xl border border-slate-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none px-4 py-3 text-sm text-slate-800 placeholder-slate-400 bg-white min-h-[44px] max-h-32 leading-relaxed transition-shadow"
+            className="flex-1 resize-none rounded-xl border border-slate-300 focus:border-primary-400 focus:ring-2 focus:ring-primary-400 outline-none px-4 py-3 text-sm text-slate-800 placeholder-slate-500 bg-white min-h-[44px] max-h-32 leading-relaxed transition-shadow"
             placeholder="Nhập câu hỏi về quy trình kiểm định đo lường…"
+            aria-label="Câu hỏi về quy trình kiểm định"
             rows={1}
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -67,14 +68,15 @@ export default function ChatPanel({ messages, isStreaming, statusText, examples,
             onClick={handleSend}
             disabled={!input.trim() || isStreaming}
             className="flex-shrink-0 w-11 h-11 rounded-xl bg-primary-600 hover:bg-primary-700 disabled:bg-slate-200 disabled:cursor-not-allowed text-white flex items-center justify-center transition-colors shadow-sm"
+            aria-label={isStreaming ? "Đang gửi…" : "Gửi câu hỏi"}
           >
             {isStreaming
-              ? <Loader2 size={18} className="animate-spin" />
-              : <Send size={18} />
+              ? <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+              : <Send size={18} aria-hidden="true" />
             }
           </button>
         </div>
-        <p className="mt-1.5 text-xs text-slate-400 text-center">
+        <p className="mt-1.5 text-xs text-slate-500 text-center">
           Enter để gửi · Shift+Enter xuống dòng
         </p>
       </div>
@@ -86,7 +88,7 @@ function EmptyState({ examples, onExample }) {
   return (
     <div className="flex flex-col items-center justify-center h-full py-12 gap-6">
       <div className="text-center">
-        <div className="text-5xl mb-3">📐</div>
+        <div className="text-5xl mb-3" aria-hidden="true">📐</div>
         <h2 className="text-lg font-bold text-slate-800 mb-1">Hỏi về quy trình kiểm định</h2>
         <p className="text-sm text-slate-500 max-w-xs">
           Nguồn: QTKĐ 1.061 / 1.062 / 1.063 / 1.071 / 1.159 / 1.160 / 1.190
@@ -95,7 +97,7 @@ function EmptyState({ examples, onExample }) {
 
       {examples.length > 0 && (
         <div className="w-full max-w-md space-y-2">
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide text-center">Câu hỏi mẫu</p>
+          <p className="text-xs font-medium text-slate-500 text-center">Câu hỏi mẫu</p>
           {examples.map((q, i) => (
             <button
               key={i}
