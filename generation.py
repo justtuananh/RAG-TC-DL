@@ -55,6 +55,32 @@ NGỮ CẢNH:
 {context}"""
 
 
+# ── Lọc nguồn theo độ tin cậy (cắt đuôi nguồn yếu) ───────────────────────────
+# Reranker (bge-reranker-v2-m3) trả điểm sigmoid [0,1]. Với câu HẸP, chỉ 1–2 nguồn
+# thực sự liên quan; phần đuôi điểm ~0 là NHIỄU — không nên hiện như "nguồn của câu
+# trả lời" (mất uy tín) lẫn nhồi vào ngữ cảnh LLM (lost-in-the-middle). Cắt đuôi:
+# LUÔN giữ nguồn top; giữ nguồn sau nếu điểm ≥ CẢ ngưỡng tuyệt đối VÀ tương đối-theo-top.
+# Áp dụng SAU retrieve() (ở consumer) nên KHÔNG đụng thứ hạng/recall của retrieve() —
+# eval/run_eval đo recall@5 trên top-5 đầy đủ vẫn nguyên. Ngưỡng chọn để không rớt nguồn
+# gold của eval_set (xem tests/unit/llm/test_source_filter.py + scripts kiểm tra).
+SOURCE_ABS_FLOOR = 0.08   # điểm tuyệt đối tối thiểu để giữ nguồn (ngoài nguồn top)
+SOURCE_REL_FLOOR = 0.20   # và phải ≥ 20% điểm của nguồn mạnh nhất
+
+
+def filter_by_confidence(results: list[dict]) -> list[dict]:
+    """Cắt đuôi nguồn điểm thấp khỏi CẢ panel LẪN ngữ cảnh LLM (giữ [n] nhất quán).
+
+    `results` đã sắp giảm dần theo ``rerank_score`` (từ ``retrieve()``). Luôn giữ
+    ``results[0]``; giữ ``results[i]`` nếu ``rerank_score ≥ max(ABS_FLOOR, REL_FLOOR×top)``.
+    Giữ nguyên trật tự, không đánh số lại ở đây (consumer đánh [n] trên list trả về).
+    """
+    if not results:
+        return results
+    top = results[0].get("rerank_score", 0.0)
+    floor = max(SOURCE_ABS_FLOOR, SOURCE_REL_FLOOR * top)
+    return [results[0]] + [r for r in results[1:] if r.get("rerank_score", 0.0) >= floor]
+
+
 # ── Builder ngữ cảnh + trích dẫn ──────────────────────────────────────────────
 
 def build_context_and_citations(results: list[dict]) -> tuple[str, str]:

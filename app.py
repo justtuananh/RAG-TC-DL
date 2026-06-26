@@ -55,6 +55,7 @@ from generation import (
     build_context_and_citations as _build_context_and_citations,
     build_messages as _build_messages,
     enforce_refusal_stop as _enforce_refusal_stop,
+    filter_by_confidence as _filter_by_confidence,
     is_calculation_request as _is_calculation_request,
     stream_ollama as _stream_ollama,
 )
@@ -194,6 +195,8 @@ def bot_fn(history: list):
         yield history, build_doc_viewer_html([])
         return
 
+    # Cắt đuôi nguồn điểm thấp → chỉ hiện + nhồi ngữ cảnh các nguồn uy tín ([n] khớp).
+    results = _filter_by_confidence(results)
     # Build doc viewer HTML immediately (show sources while LLM streams)
     doc_html = build_doc_viewer_html(results)
     context_str, citations_md = _build_context_and_citations(results)

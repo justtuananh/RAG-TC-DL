@@ -35,6 +35,7 @@ from generation import (
     build_context_and_citations,
     build_messages,
     enforce_refusal_stop,
+    filter_by_confidence,
     is_calculation_request,
     stream_ollama,
 )
@@ -142,6 +143,8 @@ def _chat_stream_gen(req: ChatRequest) -> Generator[str, None, None]:
         })
         return
 
+    # Cắt đuôi nguồn điểm thấp → panel + ngữ cảnh LLM chỉ còn nguồn uy tín ([n] khớp).
+    results = filter_by_confidence(results)
     sources = _build_sources_payload(results)
     yield _sse({"type": "sources", "sources": sources})
 
