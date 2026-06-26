@@ -1,4 +1,4 @@
-import type { Conversation, DocItem, FaqItem, Source } from "../types";
+import type { DocItem, FaqItem, Source } from "../types";
 
 // ── Dữ liệu khởi tạo — transcribe 1:1 từ mockup `design/kiemdinh.html` ──
 
@@ -113,8 +113,6 @@ export const SOURCES: Source[] = [
   },
 ];
 
-// Lịch sử hội thoại nay lưu thật ở localStorage (store/persistence.ts) — bắt đầu rỗng.
-export const CONVERSATIONS: Conversation[] = [];
 
 export const DOCUMENTS: DocItem[] = [
   { id: "d1", name: "QTKĐ 1.061:2019 — Áp kế pít tông.pdf", ext: "PDF", size: "2,4 MB", pages: 12, date: "20/06/2026", status: "ready" },

@@ -16,9 +16,7 @@ Services (all local Docker, already running):
 from __future__ import annotations
 
 import html as html_mod
-import json
 import os
-import re
 import sys
 from pathlib import Path
 
@@ -52,141 +50,6 @@ NGỮ CẢNH:
 {context}"""
 
 
-# ── LaTeX normalizer ─────────────────────────────────────────────────────────
-
-_RE_DISPLAY          = re.compile(r'\$\$(.*?)\$\$', re.DOTALL)
-_RE_INLINE           = re.compile(r'(?<!\$)\$(?!\$)((?:[^$\n\\]|\\.)*)(?<!\$)\$(?!\$)')
-_RE_CODE_MATH        = re.compile(r'`(\$.*?\$)`')
-# \[...\]  standard LaTeX display math
-_RE_BACKSLASH_DISP   = re.compile(r'\\\[(.*?)\\\]', re.DOTALL)
-# \(...\)  standard LaTeX inline math
-_RE_BACKSLASH_INLINE = re.compile(r'\\\((.*?)\\\)')
-# [ \n content \n ]  — model uses bare brackets as display math delimiter
-_RE_BRACKET_DISP     = re.compile(r'(?m)^\[$\n(.*?)\n^\]$', re.DOTALL)
-
-
-def _fix_latex(text: str) -> str:
-    """Normalize LLM LaTeX output so KaTeX can render it.
-
-    Local models (Ollama) produce several broken patterns:
-    - double-escaped backslashes: \\frac  →  \frac
-    - bare bracket display math: [\n...\n]  →  $$...$$
-    - standard LaTeX environments: \[...\] and \(...\)  →  $$...$$ / $...$
-    - formula wrapped in backticks: `$...$`  →  $...$
-    """
-    # 1. Unwrap backtick-wrapped formulas: `$...$` → $...$
-    text = _RE_CODE_MATH.sub(r'\1', text)
-
-    # 2. Convert bare-bracket display math  [ \n ... \n ]  →  $$ ... $$
-    text = _RE_BRACKET_DISP.sub(
-        lambda m: '$$\n' + m.group(1).replace('\\\\', '\\') + '\n$$', text
-    )
-
-    # 3. Convert \[...\] → $$...$$
-    text = _RE_BACKSLASH_DISP.sub(
-        lambda m: '$$' + m.group(1).replace('\\\\', '\\') + '$$', text
-    )
-
-    # 4. Convert \(...\) → $...$
-    text = _RE_BACKSLASH_INLINE.sub(
-        lambda m: '$' + m.group(1).replace('\\\\', '\\') + '$', text
-    )
-
-    # 5. Fix double backslashes inside $$...$$
-    text = _RE_DISPLAY.sub(
-        lambda m: '$$' + m.group(1).replace('\\\\', '\\') + '$$', text
-    )
-
-    # 6. Fix double backslashes inside $...$
-    text = _RE_INLINE.sub(
-        lambda m: '$' + m.group(1).replace('\\\\', '\\') + '$', text
-    )
-
-    return text
-
-
-# ── Context + citations builder ───────────────────────────────────────────────
-
-def _build_context_and_citations(results: list[dict]) -> tuple[str, str]:
-    ctx_parts: list[str] = []
-    cite_parts: list[str] = []
-
-    for i, r in enumerate(results, 1):
-        p = r["payload"]
-        pp = r.get("parent_payload")
-        file_stem = p["file_stem"]
-        section_path = p["section_path"]
-        child_text = p["text"]
-
-        ctx_text = pp["text"] if pp else child_text
-        if len(ctx_text) > MAX_CONTEXT_CHARS:
-            ctx_text = ctx_text[:MAX_CONTEXT_CHARS] + "…"
-
-        ctx_parts.append(
-            f"[{i}] Nguồn: {file_stem} — {section_path}\n---\n{ctx_text}"
-        )
-
-        snippet = child_text[:220].replace("\n", " ")
-        if len(child_text) > 220:
-            snippet += "…"
-        cite_parts.append(
-            f"**[{i}]** `{file_stem}` • {section_path}\n> {snippet}"
-        )
-
-    context_str = "\n\n---\n\n".join(ctx_parts)
-    citations_md = (
-        "\n\n---\n\n**📎 Nguồn tham khảo:**\n\n" + "\n\n".join(cite_parts)
-    )
-    return context_str, citations_md
-
-
-def _build_messages(query: str, context_str: str, prior: list[dict]) -> list[dict]:
-    msgs: list[dict] = [
-        {"role": "system", "content": SYSTEM_TMPL.replace("{context}", context_str)}
-    ]
-    for msg in prior[-(HISTORY_TURNS * 2):]:
-        role = msg.get("role")
-        content = msg.get("content") or ""
-        if isinstance(content, list):
-            content = " ".join(
-                p if isinstance(p, str) else (p.get("text", "") if isinstance(p, dict) else "")
-                for p in content
-            )
-        if role == "assistant":
-            content = content.split("\n\n---\n\n")[0].strip()
-        if role in ("user", "assistant") and content:
-            msgs.append({"role": role, "content": content})
-    msgs.append({"role": "user", "content": query})
-    return msgs
-
-
-def _stream_ollama(messages: list[dict]):
-    resp = requests.post(
-        OLLAMA_URL,
-        json={
-            "model": OLLAMA_MODEL,
-            "messages": messages,
-            "stream": True,
-            "temperature": 0.1,
-            "options": {"num_ctx": 8192},
-        },
-        stream=True,
-        timeout=OLLAMA_TIMEOUT,
-    )
-    resp.raise_for_status()
-    for line in resp.iter_lines():
-        if not line:
-            continue
-        raw = line.decode("utf-8")
-        if not raw.startswith("data: ") or raw == "data: [DONE]":
-            continue
-        try:
-            chunk = json.loads(raw[6:])
-            delta = chunk["choices"][0]["delta"].get("content", "")
-            if delta:
-                yield delta
-        except (json.JSONDecodeError, KeyError):
-            continue
 from generation import (
     REFUSAL_SENTENCE as _REFUSAL_SENTENCE,
     build_context_and_citations as _build_context_and_citations,
@@ -195,6 +58,7 @@ from generation import (
     is_calculation_request as _is_calculation_request,
     stream_ollama as _stream_ollama,
 )
+from latex import fix_latex
 
 
 # ── Markdown → HTML renderer (for doc viewer) ─────────────────────────────────
@@ -350,7 +214,7 @@ def bot_fn(history: list):
         yield history, gr.update()
         return
 
-    history[-1]["content"] = _fix_latex(partial) + citations_md
+    history[-1]["content"] = fix_latex(partial) + citations_md
     # 4. Cắt phần "tính tiếp" sau câu từ chối chuẩn (nếu có) rồi gắn citations
     partial = _enforce_refusal_stop(partial)
     history[-1][1] = partial + citations_md

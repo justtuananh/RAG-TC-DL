@@ -2,17 +2,6 @@
 
 export type Tab = "chat" | "docs" | "guide";
 
-/** Một "run" trong đoạn văn câu trả lời: text thường | đậm | số trích dẫn */
-export type Run = ["t" | "b", string] | ["c", string];
-
-/** Khối nội dung trong câu trả lời của trợ lý */
-export interface AnswerBlock {
-  summary?: string;
-  p?: Run[];
-  formula?: string;
-  cites?: string[];
-}
-
 export interface CiteChip {
   n: string; // "[1]"
   index: string; // "1"
@@ -29,9 +18,6 @@ export interface Message {
   streaming?: boolean;
   error?: boolean;
   sources?: BackendSource[]; // nguồn của câu trả lời này (để lưu/khôi phục hội thoại)
-  // ── chế độ MOCK (giữ cho tương thích, không dùng ở live) ──
-  blocks?: AnswerBlock[];
-  followups?: string[];
 }
 
 /** Nguồn trả về từ api_server.py (_build_sources_payload) */
@@ -168,11 +154,4 @@ export interface AppState {
   examples: string[]; // câu hỏi mẫu từ /api/examples (fallback SAMPLES)
   liveSources: BackendSource[]; // nguồn của câu trả lời hiện tại
   streaming: boolean; // đang nhận câu trả lời từ backend
-}
-
-/** Mức độ tin cậy hiển thị (Cao/Trung bình/Thấp) */
-export interface RelLevel {
-  t: string;
-  c: string;
-  bg: string;
 }

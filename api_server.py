@@ -18,7 +18,6 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import sys
 from pathlib import Path
 from typing import Generator
@@ -39,36 +38,7 @@ from generation import (
     is_calculation_request,
     stream_ollama,
 )
-
-# ── LaTeX normalizer (port of app.py _fix_latex) ─────────────────────────────
-
-_RE_DISPLAY          = re.compile(r'\$\$(.*?)\$\$', re.DOTALL)
-_RE_INLINE           = re.compile(r'(?<!\$)\$(?!\$)((?:[^$\n\\]|\\.)*)(?<!\$)\$(?!\$)')
-_RE_CODE_MATH        = re.compile(r'`(\$.*?\$)`')
-_RE_BACKSLASH_DISP   = re.compile(r'\\\[(.*?)\\\]', re.DOTALL)
-_RE_BACKSLASH_INLINE = re.compile(r'\\\((.*?)\\\)')
-_RE_BRACKET_DISP     = re.compile(r'(?m)^\[$\n(.*?)\n^\]$', re.DOTALL)
-
-
-def _fix_latex(text: str) -> str:
-    text = _RE_CODE_MATH.sub(r'\1', text)
-    text = _RE_BRACKET_DISP.sub(
-        lambda m: '$$\n' + m.group(1).replace('\\\\', '\\') + '\n$$', text
-    )
-    text = _RE_BACKSLASH_DISP.sub(
-        lambda m: '$$' + m.group(1).replace('\\\\', '\\') + '$$', text
-    )
-    text = _RE_BACKSLASH_INLINE.sub(
-        lambda m: '$' + m.group(1).replace('\\\\', '\\') + '$', text
-    )
-    text = _RE_DISPLAY.sub(
-        lambda m: '$$' + m.group(1).replace('\\\\', '\\') + '$$', text
-    )
-    text = _RE_INLINE.sub(
-        lambda m: '$' + m.group(1).replace('\\\\', '\\') + '$', text
-    )
-    return text
-
+from latex import fix_latex
 
 # ── App ───────────────────────────────────────────────────────────────────────
 
@@ -175,7 +145,7 @@ def _chat_stream_gen(req: ChatRequest) -> Generator[str, None, None]:
     sources = _build_sources_payload(results)
     yield _sse({"type": "sources", "sources": sources})
 
-    context_str, citations_md = build_context_and_citations(results)
+    context_str, _ = build_context_and_citations(results)
     prior = _history_to_prior(req.history)
     messages = build_messages(req.message, context_str, prior)
 
@@ -190,7 +160,7 @@ def _chat_stream_gen(req: ChatRequest) -> Generator[str, None, None]:
         yield _sse({"type": "error", "text": f"Lỗi LLM: {e}"})
         return
 
-    answer = _fix_latex(enforce_refusal_stop(partial))
+    answer = fix_latex(enforce_refusal_stop(partial))
     yield _sse({"type": "done", "answer": answer, "sources": sources})
 
 
