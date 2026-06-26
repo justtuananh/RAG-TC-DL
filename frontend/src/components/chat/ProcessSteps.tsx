@@ -15,22 +15,19 @@ export default function ProcessSteps({ step }: { step: number }) {
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {PROC_DEFS.map((d, i) => {
+            // Chỉ hiện bước ĐÃ XONG + đúng 1 bước ĐANG chạy; bước chưa tới thì ẩn.
+            if (i > step) return null;
             const done = i < step;
-            const active = i === step;
-            const labelStyle: CSSProperties = done
-              ? { color: "#15803D", fontWeight: 500 }
-              : active
-                ? { color: "#0F172A", fontWeight: 600 }
-                : { color: "#94A3B8", fontWeight: 500 };
+            const labelStyle: CSSProperties = done ? { color: "#15803D", fontWeight: 500 } : { color: "#0F172A", fontWeight: 600 };
             return (
-              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "13px" }}>
-                {done && (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "13px", animation: "fadeUp .2s ease-out" }}>
+                {done ? (
                   <span style={{ flexShrink: 0, width: 19, height: 19, borderRadius: 9999, background: "#16A34A", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <IcCheck size={11} strokeWidth={3} style={{ color: "#fff" }} />
                   </span>
+                ) : (
+                  <span className="animate-spin" style={{ flexShrink: 0, width: 19, height: 19, border: "2px solid #DCFCE7", borderTopColor: "#16A34A", borderRadius: "50%" }} />
                 )}
-                {active && <span className="animate-spin" style={{ flexShrink: 0, width: 19, height: 19, border: "2px solid #DCFCE7", borderTopColor: "#16A34A", borderRadius: "50%" }} />}
-                {i > step && <span style={{ flexShrink: 0, width: 19, height: 19, borderRadius: 9999, border: "2px solid #E2E8F0" }} />}
                 <span style={{ ...labelStyle, fontSize: "13px" }}>{done ? d.d : d.a}</span>
               </div>
             );

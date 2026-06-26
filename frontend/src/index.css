@@ -87,6 +87,53 @@
   overflow-x: auto;
 }
 
+/* Bảng (remark-gfm) — câu trả lời + trang tài liệu dùng chung kiểu */
+.md-answer table,
+.md-doc table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 11px 0;
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.md-answer th,
+.md-answer td,
+.md-doc th,
+.md-doc td {
+  border: 1px solid #e2e8f0;
+  padding: 7px 11px;
+  text-align: left;
+  vertical-align: top;
+}
+.md-answer th,
+.md-doc th {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #334155;
+  white-space: nowrap;
+}
+.md-answer td,
+.md-doc td {
+  color: #334155;
+}
+.md-answer tbody tr:nth-child(even),
+.md-doc tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+/* Công thức trong ô bảng — không tách nền/viền như $$display$$ */
+.md-answer td .katex-display,
+.md-doc td .katex-display {
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  margin: 4px 0;
+}
+
 /* Chip trích dẫn [n] bấm được, render inline trong markdown */
 .cite-chip {
   display: inline-flex;

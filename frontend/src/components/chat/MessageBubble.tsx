@@ -28,6 +28,11 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
   }
 
   const md = message.markdown ?? "";
+  // Đang xử lý mà chưa có chữ → KHÔNG dựng bong bóng rỗng; <ProcessSteps> là
+  // chỉ báo "đang xử lý" duy nhất. Khi delta đầu về, proc=null + markdown được
+  // set CÙNG một lúc → câu trả lời gen ngay trong bong bóng này (giữ nguyên box).
+  if (message.streaming && !md) return null;
+
   const isErr = !!message.error;
   const showRegen = isLast && !proc && !message.streaming;
   const plain = md.replace(/<[^>]+>/g, "");
@@ -65,11 +70,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
             </div>
           )}
 
-          {message.streaming && !md ? (
-            <TypingDots />
-          ) : (
-            <Markdown className="md-answer">{withCiteButtons(md)}</Markdown>
-          )}
+          <Markdown className="md-answer">{withCiteButtons(md)}</Markdown>
 
           {/* Nguồn: chips */}
           {!message.streaming && message.citeChips && message.citeChips.length > 0 && (
@@ -116,16 +117,6 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
           </button>
         )}
       </div>
-    </div>
-  );
-}
-
-function TypingDots() {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 4, padding: "2px 0" }}>
-      {[0, 1, 2].map((i) => (
-        <span key={i} style={{ width: 6, height: 6, borderRadius: "50%", background: "#94A3B8", animation: `pulseDot 1s ease-in-out ${i * 0.15}s infinite` }} />
-      ))}
     </div>
   );
 }
