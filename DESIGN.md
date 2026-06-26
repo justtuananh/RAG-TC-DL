@@ -115,6 +115,11 @@ components:
 
 # Design System: QTKĐ Chatbot
 
+> ⚠️ **Superseded (2026-06-25).** Hệ "Calibration Bench" (xanh *instrument* `#2563EB` + slate) dưới
+> đây thuộc một đề xuất TRƯỚC. Giao diện đang chạy (`frontend/`) theo hệ MỚI "Trợ lý Kiểm định"
+> (xanh lá `#16A34A`, font Be Vietnam Pro + Lora, nền `#ECF1EE`), dựng 1:1 từ `design/kiemdinh.html`.
+> Token thật: `frontend/tailwind.config.ts`. Phần dưới đây chỉ giữ cho bối cảnh lịch sử.
+
 ## 1. Overview
 
 **Creative North Star: "The Calibration Bench"**

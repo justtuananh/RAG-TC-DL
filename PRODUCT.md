@@ -1,5 +1,11 @@
 # Product
 
+> ⚠️ **Lưu ý (2026-06-25):** Tài liệu này (và `DESIGN.md`) mô tả hướng thiết kế "Calibration
+> Bench" xanh *instrument* đã được soạn cho một đề xuất TRƯỚC ĐÓ. Giao diện đang chạy thực tế
+> (`frontend/`) theo hệ thiết kế MỚI "Trợ lý Kiểm định" (xanh lá `#16A34A` + Be Vietnam Pro/Lora),
+> dựng 1:1 từ `design/kiemdinh.html`; token thật nằm ở `frontend/tailwind.config.ts`. Dùng hệ mới
+> làm chuẩn cho giao diện hiện tại.
+
 ## Register
 
 product

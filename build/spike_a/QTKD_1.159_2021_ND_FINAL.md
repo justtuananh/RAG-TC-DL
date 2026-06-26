@@ -298,19 +298,19 @@ Thời gian quay tự do của píttông được xác định trong các điề
 Trong trường hợp chênh lệch nhiệt độ píttông/ xilanh lớn hơn 3 oC so với nhiệt độ tiêu chuẩn do nhà sản xuất quy định, thời gian quay tự do được tính như sau:
 
 
-| [công thức không đọc được] |  |
+| $\tau = \tau_{t}\frac{\eta_{t}}{\eta}$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là thời gian quay tự do ở nhiệt độ tiêu chuẩn, s;
+$\tau$ là thời gian quay tự do ở nhiệt độ tiêu chuẩn, s;
 
-[công thức không đọc được] là thời gian quay tự do ở nhiệt độ t, s;
+$\tau_{t}$ là thời gian quay tự do ở nhiệt độ t, s;
 
-[công thức không đọc được] là độ nhớt động của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, cSt;
+$\eta$ là độ nhớt động của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, cSt;
 
-[công thức không đọc được] là độ nhớt động của môi trường truyền áp suất ở nhiệt độ t, cSt.
+$\eta_{t}$ là độ nhớt động của môi trường truyền áp suất ở nhiệt độ t, cSt.
 
 Sai số cho phép của các phép đo đối với:
 
@@ -351,19 +351,19 @@ Tốc độ hạ của píttông được xác định trong các điều kiện
 Trường hợp chênh lệch nhiệt độ píttông so với nhiệt độ tiêu chuẩn lớn hơn 3 oC thì tốc độ hạ của píttông tính như sau:
 
 
-| [công thức không đọc được] |  |
+| $V = V_{t}\frac{\eta_{t}}{\eta}$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là tốc độ hạ của píttông ở nhiệt độ tiêu chuẩn, mm/min;
+$V$ là tốc độ hạ của píttông ở nhiệt độ tiêu chuẩn, mm/min;
 
-[công thức không đọc được] là tốc độ hạ của píttông ở nhiệt độ t, mm/min;
+$V_{t}$ là tốc độ hạ của píttông ở nhiệt độ t, mm/min;
 
-[công thức không đọc được] là độ nhớt động của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, cSt;
+$\eta$ là độ nhớt động của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, cSt;
 
-[công thức không đọc được] là độ nhớt động của môi trường truyền áp suất ở nhiệt độ t, cSt.
+$\eta_{t}$ là độ nhớt động của môi trường truyền áp suất ở nhiệt độ t, cSt.
 
 Tốc độ hạ của píttông là giá trị trung bình của ba lần đo và không vượt quá 5 % so với giá trị quy định tại Bảng 4.
 
@@ -402,7 +402,7 @@ Bảng 4 - Tốc độ hạ cho phép của píttông
 Khối lượng danh nghĩa của đĩa cân gốc, píttông, các quả cân xác định theo công thức:
 
 
-| [công thức không đọc được] |  |
+| $M = P \times A_{0} \times \frac{g_{0}}{g} \times (1 + \frac{\rho_{a}}{\rho_{Mt}})$ |  |
 | --- | --- |
 
 
@@ -416,14 +416,14 @@ g0 là gia tốc trọng trường khắc độ quả cân do nhà sản xuất 
 
 g là gia tốc trọng trường nơi thực hiện kiểm định, m/s2;
 
-[công thức không đọc được] là khối lượng riêng không khí nơi đo, kg/cm3;
+$\rho_{a}$ là khối lượng riêng không khí nơi đo, kg/cm3;
 
-[công thức không đọc được] là khối lượng riêng vật liệu chế tạo đĩa cân gốc, píttông, các quả cân, kg/cm3.
+$\rho_{Mt}$ là khối lượng riêng vật liệu chế tạo đĩa cân gốc, píttông, các quả cân, kg/cm3.
 
 Sai số khối lượng tương đối giữa khối lượng thực tế và khối lượng danh nghĩa của cân gốc, píttông, các quả cân như sau:
 
 
-| [công thức không đọc được] |  |
+| $\Delta_{Mi} = \frac{|M_{i} - M|}{M}$ |  |
 | --- | --- |
 
 
@@ -467,126 +467,126 @@ Khi cân bằng áp suất, chênh lệch chiều cao giữa đáy của píttô
 - Áp suất chuẩn trong chế độ đo áp suất tương đối tại điểm kiểm tra thứ i ứng với điểm mốc cơ sở áp suất của áp kế píttông chuẩn được tính theo công thức sau:
 
 
-| [công thức không đọc được] |  |
+| $P_{s,i} = \frac{\sum_{}^{}M_{i,s}g(1 - \frac{\rho_{a}}{\rho_{Ms}}) + \gammaC_{s}}{A_{0s}(1 + \lambda_{s}P_{s,i})[1 + (\alpha_{p,s} + \alpha_{c,s})(t_{s} - t_{r})]} + (\rho_{f} - \rho_{a})gh$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là tổng khối lượng của píttông chuẩn, đĩa cân và các quả cân chuẩn trên áp kế píttông chuẩn tại điểm kiểm tra thứ i, kg;
+$\sum_{}^{}M_{i,s}$ là tổng khối lượng của píttông chuẩn, đĩa cân và các quả cân chuẩn trên áp kế píttông chuẩn tại điểm kiểm tra thứ i, kg;
 
 g là gia tốc trọng trường nơi đo, m/s2;
 
-[công thức không đọc được] là khối lượng riêng của không khí, được tính theo công thức (4) , kg/m3;
+$\rho_{a}$ là khối lượng riêng của không khí, được tính theo công thức (4) , kg/m3;
 
-[công thức không đọc được] là khối lượng riêng của píttông chuẩn, đĩa cân và các quả cân chuẩn, kg/m3;
+$\rho_{Ms}$ là khối lượng riêng của píttông chuẩn, đĩa cân và các quả cân chuẩn, kg/m3;
 
-[công thức không đọc được] là hệ số sức căng bề mặt của chất lỏng, N/m;
+$\gamma$ là hệ số sức căng bề mặt của chất lỏng, N/m;
 
-[công thức không đọc được] là chu vi của píttông chuẩn, m;
+$C_{s}$ là chu vi của píttông chuẩn, m;
 
-[công thức không đọc được] là diện tích hiệu dụng của píttông của áp kế píttông chuẩn, m2;
+$A_{0s}$ là diện tích hiệu dụng của píttông của áp kế píttông chuẩn, m2;
 
-[công thức không đọc được] là hệ số giãn nở do áp suất của píttông chuẩn, 1/Pa;
+$\lambda_{s}$ là hệ số giãn nở do áp suất của píttông chuẩn, 1/Pa;
 
-[công thức không đọc được] lần lượt là hệ số giãn nở nhiệt của píttông chuẩn, xylanh chuẩn, 1/oC;
+$\alpha_{p,s},\alpha_{c,s}$ lần lượt là hệ số giãn nở nhiệt của píttông chuẩn, xylanh chuẩn, 1/oC;
 
-[công thức không đọc được] là nhiệt độ của píttông/xylanh chuẩn, oC;
+$t_{s}$ là nhiệt độ của píttông/xylanh chuẩn, oC;
 
-[công thức không đọc được] là nhiệt độ tiêu chuẩn: 23 oC;
+$t_{r}$ là nhiệt độ tiêu chuẩn: 23 oC;
 
-[công thức không đọc được] là khối lượng riêng của chất lỏng, kg/m3;
+$\rho_{f}$ là khối lượng riêng của chất lỏng, kg/m3;
 
 h là khoảng cách giữa hai mặt đáy của hai píttông, m.
 
 Khối lượng riêng không khí được tính theo công thức sau:
 
 
-| [công thức không đọc được] |  |
+| $\rho_{a} = \frac{3,4848P_{a} - 0,009 \times H \times e^{0,061 \times t}}{t + 273,15}$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là áp suất không khí, hPa;
+$P_{a}$ là áp suất không khí, hPa;
 
-[công thức không đọc được] là độ ẩm tương đối không khí, %;
+$H$ là độ ẩm tương đối không khí, %;
 
-[công thức không đọc được] là nhiệt độ không khí, oC.
+$t$ là nhiệt độ không khí, oC.
 
 - Áp suất chuẩn trong chế độ đo áp suất tuyệt đối được tính theo công thức sau:
 
 
-| [công thức không đọc được] |  |
+| $P_{abs} = P_{s,i} + \mu$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là áp suất tuyệt đối tại đáy píttông, Pa;
+$P_{abs}$ là áp suất tuyệt đối tại đáy píttông, Pa;
 
-[công thức không đọc được] là áp suất dư trong buồng chân không tuyệt đối, Pa.
+$\mu$ là áp suất dư trong buồng chân không tuyệt đối, Pa.
 
 Vị trí đáy của píttông khi cân bằng là vị trí trùng với mốc cơ sở áp suất của hai áp kế píttông. Trường hợp hai mốc cơ sở áp suất lệch nhau một khoảng Δh, cần thực hiện bù áp suất. Giá trị áp suất sau khi bù Pm , tùy trường hợp cụ thể, được tính như sau:
 
 Đối với áp suất dư:
 
 
-| [công thức không đọc được] |  |
+| $P_{m} = P_{s,i} \pm (\rho_{f} - \rho_{a})g\Deltah$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là giá trị áp suất chuẩn tại mốc cơ sở, Pa.
+$p_{e}$ là giá trị áp suất chuẩn tại mốc cơ sở, Pa.
 
 Đối với áp suất tuyệt đối:
 
 
-| [công thức không đọc được] |  |
+| $P_{m} = P_{abs} \pm \rho_{f}g\Deltah$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là chiều cao chênh lệch mốc cơ sở giữa 2 áp kế píttông, Pa.
+$\Deltah$ là chiều cao chênh lệch mốc cơ sở giữa 2 áp kế píttông, Pa.
 
 Dấu “±” trong các công thức (6) và (7) được xác định như sau: lấy dấu “+” khi mốc cơ sở áp suất của áp kế cần kiểm định nằm cao hơn vị trí làm việc của áp kế chuẩn và ngược lại, lấy dấu “-” khi mốc cơ sở áp suất của áp kế cần kiểm định nằm thấp hơn vị trí làm việc của áp kế chuẩn.
 
-[công thức không đọc được] là diện tích hiệu dụng của píttông của AKKĐ tại điểm kiểm tra thứ i được tính từ công thức sau:
+$A_{0t,i}$ là diện tích hiệu dụng của píttông của AKKĐ tại điểm kiểm tra thứ i được tính từ công thức sau:
 
 
-| [công thức không đọc được] |  |
+| $A_{0t,i}(1 + \lambda_{t}P_{s,i}) = \frac{\sum_{}^{}M_{t,i}g(1 - \frac{\rho_{a}}{\rho_{Mt}}) + \gammaC_{t}}{P_{s,i}[1 + (\alpha_{p,t} + \alpha_{c,t})(t_{t} - t_{r})]} + \frac{(\rho_{f} - \rho_{a})gh}{P_{s,i}}$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là tổng khối lượng của píttông, đĩa cân và các quả cân trên AKKĐ tại điểm kiểm tra thứ i, kg;
+$\sum_{}^{}M_{t,i}$ là tổng khối lượng của píttông, đĩa cân và các quả cân trên AKKĐ tại điểm kiểm tra thứ i, kg;
 
 g là gia tốc trọng trường nơi đo, m/s2;
 
-[công thức không đọc được] là khối lượng riêng của píttông, đĩa cân và các quả cân của AKKĐ, kg/m3;
+$\rho_{Mt}$ là khối lượng riêng của píttông, đĩa cân và các quả cân của AKKĐ, kg/m3;
 
-[công thức không đọc được] là chu vi píttông của AKKĐ, m;
+$C_{t}$ là chu vi píttông của AKKĐ, m;
 
-[công thức không đọc được] là hệ số giãn nở do áp suất của píttông của AKKĐ, 1/Pa;
+$\lambda_{t}$ là hệ số giãn nở do áp suất của píttông của AKKĐ, 1/Pa;
 
-[công thức không đọc được] lần lượt là hệ số giãn nở nhiệt của píttông và xylanh của AKKĐ, 1/oC;
+$\alpha_{p,t},\alpha_{c,t}$ lần lượt là hệ số giãn nở nhiệt của píttông và xylanh của AKKĐ, 1/oC;
 
-[công thức không đọc được] là nhiệt độ píttông/xilanh của AKKĐ, oC;
+$t_{t}$ là nhiệt độ píttông/xilanh của AKKĐ, oC;
 
-[công thức không đọc được] là nhiệt độ tiêu chuẩn: 23 oC.
+$t_{r}$ là nhiệt độ tiêu chuẩn: 23 oC.
 
 - Xác định hệ số tuyến tính R
 
-Đặt: [công thức không đọc được] và [công thức không đọc được] ta có:
+Đặt: $X_{i} = P_{s,i}$ và $Y_{i} = A_{0t,i}$ ta có:
 
 
-|  | [công thức không đọc được] |  |
+|  | $R = \frac{n\sum_{}^{}X_{i}Y_{i} - \sum_{}^{}X_{i}\sum_{}^{}Y_{i}}{}$ |  |
 | --- | --- | --- |
-|  | [công thức không đọc được] |  |
-|  | [công thức không đọc được] |  |
+|  | $a = \frac{\sum_{}^{}X_{i}^{2}\sum_{}^{}Y_{i} - \sum_{}^{}X_{i}\sum_{}^{}Y_{i}^{2}}{n\sum_{}^{}X_{i}^{2} - (\sum_{}^{}X_{i})^{2}}$ |  |
+|  | $b = \frac{n\sum_{}^{}X_{i}\sum_{}^{}Y_{i} - \sum_{}^{}X_{i}\sum_{}^{}Y_{i}}{n\sum_{}^{}X_{i}^{2} - (\sum_{}^{}X_{i})^{2}}$ |  |
 
 
 trong đó:
@@ -600,14 +600,14 @@ Trường hợp R < 0,8:
 Diện tích hiệu dụng píttông của AKKĐ và hệ số giãn nở áp suất λ xác định như sau:
 
 
-| [công thức không đọc được] λ = 0 |  |
+| $A_{0t} = \overline{A} = \frac{\sum_{i = 1}^{n}A_{0t,i}}{n}$ λ = 0 |  |
 | --- | --- |
 
 
-Trường hợp R [công thức không đọc được] 0,8:
+Trường hợp R $\geq$ 0,8:
 
 
-| [công thức không đọc được] [công thức không đọc được] |  |
+| $A_{0t} = a$ $\lambda = \frac{b}{A_{0t}}$ |  |
 | --- | --- |
 
 
@@ -624,117 +624,117 @@ Trường hợp R < 0,8:
 ĐKĐBĐ kiểu A của diện tích hiệu dụng được tính bằng:
 
 
-| [công thức không đọc được] |  |
+| $u_{A} =$ |  |
 | --- | --- |
 
 
 ĐKĐBĐ kiểu A tính theo giá trị áp suất p được tính bằng:
 
 
-| [công thức không đọc được] |  |
+| $u_{A}(p) = \frac{u_{A}}{A_{0t}} \times p$ |  |
 | --- | --- |
 
 
-Trường hợp R [công thức không đọc được] 0,8:
+Trường hợp R $\geq$ 0,8:
 
 ĐKĐBĐ kiểu A của diện tích hiệu dụng được tính bằng:
 
 Độ lệch chuẩn của Y là Sy:
 
 
-| [công thức không đọc được] |  |
+| $S_{y} =$ |  |
 | --- | --- |
 
 
 Độ lệch chuẩn của a là Sa:
 
 
-| [công thức không đọc được] |  |
+| $S_{a} = S_{y} \times$ |  |
 | --- | --- |
 
 
 Độ lệch chuẩn của b là Sb:
 
 
-| [công thức không đọc được] |  |
+| $S_{b} = S_{y} \times$ |  |
 | --- | --- |
 
 
 Hệ tương quan r(a,b) được tính:
 
 
-| [công thức không đọc được] |  |
+| $r(a,b) = - \frac{\sum_{}^{}X_{i}}{}$ |  |
 | --- | --- |
 
 
 Độ không đảm bảo kiểu A của diện tích hiệu dụng được tính bằng:
 
 
-| [công thức không đọc được] |  |
+| $u_{A,i} =$ |  |
 | --- | --- |
 
 
 ĐKĐBĐ kiểu A tính theo giá trị áp suất p được tính bằng:
 
 
-| [công thức không đọc được] |  |
+| $u_{A}(p) = \frac{u_{A,i}}{A_{0t}} \times p$ |  |
 | --- | --- |
 
 
 6.3.3.2 Ước lượng ĐKĐBĐ kiểu B
 
-6.3.3.2.1 ĐKĐBĐ của giá trị áp suất chuẩn [công thức không đọc được]
+6.3.3.2.1 ĐKĐBĐ của giá trị áp suất chuẩn $u_{s}(p)$
 
-- Độ lặp lại giá trị áp suất chuẩn [công thức không đọc được] lấy từ giấy chứng nhận hiệu chuẩn hoặc lấy từ tính toán thực nghiệm cho từng điểm đo.
+- Độ lặp lại giá trị áp suất chuẩn $u_{1}(p)$ lấy từ giấy chứng nhận hiệu chuẩn hoặc lấy từ tính toán thực nghiệm cho từng điểm đo.
 
 
-| [công thức không đọc được] |  |
+| $u_{1}(p) = p_{0,s} + \frac{u(p_{s})}{p_{s}} \times p$ |  |
 | --- | --- |
 
 
 trong đó:
 
-[công thức không đọc được] là độ lệch áp suất của chuẩn tại điểm áp suất p = 0 do các đại lượng ảnh hưởng gây ra.
+$p_{0,s}$ là độ lệch áp suất của chuẩn tại điểm áp suất p = 0 do các đại lượng ảnh hưởng gây ra.
 
-ĐKĐBĐ diện tích hiệu dụng [công thức không đọc được] lấy từ giấy chứng nhận hiệu chuẩn (k = 2):
+ĐKĐBĐ diện tích hiệu dụng $u_{2}(p)$ lấy từ giấy chứng nhận hiệu chuẩn (k = 2):
 
 
-| [công thức không đọc được] |  |
+| $u_{2}(p) = \frac{p}{A_{0,s}} + \frac{U(A_{0,s})}{k}$ |  |
 | --- | --- |
 
 
-ĐKĐBĐ hệ số dãn nở áp suất [công thức không đọc được] lấy từ giấy chứng nhận hiệu chuẩn (k = 2):
+ĐKĐBĐ hệ số dãn nở áp suất $u_{3}(p)$ lấy từ giấy chứng nhận hiệu chuẩn (k = 2):
 
 
-| [công thức không đọc được] |  |
+| $u_{3}(p) = - p^{2} + \frac{U(\lambda_{s})}{k}$ |  |
 | --- | --- |
 
 
-ĐKĐBĐ khối lượng quả cân, píttông [công thức không đọc được] lấy từ giấy chứng nhận hiệu chuẩn (k = 2):
+ĐKĐBĐ khối lượng quả cân, píttông $u_{4}(p)$ lấy từ giấy chứng nhận hiệu chuẩn (k = 2):
 
 
-| [công thức không đọc được] |  |
+| $u_{4}(p) = \frac{p}{M_{s}} + \frac{U(M_{s})}{k}$ |  |
 | --- | --- |
 
 
-ĐKĐBĐ nhiệt độ píttông/xylanh [công thức không đọc được] . Nhiệt độ píttông/xylanh đo trực tiếp với điều kiện nhiệt độ duy trì trong khoảng ± 1 oC và ĐKĐBĐ có thể được lấy bằng: U(t) = 2 oC.
+ĐKĐBĐ nhiệt độ píttông/xylanh $u_{5}(p)$ . Nhiệt độ píttông/xylanh đo trực tiếp với điều kiện nhiệt độ duy trì trong khoảng ± 1 oC và ĐKĐBĐ có thể được lấy bằng: U(t) = 2 oC.
 
 
-| [công thức không đọc được] |  |
+| $u_{5}(p) = p \times (\alpha_{p,s} + \alpha_{c,s}) \times \frac{U(t)}{}$ |  |
 | --- | --- |
 
 
-ĐKĐBĐ hệ số dãn nở nhiệt [công thức không đọc được] . ĐKĐBĐ của hệ số dãn nở nhiệt có thể lấy bằng 10 % và độ lệch so với nhiệt độ chuẩn là 2 oC.
+ĐKĐBĐ hệ số dãn nở nhiệt $u_{6}(p)$ . ĐKĐBĐ của hệ số dãn nở nhiệt có thể lấy bằng 10 % và độ lệch so với nhiệt độ chuẩn là 2 oC.
 
 
-| [công thức không đọc được] |  |
+| $u_{6}(p) = p_{s} \times U(\alpha_{p,s} - \alpha_{c,s}) \times \frac{\Deltat}{2}$ |  |
 | --- | --- |
 
 
-ĐKĐBĐ gia tốc trọng trường [công thức không đọc được] lấy từ giấy chứng nhận hiệu chuẩn. Trường hợp gia tốc trọng trường tính theo vĩ độ, độ cao so với mặt nước biển của nơi đo thì U(g) có thể lấy bằng: [công thức không đọc được] .
+ĐKĐBĐ gia tốc trọng trường $u_{7}(p)$ lấy từ giấy chứng nhận hiệu chuẩn. Trường hợp gia tốc trọng trường tính theo vĩ độ, độ cao so với mặt nước biển của nơi đo thì U(g) có thể lấy bằng: $U(g) = 10^{ - 5} \times g,k = 3$ .
 
 
-| [công thức không đọc được] |  |
+| $u_{7}(p) = \frac{p_{s}}{g} \times \frac{U(g)}{k}$ |  |
 | --- | --- |
 
 
@@ -747,170 +747,170 @@ Công thức tính gia tốc trọng trường theo vĩ độ và độ cao so v
 
 trong đó:
 
-[công thức không đọc được] là vĩ độ nơi đo, o ;
+$\theta$ là vĩ độ nơi đo, o ;
 
 h0 là độ cao so với mực nước biển, m.
 
-- ĐKĐBĐ khối lượng riêng không khí [công thức không đọc được] . Giá trị của khối lượng riêng không khí ở điều kiện tiêu chuẩn là 1,2 kg/m3 , nhưng do áp suất khí quyển, nhiệt độ môi trường, độ ẩm tương đối thay đổi nên khối lượng riêng không khí có thể thay đổi tối đa ± 5 % và ĐKĐBĐ khối lượng riêng không khí có thể lấy bằng: [công thức không đọc được] .
+- ĐKĐBĐ khối lượng riêng không khí $u_{8}(p)$ . Giá trị của khối lượng riêng không khí ở điều kiện tiêu chuẩn là 1,2 kg/m3 , nhưng do áp suất khí quyển, nhiệt độ môi trường, độ ẩm tương đối thay đổi nên khối lượng riêng không khí có thể thay đổi tối đa ± 5 % và ĐKĐBĐ khối lượng riêng không khí có thể lấy bằng: $U(\rho_{a}) = 5 \times 10^{ - 2} \times \rho_{a},k = 3$ .
 
 
-| [công thức không đọc được] |  |
+| $u_{8}(p) = \frac{p}{\rho_{Ms} - \rho_{a}} \times \frac{U(\rho_{a})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ chênh lệch chiều cao cột môi chất truyền áp suất (chất lỏng) [công thức không đọc được] , tối đa với: U(Δh) = 2 mm, k = 3:
+- ĐKĐBĐ chênh lệch chiều cao cột môi chất truyền áp suất (chất lỏng) $u_{9}(p)$ , tối đa với: U(Δh) = 2 mm, k = 3:
 
 
-| [công thức không đọc được] |  |
+| $u_{9}(p) = \rho_{f} \times g \times \frac{U(\Deltah)}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ lực tác dụng theo phương thẳng đứng [công thức không đọc được] . Lực tác dụng theo phương thẳng đứng: [công thức không đọc được] . Trong trường hợp khi [công thức không đọc được] , ĐKĐBĐ theo [công thức không đọc được] ước lượng bằng: [công thức không đọc được] và lấy theo phân bố hình chữ nhật.
+- ĐKĐBĐ lực tác dụng theo phương thẳng đứng $u_{10}(p)$ . Lực tác dụng theo phương thẳng đứng: $F' = F \times cos\theta$ . Trong trường hợp khi $\theta < 0,5'$ , ĐKĐBĐ theo $\theta$ ước lượng bằng: $U(\theta) = 5,82 \times 10^{ - 4}rad$ và lấy theo phân bố hình chữ nhật.
 
 
-| [công thức không đọc được] |  |
+| $u_{10}(p) = p \times sin\theta_{s} \times \frac{U(\theta_{s})}{}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ khối lượng riêng các quả cân [công thức không đọc được] , k = 2:
+- ĐKĐBĐ khối lượng riêng các quả cân $u_{11}(p)$ , k = 2:
 
 
-| [công thức không đọc được] |  |
+| $u_{11}(p) = \frac{p_{s} \times \rho_{a}}{\rho_{Ms}^{2}} \times \frac{U(\rho_{Ms})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ khối lượng riêng môi chất truyền áp suất [công thức không đọc được] , k = 2:
+- ĐKĐBĐ khối lượng riêng môi chất truyền áp suất $u_{12}(p)$ , k = 2:
 
 
-| [công thức không đọc được] |  |
+| $u_{12}(p) = \frac{p_{s} \times A_{0s} \times k}{M_{s}} \times \frac{U(\rho_{f})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ chu vi píttông [công thức không đọc được] , k = 2:
+- ĐKĐBĐ chu vi píttông $u_{13}(p)$ , k = 2:
 
 
-| [công thức không đọc được] |  |
+| $u_{13}(p) = \frac{p_{s} \times \gamma \times k}{g \times M_{s}} \times \frac{U(C_{s})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ hệ số sức căng bề mặt [công thức không đọc được] , k = 2:
+- ĐKĐBĐ hệ số sức căng bề mặt $u_{14}(p)$ , k = 2:
 
 
-| [công thức không đọc được] |  |
+| $u_{14}(p) = \frac{p \times C_{s}}{g \times M_{s}} \times \frac{U(\gamma)}{k}$ |  |
 | --- | --- |
 
 
-ĐKĐBĐ tổng hợp giá trị áp suất chuẩn [công thức không đọc được] :
+ĐKĐBĐ tổng hợp giá trị áp suất chuẩn $u_{s}(p)$ :
 
 
-| [công thức không đọc được] |  |
+| $u_{s}(p) =$ |  |
 | --- | --- |
 
 
 6.3.3.2.2 ĐKĐBĐ lực tác dụng lên píttông của AKKĐ, gồm các thành phần:
 
-- ĐKĐBĐ diện tích hiệu dụng [công thức không đọc được] được lấy từ kết quả hiệu chuẩn (k = 2):
+- ĐKĐBĐ diện tích hiệu dụng $u_{15}(p)$ được lấy từ kết quả hiệu chuẩn (k = 2):
 
 
-| [công thức không đọc được] |  |
+| $u_{15}(p) = \frac{p}{A_{0,t}} + \frac{U(A_{0,t})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ hệ số dãn nở áp suất [công thức không đọc được] được lấy từ kết quả hiệu chuẩn (k = 2):
+- ĐKĐBĐ hệ số dãn nở áp suất $u_{16}(p)$ được lấy từ kết quả hiệu chuẩn (k = 2):
 
 
-| [công thức không đọc được] |  |
+| $u_{16}(p) = - p^{2} \times \frac{U(\lambda_{t})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ khối lượng quả cân và píttông [công thức không đọc được] được lấy từ kết quả hiệu chuẩn (k = 2):
+- ĐKĐBĐ khối lượng quả cân và píttông $u_{17}(p)$ được lấy từ kết quả hiệu chuẩn (k = 2):
 
 
-| [công thức không đọc được] |  |
+| $u_{17}(p) = \frac{p}{M_{t}} \times \frac{U(M_{t})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ nhiệt độ píttông/xy lanh [công thức không đọc được] , [công thức không đọc được] :
+- ĐKĐBĐ nhiệt độ píttông/xy lanh $u_{18}(p)$ , $U(t) = 2^{\circ}C$ :
 
 
-| [công thức không đọc được] |  |
+| $u_{18}(p) = p \times (\alpha_{p,t} + \alpha_{c,t}) \times \frac{U(t)}{}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ hệ số dãn nở nhiệt [công thức không đọc được] . ĐKĐBĐ hệ số dãn nở nhiệt có thể lấy bằng 10 % và độ lệch so với nhiệt độ chuẩn là 2 oC:
+- ĐKĐBĐ hệ số dãn nở nhiệt $u_{19}(p)$ . ĐKĐBĐ hệ số dãn nở nhiệt có thể lấy bằng 10 % và độ lệch so với nhiệt độ chuẩn là 2 oC:
 
 
-| [công thức không đọc được] |  |
+| $u_{19}(p) = p \times U(\alpha_{p,t} + \alpha_{c,t}) \times \frac{\Deltat}{}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ gia tốc trọng trường [công thức không đọc được] , k = 3:
+- ĐKĐBĐ gia tốc trọng trường $u_{20}(p)$ , k = 3:
 
 
-| [công thức không đọc được] |  |
+| $u_{20}(p) = \frac{p}{g} \times \frac{U(g)}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ khối lượng riêng không khí [công thức không đọc được] , k = 3:
+- ĐKĐBĐ khối lượng riêng không khí $u_{21}(p)$ , k = 3:
 
 
-| [công thức không đọc được] |  |
+| $u_{21}(p) = \frac{p}{\rho_{Mt} - \rho_{a}} \times \frac{U(\rho_{a})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ lực tác dụng so với phương thẳng đứng [công thức không đọc được] :
+- ĐKĐBĐ lực tác dụng so với phương thẳng đứng $u_{22}(p)$ :
 
 
-| [công thức không đọc được] |  |
+| $u_{22}(p) = p \times sin\theta_{t} \times \frac{U(\theta_{t})}{}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ khối lượng riêng các quả cân [công thức không đọc được] , k = 2:
+- ĐKĐBĐ khối lượng riêng các quả cân $u_{23}(p)$ , k = 2:
 
 
-| [công thức không đọc được] |  |
+| $u_{23}(p) = \frac{p \times \rho_{a}}{\rho_{Mt}^{2}} \times \frac{U(\rho_{Mt})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ chu vi píttông [công thức không đọc được] , k = 2:
+- ĐKĐBĐ chu vi píttông $u_{24}(p)$ , k = 2:
 
 
-| [công thức không đọc được] |  |
+| $u_{24}(p) = \frac{p_{s} \times \gamma}{g \times M_{t}} \times \frac{U(C_{t})}{k}$ |  |
 | --- | --- |
 
 
-- ĐKĐBĐ hệ số sức căng bề mặt [công thức không đọc được] , k = 2:
+- ĐKĐBĐ hệ số sức căng bề mặt $u_{25}(p)$ , k = 2:
 
 
-| [công thức không đọc được] |  |
+| $u_{25}(p) = \frac{p \times C_{t}}{g \times M_{t}} \times \frac{U(\gamma)}{k}$ |  |
 | --- | --- |
 
 
 ĐKĐBĐ tổng hợp của lực tác dụng lên píttông của AKKĐ:
 
 
-| [công thức không đọc được] |  |
+| $u_{s}(p) =$ |  |
 | --- | --- |
 
 
 6.3.3.2.3 ĐKĐBĐ tổng hợp:
 
 
-| [công thức không đọc được] |  |
+| $u_{c}(p) =$ |  |
 | --- | --- |
 
 
 6.3.3.2.4 ĐKĐBĐ mở rộng:
 
 
-| [công thức không đọc được] |  |
+| $U = k \times u_{c}(p)$ |  |
 | --- | --- |
 
 
 6.3.3.3 Sai số áp suất tính theo gia tốc trọng trường tại nơi đo (g) so với áp suất danh nghĩa (gs):
 
 
-| [công thức không đọc được] |  |
+| $\Deltap = \frac{M}{A0t} \times (g_{s} - g)$ |  |
 | --- | --- |
 
 
@@ -919,14 +919,14 @@ Nếu áp suất danh nghĩa trên quả cân được ghi khắc theo gia tốc
 6.3.3.4 Độ chính xác (sai số tương đối) của áp kế píttông tại nơi đo (g) được tính bằng công thức:
 
 
-| [công thức không đọc được] |  |
+| $\delta = \frac{}{p}$ |  |
 | --- | --- |
 
 
 Nếu áp suất danh nghĩa trên quả cân được ghi khắc theo gia tốc trọng trường nơi đo thì độ chính xác của áp kế píttông tại nơi đo (g) được tính bằng:
 
 
-| [công thức không đọc được] |  |
+| $\delta = \frac{U(p)}{p}$ |  |
 | --- | --- |
 
 
@@ -1092,7 +1092,7 @@ A.3.3 Xác định độ chính xác
 
 U(p) = (với k = 2)
 
-[công thức không đọc được]
+$\Deltap = \frac{M}{A0t} \times (g_{s} - g) =$
 
 Độ chính xác: d =
 
@@ -1248,7 +1248,7 @@ B.3.3 Xác định độ chính xác
 
 U(p) = (với k = 2)
 
-[công thức không đọc được]
+$\Deltap = \frac{M}{A0t} \times (g_{s} - g) =$
 
 Độ chính xác: d =
 
@@ -1406,23 +1406,23 @@ Tính ĐKĐBĐ kiểu B
 1/ ĐKĐBĐ của chuẩn tại áp suất p = 5,2111×10+05 Pa
 
 
-| [công thức không đọc được] | Đại lượng | Giá trị đại lượng | Hệ số độ nhạy | Giá trị hệ số | U (đại lượng) | [công thức không đọc được] | [công thức không đọc được] |
+| $u_{i}(p)$ | Đại lượng | Giá trị đại lượng | Hệ số độ nhạy | Giá trị hệ số | U (đại lượng) | $u_{i}(p),$ | $u_{i}^{2}(p),^{}$ |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [công thức không đọc được] | P, Pa | 5,21E+05 | [công thức không đọc được] | 4,06E-08 | 2,61E+01 | 1,06E-06 | 1,12E-12 |
-| [công thức không đọc được] | A0s, m2 | 1,96E-04 | [công thức không đọc được] | 1,33E+09 | 3,73E-09 | 4,96E+00 | 2,46E+01 |
-| [công thức không đọc được] | [công thức không đọc được] | 7,80E-14 | [công thức không đọc được] | -1,36E+11 | 7,80E-15 | -1,06E-03 | 1,12E-06 |
-| [công thức không đọc được] | Ms, kg | 1,04E+01 | [công thức không đọc được] | 2,51E+04 | 1,56E-05 | 3,91E-01 | 1,53E-01 |
-| [công thức không đọc được] | [công thức không đọc được] | -4,00E+00 | [công thức không đọc được] | 3,35E+00 | 2,00E+00 | 6,71E+00 | 4,50E+01 |
-| [công thức không đọc được] | [công thức không đọc được] | 9,10E-06 | [công thức không đọc được] | -1,04E+06 | 1,00E-07 | -1,04E-01 | 1,09E-02 |
-| [công thức không đọc được] | g, m/s2 | 9,79E+00 | [công thức không đọc được] | 1,70E+06 | 1,00E-05 | 1,70E+01 | 2,89E+02 |
-| [công thức không đọc được] | [công thức không đọc được] | 1,20E+00 | [công thức không đọc được] | 2,17E+01 | 6,00E-02 | 1,30E+00 | 1,70E+00 |
-| [công thức không đọc được] | [công thức không đọc được] | -8,90E-02 | [công thức không đọc được] | 2,98E+03 | 2,00E-03 | 5,96E+00 | 3,55E+01 |
-| [công thức không đọc được] | [công thức không đọc được] | 5,00E-01 | [công thức không đọc được] | 4,36E+02 | 5,82E-04 | 2,54E-01 | 6,43E-02 |
-| [công thức không đọc được] | [công thức không đọc được] | 8,00E+03 | [công thức không đọc được] | 4,89E-03 | 2,00E+01 | 9,77E-02 | 9,55E-03 |
-| [công thức không đọc được] | [công thức không đọc được] | 9,13E+02 | [công thức không đọc được] | -4,37E-01 | 1,00E+01 | -4,37E+00 | 1,91E+01 |
-| [công thức không đọc được] | [công thức không đọc được] | 4,96E-02 | [công thức không đọc được] | 7,91E+01 | 1,00E-03 | 7,91E-02 | 6,26E-03 |
-| [công thức không đọc được] | [công thức không đọc được] | 3,09E-02 | [công thức không đọc được] | 1,27E+02 | 1,00E-04 | 1,27E-02 | 1,61E-04 |
-| [công thức không đọc được] |  |  |  |  |  |  |  |
+| $u_{1}(p)$ | P, Pa | 5,21E+05 | $p_{0,s} + \frac{u(p_{s})}{p_{s}} \times p$ | 4,06E-08 | 2,61E+01 | 1,06E-06 | 1,12E-12 |
+| $u_{2}(p)$ | A0s, m2 | 1,96E-04 | $\frac{p}{2A_{0,s}}$ | 1,33E+09 | 3,73E-09 | 4,96E+00 | 2,46E+01 |
+| $u_{3}(p)$ | $\lambda_{s},$ | 7,80E-14 | $\frac{p^{2}}{2}$ | -1,36E+11 | 7,80E-15 | -1,06E-03 | 1,12E-06 |
+| $u_{4}(p)$ | Ms, kg | 1,04E+01 | $\frac{p}{2M_{s}}$ | 2,51E+04 | 1,56E-05 | 3,91E-01 | 1,53E-01 |
+| $u_{5}(p)$ | $t_{s},^{\circ}C$ | -4,00E+00 | $\frac{p \times (\alpha_{p,s} + \alpha_{c,s})}{}$ | 3,35E+00 | 2,00E+00 | 6,71E+00 | 4,50E+01 |
+| $u_{6}(p)$ | $\begin{matrix} (\alpha_{ps} + \alpha_{cs}), \\ 1/^{\circ}C \end{matrix}$ | 9,10E-06 | $\frac{p \times \Deltat}{}$ | -1,04E+06 | 1,00E-07 | -1,04E-01 | 1,09E-02 |
+| $u_{7}(p)$ | g, m/s2 | 9,79E+00 | $\frac{p}{3g}$ | 1,70E+06 | 1,00E-05 | 1,70E+01 | 2,89E+02 |
+| $u_{8}(p)$ | $r_{a},^{}$ | 1,20E+00 | $\frac{p}{3(\rho_{Ms} - \rho_{a})}$ | 2,17E+01 | 6,00E-02 | 1,30E+00 | 1,70E+00 |
+| $u_{9}(p)$ | $\Deltah,$ | -8,90E-02 | $\frac{\rho_{f} \times g}{3}$ | 2,98E+03 | 2,00E-03 | 5,96E+00 | 3,55E+01 |
+| $u_{10}(p)$ | $\theta,^{\circ}$ | 5,00E-01 | $\frac{p \times sin\theta}{}$ | 4,36E+02 | 5,82E-04 | 2,54E-01 | 6,43E-02 |
+| $u_{11}(p)$ | $\rho_{Ms},^{}$ | 8,00E+03 | $\frac{p \times \rho_{a}}{2 \times \rho_{Ms}^{2}}$ | 4,89E-03 | 2,00E+01 | 9,77E-02 | 9,55E-03 |
+| $u_{12}(p)$ | $\rho_{f},^{}$ | 9,13E+02 | $\frac{p \times A_{0s} \times \Deltah}{2 \times M_{s}}$ | -4,37E-01 | 1,00E+01 | -4,37E+00 | 1,91E+01 |
+| $u_{13}(p)$ | $C_{s},$ | 4,96E-02 | $\frac{p \times \gamma}{2 \times g \times M_{s}}$ | 7,91E+01 | 1,00E-03 | 7,91E-02 | 6,26E-03 |
+| $u_{14}(p)$ | $\gamma,^{2}$ | 3,09E-02 | $\frac{p \times C_{s}}{2 \times g \times M_{s}}$ | 1,27E+02 | 1,00E-04 | 1,27E-02 | 1,61E-04 |
+| $\begin{matrix} \sum_{i = 1}^{14}u_{i}^{2} = ^{2} \\ U_{Bs} = \end{matrix}$ |  |  |  |  |  |  |  |
 
 
 Phụ lục D (kết thúc)
@@ -1430,20 +1430,20 @@ Phụ lục D (kết thúc)
 2/ ĐKĐBĐ của lực tác dụng lên píttông của AKKĐ tại áp suất P = 5,2111×10+05 Pa
 
 
-| [công thức không đọc được] | Đại lượng | Giá trị đại lượng | Hệ số độ nhạy | Giá trị hệ số | U (đại lượng) | [công thức không đọc được] | [công thức không đọc được] |
+| $u_{i}(p)$ | Đại lượng | Giá trị đại lượng | Hệ số độ nhạy | Giá trị hệ số | U (đại lượng) | $u_{i}(p),$ | $u_{i}^{2}(p),^{}$ |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [công thức không đọc được] | A0t, m2 | 8,05E-05 | [công thức không đọc được] | 2,10E+01 | 2,91E-09 | 6,10E-08 | 3,72E-15 |
-| [công thức không đọc được] | [công thức không đọc được] | 4,51E-11 | [công thức không đọc được] | 1,36E+11 | 1,16E-11 | 1,57E+00 | 2,47E+00 |
-| [công thức không đọc được] | Mt, kg | 4,29E+00 | [công thức không đọc được] | 1,12E+06 | 1,56E-05 | 1,74E+01 | 3,04E+02 |
-| [công thức không đọc được] | [công thức không đọc được] | -4,00E+00 | [công thức không đọc được] | 3,35E+00 | 2,00E+00 | 6,71E+00 | 4,50E+01 |
-| [công thức không đọc được] | [công thức không đọc được] | 9,10E-06 | [công thức không đọc được] | -1,04E+06 | 1,00E-07 | -1,04E-01 | 1,09E-02 |
-| [công thức không đọc được] | g, m/s2 | 9,79E+00 | [công thức không đọc được] | 1,70E+06 | 1,00E-05 | 1,70E+01 | 2,89E+02 |
-| [công thức không đọc được] | [công thức không đọc được] | 1,20E+00 | [công thức không đọc được] | 2,17E+01 | 6,00E-02 | 1,30E+00 | 1,70E+00 |
-| [công thức không đọc được] | [công thức không đọc được] | 5,00E-01 | [công thức không đọc được] | 4,36E+02 | 5,82E-04 | 2,54E-01 | 6,43E-02 |
-| [công thức không đọc được] | [công thức không đọc được] | 8,00E+03 | [công thức không đọc được] | 4,89E-03 | 2,00E+01 | 9,77E-02 | 9,55E-03 |
-| [công thức không đọc được] | [công thức không đọc được] | 4,96E-02 | [công thức không đọc được] | 1,92E+02 | 1,00E-03 | 1,92E-01 | 3,68E-02 |
-| [công thức không đọc được] | [công thức không đọc được] | 3,09E-02 | [công thức không đọc được] | 3,08E+02 | 1,00E-04 | 3,08E-02 | 9,49E-04 |
-| [công thức không đọc được] |  |  |  |  |  |  |  |
+| $u_{15}(p)$ | A0t, m2 | 8,05E-05 | $\frac{p}{2A_{0,t}}$ | 2,10E+01 | 2,91E-09 | 6,10E-08 | 3,72E-15 |
+| $u_{16}(p)$ | $\lambda_{t},$ | 4,51E-11 | $\frac{p^{2}}{2}$ | 1,36E+11 | 1,16E-11 | 1,57E+00 | 2,47E+00 |
+| $u_{17}(p)$ | Mt, kg | 4,29E+00 | $\frac{p}{2M_{t}}$ | 1,12E+06 | 1,56E-05 | 1,74E+01 | 3,04E+02 |
+| $u_{18}(p)$ | $t_{t},^{\circ}C$ | -4,00E+00 | $\frac{p \times (\alpha_{p,t} + \alpha_{c,t})}{}$ | 3,35E+00 | 2,00E+00 | 6,71E+00 | 4,50E+01 |
+| $u_{19}(p)$ | $\begin{matrix} (\alpha_{p,t} + \alpha_{c,t}), \\ 1/^{\circ}C \end{matrix}$ | 9,10E-06 | $\frac{p \times \Deltat}{}$ | -1,04E+06 | 1,00E-07 | -1,04E-01 | 1,09E-02 |
+| $u_{20}(p)$ | g, m/s2 | 9,79E+00 | $\frac{p}{3g}$ | 1,70E+06 | 1,00E-05 | 1,70E+01 | 2,89E+02 |
+| $u_{21}(p)$ | $r_{a},^{}$ | 1,20E+00 | $\frac{p}{3(\rho_{Mt} - \rho_{a})}$ | 2,17E+01 | 6,00E-02 | 1,30E+00 | 1,70E+00 |
+| $u_{22}(p)$ | $\theta,^{\circ}$ | 5,00E-01 | $\frac{p \times sin\theta}{}$ | 4,36E+02 | 5,82E-04 | 2,54E-01 | 6,43E-02 |
+| $u_{23}(p)$ | $\rho_{Mt},^{}$ | 8,00E+03 | $\frac{p \times \rho_{a}}{2 \times \rho_{Mt}^{2}}$ | 4,89E-03 | 2,00E+01 | 9,77E-02 | 9,55E-03 |
+| $u_{24}(p)$ | $C_{t},$ | 4,96E-02 | $\frac{p \times \gamma}{2 \times g \times M_{t}}$ | 1,92E+02 | 1,00E-03 | 1,92E-01 | 3,68E-02 |
+| $u_{25}(p)$ | $\gamma,^{2}$ | 3,09E-02 | $\frac{p \times C_{t}}{2 \times g \times M_{t}}$ | 3,08E+02 | 1,00E-04 | 3,08E-02 | 9,49E-04 |
+| $\begin{matrix} \sum_{i = 15}^{25}u_{i}^{2} = ^{2} \\ U_{Bt} = \end{matrix}$ |  |  |  |  |  |  |  |
 | Uc(p) = | 36,3 | Pa |  |  |  |  |  |
 | Uexp(p) = | 72,6 | Pa | (k = 2) |  |  |  |  |
 | Độ chính xác = | 0,0144 | % | (k = 2) |  |  |  |  |

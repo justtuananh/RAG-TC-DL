@@ -40,4 +40,7 @@ node_modules/
 frontend/dist/
 dist/
 frontend/.env.local
-frontend/.env.production
+frontend/.env.productiondocker-compose.override.yml
+logs/
+docker-compose.override.yml
+design/_ref/

@@ -1,0 +1,74 @@
+@import "katex/dist/katex.min.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* ── Scrollbar ── */
+  .chat-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.slate.300') transparent;
+  }
+  .chat-scrollbar::-webkit-scrollbar { width: 6px; }
+  .chat-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .chat-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+
+  /* ── KaTeX inline ── */
+  .katex {
+    font-size: 1.05em !important;
+  }
+
+  /* ── Display math block ── */
+  .katex-display {
+    @apply bg-slate-50 border border-slate-200 rounded-lg;
+    padding: 14px 18px !important;
+    margin: 12px 0 !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    text-align: center;
+    letter-spacing: 0.02em;
+  }
+
+  /* Override KaTeX display margin inside the block */
+  .katex-display > .katex {
+    font-size: 1.1em !important;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.25s ease-out;
+  }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes typingDot {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30%           { transform: translateY(-4px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in-up,
+  .animate-pulse { animation: none; }
+
+  @keyframes typingDot {
+    0%, 100% { opacity: 0.5; }
+    30%      { opacity: 1; }
+  }
+}

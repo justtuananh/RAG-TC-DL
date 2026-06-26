@@ -1,3 +1,9 @@
+/* Tự host font (offline) — bản @fontsource đã kèm subset vietnamese */
+@import "@fontsource/be-vietnam-pro/400.css";
+@import "@fontsource/be-vietnam-pro/500.css";
+@import "@fontsource/be-vietnam-pro/600.css";
+@import "@fontsource/be-vietnam-pro/700.css";
+@import "@fontsource/lora/400.css";
 @import "katex/dist/katex.min.css";
 
 @tailwind base;
@@ -5,70 +11,136 @@
 @tailwind utilities;
 
 @layer base {
-  html, body, #root {
+  html,
+  body,
+  #root {
     height: 100%;
+    margin: 0;
   }
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+    @apply bg-app font-sans text-slate-900 antialiased;
   }
 }
 
-@layer components {
-  /* ── Scrollbar ── */
-  .chat-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: theme('colors.slate.300') transparent;
-  }
-  .chat-scrollbar::-webkit-scrollbar { width: 6px; }
-  .chat-scrollbar::-webkit-scrollbar-track { background: transparent; }
-  .chat-scrollbar::-webkit-scrollbar-thumb {
-    @apply bg-slate-300 rounded-full;
-  }
-
-  /* ── KaTeX inline ── */
-  .katex {
-    font-size: 1.05em !important;
-  }
-
-  /* ── Display math block ── */
-  .katex-display {
-    @apply bg-slate-50 border border-slate-200 rounded-lg;
-    padding: 14px 18px !important;
-    margin: 12px 0 !important;
-    overflow-x: auto;
-    overflow-y: hidden;
-    text-align: center;
-    letter-spacing: 0.02em;
-  }
-
-  /* Override KaTeX display margin inside the block */
-  .katex-display > .katex {
-    font-size: 1.1em !important;
-  }
+/* Thanh cuộn — khớp mockup */
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
 }
-
-@layer utilities {
-  .animate-fade-in-up {
-    animation: fadeInUp 0.25s ease-out;
-  }
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes typingDot {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
-  30%           { transform: translateY(-4px); opacity: 1; }
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+  background-clip: padding-box;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up,
-  .animate-pulse { animation: none; }
-
-  @keyframes typingDot {
-    0%, 100% { opacity: 0.5; }
-    30%      { opacity: 1; }
+  * {
+    animation: none !important;
   }
+}
+
+/* ── Markdown câu trả lời (bong bóng bot) ── */
+.md-answer {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #1e293b;
+}
+.md-answer p {
+  margin: 7px 0;
+}
+.md-answer p:first-child {
+  margin-top: 0;
+}
+.md-answer p:last-child {
+  margin-bottom: 0;
+}
+.md-answer ul,
+.md-answer ol {
+  margin: 7px 0;
+  padding-left: 20px;
+}
+.md-answer li {
+  margin: 3px 0;
+}
+.md-answer strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+.md-answer code {
+  background: #f0fdf4;
+  color: #15803d;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.92em;
+}
+.md-answer .katex-display {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 11px 15px;
+  margin: 9px 0;
+  overflow-x: auto;
+}
+
+/* Chip trích dẫn [n] bấm được, render inline trong markdown */
+.cite-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 21px;
+  height: 21px;
+  padding: 0 5px;
+  margin: 0 1px;
+  vertical-align: -3px;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  color: #15803d;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+}
+.cite-chip:hover {
+  background: #16a34a;
+  color: #fff;
+  border-color: #16a34a;
+}
+
+/* ── Markdown "trang tài liệu" (serif Lora) ── */
+.md-doc {
+  font-family: "Lora", Georgia, serif;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: #1e293b;
+}
+.md-doc p {
+  margin: 11px 0;
+}
+.md-doc strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+.md-doc .katex-display {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 11px 15px;
+  margin: 9px 0;
+  overflow-x: auto;
+}
+.md-doc h1,
+.md-doc h2,
+.md-doc h3,
+.md-doc h4 {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 14px 0 5px;
+  font-size: 14px;
 }
