@@ -14,10 +14,13 @@ chạy local. Mục tiêu prod: 1 máy đơn **RTX 5060 8GB**, mở rộng từ 
 >   `kotaemon_ext/`, phong phú cho quản lý tài liệu & chat.
 >
 > **Giao diện web React (mới).** Ngoài UI Gradio `:7861` của Mode A, repo còn có **frontend React +
-> TypeScript** (`frontend/`, nginx `:3000`) nói chuyện với **FastAPI backend** `api_server.py`
-> (`:8080`, cùng pipeline truy hồi/sinh đáp với `app.py`). Bản `frontend/` hiện là **mock-only**
-> (UX prototype dựng 1:1 từ `design/kiemdinh.html`, mô phỏng bằng timer — chưa nối backend); bản
-> React **đã** nối backend nằm ở `frontend-legacy/`. Chi tiết: [`frontend/README.md`](frontend/README.md).
+> TypeScript** (`frontend/`, nginx `:3000`, dev Vite `:5173`) nói chuyện với **FastAPI backend**
+> `api_server.py` (`:8080`, cùng pipeline truy hồi/sinh đáp với `app.py`). Bản `frontend/` (dựng 1:1
+> từ `design/kiemdinh.html`) nay **đã nối backend thật**: chat streaming SSE, render Markdown +
+> **bảng** (remark-gfm) + **công thức** `$LaTeX$` (KaTeX), trích dẫn `[n]` bấm được + panel nguồn,
+> **lưu lịch sử hội thoại** (localStorage) và **bộ nhớ ngắn hạn** cho LLM (gửi lại các lượt trước).
+> `frontend-legacy/` là bản React (JS thuần) đời trước, giữ để tham khảo. Chạy nhanh local (api_server
+> + Vite): `./run.sh`. Chi tiết: [`frontend/README.md`](frontend/README.md).
 
 **Mục lục**
 1. [Tổng quan & vấn đề cốt lõi](#1-tổng-quan--vấn-đề-cốt-lõi)
@@ -57,7 +60,7 @@ ro lớn nhất của dự án — *độ chính xác công thức là mối qua
 
 | Lớp | Thành phần | Ghi chú |
 |---|---|---|
-| **Giao diện** | **Gradio** `app.py` `:7861` · **React** `frontend/` `:3000` (+ `api_server.py` FastAPI `:8080`) · **kotaemon** (Mode B) | React UI hiện **mock-only** — [`frontend/README.md`](frontend/README.md) |
+| **Giao diện** | **Gradio** `app.py` `:7861` · **React** `frontend/` `:3000` (dev Vite `:5173`, + `api_server.py` FastAPI `:8080`) · **kotaemon** (Mode B) | React UI **đã nối backend thật** (SSE, bảng + công thức, lịch sử/bộ nhớ) — [`frontend/README.md`](frontend/README.md) |
 | **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | `qwen2.5:1.5b` (dev) / `qwen2.5:7b` (prod), `:11434`; `generation.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
 | **Embedding** | **bge-m3** (1024 chiều) qua **inference server tự viết** | `docker/inference/server.py` (FastAPI + sentence-transformers), `:8010`, `/v1/embeddings` |
 | **Reranker** | **bge-reranker-v2-m3** qua cùng server (CrossEncoder) | `:8011`, `/v1/rerank` (Cohere-style); env `RERANKER_MAX_LENGTH` (mặc định 1024) |
@@ -130,7 +133,7 @@ make index         # indexer: index.embed_store --force → nhúng build/spike_a
 | `ollama` | `ollama/ollama:latest` | 11434 | LLM, volume `ollama_data` |
 | `app` | build `.` → `python app.py` | 7861 | Gradio UI; mount `build/spike_a` + `TC_DL` (ro); đọc env `EMBED_URL/RERANK_URL/QDRANT_URL/OLLAMA_URL/OLLAMA_MODEL` |
 | `api` | reuse `qtkd-app:local` → `uvicorn api_server:app` | 8080 | **FastAPI + SSE** cho React frontend (`/api/health`, `/api/examples`, `/api/chat/stream`); cùng pipeline với `app` |
-| `frontend` | build `frontend/` → nginx | 3000 | Serve bản React build; proxy `/api` → `api:8080`. **Hiện mock-only** (chưa gọi backend) |
+| `frontend` | build `frontend/` → nginx | 3000 | Serve bản React build; proxy `/api` → `api:8080`. **Đã nối backend thật** (chat SSE, bảng/công thức, lịch sử + bộ nhớ ngắn hạn) |
 | `indexer` | build `.` (profile `tools`) | — | Chạy 1 lần: `index.embed_store --force` |
 
 **Inference server tự viết** — `docker/inference/server.py`: FastAPI + `sentence-transformers`
@@ -363,4 +366,4 @@ Lịch sử số liệu lưu ở [`result_eval.md`](result_eval.md).
 
 **Tài liệu nội bộ**
 - [`docs/PLAN.md`](docs/PLAN.md) — thiết kế & kế hoạch đầy đủ · [`docs/spike_c_ui_setup.md`](docs/spike_c_ui_setup.md) — bake-off UI + setup
-- [`docs/plan-7.md`](docs/plan-7.md) — kế hoạch cải thiện retrieval · [`result_eval.md`](result_eval.md) — log kết quả eval · [`CLAUDE.md`](CLAUDE.md) — hướng dẫn kiến trúc cho agent
+- [`docs/archive/plan-7.md`](docs/archive/plan-7.md) — kế hoạch cải thiện retrieval (lưu trữ) · [`result_eval.md`](result_eval.md) — log kết quả eval · [`CLAUDE.md`](CLAUDE.md) — hướng dẫn kiến trúc cho agent

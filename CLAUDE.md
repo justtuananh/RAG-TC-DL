@@ -90,12 +90,21 @@ answer + citations  ──►  UI (one of):
   `GET /api/health`, `GET /api/examples`, `POST /api/chat/stream` (SSE). Reuses the SAME pipeline as
   `app.py` (`retrieval.retriever` + `generation.py`: `is_calculation_request` guard → `retrieve` →
   `build_messages` → `stream_ollama`). Run with `kotaemon/.venv` (needs `fastapi`+`uvicorn`).
-- `frontend/` — **React 18 + TypeScript + Vite + Tailwind** web UI (served on **:3000**, nginx
-  proxies `/api` → `api_server.py`). This is a 1:1 rebuild of `design/kiemdinh.html` and is
-  **currently MOCK-ONLY** (answers/progress simulated by timers in `src/services/mockEngine.ts`;
-  no backend calls yet). The PRIOR React app that WAS wired to `api_server.py` via SSE is preserved
-  in `frontend-legacy/` (`src/utils/api.js` `streamChat`) — reference it when wiring the new UI to
-  the real backend. See `frontend/README.md`.
+- `frontend/` — **React 18 + TypeScript + Vite + Tailwind** web UI (Docker nginx on **:3000**,
+  proxies `/api` → `api_server.py`; dev server is Vite on **:5173**). A 1:1 rebuild of
+  `design/kiemdinh.html`, now **wired to the real backend**: `src/services/liveApi.ts`
+  (`streamChat` SSE, `fetchExamples`, `pingHealth`) drives the chat. Answers render through
+  `src/components/common/Markdown.tsx` — `react-markdown` + **`remark-gfm`** (pipe tables) +
+  `remark-math`/`rehype-katex` (verbatim `$LaTeX$`, lenient mode) + `rehype-raw` for clickable
+  `[n]` citation chips; a live source panel highlights `child_text` inside `parent_text`.
+  Conversation history persists in `localStorage` (`src/store/persistence.ts`) and prior turns
+  are replayed as short-term LLM memory (`toHistory` in `src/store/useAppStore.ts`).
+  `src/services/mockEngine.ts` now retains only demo data + timing for the Documents/Guide tabs.
+  `frontend-legacy/` is the earlier plain-JS React prototype, kept for reference. Quick local
+  run of `api_server.py` + Vite together: `./run.sh`. See `frontend/README.md`.
+- `latex.py` — shared `fix_latex` normalizer (strip backticks around `$…$`; `\[…\]`/`\(…\)` →
+  `$$…$$`/`$…$`; collapse `\\` → `\`) imported by **both** `app.py` and `api_server.py` (was
+  duplicated); mirrored in the frontend as `liveApi.fixLatex`. Regression: `tests/unit/llm/test_latex_fix.py`.
 - `eval/run_eval.py` — Spike E regression harness. Computes recall@k + MRR for hybrid vs
   dense-only against `eval/eval_set.jsonl` (question → expected file_stem + section_path). Run
   this after any retrieval change. Pass goal is recall@5 ≥ 0.85.
@@ -118,7 +127,7 @@ answer + citations  ──►  UI (one of):
 | Qdrant     | 6333  | collection `qtkd_rag` (cosine, 1024 dims)        |
 | Ollama     | 11434 | **native `/api/chat`** (generation.py tự map từ env OLLAMA_URL dạng `/v1`), model `qwen2.5:1.5b` (dev; prod target qwen2.5:7b). KHÔNG quay lại `/v1/chat/completions`: endpoint đó BỎ QUA `options` → num_ctx/num_predict không có hiệu lực (đo 2026-06-11). |
 | api        | 8080  | `api_server.py` (FastAPI+SSE) — backend cho React frontend; same pipeline as `app.py` |
-| frontend   | 3000  | React UI (nginx, proxy `/api`→api:8080); **mock-only hiện tại** — xem `frontend/README.md` |
+| frontend   | 3000 (Docker) / 5173 (Vite dev) | React UI (nginx, proxy `/api`→api:8080); **đã nối backend thật** (chat SSE + lịch sử/bộ nhớ) — xem `frontend/README.md` |
 
 Note: ports/models are **hardcoded** as module-level constants in `app.py`, `retriever.py`,
 `bm25_index.py`, `embed_store.py` — change them in all relevant files together. The PLAN doc
@@ -146,8 +155,15 @@ python -m eval.run_eval                          # hybrid vs dense, recall@k + M
 python -m eval.run_eval --mode hybrid -v
 ```
 
-There is no test suite, linter, or build step — verification is `extraction_report.json`
-(Stage 1) and `eval/run_eval.py` (Stage 3).
+Verification gates: `extraction_report.json` (Stage 1 formula fidelity), `eval/run_eval.py`
+(Stage 3 retrieval), and **`make check`** — backend unit tests + the 351/351 formula-fidelity
+guard, no Docker needed. The `frontend/` has its own gate (ESLint + Prettier + Vitest were added
+as the refactor safety net):
+
+```bash
+cd frontend && npm install
+npm run typecheck && npm run lint && npm run test && npm run build
+```
 
 ## Conventions
 
