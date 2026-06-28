@@ -163,6 +163,7 @@ services:
       - ./TC_DL:/app/TC_DL:ro                   # source .docx files (read-only)
       # Dev mounts: chỉ cần `docker compose restart app` sau khi sửa code (không rebuild)
       - ./app.py:/app/app.py:ro
+      - ./latex.py:/app/latex.py:ro
       - ./retrieval:/app/retrieval:ro
       - ./index:/app/index:ro
     environment:
@@ -191,6 +192,7 @@ services:
       - ./TC_DL:/app/TC_DL:ro
       - ./api_server.py:/app/api_server.py:ro
       - ./generation.py:/app/generation.py:ro
+      - ./latex.py:/app/latex.py:ro
       - ./retrieval:/app/retrieval:ro
     environment:
       EMBED_URL: http://embedding:8010/v1/embeddings

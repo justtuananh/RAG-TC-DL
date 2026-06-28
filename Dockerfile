@@ -15,6 +15,7 @@ RUN pip install --no-cache-dir -r requirements-app.txt
 COPY app.py .
 COPY api_server.py .
 COPY generation.py .
+COPY latex.py .
 COPY retrieval/ retrieval/
 COPY index/ index/
 COPY eval/ eval/
