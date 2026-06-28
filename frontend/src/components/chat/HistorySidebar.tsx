@@ -22,14 +22,17 @@ export default function HistorySidebar({ state, actions }: { state: AppState; ac
   const noneAtAll = state.conversations.length === 0;
 
   return (
-    <aside style={{ width: 278, flexShrink: 0, display: "flex", flexDirection: "column", background: "#F6F8F7", borderRight: "1px solid #E6EAE8" }}>
+    <aside
+      className="layout-sidebar"
+      style={{ width: 278, flexShrink: 0, display: "flex", flexDirection: "column", background: "#ffffff", borderRight: "1px solid #becabd" }}
+    >
       <div style={{ padding: "9px 10px 6px", display: "flex", flexDirection: "column", gap: 7 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#334155", flex: 1, letterSpacing: ".01em" }}>Lịch sử trò chuyện</span>
+          <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#131b2e", flex: 1, letterSpacing: ".01em" }}>Lịch sử trò chuyện</span>
           <button
             onClick={actions.toggleSidebar}
             title="Thu gọn thanh bên"
-            className="w-[30px] h-[30px] rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-slate-500 hover:bg-slate-200 hover:text-slate-700"
+            className="w-[30px] h-[30px] rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-[#eaedff] hover:text-[#3f4940]"
           >
             <IcPanelClose size={18} />
           </button>
@@ -43,13 +46,13 @@ export default function HistorySidebar({ state, actions }: { state: AppState; ac
           <IcPlus size={16} /> Hội thoại mới
         </button>
 
-        <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-[9px] px-[11px] h-[33px] focus-within:border-brand focus-within:shadow-[0_0_0_3px_#DCFCE7]">
-          <IcSearch size={15} style={{ color: "#94A3B8" }} />
+        <div className="flex items-center gap-2 bg-white border border-line rounded-[9px] px-[11px] h-[33px] focus-within:border-brand focus-within:shadow-[0_0_0_3px_#dae2fd]">
+          <IcSearch size={15} style={{ color: "#6f7a6f" }} />
           <input
             value={state.histSearch}
             onChange={(e) => actions.setHistSearch(e.target.value)}
             placeholder="Tìm hội thoại…"
-            className="flex-1 min-w-0 border-none outline-none font-sans text-[13px] text-slate-800 bg-transparent"
+            className="flex-1 min-w-0 border-none outline-none font-sans text-[13px] text-[#131b2e] bg-transparent"
           />
         </div>
       </div>
@@ -57,7 +60,19 @@ export default function HistorySidebar({ state, actions }: { state: AppState; ac
       <div style={{ flex: 1, overflowY: "auto", padding: "2px 8px 14px" }}>
         {groups.map((g) => (
           <div key={g.key} style={{ marginTop: 7 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "10px", fontWeight: 700, letterSpacing: ".07em", textTransform: "uppercase", color: "#94A3B8", margin: "0 8px 3px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: ".07em",
+                textTransform: "uppercase",
+                color: "#6f7a6f",
+                margin: "0 8px 3px",
+              }}
+            >
               {g.pinned && <IcPin size={11} strokeWidth={1.5} fill="#F59E0B" style={{ color: "#F59E0B" }} />}
               {g.label}
             </div>
@@ -69,7 +84,7 @@ export default function HistorySidebar({ state, actions }: { state: AppState; ac
           </div>
         ))}
         {groups.length === 0 && (
-          <div style={{ textAlign: "center", padding: "30px 14px", color: "#94A3B8", fontSize: "13px", lineHeight: 1.6 }}>
+          <div style={{ textAlign: "center", padding: "30px 14px", color: "#6f7a6f", fontSize: "13px", lineHeight: 1.6 }}>
             {noneAtAll ? "Chưa có hội thoại. Hãy bắt đầu hỏi — cuộc trò chuyện sẽ tự lưu vào đây." : "Không tìm thấy hội thoại."}
           </div>
         )}
@@ -84,13 +99,19 @@ function Row({ conv, state, actions }: { conv: Conversation; state: AppState; ac
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       onClick={() => actions.openConv(conv)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          actions.openConv(conv);
+        }
+      }}
       title={conv.title}
-      className={
-        "flex items-center gap-2 px-2 py-[5px] rounded-lg cursor-pointer " + (active ? "bg-[#DCFCE7]" : "hover:bg-[#EAEFEC]")
-      }
+      className={"flex items-center gap-2 px-2 py-[5px] rounded-lg cursor-pointer " + (active ? "bg-[#dae2fd]" : "hover:bg-[#e2e7ff]")}
     >
-      <IcMessage size={15} style={{ flexShrink: 0, color: active ? "#16A34A" : "#94A3B8" }} />
+      <IcMessage size={15} style={{ flexShrink: 0, color: active ? "#006130" : "#6f7a6f" }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         {renaming ? (
           <input
@@ -105,12 +126,12 @@ function Row({ conv, state, actions }: { conv: Conversation; state: AppState; ac
               }
             }}
             onBlur={actions.commitRenameConv}
-            className="w-full border border-brand outline-none rounded-md px-[6px] py-[3px] font-sans text-[13px] font-semibold text-slate-900 shadow-[0_0_0_2px_#DCFCE7]"
+            className="w-full border border-brand outline-none rounded-md px-[6px] py-[3px] font-sans text-[13px] font-semibold text-[#131b2e] shadow-[0_0_0_2px_#dae2fd]"
           />
         ) : (
           <div
             className="text-[13px] whitespace-nowrap overflow-hidden text-ellipsis"
-            style={{ fontWeight: active ? 700 : 500, color: active ? "#15803D" : "#334155" }}
+            style={{ fontWeight: active ? 700 : 500, color: active ? "#006130" : "#3f4940" }}
           >
             {conv.title}
           </div>
@@ -120,22 +141,22 @@ function Row({ conv, state, actions }: { conv: Conversation; state: AppState; ac
         <button
           onClick={(e) => actions.togglePin(e, conv.id)}
           title={conv.pinned ? "Bỏ ghim" : "Ghim hội thoại"}
-          className="w-[26px] h-[26px] rounded-md border-none bg-transparent flex items-center justify-center cursor-pointer hover:bg-[#DCFCE7]"
-          style={{ color: conv.pinned ? "#F59E0B" : "#A8B2AC" }}
+          className="w-[26px] h-[26px] rounded-md border-none bg-transparent flex items-center justify-center cursor-pointer hover:bg-[#dae2fd]"
+          style={{ color: conv.pinned ? "#F59E0B" : "#9AAFA3" }}
         >
           <IcPin size={14} />
         </button>
         <button
           onClick={(e) => actions.startRenameConv(e, conv.id)}
           title="Đổi tên"
-          className="w-[26px] h-[26px] rounded-md border-none bg-transparent flex items-center justify-center cursor-pointer text-[#A8B2AC] hover:bg-slate-200 hover:text-slate-700"
+          className="w-[26px] h-[26px] rounded-md border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-[#eaedff] hover:text-[#3f4940]"
         >
           <IcPencil size={13} />
         </button>
         <button
           onClick={(e) => actions.requestDeleteConv(e, conv.id)}
           title="Xoá"
-          className="w-[26px] h-[26px] rounded-md border-none bg-transparent flex items-center justify-center cursor-pointer text-[#A8B2AC] hover:bg-[#FEE2E2] hover:text-[#DC2626]"
+          className="w-[26px] h-[26px] rounded-md border-none bg-transparent flex items-center justify-center cursor-pointer text-[#9AAFA3] hover:bg-[#FEE2E2] hover:text-[#DC2626]"
         >
           <IcTrash size={13} />
         </button>

@@ -21,16 +21,16 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
     fontSize: "12px",
     fontWeight: 600,
     ...(isReady
-      ? { background: "#F0FDF4", color: "#15803D", border: "1px solid #BBF7D0" }
+      ? { background: "#f2f3ff", color: "#006130", border: "1px solid #becabd" }
       : isProcessing
         ? { background: "#FFFBEB", color: "#B45309", border: "1px solid #FDE68A" }
         : isPending
-          ? { background: "#F1F5F9", color: "#64748B", border: "1px solid #E2E8F0" }
+          ? { background: "#eaedff", color: "#3f4940", border: "1px solid #becabd" }
           : { background: "#FEF2F2", color: "#DC2626", border: "1px solid #FECACA" }),
   };
 
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 13, background: "#fff", border: "1px solid #E6EAE8", borderRadius: 13, padding: "13px 15px", boxShadow: "0 1px 2px rgba(15,23,42,.04)" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: 13, background: "#fff", border: "1px solid #becabd", borderRadius: 13, padding: "13px 15px", boxShadow: "0 1px 2px rgba(19,27,46,.04)" }}>
       <div style={{ flexShrink: 0, width: 40, height: 48, borderRadius: 8, display: "flex", alignItems: "flex-end", justifyContent: "center", paddingBottom: 6, background: extColor(doc.ext) }}>
         <span style={{ fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "10.5px", fontWeight: 700, color: "#fff" }}>{doc.ext}</span>
       </div>
@@ -48,14 +48,14 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
               }
             }}
             onBlur={actions.commitRenameDoc}
-            className="w-full border border-brand outline-none rounded-[7px] px-2 py-[5px] font-sans text-[14px] font-semibold text-slate-900 shadow-[0_0_0_3px_#DCFCE7]"
+            className="w-full border border-brand outline-none rounded-[7px] px-2 py-[5px] font-sans text-[14px] font-semibold text-[#131b2e] shadow-[0_0_0_3px_#dae2fd]"
           />
         ) : (
-          <div style={{ fontWeight: 600, fontSize: "14px", color: "#0F172A", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{doc.name}</div>
+          <div style={{ fontWeight: 600, fontSize: "14px", color: "#131b2e", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{doc.name}</div>
         )}
-        <div style={{ fontSize: "11.5px", color: "#94A3B8", marginTop: 3 }}>{meta}</div>
+        <div style={{ fontSize: "11.5px", color: "#3f4940", marginTop: 3 }}>{meta}</div>
         {isProcessing && (
-          <div style={{ height: 6, background: "#F1F5F9", borderRadius: 9999, overflow: "hidden", marginTop: 7, maxWidth: 270 }}>
+          <div style={{ height: 6, background: "#eaedff", borderRadius: 9999, overflow: "hidden", marginTop: 7, maxWidth: 270 }}>
             <div style={{ height: "100%", borderRadius: 9999, background: "#F59E0B", width: `${doc.progress || 0}%` }} />
           </div>
         )}
@@ -72,20 +72,20 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
         <button
           onClick={() => actions.processDoc(doc.id)}
           title="Bắt đầu xử lý tài liệu"
-          className="inline-flex items-center gap-[6px] h-8 px-[13px] border-none rounded-lg bg-brand text-white font-sans text-[12.5px] font-semibold cursor-pointer flex-shrink-0 shadow-[0_1px_3px_rgba(22,163,74,.3)] hover:bg-brand-dark"
+          className="inline-flex items-center gap-[6px] h-8 px-[13px] border-none rounded-lg bg-brand text-white font-sans text-[12.5px] font-semibold cursor-pointer flex-shrink-0 shadow-[0_1px_3px_rgba(0,97,48,.3)] hover:bg-brand-dark"
         >
           <IcPlay size={13} /> Xử lý
         </button>
       )}
 
       <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
-        <button onClick={() => actions.viewDoc(doc)} title="Xem tài liệu" className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-slate-400 hover:bg-green-50 hover:text-brand">
+        <button onClick={() => actions.viewDoc(doc)} aria-label="Xem tài liệu" title="Xem tài liệu" className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-[#f2f3ff] hover:text-brand">
           <IcEye size={15} />
         </button>
-        <button onClick={() => actions.startRenameDoc(doc.id)} title="Đổi tên" className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+        <button onClick={() => actions.startRenameDoc(doc.id)} aria-label="Đổi tên" title="Đổi tên" className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-[#eaedff] hover:text-[#3f4940]">
           <IcPencil size={14} />
         </button>
-        <button onClick={() => actions.deleteDoc(doc.id)} title="Xoá tài liệu" className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-slate-400 hover:bg-red-50 hover:text-[#DC2626]">
+        <button onClick={() => actions.deleteDoc(doc.id)} aria-label="Xoá tài liệu" title="Xoá tài liệu" className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-red-50 hover:text-[#DC2626]">
           <IcTrash size={14} />
         </button>
       </div>

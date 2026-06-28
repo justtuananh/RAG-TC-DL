@@ -1,279 +1,312 @@
 ---
-name: QTKĐ Chatbot
-description: Offline Vietnamese RAG lookup tool for metrology calibration procedure standards
+name: Trợ lý Kiểm định
+description: Offline Vietnamese RAG lookup tool for metrology calibration procedures — "Kỹ Nghệ Xanh"
 colors:
-  instrument-blue: "#2563EB"
-  instrument-blue-deep: "#1D4ED8"
-  instrument-blue-light: "#DBEAFE"
-  instrument-blue-subtle: "#EFF6FF"
-  instrument-blue-text: "#1E40AF"
-  surface-base: "#F8FAFC"
-  surface-elevated: "#FFFFFF"
-  surface-divider: "#F1F5F9"
-  ink-primary: "#0F172A"
-  ink-secondary: "#1E293B"
-  ink-tertiary: "#64748B"
-  ink-muted: "#94A3B8"
-  border-default: "#E2E8F0"
-  border-subtle: "#CBD5E1"
+  # Primary brand — single accent (emerald green)
+  brand: "#16A34A"
+  brand-dark: "#15803D"
+  brand-light: "#F0FDF4"
+  brand-border: "#BBF7D0"
+  brand-focus: "#DCFCE7"
+  # Surfaces — 3-layer hierarchy
+  canvas: "#F1F5F2"
+  surface: "#FFFFFF"
+  bot-zone: "#EDF8F2"
+  bot-zone-border: "#C3DDD0"
+  source-panel: "#EEF3F0"
+  # Text — warm sage scale (grays lean toward brand, not cool blue-slate)
+  ink-primary: "#111B16"
+  ink-body: "#1D2D23"
+  ink-secondary: "#3D5045"
+  ink-muted: "#6B7C72"
+  ink-faint: "#9AAFA3"
+  # Structural
+  border: "#DDE5E0"
+  border-strong: "#C3D0C8"
+  # Semantic states
+  state-success-text: "#15803D"
   state-success-bg: "#F0FDF4"
-  state-success-text: "#166534"
-  state-success-indicator: "#22C55E"
+  state-success-border: "#BBF7D0"
+  state-success-dot: "#22C55E"
+  state-warning-text: "#B45309"
+  state-warning-bg: "#FFFBEB"
+  state-warning-border: "#FDE68A"
+  state-warning-dot: "#F59E0B"
+  state-error-text: "#DC2626"
   state-error-bg: "#FEF2F2"
   state-error-border: "#FECACA"
-  state-error-text: "#B91C1C"
+  # Citation chips
+  cite-bg: "#DCFCE7"
+  cite-border: "#86EFAC"
+  cite-text: "#15803D"
+  # Tables (inside rendered markdown)
+  table-header-bg: "#EEF2EE"
+  table-even-row: "#F5FAF7"
 typography:
-  title:
-    fontFamily: "system-ui, -apple-system, sans-serif"
-    fontSize: "20px"
+  display:
+    fontFamily: "'Be Vietnam Pro', system-ui, -apple-system, sans-serif"
+    fontSize: "15.5px"
     fontWeight: 700
-    lineHeight: 1.25
-    letterSpacing: "normal"
+    lineHeight: 1.2
+    letterSpacing: "0.01em"
   body:
-    fontFamily: "system-ui, -apple-system, sans-serif"
+    fontFamily: "'Be Vietnam Pro', system-ui, -apple-system, sans-serif"
     fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.6
     letterSpacing: "normal"
   label:
-    fontFamily: "system-ui, -apple-system, sans-serif"
-    fontSize: "12px"
+    fontFamily: "'Be Vietnam Pro', system-ui, -apple-system, sans-serif"
+    fontSize: "13.5px"
+    fontWeight: 600
+    lineHeight: 1.4
+    letterSpacing: "0.01em"
+  meta:
+    fontFamily: "'Be Vietnam Pro', system-ui, -apple-system, sans-serif"
+    fontSize: "11.5px"
     fontWeight: 500
     lineHeight: 1.4
     letterSpacing: "normal"
-  meta:
-    fontFamily: "system-ui, -apple-system, sans-serif"
-    fontSize: "11px"
+  doc:
+    fontFamily: "'Lora', Georgia, serif"
+    fontSize: "13.5px"
     fontWeight: 400
-    lineHeight: 1.4
-    letterSpacing: "normal"
-  mono:
-    fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace"
-    fontSize: "11px"
-    fontWeight: 600
-    lineHeight: 1.4
+    lineHeight: 1.65
     letterSpacing: "normal"
 rounded:
-  xs: "4px"
+  xs: "6px"
   sm: "8px"
-  md: "12px"
+  md: "9px"
+  lg: "11px"
   bubble: "16px"
   pill: "9999px"
 spacing:
   xs: "4px"
   sm: "8px"
-  md: "16px"
-  lg: "24px"
-  xl: "32px"
+  md: "15px"
+  lg: "22px"
+  xl: "30px"
 components:
   button-primary:
-    backgroundColor: "{colors.instrument-blue}"
-    textColor: "{colors.surface-elevated}"
-    rounded: "{rounded.md}"
-    size: "44px"
+    backgroundColor: "{colors.brand}"
+    textColor: "#FFFFFF"
+    rounded: "{rounded.lg}"
+    height: "46px"
+    padding: "0 18px"
   button-primary-hover:
-    backgroundColor: "{colors.instrument-blue-deep}"
-    textColor: "{colors.surface-elevated}"
-    rounded: "{rounded.md}"
-    size: "44px"
+    backgroundColor: "{colors.brand-dark}"
+    textColor: "#FFFFFF"
+    rounded: "{rounded.lg}"
+    height: "46px"
+    padding: "0 18px"
   button-ghost:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink-tertiary}"
-    rounded: "{rounded.sm}"
-    padding: "6px 12px"
-  button-ghost-hover:
-    backgroundColor: "{colors.state-error-bg}"
-    textColor: "{colors.state-error-text}"
-    rounded: "{rounded.sm}"
-    padding: "6px 12px"
-  input-text:
-    backgroundColor: "{colors.surface-elevated}"
-    textColor: "{colors.ink-secondary}"
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.brand-dark}"
     rounded: "{rounded.md}"
-    padding: "12px 16px"
-  source-chip:
-    backgroundColor: "{colors.instrument-blue-subtle}"
-    textColor: "{colors.instrument-blue-text}"
-    rounded: "{rounded.pill}"
-    padding: "2px 8px"
-  source-card:
-    backgroundColor: "{colors.surface-elevated}"
-    textColor: "{colors.ink-primary}"
-    rounded: "{rounded.md}"
-    padding: "14px"
+    height: "34px"
+    padding: "0 14px"
   message-user:
-    backgroundColor: "{colors.instrument-blue}"
-    textColor: "{colors.surface-elevated}"
-    rounded: "{rounded.bubble}"
-    padding: "12px 16px"
+    backgroundColor: "{colors.brand}"
+    textColor: "#FFFFFF"
+    rounded: "16px 16px 5px 16px"
+    padding: "11px 15px"
   message-assistant:
-    backgroundColor: "{colors.surface-elevated}"
-    textColor: "{colors.ink-secondary}"
-    rounded: "{rounded.bubble}"
-    padding: "12px 16px"
+    backgroundColor: "{colors.bot-zone}"
+    textColor: "{colors.ink-body}"
+    rounded: "16px 16px 16px 5px"
+    padding: "13px 16px"
+  citation-chip:
+    backgroundColor: "{colors.cite-bg}"
+    textColor: "{colors.cite-text}"
+    rounded: "6px"
+    height: "21px"
+    padding: "0 5px"
+  source-card:
+    backgroundColor: "{colors.surface}"
+    rounded: "{rounded.xs}"
+    padding: "26px 30px"
+  input-text:
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.ink-body}"
+    rounded: "{rounded.lg}"
+    height: "46px"
+    padding: "0 15px"
 ---
 
-# Design System: QTKĐ Chatbot
-
-> ⚠️ **Superseded (2026-06-25).** Hệ "Calibration Bench" (xanh *instrument* `#2563EB` + slate) dưới
-> đây thuộc một đề xuất TRƯỚC. Giao diện đang chạy (`frontend/`) theo hệ MỚI "Trợ lý Kiểm định"
-> (xanh lá `#16A34A`, font Be Vietnam Pro + Lora, nền `#ECF1EE`), dựng 1:1 từ `design/kiemdinh.html`.
-> Token thật: `frontend/tailwind.config.ts`. Phần dưới đây chỉ giữ cho bối cảnh lịch sử.
+# Design System: Trợ lý Kiểm định
 
 ## 1. Overview
 
-**Creative North Star: "The Calibration Bench"**
+**Creative North Star: "The Calibration Document"**
 
-This is a metrologist's workstation, not a chat product. The Calibration Bench means a technician's workspace where every element occupies a known position, serves a measurement function, and nothing decorates for its own sake. A user arrives with an instrument, a procedure number, and a question — the interface must disappear into that task the moment they start typing.
+This interface is a precision tool, not a chat product. The metrologist arrives with an instrument and a procedure number; the interface must vanish into the lookup task within the first keystroke. The visual system is named *Kỹ Nghệ Xanh* (Engineering Green) — a discipline of structured density, a single emerald accent, and a text scale where every gray leans sage-warm toward the brand rather than cold blue-slate. That last move — warm grays instead of Tailwind's default slate — is the difference between a palette that feels coherent and one that reads as two unrelated systems bolted together.
 
-The visual system is restrained by discipline, not laziness. Slate neutrals hold the field. Instrument Blue appears exactly where it belongs — on primary actions, focus states, and navigational anchors — and nowhere else. Formulas are first-class content: rendered with precision, visually distinguished by a full container border (never a side stripe), and never recomputed or approximated downstream. The right-panel source citations exist to be cross-checked against the source document; their layout must make that act fast.
+The layout follows a 3-column professional workstation model: history sidebar | chat column | source document panel. Each panel has a distinct background level (canvas → white → tinted), so a user scanning at a glance always knows which zone they're in. Bot responses earn their own background color (`#EDF8F2`) — a light sage tint that says "AI response zone" without shouting. User messages sit in solid emerald. Chrome and panels are white. The outer canvas is barely-there sage.
 
-This system rejects three wrong registers by name. The Vietnamese government-portal aesthetic (colored section headers, small crowded type, borders as decoration, red/gold/green palette) is the primary anti-reference — the tool must read nothing like the portals that index the same QTKĐ documents it cites. Generic chat-clone minimalism (centered bubble UI, padded whitespace, consumer curves) is the second — this is a professional lookup tool, not a consumer assistant. Enterprise-dashboard weight (navy-grey walls, data tables without hierarchy, heavy side navs) is the third.
+This system explicitly rejects three anti-references (from PRODUCT.md):
+- **Vietnamese government portal aesthetic** — no red/gold/green palette, no colored section headers, no heavy border decoration, no dense tables without breathing room
+- **Generic ChatGPT clone** — no centered bubble UI, no floating input, no sparse consumer-grade layout
+- **Heavy enterprise dashboards** — no navy-grey walls, no IBM-style data tables, no authoritative-but-wrong direction for a query-first tool
 
 **Key Characteristics:**
-- System font throughout — no custom typefaces competing with technical content
-- Two surface levels exactly (page bg, elevated panel/card) — no deeper layering
-- Instrument Blue on ≤10% of visible surface at any time — action and state only, never fill
-- Formulas distinguished by full four-side border + background tint — never by a left-side stripe
-- Monospace for calibration IDs and file stems — code-legibility is functional, not decorative
-- Flat at rest; minimal lift on hover — the interface recedes
+- Single emerald accent used only on interactive elements and active states — ≤10% of visible surface
+- Three-level surface hierarchy with distinct backgrounds for each panel zone
+- Warm sage text scale (all grays biased toward brand hue, eliminating warm-surface / cool-text conflict)
+- Bot response bubbles as a distinct visual zone (light sage-green, not neutral gray)
+- Lora serif restricted exclusively to the source-document reading pane — all UI chrome stays in Be Vietnam Pro
+- Formula fidelity is a trust signal; KaTeX blocks have full four-side borders, not left-side stripes
 
-## 2. Colors: The Precision Field
+## 2. Colors: The Sage Accord
 
-A restrained palette anchored by one committed color. Instrument Blue is the sole non-neutral accent; every other color either belongs to the neutral field or carries an explicit semantic role (success, error, warning). There is no secondary accent.
+A restrained palette anchored by a single emerald green, with neutrals that lean warm-sage rather than cool-slate — they exist on the same hue axis as the brand so the palette reads as one coherent system.
 
 ### Primary
-- **Instrument Blue** (`#2563EB`): The one committed color. Send button, focus rings, active link text in source panels, selected-state indicators. Its presence signals "interactive or important." Never used as a background fill for containers, panels, or cards.
-- **Instrument Blue Deep** (`#1D4ED8`): Hover state of Instrument Blue only. Not used independently.
-- **Instrument Blue Light** (`#DBEAFE`): Focus halos and file-badge backgrounds. A tint layer, never a fill. Signals "this element has focus" when used as a ring.
-- **Instrument Blue Subtle** (`#EFF6FF`): Status bar background, hover surfaces for example buttons, inline code background. Near-invisible; carries state without volume.
-- **Instrument Blue Text** (`#1E40AF`): Badge label text on Instrument Blue Light backgrounds. Passes 5.2:1 contrast on `#DBEAFE`.
+
+- **Emerald Active** (`#16A34A`): The sole non-neutral accent. Send button, active nav indicator stripe, brand logo background gradient, any interactive affordance that needs clear visibility. Its presence on ≤10% of the screen surface at any time is the point.
+- **Emerald Deep** (`#15803D`): Hover state of Emerald Active, text-mode links, active row text in sidebar. Never used as a primary fill — reserved for state transitions downward.
+- **Emerald Whisper** (`#F0FDF4`): Hover backgrounds on sample question buttons, status badge backgrounds, light fill on ghost-button hover. A tint, not a fill.
+- **Sage Focus** (`#DCFCE7`): Input focus ring (3px spread), active conversation row background in sidebar. The "you are here" signal.
+- **Bot Zone** (`#EDF8F2`): Background of AI response bubbles — the defining spatial signal that "this is an AI response", distinct from white chrome and the emerald user bubble.
+- **Bot Zone Boundary** (`#C3DDD0`): Border of AI response bubbles. Slightly stronger than the general border to frame the AI zone clearly.
 
 ### Neutral
-- **Lab White** (`#FFFFFF`): Chat panel, header, source cards, message bubbles. The content layer — everything a user reads lives on Lab White.
-- **Surface Base** (`#F8FAFC`): Page background and source-panel tray background. A fractional blue tint (barely perceptible) that recedes behind white panels.
-- **Surface Divider** (`#F1F5F9`): Internal separators inside cards and between source sections. A whisper of distinction, not a border.
-- **Ink Primary** (`#0F172A`): App title, primary headings. Near-black.
-- **Ink Secondary** (`#1E293B`): Body text, message content. The default reading color.
-- **Ink Tertiary** (`#64748B`): Secondary labels, panel header titles, section path breadcrumbs. Passes 4.5:1 on Lab White.
-- **Ink Muted** (`#94A3B8`): ⚠️ A11y gap — approximately 2.7:1 on Lab White, below WCAG AA for 14px text. Restricted to purely decorative or non-readable elements: scrollbar thumb, visual timing markers. Never for text that must be read.
-- **Border Default** (`#E2E8F0`): Container borders, card borders, input borders, dividers.
-- **Border Subtle** (`#CBD5E1`): Scrollbar thumb, subtler internal dividers.
 
-### Tertiary (Semantic — confined to state use only)
-- **Status Green** (`#22C55E` / bg `#F0FDF4` / text `#166534`): Online indicator only.
-- **Error Red** (bg `#FEF2F2` / border `#FECACA` / text `#B91C1C`): Error message states on assistant bubbles and API failure banners.
+- **Near-Black Sage** (`#111B16`): Display headings, important labels. Near-black with a deliberate warm green bias — never pure `#000000`.
+- **Body Sage** (`#1D2D23`): Message content, paragraph text in chat. Passes ≥7:1 on surface white.
+- **Secondary Sage** (`#3D5045`): Metadata labels, sidebar section headers, panel titles, table headers. Passes ≥4.5:1 on white.
+- **Muted Sage** (`#6B7C72`): Timestamps, helper text, captions. Passes ≥4.5:1 on white; do not use for body text.
+- **Faint Sage** (`#9AAFA3`): Placeholder text in inputs, icon tints for muted icon states. **Do not use for any readable text — fails AA on white at small sizes.** Restricted to decorative icon tinting and scrollbar thumb.
+- **Canvas** (`#F1F5F2`): Outer app background — the lowest surface layer, barely sage.
+- **Source Panel** (`#EEF3F0`): Source document panel background — one step deeper than canvas, distinct from sidebar white.
+- **Boundary** (`#DDE5E0`): All structural borders — sage-warm so they harmonize with both green and neutral surfaces. Replaces cold slate.
+- **Boundary Strong** (`#C3D0C8`): Scrollbar thumb, stronger internal separators.
 
-### Named Rules
+### Semantic (confined to state use only)
 
-**The One Instrument Rule.** Instrument Blue is the only non-neutral, non-semantic color permitted. It appears on ≤10% of visible surface at any time. A second accent — teal, orange, purple, an extra shade of green — anywhere in the interface is a violation of this rule, not a design decision.
+State colors carry meaning exclusively. Using them for decoration is a trust violation in a precision tool.
 
-**The Semantic Confinement Rule.** Error Red, Success Green, and Warning Amber appear only when conveying their explicit semantic state. Using red for navigational labels, green for decorative badges, or amber for neutral annotations is prohibited. The SourceCard section path currently using `text-red-500 italic` is a known violation to fix — it reads as an error before the user processes any text.
+- **Success** (text `#15803D` / bg `#F0FDF4` / border `#BBF7D0` / dot `#22C55E`): Online status indicator, process-step completion checks.
+- **Warning** (text `#B45309` / bg `#FFFBEB` / border `#FDE68A` / dot `#F59E0B`): LLM connection checking state. The amber dot also appears on pinned conversations (the same warning hue signals "held for attention").
+- **Error** (text `#DC2626` / bg `#FEF2F2` / border `#FECACA`): Failed API calls, error message bubbles.
+
+**The One Accent Rule.** Emerald is the only non-neutral color. Its rarity is the signal. A second decorative accent — teal, indigo, orange, amber used as fill — anywhere in the interface is prohibited, not a design option. Amber appears only as a semantic warning indicator.
+
+**The Warm Gray Rule.** Every gray in this system must sit on the warm-sage hue axis (toward brand green). The Tailwind `slate-` scale (which is blue-gray) is prohibited for new surface or text colors — it creates a warm-surface / cool-text split that makes the palette read as two disconnected systems.
 
 ## 3. Typography
 
-**Font:** system-ui, -apple-system, sans-serif (system native throughout)
-**Mono Font:** ui-monospace, SFMono-Regular, Menlo, monospace (calibration IDs and file stems only)
+**Display / UI Font:** Be Vietnam Pro (400, 500, 600, 700 weights; subsets: Vietnamese, Latin)
+**Document Reading Font:** Lora (400 weight; subsets: Vietnamese, Latin)
 
-**Character:** The system font is a deliberate choice, not a budget constraint. On a calibration workstation, the interface should be invisible; native text lets Vietnamese technical content dominate. Monospace for document identifiers (QTKD_1.061, QTKD_1.063) makes codes scannable in dense source panels — functional distinction, not decoration.
+**Character:** Be Vietnam Pro is a Vietnamese-origin geometric humanist sans — it earns its place by being native to the script domain, not just a "safe" choice. At 14px with 1.6 leading, it reads cleanly at the densities a workstation requires. Lora appears only in the source-document reading panel, where its serif rhythm slows the eye down for careful verification of regulatory text.
 
 ### Hierarchy
 
-- **Title** (700, 20px, 1.25 line-height): App header only. One instance per page. `text-wrap: balance`.
-- **Body** (400, 14px, 1.6 line-height): Message content, source panel prose, example button text. The reading voice.
-- **Label** (500, 12px, 1.4 line-height): Panel header titles ("Tài liệu nguồn"), button text on ghost buttons, section headings in source prose.
-- **Meta** (400, 11px, 1.4 line-height): Rerank scores, section path breadcrumbs, kind annotations (¶ paragraph, ∑ formula). The high-density information layer.
-- **Mono** (600, 11px, 1.4 line-height): Calibration document IDs and file stems in badges and chips. Bold weight makes codes scannable in tight badge contexts.
+- **Display** (700, 15–16px, 1.2 leading): App title, panel section headers. One instance each. `text-wrap: balance`.
+- **Label** (600, 13.5px, 1.4 leading, 0.01em tracking): Button text, navigation tabs, sidebar group headings, sub-panel titles. The workstation's action register.
+- **Body** (400–500, 14px, 1.55–1.65 leading): Chat message content, source document prose in Be Vietnam Pro chrome, example question buttons. Max ~65ch line length in prose contexts.
+- **Meta** (500, 11–12px, 1.4 leading): Timestamps, section paths, status labels, citation chip numbers. The high-density information layer.
+- **Document** (Lora 400, 13.5px, 1.65 leading): Source document viewer panel (`.md-doc`) only. Headings inside Lora blocks revert to Be Vietnam Pro 700 at 14px so structural hierarchy is visually distinct from prose.
 
-### Named Rules
+**The Lora Containment Rule.** Lora is permitted in exactly one place: the `.md-doc` source reading panel. In every other UI surface — sidebar, header, chat bubbles, buttons, status chips — only Be Vietnam Pro. Mixing serif into chrome degrades the "technical instrument" character and makes the app feel decorative.
 
-**The Scale Floor Rule.** Nothing below 10px. Source cards currently use 10px for kind annotations — this is the absolute minimum. Every new metadata annotation starts at 11px (Meta role).
-
-**The Monospace Discipline Rule.** Monospace is reserved for calibration document identifiers, file stems, and inline code only. Never for prose, labels, or error messages — its specificity is the point.
+**The Scale Floor Rule.** Nothing below 11px. Source document annotations at 10px currently violate this; 11px is the absolute floor. The information benefit never exceeds the legibility cost below 11px.
 
 ## 4. Elevation
 
-Flat by default. The Calibration Bench has no lifted surfaces at rest; depth appears only as a response to interaction. Two shadow steps exist — nothing beyond them.
+Flat by default. The calibration workstation recedes; the content advances. No element rests at a raised elevation; shadows appear only as structural spatial signals or hover responses, never as decoration.
 
 ### Shadow Vocabulary
 
-- **Ambient Low** (`0 1px 2px 0 rgba(0,0,0,0.05)`): Applied at rest on the header, message bubbles, and source cards. Barely perceptible — structural layer separation, not decorative depth.
-- **Interactive Lift** (`0 4px 6px -1px rgba(0,0,0,0.10), 0 2px 4px -2px rgba(0,0,0,0.10)`): Source cards on hover only. One-step elevation that communicates "this is expandable." Resets to Ambient Low on mouse-leave.
+- **Structural Separation** (`0 1px 2px rgba(15,23,42,.04)`): Applied on the app header and subtle structural cards at rest. Barely perceptible — a whisper that the header is above the content layer, not a decorative flourish.
+- **Source Card** (`0 6px 22px -10px rgba(15,23,42,.16)`): Source document page card in the reading panel. The document "page" sits above the tinted panel background; this controlled lift is the one place depth is used structurally. No more than this.
+- **Process Step Card** (`0 6px 18px -10px rgba(15,23,42,.18)`): The thinking card shown while the pipeline runs. Same spatial logic as source card — it sits above the chat surface.
 
-No colored shadows. No glow effects. No shadow-lg or deeper.
+**The Flat-at-Rest Rule.** Every surface ships flat or at Structural Separation shadow. The source-card lift appears only on the document page card inside the source panel and the process step card — nowhere else. An element resting at elevated shadow implies permanence; restrict lift to genuine elevation of page-like content.
 
-### Named Rules
-
-**The Flat-at-Rest Rule.** Every surface ships at Ambient Low or flat. Interactive Lift appears only in direct response to user hover or focus — not at rest, not by default, not as a ranking signal. An element resting at Interactive Lift elevation implies it is perpetually active, which is false.
+**The No-Stripe Rule.** `border-left` or `border-right` greater than 1px as a colored accent on cards, callouts, formula blocks, or list items is absolutely prohibited. Formula blocks use a full four-side border (`1px solid #DDE5E0`) plus background tint. A side stripe reads as a design shortcut; a full enclosure reads as a deliberate container.
 
 ## 5. Components
 
 ### Buttons
 
-- **Shape:** 12px radius (primary icon-only button); 8px radius (ghost text utility).
-- **Primary (Send):** 44×44px square, Instrument Blue fill, white SVG icon, no border. Hover: Instrument Blue Deep. Focus: 3px ring in Instrument Blue Subtle. Disabled: `#E2E8F0` bg, cursor not-allowed. `transition: background-color 150ms ease`.
-- **Ghost / Utility (Clear):** Transparent bg, Ink Tertiary text, 1px Border Default border at rest. Hover: Error Red bg (`#FEF2F2`), error text — this button is destructive, the hover color confirms it. Focus: 2px Instrument Blue Light outline. `transition: color 150ms ease, background-color 150ms ease`.
+Tactile and precise — the send button is the single primary action; it must be instantly identifiable. No outer glows.
+
+- **Shape:** 9–11px radius. Primary is 11px; ghost is 9px; icon-only is 11px.
+- **Primary (Send, Confirm):** Emerald Active fill (`#16A34A`), white text, `height: 46px`, `padding: 0 18px`. Hover: Emerald Deep (`#15803D`). Active: `-1px translateY` (tactile downpress). No `box-shadow` glow on hover.
+- **Ghost / Outline:** White bg, `1px solid #16A34A`, Emerald Deep text. Hover: Emerald Whisper fill. Used for secondary actions: "Hội thoại mới", "Mở tài liệu gốc".
+- **Icon Action (28px):** Transparent bg, Muted Sage icon. Context-aware hover: `#F0FDF4` for safe actions, `#FEF2F2` for destructive. Radius 7px.
+- **Disabled:** `#CBD5E1` fill (cold neutral for clearly inactive), white icon.
+
+### Chat Bubbles
+
+The central interaction surface. Visual language: green = user, sage = AI, white = chrome.
+
+- **User Bubble:** Emerald Active fill (`#16A34A`), white text, `border-radius: 16px 16px 5px 16px` (sharp bottom-right signals direction). Shadow `0 2px 5px rgba(22,163,74,.22)`. Max 80% of column width. Right-aligned.
+- **Assistant Bubble:** Bot Zone bg (`#EDF8F2`), `1px solid #C3DDD0` border, `border-radius: 16px 16px 16px 5px` (sharp bottom-left). Light sage-green deliberately distinct from both white chrome and emerald user bubble.
+- **Bot Avatar:** 32px circle, Sage Focus bg (`#DCFCE7`) + `1px solid #BBF7D0`, brand icon at `#16A34A`. Sits at left of each AI turn.
+- **Error State:** Error bg (`#FEF2F2`), error border (`#FECACA`), error text (`#DC2626`). Same bubble shape.
+
+### Citation Chips `[n]`
+
+Inline citation buttons embedded in assistant markdown. Designed to be scannable at reading speed.
+
+- **Style:** 21px height, `#DCFCE7` background, `1px solid #86EFAC` border, `#15803D` text, 6px radius. Inline-flex at -3px vertical offset to sit cleanly in text lines. Bold number.
+- **Hover:** Emerald Active fill, white text, matching border.
+- **Usage:** Appear both inline in answer text (replacing `[n]` markers) and as a source-chip row below the answer bubble.
+
+### Source Document Card
+
+The "page" object inside the source panel — meant to evoke a real document page.
+
+- **Shape:** 6px radius (gently curved, not bubbly — this is a document)
+- **Surface:** White bg, `1px solid #DDE5E0` border, Source Card elevation shadow
+- **Internal padding:** 26px top/bottom, 30px left/right — generous enough to breathe, tight enough for density
+- **Excerpt highlight:** `#F0FDF4` background, `2px solid #16A34A` border, 8px radius. The label "Đoạn trả lời" tag sits at `-9px` on the top-right in Emerald Active.
+- **Section divider (dashed):** `1px dashed #DDE5E0` between metadata header and body text
 
 ### Inputs / Fields
 
-- **Style:** Lab White bg, 1px Border Default border, 12px radius. Body text (14px, Ink Secondary). Placeholder: Ink Tertiary (`#64748B` — not Ink Muted; placeholder text must pass AA).
-- **Focus:** Border shifts to Instrument Blue Light (`#DBEAFE`); 3px ring in Instrument Blue Subtle. `outline: none`.
-- **Disabled:** 0.6 opacity, cursor not-allowed.
-- **Sizing:** Min-height 44px; max-height 128px auto-expanding textarea. `resize: none`.
+- **Style:** White bg, `1px solid #CBD5E1` border (slightly stronger than general border for visibility), 11px radius.
+- **Focus:** Border shifts to `#16A34A`; `box-shadow: 0 0 0 3px #DCFCE7`. No outline.
+- **Placeholder:** `#6B7C72` (Muted Sage) — passes 4.5:1 on white; never Ink Faint.
+- **Autosize textarea:** Min 46px, max 130px, `resize: none`.
 
-### Cards / Containers
+### Navigation Tabs (Header)
 
-- **Source Card:** Lab White bg, 1px Border Default border at rest, 12px radius, Ambient Low shadow. Hover: border shifts to `#93C5FD` (blue-300), Interactive Lift shadow. `transition: border-color 150ms ease, box-shadow 150ms ease`. Internal: 14px padding, 8–10px between rows. No nested cards.
-- **Status Bar (streaming):** Instrument Blue Subtle bg, 1px Instrument Blue Light border, 12px radius, 8–12px padding. Ephemeral — disappears on stream completion.
+- **At rest:** Transparent bg, `#4E6457` text, 700 weight
+- **Active:** Emerald Deep text (`#15803D`), `3px solid #16A34A` bottom indicator stripe (3px only at bottom of nav, not a side accent)
+- **Hover background:** `#F1F5F2` (canvas color — subtle, not a state change)
 
-### Message Bubbles
+### Signature Component: Process Steps
 
-- **User:** 16px radius with top-right corner snipped to 6px (directional tail), Instrument Blue fill, white text. Right-aligned, max 75% width. Ambient Low shadow.
-- **Assistant:** 16px radius with top-left corner snipped to 6px, Lab White bg, 1px Border Default border, Ink Secondary text. Left-aligned with 28×28px avatar at left. Max 85% width. Ambient Low shadow. Source citation chips below answer text on completion, separated by a 1px Surface Divider.
-- **Avatar:** 28×28px circle, Instrument Blue Subtle bg, 1px Instrument Blue Light border, 📐 emoji center-aligned.
-- **Typing indicator:** Three Ink Muted dots (6×6px), staggered 0.2s, 1.2s cycle. `prefers-reduced-motion` override: instant opacity pulse, no translation.
-- **Error state:** Error Red bg, Error Red border, error text color.
+The thinking card shown while the retrieval pipeline runs.
 
-### Formula Blocks (.katex-display)
-
-The most critical display element in the entire system. Formulas earn their container through completeness, not an accent stripe.
-
-- **Container:** Surface Base bg (`#F8FAFC`), 1px Border Default on **all four sides** (`border: 1px solid #E2E8F0`), 8px radius, 14px vertical / 18px horizontal padding. Centered. Horizontal scroll on overflow.
-- **Font:** 1.1em display math; 1.05em inline math.
-- **On colored backgrounds** (source cards if teal or colored bg variant is used): bg `rgba(255,255,255,0.12)`, border `rgba(255,255,255,0.25)` all sides, text white.
-
-### Navigation (Header)
-
-- **Height:** 64px, Lab White bg, 1px Border Default bottom, Ambient Low shadow. z-index: 10.
-- **Left:** Title (Title role, 20px bold, Ink Primary) + subtitle (Meta role, 12px, Ink Tertiary). No logo — the title carries the identity in a single-product tool.
-- **Right:** Online badge (pill, Status Green palette), Clear button (ghost destructive, appears only when `hasMessages`).
-
-### Signature Component — Source Citation Chip
-
-Inline citation reference inside assistant message bubbles. Citation number `[n]` + file stem in monospace.
-
-- **Style:** Instrument Blue Subtle bg, 1px Instrument Blue Light border, pill radius, 12px label (Ink for `[n]`), 10px monospace for the file stem.
-- **No hover state** in current implementation — cosmetic/navigational reference only.
+- White card, `1px solid #DDE5E0`, `border-radius: 16px 16px 16px 5px` (matches bot bubble), shadow elevated above chat bg
+- Spinning border-top loader: `2px solid #BBF7D0` with `borderTopColor: #16A34A`
+- Completed step: filled Emerald Active circle with white check; active step: spinner; future steps: hidden until reached
 
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** use Instrument Blue (`#2563EB`) exclusively on primary interactive elements: the send button, focus rings, active link text, selected-state indicators.
-- **Do** give formula blocks a full four-side border (`border: 1px solid #E2E8F0`). The formula container earns its distinction from a complete enclosure, not a left-side stripe.
-- **Do** set placeholder and hint text to Ink Tertiary (`#64748B`) or darker. This is the minimum value that clears WCAG 2.1 AA (4.5:1) on Lab White at 14px.
-- **Do** keep section path text in source cards at Ink Tertiary (`#64748B`) — it is navigational breadcrumb content, not a warning or error state.
-- **Do** apply `@media (prefers-reduced-motion: reduce)` overrides for all animations: fade-up on messages (instant opacity), typing dots (instant opacity pulse, no translateY), online pulse (static dot).
-- **Do** use Monospace role (11px 600-weight, `ui-monospace`) for all calibration document identifiers and file stems.
-- **Do** keep shadows at Ambient Low at rest; Interactive Lift applies on hover/focus and resets on mouse-leave.
+
+- **Do** use Emerald Active (`#16A34A`) on ≤10% of any screen. Its rarity is what makes it a signal. Send buttons, active indicators, focus rings, and the bot avatar are the canonical uses.
+- **Do** give formula blocks full four-side borders (`1px solid #DDE5E0`) plus a background tint (`#F8FAFC` in source docs, white in chat). Formula distinction comes from enclosure, not a side stripe.
+- **Do** set all gray text in this system to the warm-sage scale (`#3D5045`, `#6B7C72`). Do not use Tailwind `slate-500` (`#64748B`) — it's blue-gray and conflicts with the sage surfaces.
+- **Do** keep Lora serif to the `.md-doc` source reading pane only. All UI chrome — labels, titles, buttons, error messages — uses Be Vietnam Pro.
+- **Do** give bot response bubbles the `#EDF8F2` background and `#C3DDD0` border. This is the spatial marker that tells users "this came from the AI"; it must be consistent.
+- **Do** respect `prefers-reduced-motion: reduce` — all CSS keyframe animations (`fadeUp`, `hlGlow`, `pulseDot`, `spin`) must have a static fallback (`animation: none`).
+- **Do** apply `WCAG AA` contrast to all text. Body text at `#1D2D23` on `#FFFFFF` gives ≥11:1. Secondary text `#3D5045` on white gives ≥7:1. `#6B7C72` on white gives ≈4.7:1 — it passes AA but must not be used for body text in dense paragraphs.
 
 ### Don't:
-- **Don't** use `border-left` or `border-right` greater than 1px as a colored accent on any element — formula blocks, callout boxes, cards, list items. Prohibited absolutely. The current `border-left: 3px solid #3b82f6` on `.katex-display` is a violation to fix.
-- **Don't** use `text-red-500` or any error-state color for non-error content. The SourceCard section path is currently `text-red-500 italic` — this communicates error before the user reads the text. Fix to Ink Tertiary.
-- **Don't** use Ink Muted (`#94A3B8`) for any text that must be read. It fails WCAG AA at 14px on Lab White (~2.7:1). Scrollbar thumbs and visual decoration only.
-- **Don't** use gradient text (`background-clip: text` with a gradient). One solid color; emphasis through weight or size.
-- **Don't** use Instrument Blue as a background fill for panels, containers, or cards. It appears on ≤10% of visible surface; a blue panel violates the One Instrument Rule.
-- **Don't** introduce a second accent color anywhere in the interface — no teal headers, no orange badges, no green action buttons. Semantic state colors are confined to their roles.
-- **Don't** make this look like a Vietnamese government portal: no colored section headers, no red/gold/green palette, no full-width decorative borders, no font sizes below 11px.
-- **Don't** make this look like a generic consumer chat clone: no hero-centered empty states, no bubbly consumer curves as the dominant radius, no heavy marketing copy in UI chrome.
-- **Don't** use numbered section markers (`01 /`) or tiny uppercase tracked eyebrows as scaffold for new screens.
-- **Don't** nest cards. Source cards contain text and chips; they do not contain child cards.
+
+- **Don't** use cool Tailwind slate grays (`slate-500` `#64748B`, `slate-700` `#334155`) for any new surface, border, or text color. They introduce a blue-gray temperature that fights the warm sage palette.
+- **Don't** introduce a second decorative accent color. No teal, indigo, purple, or blue anywhere in the UI chrome. Amber is permitted only for the semantic warning state and pin indicator.
+- **Don't** use `border-left` or `border-right` greater than 1px as a colored accent stripe on any card, callout, or formula block. This is absolutely prohibited — rewrite with a tinted background and full border.
+- **Don't** use `background-clip: text` with gradient for headings. Emphasis is weight or size, never gradient text.
+- **Don't** make this look like a Vietnamese government portal: no colored section headers, no red/gold/green decorative palette, no full-width horizontal rule dividers used as page chrome.
+- **Don't** make this look like a generic consumer chat clone: no centered empty-state hero with a large illustration, no floating input that's the only content, no sparse consumer padding.
+- **Don't** make this look like heavy enterprise dashboards (IBM/SAP): no navy-grey panel walls, no data tables as the primary UI pattern, no hierarchical breadcrumb navigation for procedure selection.
+- **Don't** use `#9AAFA3` (Ink Faint) for any text that must be read. It fails WCAG AA on white at 14px. Restrict to icon tinting and scrollbar thumb.
+- **Don't** use `#000000` pure black. Near-Black Sage (`#111B16`) is the darkest text value — it's still dark but positioned on the same hue axis as the brand.
+- **Don't** add extra fonts. Be Vietnam Pro and Lora are self-hosted (offline). Any CDN-linked webfont defeats the offline-first constraint.

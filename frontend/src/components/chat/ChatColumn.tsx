@@ -34,25 +34,45 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
   return (
     <section style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "#fff" }}>
       {/* header */}
-      <div style={{ flexShrink: 0, height: 46, display: "flex", alignItems: "center", gap: 9, padding: "0 18px", borderBottom: "1px solid #F1F5F9" }}>
-        <IcMessage size={15} style={{ color: "#16A34A" }} />
-        <span style={{ fontWeight: 600, fontSize: "13.5px", color: "#334155", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{chatTitle}</span>
+      <div style={{ flexShrink: 0, height: 46, display: "flex", alignItems: "center", gap: 9, padding: "0 18px", borderBottom: "1px solid #becabd" }}>
+        <IcMessage size={15} style={{ color: "#006130" }} />
+        <span style={{ fontWeight: 600, fontSize: "13.5px", color: "#3f4940", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+          {chatTitle}
+        </span>
       </div>
 
       {/* scroll area */}
-      <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: "18px 22px 24px", display: "flex", flexDirection: "column", gap: 15, position: "relative" }}>
+      <div
+        ref={scrollRef}
+        role="log"
+        aria-live="polite"
+        aria-label="Cuộc trò chuyện"
+        style={{ flex: 1, overflowY: "auto", padding: "18px 22px 24px", display: "flex", flexDirection: "column", gap: 15, position: "relative" }}
+      >
         {state.messages.length === 0 ? (
           <div style={{ margin: "auto", maxWidth: 430, textAlign: "center", padding: "24px 0" }}>
-            <div style={{ width: 56, height: 56, borderRadius: 9999, background: "#DCFCE7", border: "1px solid #BBF7D0", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 15px" }}>
-              <IcBrand size={28} style={{ color: "#16A34A" }} />
+            <div
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: 9999,
+                background: "#dae2fd",
+                border: "1px solid #becabd",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 15px",
+              }}
+            >
+              <IcBrand size={28} style={{ color: "#006130" }} />
             </div>
-            <div style={{ fontSize: "17px", fontWeight: 700, color: "#0F172A", marginBottom: 18 }}>Xin chào! Mình có thể giúp gì cho bạn?</div>
+            <div style={{ fontSize: "17px", fontWeight: 700, color: "#131b2e", marginBottom: 18 }}>Xin chào! Mình có thể giúp gì cho bạn?</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {state.examples.map((q, i) => (
                 <button
                   key={i}
                   onClick={() => actions.askSample(q)}
-                  className="text-left px-[15px] py-3 border border-slate-200 bg-[#F8FAFC] rounded-[11px] font-sans text-[13.5px] text-slate-700 cursor-pointer leading-[1.5] hover:border-brand hover:bg-green-50 hover:text-brand-dark"
+                  className="text-left px-[15px] py-3 border border-line bg-[#f2f3ff] rounded-[11px] font-sans text-[13.5px] text-[#3f4940] cursor-pointer leading-[1.5] hover:border-brand hover:bg-[#eaedff] hover:text-brand-dark"
                 >
                   {q}
                 </button>
@@ -76,11 +96,16 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
       </div>
 
       {/* composer */}
-      <div style={{ flexShrink: 0, borderTop: "1px solid #E6EAE8", padding: "12px 18px 14px" }}>
+      <div style={{ flexShrink: 0, borderTop: "1px solid #becabd", padding: "12px 18px 14px" }}>
         <div style={{ display: "flex", gap: 9, alignItems: "flex-end" }}>
           <textarea
             value={state.input}
             onChange={(e) => actions.setInput(e.target.value)}
+            onInput={(e) => {
+              const el = e.currentTarget;
+              el.style.height = "46px";
+              el.style.height = `${Math.min(el.scrollHeight, 130)}px`;
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -89,17 +114,30 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
             }}
             rows={1}
             placeholder="Nhập câu hỏi của bạn…"
-            className="flex-1 resize-none border border-slate-300 rounded-[11px] px-[15px] py-3 text-[14px] font-sans leading-[1.55] h-[46px] min-h-[46px] max-h-[130px] outline-none text-slate-800 focus:border-brand focus:shadow-[0_0_0_3px_#DCFCE7]"
+            className="flex-1 resize-none border border-line rounded-[11px] px-[15px] py-3 text-[14px] font-sans leading-[1.55] h-[46px] min-h-[46px] max-h-[130px] outline-none text-[#131b2e] focus:border-brand focus:shadow-[0_0_0_3px_#dae2fd]"
           />
           <button
             onClick={() => actions.send()}
             title="Gửi câu hỏi"
-            style={{ flexShrink: 0, width: 46, height: 46, border: "none", borderRadius: 11, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "#fff", boxShadow: "0 1px 2px rgba(15,23,42,.08)", background: canSend ? "#16A34A" : "#CBD5E1" }}
+            style={{
+              flexShrink: 0,
+              width: 46,
+              height: 46,
+              border: "none",
+              borderRadius: 11,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              color: "#fff",
+              boxShadow: "0 1px 2px rgba(19,27,46,.08)",
+              background: canSend ? "#006130" : "#becabd",
+            }}
           >
             <IcSend size={19} />
           </button>
         </div>
-        <p style={{ margin: "7px 0 0", textAlign: "center", fontSize: "11.5px", color: "#94A3B8" }}>Nhấn Enter để gửi · Shift + Enter để xuống dòng</p>
+        <p style={{ margin: "7px 0 0", textAlign: "center", fontSize: "11.5px", color: "#6f7a6f" }}>Nhấn Enter để gửi · Shift + Enter để xuống dòng</p>
       </div>
     </section>
   );

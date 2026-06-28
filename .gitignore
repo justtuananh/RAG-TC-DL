@@ -10,6 +10,10 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 
+.claude/
+.github/
+.impeccable/
+
 # OS
 .DS_Store
 Thumbs.db

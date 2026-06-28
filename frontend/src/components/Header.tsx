@@ -10,10 +10,10 @@ interface Props {
 }
 
 const STATUS = {
-  active: { label: "Đang hoạt động", color: "#15803D", bg: "#F0FDF4", bd: "#BBF7D0", dot: "#22C55E", spin: false },
+  active: { label: "Đang hoạt động", color: "#006130", bg: "#f2f3ff", bd: "#dae2fd", dot: "#006130", spin: false },
   checking: { label: "Đang kiểm tra…", color: "#B45309", bg: "#FFFBEB", bd: "#FDE68A", dot: "#F59E0B", spin: true },
   error: { label: "Mất kết nối", color: "#DC2626", bg: "#FEF2F2", bd: "#FECACA", dot: "#EF4444", spin: false },
-  none: { label: "Chưa kết nối", color: "#64748B", bg: "#F1F5F9", bd: "#E2E8F0", dot: "#94A3B8", spin: false },
+  none: { label: "Chưa kết nối", color: "#6f7a6f", bg: "#eaedff", bd: "#becabd", dot: "#6f7a6f", spin: false },
 } as const;
 
 function Tab_({ active, icon, label, title, onClick }: { active: boolean; icon: React.ReactNode; label: string; title: string; onClick: () => void }) {
@@ -21,12 +21,12 @@ function Tab_({ active, icon, label, title, onClick }: { active: boolean; icon: 
     <button
       onClick={onClick}
       title={title}
-      className="relative inline-flex items-center gap-[7px] h-[42px] px-[14px] border-none bg-transparent rounded-[9px] font-sans text-[14px] font-semibold cursor-pointer hover:bg-[#F6F8F7]"
-      style={{ color: active ? "#15803D" : "#475569" }}
+      className="relative inline-flex items-center gap-[7px] h-[42px] px-[14px] border-none bg-transparent rounded-[9px] font-sans text-[14px] font-semibold cursor-pointer hover:bg-[#eaedff]"
+      style={{ color: active ? "#006130" : "#3f4940" }}
     >
       {icon}
       {label}
-      {active && <span style={{ position: "absolute", left: 12, right: 12, bottom: -9, height: 3, borderRadius: "3px 3px 0 0", background: "#16A34A" }} />}
+      {active && <span style={{ position: "absolute", left: 12, right: 12, bottom: -9, height: 3, borderRadius: "3px 3px 0 0", background: "#006130" }} />}
     </button>
   );
 }
@@ -49,16 +49,38 @@ export default function Header({ tab, llmStatus, onGo, onOpenLlm }: Props) {
 
   return (
     <header
-      style={{ flexShrink: 0, display: "flex", alignItems: "center", gap: 16, height: 62, padding: "0 20px", background: "#fff", borderBottom: "1px solid #E6EAE8", boxShadow: "0 1px 2px rgba(15,23,42,.04)", zIndex: 20 }}
+      style={{
+        flexShrink: 0,
+        display: "flex",
+        alignItems: "center",
+        gap: 16,
+        height: 62,
+        padding: "0 20px",
+        background: "#fff",
+        borderBottom: "1px solid #becabd",
+        boxShadow: "0 1px 2px rgba(29,45,35,.04)",
+        zIndex: 20,
+      }}
     >
       {/* logo + title */}
       <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
-        <div style={{ width: 37, height: 37, borderRadius: 10, background: "linear-gradient(135deg,#22C55E,#15803D)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 3px 8px rgba(22,163,74,.35)" }}>
+        <div
+          style={{
+            width: 37,
+            height: 37,
+            borderRadius: 10,
+            background: "linear-gradient(135deg,#107c41,#006130)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 3px 8px rgba(0,97,48,.35)",
+          }}
+        >
           <IcBrand size={20} style={{ color: "#fff" }} />
         </div>
         <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2 }}>
-          <span style={{ fontSize: "15.5px", fontWeight: 700, color: "#0F172A" }}>Trợ lý Kiểm định</span>
-          <span style={{ fontSize: "11.5px", color: "#64748B" }}>Tra cứu quy trình kiểm định đo lường</span>
+          <span style={{ fontSize: "15.5px", fontWeight: 700, color: "#131b2e" }}>Trợ lý Kiểm định</span>
+          <span style={{ fontSize: "11.5px", color: "#6f7a6f" }}>Tra cứu quy trình kiểm định đo lường</span>
         </div>
       </div>
 
@@ -74,9 +96,15 @@ export default function Header({ tab, llmStatus, onGo, onOpenLlm }: Props) {
       {/* LLM status */}
       <button onClick={onOpenLlm} title="Cấu hình mô hình ngôn ngữ (LLM)" className="hover:brightness-[0.97] font-sans" style={btnStyle}>
         {m.spin ? (
-          <span className="animate-spin" style={{ width: 13, height: 13, flexShrink: 0, border: `2px solid ${m.bd}`, borderTopColor: m.color, borderRadius: "50%" }} />
+          <span
+            className="animate-spin"
+            style={{ width: 13, height: 13, flexShrink: 0, border: `2px solid ${m.bd}`, borderTopColor: m.color, borderRadius: "50%" }}
+          />
         ) : (
-          <span style={{ width: 8, height: 8, borderRadius: 9999, flexShrink: 0, background: m.dot, animation: llmStatus === "active" ? "pulseDot 2s ease-in-out infinite" : undefined }} />
+          <span
+            className={llmStatus === "active" ? "animate-pulseDot" : ""}
+            style={{ width: 8, height: 8, borderRadius: 9999, flexShrink: 0, background: m.dot }}
+          />
         )}
         {m.label}
         <IcSettings size={13} strokeWidth={2} style={{ opacity: 0.55, flexShrink: 0 }} />

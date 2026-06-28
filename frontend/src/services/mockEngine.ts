@@ -14,14 +14,6 @@ export const TIMING = {
 /** Toàn app thu nhỏ 0.88 (khớp mockup) */
 export const ZOOM = 0.88;
 
-/** Nhãn các bước "tiến trình xử lý" hiển thị khi đang trả lời */
-export const PROC_DEFS: { a: string; d: string }[] = [
-  { a: "Đang tìm trong tài liệu…", d: "Đã tìm trong 24 tài liệu" },
-  { a: "Đang lọc các đoạn liên quan…", d: "Tìm được 10 đoạn liên quan" },
-  { a: "Đang đọc & đối chiếu nguồn…", d: "Đã đối chiếu 3 nguồn tin cậy" },
-  { a: "Đang tổng hợp câu trả lời…", d: "Soạn xong câu trả lời" },
-];
-
 export function extColor(ext: string): string {
   return ext === "PDF" ? "#DC2626" : ext === "DOCX" ? "#2563EB" : ext === "XLSX" ? "#15803D" : "#64748B";
 }
@@ -32,7 +24,9 @@ export function genericBlocks(): DocBlock[] {
     { h: "1   PHẠM VI ÁP DỤNG" },
     { p: "Tài liệu này quy định trình tự, thủ tục và yêu cầu kỹ thuật áp dụng cho công tác kiểm định, hiệu chuẩn phương tiện đo theo quy định hiện hành." },
     { h: "2   PHƯƠNG TIỆN & ĐIỀU KIỆN" },
-    { p: "Các chuẩn đo lường và phương tiện phụ trợ phải còn trong thời hạn hiệu lực của giấy chứng nhận kiểm định/hiệu chuẩn và phù hợp với phạm vi đo của phương tiện cần kiểm định." },
+    {
+      p: "Các chuẩn đo lường và phương tiện phụ trợ phải còn trong thời hạn hiệu lực của giấy chứng nhận kiểm định/hiệu chuẩn và phù hợp với phạm vi đo của phương tiện cần kiểm định.",
+    },
     { p: "Điều kiện môi trường tại nơi kiểm định phải ổn định: nhiệt độ (20 ± 5) °C, độ ẩm không vượt quá 80 % RH." },
     { h: "3   TIẾN HÀNH KIỂM ĐỊNH" },
     { p: "3.1  Kiểm tra bên ngoài: phương tiện đo phải có nhãn mác, thang đo rõ ràng, không có hư hỏng ảnh hưởng đến đặc tính kỹ thuật đo lường." },

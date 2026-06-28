@@ -9,12 +9,8 @@ export default function ChatTab({ state, actions }: { state: AppState; actions: 
   const showSource = state.liveSources.length > 0;
 
   return (
-    <main style={{ flex: 1, minHeight: 0, display: "flex" }}>
-      {state.sidebarOpen ? (
-        <HistorySidebar state={state} actions={actions} />
-      ) : (
-        <HistoryRail onToggle={actions.toggleSidebar} onNewChat={actions.newChat} />
-      )}
+    <main className="layout-main" style={{ flex: 1, minHeight: 0, display: "flex" }}>
+      {state.sidebarOpen ? <HistorySidebar state={state} actions={actions} /> : <HistoryRail onToggle={actions.toggleSidebar} onNewChat={actions.newChat} />}
 
       <ChatColumn state={state} actions={actions} />
 

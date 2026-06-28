@@ -1,25 +1,47 @@
 import type { Config } from "tailwindcss";
 
-/**
- * Token đọc trực tiếp từ mockup `design/kiemdinh.html`.
- * Phần lớn màu trùng palette mặc định của Tailwind (green/slate/amber/red),
- * chỉ định nghĩa thêm các màu "bề mặt" pha xanh đặc trưng của app.
- */
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        brand: "#16A34A", // = green-600
-        "brand-dark": "#15803D", // = green-700
-        app: "#ECF1EE", // nền toàn app
-        sidebar: "#F6F8F7", // nền thanh lịch sử + bong bóng bot
-        source: "#F1F4F2", // nền cột nguồn
-        line: "#E6EAE8", // viền mảnh chủ đạo
-        "row-hover": "#EAEFEC", // hover hàng lịch sử
-        highlight: "#FEF6DD", // nền đoạn nguồn được tô sáng
-        "page-foot": "#6E8B78", // chân "trang tài liệu"
-        "icon-muted": "#A8B2AC", // icon hành động mờ
+        // Material Design 3 tokens — từ design.html
+        primary: "#006130",
+        "on-primary": "#ffffff",
+        "primary-container": "#107c41",
+        "on-primary-container": "#b6ffc5",
+        secondary: "#515f74",
+        "on-secondary": "#ffffff",
+        "secondary-container": "#d5e3fd",
+        "on-secondary-container": "#57657b",
+        background: "#faf8ff",
+        "on-background": "#131b2e",
+        surface: "#faf8ff",
+        "on-surface": "#131b2e",
+        "surface-variant": "#dae2fd",
+        "on-surface-variant": "#3f4940",
+        outline: "#6f7a6f",
+        "outline-variant": "#becabd",
+        "surface-container-lowest": "#ffffff",
+        "surface-container-low": "#f2f3ff",
+        "surface-container": "#eaedff",
+        "surface-container-high": "#e2e7ff",
+        "surface-container-highest": "#dae2fd",
+        "inverse-primary": "#7ada95",
+        error: "#ba1a1a",
+        "error-container": "#ffdad6",
+        // Legacy aliases
+        brand: "#006130",
+        "brand-dark": "#004f27",
+        app: "#faf8ff",
+        sidebar: "#ffffff",
+        "bot-bubble": "#f2f3ff",
+        source: "#eaedff",
+        line: "#becabd",
+        "row-hover": "#dae2fd",
+        highlight: "#FEF6DD",
+        "page-foot": "#6f7a6f",
+        "icon-muted": "#6f7a6f",
       },
       fontFamily: {
         sans: ["'Be Vietnam Pro'", "system-ui", "-apple-system", "sans-serif"],
@@ -30,8 +52,8 @@ export default {
         pulseDot: { "0%,100%": { opacity: "1" }, "50%": { opacity: ".35" } },
         fadeUp: { from: { transform: "translateY(7px)", opacity: "0" }, to: { transform: "translateY(0)", opacity: "1" } },
         hlGlow: {
-          "0%,100%": { boxShadow: "0 0 0 0 rgba(245,158,11,0)" },
-          "50%": { boxShadow: "0 0 0 5px rgba(245,158,11,.22)" },
+          "0%,100%": { boxShadow: "0 0 0 0 rgba(0,97,48,0)" },
+          "50%": { boxShadow: "0 0 0 5px rgba(0,97,48,.18)" },
         },
       },
       animation: {
