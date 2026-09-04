@@ -1,0 +1,26 @@
+# Stage 1 PDF path (Marker) — extract_pdf_marker.py + pdf_math_scan.py.
+#
+# Deliberately NOT part of requirements.txt: marker-pdf pulls in torch +
+# CUDA, which is a much heavier footprint than the rest of Stage 1 ingestion
+# (see CLAUDE.md, "Two virtualenvs" — this makes a third). Set up as its own
+# venv, separate from both the project .venv and kotaemon/.venv:
+#
+#   uv python install 3.12                      # marker-pdf pins pillow<11, no py3.14 wheel
+#   uv venv --python 3.12 .venv-pdf
+#   uv pip install --python .venv-pdf/Scripts/python.exe -r requirements-pdf.txt
+#   uv pip install --python .venv-pdf/Scripts/python.exe --reinstall --no-deps \
+#       torch torchvision --index-url https://download.pytorch.org/whl/cu128
+#
+# The last step matters: a plain `torch` install resolves to a CPU-only
+# wheel even on a CUDA machine, and `uv pip install torch --index-url cu128`
+# alone is a no-op if a CPU torch is already "satisfying" the requirement —
+# --reinstall --no-deps forces the CUDA build in. Confirm with:
+#   .venv-pdf/Scripts/python.exe -c "import torch; print(torch.cuda.is_available())"
+#
+# extract_pdf_marker.py looks for this venv at ../.venv-pdf by default, or at
+# the path in the MARKER_PYTHON env var.
+
+marker-pdf==1.10.1  # NOT 2.0.0+ — that version requires a Docker+vLLM inference
+                    # server even in --mode fast, unsuited to this project's
+                    # offline/lean goals. 1.10.1 runs fully local via Surya+Texify.
+pymupdf>=1.24       # already in requirements.txt; used here for pdf_math_scan.py too
