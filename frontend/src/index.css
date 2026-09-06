@@ -28,13 +28,13 @@
   height: 9px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #becabd;
+  background: #DEE3EA;
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #6f7a6f;
+  background: #7C8896;
   background-clip: padding-box;
 }
 
@@ -48,7 +48,7 @@
 .md-answer {
   font-size: 14px;
   line-height: 1.65;
-  color: #131b2e;
+  color: #101828;
 }
 .md-answer p {
   margin: 7px 0;
@@ -69,18 +69,18 @@
 }
 .md-answer strong {
   font-weight: 700;
-  color: #131b2e;
+  color: #101828;
 }
 .md-answer code {
-  background: #f2f3ff;
-  color: #006130;
+  background: #E9EFFF;
+  color: #173CAE;
   padding: 1px 5px;
   border-radius: 6px;
   font-size: 0.92em;
 }
 .md-answer .katex-display {
   background: #fff;
-  border: 1px solid #becabd;
+  border: 1px solid #DEE3EA;
   border-radius: 8px;
   padding: 11px 15px;
   margin: 9px 0;
@@ -104,25 +104,25 @@
 .md-answer td,
 .md-doc th,
 .md-doc td {
-  border: 1px solid #becabd;
+  border: 1px solid #DEE3EA;
   padding: 7px 11px;
   text-align: left;
   vertical-align: top;
 }
 .md-answer th,
 .md-doc th {
-  background: #eaedff;
+  background: #E8ECF2;
   font-weight: 700;
-  color: #3f4940;
+  color: #475467;
   white-space: nowrap;
 }
 .md-answer td,
 .md-doc td {
-  color: #3f4940;
+  color: #475467;
 }
 .md-answer tbody tr:nth-child(even),
 .md-doc tbody tr:nth-child(even) {
-  background: #f2f3ff;
+  background: #F8FAFC;
 }
 /* Công thức trong ô bảng — không tách nền/viền như $$display$$ */
 .md-answer td .katex-display,
@@ -144,9 +144,9 @@
   padding: 0 5px;
   margin: 0 1px;
   vertical-align: -3px;
-  background: #dae2fd;
-  border: 1px solid #becabd;
-  color: #006130;
+  background: #E9EFFF;
+  border: 1px solid #C9D8FF;
+  color: #173CAE;
   border-radius: 6px;
   font-size: 11.5px;
   font-weight: 700;
@@ -154,9 +154,9 @@
   cursor: pointer;
 }
 .cite-chip:hover {
-  background: #006130;
+  background: #2454E0;
   color: #fff;
-  border-color: #006130;
+  border-color: #2454E0;
 }
 
 /* ── Markdown "trang tài liệu" (serif Lora) ── */
@@ -164,18 +164,18 @@
   font-family: "Lora", Georgia, serif;
   font-size: 13.5px;
   line-height: 1.65;
-  color: #131b2e;
+  color: #101828;
 }
 .md-doc p {
   margin: 11px 0;
 }
 .md-doc strong {
   font-weight: 700;
-  color: #131b2e;
+  color: #101828;
 }
 .md-doc .katex-display {
-  background: #f2f3ff;
-  border: 1px solid #becabd;
+  background: #F1F4F9;
+  border: 1px solid #DEE3EA;
   border-radius: 8px;
   padding: 11px 15px;
   margin: 9px 0;
@@ -187,7 +187,7 @@
 .md-doc h4 {
   font-family: "Be Vietnam Pro", sans-serif;
   font-weight: 700;
-  color: #131b2e;
+  color: #101828;
   margin: 14px 0 5px;
   font-size: 14px;
 }
@@ -198,19 +198,6 @@
     position: relative;
     flex-direction: column;
   }
-  /* Expanded sidebar overlays as a fixed panel */
-  .layout-sidebar {
-    position: fixed !important;
-    left: 0;
-    top: 62px;
-    bottom: 0;
-    z-index: 40;
-    box-shadow: 4px 0 24px rgba(29, 45, 35, 0.18);
-  }
-  /* Collapsed rail hides at narrow widths */
-  .layout-rail {
-    display: none;
-  }
   /* Source panel stacks full-width below chat */
   .layout-source-panel {
     width: 100% !important;
@@ -218,7 +205,7 @@
     height: 50vh;
     min-height: 260px;
     border-left: none !important;
-    border-top: 1px solid #DDE5E0;
+    border-top: 1px solid #DEE3EA;
   }
   .layout-resize-handle {
     display: none !important;

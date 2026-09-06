@@ -10,9 +10,16 @@ CORS: localhost:5173 (Vite dev), localhost:5174
 Port: 8080 (không đụng Gradio :7861, embedding :8010, reranker :8011)
 
 Endpoints:
-  GET  /api/health
-  GET  /api/examples
-  POST /api/chat/stream  — SSE streaming (text/event-stream)
+  GET    /api/health
+  GET    /api/examples
+  POST   /api/chat/stream            — SSE streaming (text/event-stream)
+  GET    /api/documents              — list real files in TC_DL/ + ingestion status
+  POST   /api/documents/upload       — save a .docx/.pdf (multipart "file"), status "pending"
+  POST   /api/documents/{id}/process — extract → chunk → embed (background thread)
+  GET    /api/documents/{id}/markdown
+  GET    /api/documents/{id}/file    — tệp gốc (.docx/.pdf) thô, dùng để hiển thị "tài liệu gốc"
+  DELETE /api/documents/{id}
+  PATCH  /api/documents/{id}         — {"name": str} display-name override
 """
 from __future__ import annotations
 
@@ -22,9 +29,9 @@ import sys
 from pathlib import Path
 from typing import Generator
 
-from fastapi import FastAPI
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -40,6 +47,7 @@ from generation import (
     stream_ollama,
 )
 from latex import fix_latex
+import ingestion_jobs
 
 # ── App ───────────────────────────────────────────────────────────────────────
 
@@ -78,6 +86,10 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     history: list[ChatMessage] = []
+
+
+class RenameRequest(BaseModel):
+    name: str
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -190,6 +202,75 @@ def chat_stream(req: ChatRequest):
             "Connection": "keep-alive",
         },
     )
+
+
+# ── Document routes (upload → extract → chunk → embed) ───────────────────────
+
+@app.get("/api/documents")
+def list_documents():
+    return {"documents": ingestion_jobs.list_documents()}
+
+
+@app.post("/api/documents/upload")
+async def upload_document(file: UploadFile = File(...)):
+    data = await file.read()
+    try:
+        file_stem = ingestion_jobs.save_upload(file.filename or "", data)
+    except ingestion_jobs.UploadError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    doc = next((d for d in ingestion_jobs.list_documents() if d["id"] == file_stem), None)
+    if doc is None:
+        raise HTTPException(status_code=500, detail="Đã lưu tệp nhưng không đọc lại được.")
+    return doc
+
+
+@app.post("/api/documents/{file_stem}/process")
+def process_document(file_stem: str):
+    try:
+        ingestion_jobs.start_processing(file_stem)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu.")
+    except RuntimeError:
+        raise HTTPException(status_code=409, detail="Tài liệu đang được xử lý.")
+    return {"status": "queued"}
+
+
+@app.get("/api/documents/{file_stem}/markdown")
+def document_markdown(file_stem: str):
+    md = ingestion_jobs.get_markdown(file_stem)
+    if md is None:
+        raise HTTPException(status_code=404, detail="Tài liệu chưa được xử lý.")
+    return {"file_stem": file_stem, "markdown": md}
+
+
+_FILE_MEDIA_TYPES = {
+    ".pdf": "application/pdf",
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+}
+
+
+@app.get("/api/documents/{file_stem}/file")
+def document_file(file_stem: str):
+    """Trả về tệp .docx/.pdf gốc (không phải Markdown đã trích xuất/embed) để
+    frontend hiển thị đúng tài liệu nguồn."""
+    path = ingestion_jobs.get_source_path(file_stem)
+    if path is None:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tệp gốc.")
+    media_type = _FILE_MEDIA_TYPES.get(path.suffix.lower(), "application/octet-stream")
+    return FileResponse(path, media_type=media_type, filename=path.name, content_disposition_type="inline")
+
+
+@app.delete("/api/documents/{file_stem}", status_code=204)
+def delete_document(file_stem: str):
+    ingestion_jobs.delete_document(file_stem)
+
+
+@app.patch("/api/documents/{file_stem}")
+def rename_document(file_stem: str, req: RenameRequest):
+    try:
+        return ingestion_jobs.rename_document(file_stem, req.name)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tài liệu.")
 
 
 if __name__ == "__main__":

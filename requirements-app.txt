@@ -10,3 +10,9 @@ requests>=2.31
 lxml>=5.0
 fastapi>=0.110
 uvicorn>=0.27
+
+# Document upload (api container): Stage 1 ingestion runs inside the container now
+olefile>=0.47          # read MathType "Equation Native" (MTEF) streams from OLE objects
+python-multipart>=0.0.9 # required by FastAPI's UploadFile / File() form parsing
+pymupdf>=1.24           # PDF -> Markdown (ingestion/extract_pdf.py) — text only, no formula recovery
+python-dotenv>=1.0      # load .env for local dev runs (generation.py: OLLAMA_MODEL / OLLAMA_URL)

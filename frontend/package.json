@@ -15,6 +15,7 @@
   "dependencies": {
     "@fontsource/be-vietnam-pro": "^5.1.0",
     "@fontsource/lora": "^5.1.0",
+    "docx-preview": "^0.3.3",
     "katex": "^0.16.22",
     "lucide-react": "^0.525.0",
     "react": "^18.3.1",

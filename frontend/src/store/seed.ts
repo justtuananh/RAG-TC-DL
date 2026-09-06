@@ -20,7 +20,7 @@ export const FAQS: FaqItem[] = [
   },
   {
     q: "Tôi tải tài liệu mới lên bằng cách nào?",
-    a: "Vào tab Tài liệu, kéo thả tệp PDF hoặc Word vào khung tải lên, hoặc bấm để chọn tệp. Hệ thống xử lý trong giây lát; khi trạng thái chuyển “Đã sẵn sàng”, bạn có thể hỏi về tài liệu đó.",
+    a: "Vào tab Tài liệu, kéo thả tệp Word (.docx) vào khung tải lên, hoặc bấm để chọn tệp. Bấm “Xử lý” để hệ thống trích xuất nội dung; khi trạng thái chuyển “Đã sẵn sàng”, bạn có thể hỏi về tài liệu đó.",
   },
   {
     q: "Cuộc trò chuyện có được lưu lại không?",
@@ -112,7 +112,6 @@ export const SOURCES: Source[] = [
     ],
   },
 ];
-
 
 export const DOCUMENTS: DocItem[] = [
   { id: "d1", name: "QTKĐ 1.061:2019 — Áp kế pít tông.pdf", ext: "PDF", size: "2,4 MB", pages: 12, date: "20/06/2026", status: "ready" },

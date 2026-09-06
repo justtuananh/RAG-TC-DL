@@ -1,8 +1,21 @@
-import { useEffect, useReducer, useRef } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import type { AppState, BackendSource, CiteChip, Conversation, DocItem, Message } from "../types";
-import { DOCUMENTS, SAMPLES } from "./seed";
-import { TIMING, ZOOM, docInfo } from "../services/mockEngine";
-import { fetchExamples, fixLatex, pingHealth, streamChat, type HistoryTurn } from "../services/liveApi";
+import { SAMPLES } from "./seed";
+import { TIMING, ZOOM } from "../services/mockEngine";
+import {
+  deleteDocument,
+  documentFileUrl,
+  fetchDocumentMarkdown,
+  fetchDocuments,
+  fetchExamples,
+  fixLatex,
+  pingHealth,
+  processDocument,
+  renameDocument,
+  streamChat,
+  uploadDocument,
+  type HistoryTurn,
+} from "../services/liveApi";
 import { loadConversations, saveConversations } from "./persistence";
 
 // setState-style reducer: nhận patch (partial hoặc hàm) → merge.
@@ -21,7 +34,6 @@ function makeInitialState(): AppState {
     pulse: 0,
     pinIndex: -1,
     sourceW: 430,
-    sidebarOpen: true,
     activeConvId: null,
     messages: [], // LIVE: bắt đầu rỗng (màn hình chào + câu hỏi mẫu)
     histSearch: "",
@@ -30,6 +42,7 @@ function makeInitialState(): AppState {
     faqOpen: 0,
     toast: null,
     docSearch: "",
+    docStatusFilter: "all",
     docPageSize: 5,
     docPage: 1,
     viewingDoc: null,
@@ -40,7 +53,7 @@ function makeInitialState(): AppState {
     llmTestResult: null,
     llm: { baseUrl: "https://api.openai.com/v1", apiKey: "", model: "gpt-4o-mini", temperature: "0.7" },
     conversations: loadConversations(),
-    documents: DOCUMENTS,
+    documents: [], // LIVE: nạp từ /api/documents khi mount (xem effect bên dưới)
     examples: SAMPLES,
     liveSources: [],
     streaming: false,
@@ -49,7 +62,6 @@ function makeInitialState(): AppState {
 
 export interface Actions {
   go: (tab: AppState["tab"]) => void;
-  toggleSidebar: () => void;
   setInput: (v: string) => void;
   send: (text?: string) => void;
   regenerate: () => void;
@@ -67,7 +79,7 @@ export interface Actions {
   confirmDeleteYes: () => void;
   confirmDeleteNo: () => void;
   setHistSearch: (v: string) => void;
-  uploadDemo: () => void;
+  uploadDoc: (file: File) => void;
   processDoc: (id: string) => void;
   startRenameDoc: (id: string) => void;
   renameDoc: (id: string, v: string) => void;
@@ -77,6 +89,7 @@ export interface Actions {
   openSourceDoc: () => void;
   closeViewer: () => void;
   setDocSearch: (v: string) => void;
+  setDocStatusFilter: (v: AppState["docStatusFilter"]) => void;
   setDocPageSize: (n: number) => void;
   setDocPage: (n: number) => void;
   toggleFaq: (i: number) => void;
@@ -106,7 +119,12 @@ function chipsOf(srcs: BackendSource[]): CiteChip[] {
   return srcs.map((s) => ({ n: `[${s.index}]`, index: String(s.index), code: s.file_stem }));
 }
 function snippetOf(md: string): string {
-  return md.replace(/<[^>]+>/g, "").replace(/[#*`>_~]/g, "").replace(/\s+/g, " ").trim().slice(0, 90);
+  return md
+    .replace(/<[^>]+>/g, "")
+    .replace(/[#*`>_~]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 90);
 }
 /** Dựng history gửi backend từ các lượt TRƯỚC (timing-independent). */
 function toHistory(prior: Message[]): HistoryTurn[] {
@@ -128,20 +146,43 @@ export function useAppStore(): { state: AppState; actions: Actions } {
   const llmTimer = useRef<number | undefined>(undefined);
   const abortRef = useRef<AbortController | null>(null);
 
-  // mount: nạp câu hỏi mẫu + ping sức khoẻ backend (lặp 30s)
+  // Nạp danh sách tài liệu thật; khi còn tài liệu "processing" thì poll lại sau
+  // ~2s để cập nhật tiến độ/kết quả (dừng khi không còn tài liệu nào đang xử lý).
+  // Dùng cả ở mount lẫn ngay sau upload/xử lý/xoá để phản ánh tức thời.
+  const refreshDocuments = useCallback(() => {
+    clearTimeout(upTimer.current);
+    fetchDocuments()
+      .then((docs) => {
+        set({ documents: docs });
+        if (docs.some((d) => d.status === "processing")) {
+          upTimer.current = window.setTimeout(refreshDocuments, 2000);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // mount: nạp câu hỏi mẫu + ping sức khoẻ backend (lặp 30s) + tài liệu thật
   useEffect(() => {
-    fetchExamples().then((ex) => ex.length && set({ examples: ex })).catch(() => {});
-    const ping = () => pingHealth().then((ok) => set({ llmStatus: ok ? "active" : "none" })).catch(() => set({ llmStatus: "none" }));
+    fetchExamples()
+      .then((ex) => ex.length && set({ examples: ex }))
+      .catch(() => {});
+    const ping = () =>
+      pingHealth()
+        .then((ok) => set({ llmStatus: ok ? "active" : "none" }))
+        .catch(() => set({ llmStatus: "none" }));
     ping();
     const iv = window.setInterval(ping, 30000);
+
+    refreshDocuments();
+
     return () => {
       clearInterval(iv);
       clearTimeout(toastTimer.current);
-      clearInterval(upTimer.current);
+      clearTimeout(upTimer.current);
       clearTimeout(llmTimer.current);
       abortRef.current?.abort();
     };
-  }, []);
+  }, [refreshDocuments]);
 
   // Lưu lịch sử hội thoại mỗi khi danh sách thay đổi
   useEffect(() => {
@@ -247,7 +288,6 @@ export function useAppStore(): { state: AppState; actions: Actions } {
 
   const actions: Actions = {
     go: (tab) => set({ tab }),
-    toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
     setInput: (v) => set({ input: v }),
     send,
     regenerate: () => {
@@ -321,61 +361,86 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     },
     confirmDeleteNo: () => set({ confirmDelete: null }),
     setHistSearch: (v) => set({ histSearch: v }),
-    uploadDemo: () => {
-      const id = "d" + Date.now();
-      const doc: DocItem = { id, name: "QTKĐ 1.082:2021 — Áp kế điện tử.pdf", ext: "PDF", size: "1,8 MB", pages: "—", date: "25/06/2026", status: "pending", progress: 0 };
-      set((s) => ({ documents: [doc, ...s.documents], docPage: 1 }));
-      showToast("Đã tải lên — tài liệu đang chờ xử lý");
+    uploadDoc: (file) => {
+      uploadDocument(file)
+        .then((doc) => {
+          set((s) => ({ documents: [doc, ...s.documents.filter((d) => d.id !== doc.id)], docPage: 1 }));
+          showToast("Đã tải lên — tài liệu đang chờ xử lý");
+        })
+        .catch((e) => showToast(e instanceof Error ? e.message : "Tải lên thất bại"));
     },
     processDoc: (id) => {
-      set((s) => ({ documents: s.documents.map((d) => (d.id === id ? { ...d, status: "processing", progress: 0 } : d)) }));
+      set((s) => ({ documents: s.documents.map((d) => (d.id === id ? { ...d, status: "processing", progress: 5, error: undefined } : d)) }));
       showToast("Bắt đầu xử lý tài liệu…");
-      clearInterval(upTimer.current);
-      upTimer.current = window.setInterval(() => {
-        let finished = false;
-        set((s) => {
-          const docs = s.documents.map((d) => {
-            if (d.id !== id) return d;
-            const p = (d.progress || 0) + 16;
-            if (p >= 100) {
-              finished = true;
-              return { ...d, status: "ready" as const, progress: 100, pages: 18 };
-            }
-            return { ...d, progress: p };
-          });
-          return { documents: docs };
+      processDocument(id)
+        .then(refreshDocuments)
+        .catch((e) => {
+          showToast(e instanceof Error ? e.message : "Không xử lý được tài liệu");
+          refreshDocuments();
         });
-        if (finished) {
-          clearInterval(upTimer.current);
-          showToast("Tài liệu đã sẵn sàng để hỏi");
-        }
-      }, TIMING.docProgress);
     },
     startRenameDoc: (id) => set({ renamingDoc: id }),
     renameDoc: (id, v) => set((s) => ({ documents: s.documents.map((d) => (d.id === id ? { ...d, name: v } : d)) })),
     commitRenameDoc: () => {
+      const id = stateRef.current.renamingDoc;
       set({ renamingDoc: null });
-      showToast("Đã đổi tên tài liệu");
+      const doc = id ? stateRef.current.documents.find((d) => d.id === id) : undefined;
+      if (!id || !doc) return;
+      renameDocument(id, doc.name)
+        .then(() => showToast("Đã đổi tên tài liệu"))
+        .catch((e) => showToast(e instanceof Error ? e.message : "Đổi tên thất bại"));
     },
     deleteDoc: (id) => {
       set((s) => ({ documents: s.documents.filter((d) => d.id !== id) }));
-      showToast("Đã xoá tài liệu");
+      deleteDocument(id)
+        .then(() => showToast("Đã xoá tài liệu"))
+        .catch((e) => {
+          showToast(e instanceof Error ? e.message : "Xoá thất bại");
+          refreshDocuments();
+        });
     },
     viewDoc: (d) => {
       if (d.status && d.status !== "ready") {
         showToast("Tài liệu đang được xử lý — vui lòng đợi");
         return;
       }
-      const info = docInfo(d.name);
-      set({ viewingDoc: { name: d.name, code: info.code, pages: info.pages ?? (d.pages === "—" ? null : (d.pages as number)), blocks: info.blocks } });
+      // Hiện tệp gốc (.docx/.pdf) thô ngay; markdown chỉ tải nền làm phương án dự phòng
+      // (ext không phải PDF/DOCX, hoặc tệp gốc không mở được trong trình duyệt).
+      set({
+        viewingDoc: {
+          name: d.name,
+          code: d.id,
+          pages: null,
+          blocks: [],
+          fileUrl: documentFileUrl(d.id),
+          ext: d.ext,
+          size: d.size,
+          date: d.date,
+          status: d.status,
+        },
+      });
+      fetchDocumentMarkdown(d.id)
+        .then((markdown) => set((st) => (st.viewingDoc ? { viewingDoc: { ...st.viewingDoc, markdown } } : {})))
+        .catch(() => {});
     },
     openSourceDoc: () => {
       const s = stateRef.current.liveSources.find((x) => String(x.index) === stateRef.current.activeCite) || stateRef.current.liveSources[0];
       if (!s) return;
-      set({ viewingDoc: { name: s.file_stem, code: s.file_stem, pages: null, blocks: [], markdown: s.parent_text } });
+      // doc thật trong danh sách (nếu có) — cung cấp ext/size/ngày/trạng thái thật cho panel "Thông tin tệp"
+      const doc = stateRef.current.documents.find((d) => d.id === s.file_stem);
+      const meta = { sectionPath: s.section_path, kind: s.kind, ext: doc?.ext, size: doc?.size, date: doc?.date, status: doc?.status };
+      // Hiện tệp gốc (.docx/.pdf) thô — không chỉ đoạn parent_text của 1 trích dẫn;
+      // markdown (parent_text) chỉ dùng khi chưa biết ext hoặc tệp gốc không mở được.
+      set({
+        viewingDoc: { name: s.file_stem, code: s.file_stem, pages: null, blocks: [], markdown: s.parent_text, fileUrl: documentFileUrl(s.file_stem), ...meta },
+      });
+      fetchDocumentMarkdown(s.file_stem)
+        .then((markdown) => set((st) => (st.viewingDoc ? { viewingDoc: { ...st.viewingDoc, markdown } } : {})))
+        .catch(() => {});
     },
     closeViewer: () => set({ viewingDoc: null }),
     setDocSearch: (v) => set({ docSearch: v, docPage: 1 }),
+    setDocStatusFilter: (v) => set({ docStatusFilter: v, docPage: 1 }),
     setDocPageSize: (n) => set({ docPageSize: n, docPage: 1 }),
     setDocPage: (n) => set({ docPage: n }),
     toggleFaq: (i) => set((s) => ({ faqOpen: s.faqOpen === i ? -1 : i })),
@@ -408,7 +473,11 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       set({ llmTesting: true, llmTestResult: null, llmStatus: "checking" });
       clearTimeout(llmTimer.current);
       llmTimer.current = window.setTimeout(() => {
-        set({ llmTesting: false, llmStatus: "active", llmTestResult: { ok: true, msg: "Kết nối thành công — mô hình đã phản hồi.", sample: "Xin chào! Tôi là trợ lý kiểm định, đã sẵn sàng hỗ trợ bạn." } });
+        set({
+          llmTesting: false,
+          llmStatus: "active",
+          llmTestResult: { ok: true, msg: "Kết nối thành công — mô hình đã phản hồi.", sample: "Xin chào! Tôi là trợ lý kiểm định, đã sẵn sàng hỗ trợ bạn." },
+        });
       }, TIMING.llmTest);
     },
     saveLlm: () => {

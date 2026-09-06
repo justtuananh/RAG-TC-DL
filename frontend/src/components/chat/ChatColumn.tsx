@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type { AppState } from "../../types";
 import type { Actions } from "../../store/useAppStore";
+import { COLOR, SHADOW } from "../../theme";
 import { IcBrand, IcMessage, IcSend } from "../common/icons";
 import MessageBubble from "./MessageBubble";
 import ProcessSteps from "./ProcessSteps";
@@ -32,11 +33,11 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
   const canSend = !!state.input.trim() && !state.proc;
 
   return (
-    <section style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: "#fff" }}>
+    <section style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", background: COLOR.surface }}>
       {/* header */}
-      <div style={{ flexShrink: 0, height: 46, display: "flex", alignItems: "center", gap: 9, padding: "0 18px", borderBottom: "1px solid #becabd" }}>
-        <IcMessage size={15} style={{ color: "#006130" }} />
-        <span style={{ fontWeight: 600, fontSize: "13.5px", color: "#3f4940", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+      <div style={{ flexShrink: 0, height: 46, display: "flex", alignItems: "center", gap: 9, padding: "0 18px", borderBottom: `1px solid ${COLOR.border}` }}>
+        <IcMessage size={15} style={{ color: COLOR.accent }} />
+        <span style={{ fontWeight: 600, fontSize: "13.5px", color: COLOR.textSecondary, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {chatTitle}
         </span>
       </div>
@@ -56,23 +57,23 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
                 width: 56,
                 height: 56,
                 borderRadius: 9999,
-                background: "#dae2fd",
-                border: "1px solid #becabd",
+                background: COLOR.accentSoft,
+                border: `1px solid ${COLOR.border}`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 margin: "0 auto 15px",
               }}
             >
-              <IcBrand size={28} style={{ color: "#006130" }} />
+              <IcBrand size={28} style={{ color: COLOR.accent }} />
             </div>
-            <div style={{ fontSize: "17px", fontWeight: 700, color: "#131b2e", marginBottom: 18 }}>Xin chào! Mình có thể giúp gì cho bạn?</div>
+            <div style={{ fontSize: "17px", fontWeight: 700, color: COLOR.textPrimary, marginBottom: 18 }}>Xin chào! Mình có thể giúp gì cho bạn?</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {state.examples.map((q, i) => (
                 <button
                   key={i}
                   onClick={() => actions.askSample(q)}
-                  className="text-left px-[15px] py-3 border border-line bg-[#f2f3ff] rounded-[11px] font-sans text-[13.5px] text-[#3f4940] cursor-pointer leading-[1.5] hover:border-brand hover:bg-[#eaedff] hover:text-brand-dark"
+                  className="text-left px-[15px] py-3 border border-line bg-[#F1F4F9] rounded-[11px] font-sans text-[13.5px] text-[#475467] cursor-pointer leading-[1.5] hover:border-brand hover:bg-[#E9EFFF] hover:text-brand-dark"
                 >
                   {q}
                 </button>
@@ -96,7 +97,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
       </div>
 
       {/* composer */}
-      <div style={{ flexShrink: 0, borderTop: "1px solid #becabd", padding: "12px 18px 14px" }}>
+      <div style={{ flexShrink: 0, borderTop: `1px solid ${COLOR.border}`, padding: "12px 18px 14px" }}>
         <div style={{ display: "flex", gap: 9, alignItems: "flex-end" }}>
           <textarea
             value={state.input}
@@ -114,7 +115,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
             }}
             rows={1}
             placeholder="Nhập câu hỏi của bạn…"
-            className="flex-1 resize-none border border-line rounded-[11px] px-[15px] py-3 text-[14px] font-sans leading-[1.55] h-[46px] min-h-[46px] max-h-[130px] outline-none text-[#131b2e] focus:border-brand focus:shadow-[0_0_0_3px_#dae2fd]"
+            className="flex-1 resize-none border border-line rounded-[11px] px-[15px] py-3 text-[14px] font-sans leading-[1.55] h-[46px] min-h-[46px] max-h-[130px] outline-none text-[#101828] focus:border-brand focus:shadow-[0_0_0_3px_#E9EFFF]"
           />
           <button
             onClick={() => actions.send()}
@@ -129,15 +130,15 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
               alignItems: "center",
               justifyContent: "center",
               cursor: "pointer",
-              color: "#fff",
-              boxShadow: "0 1px 2px rgba(19,27,46,.08)",
-              background: canSend ? "#006130" : "#becabd",
+              color: COLOR.textOnDark,
+              boxShadow: SHADOW.sm,
+              background: canSend ? COLOR.accent : COLOR.border,
             }}
           >
             <IcSend size={19} />
           </button>
         </div>
-        <p style={{ margin: "7px 0 0", textAlign: "center", fontSize: "11.5px", color: "#6f7a6f" }}>Nhấn Enter để gửi · Shift + Enter để xuống dòng</p>
+        <p style={{ margin: "7px 0 0", textAlign: "center", fontSize: "11.5px", color: COLOR.textMuted }}>Nhấn Enter để gửi · Shift + Enter để xuống dòng</p>
       </div>
     </section>
   );

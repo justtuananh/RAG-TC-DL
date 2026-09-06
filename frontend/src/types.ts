@@ -88,6 +88,7 @@ export interface DocItem {
   date: string;
   status: DocStatus;
   progress?: number;
+  error?: string;
 }
 
 export interface LlmConfig {
@@ -111,6 +112,14 @@ export interface ViewingDoc {
   pages: number | null;
   blocks: DocBlock[];
   markdown?: string; // chế độ live: hiển thị parent_text markdown thay cho blocks
+  fileUrl?: string; // tệp gốc (.docx/.pdf) thô — ưu tiên hiển thị thay cho markdown khi có
+  // ── metadata thật cho panel "Thông tin tệp" — chỉ điền khi có dữ liệu ──
+  ext?: DocExt;
+  size?: string;
+  date?: string;
+  status?: DocStatus;
+  sectionPath?: string; // có khi mở từ trích dẫn nguồn (openSourceDoc)
+  kind?: string; // loại nội dung (đoạn văn/bảng/công thức…), có khi mở từ trích dẫn nguồn
 }
 
 export interface Proc {
@@ -130,7 +139,6 @@ export interface AppState {
   pulse: number;
   pinIndex: number;
   sourceW: number;
-  sidebarOpen: boolean;
   activeConvId: string | null;
   messages: Message[];
   histSearch: string;
@@ -139,6 +147,7 @@ export interface AppState {
   faqOpen: number;
   toast: string | null;
   docSearch: string;
+  docStatusFilter: DocStatus | "all";
   docPageSize: number;
   docPage: number;
   viewingDoc: ViewingDoc | null;

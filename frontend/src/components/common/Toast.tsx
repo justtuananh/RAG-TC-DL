@@ -1,4 +1,5 @@
 import { IcCheck } from "./icons";
+import { COLOR } from "../../theme";
 
 export default function Toast({ message }: { message: string | null }) {
   if (!message) return null;
@@ -8,8 +9,8 @@ export default function Toast({ message }: { message: string | null }) {
         position: "fixed",
         right: 20,
         top: 72,
-        background: "#0F172A",
-        color: "#fff",
+        background: COLOR.sidebarBg,
+        color: COLOR.textOnDark,
         padding: "10px 16px",
         borderRadius: 10,
         fontSize: "13px",
@@ -22,7 +23,7 @@ export default function Toast({ message }: { message: string | null }) {
         animation: "fadeUp .2s ease-out",
       }}
     >
-      <IcCheck size={15} strokeWidth={2.5} style={{ color: "#4ADE80", flexShrink: 0 }} />
+      <IcCheck size={15} strokeWidth={2.5} style={{ color: COLOR.successBorder, flexShrink: 0 }} />
       {message}
     </div>
   );

@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { COLOR } from "../../theme";
 import { IcBrand, IcCheck } from "../common/icons";
 
 const PROC_DEFS: { a: string; d: string }[] = [
@@ -17,15 +18,15 @@ export default function ProcessSteps({ step }: { step: number }) {
           width: 32,
           height: 32,
           borderRadius: 9999,
-          background: "#dae2fd",
-          border: "1px solid #becabd",
+          background: COLOR.accentSoft,
+          border: `1px solid ${COLOR.border}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           marginTop: 2,
         }}
       >
-        <IcBrand size={17} style={{ color: "#006130" }} />
+        <IcBrand size={17} style={{ color: COLOR.accent }} />
       </div>
       <div
         style={{
@@ -33,13 +34,16 @@ export default function ProcessSteps({ step }: { step: number }) {
           maxWidth: "86%",
           padding: "14px 16px",
           borderRadius: "16px 16px 16px 5px",
-          background: "#fff",
-          border: "1px solid #becabd",
-          boxShadow: "0 6px 18px -10px rgba(19,27,46,.18)",
+          background: COLOR.surface,
+          border: `1px solid ${COLOR.border}`,
+          boxShadow: "0 6px 18px -10px rgba(16,24,40,.18)",
         }}
       >
-        <div style={{ fontSize: "12.5px", fontWeight: 700, color: "#3f4940", marginBottom: 11, display: "flex", alignItems: "center", gap: 8 }}>
-          <span className="animate-spin" style={{ width: 14, height: 14, border: "2px solid #becabd", borderTopColor: "#006130", borderRadius: "50%" }} />
+        <div style={{ fontSize: "12.5px", fontWeight: 700, color: COLOR.textSecondary, marginBottom: 11, display: "flex", alignItems: "center", gap: 8 }}>
+          <span
+            className="animate-spin"
+            style={{ width: 14, height: 14, border: `2px solid ${COLOR.border}`, borderTopColor: COLOR.accent, borderRadius: "50%" }}
+          />
           Đang xử lý câu hỏi của bạn…
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -47,7 +51,7 @@ export default function ProcessSteps({ step }: { step: number }) {
             // Chỉ hiện bước ĐÃ XONG + đúng 1 bước ĐANG chạy; bước chưa tới thì ẩn.
             if (i > step) return null;
             const done = i < step;
-            const labelStyle: CSSProperties = done ? { color: "#006130", fontWeight: 500 } : { color: "#131b2e", fontWeight: 600 };
+            const labelStyle: CSSProperties = done ? { color: COLOR.accent, fontWeight: 500 } : { color: COLOR.textPrimary, fontWeight: 600 };
             return (
               <div key={i} className="animate-fadeUp" style={{ display: "flex", alignItems: "center", gap: 10, fontSize: "13px" }}>
                 {done ? (
@@ -57,18 +61,18 @@ export default function ProcessSteps({ step }: { step: number }) {
                       width: 19,
                       height: 19,
                       borderRadius: 9999,
-                      background: "#006130",
+                      background: COLOR.accent,
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
-                    <IcCheck size={11} strokeWidth={3} style={{ color: "#fff" }} />
+                    <IcCheck size={11} strokeWidth={3} style={{ color: COLOR.textOnDark }} />
                   </span>
                 ) : (
                   <span
                     className="animate-spin"
-                    style={{ flexShrink: 0, width: 19, height: 19, border: "2px solid #dae2fd", borderTopColor: "#006130", borderRadius: "50%" }}
+                    style={{ flexShrink: 0, width: 19, height: 19, border: `2px solid ${COLOR.accentSoft}`, borderTopColor: COLOR.accent, borderRadius: "50%" }}
                   />
                 )}
                 <span style={{ ...labelStyle, fontSize: "13px" }}>{done ? d.d : d.a}</span>

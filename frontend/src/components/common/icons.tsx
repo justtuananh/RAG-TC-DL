@@ -302,3 +302,33 @@ export const IcSend = (p: IconProps) => (
     <polygon points="22 2 15 22 11 13 2 9 22 2" />
   </Svg>
 );
+
+/** Danh sách dạng bảng — dùng cho công cụ chuyển kiểu xem (bảng/thẻ) */
+export const IcList = (p: IconProps) => (
+  <Svg {...p}>
+    <line x1="8" y1="6" x2="21" y2="6" />
+    <line x1="8" y1="12" x2="21" y2="12" />
+    <line x1="8" y1="18" x2="21" y2="18" />
+    <line x1="3" y1="6" x2="3.01" y2="6" />
+    <line x1="3" y1="12" x2="3.01" y2="12" />
+    <line x1="3" y1="18" x2="3.01" y2="18" />
+  </Svg>
+);
+
+/** Lưới 4 ô — dùng cho công cụ chuyển kiểu xem (bảng/thẻ) */
+export const IcGrid = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+  </Svg>
+);
+
+export const IcMoreHorizontal = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none" />
+    <circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none" />
+  </Svg>
+);

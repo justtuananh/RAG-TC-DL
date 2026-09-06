@@ -1,6 +1,7 @@
 import type { Message } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import Markdown from "../common/Markdown";
+import { COLOR } from "../../theme";
 import { IcBrand, IcCheck, IcCopy, IcRefresh, IcThumbDown, IcThumbUp } from "../common/icons";
 
 interface Props {
@@ -25,11 +26,11 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
             maxWidth: "80%",
             padding: "11px 15px",
             borderRadius: "16px 16px 5px 16px",
-            background: "#006130",
-            color: "#fff",
+            background: COLOR.accent,
+            color: COLOR.textOnDark,
             fontSize: "14px",
             lineHeight: 1.55,
-            boxShadow: "0 2px 5px rgba(0,97,48,.22)",
+            boxShadow: "0 2px 5px rgba(36,84,224,.22)",
           }}
         >
           {message.text}
@@ -61,15 +62,15 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
           width: 32,
           height: 32,
           borderRadius: 9999,
-          background: "#dae2fd",
-          border: "1px solid #becabd",
+          background: COLOR.accentSoft,
+          border: `1px solid ${COLOR.border}`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           marginTop: 2,
         }}
       >
-        <IcBrand size={17} style={{ color: "#006130" }} />
+        <IcBrand size={17} style={{ color: COLOR.accent }} />
       </div>
 
       <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 9, alignItems: "flex-start" }}>
@@ -80,9 +81,9 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
             maxWidth: "100%",
             padding: "13px 16px",
             borderRadius: "16px 16px 16px 5px",
-            background: isErr ? "#FEF2F2" : "#f2f3ff",
-            border: `1px solid ${isErr ? "#FECACA" : "#becabd"}`,
-            color: isErr ? "#B91C1C" : "#131b2e",
+            background: isErr ? COLOR.dangerBg : COLOR.surfaceAlt,
+            border: `1px solid ${isErr ? COLOR.dangerBorder : COLOR.border}`,
+            color: isErr ? COLOR.danger : COLOR.textPrimary,
             fontSize: "14px",
             lineHeight: 1.65,
           }}
@@ -94,9 +95,9 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
                 alignItems: "center",
                 gap: 6,
                 fontSize: "11.5px",
-                color: "#006130",
-                background: "#f2f3ff",
-                border: "1px solid #dae2fd",
+                color: COLOR.accent,
+                background: COLOR.surfaceAlt,
+                border: `1px solid ${COLOR.accentSoftBorder}`,
                 padding: "4px 10px",
                 borderRadius: 9999,
                 marginBottom: 11,
@@ -112,14 +113,16 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
 
           {/* Nguồn: chips */}
           {!message.streaming && message.citeChips && message.citeChips.length > 0 && (
-            <div style={{ marginTop: 11, paddingTop: 10, borderTop: "1px solid #becabd", display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
-              <span style={{ fontSize: "11.5px", color: "#6f7a6f", fontWeight: 600 }}>Nguồn:</span>
+            <div
+              style={{ marginTop: 11, paddingTop: 10, borderTop: `1px solid ${COLOR.border}`, display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}
+            >
+              <span style={{ fontSize: "11.5px", color: COLOR.textMuted, fontWeight: 600 }}>Nguồn:</span>
               {message.citeChips.map((c) => (
                 <button
                   key={c.index}
                   onClick={() => actions.openCite(c.index)}
                   title="Bấm để mở nguồn này"
-                  className="inline-flex items-center gap-[5px] px-[10px] py-1 bg-white border border-[#becabd] rounded-full font-sans text-[11.5px] font-semibold text-brand-dark cursor-pointer hover:bg-[#eaedff] hover:border-brand"
+                  className="inline-flex items-center gap-[5px] px-[10px] py-1 bg-white border border-[#DEE3EA] rounded-full font-sans text-[11.5px] font-semibold text-brand-dark cursor-pointer hover:bg-[#E9EFFF] hover:border-brand"
                 >
                   <span style={{ fontWeight: 700 }}>{c.n}</span> {c.code}
                 </button>
@@ -135,7 +138,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
               onClick={() => actions.copyAnswer(plain)}
               aria-label="Sao chép câu trả lời"
               title="Sao chép câu trả lời"
-              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-[#eaedff] hover:text-[#3f4940]"
+              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] hover:bg-[#E9EFFF] hover:text-[#475467]"
             >
               <IcCopy size={14} />
             </button>
@@ -143,7 +146,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
               onClick={() => actions.feedback("up")}
               aria-label="Câu trả lời hữu ích"
               title="Câu trả lời hữu ích"
-              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-[#f2f3ff] hover:text-brand"
+              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] hover:bg-[#F1F4F9] hover:text-brand"
             >
               <IcThumbUp size={14} />
             </button>
@@ -151,7 +154,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
               onClick={() => actions.feedback("down")}
               aria-label="Câu trả lời chưa đúng"
               title="Câu trả lời chưa đúng"
-              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-red-50 hover:text-[#DC2626]"
+              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] hover:bg-[#FEF2F2] hover:text-[#DC2626]"
             >
               <IcThumbDown size={14} />
             </button>
@@ -160,7 +163,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
                 onClick={() => actions.regenerate()}
                 aria-label="Tạo lại câu trả lời"
                 title="Tạo lại câu trả lời"
-                className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#6f7a6f] hover:bg-[#eaedff] hover:text-[#3f4940]"
+                className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] hover:bg-[#E9EFFF] hover:text-[#475467]"
               >
                 <IcRefresh size={14} />
               </button>
@@ -172,9 +175,9 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
         {isErr && isLast && (
           <button
             onClick={() => actions.regenerate()}
-            className="inline-flex items-center gap-2 px-[11px] py-[7px] border border-line bg-white rounded-[9px] font-sans text-[12.5px] text-[#3f4940] cursor-pointer hover:border-brand hover:bg-[#eaedff] hover:text-brand-dark"
+            className="inline-flex items-center gap-2 px-[11px] py-[7px] border border-line bg-white rounded-[9px] font-sans text-[12.5px] text-[#475467] cursor-pointer hover:border-brand hover:bg-[#E9EFFF] hover:text-brand-dark"
           >
-            <IcRefresh size={14} style={{ color: "#006130" }} /> Thử lại
+            <IcRefresh size={14} style={{ color: COLOR.accent }} /> Thử lại
           </button>
         )}
       </div>
