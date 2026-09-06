@@ -110,6 +110,18 @@ def _marker_single_exe(python_exe: str) -> str:
     return str(exe)
 
 
+def _run_timeout(start: int, end: int, force_ocr: bool) -> int:
+    """Generous per-run budget, not a tight one: this only exists to catch a
+    genuinely stuck subprocess (e.g. GPU memory held by another orphaned
+    Marker process — hit exactly this during development) rather than to cap
+    normal-but-slow runs. Padded well above the worst per-page time observed
+    in testing (~250s/page for a force_ocr page with heavy tables/figures).
+    """
+    n_pages = end - start + 1
+    per_page = 600 if force_ocr else 90
+    return 600 + n_pages * per_page
+
+
 def _run_marker(marker_exe: str, pdf_path: str, page_range: str, out_dir: Path, force_ocr: bool) -> str:
     cmd = [
         marker_exe, pdf_path,
@@ -119,7 +131,16 @@ def _run_marker(marker_exe: str, pdf_path: str, page_range: str, out_dir: Path, 
     ]
     if force_ocr:
         cmd.append("--force_ocr")
-    subprocess.run(cmd, check=True, capture_output=True, text=True)
+    start, end = (int(p) for p in (page_range.split("-") if "-" in page_range else [page_range, page_range]))
+    timeout = _run_timeout(start, end, force_ocr)
+    try:
+        subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=timeout)
+    except subprocess.TimeoutExpired as e:
+        raise RuntimeError(
+            f"Marker didn't finish pages {page_range} within {timeout}s — likely stuck "
+            f"(common cause: another Marker/torch process still holding GPU memory; "
+            f"check `nvidia-smi` for orphaned python.exe/marker_single.exe processes)."
+        ) from e
 
     stem = Path(pdf_path).stem
     md_path = out_dir / stem / f"{stem}.md"
@@ -174,21 +195,38 @@ def extract_pdf_marker(pdf_path: str, marker_python: str | None = None) -> PdfMa
 
     flags = scan_pdf_pages(pdf_path)
     runs = flags_to_runs(flags)
+    n_flagged = sum(1 for is_ocr, _, _ in runs if is_ocr)
+    print(
+        f"[pdf-marker] {Path(pdf_path).name}: {len(flags)} pages, {sum(flags)} flagged "
+        f"for OCR, {len(runs)} runs ({n_flagged} need --force_ocr) — this can take a "
+        f"long time on a large PDF (~180s/page for OCR runs, ~18s/page for fast runs, "
+        f"measured on an RTX 5060 8GB)",
+        flush=True,
+    )
 
     t0 = time.monotonic()
     parts: list[str] = []
     run_reports: list[dict] = []
     n_pages_ocr = 0
     with tempfile.TemporaryDirectory(prefix="pdf_marker_") as work_dir:
-        for is_ocr, start, end in runs:
+        for i, (is_ocr, start, end) in enumerate(runs, 1):
             page_range = str(start) if start == end else f"{start}-{end}"
             out_dir = Path(work_dir) / f"run_{start}_{end}_{'ocr' if is_ocr else 'fast'}"
+            run_t0 = time.monotonic()
+            print(
+                f"[pdf-marker] run {i}/{len(runs)}: pages {page_range} "
+                f"({'force_ocr' if is_ocr else 'fast'})...",
+                flush=True,
+            )
             md = _run_marker(marker_exe, pdf_path, page_range, out_dir, force_ocr=is_ocr)
+            run_elapsed = time.monotonic() - run_t0
+            print(f"[pdf-marker] run {i}/{len(runs)} done in {run_elapsed:.1f}s", flush=True)
             parts.append(md)
             run_reports.append({"pages": page_range, "force_ocr": is_ocr, "chars": len(md)})
             if is_ocr:
                 n_pages_ocr += end - start + 1
     elapsed = time.monotonic() - t0
+    print(f"[pdf-marker] {Path(pdf_path).name}: done in {elapsed:.1f}s total", flush=True)
 
     combined = "\n\n".join(parts)
     combined, n_unnormalized = _normalize_sub_sup(combined)

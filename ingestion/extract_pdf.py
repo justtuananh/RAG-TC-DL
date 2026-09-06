@@ -25,6 +25,11 @@ from dataclasses import dataclass
 
 import pymupdf
 
+# See pdf_math_scan.py for why: MuPDF prints minor PDF structural quirks
+# straight to stderr as "MuPDF error: ...", harmless but easily mistaken for
+# a real failure.
+pymupdf.TOOLS.mupdf_display_errors(False)
+
 _HEADING_RE = re.compile(r"^#{1,6}\s", re.MULTILINE)
 _TABLE_SEP_RE = re.compile(r"^\|[\s:|-]+\|$", re.MULTILINE)
 

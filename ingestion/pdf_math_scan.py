@@ -28,6 +28,13 @@ import re
 
 import pymupdf
 
+# Real-world PDFs commonly have minor structural quirks (e.g. a content stream
+# referencing an XObject the resource dict doesn't define). MuPDF prints these
+# straight to stderr as "MuPDF error: ..." regardless of Python's exception
+# handling — harmless (the page still reads fine, just skips that resource),
+# but reads as an actual error to anyone watching the log. Silence it here.
+pymupdf.TOOLS.mupdf_display_errors(False)
+
 _MATH_FONT_RE = re.compile(
     r"cmmi|cmsy|cmex|cmbsy|msam|msbm|euler|eufm|lmmi|lmsy|lmex|"
     r"txmi|txsy|stix.*math|cambria.*math|asana|latin.*modern.*math|"

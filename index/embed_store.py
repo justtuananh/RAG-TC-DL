@@ -160,6 +160,28 @@ def upsert(client: QdrantClient, points: list[PointStruct]) -> None:
         client.upsert(collection_name=COLLECTION, points=batch)
 
 
+def index_chunks(client: QdrantClient, chunks: list[Chunk]) -> int:
+    """Embed + upsert one list of chunks (single file or full corpus). Returns point count."""
+    vectors = embed_chunks_batched(chunks)
+    points = []
+    for chunk, vec in zip(chunks, vectors):
+        points.append(PointStruct(
+            id=int(chunk.chunk_id, 16),  # Qdrant needs uint64
+            vector=vec,
+            payload={
+                "chunk_id": chunk.chunk_id,
+                "parent_id": chunk.parent_id,
+                "is_parent": chunk.is_parent,
+                "kind": chunk.kind,
+                "text": chunk.text,
+                "section_path": chunk.section_path,
+                "file_stem": chunk.file_stem,
+            },
+        ))
+    upsert(client, points)
+    return len(points)
+
+
 # ── Main indexing logic ───────────────────────────────────────────────────────
 
 def index_directory(md_dir: Path, force: bool = False) -> dict:
@@ -188,29 +210,11 @@ def index_directory(md_dir: Path, force: bool = False) -> dict:
         print(f"\nIndexing {file_stem} ({len(chunks)} chunks) …")
         t0 = time.time()
 
-        vectors = embed_chunks_batched(chunks)
-
-        points = []
-        for chunk, vec in zip(chunks, vectors):
-            points.append(PointStruct(
-                id=int(chunk.chunk_id, 16),  # Qdrant needs uint64
-                vector=vec,
-                payload={
-                    "chunk_id": chunk.chunk_id,
-                    "parent_id": chunk.parent_id,
-                    "is_parent": chunk.is_parent,
-                    "kind": chunk.kind,
-                    "text": chunk.text,
-                    "section_path": chunk.section_path,
-                    "file_stem": chunk.file_stem,
-                },
-            ))
-
-        upsert(client, points)
+        n_points = index_chunks(client, chunks)
         elapsed = time.time() - t0
-        print(f"  ✓ {len(points)} points in {elapsed:.1f}s")
+        print(f"  ✓ {n_points} points in {elapsed:.1f}s")
         stats["files_indexed"] += 1
-        stats["chunks_added"] += len(points)
+        stats["chunks_added"] += n_points
 
     total = client.get_collection(COLLECTION).points_count
     stats["total_points"] = total

@@ -188,12 +188,17 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./build/spike_a:/app/build/spike_a:ro
-      - ./TC_DL:/app/TC_DL:ro
+      # Writable (not :ro like the `app`/`indexer` services) — the upload
+      # feature saves .docx here and writes extracted .md/assets/report here.
+      - ./build/spike_a:/app/build/spike_a
+      - ./TC_DL:/app/TC_DL
       - ./api_server.py:/app/api_server.py:ro
       - ./generation.py:/app/generation.py:ro
       - ./latex.py:/app/latex.py:ro
+      - ./ingestion_jobs.py:/app/ingestion_jobs.py:ro
       - ./retrieval:/app/retrieval:ro
+      - ./index:/app/index:ro
+      - ./ingestion:/app/ingestion:ro
     environment:
       EMBED_URL: http://embedding:8010/v1/embeddings
       RERANK_URL: http://reranker:8011/v1/rerank

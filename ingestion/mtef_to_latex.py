@@ -38,14 +38,22 @@ if _platform.system() == "Windows":
         r"C:\Ruby40-x64\lib\ruby\gems\4.0.0",
         os.path.expanduser(r"~\.local\share\gem\ruby\4.0.0"),
     ]
-    _GEM_PATH_ENV = ";".join(_GEM_PATHS)
+    _GEM_PATH_SEP = ";"
 else:
     _GEM_PATHS = [
         os.path.expanduser("~/.gem/ruby/2.6.0"),
         "/Library/Ruby/Gems/2.6.0",
         "/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/gems/2.6.0",
     ]
-    _GEM_PATH_ENV = ":".join(_GEM_PATHS)
+    _GEM_PATH_SEP = ":"
+
+# Only override GEM_PATH with paths that actually exist on this machine — e.g.
+# a Docker container with a system-wide `gem install` (Debian's ruby-full) has
+# none of the paths above, and forcing GEM_PATH to a nonexistent path would
+# make `require 'mathtype_to_mathml'` fail even though the gem installed fine.
+# Leaving GEM_PATH unset lets Ruby fall back to its own correct default.
+_existing_gem_paths = [p for p in _GEM_PATHS if os.path.isdir(p)]
+_GEM_PATH_ENV = _GEM_PATH_SEP.join(_existing_gem_paths) if _existing_gem_paths else None
 
 _RUBY_SNIPPET = r"""
 require 'mathtype_to_mathml'
@@ -56,7 +64,8 @@ puts MathTypeToMathML::Converter.new(ARGV[0]).convert
 def _bin_to_mathml(bin_path: str, timeout: int = 15) -> Optional[str]:
     """Run Ruby gem and return MathML string, or None on error."""
     env = os.environ.copy()
-    env["GEM_PATH"] = _GEM_PATH_ENV
+    if _GEM_PATH_ENV:
+        env["GEM_PATH"] = _GEM_PATH_ENV
     try:
         result = subprocess.run(
             ["ruby", "-e", _RUBY_SNIPPET, "--", bin_path],

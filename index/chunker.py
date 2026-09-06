@@ -32,6 +32,12 @@ _HEADING_RE = re.compile(r"^(#{1,6})\s+(.+)$")
 _TABLE_ROW_RE = re.compile(r"^\|")
 _FORMULA_ONLY_RE = re.compile(r"^\s*\$[^$]+\$\s*$")
 
+# Window size for synthetic sections (see _synthesize_sections) — keeps both
+# the parent (section) and its child chunks well inside any embedding
+# model's context, whether the source has real paragraph breaks or (as seen
+# with MarkItDown's PDF output on multi-column layouts) almost none at all.
+_SYNTH_SECTION_CHARS = 4000
+
 
 def _make_id(file_stem: str, section: str, text: str) -> str:
     raw = f"{file_stem}\x00{section}\x00{text}"
@@ -105,11 +111,41 @@ def _split_body_into_children(
     return children
 
 
+def _synthesize_sections(text: str, file_stem: str) -> str:
+    """Fallback for Markdown with zero headings (e.g. MarkItDown's PDF output,
+    which never infers heading levels — unlike extract_docx.py, which always
+    emits at least one). Without a heading, flush_section() below has no
+    section to attach the body to and silently drops it, so parse_file()
+    returns zero chunks for the whole file.
+
+    Break the raw text into fixed-size windows (at whitespace boundaries so
+    words aren't split) and prefix each with a synthetic heading, turning an
+    unbounded blob into a bounded number of indexable sections."""
+    windows: list[str] = []
+    n = len(text)
+    start = 0
+    while start < n:
+        end = min(start + _SYNTH_SECTION_CHARS, n)
+        if end < n:
+            ws = text.rfind(" ", start, end)
+            if ws > start:
+                end = ws
+        window = text[start:end].strip()
+        if window:
+            windows.append(window)
+        start = end
+    return "\n\n".join(
+        f"# {file_stem} (phần {i})\n\n{w}" for i, w in enumerate(windows, 1)
+    )
+
+
 def parse_file(md_path: Path) -> list[Chunk]:
     """Parse one Markdown file → list of parent + child Chunks."""
     text = md_path.read_text(encoding="utf-8")
-    lines = text.split("\n")
     file_stem = md_path.stem
+    if not any(_HEADING_RE.match(line) for line in text.split("\n")):
+        text = _synthesize_sections(text, file_stem)
+    lines = text.split("\n")
 
     chunks: list[Chunk] = []
 

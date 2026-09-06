@@ -87,6 +87,16 @@ def _ensure_index() -> tuple[BM25Okapi, list[dict]]:
     return _bm25, _chunks
 
 
+def invalidate() -> None:
+    """Drop the cached index so the next bm25_search() rebuilds it from Qdrant.
+
+    Call after upserting new chunks (e.g. a document upload) — _ensure_index()
+    otherwise never re-scrolls Qdrant once built.
+    """
+    global _bm25, _chunks
+    _bm25, _chunks = None, None
+
+
 # ── public API ────────────────────────────────────────────────────────────────
 
 def bm25_search(

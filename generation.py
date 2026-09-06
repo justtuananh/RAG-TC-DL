@@ -18,6 +18,11 @@ import os
 import re
 
 import requests
+from dotenv import load_dotenv
+
+# Đọc .env ở thư mục gốc repo (không có gì xảy ra nếu file không tồn tại — vd.
+# trong container Docker, nơi biến môi trường đã được docker-compose set sẵn).
+load_dotenv()
 
 # ── Config LLM ────────────────────────────────────────────────────────────────
 OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434/v1/chat/completions")
