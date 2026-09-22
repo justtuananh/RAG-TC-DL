@@ -22,6 +22,8 @@ ARG RERANKER_MODEL=BAAI/bge-reranker-v2-m3
 ENV MODE=${MODE}
 ENV EMBEDDING_MODEL=${EMBEDDING_MODEL}
 ENV RERANKER_MODEL=${RERANKER_MODEL}
+# Cố định cache dir để HF_HUB_OFFLINE=1 lúc runtime tìm đúng chỗ đã bake lúc build
+ENV HF_HOME=/root/.cache/huggingface
 
 RUN python - <<'EOF'
 import os
@@ -36,6 +38,9 @@ else:
     SentenceTransformer(emb)
 print("Model downloaded.")
 EOF
+
+# Xác nhận model thật sự đã nằm trong image layer (fail build sớm nếu chưa)
+RUN test -n "$(find /root/.cache/huggingface -iname '*.safetensors' -o -iname 'pytorch_model*.bin')"
 
 EXPOSE 8000
 CMD ["python", "server.py"]

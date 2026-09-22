@@ -118,10 +118,10 @@ python -m ingestion.spike_a              # đọc TC_DL/ → ghi build/spike_a/*
 Toàn bộ stack gói trong `docker-compose.yml` + điều khiển qua `Makefile`. **Trình tự:**
 ```bash
 # 0) Đã chạy ingestion (§3.2) → có build/spike_a/   (compose mount thư mục này read-only)
-make up            # build images + start: qdrant, embedding, reranker, ollama, app  (~10–20' lần đầu: tải model)
+make up            # build images + start: qdrant, embedding, reranker, ollama, api, frontend  (~10–20' lần đầu: tải model)
 make pull-model    # tải qwen2.5:1.5b vào container ollama (~940MB); prod: make pull-model-7b
 make index         # indexer: index.embed_store --force → nhúng build/spike_a/ vào Qdrant
-# → mở http://localhost:7861
+# → mở http://localhost:3000
 ```
 
 **Các service (`docker-compose.yml`):**
@@ -131,10 +131,9 @@ make index         # indexer: index.embed_store --force → nhúng build/spike_a
 | `embedding` | build `docker/inference` (`MODE=embedding`, `BAAI/bge-m3`) | 8010 | `/v1/embeddings`, 1024-dim |
 | `reranker` | build `docker/inference` (`MODE=reranker`, `BAAI/bge-reranker-v2-m3`) | 8011 | `/v1/rerank` (Cohere-style) |
 | `ollama` | `ollama/ollama:latest` | 11434 | LLM, volume `ollama_data` |
-| `app` | build `.` → `python app.py` | 7861 | Gradio UI; mount `build/spike_a` + `TC_DL` (ro); đọc env `EMBED_URL/RERANK_URL/QDRANT_URL/OLLAMA_URL/OLLAMA_MODEL` |
-| `api` | reuse `qtkd-app:local` → `uvicorn api_server:app` | 8080 | **FastAPI + SSE** cho React frontend (`/api/health`, `/api/examples`, `/api/chat/stream`); cùng pipeline với `app` |
+| `api` | build `.` → `uvicorn api_server:app` | 8080 | **FastAPI + SSE** cho React frontend (`/api/health`, `/api/examples`, `/api/chat/stream`); mount `build/spike_a` + `TC_DL` (writable, cho upload); đọc env `EMBED_URL/RERANK_URL/QDRANT_URL/OLLAMA_URL/OLLAMA_MODEL` |
 | `frontend` | build `frontend/` → nginx | 3000 | Serve bản React build; proxy `/api` → `api:8080`. **Đã nối backend thật** (chat SSE, bảng/công thức, lịch sử + bộ nhớ ngắn hạn) |
-| `indexer` | build `.` (profile `tools`) | — | Chạy 1 lần: `index.embed_store --force` |
+| `indexer` | reuse `qtkd-app:local` (profile `tools`) | — | Chạy 1 lần: `index.embed_store --force` |
 
 **Inference server tự viết** — `docker/inference/server.py`: FastAPI + `sentence-transformers`
 (`SentenceTransformer` cho embedding, `CrossEncoder` cho reranker). Model được **tải sẵn vào
