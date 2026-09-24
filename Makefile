@@ -1,4 +1,4 @@
-.PHONY: up down logs pull-model index rebuild status eval answer-eval answer-eval-dev lint lint-all fmt fidelity test-unit check test-int smoke test test-ruby
+.PHONY: up down logs pull-model index rebuild status eval answer-eval answer-eval-dev lint lint-all fmt fidelity test-unit check test-int smoke test test-ruby db-upgrade db-downgrade db-backup migrate-documents db-check seed-knowledge generate-procedures extract-eval extract-section6-eval extract-section6 extract-appendix records-fixtures seed-synthetic intent-eval
 
 # ── Khởi động ────────────────────────────────────────────────────────────────
 up:
@@ -96,12 +96,26 @@ fmt:
 fidelity:
 	$(PY) scripts/check_fidelity.py
 
+# Eval trích xuất bằng luật trên tập vàng (spec Sprint 4): precision ≥ 0,95, recall ≥ 0,80.
+extract-eval:
+	$(PY) -m eval.extract_eval
+
+# Eval trích xuất §6 bằng LLM (spec Sprint 5): precision ≥ 0,90 + 0 bịa số.
+# Mặc định chạy client kịch bản (tất định, không cần Ollama); --live để đo model thật.
+extract-section6-eval:
+	$(PY) -m eval.extract_section6_eval
+
+# Eval định tuyến chat lai văn bản + số liệu (spec Sprint 9): intent ≥ 0,90,
+# 0 ô số không nguồn, câu hỏi văn bản không lạc nhánh số liệu.
+intent-eval:
+	$(PY) -m eval.intent_eval
+
 # Unit test (mock toàn bộ I/O) — chạy mọi nơi, không cần Docker.
 test-unit:
 	$(PY) -m pytest -m unit tests/unit
 
 # Cổng cloud-feasible = đúng những gì CI chạy ("xanh local ⇒ xanh CI").
-check: lint fidelity test-unit
+check: lint fidelity extract-eval extract-section6-eval intent-eval test-unit
 
 # Tầng integration (cần `make up` trước): chờ service rồi chạy test thật.
 test-int:
@@ -119,3 +133,56 @@ test-ruby:
 
 # Tất cả test chạy được trên máy (unit + integration). `make eval` vẫn là eval chuẩn.
 test: test-unit test-int
+
+# ── Database Management ───────────────────────────────────────────────────────
+
+# Run pending migrations
+db-upgrade:
+	docker compose run --rm --no-deps api python scripts/migrate.py upgrade head
+
+# Downgrade all migrations
+db-downgrade:
+	docker compose run --rm --no-deps api python scripts/migrate.py downgrade base
+
+# Backup database
+db-backup:
+	@mkdir -p backups
+	docker compose exec -T postgres pg_dump -U $${POSTGRES_USER:-qtkd_user} -d $${POSTGRES_DB:-qtkd} > backups/qtkd_db_$$(date +%Y%m%d_%H%M%S).sql
+
+migrate-documents:
+	docker compose run --rm --no-deps api python scripts/migrate_documents.py --apply
+
+# Seed khung khái niệm đo lường (quantity/unit/device_type) — idempotent.
+seed-knowledge:
+	docker compose run --rm --no-deps api python scripts/seed_knowledge.py
+
+# Sinh procedure cho QTKĐ đang có; mặc định dry-run, thêm --apply để ghi.
+generate-procedures:
+	docker compose run --rm --no-deps api python scripts/generate_procedures.py --apply
+
+# Trích xuất §6 bằng LLM cho QTKĐ đang có (batch ngoài giờ); mặc định dry-run,
+# thêm --apply để ghi pending. Cần Ollama + model đã pull; thất bại an toàn.
+extract-section6:
+	docker compose run --rm --no-deps api python scripts/extract_section6.py --apply
+
+# Trích xuất Phụ lục A (sơ đồ trường biên bản) cho QTKĐ; mặc định dry-run,
+# thêm --apply để ghi pending. Người duyệt xác nhận rồi records.template mới đọc.
+extract-appendix:
+	docker compose run --rm --no-deps api python scripts/extract_appendix.py --apply
+
+# Sinh lại tệp mẫu hồ sơ (docx/xlsx) đã làm sạch cho test Sprint 7.
+records-fixtures:
+	$(PY) scripts/make_record_fixtures.py
+
+# Seed bộ dữ liệu kiểm định tổng hợp (đã duyệt) cho tab Dữ liệu/thử hiệu năng.
+# Mặc định 10.000 hồ sơ / 1.000 thiết bị; chạy lại gỡ và dựng lại (idempotent).
+seed-synthetic:
+	docker compose run --rm --no-deps api python scripts/seed_synthetic_records.py --count 10000 --devices 1000 --apply
+
+# Test migrations up and down on clean database
+db-check:
+	@echo "Testing database migrations..."
+	@docker compose up -d postgres
+	@docker compose run --rm --no-deps api python scripts/migrate.py upgrade head
+	@docker compose run --rm --no-deps api python scripts/migrate.py downgrade base
+	@echo "✓ Database migrations verified"

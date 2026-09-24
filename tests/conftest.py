@@ -25,7 +25,7 @@ _DATA = Path(__file__).resolve().parent / "data"
 _SINGLETONS = {
     "retrieval.retriever": ["_client"],
     "retrieval.bm25_index": ["_bm25", "_chunks"],
-    "retrieval.router": ["_number_to_stem"],
+    "retrieval.router": ["_number_to_stem", "_device_aliases"],
 }
 
 

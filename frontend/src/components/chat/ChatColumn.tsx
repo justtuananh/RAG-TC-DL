@@ -1,10 +1,11 @@
-import { useEffect, useRef } from "react";
-import type { AppState } from "../../types";
+import { useEffect, useRef, useState } from "react";
+import type { AppState, DataCellRef } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import { COLOR, SHADOW } from "../../theme";
 import { IcBrand, IcMessage, IcSend } from "../common/icons";
 import MessageBubble from "./MessageBubble";
 import ProcessSteps from "./ProcessSteps";
+import ProvenanceDrawer from "../data/ProvenanceDrawer";
 
 function offsetTopIn(el: HTMLElement, container: HTMLElement) {
   let y = 0;
@@ -19,6 +20,8 @@ function offsetTopIn(el: HTMLElement, container: HTMLElement) {
 export default function ChatColumn({ state, actions }: { state: AppState; actions: Actions }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLElement | null>(null);
+  // Ngăn kéo xuất xứ cho các ô số trong bảng kết quả chat (Sprint 9, P1).
+  const [provenanceRef, setProvenanceRef] = useState<DataCellRef | null>(null);
 
   // Ghim câu hỏi lên đầu khung khi pinIndex đổi (đọc từ trên xuống)
   useEffect(() => {
@@ -89,12 +92,16 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
               proc={!!state.proc}
               actions={actions}
               pinnedRef={i === state.pinIndex ? (el) => (pinRef.current = el) : undefined}
+              onOpenProvenance={setProvenanceRef}
+              onOpenDevice={actions.openDevice}
             />
           ))
         )}
 
         {state.proc && <ProcessSteps step={state.proc.step} />}
       </div>
+
+      <ProvenanceDrawer cellRef={provenanceRef} onClose={() => setProvenanceRef(null)} />
 
       {/* composer */}
       <div style={{ flexShrink: 0, borderTop: `1px solid ${COLOR.border}`, padding: "12px 18px 14px" }}>

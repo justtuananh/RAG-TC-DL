@@ -332,3 +332,86 @@ export const IcMoreHorizontal = (p: IconProps) => (
     <circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none" />
   </Svg>
 );
+
+/** Người dùng — nút tài khoản/đăng nhập */
+export const IcUser = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </Svg>
+);
+
+/** Đăng xuất */
+export const IcLogOut = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </Svg>
+);
+
+/** Ổ khoá — màn hình đăng nhập / quyền ghi */
+export const IcLock = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3" y="11" width="18" height="11" rx="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </Svg>
+);
+
+/** Cơ sở dữ liệu — tab Dữ liệu */
+export const IcDatabase = (p: IconProps) => (
+  <Svg {...p}>
+    <ellipse cx="12" cy="5" rx="9" ry="3" />
+    <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
+    <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
+  </Svg>
+);
+
+/** Bảng dữ liệu — bảng tra cứu dày */
+export const IcTable = (p: IconProps) => (
+  <Svg {...p}>
+    <rect x="3" y="4" width="18" height="16" rx="2" />
+    <line x1="3" y1="10" x2="21" y2="10" />
+    <line x1="9" y1="10" x2="9" y2="20" />
+  </Svg>
+);
+
+/** Tải xuống — xuất Excel */
+export const IcDownload = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <polyline points="7 10 12 15 17 10" />
+    <line x1="12" y1="15" x2="12" y2="3" />
+  </Svg>
+);
+
+/** Mũi tên trái — quay lại bảng từ trang thiết bị */
+export const IcArrowLeft = (p: IconProps) => (
+  <Svg {...p}>
+    <line x1="19" y1="12" x2="5" y2="12" />
+    <polyline points="12 19 5 12 12 5" />
+  </Svg>
+);
+
+/** Phễu lọc — thanh lọc ở đầu cột */
+export const IcFilter = (p: IconProps) => (
+  <Svg {...p}>
+    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+  </Svg>
+);
+
+/** Biểu đồ đường — diễn biến sai số */
+export const IcChart = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M3 3v18h18" />
+    <polyline points="7 14 11 10 15 13 20 6" />
+  </Svg>
+);
+
+/** Liên kết nguồn / xuất xứ */
+export const IcLink = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+  </Svg>
+);

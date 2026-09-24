@@ -17,9 +17,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # LoadError: cannot load such file -- pry, without this).
 RUN gem install mathtype_to_mathml pry
 
-# Stage 2-3 Python deps (index + retrieval + Gradio)
-COPY requirements-app.txt .
-RUN pip install --no-cache-dir -r requirements-app.txt
+# Stage 0-3 Python deps (database, auth, index + retrieval + Gradio)
+COPY requirements.txt requirements-app.txt ./
+RUN pip install --no-cache-dir -r requirements.txt -r requirements-app.txt
 
 # Copy source (TC_DL/ and build/spike_a/ are mounted as volumes at runtime)
 COPY app.py .
@@ -30,8 +30,13 @@ COPY ingestion_jobs.py .
 COPY retrieval/ retrieval/
 COPY index/ index/
 COPY ingestion/ ingestion/
+COPY knowledge/ knowledge/
 COPY eval/ eval/
 COPY vendor/ vendor/
+COPY db/ db/
+COPY auth/ auth/
+COPY scripts/ scripts/
+COPY alembic.ini .
 
 EXPOSE 7861
 

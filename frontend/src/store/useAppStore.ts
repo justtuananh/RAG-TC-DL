@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import type { AppState, BackendSource, CiteChip, Conversation, DocItem, Message } from "../types";
+import type { AppState, BackendSource, ChatDataPayload, CiteChip, Conversation, DocItem, Message } from "../types";
 import { SAMPLES } from "./seed";
 import { TIMING, ZOOM } from "../services/mockEngine";
 import {
@@ -17,6 +17,19 @@ import {
   type HistoryTurn,
 } from "../services/liveApi";
 import { loadConversations, saveConversations } from "./persistence";
+import {
+  AuthError,
+  canWrite,
+  clearToken,
+  expiresWithin,
+  fetchMe,
+  getToken,
+  isTokenExpired,
+  login as apiLogin,
+  logout as apiLogout,
+  refreshToken,
+  subscribeUnauthorized,
+} from "../services/auth";
 
 // setState-style reducer: nhận patch (partial hoặc hàm) → merge.
 type Patch = Partial<AppState> | ((s: AppState) => Partial<AppState>);
@@ -57,6 +70,15 @@ function makeInitialState(): AppState {
     examples: SAMPLES,
     liveSources: [],
     streaming: false,
+    pendingDeviceId: null,
+    auth: {
+      user: null,
+      loginOpen: false,
+      loginBusy: false,
+      loginError: null,
+      loginNotice: null,
+      restoreDone: false,
+    },
   };
 }
 
@@ -94,11 +116,19 @@ export interface Actions {
   setDocPage: (n: number) => void;
   toggleFaq: (i: number) => void;
   startResize: (e: React.MouseEvent) => void;
+  // ── Chat lai (Sprint 9): mở trang thiết bị từ bảng kết quả số liệu ──
+  openDevice: (deviceId: number) => void;
+  clearPendingDevice: () => void;
   openLlmConfig: () => void;
   closeLlmConfig: () => void;
   setLlm: (field: keyof AppState["llm"], v: string) => void;
   testLlm: () => void;
   saveLlm: () => void;
+  // ── Xác thực (Sprint 1) ──
+  openLogin: (notice?: string) => void;
+  closeLogin: () => void;
+  submitLogin: (username: string, password: string) => void;
+  logout: () => void;
 }
 
 // ── helpers thuần ──
@@ -145,6 +175,8 @@ export function useAppStore(): { state: AppState; actions: Actions } {
   const upTimer = useRef<number | undefined>(undefined);
   const llmTimer = useRef<number | undefined>(undefined);
   const abortRef = useRef<AbortController | null>(null);
+  // Thao tác ghi đang chờ đăng nhập → tự chạy lại sau khi đăng nhập thành công.
+  const pendingWriteRef = useRef<(() => void) | null>(null);
 
   // Nạp danh sách tài liệu thật; khi còn tài liệu "processing" thì poll lại sau
   // ~2s để cập nhật tiến độ/kết quả (dừng khi không còn tài liệu nào đang xử lý).
@@ -189,10 +221,72 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     saveConversations(state.conversations);
   }, [state.conversations]);
 
+  // Khôi phục phiên từ localStorage khi mount: token còn hạn → lấy hồ sơ qua /api/auth/me;
+  // token hết hạn/hỏng → xoá im lặng (khách vẫn đọc/chat được, KHÔNG bắt đăng nhập).
+  useEffect(() => {
+    const token = getToken();
+    if (!token || isTokenExpired(token)) {
+      if (token) clearToken();
+      set((s) => ({ auth: { ...s.auth, restoreDone: true } }));
+      return;
+    }
+    let cancelled = false;
+    fetchMe()
+      .then((user) => {
+        if (cancelled) return;
+        set((s) => ({ auth: { ...s.auth, user, restoreDone: true } }));
+        // Còn ít thời gian hiệu lực → gia hạn trượt trong nền (không chặn UI).
+        if (expiresWithin(getToken(), 6 * 3600 * 1000)) refreshToken().catch(() => {});
+      })
+      .catch(() => {
+        clearToken();
+        if (!cancelled) set((s) => ({ auth: { ...s.auth, user: null, restoreDone: true } }));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Một request ghi gặp 401 (token hết hạn/bị từ chối) → xoá người dùng và mở màn hình đăng nhập.
+  useEffect(
+    () =>
+      subscribeUnauthorized(() => {
+        set((s) => ({
+          auth: {
+            ...s.auth,
+            user: null,
+            loginOpen: true,
+            loginError: null,
+            loginNotice: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để tiếp tục.",
+          },
+        }));
+      }),
+    [],
+  );
+
   const showToast = (msg: string) => {
     set({ toast: msg });
     clearTimeout(toastTimer.current);
     toastTimer.current = window.setTimeout(() => set({ toast: null }), TIMING.toast);
+  };
+
+  /**
+   * Cổng kiểm quyền cho thao tác ghi (upload/process/delete/rename).
+   * - Chưa đăng nhập → mở màn hình đăng nhập, ghi nhớ `retry` để chạy lại sau khi đăng nhập.
+   * - Đã đăng nhập nhưng vai trò không đủ (viewer/approver) → báo toast, không gọi backend.
+   */
+  const ensureWriteAccess = (label: string, retry: () => void): boolean => {
+    const user = stateRef.current.auth.user;
+    if (!user) {
+      pendingWriteRef.current = retry;
+      set((s) => ({ auth: { ...s.auth, loginOpen: true, loginError: null, loginNotice: `Vui lòng đăng nhập để ${label}.` } }));
+      return false;
+    }
+    if (!canWrite(user.role)) {
+      showToast("Tài khoản của bạn không có quyền thực hiện thao tác này.");
+      return false;
+    }
+    return true;
   };
 
   const runLive = async (q: string, prior: Message[]) => {
@@ -201,12 +295,15 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     abortRef.current = ac;
     let partial = "";
     let firstDelta = true;
+    let dataPayload: ChatDataPayload | null = null;
     try {
       for await (const ev of streamChat(q, hist, ac.signal)) {
         if (ev.type === "status") {
           set((s) => ({ proc: { step: Math.min((s.proc?.step ?? 0) + 1, 3) } }));
         } else if (ev.type === "sources") {
           set({ liveSources: ev.sources ?? [], activeCite: "1", proc: { step: 2 } });
+        } else if (ev.type === "data") {
+          dataPayload = ev.data ?? null;
         } else if (ev.type === "delta") {
           partial += ev.text ?? "";
           const md = fixLatex(partial);
@@ -215,12 +312,13 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         } else if (ev.type === "done") {
           const md = fixLatex(ev.answer || partial);
           const srcs = ev.sources ?? stateRef.current.liveSources;
+          const data = ev.data ?? dataPayload;
           set((s) => {
-            // cập nhật bot message cuối + gắn nguồn
+            // cập nhật bot message cuối + gắn nguồn + khối số liệu (nếu có)
             const next = [...s.messages];
             for (let i = next.length - 1; i >= 0; i--) {
               if (next[i].role === "bot") {
-                next[i] = { ...next[i], markdown: md, streaming: false, summary: summaryOf(srcs), citeChips: chipsOf(srcs), sources: srcs };
+                next[i] = { ...next[i], markdown: md, streaming: false, summary: summaryOf(srcs), citeChips: chipsOf(srcs), sources: srcs, branch: ev.branch ?? "text", data };
                 break;
               }
             }
@@ -362,24 +460,38 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     confirmDeleteNo: () => set({ confirmDelete: null }),
     setHistSearch: (v) => set({ histSearch: v }),
     uploadDoc: (file) => {
-      uploadDocument(file)
-        .then((doc) => {
-          set((s) => ({ documents: [doc, ...s.documents.filter((d) => d.id !== doc.id)], docPage: 1 }));
-          showToast("Đã tải lên — tài liệu đang chờ xử lý");
-        })
-        .catch((e) => showToast(e instanceof Error ? e.message : "Tải lên thất bại"));
+      const run = () =>
+        uploadDocument(file)
+          .then((doc) => {
+            set((s) => ({ documents: [doc, ...s.documents.filter((d) => d.id !== doc.id)], docPage: 1 }));
+            showToast("Đã tải lên — tài liệu đang chờ xử lý");
+          })
+          .catch((e) => {
+            if (e instanceof AuthError && e.status === 401) return; // màn hình đăng nhập đã mở
+            showToast(e instanceof Error ? e.message : "Tải lên thất bại");
+          });
+      if (!ensureWriteAccess("tải tài liệu lên", run)) return;
+      run();
     },
     processDoc: (id) => {
-      set((s) => ({ documents: s.documents.map((d) => (d.id === id ? { ...d, status: "processing", progress: 5, error: undefined } : d)) }));
-      showToast("Bắt đầu xử lý tài liệu…");
-      processDocument(id)
-        .then(refreshDocuments)
-        .catch((e) => {
-          showToast(e instanceof Error ? e.message : "Không xử lý được tài liệu");
-          refreshDocuments();
-        });
+      const run = () => {
+        set((s) => ({ documents: s.documents.map((d) => (d.id === id ? { ...d, status: "processing", progress: 5, error: undefined } : d)) }));
+        showToast("Bắt đầu xử lý tài liệu…");
+        processDocument(id)
+          .then(refreshDocuments)
+          .catch((e) => {
+            if (e instanceof AuthError && e.status === 401) return;
+            showToast(e instanceof Error ? e.message : "Không xử lý được tài liệu");
+            refreshDocuments();
+          });
+      };
+      if (!ensureWriteAccess("xử lý tài liệu", run)) return;
+      run();
     },
-    startRenameDoc: (id) => set({ renamingDoc: id }),
+    startRenameDoc: (id) => {
+      if (!ensureWriteAccess("đổi tên tài liệu", () => set({ renamingDoc: id }))) return;
+      set({ renamingDoc: id });
+    },
     renameDoc: (id, v) => set((s) => ({ documents: s.documents.map((d) => (d.id === id ? { ...d, name: v } : d)) })),
     commitRenameDoc: () => {
       const id = stateRef.current.renamingDoc;
@@ -388,16 +500,24 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       if (!id || !doc) return;
       renameDocument(id, doc.name)
         .then(() => showToast("Đã đổi tên tài liệu"))
-        .catch((e) => showToast(e instanceof Error ? e.message : "Đổi tên thất bại"));
+        .catch((e) => {
+          if (e instanceof AuthError && e.status === 401) return;
+          showToast(e instanceof Error ? e.message : "Đổi tên thất bại");
+        });
     },
     deleteDoc: (id) => {
-      set((s) => ({ documents: s.documents.filter((d) => d.id !== id) }));
-      deleteDocument(id)
-        .then(() => showToast("Đã xoá tài liệu"))
-        .catch((e) => {
-          showToast(e instanceof Error ? e.message : "Xoá thất bại");
-          refreshDocuments();
-        });
+      const run = () => {
+        set((s) => ({ documents: s.documents.filter((d) => d.id !== id) }));
+        deleteDocument(id)
+          .then(() => showToast("Đã xoá tài liệu"))
+          .catch((e) => {
+            if (e instanceof AuthError && e.status === 401) return;
+            showToast(e instanceof Error ? e.message : "Xoá thất bại");
+            refreshDocuments();
+          });
+      };
+      if (!ensureWriteAccess("xoá tài liệu", run)) return;
+      run();
     },
     viewDoc: (d) => {
       if (d.status && d.status !== "ready") {
@@ -463,6 +583,9 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     },
     openLlmConfig: () => set({ llmConfigOpen: true }),
     closeLlmConfig: () => set({ llmConfigOpen: false }),
+    // ── Chat lai (Sprint 9) ──
+    openDevice: (deviceId) => set({ tab: "data", pendingDeviceId: deviceId }),
+    clearPendingDevice: () => set({ pendingDeviceId: null }),
     setLlm: (field, v) => set((s) => ({ llm: { ...s.llm, [field]: v } })),
     testLlm: () => {
       const l = stateRef.current.llm;
@@ -483,6 +606,41 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     saveLlm: () => {
       set({ llmConfigOpen: false });
       showToast("Đã lưu cấu hình mô hình");
+    },
+    // ── Xác thực (Sprint 1) ──
+    openLogin: (notice) =>
+      set((s) => ({ auth: { ...s.auth, loginOpen: true, loginError: null, loginNotice: notice ?? null } })),
+    closeLogin: () => {
+      pendingWriteRef.current = null;
+      set((s) => ({ auth: { ...s.auth, loginOpen: false, loginError: null, loginNotice: null } }));
+    },
+    submitLogin: (username, password) => {
+      const u = username.trim();
+      if (!u || !password) {
+        set((s) => ({ auth: { ...s.auth, loginError: "Vui lòng nhập tên đăng nhập và mật khẩu." } }));
+        return;
+      }
+      set((s) => ({ auth: { ...s.auth, loginBusy: true, loginError: null } }));
+      apiLogin(u, password)
+        .then((user) => {
+          set((s) => ({ auth: { ...s.auth, user, loginBusy: false, loginOpen: false, loginNotice: null, loginError: null } }));
+          showToast("Đã đăng nhập: " + (user.full_name || user.username));
+          // chạy lại thao tác ghi đã bị chặn trước đó (nếu có)
+          const pending = pendingWriteRef.current;
+          pendingWriteRef.current = null;
+          if (pending) pending();
+        })
+        .catch((e) => {
+          set((s) => ({
+            auth: { ...s.auth, loginBusy: false, loginError: e instanceof Error ? e.message : "Đăng nhập thất bại." },
+          }));
+        });
+    },
+    logout: () => {
+      pendingWriteRef.current = null;
+      void apiLogout(); // best-effort: token client luôn bị xoá trong service
+      set((s) => ({ auth: { ...s.auth, user: null, loginOpen: false, loginNotice: null, loginError: null } }));
+      showToast("Đã đăng xuất");
     },
   };
 

@@ -90,6 +90,15 @@ answer + citations  ──►  UI (one of):
   `GET /api/health`, `GET /api/examples`, `POST /api/chat/stream` (SSE). Reuses the SAME pipeline as
   `app.py` (`retrieval.retriever` + `generation.py`: `is_calculation_request` guard → `retrieve` →
   `build_messages` → `stream_ollama`). Run with `kotaemon/.venv` (needs `fastapi`+`uvicorn`).
+- `query/intents.py` + `query/router.py` — **chat lai văn bản + số liệu** (Sprint 9, spec §8).
+  `intents.py` định nghĩa 7 intent tra cứu số liệu (`device_history`, `latest_record`,
+  `records_by_period`, `procedure_params`, `devices_by_range`, `standards_for`, `error_trend`)
+  với schema tham số pydantic; LLM chỉ chọn intent + điền tham số, **không có text-to-SQL**.
+  `router.py` phân ba nhánh `text`/`data`/`mixed` và **mặc định rơi về `text`** khi không chắc.
+  Nhánh số liệu chỉ đọc view đã duyệt (P3) qua `query/records.py` + `query/approved.py`, trả mỗi
+  con số kèm tham chiếu xuất xứ (P1) và trích dẫn sổ cái tách bạch với nguồn QTKĐ. Tích hợp ở
+  `/api/chat/stream` (SSE event `data`, `done.branch`/`done.data`); câu trả lời nhánh số liệu
+  không nhét số vào văn xuôi — frontend render bảng (`components/chat/DataResultTable.tsx`).
 - `frontend/` — **React 18 + TypeScript + Vite + Tailwind** web UI (Docker nginx on **:3000**,
   proxies `/api` → `api_server.py`; dev server is Vite on **:5173**). A 1:1 rebuild of
   `design/kiemdinh.html`, now **wired to the real backend**: `src/services/liveApi.ts`
@@ -108,6 +117,10 @@ answer + citations  ──►  UI (one of):
 - `eval/run_eval.py` — Spike E regression harness. Computes recall@k + MRR for hybrid vs
   dense-only against `eval/eval_set.jsonl` (question → expected file_stem + section_path). Run
   this after any retrieval change. Pass goal is recall@5 ≥ 0.85.
+- `eval/intent_eval.py` — Sprint 9 gate for the hybrid chat router: intent accuracy ≥ 0.90,
+  parameter-validation fallback to `text`, zero untraceable numbers, and text questions never
+  routed to the data branch. Runs a scripted classifier by default (no Ollama); `--live` measures
+  the real model. Part of `make check` via `intent-eval`.
 
 ## Two virtualenvs — this matters
 
@@ -153,6 +166,10 @@ python -m index.embed_store --query "phạm vi van an toàn 1400 bar"   # smoke-
 # Eval — retrieval regression (run after any retrieval change)
 python -m eval.run_eval                          # hybrid vs dense, recall@k + MRR
 python -m eval.run_eval --mode hybrid -v
+
+# Eval — chat lai văn bản + số liệu (Sprint 9; tất định, không cần Ollama)
+python -m eval.intent_eval                       # intent ≥ 0.90, 0 số không nguồn
+python -m eval.intent_eval --live                # đo model phân loại thật
 ```
 
 Verification gates: `extraction_report.json` (Stage 1 formula fidelity), `eval/run_eval.py`

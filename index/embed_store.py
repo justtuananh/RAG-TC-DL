@@ -163,6 +163,19 @@ def upsert(client: QdrantClient, points: list[PointStruct]) -> None:
 def index_chunks(client: QdrantClient, chunks: list[Chunk]) -> int:
     """Embed + upsert one list of chunks (single file or full corpus). Returns point count."""
     vectors = embed_chunks_batched(chunks)
+    document_ids: dict[str, str] = {}
+    try:
+        from db import SessionLocal
+        from db.models import Document
+        db = SessionLocal()
+        document_ids = {
+            row.file_stem: row.id
+            for row in db.query(Document).filter(Document.file_stem.in_({c.file_stem for c in chunks})).all()
+        }
+        db.close()
+    except Exception:
+        # Indexing legacy corpora remains possible before the document migration.
+        document_ids = {}
     points = []
     for chunk, vec in zip(chunks, vectors):
         points.append(PointStruct(
@@ -176,6 +189,7 @@ def index_chunks(client: QdrantClient, chunks: list[Chunk]) -> int:
                 "text": chunk.text,
                 "section_path": chunk.section_path,
                 "file_stem": chunk.file_stem,
+                "document_id": document_ids.get(chunk.file_stem),
             },
         ))
     upsert(client, points)

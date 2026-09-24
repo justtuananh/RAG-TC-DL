@@ -15,3 +15,12 @@ rank-bm25>=0.2.2   # BM25 in-memory index for hybrid retrieval (MIT)
 # PyMuPDF, not MarkItDown/pdfminer — the latter mangled text into
 # space-less runs on some real-world PDFs (broken embedded font width table).
 pymupdf>=1.24
+
+# Sprint 0+1 — Database and Authentication
+sqlalchemy>=2.0       # ORM for PostgreSQL
+psycopg2-binary>=2.9  # PostgreSQL adapter for Python
+bcrypt>=4.0           # Password hashing
+pyjwt>=2.8            # JWT token generation and validation
+alembic>=1.13         # Database migrations
+fastapi>=0.104        # Web framework (for api_server.py)
+python-multipart>=0.0.6  # Form parsing for FastAPI

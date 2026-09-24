@@ -1,13 +1,18 @@
-import type { BackendSource, DocItem } from "../types";
+import type { BackendSource, ChatDataPayload, DocItem } from "../types";
+import { AuthError, authFetch } from "./auth";
 
 // ── Client gọi backend RAG thật (api_server.py, FastAPI + SSE) ──
 // Port từ frontend-legacy/src/utils/{api.js,latex.js}, có thêm AbortSignal + health.
+// Route ĐỌC/CHAT dùng fetch thường (công khai); route GHI dùng authFetch (bearer token).
 
 export interface SseEvent {
-  type: "status" | "sources" | "delta" | "done" | "error";
+  type: "status" | "sources" | "delta" | "done" | "error" | "data";
   text?: string;
   answer?: string;
   sources?: BackendSource[];
+  // ── Chat lai (Sprint 9) ──
+  branch?: "text" | "data" | "mixed";
+  data?: ChatDataPayload | null;
 }
 
 export interface HistoryTurn {
@@ -75,7 +80,10 @@ export async function pingHealth(): Promise<boolean> {
 async function _json<T>(res: Response): Promise<T> {
   if (!res.ok) {
     const body = await res.json().catch(() => null);
-    throw new Error(body?.detail || `HTTP ${res.status}`);
+    const message = body?.detail || `HTTP ${res.status}`;
+    // 401 = token thiếu/hết hạn → nơi gọi (store) mở màn hình đăng nhập thay vì báo lỗi chung.
+    if (res.status === 401) throw new AuthError(message, 401);
+    throw new Error(message);
   }
   return res.json();
 }
@@ -89,12 +97,12 @@ export async function fetchDocuments(): Promise<DocItem[]> {
 export async function uploadDocument(file: File): Promise<DocItem> {
   const form = new FormData();
   form.append("file", file);
-  const res = await fetch("/api/documents/upload", { method: "POST", body: form });
+  const res = await authFetch("/api/documents/upload", { method: "POST", body: form });
   return _json<DocItem>(res);
 }
 
 export async function processDocument(fileStem: string): Promise<void> {
-  const res = await fetch(`/api/documents/${encodeURIComponent(fileStem)}/process`, { method: "POST" });
+  const res = await authFetch(`/api/documents/${encodeURIComponent(fileStem)}/process`, { method: "POST" });
   await _json(res);
 }
 
@@ -110,15 +118,17 @@ export function documentFileUrl(fileStem: string): string {
 }
 
 export async function deleteDocument(fileStem: string): Promise<void> {
-  const res = await fetch(`/api/documents/${encodeURIComponent(fileStem)}`, { method: "DELETE" });
+  const res = await authFetch(`/api/documents/${encodeURIComponent(fileStem)}`, { method: "DELETE" });
   if (!res.ok) {
     const body = await res.json().catch(() => null);
-    throw new Error(body?.detail || `HTTP ${res.status}`);
+    const message = body?.detail || `HTTP ${res.status}`;
+    if (res.status === 401) throw new AuthError(message, 401);
+    throw new Error(message);
   }
 }
 
 export async function renameDocument(fileStem: string, name: string): Promise<DocItem> {
-  const res = await fetch(`/api/documents/${encodeURIComponent(fileStem)}`, {
+  const res = await authFetch(`/api/documents/${encodeURIComponent(fileStem)}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),

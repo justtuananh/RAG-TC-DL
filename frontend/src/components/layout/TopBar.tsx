@@ -1,13 +1,17 @@
 import type { CSSProperties } from "react";
-import type { LlmStatus, Tab } from "../../types";
+import type { AuthState, LlmStatus, Tab } from "../../types";
 import { COLOR } from "../../theme";
 import { IcChevronRight, IcSettings } from "../common/icons";
+import AccountMenu from "./AccountMenu";
 
 interface Props {
   tab: Tab;
   llmStatus: LlmStatus;
   onGo: (tab: Tab) => void;
   onOpenLlm: () => void;
+  auth: AuthState;
+  onOpenLogin: () => void;
+  onLogout: () => void;
   /** Tên tài liệu đang xem — thêm nhánh thứ 3 vào breadcrumb khi có */
   docName?: string;
 }
@@ -15,6 +19,8 @@ interface Props {
 const TAB_LABEL: Record<Tab, string> = {
   chat: "Trò chuyện",
   docs: "Tài liệu",
+  knowledge: "Tri thức",
+  data: "Dữ liệu",
   guide: "Hướng dẫn",
 };
 
@@ -25,7 +31,7 @@ const STATUS = {
   none: { label: "Chưa kết nối", color: COLOR.neutral, bg: COLOR.neutralBg, bd: COLOR.neutralBorder, dot: COLOR.neutral, spin: false },
 } as const;
 
-export default function TopBar({ tab, llmStatus, onGo, onOpenLlm, docName }: Props) {
+export default function TopBar({ tab, llmStatus, onGo, onOpenLlm, auth, onOpenLogin, onLogout, docName }: Props) {
   const m = STATUS[llmStatus];
   const btnStyle: CSSProperties = {
     display: "inline-flex",
@@ -99,6 +105,9 @@ export default function TopBar({ tab, llmStatus, onGo, onOpenLlm, docName }: Pro
         {m.label}
         <IcSettings size={13} strokeWidth={2} style={{ opacity: 0.55, flexShrink: 0 }} />
       </button>
+
+      {/* tài khoản: đăng nhập / vai trò / đăng xuất */}
+      <AccountMenu auth={auth} onLogin={onOpenLogin} onLogout={onLogout} />
     </header>
   );
 }

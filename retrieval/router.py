@@ -4,6 +4,8 @@ Uses explicit QTKĐ number (e.g. "1.061") or device-name alias (e.g. "van an to�
 found in the query text. Returns None when uncertain → full-corpus search.
 
 Number map is built lazily from Qdrant on first call (one-time scan, ~0.1s).
+Device aliases are read from the `device_type` + `procedure` tables (Sprint 3)
+with a hardcoded fallback, so retrieval never depends on Postgres being up.
 """
 from __future__ import annotations
 
@@ -18,8 +20,10 @@ COLLECTION = "qtkd_rag"
 # Matches "1.061" / "1.160" but NOT "6.3", "0.05", "1400".
 _NUMBER_RE = re.compile(r'(\d\.\d{3})(?!\d)')
 
-# Device-name aliases (all lowercase) → QTKĐ number
-_DEVICE_ALIASES: dict[str, str] = {
+# Device-name aliases (all lowercase) → QTKĐ number.
+# Đây chỉ là DỰ PHÒNG khi DB chưa sẵn sàng/chưa seed. Nguồn sự thật là bảng
+# `device_type` + `procedure` (Sprint 3); xem `_load_db_device_aliases`.
+_FALLBACK_DEVICE_ALIASES: dict[str, str] = {
     "van an toàn": "1.061",
     "bàn tạo áp": "1.062",
     "bình phân ly": "1.063",
@@ -38,7 +42,42 @@ _DEVICE_ALIASES: dict[str, str] = {
 }
 
 _number_to_stem: dict[str, str] | None = None
+_device_aliases: dict[str, tuple[str, ...]] | None = None
 _STEM_NUMBER_RE = re.compile(r'QTKD_(\d+\.\d+)')
+
+
+def _load_db_device_aliases() -> dict[str, tuple[str, ...]] | None:
+    """Đọc alias thiết bị từ DB (device_type + procedure); None nếu không đọc được.
+
+    Bọc try/except rộng có chủ đích: router phải chạy được cả khi Postgres
+    chưa lên hoặc chưa migrate — khi đó rơi về hằng số dự phòng để không đổi
+    hành vi truy hồi hiện tại.
+    """
+    try:
+        from db import SessionLocal
+        from knowledge.reference import device_alias_map
+
+        session = SessionLocal()
+        try:
+            mapping = device_alias_map(session)
+        finally:
+            session.close()
+        return mapping or None
+    except Exception:
+        return None
+
+
+def _ensure_device_aliases() -> dict[str, tuple[str, ...]]:
+    global _device_aliases
+    if _device_aliases is None:
+        from_db = _load_db_device_aliases()
+        if from_db:
+            _device_aliases = from_db
+        else:
+            _device_aliases = {
+                alias: (number,) for alias, number in _FALLBACK_DEVICE_ALIASES.items()
+            }
+    return _device_aliases
 
 
 def _build_number_to_stem() -> dict[str, str]:
@@ -93,11 +132,12 @@ def route_files(query: str) -> frozenset[str]:
         stem = mapping.get(num)
         if stem:
             stems.add(stem)
-    for alias, number in _DEVICE_ALIASES.items():
+    for alias, numbers in _ensure_device_aliases().items():
         if alias in q:
-            stem = mapping.get(number)
-            if stem:
-                stems.add(stem)
+            for number in numbers:
+                stem = mapping.get(number)
+                if stem:
+                    stems.add(stem)
     return frozenset(stems)
 
 

@@ -1,11 +1,11 @@
 # Phụ thuộc dev/test cho harness QTKĐ — cài vào .venv-dev (project-local).
 #
-# .venv-dev = requirements.txt + requirements-app.txt + FILE NÀY, để import được
-# MỌI module dưới test (Stage 1 ingestion + Stage 2-3 app + inference server).
+# .venv-dev = requirements-app.txt + FILE NÀY, đủ để import MỌI module dưới test
+# (Stage 1 ingestion + Stage 2-3 app + inference server) và chạy `make check`.
+# requirements.txt (scikit-image cho QA ảnh) không được test nào import — không cần.
 #
 #   python3.11 -m venv .venv-dev
-#   .venv-dev/bin/python -m pip install -r requirements.txt \
-#       -r requirements-app.txt -r requirements-dev.txt
+#   .venv-dev/bin/python -m pip install -r requirements-app.txt -r requirements-dev.txt
 
 pytest>=8.0
 pytest-mock>=3.12
@@ -15,9 +15,20 @@ httpx>=0.27          # transport cho fastapi.testclient.TestClient
 ruff>=0.6            # lint + format
 pre-commit>=3.5
 
-# app.py có `import markdown` nhưng KHÔNG khai báo trong requirements-app.txt
-# (trong prod được thoả mãn gián tiếp qua gradio). Ghim ở đây để .venv-dev import
-# được app.py cho test frontend.
+# Sprint 0+1 runtime deps: api_server.py + db/ + auth/ import các gói này. Docker
+# cài qua requirements.txt, nhưng CI (requirements-app + requirements-dev) và
+# .venv-dev cũng cần để collect test_auth / test_document_* / test api_server.
+sqlalchemy>=2.0       # ORM (db/models.py)
+psycopg2-binary>=2.9  # PostgreSQL driver (db/config.py)
+bcrypt>=4.0           # password hashing (auth/security.py)
+pyjwt>=2.8            # JWT (auth/security.py)
+alembic>=1.13         # migration runner (scripts/migrate.py, db/migrations)
+
+# Frontend tests (tests/unit/frontend/) import app.py, và app.py `import gradio`
+# + `import markdown` ở top-level. Cả hai có trong requirements-app.txt, nhưng
+# khai báo lại ở đây để requirements-dev tự đủ cho test frontend (không phải nhớ
+# cài thêm requirements-app.txt theo đúng thứ tự).
+gradio>=5.0
 markdown>=3.5
 
 # Pin tương thích: gradio 4.x gọi `from huggingface_hub import HfFolder` — symbol này

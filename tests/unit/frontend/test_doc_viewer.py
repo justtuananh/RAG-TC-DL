@@ -4,6 +4,8 @@ Test thẳng các hàm thuần (không dựng Gradio runtime). bot_fn được d
 mock retrieve + _stream_ollama.
 """
 
+import pytest
+
 import app
 
 
@@ -69,18 +71,18 @@ def test_md_to_html_renders_table():
 
 def test_bot_fn_no_results(monkeypatch):
     monkeypatch.setattr(app, "retrieve", lambda q, **k: [])
-    *_, last = app.bot_fn([["câu hỏi", None]])
+    *_, last = app.bot_fn([{"role": "user", "content": "câu hỏi"}])
     hist, _doc = last
-    assert hist[-1][1] == "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ."
+    assert hist[-1]["content"] == "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ."
 
 
 def test_bot_fn_with_results_streams_and_appends_citations(monkeypatch):
     monkeypatch.setattr(app, "retrieve", lambda q, **k: [_r("nội dung")])
     monkeypatch.setattr(app, "_stream_ollama", lambda msgs: iter(["Trả ", "lời"]))
-    *_, last = app.bot_fn([["câu hỏi", None]])
+    *_, last = app.bot_fn([{"role": "user", "content": "câu hỏi"}])
     hist, _doc = last
-    assert hist[-1][1].startswith("Trả lời")
-    assert "Nguồn tham khảo" in hist[-1][1]
+    assert hist[-1]["content"].startswith("Trả lời")
+    assert "Nguồn tham khảo" in hist[-1]["content"]
 
 
 def test_bot_fn_retrieve_error_is_shown(monkeypatch):
@@ -88,6 +90,23 @@ def test_bot_fn_retrieve_error_is_shown(monkeypatch):
         raise RuntimeError("qdrant chết")
 
     monkeypatch.setattr(app, "retrieve", boom)
-    *_, last = app.bot_fn([["câu hỏi", None]])
+    *_, last = app.bot_fn([{"role": "user", "content": "câu hỏi"}])
     hist, _doc = last
-    assert "Lỗi tìm kiếm" in hist[-1][1]
+    assert "Lỗi tìm kiếm" in hist[-1]["content"]
+
+
+def test_bot_fn_calculation_request_refuses_without_retrieving(monkeypatch):
+    monkeypatch.setattr(app, "retrieve", lambda q, **k: pytest.fail("không được retrieve"))
+
+    *_, last = app.bot_fn([{"role": "user", "content": "Tính giúp sai số khi P = 4 bar"}])
+    hist, _doc = last
+    assert hist[-1]["content"] == app._REFUSAL_SENTENCE
+
+
+def test_history_to_prior_pairs_dict_turns():
+    history = [
+        {"role": "user", "content": "u1"},
+        {"role": "assistant", "content": "a1"},
+        {"role": "user", "content": "u2"},
+    ]
+    assert app._history_to_prior(history) == [["u1", "a1"]]

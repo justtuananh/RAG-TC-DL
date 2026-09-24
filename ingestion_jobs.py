@@ -7,9 +7,10 @@ subprocess or embedding-service HTTP call never blocks the chat SSE event loop.
 from __future__ import annotations
 
 import json
+import hashlib
+import logging
 import shutil
 import threading
-import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
@@ -27,6 +28,9 @@ _CONNECTION_ERRORS = (OSError, ResponseHandlingException)
 from index.chunker import parse_file
 from index.embed_store import COLLECTION, QDRANT_URL, ensure_collection, index_chunks
 from ingestion.spike_a import _safe, process_one, totals_from_entries
+from ingestion.classify import classify_document
+from db import SessionLocal
+from db.models import Document, DocumentType, IngestStatus
 
 # retrieval.bm25_index is imported lazily where used (see invalidate_bm25) —
 # it requires rank_bm25, and retriever.py already avoids a hard module-level
@@ -34,7 +38,6 @@ from ingestion.spike_a import _safe, process_one, totals_from_entries
 
 TC_DL_DIR = Path("TC_DL")
 OUT_DIR = Path("build/spike_a")
-META_PATH = OUT_DIR / "doc_meta.json"
 REPORT_PATH = OUT_DIR / "extraction_report.json"
 
 MAX_UPLOAD_BYTES = 50 * 1024 * 1024
@@ -64,6 +67,8 @@ _jobs: dict[str, Job] = {}
 _jobs_lock = threading.Lock()
 _executor = ThreadPoolExecutor(max_workers=1)
 
+logger = logging.getLogger(__name__)
+
 
 def _set_job(file_stem: str, stage: str, error: str | None = None) -> None:
     with _jobs_lock:
@@ -75,17 +80,6 @@ def _set_job(file_stem: str, stage: str, error: str | None = None) -> None:
 def _get_job(file_stem: str) -> Job | None:
     with _jobs_lock:
         return _jobs.get(file_stem)
-
-
-def _load_meta() -> dict:
-    if META_PATH.exists():
-        return json.loads(META_PATH.read_text(encoding="utf-8"))
-    return {}
-
-
-def _save_meta(meta: dict) -> None:
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    META_PATH.write_text(json.dumps(meta, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
 def _human_size(n: int) -> str:
@@ -129,7 +123,7 @@ def get_source_path(file_stem: str) -> Path | None:
     return _find_source(file_stem)
 
 
-def save_upload(filename: str, data: bytes) -> str:
+def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> str:
     """Validate + save an uploaded .docx/.pdf into TC_DL/. Returns its file_stem."""
     ext = Path(filename).suffix.lower()
     if ext not in SUPPORTED_EXTS:
@@ -138,8 +132,15 @@ def save_upload(filename: str, data: bytes) -> str:
         raise UploadError("Tệp rỗng.")
     if len(data) > MAX_UPLOAD_BYTES:
         raise UploadError("Tệp vượt quá dung lượng cho phép (50 MB).")
+    digest = hashlib.sha256(data).hexdigest()
 
     TC_DL_DIR.mkdir(parents=True, exist_ok=True)
+    db = SessionLocal()
+    try:
+        if db.query(Document).filter(Document.sha256 == digest).first() is not None:
+            raise UploadError("Tài liệu đã tồn tại trong kho (trùng nội dung).")
+    finally:
+        db.close()
     stem = _safe(Path(filename).stem)
     candidate = stem
     n = 2
@@ -148,6 +149,29 @@ def save_upload(filename: str, data: bytes) -> str:
         n += 1
 
     (TC_DL_DIR / f"{candidate}{ext}").write_bytes(data)
+    db = SessionLocal()
+    try:
+        classification = classify_document(filename)
+        db.add(
+            Document(
+                id=candidate,
+                file_stem=candidate,
+                display_name=Path(filename).name,
+                ext=ext[1:].upper(),
+                doc_type=DocumentType(classification.doc_type),
+                sha256=digest,
+                size_bytes=len(data),
+                uploaded_by=uploaded_by,
+                ingest_status=IngestStatus.PENDING,
+            )
+        )
+        db.commit()
+    except Exception:
+        db.rollback()
+        (TC_DL_DIR / f"{candidate}{ext}").unlink(missing_ok=True)
+        raise
+    finally:
+        db.close()
     return candidate
 
 
@@ -165,28 +189,28 @@ def _status_for(file_stem: str) -> tuple[str, int, str | None]:
 
 
 def list_documents() -> list[dict]:
-    if not TC_DL_DIR.exists():
-        return []
-    meta = _load_meta()
-    rows: list[tuple[float, dict]] = []
-    for ext in SUPPORTED_EXTS:
-        for f in TC_DL_DIR.glob(f"*{ext}"):
-            stem = _safe(f.stem)
-            status, progress, error = _status_for(stem)
-            stat = f.stat()
-            rows.append((stat.st_mtime, {
-                "id": stem,
-                "name": meta.get(stem, {}).get("display_name", f.name),
-                "ext": ext[1:].upper(),
-                "size": _human_size(stat.st_size),
+    db = SessionLocal()
+    try:
+        rows = db.query(Document).order_by(Document.uploaded_at.desc()).all()
+        result = []
+        for row in rows:
+            status, progress, error = _status_for(row.file_stem)
+            result.append({
+                "id": row.file_stem,
+                "name": row.display_name,
+                "ext": row.ext,
+                "size": _human_size(row.size_bytes),
                 "pages": None,
-                "date": time.strftime("%d/%m/%Y", time.localtime(stat.st_mtime)),
-                "status": status,
+                "date": row.uploaded_at.strftime("%d/%m/%Y"),
+                "status": status if status != "pending" or row.ingest_status.value == "pending" else row.ingest_status.value,
                 "progress": progress,
-                "error": error,
-            }))
-    rows.sort(key=lambda r: r[0], reverse=True)
-    return [d for _, d in rows]
+                "error": error or row.ingest_error,
+                "doc_type": row.doc_type.value,
+                "sha256": row.sha256,
+            })
+        return result
+    finally:
+        db.close()
 
 
 def get_markdown(file_stem: str) -> str | None:
@@ -210,6 +234,7 @@ def _merge_report_entry(entry: dict) -> None:
 
 def _run_job(file_stem: str, source_path: Path) -> None:
     try:
+        _set_db_status(file_stem, IngestStatus.PROCESSING)
         _set_job(file_stem, "extracting")
         entry = process_one(source_path, OUT_DIR)
         _merge_report_entry(entry)
@@ -227,11 +252,74 @@ def _run_job(file_stem: str, source_path: Path) -> None:
         index_chunks(client, chunks)
         _invalidate_bm25()
 
+        # Sprint 4: sau khi nhúng, trích xuất tri thức cho QTKĐ (trạng thái pending).
+        # Lỗi trích xuất không làm hỏng tài liệu đã nhúng; ghi lại để rà sau.
+        extraction_error: str | None = None
+        try:
+            _run_extraction(file_stem, md_path)
+        except Exception as e:  # noqa: BLE001 - best-effort, không chặn ingestion
+            extraction_error = f"Trích xuất tri thức thất bại: {e}"
+
         _set_job(file_stem, "ready")
+        _set_db_status(file_stem, IngestStatus.READY, extraction_error)
     except _CONNECTION_ERRORS as e:
         _set_job(file_stem, "error", f"Không kết nối được dịch vụ embedding/Qdrant — kiểm tra Docker đã chạy chưa ({e}).")
+        _set_db_status(file_stem, IngestStatus.ERROR, str(e))
     except Exception as e:  # noqa: BLE001 - surface any failure as a job error, never crash the worker thread
         _set_job(file_stem, "error", str(e))
+        _set_db_status(file_stem, IngestStatus.ERROR, str(e))
+
+
+def _run_extraction(file_stem: str, md_path: Path) -> None:
+    """Chạy bộ luật trích xuất cho tài liệu QTKĐ và ghi extraction ``pending``.
+
+    Bỏ qua tài liệu không phải QTKĐ. Dùng procedure đã sinh nếu có; nếu chưa,
+    ``knowledge.extract`` tự dựng từ đầu mục Markdown để giữ liên kết P1.
+
+    Sprint 5: sau luật, tùy chọn chạy trích xuất §6 bằng LLM (``SECTION6_LLM_ENABLED``).
+    Bọc trong SAVEPOINT và thất bại an toàn — Ollama chưa lên/model chưa pull
+    không được làm hỏng phần luật đã ghi, và mọi dòng mới vẫn ``pending`` (P3).
+    """
+    from db.models import Procedure
+    from knowledge.extract import extract_and_store, extract_section6_and_store
+    from knowledge.llm_extract import llm_extraction_enabled
+
+    db = SessionLocal()
+    try:
+        document = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
+        if document is None or document.doc_type != DocumentType.QTKD:
+            return
+        text = md_path.read_text(encoding="utf-8")
+        procedure = (
+            db.query(Procedure).filter(Procedure.document_id == document.id).one_or_none()
+        )
+        extract_and_store(db, document, text, procedure=procedure)
+
+        if llm_extraction_enabled():
+            try:
+                with db.begin_nested():
+                    extract_section6_and_store(db, document, text, procedure=procedure)
+            except Exception as e:  # noqa: BLE001 - §6 best-effort, không chặn ingestion
+                logger.warning("Trích xuất §6 bằng LLM thất bại cho %s: %s", file_stem, e)
+
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
+    finally:
+        db.close()
+
+
+def _set_db_status(file_stem: str, status: IngestStatus, error: str | None = None) -> None:
+    db = SessionLocal()
+    try:
+        row = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
+        if row:
+            row.ingest_status = status
+            row.ingest_error = error
+            db.commit()
+    finally:
+        db.close()
 
 
 def start_processing(file_stem: str) -> None:
@@ -273,20 +361,30 @@ def delete_document(file_stem: str) -> None:
     except Exception:
         pass  # best-effort — local files are already gone; index cleanup can be retried by re-uploading
 
-    meta = _load_meta()
-    if meta.pop(file_stem, None) is not None:
-        _save_meta(meta)
-
     with _jobs_lock:
         _jobs.pop(file_stem, None)
 
     _invalidate_bm25()
+    db = SessionLocal()
+    try:
+        row = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
+        if row:
+            db.delete(row)
+            db.commit()
+    finally:
+        db.close()
 
 
 def rename_document(file_stem: str, name: str) -> dict:
     if _find_source(file_stem) is None:
         raise FileNotFoundError(file_stem)
-    meta = _load_meta()
-    meta.setdefault(file_stem, {})["display_name"] = name
-    _save_meta(meta)
+    db = SessionLocal()
+    try:
+        row = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
+        if row is None:
+            raise FileNotFoundError(file_stem)
+        row.display_name = name.strip() or row.display_name
+        db.commit()
+    finally:
+        db.close()
     return next(d for d in list_documents() if d["id"] == file_stem)

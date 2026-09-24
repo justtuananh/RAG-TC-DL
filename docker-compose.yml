@@ -32,6 +32,23 @@
 
 services:
 
+  # ── PostgreSQL: Relational ledger (not exposed to host, internal only) ──────
+  postgres:
+    image: postgres:16-alpine
+    container_name: qtkd-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-qtkd}
+      POSTGRES_USER: ${POSTGRES_USER:-qtkd_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qtkd_password}
+    volumes:
+      - postgres_storage:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-qtkd_user}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
   # ── Vector Database ─────────────────────────────────────────────────────────
   qdrant:
     image: qdrant/qdrant:v1.10.1
@@ -178,14 +195,26 @@ services:
       - ./retrieval:/app/retrieval:ro
       - ./index:/app/index:ro
       - ./ingestion:/app/ingestion:ro
+      - ./db:/app/db:ro
+      - ./auth:/app/auth:ro
+      - ./scripts:/app/scripts:ro
+      - ./alembic.ini:/app/alembic.ini:ro
     environment:
       EMBED_URL: http://embedding:8010/v1/embeddings
       RERANK_URL: http://reranker:8011/v1/rerank
       QDRANT_URL: http://qdrant:6333
       OLLAMA_URL: http://ollama:11434/api/chat
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ${POSTGRES_DB:-qtkd}
+      POSTGRES_USER: ${POSTGRES_USER:-qtkd_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qtkd_password}
+      AUTH_ENABLED: ${AUTH_ENABLED:-true}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
     command: ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8080"]
     depends_on:
+      postgres:
+        condition: service_healthy
       qdrant:
         condition: service_healthy
       embedding:
@@ -226,6 +255,7 @@ services:
     command: ["python", "-m", "index.embed_store"]
 
 volumes:
+  postgres_storage:   # PostgreSQL data persists across restarts
   qdrant_storage:   # Qdrant data persists across restarts
   ollama_data:      # Downloaded LLM models persist across restarts
   hf_cache_embedding:  # BAAI/bge-m3 weights persist across restarts

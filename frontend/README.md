@@ -33,14 +33,34 @@ src/
     useAppStore.ts           # state + actions — port từ class DCLogic (useReducer kiểu setState)
   services/
     mockEngine.ts            # responder() định tuyến từ khoá + mốc thời gian timer (RANH GIỚI để thay backend)
+    liveApi.ts               # client backend thật (chat SSE, documents); route ghi dùng bearer token
+    auth.ts                  # phiên đăng nhập: token localStorage, giải mã JWT, authFetch, login/logout/me/refresh
   components/
     Header.tsx               # logo + 3 tab + nút trạng thái LLM
+    layout/                  # Sidebar, TopBar, AccountMenu (đăng nhập/vai trò/đăng xuất)
     chat/                    # ChatTab, HistorySidebar, HistoryRail, ChatColumn, MessageBubble, ProcessSteps, SourcePanel
     docs/                    # DocsTab, DocRow
     guide/                   # GuideTab
-    modals/                  # DocViewerModal, LlmConfigModal, ConfirmDialog
+    modals/                  # DocViewerModal, LlmConfigModal, ConfirmDialog, LoginModal
     common/                  # icons.tsx (SVG path 1:1 từ mockup), Toast, DocPage (trang tài liệu serif)
 ```
+
+## Xác thực & phân quyền (Sprint 1)
+
+Backend `../api_server.py` đã có `/api/auth/*` và bọc route ghi bằng vai trò technician/admin.
+Frontend nối vào đó:
+
+- `src/services/auth.ts` — lưu token JWT ở localStorage (`qtkd.auth.token`), giải mã payload để
+  biết vai trò/hạn, `authFetch` gắn `Authorization: Bearer`, và API `login/logout/me/refresh`.
+- `src/components/modals/LoginModal.tsx` — form đăng nhập (username + password).
+- `src/components/layout/AccountMenu.tsx` — nút tài khoản/đăng xuất trên TopBar.
+- Route **đọc/chat** công khai (không cần token). Route **ghi** (upload/process/delete/rename)
+  dùng bearer token; chưa đăng nhập thì mở màn hình đăng nhập rồi chạy lại thao tác đang chờ.
+- Token hết hạn/401 khi gọi route ghi → xoá token và mở lại màn hình đăng nhập.
+- Vai trò `viewer`/`approver` bị chặn tại UI; `technician`/`admin` mới thao tác ghi được.
+
+Test: `npm test` (Vitest) — `src/services/auth.test.ts` phủ lưu/đọc token, hạn token, ma trận quyền,
+`authFetch` 401, login/me/refresh/logout.
 
 ## Hệ thiết kế (token trong `tailwind.config.ts`)
 

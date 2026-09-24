@@ -3,10 +3,13 @@ import Sidebar from "./components/layout/Sidebar";
 import TopBar from "./components/layout/TopBar";
 import ChatTab from "./components/chat/ChatTab";
 import DocsTab from "./components/docs/DocsTab";
+import KnowledgeTab from "./components/knowledge/KnowledgeTab";
+import DataTab from "./components/data/DataTab";
 import GuideTab from "./components/guide/GuideTab";
 import ConfirmDialog from "./components/modals/ConfirmDialog";
 import DocViewerModal from "./components/modals/DocViewerModal";
 import LlmConfigModal from "./components/modals/LlmConfigModal";
+import LoginModal from "./components/modals/LoginModal";
 import Toast from "./components/common/Toast";
 import { useAppStore } from "./store/useAppStore";
 
@@ -37,11 +40,16 @@ export default function App() {
             llmStatus={state.llmStatus}
             onGo={actions.go}
             onOpenLlm={actions.openLlmConfig}
+            auth={state.auth}
+            onOpenLogin={() => actions.openLogin()}
+            onLogout={actions.logout}
             docName={state.tab === "docs" ? state.viewingDoc?.name : undefined}
           />
 
           {state.tab === "chat" && <ChatTab state={state} actions={actions} />}
           {state.tab === "docs" && <DocsTab state={state} actions={actions} />}
+          {state.tab === "knowledge" && <KnowledgeTab state={state} actions={actions} />}
+          {state.tab === "data" && <DataTab state={state} actions={actions} />}
           {state.tab === "guide" && <GuideTab state={state} actions={actions} />}
         </div>
       </div>
@@ -61,6 +69,14 @@ export default function App() {
         onSave={actions.saveLlm}
       />
       <ConfirmDialog conv={state.confirmDelete} onYes={actions.confirmDeleteYes} onNo={actions.confirmDeleteNo} />
+      <LoginModal
+        open={state.auth.loginOpen}
+        busy={state.auth.loginBusy}
+        error={state.auth.loginError}
+        notice={state.auth.loginNotice}
+        onClose={actions.closeLogin}
+        onSubmit={actions.submitLogin}
+      />
       <Toast message={state.toast} />
     </div>
   );
