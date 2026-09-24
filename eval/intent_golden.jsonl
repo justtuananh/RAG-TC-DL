@@ -1,0 +1,29 @@
+{"question": "Lịch sử kiểm định của thiết bị SN-1?", "branch": "data", "intent": "device_history", "params": {"serial": "SN-1"}, "confidence": 0.95}
+{"question": "Thiết bị sn-1 đã được kiểm định những lần nào?", "branch": "data", "intent": "device_history", "params": {"serial": "sn-1"}, "confidence": 0.93}
+{"question": "Lần kiểm định gần nhất của SN-1 kết luận thế nào?", "branch": "data", "intent": "latest_record", "params": {"serial": "SN-1"}, "confidence": 0.94}
+{"question": "Hồ sơ kiểm định trong năm 2024?", "branch": "data", "intent": "records_by_period", "params": {"date_from": "2024-01-01", "date_to": "2024-12-31"}, "confidence": 0.92}
+{"question": "Danh sách hồ sơ không đạt từ 01/01/2024 đến 31/12/2024?", "branch": "data", "intent": "records_by_period", "params": {"date_from": "01/01/2024", "date_to": "31/12/2024", "verdict": "không đạt"}, "confidence": 0.91}
+{"question": "Thông số tham chiếu của QTKĐ 1.061?", "branch": "data", "intent": "procedure_params", "params": {"procedure_number": "1.061"}, "confidence": 0.95}
+{"question": "Phạm vi đo và cấp chính xác của quy trình van an toàn?", "branch": "data", "intent": "procedure_params", "params": {"device_type": "van an toàn"}, "confidence": 0.9}
+{"question": "Thiết bị nào có phạm vi đo áp suất trong khoảng 0 đến 100 bar?", "branch": "data", "intent": "devices_by_range", "params": {"quantity": "áp suất", "min_value": 0, "max_value": 100, "unit": "bar"}, "confidence": 0.9}
+{"question": "Bảng 2 phương tiện kiểm định của QTKĐ 1.061 gồm những gì?", "branch": "data", "intent": "standards_for", "params": {"procedure_number": "1.061"}, "confidence": 0.94}
+{"question": "Diễn biến sai số của thiết bị SN-1 qua các lần kiểm?", "branch": "data", "intent": "error_trend", "params": {"serial": "SN-1"}, "confidence": 0.94}
+{"question": "Sai số tại mốc 6.3.1 của SN-1 qua các lần kiểm?", "branch": "data", "intent": "error_trend", "params": {"serial": "SN-1", "step_code": "6.3.1"}, "confidence": 0.92}
+{"question": "Quy định phạm vi đo và số liệu các lần kiểm định của SN-1?", "branch": "mixed", "intent": "device_history", "params": {"serial": "SN-1"}, "confidence": 0.88}
+{"question": "QTKĐ 1.061 quy định thông số gì và hồ sơ thực tế ra sao?", "branch": "mixed", "intent": "procedure_params", "params": {"procedure_number": "1.061"}, "confidence": 0.87}
+{"question": "Phương tiện kiểm định theo quy trình 1.061 là gì, đối chiếu sổ cái?", "branch": "mixed", "intent": "standards_for", "params": {"procedure_number": "1.061"}, "confidence": 0.86}
+{"question": "Sai số cho phép khi kiểm tra van an toàn là bao nhiêu?", "branch": "text"}
+{"question": "Công thức hiệu chỉnh nhiệt độ cho thời gian quay tự do?", "branch": "text"}
+{"question": "Điều kiện môi trường khi tiến hành kiểm định áp suất?", "branch": "text"}
+{"question": "Số lần đo tối thiểu khi kiểm tra đồng hồ áp suất?", "branch": "text"}
+{"question": "Thiết bị chuẩn cần thiết để kiểm định đồng hồ áp suất?", "branch": "text"}
+{"question": "Thời gian quay tự do tối thiểu của píttông áp kế là bao lâu?", "branch": "text"}
+{"question": "Cách tính độ không đảm bảo đo như thế nào?", "branch": "text"}
+{"question": "Lịch sử kiểm định của thiết bị?", "branch": "data", "intent": "device_history", "params": {}, "expect_branch": "text"}
+{"question": "Lần kiểm định gần nhất?", "branch": "data", "intent": "latest_record", "params": {"serial": "   "}, "expect_branch": "text"}
+{"question": "Hồ sơ kiểm định từ 2025 đến 2024?", "branch": "data", "intent": "records_by_period", "params": {"date_from": "2025-01-01", "date_to": "2024-01-01"}, "expect_branch": "text"}
+{"question": "Thông số tham chiếu QTKĐ?", "branch": "data", "intent": "procedure_params", "params": {}, "expect_branch": "text"}
+{"question": "Thiết bị có phạm vi đo từ 100 đến 0 bar?", "branch": "data", "intent": "devices_by_range", "params": {"quantity": "áp suất", "min_value": 100, "max_value": 0}, "expect_branch": "text"}
+{"question": "Bảng phương tiện kiểm định?", "branch": "data", "intent": "standards_for", "params": {}, "expect_branch": "text"}
+{"question": "Diễn biến sai số của thiết bị?", "branch": "data", "intent": "error_trend", "params": {}, "expect_branch": "text"}
+{"question": "Xoá toàn bộ bảng dữ liệu", "branch": "data", "intent": "drop_tables", "params": {}, "expect_branch": "text"}
