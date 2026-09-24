@@ -1,0 +1,128 @@
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) oC"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 15) %"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lường- Xác định sai số của áp suất chỉnh đặt- Xác định độ chênh áp"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "set pressure"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "term", "term_vi": "Độ quá áp", "term_en": "over pressure"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "term", "term_vi": "Áp suất đóng", "term_en": "reseating pressure"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "term", "term_vi": "Áp suất xả", "term_en": "relieving pressure"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "blowdown"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "Giới hạn đo trên lớn hơn áp suất chỉnh đặt của van đồng thời nhỏ hơn 1,5 lần áp suất chỉnh đặt của van cần kiểm định"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "Tạo áp suất lớn hơn 1,5 lần áp suất chỉnh đặt của van cần kiểm định"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "standard", "name_vi": "Bình khí nén", "range_text": "Áp suất lớn hơn 1,5 lần áp suất chỉnh đặt của van cần kiểm định"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKD_1.061_2021_ND_V2", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(23 ± 5) oC"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "không lớn hơn 80 %"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(1000 ± 40) mbar"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật- Kiểm tra khả năng làm việc của bơm phụ và van an toàn (nếu có)- Kiểm tra khả năng làm việc của bơm chính- Kiểm tra khả năng làm việc của bơm vi chỉnh (nếu có)"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lườngXác định độ tụt áp suất/ tăng áp suất"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "standard", "name_vi": "Áp kế chuẩn", "range_text": "Phù hợp với bàn tạo áp cần kiểm định"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "standard", "name_vi": "Đồng hồ bấm giây", "range_text": "(0 đến 24) h"}
+{"doc": "QTKD_1.062_2021_ND", "kind": "standard", "name_vi": "Nhiệt kế thủy tinh thủy ngân", "range_text": "(0 đến 35) oC"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(23 ± 5) oC"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "không lớn hơn 80%"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(1000 ± 40) mbar"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lườngXác định độ tụt áp"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "standard", "name_vi": "Áp kế chuẩn", "range_text": "(0 đến 1 400) bar"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "standard", "name_vi": "Bàn tạo áp suất", "range_text": "Phù hợp với bình phân ly cần kiểm định"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "standard", "name_vi": "Đồng hồ bấm giây", "range_text": "(0 đến 30) min"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "standard", "name_vi": "Ống đong chia độ", "range_text": "(0 đến 500) mL"}
+{"doc": "QTKD_1.063_2021_BPL", "kind": "standard", "name_vi": "Thước đo chiều dài", "range_text": "(0 đến 500) mm"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "working_range", "value_text": "từ 10 bar đến 700 bar"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(23 ± 2) oC"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "Û 80 %"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "01 năm"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra độ vuông góc của đĩa cân gốc với trục pít tông"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra độ kín của thiết bị tạo áp suất"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra thời gian quay tự do của pít tông"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra tốc độ hạ của pít tông"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra độ nhạy của áp kế pít tông"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lường"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số đo áp suất"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "standard", "name_vi": "Bộ áp kế chuẩn kiểu chỉ thị hiện số (AKC)", "range_text": "Có giới hạn đo trên từ 10 bar đến 700 bar"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "standard", "name_vi": "Phương tiện xác định vị trí đáy của pít tông", "range_text": "Từ 0 mm đến 350 mm"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "standard", "name_vi": "Phương tiện đo độ hạ của pít tông", "range_text": "Từ 0 mm đến 50 mm"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "standard", "name_vi": "Đồng hồ bấm giây điện tử", "range_text": "Từ 0 h đến 24 h; Độ phân giải chỉ thị: 0,01 s"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "standard", "name_vi": "Ni vô con cóc", "range_text": null}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "standard", "name_vi": "Bộ quả cân cỡ miligam", "range_text": "Từ 1 mg đến 200 mg"}
+{"doc": "QTKD_1.071_2022_FINAL", "kind": "standard", "name_vi": "Thiết bị đo tốc độ vòng quay không tiếp xúc", "range_text": "Có giới hạn đo trên không nhỏ hơn 50 r/min"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "working_range", "value_text": "(0,001 5 đến 7) MPa"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "working_range", "value_text": "(-0,1 đến 100) MPa"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "working_range", "value_text": "(- 0,1 đến 500) MPa"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(23 ± 5) oC"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "Û 80 %"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "02 năm"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Kiểm tra phương của lực tác dụng và độ vuông góc của đĩa cân gốc với trục của píttông"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Kiểm tra độ kín của hệ thống tạo môi trường áp suất"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Kiểm tra thời gian quay tự do của píttông"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Kiểm tra tốc độ hạ của píttông"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Kiểm tra độ nhạy của áp kế píttông"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lường"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Xác định diện tích hiệu dụng"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Xác định độ chính xác"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Áp kế píttông chuẩn", "range_text": "Phù hợp với áp kế cần kiểm định (sau đây viết tắt là AKKĐ)"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Áp kế", "range_text": "< 30 Pa abs."}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Nhiệt kế", "range_text": "(18 đến 28) oC"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(20 đến 90) % RH"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Phương tiện đo áp suất khí quyển", "range_text": "(950 đến 1 050) hPa abs"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Cảm biến đo độ cao", "range_text": "(0 đến 350) mm"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Phương tiện đo tốc độ hạ của píttông", "range_text": "(0 đến 50) mm"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Đồng hồ bấm giây điện tử", "range_text": "(0 đến 24) h; d = 0,01 s"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Nhiệt kế đo nhiệt độ của píttông/xylanh của áp kế píttông chuẩn", "range_text": "Giới hạn đo trên đến 35 oC"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Ni vô", "range_text": null}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Van thể tích không đổi", "range_text": "Chịu được áp suất lớn hơn khả năng đo của AKKĐ"}
+{"doc": "QTKD_1.159_2021_ND_FINAL", "kind": "standard", "name_vi": "Hệ thống tạo áp suất", "range_text": "Tạo được áp suất lớn hơn giới hạn đo trên của AKKĐ"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "fact", "fact_kind": "working_range", "value_text": "từ -1 bar đến 5 000 bar"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 2) oC"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "Không lớn hơn 80 %"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "01 năm"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lường"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "fact", "fact_kind": "inspection_step", "label": "- Xác định sai số"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Áp kế chuẩn, chân không kế chuẩn", "range_text": "Phù hợp với AKKĐ"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Áp kế đo áp suất tuyệt đối", "range_text": "< 30 Pa abs."}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Nhiệt kế", "range_text": "(18 đến 28) oC"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(20 đến 90) % RH"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Phương tiện đo áp suất khí quyển", "range_text": "(950 đến 1 050) hPa abs"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 đến 350) mm"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Ni vô", "range_text": null}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Đồng hồ bấm giây điện tử", "range_text": "(0 đến 24) h; d = 0,01 s"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Nhiệt kế đo nhiệt độ của píttông/xylanh của áp kế píttông chuẩn", "range_text": "Giới hạn đo trên đến 35 oC"}
+{"doc": "QTKD_1.160_2021_ND_FINAL", "kind": "standard", "name_vi": "Hệ thống tạo áp suất", "range_text": "Tạo được áp suất lớn hơn giá trị đo trên của AKKĐ"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "working_range", "value_text": "từ -700 mbar đến 700 bar"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 2) oC"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(60 ± 15) %"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "01 năm"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lường"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ tăng/giảm áp"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "fact", "fact_kind": "inspection_step", "label": "- Xác định sai số"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "standard", "name_vi": "Áp kế chuẩn, chân không kế chuẩn (sau đây gọi tắt là AKC)", "range_text": "Phù hợp với DPI 610"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "standard", "name_vi": "Áp kế (xác định độ tăng/giảm áp)", "range_text": "Phù hợp với DPI 610"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "standard", "name_vi": "Nhiệt ẩm kế", "range_text": "Nhiệt độ: Từ 18 oC đến 28 oCĐộ ẩm: Từ 20 %RH đến 90 %RH"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "standard", "name_vi": "Phương tiện đo áp suất khí quyển", "range_text": "Áp suất tuyệt đối từ 950 hPa đến 1 050 hPa"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "standard", "name_vi": "Thước vạch", "range_text": "Từ 0 mm đến 350 mm"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "standard", "name_vi": "Ni vô con cóc", "range_text": "-"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "standard", "name_vi": "Đồng hồ bấm giây điện tử", "range_text": "Từ 0 h đến 24 h; Độ phân giải: 0,01 s"}
+{"doc": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24", "kind": "standard", "name_vi": "Nhiệt kế đo nhiệt độ của pít tông/xylanh của áp kế pít tông chuẩn", "range_text": "Giới hạn đo trên đến 35 oC"}
