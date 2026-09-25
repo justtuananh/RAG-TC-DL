@@ -37,6 +37,23 @@ def _line_offsets(body: str) -> list[tuple[str, int, int]]:
     return result
 
 
+def _split_condition_text(expression: str) -> tuple[str, str | None]:
+    """Tách ``value_text`` / ``condition_text`` tại dấu phẩy ĐẦU TIÊN không nằm
+    giữa hai chữ số (K02): dấu phẩy thập phân kiểu Việt "(20,5 ± 2) °C" không
+    phải ranh giới tách."""
+    for index, char in enumerate(expression):
+        if char != ",":
+            continue
+        if (
+            0 < index < len(expression) - 1
+            and expression[index - 1].isdigit()
+            and expression[index + 1].isdigit()
+        ):
+            continue
+        return expression[:index], expression[index + 1 :]
+    return expression, None
+
+
 def _parse_condition(expr: str) -> tuple[str | None, float | None, float | None, str | None]:
     """(rel_op, value_min, value_max, unit) từ biểu thức điều kiện."""
     normalized = vnnum.normalize_spaces(expr)
@@ -72,12 +89,10 @@ def extract(text: str) -> list[RuleHit]:
         expression = expression.strip().rstrip(";").strip()
         if not expression:
             continue
-        if "," in expression:
-            value_text, condition_text = expression.split(",", 1)
-            value_text = value_text.strip()
+        value_text, condition_text = _split_condition_text(expression)
+        value_text = value_text.strip()
+        if condition_text is not None:
             condition_text = condition_text.strip().rstrip(";").strip() or None
-        else:
-            value_text, condition_text = expression, None
 
         rel_op, value_min, value_max, unit = _parse_condition(value_text)
         leading = len(line) - len(line.lstrip())

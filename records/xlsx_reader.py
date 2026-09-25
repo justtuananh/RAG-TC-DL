@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import re
 import zipfile
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from lxml import etree
@@ -77,7 +78,7 @@ def _first_sheet_path(archive: zipfile.ZipFile) -> str:
     return "xl/worksheets/sheet1.xml"
 
 
-def _cell_value(cell, shared: list[str]) -> str:
+def _cell_value(cell, shared: list[str], date_styles: set[int]) -> str:
     cell_type = cell.get("t")
     if cell_type == "inlineStr":
         return "".join(node.text or "" for node in cell.iter(f"{_M}t"))
@@ -89,12 +90,82 @@ def _cell_value(cell, shared: list[str]) -> str:
             return shared[int(value_node.text)]
         except (ValueError, IndexError):
             return ""
+    if cell_type in (None, "n"):
+        # K05: ô số mang style ngày (xl/styles.xml) là số serial Excel, đổi sang
+        # "DD/MM/YYYY" TRƯỚC bước đổi dấu chấm của K01.
+        if _style_index(cell) in date_styles:
+            return _serial_to_date(value_node.text)
+        # K01: ô số là số máy, luôn dùng dấu chấm thập phân; đổi sang chuỗi kiểu
+        # Việt (phẩy thập phân, không nhóm nghìn) trước khi xuống tầng parse.
+        return value_node.text.replace(".", ",")
     return value_node.text
+
+
+def _style_index(cell) -> int:
+    """Chỉ số ``cellXfs`` của ô (thuộc tính ``s``); -1 nếu không có/không hợp lệ."""
+    try:
+        return int(cell.get("s"))
+    except (TypeError, ValueError):
+        return -1
+
+
+# Định dạng ngày/giờ dựng sẵn của Excel (mục 14..22 theo ECMA-376).
+_BUILTIN_DATE_FMT_IDS = frozenset(range(14, 23))
+
+
+def _is_date_format(code: str) -> bool:
+    """``formatCode`` tuỳ biến là định dạng ngày, không phải chỉ giờ.
+
+    Bỏ literal trong ngoặc kép/vuông trước khi xét; có ``d``/``y`` là ngày; chỉ
+    còn ``m`` thì phải không kèm ``h`` hoặc ``:`` (nếu không là phút).
+    """
+    cleaned = re.sub(r'"[^"]*"', "", code or "")
+    cleaned = re.sub(r"\[[^\]]*\]", "", cleaned)
+    if not re.search(r"[dmyDMY]", cleaned):
+        return False
+    if re.search(r"[dDyY]", cleaned):
+        return True
+    return not (re.search(r"[hH]", cleaned) or ":" in cleaned)
+
+
+def _date_styles(archive: zipfile.ZipFile) -> set[int]:
+    """Tập chỉ số ``cellXfs`` có định dạng ngày (dựng sẵn 14..22 hoặc tuỳ biến)."""
+    try:
+        root = etree.fromstring(archive.read("xl/styles.xml"))
+    except KeyError:
+        return set()
+    custom: dict[int, str] = {}
+    for numfmt in root.findall(f"{_M}numFmts/{_M}numFmt"):
+        try:
+            custom[int(numfmt.get("numFmtId"))] = numfmt.get("formatCode") or ""
+        except (TypeError, ValueError):
+            continue
+    styles: set[int] = set()
+    for index, xf in enumerate(root.findall(f"{_M}cellXfs/{_M}xf")):
+        try:
+            fmt_id = int(xf.get("numFmtId") or 0)
+        except ValueError:
+            continue
+        if fmt_id in _BUILTIN_DATE_FMT_IDS or _is_date_format(custom.get(fmt_id, "")):
+            styles.add(index)
+    return styles
+
+
+def _serial_to_date(text: str) -> str:
+    """Số serial Excel (gốc 1899-12-30) → ``"DD/MM/YYYY"``; lỗi thì giữ nguyên."""
+    try:
+        serial = float(text)
+    except (TypeError, ValueError):
+        return text
+    moment = datetime(1899, 12, 30) + timedelta(days=serial)
+    return moment.strftime("%d/%m/%Y")
+
 
 
 def _read_grid(path: str | Path) -> list[list[str]]:
     with zipfile.ZipFile(path) as archive:
         shared = _shared_strings(archive)
+        date_styles = _date_styles(archive)
         sheet_path = _first_sheet_path(archive)
         root = etree.fromstring(archive.read(sheet_path))
 
@@ -103,7 +174,7 @@ def _read_grid(path: str | Path) -> list[list[str]]:
         cells: dict[int, str] = {}
         for cell in row.findall(f"{_M}c"):
             index = _column_index(cell.get("r", ""))
-            cells[index] = _cell_value(cell, shared)
+            cells[index] = _cell_value(cell, shared, date_styles)
         width = max(cells) + 1 if cells else 0
         grid.append([cells.get(i, "") for i in range(width)])
     return grid

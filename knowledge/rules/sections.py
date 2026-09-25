@@ -11,12 +11,16 @@ gán nhầm mục (spec §7, §12).
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from knowledge import vnnum
 
 _HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*$", re.MULTILINE)
 _NUMBER_RE = re.compile(r"^(\d+(?:\.\d+)*)[.)]?\s+(.*)$")
+# Nhãn phụ lục phải là MỘT chữ cái đứng riêng, B..Z (bỏ A), không theo sau bởi
+# chữ cái/chữ số khác: "Phụ lục B", "PHỤ LỤC C (tiếp theo)" khớp; "Phụ lục này",
+# "Phụ lục Bảng", "Phụ lục A (tiếp theo)" không khớp (K12).
+_APPENDIX_LABEL_RE = re.compile(r"^phụ\s*lục\s+([b-z])(?![^\W_])", re.IGNORECASE)
 
 
 @dataclass(frozen=True)
@@ -85,3 +89,51 @@ def find_section(sections: list[Section], *keywords: str) -> Section | None:
         if all(needle in haystack for needle in needles):
             return section
     return None
+
+
+def _first_plain_appendix_stop(text: str, start: int) -> int | None:
+    """Vị trí dòng đầu tiên (từ ``start``) mang nhãn phụ lục B..Z đứng riêng.
+
+    Chỉ xét dòng bắt đầu bằng nhãn "Phụ lục <chữ cái B..Z>"; câu văn nhắc
+    "Phụ lục B" giữa dòng hay "Phụ lục này"/"Phụ lục Bảng" không tính. Trả
+    ``None`` nếu không có.
+    """
+    offset = start
+    for line in text[start:].split("\n"):
+        if _APPENDIX_LABEL_RE.match(line.strip()):
+            return offset + (len(line) - len(line.lstrip()))
+        offset += len(line) + 1
+    return None
+
+
+def find_appendix_section(text: str) -> Section | None:
+    """Mục "Phụ lục A" với thân MỞ RỘNG tới điểm dừng sớm nhất (K12):
+
+    (a) heading mang nhãn phụ lục B..Z đứng riêng, hoặc
+    (b) dòng riêng mang nhãn phụ lục B..Z đứng riêng ("Phụ lục B", "PHỤ LỤC C",
+        "Phụ lục B (tiếp theo)"), hoặc hết tài liệu.
+
+    Heading con bên trong Phụ lục A ("(Quy định)", "Mẫu biên bản...",
+    "BIÊN BẢN KIỂM ĐỊNH..."), "Phụ lục A (tiếp theo)/(kết thúc)" và các dòng bắt
+    đầu bằng một TỪ như "Phụ lục này..." KHÔNG kết thúc mục. Chỉ luật ``phuluc_a``
+    dùng hàm này; các luật khác giữ nguyên ngữ nghĩa ``find_section`` (dừng ở
+    heading kế tiếp bất kỳ cấp nào).
+    """
+    sections = split_sections(text)
+    section = find_section(sections, "phụ lục a")
+    if section is None:
+        return None
+    candidates: list[int] = []
+    for candidate in sections:
+        if candidate.start <= section.start:
+            continue
+        if _APPENDIX_LABEL_RE.match(_normalize(candidate.title)):
+            candidates.append(candidate.start)
+            break
+    plain_stop = _first_plain_appendix_stop(text, section.body_start)
+    if plain_stop is not None:
+        candidates.append(plain_stop)
+    end = min(candidates) if candidates else len(text)
+    if end == section.end:
+        return section
+    return replace(section, end=end, body=text[section.body_start:end])

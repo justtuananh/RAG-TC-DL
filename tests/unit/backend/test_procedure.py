@@ -86,6 +86,17 @@ def test_infer_device_type_returns_none_for_unknown_title():
     assert infer_device_type("MỘT THIẾT BỊ LẠ KHÔNG CÓ ALIAS", _candidates()) is None
 
 
+@pytest.mark.parametrize("code", ["QTKD", "QTKĐ", "qtkd", "qtkđ"])
+def test_parse_procedure_header_accepts_qtkd_with_or_without_d(code):
+    """K11: dòng mã nhận cả ``QTKD`` (không dấu Đ) lẫn ``QTKĐ``, mọi kiểu hoa thường."""
+    md = f"{code} 9.013 : 2026\nVAN AN TOAN\nQUY TRINH KIEM DINH\n"
+    header = parse_procedure_header(md)
+    assert header is not None
+    assert header.number == "9.013"
+    assert header.year == 2026
+    assert header.title.startswith("VAN AN TOAN")
+
+
 @pytest.fixture
 def session():
     engine = create_engine(

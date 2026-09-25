@@ -132,7 +132,9 @@ def parse_number(text: str | None) -> float | None:
             return None
         body = body.replace(",", ".")
     elif "." in body:
-        if re.fullmatch(r"\d{1,3}(?:\.\d{3})+", body):
+        # Nhóm nghìn kiểu "\d{1,3}(\.\d{3})+" nhưng nhóm đầu bằng "0" thì không
+        # thể là nhóm nghìn: "0.500" là số thập phân 0,5 (K01).
+        if re.fullmatch(r"\d{1,3}(?:\.\d{3})+", body) and not body.startswith("0"):
             body = body.replace(".", "")  # 1.061 → 1061 (phân nhóm hàng nghìn)
         elif body.count(".") != 1:
             return None

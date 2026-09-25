@@ -6,7 +6,7 @@ từng bị nhận nhầm là heading). _table_md dựng Markdown + escape '|'.
 
 from lxml import etree
 
-from ingestion.extract_docx import _heading_level, _local, _q, _table_md
+from ingestion.extract_docx import _heading_level, _load_styles, _local, _q, _table_md
 
 W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
@@ -31,6 +31,53 @@ def test_heading_level_rejects_toc_and_title():
 
 def test_heading_level_none_without_pstyle():
     assert _heading_level(_p(None)) is None
+
+
+def test_heading_level_localized_name():
+    """K13: style có ``w:name`` là "heading N" vẫn là heading dù styleId khác."""
+    assert _heading_level(_p("TieuDeMuc1"), {"TieuDeMuc1": ("heading 1", "Normal")}) == 1
+
+
+def test_heading_level_follows_based_on_chain():
+    """K13: đi theo chuỗi ``basedOn`` để lấy cấp của style heading gốc."""
+    styles = {"MucCon2": ("Muc con 2", "TieuDeMuc1"), "TieuDeMuc1": ("heading 2", "Normal")}
+    assert _heading_level(_p("MucCon2"), styles) == 2
+
+
+def test_heading_level_excludes_toc_even_when_based_on_heading():
+    """K13: style TOC (styleId/tên bắt đầu ``toc``) không thành heading."""
+    styles = {"TOCHeading": ("TOC Heading", "Heading1"), "Heading1": ("heading 1", "Normal")}
+    assert _heading_level(_p("TOCHeading"), styles) is None
+
+
+def test_heading_level_unresolved_style_is_none():
+    styles = {"Khach": ("Khach hang", "Normal")}
+    assert _heading_level(_p("Khach"), styles) is None
+
+
+def test_load_styles_reads_name_and_based_on(tmp_path):
+    """K13: ``_load_styles`` đọc ``w:name``/``w:basedOn`` của style đoạn văn."""
+    import zipfile
+
+    styles_xml = (
+        f'<?xml version="1.0" encoding="UTF-8"?>'
+        f'<w:styles xmlns:w="{W}">'
+        '<w:style w:type="paragraph" w:styleId="TieuDeMuc1">'
+        '<w:name w:val="heading 1"/><w:basedOn w:val="Normal"/>'
+        "</w:style>"
+        '<w:style w:type="character" w:styleId="Heading1Char">'
+        '<w:name w:val="Heading 1 Char"/>'
+        "</w:style>"
+        "</w:styles>"
+    )
+    path = tmp_path / "styles.docx"
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("word/styles.xml", styles_xml)
+    with zipfile.ZipFile(path) as archive:
+        styles = _load_styles(archive)
+
+    assert styles["TieuDeMuc1"] == ("heading 1", "Normal")
+    assert "Heading1Char" not in styles  # chỉ style đoạn văn
 
 
 def test_q_expands_and_local_strips():
@@ -100,3 +147,29 @@ def test_guard_keeps_real_headings():
         "Áp kế pít tông kiểu H3000-SP-70/700",
     ]:
         assert not _is_body_masquerading_as_heading(h), h
+
+
+def test_table_md_k07_honors_gridspan_and_vmerge():
+    """K07: ô gridSpan chiếm N cột (văn bản ở cột đầu, N-1 cột rỗng); ô vMerge
+    tiếp nối để trống, giữ đúng vị trí cột cho bảng Markdown."""
+    xml = (
+        f'<w:tbl xmlns:w="{W}">'
+        "<w:tr>"
+        '<w:tc><w:tcPr><w:gridSpan w:val="3"/></w:tcPr>'
+        "<w:p><w:r><w:t>Áp suất</w:t></w:r></w:p></w:tc>"
+        '<w:tc><w:tcPr><w:vMerge w:val="restart"/></w:tcPr>'
+        "<w:p><w:r><w:t>Ghi chú</w:t></w:r></w:p></w:tc>"
+        "</w:tr>"
+        "<w:tr>"
+        "<w:tc><w:p><w:r><w:t>Mở</w:t></w:r></w:p></w:tc>"
+        "<w:tc><w:p><w:r><w:t>Đóng</w:t></w:r></w:p></w:tc>"
+        "<w:tc><w:p><w:r><w:t>Độ chênh</w:t></w:r></w:p></w:tc>"
+        "<w:tc><w:tcPr><w:vMerge/></w:tcPr>"
+        "<w:p><w:r><w:t>bị bỏ</w:t></w:r></w:p></w:tc>"
+        "</w:tr>"
+        "</w:tbl>"
+    )
+    md = _table_md(etree.fromstring(xml), {}, [], [], [0])
+    lines = md.split("\n")
+    assert lines[0] == "| Áp suất |  |  | Ghi chú |"
+    assert lines[2] == "| Mở | Đóng | Độ chênh |  |"

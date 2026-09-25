@@ -23,6 +23,7 @@ from pathlib import Path
 from lxml import etree
 
 from knowledge import vnnum
+from ingestion.docx_grid import grid_slots
 from records.template import MappingConfig
 from records.types import FieldDraft, MeasurementDraft, RecordDraft
 
@@ -96,7 +97,14 @@ def _iter_blocks(root) -> list[tuple[str, object]]:
         elif child.tag == _W_TBL:
             rows: list[list[str]] = []
             for tr in child.findall(_W_TR):
-                rows.append([_cell_text(tc) for tc in tr.findall(_W_TC)])
+                cells: list[str] = []
+                for slot in grid_slots(tr):
+                    # K07: cùng quy tắc với ingestion.extract_docx: ô gộp dọc tiếp
+                    # nối để trống, ô gridSpan chiếm N cột (văn bản ở cột đầu).
+                    text = "" if slot.continues else _cell_text(slot.cell)
+                    cells.append(text)
+                    cells.extend([""] * (slot.span - 1))
+                rows.append(cells)
             if rows:
                 blocks.append(("table", rows))
     return blocks
@@ -149,15 +157,35 @@ def _table_field_value(rows: list[list[str]], labels: list[str]) -> list[FieldDr
         for index, cell in enumerate(row):
             if not cell:
                 continue
-            if slugify(cell) in label_keys:
+            # K03: chuẩn hoá nhãn ô (bỏ ':' và khoảng trắng cuối) trước khi khớp
+            # và trước khi lưu, để tầng store tra đúng alias.
+            label = cell.strip().rstrip(":").strip()
+            if slugify(label) in label_keys:
                 value = ""
                 for candidate in row[index + 1 :]:
                     if candidate:
                         value = candidate
                         break
-                drafts.append(FieldDraft(label=cell, value=value, quote=" | ".join(row)))
+                drafts.append(FieldDraft(label=label, value=value, quote=" | ".join(row)))
                 break
     return drafts
+
+
+_UNIT_IN_HEADER_RE = re.compile(r"\(([^()]*)\)")
+_UNIT_HEADER_CANDIDATE_RE = re.compile(r"^[^\d()]{1,15}$")
+
+
+def _unit_from_header(column: str) -> str | None:
+    """Đơn vị trong ngoặc ở tiêu đề cột giá trị (``Giá trị đo (bar)`` → ``bar``).
+
+    Lấy nhóm ngoặc cuối cùng trông giống đơn vị (không chứa chữ số, không quá
+    dài). Không có → ``None`` để tầng store dùng đơn vị của ``working_range``.
+    """
+    for candidate in reversed(_UNIT_IN_HEADER_RE.findall(column or "")):
+        text = candidate.strip()
+        if text and _UNIT_HEADER_CANDIDATE_RE.match(text):
+            return text
+    return None
 
 
 def _role_for_column(column: str) -> str | None:
@@ -211,8 +239,10 @@ def _map_measurement_row(columns: list[str], cells: list[str]) -> MeasurementDra
         elif role == "measured" and draft.measured_text is None:
             draft.measured_text = text or None
             draft.measured_value = vnnum.parse_number(text)
+            # K09: ưu tiên đơn vị trong ngoặc ở tiêu đề cột giá trị.
+            draft.unit_text = _unit_from_header(column)
         elif role == "measured_secondary" and text:
-            extras.append(f"{column}={text}")
+            extras.append(f"{column}: {text}")
         elif role == "nominal" and draft.nominal_text is None:
             draft.nominal_text = text or None
             draft.nominal_value = vnnum.parse_number(text)

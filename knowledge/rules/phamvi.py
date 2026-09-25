@@ -22,7 +22,9 @@ EXTRACTOR = "rule:phamvi.v1"
 FACT_KIND = "working_range"
 SECTION_KEYWORDS = ("phạm vi",)
 
-_UNIT = r"[A-Za-zµ%°/][\w%°/²³.]*"
+_UNIT = r"[A-Za-zµ%°/](?:[\w%°/²³]|\.(?=[\w%°/²³]))*"
+# K15: dấu "." chỉ thuộc đơn vị khi còn ký tự đơn vị theo sau; dấu chấm câu cuối
+# token (theo sau là khoảng trắng hoặc hết dòng) bị chặn, không lọt vào value_text.
 _NUM = r"-?\s?\d[\d\s.,]*?"
 
 _TU_DEN_RE = re.compile(

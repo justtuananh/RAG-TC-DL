@@ -11,9 +11,9 @@ from dataclasses import dataclass
 
 from knowledge.reference import normalize_alias
 
-# Dòng mã QTKĐ: "QTKĐ 1.061 : 2021" / "QTKĐ 1.062 :2021".
+# Dòng mã QTKĐ: "QTKĐ 1.061 : 2021" / "QTKD 1.062 :2021" (K11: nhận cả không dấu Đ).
 _HEADER_RE = re.compile(
-    r"QTKĐ\s*([0-9]+(?:\.[0-9]+)?)\s*[:\-]?\s*(\d{4})",
+    r"QTK[ĐD]\s*([0-9]+(?:\.[0-9]+)?)\s*[:\-]?\s*(\d{4})",
     re.IGNORECASE,
 )
 _STOP_RE = re.compile(r"^(QUY TRÌNH KIỂM ĐỊNH|HÀ NỘI|HỒ CHÍ MINH)\b", re.IGNORECASE)

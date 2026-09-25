@@ -109,7 +109,11 @@ def ensure_procedure(session, document, text: str) -> Procedure | None:
 
 
 def _supersede_previous(
-    session, document, *, extractor_prefix: str | None = None
+    session,
+    document,
+    *,
+    extractor_prefix: str | None = None,
+    exclude_extractor_prefix: str | None = None,
 ) -> tuple[dict[tuple[str, str | None], int], int]:
     """Chuyển extraction cũ (pending/approved) sang ``superseded``.
 
@@ -118,6 +122,8 @@ def _supersede_previous(
 
     ``extractor_prefix`` giới hạn phạm vi (ví dụ ``"llm:"``) để bước trích xuất
     §6 bằng LLM không vô hiệu hóa các dòng luật vừa ghi trong cùng lần nạp.
+    ``exclude_extractor_prefix`` loại trừ thêm (ví dụ ``"rule:phuluc_a"`` khi trích
+    lại bằng luật: Phụ lục A có vòng đời riêng, không bị luật lõi thay thế).
     """
     query = session.query(Extraction).filter(
         Extraction.document_id == document.id,
@@ -125,6 +131,8 @@ def _supersede_previous(
     )
     if extractor_prefix:
         query = query.filter(Extraction.extractor.like(f"{extractor_prefix}%"))
+    if exclude_extractor_prefix:
+        query = query.filter(~Extraction.extractor.like(f"{exclude_extractor_prefix}%"))
     previous = query.order_by(Extraction.id).all()
     latest: dict[tuple[str, str | None], int] = {}
     for row in previous:
@@ -150,7 +158,16 @@ def extract_and_store(
     if procedure is None:
         procedure = ensure_procedure(session, document, text)
 
-    previous = _supersede_previous(session, document) if supersede else ({}, 0)
+    previous = (
+        _supersede_previous(
+            session,
+            document,
+            extractor_prefix="rule:",
+            exclude_extractor_prefix="rule:phuluc_a",
+        )
+        if supersede
+        else ({}, 0)
+    )
     supersedes_map, summary.superseded = previous
 
     unit_defs = units_module.load_unit_defs(session)

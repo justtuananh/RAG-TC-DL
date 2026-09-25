@@ -22,6 +22,7 @@ from dataclasses import dataclass, field
 
 from lxml import etree
 
+from .docx_grid import grid_slots
 from .omml import omml_to_latex
 
 # ---- OOXML namespaces -------------------------------------------------------
@@ -101,14 +102,81 @@ def _load_rels(z: zipfile.ZipFile) -> dict[str, str]:
     return rels
 
 
-def _heading_level(p) -> int | None:
+def _load_styles(z: zipfile.ZipFile) -> dict[str, tuple[str | None, str | None]]:
+    """Map ``styleId`` -> ``(w:name, w:basedOn)`` của style đoạn văn (K13).
+
+    Chỉ lấy ``w:type="paragraph"`` (hoặc thiếu type); trả ``{}`` nếu docx không có
+    ``word/styles.xml``.
+    """
+    try:
+        xml = z.read("word/styles.xml")
+    except KeyError:
+        return {}
+    styles: dict[str, tuple[str | None, str | None]] = {}
+    for style in etree.fromstring(xml).findall(_q("w:style")):
+        if style.get(_q("w:type")) not in (None, "paragraph"):
+            continue
+        style_id = style.get(_q("w:styleId"))
+        if not style_id:
+            continue
+        name_el = style.find(_q("w:name"))
+        based_el = style.find(_q("w:basedOn"))
+        name = name_el.get(_q("w:val")) if name_el is not None else None
+        based_on = based_el.get(_q("w:val")) if based_el is not None else None
+        styles[style_id] = (name, based_on)
+    return styles
+
+
+_TOC_PREFIX_RE = re.compile(r"^toc", re.IGNORECASE)
+_HEADING_ID_RE = re.compile(r"heading(\d)", re.IGNORECASE)
+_HEADING_NAME_RE = re.compile(r"heading\s*(\d)", re.IGNORECASE)
+
+
+def _style_heading_level(
+    style_id: str,
+    styles: dict[str, tuple[str | None, str | None]],
+    *,
+    max_hops: int = 5,
+) -> int | None:
+    """Cấp heading 1..9 của ``style_id`` theo ba tín hiệu, hoặc ``None`` (K13).
+
+    Theo thứ tự: (1) ``styleId`` khớp ``heading\\d``; (2) ``w:name`` khớp
+    ``heading \\d``; (3) đi theo chuỗi ``w:basedOn`` tối đa ``max_hops`` bước tới
+    một style thoả (1)/(2). Style TOC (styleId hoặc tên bắt đầu ``toc``) bị loại.
+    """
+    current: str | None = style_id
+    visited: set[str] = set()
+    for _ in range(max_hops + 1):
+        if not current or current in visited:
+            return None
+        visited.add(current)
+        name, based_on = styles.get(current, (None, None))
+        if _TOC_PREFIX_RE.match(current) or _TOC_PREFIX_RE.match(name or ""):
+            return None
+        match = _HEADING_ID_RE.match(current)
+        if match:
+            return int(match.group(1))
+        if name:
+            match = _HEADING_NAME_RE.match(name)
+            if match:
+                return int(match.group(1))
+        current = based_on
+    return None
+
+
+def _heading_level(
+    p,
+    styles: dict[str, tuple[str | None, str | None]] | None = None,
+) -> int | None:
     """Return 1..9 if the paragraph is a heading style, else None.
 
-    Only trusts explicit Word heading styles (heading1..heading9).
-    The outlineLvl attribute is intentionally NOT used as a fallback because
-    it is also set on list-item paragraphs in some QTKD files, causing body
-    text to be misclassified as headings (QTKD_1.071 bug: 3 bullet lines
-    emitted as ### headings, making sections 5.2.1 and 5.2.5 appear empty).
+    Only trusts explicit Word heading styles. K13 bổ sung: phân giải ``styleId``
+    qua ``word/styles.xml`` (``w:name="heading N"`` hoặc chuỗi ``w:basedOn`` tới
+    một style heading), loại trừ style TOC. The outlineLvl attribute is
+    intentionally NOT used as a fallback because it is also set on list-item
+    paragraphs in some QTKD files, causing body text to be misclassified as
+    headings (QTKD_1.071 bug: 3 bullet lines emitted as ### headings, making
+    sections 5.2.1 and 5.2.5 appear empty).
     """
     ppr = p.find(_q("w:pPr"))
     if ppr is None:
@@ -116,13 +184,10 @@ def _heading_level(p) -> int | None:
     pstyle = ppr.find(_q("w:pStyle"))
     if pstyle is None:
         return None
-    val = (pstyle.get(_q("w:val")) or "").lower()
-    m = re.match(r"heading(\d)", val)
-    if m:
-        return int(m.group(1))
-    if val.startswith("toc") or val in {"tieude", "title"}:
-        return None  # skip table-of-contents entries / cover title
-    return None
+    style_id = (pstyle.get(_q("w:val")) or "").strip()
+    if not style_id:
+        return None
+    return _style_heading_level(style_id, styles or {})
 
 
 _CAPTION_RE = re.compile(r"(?:Hình|Bảng)\s+\d")
@@ -209,10 +274,19 @@ def _inline(el, rels, formulas, section_path, *, in_table=False, counter=None):
 def _table_md(tbl, rels, formulas, section_path, counter) -> str:
     rows: list[list[str]] = []
     for tr in tbl.findall(_q("w:tr")):
-        cells = []
-        for tc in tr.findall(_q("w:tc")):
-            cells.append(_inline(tc, rels, formulas, section_path,
-                                 in_table=True, counter=counter).replace("|", "\\|"))
+        cells: list[str] = []
+        for slot in grid_slots(tr):
+            # K07: ô gộp dọc tiếp nối để trống; ô gridSpan chiếm N cột thì văn bản
+            # ở cột đầu và N-1 cột sau rỗng, để lưới Markdown khớp lưới reader.
+            text = (
+                ""
+                if slot.continues
+                else _inline(
+                    slot.cell, rels, formulas, section_path, in_table=True, counter=counter
+                )
+            )
+            cells.append(text.replace("|", "\\|"))
+            cells.extend([""] * (slot.span - 1))
         if cells:
             rows.append(cells)
     if not rows:
@@ -230,6 +304,7 @@ def extract_docx(path: str) -> DocResult:
     with zipfile.ZipFile(path) as z:
         names = z.namelist()
         rels = _load_rels(z)
+        styles = _load_styles(z)
         doc_xml = z.read("word/document.xml")
         media = sorted(n for n in names if n.startswith("word/media/"))
         embeddings = sorted(n for n in names if n.startswith("word/embeddings/"))
@@ -249,7 +324,7 @@ def extract_docx(path: str) -> DocResult:
         tag = child.tag
         if tag == _q("w:p"):
             n_paragraphs += 1
-            level = _heading_level(child)
+            level = _heading_level(child, styles)
             text = _inline(child, rels, formulas, section_path, counter=counter)
             # Guard: body text accidentally formatted with a heading style
             # (bullet / câu / caption) — see _is_body_masquerading_as_heading.

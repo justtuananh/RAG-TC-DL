@@ -90,15 +90,72 @@ def test_xlsx_reader_extracts_fields_and_measurements(data_dir):
     assert len(draft.measurements) == 3
     first = draft.measurements[0]
     assert first.ord == 1
-    assert first.nominal_text == "10.0"
+    assert first.nominal_text == "10,0"
     assert first.nominal_value == 10.0
-    assert first.measured_text == "10.1"
+    assert first.measured_text == "10,1"
     assert first.measured_value == 10.1
-    assert first.error_text == "0.1"
+    assert first.error_text == "0,1"
     assert first.error_value == 0.1
-    assert first.limit_text == "0.5"
+    assert first.limit_text == "0,5"
     assert first.limit_value == 0.5
-    assert first.quote == "1 | 10.0 | 10.1 | 0.1 | 0.5 | "
+    assert first.quote == "1 | 10,0 | 10,1 | 0,1 | 0,5 | "
+
+
+def test_xlsx_k01_numeric_cells_are_vietnamese_decimal_strings(data_dir):
+    """K01: ô số (không ``t``/``t="n"``) đổi dấu chấm thập phân thành dấu phẩy,
+    không nhóm nghìn, để ``vnnum`` hiểu đúng số thực."""
+    draft = read_xlsx(data_dir / "record_phieu_do.xlsx", _config(XLSX_COLUMNS))
+    first = draft.measurements[0]
+    assert first.measured_text == "10,1"
+    assert first.measured_value == 10.1
+    assert first.error_value == 0.1
+
+
+def _header_only_config(label: str) -> MappingConfig:
+    return MappingConfig(
+        procedure_id=1,
+        procedure_number="1.061",
+        header_fields=[HeaderField(key="f1", label=label, fact_id=1)],
+        result_tables=[],
+    )
+
+
+def test_xlsx_k05_date_styled_cell_converts_excel_serial(tmp_path):
+    """K05: ô số có định dạng ngày (xl/styles.xml) chuyển serial thành DD/MM/YYYY."""
+    from datetime import date
+
+    from scripts.knowledge_corpus import ooxml as ox
+
+    path = tmp_path / "date.xlsx"
+    ox.write_xlsx(path, [ox.Sheet("S", [["Ngày kiểm định", ox.DateCell(date(2026, 7, 20))]])])
+    draft = read_xlsx(path, _header_only_config("Ngày kiểm định"))
+    assert draft.get_field("Ngày kiểm định") == "20/07/2026"
+
+
+def test_xlsx_k05_plain_number_is_not_converted_to_date(tmp_path):
+    """K05: ô số KHÔNG có định dạng ngày giữ nguyên giá trị số."""
+    from scripts.knowledge_corpus import ooxml as ox
+
+    path = tmp_path / "plain.xlsx"
+    ox.write_xlsx(path, [ox.Sheet("S", [["Số hiệu", 12345]])])
+    draft = read_xlsx(path, _header_only_config("Số hiệu"))
+    assert draft.get_field("Số hiệu") == "12345"
+
+
+def test_docx_k03_table_field_label_with_colon(tmp_path):
+    """K03: ô nhãn trong bảng có dấu hai chấm (kể cả dính khoảng trắng) vẫn nhận
+    diện; nhãn lưu đã bỏ dấu ':' để ``store`` tra được alias."""
+    from scripts.knowledge_corpus import ooxml as ox
+
+    path = tmp_path / "colon.docx"
+    rows = [
+        [ox.Cell("Số hiệu:"), ox.Cell("SN-1")],
+        [ox.Cell("Ngày kiểm định :"), ox.Cell("05/02/2026")],
+    ]
+    ox.write_docx(path, [ox.heading("BIÊN BẢN KIỂM ĐỊNH", 1), ox.table(rows)])
+    draft = read_docx(path, _config(DOCX_COLUMNS))
+    assert draft.get_field("Số hiệu") == "SN-1"
+    assert draft.get_field("Ngày kiểm định") == "05/02/2026"
 
 
 def test_no_recalculation_when_error_column_absent():
@@ -120,6 +177,18 @@ def test_no_recalculation_when_error_cell_blank():
     )
     assert draft.measured_value == 10.5
     assert draft.error_value is None
+
+
+def test_parse_verdict_k04_ambiguous_template_returns_none():
+    """K04: câu mẫu chứa đồng thời 'đạt' độc lập và 'không đạt' là mập mờ."""
+    from records.store import _parse_verdict
+
+    assert _parse_verdict("Đạt (không đạt) yêu cầu kỹ thuật đo lường.") is None
+    assert _parse_verdict("Đạt/Không đạt") is None
+    assert _parse_verdict("Đạt yêu cầu") == "dat"
+    assert _parse_verdict("Không đạt yêu cầu") == "khong_dat"
+    assert _parse_verdict("Đạt") == "dat"
+    assert _parse_verdict("Không đạt") == "khong_dat"
 
 
 def test_store_mapping_never_invents_error():
@@ -144,3 +213,69 @@ def test_within_limit_only_when_both_sources_present():
     draft = MeasurementDraft(error_value=0.9)
     point = _measurement_row(draft, unit_id=None)
     assert point.within_limit is None
+
+
+def test_docx_k07_gridspan_columns_map_correct_roles(tmp_path):
+    """K07: bảng có ô gộp ``gridSpan`` đọc đúng vai trò cột; cột phụ (Đóng) vào
+    note dạng ``nhãn: giá trị``, cột ``Độ chênh áp`` vào error."""
+    from scripts.knowledge_corpus import ooxml as ox
+
+    rows = [
+        [
+            ox.Cell("Lần kiểm tra"),
+            ox.Cell("Áp suất", span=3),
+            ox.Cell("Sai số"),
+            ox.Cell("Ghi chú"),
+        ],
+        [
+            ox.Cell(""),
+            ox.Cell("Mở"),
+            ox.Cell("Đóng"),
+            ox.Cell("Độ chênh áp"),
+            ox.Cell(""),
+            ox.Cell(""),
+        ],
+        [
+            ox.Cell("1"),
+            ox.Cell("120,05"),
+            ox.Cell("120,00"),
+            ox.Cell("0,05"),
+            ox.Cell(""),
+            ox.Cell(""),
+        ],
+    ]
+    path = tmp_path / "grid.docx"
+    ox.write_docx(path, [ox.heading("BIÊN BẢN KIỂM ĐỊNH", 1), ox.table(rows)])
+    config = MappingConfig(
+        procedure_id=1,
+        procedure_number="9.015",
+        header_fields=[],
+        result_tables=[
+            ResultTable(
+                key="bang",
+                title="Bảng A.1",
+                columns=["Lần kiểm tra", "Áp suất Mở", "Đóng", "Độ chênh áp", "Sai số", "Ghi chú"],
+                fact_id=1,
+            )
+        ],
+    )
+    draft = read_docx(path, config)
+    assert len(draft.measurements) == 1
+    point = draft.measurements[0]
+    assert point.measured_value == 120.05
+    assert point.error_value == 0.05
+    assert point.note == "Đóng: 120,00"
+    assert point.quote == "1 | 120,05 | 120,00 | 0,05 |  | "
+
+
+def test_map_measurement_row_k09_unit_from_column_header():
+    """K09: đơn vị lấy từ ngoặc ở tiêu đề cột giá trị, ví dụ ``Giá trị đo (bar)``."""
+    draft = _map_measurement_row(
+        ["Lần kiểm tra", "Giá trị đo (bar)", "Sai số"],
+        ["1", "10,5", "0,2"],
+    )
+    assert draft.measured_value == 10.5
+    assert draft.unit_text == "bar"
+
+    plain = _map_measurement_row(["Lần kiểm tra", "Giá trị đo", "Sai số"], ["1", "10,5", "0,2"])
+    assert plain.unit_text is None

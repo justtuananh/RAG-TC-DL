@@ -21,6 +21,7 @@ from db.models import (
     DocumentType,
     Extraction,
     ExtractionStatus,
+    Procedure,
     ProcedureFact,
     ProcedureStandard,
     Term,
@@ -111,6 +112,7 @@ def _add_fact(
     value_max=1400 * 100_000,
     char_start=10,
     char_end=33,
+    procedure_id=None,
 ):
     extraction = Extraction(
         document_id=document_id,
@@ -129,6 +131,7 @@ def _add_fact(
     session.add(
         ProcedureFact(
             extraction_id=extraction.id,
+            procedure_id=procedure_id,
             fact_kind=fact_kind,
             label="Phạm vi đo",
             rel_op="range",
@@ -321,6 +324,130 @@ def test_reject_removes_from_approved_view(session, approver):
     review.reject(session, rejected, approver, "sai")
     assert _view_count(session, "v_procedure_fact") == 1
     assert session.get(Extraction, rejected).status == ExtractionStatus.REJECTED
+
+
+# ── K08b: thay thế dữ kiện khi duyệt phiên bản mới của QTKĐ ──────────────────
+
+
+def _procedure(session, *, number="1.061", document_id=STEM):
+    procedure = Procedure(number=number, document_id=document_id)
+    session.add(procedure)
+    session.commit()
+    return procedure
+
+
+def test_approve_supersedes_approved_counterpart_in_other_document(session, approver):
+    """Duyệt bản mới của QTKĐ thì bản đã duyệt của tài liệu cũ cùng khoá chuyển
+    ``superseded``, bản mới trỏ ``supersedes_id`` và có audit."""
+    procedure = _procedure(session)
+    old_id = _add_fact(
+        session, document_id=OTHER_STEM, procedure_id=procedure.id, value_text="đến 1 400 bar"
+    )
+    review.approve(session, old_id, approver)
+
+    new_id = _add_fact(
+        session, document_id=STEM, procedure_id=procedure.id, value_text="đến 1 600 bar"
+    )
+    review.approve(session, new_id, approver)
+
+    assert session.get(Extraction, old_id).status == ExtractionStatus.SUPERSEDED
+    assert session.get(Extraction, new_id).supersedes_id == old_id
+    log = (
+        session.query(AuditLog)
+        .filter(AuditLog.action == "supersede", AuditLog.entity_id == str(old_id))
+        .one()
+    )
+    assert log.after["status"] == "superseded"
+    assert log.after["superseded_by"] == new_id
+
+
+def test_approve_keeps_counterparts_without_match(session, approver):
+    """Bản cũ không có đối ứng (khác khoá) vẫn giữ ``approved``."""
+    procedure = _procedure(session)
+    matching = _add_fact(session, document_id=OTHER_STEM, procedure_id=procedure.id)
+    other_kind = _add_fact(
+        session,
+        document_id=OTHER_STEM,
+        procedure_id=procedure.id,
+        fact_kind="calibration_interval",
+        confidence=0.5,
+    )
+    review.approve(session, matching, approver)
+    review.approve(session, other_kind, approver)
+
+    new_id = _add_fact(session, document_id=STEM, procedure_id=procedure.id)
+    review.approve(session, new_id, approver)
+
+    assert session.get(Extraction, matching).status == ExtractionStatus.SUPERSEDED
+    assert session.get(Extraction, other_kind).status == ExtractionStatus.APPROVED
+
+
+def test_approving_fact_of_old_document_does_not_supersede_current(session, approver):
+    """Chỉ extraction thuộc tài liệu HIỆN HÀNH của QTKĐ mới kích hoạt thay thế."""
+    procedure = _procedure(session)  # tài liệu hiện hành = STEM
+    current = _add_fact(session, document_id=STEM, procedure_id=procedure.id)
+    review.approve(session, current, approver)
+
+    old = _add_fact(
+        session, document_id=OTHER_STEM, procedure_id=procedure.id, value_text="đến 1 400 bar"
+    )
+    review.approve(session, old, approver)
+
+    assert session.get(Extraction, current).status == ExtractionStatus.APPROVED
+    assert session.get(Extraction, old).status == ExtractionStatus.APPROVED
+
+
+def test_edit_and_approve_supersedes_counterpart(session, approver):
+    """Đường "sửa giá trị rồi duyệt" cũng thay thế bản cũ cùng khoá."""
+    procedure = _procedure(session)
+    old = _add_fact(session, document_id=OTHER_STEM, procedure_id=procedure.id)
+    review.approve(session, old, approver)
+
+    new = _add_fact(session, document_id=STEM, procedure_id=procedure.id)
+    review.edit_and_approve(session, new, approver, {"value_text": "đến 1 700 bar"})
+
+    assert session.get(Extraction, old).status == ExtractionStatus.SUPERSEDED
+    assert session.get(Extraction, new).supersedes_id == old
+
+
+def test_bulk_approve_supersedes_counterpart(session, approver):
+    """Duyệt hàng loạt theo luật cũng thay thế bản cũ cùng khoá."""
+    procedure = _procedure(session)
+    old = _add_fact(
+        session,
+        document_id=OTHER_STEM,
+        procedure_id=procedure.id,
+        extractor="rule:phamvi.v1",
+    )
+    review.approve(session, old, approver)
+
+    new = _add_fact(
+        session, document_id=STEM, procedure_id=procedure.id, extractor="rule:phamvi.v1"
+    )
+    review.bulk_approve(session, approver, extractor="rule:phamvi.v1", document_id=STEM)
+
+    assert session.get(Extraction, old).status == ExtractionStatus.SUPERSEDED
+    assert session.get(Extraction, new).supersedes_id == old
+
+
+def test_approved_view_returns_single_version_per_key(session, approver):
+    """P3: sau khi duyệt bản mới, view đã duyệt chỉ còn MỘT bản cho mỗi khoá."""
+    procedure = _procedure(session)
+    old = _add_fact(
+        session, document_id=OTHER_STEM, procedure_id=procedure.id, value_text="đến 1 400 bar"
+    )
+    review.approve(session, old, approver)
+    new = _add_fact(
+        session, document_id=STEM, procedure_id=procedure.id, value_text="đến 1 600 bar"
+    )
+    review.approve(session, new, approver)
+
+    rows = session.execute(
+        text(
+            "SELECT extraction_id, value_text FROM v_procedure_fact WHERE fact_kind = 'working_range'"
+        )
+    ).all()
+    assert rows == [(new, "đến 1 600 bar")]
 
 
 # ── Sửa giá trị rồi duyệt (P1) ────────────────────────────────────────────────

@@ -27,6 +27,7 @@ from records.store import (
     _parse_mode,
     _parse_verdict,
     derive_expiry,
+    parse_date,
     store_record_draft,
 )
 from records.types import FieldDraft, MeasurementDraft, RecordDraft
@@ -242,6 +243,18 @@ def test_parse_mode_and_verdict_aliases():
     assert _parse_verdict("Không đạt") == "khong_dat"
     assert _parse_verdict("Kết luận: Không đạt yêu cầu") == "khong_dat"
     assert _parse_verdict("") is None
+
+
+def test_parse_date_k05_accepts_iso_year_first():
+    """K05: ``YYYY-MM-DD`` phải được đọc là năm-tháng-ngày, không phải D/M/Y."""
+    assert parse_date("2026-04-10") == datetime(2026, 4, 10)
+    assert parse_date("Ngày kiểm định: 2026-04-10") == datetime(2026, 4, 10)
+
+
+def test_parse_date_k05_keeps_vietnamese_formats():
+    assert parse_date("15/01/2026") == datetime(2026, 1, 15)
+    assert parse_date("5.2.2026") == datetime(2026, 2, 5)
+    assert parse_date("ngày 20 tháng 3 năm 2026") == datetime(2026, 3, 20)
 
 
 def test_missing_serial_flags_device(session):

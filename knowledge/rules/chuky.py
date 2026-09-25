@@ -1,8 +1,9 @@
 """§7 (hoặc §6) Xử lý chung → ``calibration_interval`` (spec §7).
 
-Mẫu: ``Chu kỳ kiểm định của <X> là N tháng|năm``. Giữ nguyên văn giá trị ("12
-tháng", "01 năm") — không quy đổi, không tự tính hạn hiệu lực (P2). Không khớp
-mẫu → rỗng.
+Mẫu: ``Chu kỳ kiểm định của <X> là N tháng|năm`` hoặc dạng rút gọn không có "là"
+``Chu kỳ kiểm định: N tháng|năm`` (K10). Giữ nguyên văn giá trị ("12 tháng",
+"01 năm") - không quy đổi, không tự tính hạn hiệu lực (P2). Không khớp mẫu →
+rỗng.
 """
 
 from __future__ import annotations
@@ -18,7 +19,7 @@ FACT_KIND = "calibration_interval"
 SECTION_KEYWORDS = ("xử lý chung",)
 
 _INTERVAL_RE = re.compile(
-    r"chu\s*kỳ\s*kiểm\s*định[^.;\n]*?là\s*(?P<val>[^.;\n]+)",
+    r"chu\s*kỳ\s*kiểm\s*định[^.;\n]*?(?:\s+là\s*:?\s*|:\s*)(?P<val>[^.;\n]+)",
     re.IGNORECASE,
 )
 

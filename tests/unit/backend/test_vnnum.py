@@ -51,6 +51,22 @@ def test_parse_number_rejects_ambiguous_or_non_numeric(raw):
     assert parse_number(raw) is None
 
 
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("0.500", 0.5),  # K01: nhóm đầu bằng 0 -> số thập phân, không phải nhóm nghìn
+        ("0.125", 0.125),
+        ("0.050", 0.05),
+        ("1.000", 1000.0),  # nhóm đầu khác 0 -> vẫn là nhóm nghìn
+        ("12.500", 12500.0),
+        ("1.061", 1061.0),
+    ],
+)
+def test_parse_number_leading_zero_is_decimal(raw, expected):
+    """K01: nhóm đầu bằng ``0`` không thể là nhóm nghìn."""
+    assert parse_number(raw) == pytest.approx(expected)
+
+
 def test_normalize_spaces_collapses_unicode_spaces():
     assert normalize_spaces(f"1{NBSP}400") == "1 400"
     assert normalize_spaces(f"1{NNBSP}400") == "1 400"

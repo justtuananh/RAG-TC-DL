@@ -33,40 +33,13 @@ from db.models import (
 )
 from knowledge import units as units_module
 from knowledge import vnnum
+from knowledge.record_labels import HEADER_ALIASES as _HEADER_ALIASES
 from query import approved as approved_query
 from records.matching import find_or_create_device
 from records.types import MeasurementDraft, RecordDraft
 
 EXTRACTOR_VERSION = "v1"
 DEFAULT_CONFIDENCE = 0.9
-
-# Nhãn đầu mục (đã chuẩn hóa hoa/thường) → trường hồ sơ. Nhiều biến thể vì mỗi
-# mẫu biên bản đặt tên hơi khác nhau; không khớp thì bỏ qua, không đoán.
-_HEADER_ALIASES: dict[str, tuple[str, ...]] = {
-    "serial_no": ("số hiệu", "số serial", "serial", "số máy", "số hiệu phương tiện"),
-    "model_code": ("ký hiệu", "model", "ký hiệu/model"),
-    "manufacturer": (
-        "nơi (hãng) sản xuất",
-        "nơi sản xuất",
-        "hãng sản xuất",
-        "nhà sản xuất",
-    ),
-    "owner_org": ("đơn vị sử dụng", "cơ sở sử dụng", "đơn vị quản lý"),
-    "cert_no": ("số giấy chứng nhận", "số chứng nhận", "giấy chứng nhận số"),
-    "inspector_name": ("người kiểm định", "kiểm định viên", "người thực hiện"),
-    "reviewer_name": ("người soát lại", "người duyệt", "người soát xét"),
-    "lab_name": (
-        "phòng đo lường",
-        "đơn vị kiểm định",
-        "phòng thí nghiệm",
-        "đơn vị thực hiện",
-    ),
-    "calibrated_at": ("ngày kiểm định", "ngày thực hiện"),
-    "mode": ("chế độ kiểm định", "chế độ"),
-    "verdict": ("kết luận",),
-    "env_temp_c": ("nhiệt độ", "nhiệt độ môi trường"),
-    "env_humidity_pct": ("độ ẩm", "độ ẩm môi trường"),
-}
 
 _MODE_ALIASES = {
     "ban_dau": "ban_dau",
@@ -149,20 +122,40 @@ def _parse_verdict(text: str | None) -> str | None:
     for alias, value in _VERDICT_ALIASES.items():
         if normalized == alias:
             return value
-    for alias, value in _VERDICT_ALIASES.items():
-        if alias in normalized:
-            return value
+    # K04: "Đạt (không đạt) yêu cầu" / "Đạt/Không đạt" là câu mẫu mập mờ: có cả
+    # một "đạt" độc lập lẫn một "không đạt" -> không kết luận được.
+    negative = "không đạt" in normalized or "khong dat" in normalized
+    remainder = normalized.replace("không đạt", "").replace("khong dat", "")
+    positive = "đạt" in remainder or "dat" in remainder
+    if negative and positive:
+        return None
+    if negative:
+        return "khong_dat"
+    if positive:
+        return "dat"
     return None
 
 
+_ISO_DATE_RE = re.compile(r"(\d{4})-(\d{2})-(\d{2})")
 _DATE_RE = re.compile(r"(\d{1,2})\s*[/\-.]\s*(\d{1,2})\s*[/\-.]\s*(\d{2,4})")
 _DATE_VI_RE = re.compile(r"ngày\s+(\d{1,2})\s+tháng\s+(\d{1,2})\s+năm\s+(\d{4})", re.IGNORECASE)
 
 
 def parse_date(text: str | None) -> datetime | None:
-    """Phân tích ngày kiểu Việt (``20/01/2024`` hoặc ``ngày 20 tháng 1 năm 2024``)."""
+    """Phân tích ngày kiểu Việt (``20/01/2024`` hoặc ``ngày 20 tháng 1 năm 2024``).
+
+    K05: nhận ``YYYY-MM-DD`` (nhóm đầu 4 chữ số là năm) TRƯỚC các mẫu khác, nếu
+    không "2026-04-10" sẽ bị đọc nhầm theo mẫu D/M/Y.
+    """
     if not text:
         return None
+    iso = _ISO_DATE_RE.search(text)
+    if iso:
+        year, month, day = (int(part) for part in iso.groups())
+        try:
+            return datetime(year, month, day)
+        except ValueError:
+            return None
     match = _DATE_VI_RE.search(text) or _DATE_RE.search(text)
     if not match:
         return None
@@ -264,6 +257,27 @@ def _resolve_unit_id(session: Session, unit_text: str | None) -> int | None:
         return None
     row = session.query(Unit).filter(Unit.code == unit_def.code).one_or_none()
     return row.id if row is not None else None
+
+
+def _working_range_unit_id(session: Session, procedure: Procedure | None) -> int | None:
+    """Đơn vị của dữ kiện ``working_range`` ĐÃ DUYỆT gần nhất của QTKĐ (K09).
+
+    Dùng làm đơn vị mặc định cho điểm đo khi tiêu đề cột không ghi đơn vị. Chỉ
+    đọc ``v_procedure_fact`` (P3); trả ``None`` nếu không có dữ kiện nào có đơn vị.
+    """
+    if procedure is None:
+        return None
+    rows = approved_query.list_approved_facts(
+        session,
+        procedure_id=procedure.id,
+        fact_kind="working_range",
+        limit=100,
+    )
+    for row in sorted(rows, key=lambda item: int(item["id"]), reverse=True):
+        unit_id = row.get("unit_id")
+        if unit_id is not None:
+            return int(unit_id)
+    return None
 
 
 def _measurement_row(
@@ -374,7 +388,11 @@ def store_record_draft(
     result.record_id = record.id
 
     for draft_point in draft.measurements:
-        unit_id = _resolve_unit_id(session, draft_point.unit_text)
+        # K09: đơn vị ưu tiên từ tiêu đề cột; không có thì lấy đơn vị working_range.
+        if draft_point.unit_text:
+            unit_id = _resolve_unit_id(session, draft_point.unit_text)
+        else:
+            unit_id = _working_range_unit_id(session, procedure)
         session.add(_measurement_row(draft_point, unit_id=unit_id, record_id=record.id))
         result.measurement_points += 1
 

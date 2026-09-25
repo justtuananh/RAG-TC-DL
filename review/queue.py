@@ -29,6 +29,7 @@ from db.models import (
     Document,
     Extraction,
     ExtractionStatus,
+    Procedure,
     ProcedureFact,
     ProcedureStandard,
     Term,
@@ -272,6 +273,93 @@ def _require_pending(extraction: Extraction) -> None:
         )
 
 
+def _approved_counterparts(
+    db: Session, extraction: Extraction, kind: str, row: Any
+) -> list[Extraction]:
+    """K08b: extraction ĐÃ DUYỆT của cùng QTKĐ nhưng ở TÀI LIỆU KHÁC, cùng khoá.
+
+    Khoá đối ứng phụ thuộc loại dữ kiện: ``procedure_fact`` dùng
+    ``(fact_kind, label)`` (``label`` NULL khớp NULL); ``procedure_standard`` dùng
+    ``name_vi``; ``term`` dùng ``term_vi``. Trả rỗng nếu extraction không thuộc
+    tài liệu HIỆN HÀNH của QTKĐ (``procedure.document_id``).
+    """
+    procedure = db.get(Procedure, row.procedure_id) if row.procedure_id is not None else None
+    if procedure is None or procedure.document_id != extraction.document_id:
+        return []
+    common = (
+        Extraction.status == ExtractionStatus.APPROVED,
+        Extraction.document_id != extraction.document_id,
+    )
+    if kind == "fact":
+        label_match = (
+            ProcedureFact.label.is_(None)
+            if row.label is None
+            else ProcedureFact.label == row.label
+        )
+        query = (
+            db.query(Extraction)
+            .join(ProcedureFact, ProcedureFact.extraction_id == Extraction.id)
+            .filter(
+                *common,
+                ProcedureFact.procedure_id == procedure.id,
+                ProcedureFact.fact_kind == row.fact_kind,
+                label_match,
+            )
+        )
+    elif kind == "standard":
+        query = (
+            db.query(Extraction)
+            .join(ProcedureStandard, ProcedureStandard.extraction_id == Extraction.id)
+            .filter(
+                *common,
+                ProcedureStandard.procedure_id == procedure.id,
+                ProcedureStandard.name_vi == row.name_vi,
+            )
+        )
+    else:
+        query = (
+            db.query(Extraction)
+            .join(Term, Term.extraction_id == Extraction.id)
+            .filter(
+                *common,
+                Term.procedure_id == procedure.id,
+                Term.term_vi == row.term_vi,
+            )
+        )
+    return query.order_by(Extraction.id).all()
+
+
+def _supersede_counterparts(
+    db: Session, extraction: Extraction, actor: Any, *, bulk: bool = False
+) -> int:
+    """K08b: bản mới thay bản cũ KHI DUYỆT, không phải khi nạp.
+
+    Duyệt một extraction của TÀI LIỆU HIỆN HÀNH của QTKĐ thì mọi extraction ĐÃ
+    DUYỆT của cùng QTKĐ ở tài liệu khác có cùng khoá chuyển ``superseded``;
+    extraction mới trỏ ``supersedes_id`` về bản cũ mới nhất và mỗi bản cũ ghi một
+    dòng audit. Dữ kiện bản cũ không có đối ứng vẫn giữ ``approved``.
+    """
+    kind, row = _data_row(db, extraction)
+    if row is None or kind is None:
+        return 0
+    counterparts = _approved_counterparts(db, extraction, kind, row)
+    if not counterparts:
+        return 0
+
+    extraction.supersedes_id = counterparts[-1].id
+    for old in counterparts:
+        before = {"status": _status_value(old.status)}
+        old.status = ExtractionStatus.SUPERSEDED
+        after: dict[str, Any] = {
+            "status": ExtractionStatus.SUPERSEDED.value,
+            "superseded_by": extraction.id,
+        }
+        if bulk:
+            after["bulk"] = True
+        _log(db, actor, "supersede", old.id, before, after)
+    return len(counterparts)
+
+
 def _set_approved(
     db: Session, extraction: Extraction, actor: Any, note: str | None, *, bulk: bool
 ) -> None:
@@ -285,6 +373,7 @@ def _set_approved(
         after["bulk"] = True
         after["extractor"] = extraction.extractor
     _log(db, actor, "approve", extraction.id, before, after)
+    _supersede_counterparts(db, extraction, actor, bulk=bulk)
 
 
 def approve(db: Session, extraction_id: int, actor: Any, note: str | None = None) -> dict:
@@ -370,6 +459,7 @@ def edit_and_approve(
         "note": note,
     }
     _log(db, actor, "edit_approve", extraction.id, before, after)
+    _supersede_counterparts(db, extraction, actor)
     db.commit()
     return serialize(db, extraction)
 
