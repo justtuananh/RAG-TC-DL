@@ -1,0 +1,108 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.003",
+    "short": "Huyết áp kế",
+    "heading_style": "paren",
+    "title": "Huyết áp kế thủy ngân và lò xo",
+    "range": {
+      "pattern": "paren",
+      "value_text": "(0 đến 40) kPa",
+      "prefix": "Phạm vi đo của huyết áp kế kiểm định theo quy trình này là "
+    },
+    "references": [
+      "ĐLVN 09 : 2011, Huyết áp kế - Quy trình kiểm định",
+      "Thông tư 23/2013/TT-BKHCN, mục 34-35"
+    ],
+    "terms": [
+      {
+        "vi": "Huyết áp kế",
+        "en": "Sphygmomanometer",
+        "definition": "là phương tiện đo dùng để xác định áp suất máu động mạch của con người.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Huyết áp tâm thu",
+        "en": "Systolic pressure",
+        "definition": "là áp suất máu động mạch cao nhất trong một chu kỳ tim đập.",
+        "chu_thich": "Huyết áp tâm thu còn gọi là huyết áp tối đa."
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra đo lường",
+        "ref": "7.3",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Áp kế píttông",
+        "range": "(0 ÷ 40) kPa",
+        "accuracy": "≤ 0,1 kPa"
+      },
+      {
+        "name": "Áp kế chất lỏng",
+        "range": "(0 ÷ 40) kPa",
+        "accuracy": "≤ 0,1 kPa"
+      },
+      {
+        "name": "Nhiệt kế",
+        "range": "(15 ÷ 35) °C",
+        "accuracy": "± 0,5 °C"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "không lớn hơn 30 °C"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "(60 ± 15) %RH"
+      ],
+      [
+        "Áp suất khí quyển",
+        "(101 ± 3) kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số cho phép toàn thang đo",
+        "sentence": "Sai số cho phép tại mọi điểm kiểm tra là ± 0,4 kPa.",
+        "rel_op": "=",
+        "value_text": "0,4 kPa",
+        "limit": {
+          "value": 0.4,
+          "unit": "kPa",
+          "quote": "là ± 0,4 kPa"
+        }
+      }
+    ],
+    "appendix_extra": []
+  },
+  "doc_stem": "QTKĐ_9.003_2026_Huyet_ap_ke"
+}

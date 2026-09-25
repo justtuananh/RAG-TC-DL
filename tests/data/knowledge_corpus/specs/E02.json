@@ -1,0 +1,48 @@
+{
+  "kind": "phieu_do",
+  "procedure_number": "9.002",
+  "values": {
+    "Tên phương tiện đo": "Áp kế kiểu lò xo",
+    "Ký hiệu": "AK-210",
+    "Số hiệu": "SN-2026-211",
+    "Nơi (hãng) sản xuất": "Công ty Đo lường ABC",
+    "Cấp chính xác": "1,6",
+    "Đơn vị sử dụng": "Nhà máy XYZ",
+    "Nhiệt độ": "22",
+    "Độ ẩm": "60",
+    "Chế độ kiểm định": "Định kỳ",
+    "Phương pháp kiểm định": "QTKĐ 9.002 : 2026",
+    "Ngày kiểm định": "12/05/2026",
+    "Người kiểm định": "Nguyễn Văn A",
+    "Người soát lại": "Nguyễn Văn B"
+  },
+  "points": [
+    {
+      "ordinal": 1,
+      "nominal": 100.0,
+      "measured": 100.03,
+      "error": 0.03,
+      "limit": 0.05,
+      "note": ""
+    },
+    {
+      "ordinal": 2,
+      "nominal": 150.0,
+      "measured": 150.04,
+      "error": 0.04,
+      "limit": 0.05,
+      "note": ""
+    },
+    {
+      "ordinal": 3,
+      "nominal": 200.0,
+      "measured": 200.2,
+      "error": 0.2,
+      "limit": 0.05,
+      "note": ""
+    }
+  ],
+  "verdict_text": "Không đạt",
+  "inline_labels": false,
+  "extra_sheet": false
+}

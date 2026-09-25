@@ -1,0 +1,130 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.005",
+    "short": "Cân ô tô",
+    "heading_style": "dot",
+    "title": "Cân ô tô có mức cân lớn nhất đến 150 000 kg",
+    "range": {
+      "pattern": "paren",
+      "value_text": "(0 đến 150 000) kg",
+      "prefix": "Phạm vi đo của cân ô tô kiểm định theo quy trình này là "
+    },
+    "references": [
+      "ĐLVN 13 : 2019, Cân ô tô - Quy trình kiểm định",
+      "Thông tư 23/2013/TT-BKHCN, mục 11"
+    ],
+    "terms": [
+      {
+        "vi": "Mức cân lớn nhất",
+        "en": "Maximum capacity",
+        "definition": "là khối lượng lớn nhất mà cân có thể cân được theo thiết kế.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Độ chia kiểm",
+        "en": "Verification scale interval",
+        "definition": "là giá trị nhỏ nhất dùng để xác định sai số cho phép và phân cấp cân.",
+        "chu_thich": "Độ chia kiểm ký hiệu là e."
+      },
+      {
+        "vi": "Cấp chính xác",
+        "en": "Accuracy class",
+        "definition": "là chỉ số biểu thị mức sai số cho phép của cân theo tải trọng.",
+        "chu_thich": null
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số ở các mức tải",
+        "ref": "7.3.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra độ lặp lại",
+        "ref": "7.3.2",
+        "modes": [
+          "bd",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Quả cân chuẩn hạng M1",
+        "range": "(0 ÷ 150 000) kg",
+        "accuracy": "cấp M1"
+      },
+      {
+        "name": "Xe tải chuẩn",
+        "range": "(0 ÷ 150 000) kg",
+        "accuracy": "± 0,05 % khối lượng"
+      },
+      {
+        "name": "Nhiệt kế",
+        "range": "(0 ÷ 50) °C",
+        "accuracy": "± 0,5 °C"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "(20 ± 5) °C"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "(65 ± 20) %"
+      ],
+      [
+        "Áp suất khí quyển",
+        "(100 ± 4) kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số ở các mức tải",
+        "sentence": "Sai số cho phép ở mỗi mức tải bằng ± 0,1 % tải trọng cân nhưng không nhỏ hơn ± 20 kg.",
+        "rel_op": "±",
+        "value_text": "0,1 %",
+        "condition_text": "không nhỏ hơn ± 20 kg",
+        "limit": {
+          "value": 0.1,
+          "unit": "%",
+          "quote": "± 0,1 % tải trọng cân"
+        },
+        "floor": {
+          "value": 20.0,
+          "unit": "kg",
+          "quote": "không nhỏ hơn ± 20 kg"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Mức cân lớn nhất"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.005_2026_Can_o_to"
+}

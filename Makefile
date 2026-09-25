@@ -1,4 +1,4 @@
-.PHONY: up down logs pull-model index rebuild status eval answer-eval answer-eval-dev lint lint-all fmt fidelity test-unit check test-int smoke test test-ruby db-upgrade db-downgrade db-backup migrate-documents db-check seed-knowledge generate-procedures extract-eval extract-section6-eval extract-section6 extract-appendix records-fixtures seed-synthetic intent-eval
+.PHONY: up down logs pull-model index rebuild status eval answer-eval answer-eval-dev lint lint-all fmt fidelity test-unit check test-int smoke test test-ruby db-upgrade db-downgrade db-backup migrate-documents db-check seed-knowledge generate-procedures extract-eval extract-section6-eval extract-section6 extract-appendix records-fixtures seed-synthetic intent-eval knowledge-corpus
 
 # ── Khởi động ────────────────────────────────────────────────────────────────
 up:
@@ -173,6 +173,8 @@ extract-appendix:
 # Sinh lại tệp mẫu hồ sơ (docx/xlsx) đã làm sạch cho test Sprint 7.
 records-fixtures:
 	$(PY) scripts/make_record_fixtures.py
+
+knowledge-corpus: ; $(PY) -m scripts.knowledge_corpus.build
 
 # Seed bộ dữ liệu kiểm định tổng hợp (đã duyệt) cho tab Dữ liệu/thử hiệu năng.
 # Mặc định 10.000 hồ sơ / 1.000 thiết bị; chạy lại gỡ và dựng lại (idempotent).

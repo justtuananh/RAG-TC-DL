@@ -1,0 +1,121 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.002",
+    "short": "Áp kế kiểu lò xo",
+    "heading_style": "dot",
+    "title": "Áp kế kiểu lò xo có phạm vi đo đến 250 MPa",
+    "range": {
+      "pattern": "tu_den",
+      "value_text": "từ -0,1 MPa đến 250 MPa",
+      "prefix": "Phạm vi đo của áp kế kiểu lò xo kiểm định theo quy trình này "
+    },
+    "references": [
+      "ĐLVN 08 : 2011, Áp kế kiểu lò xo - Quy trình kiểm định",
+      "Thông tư 23/2013/TT-BKHCN, Danh mục phương tiện đo phải kiểm định"
+    ],
+    "terms": [
+      {
+        "vi": "Áp kế kiểu lò xo",
+        "en": "Spring pressure gauge",
+        "definition": "là áp kế đo áp suất dựa trên biến dạng đàn hồi của ống lò xo (ống Bourdon).",
+        "chu_thich": null
+      },
+      {
+        "vi": "Cấp chính xác",
+        "en": "Accuracy class",
+        "definition": "là chỉ số thể hiện sai số cho phép lớn nhất của áp kế theo phần trăm khoảng đo.",
+        "chu_thich": null
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra đo lường",
+        "ref": "7.3",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Áp kế píttông chuẩn",
+        "range": "(-0,1 ÷ 250) MPa",
+        "accuracy": "cấp 0,05"
+      },
+      {
+        "name": "Buồng điều nhiệt",
+        "range": "(15 ÷ 35) °C",
+        "accuracy": "± 0,5 °C"
+      },
+      {
+        "name": "Ẩm kế",
+        "range": "(0 ÷ 100) %RH",
+        "accuracy": "± 5 %RH"
+      },
+      {
+        "name": "Barômét",
+        "range": "(800 ÷ 1 100) mbar",
+        "accuracy": "± 2 mbar"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "(25 ± 3) oC"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "không lớn hơn 80 %RH"
+      ],
+      [
+        "Áp suất khí quyển",
+        "≤ 106 kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số cơ bản",
+        "sentence": "Sai số cho phép tại mỗi điểm kiểm tra bằng ± 1,6 % giá trị khoảng đo nhưng không nhỏ hơn ± 0,05 MPa.",
+        "rel_op": "±",
+        "value_text": "1,6 %",
+        "condition_text": "không nhỏ hơn ± 0,05 MPa",
+        "limit": {
+          "value": 1.6,
+          "unit": "%",
+          "quote": "± 1,6 % giá trị khoảng đo"
+        },
+        "floor": {
+          "value": 0.05,
+          "unit": "MPa",
+          "quote": "không nhỏ hơn ± 0,05 MPa"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Cấp chính xác"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo"
+}

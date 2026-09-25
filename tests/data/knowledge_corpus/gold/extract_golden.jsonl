@@ -1,0 +1,322 @@
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.001_2026_Van_an_toan", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "fact", "fact_kind": "working_range", "value_text": "từ -0,1 MPa đến 250 MPa"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "term", "term_vi": "Áp kế kiểu lò xo", "term_en": "Spring pressure gauge"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "term", "term_vi": "Cấp chính xác", "term_en": "Accuracy class"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lường"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "standard", "name_vi": "Áp kế píttông chuẩn", "range_text": "(-0,1 ÷ 250) MPa"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "standard", "name_vi": "Buồng điều nhiệt", "range_text": "(15 ÷ 35) °C"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(25 ± 3) oC"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "không lớn hơn 80 %RH"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "≤ 106 kPa"}
+{"doc": "QTKĐ_9.002_2026_Ap_ke_kieu_lo_xo", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "fact", "fact_kind": "working_range", "value_text": "(0 đến 40) kPa"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "term", "term_vi": "Huyết áp kế", "term_en": "Sphygmomanometer"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "term", "term_vi": "Huyết áp tâm thu", "term_en": "Systolic pressure"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra đo lường"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "standard", "name_vi": "Áp kế píttông", "range_text": "(0 ÷ 40) kPa"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "standard", "name_vi": "Áp kế chất lỏng", "range_text": "(0 ÷ 40) kPa"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "standard", "name_vi": "Nhiệt kế", "range_text": "(15 ÷ 35) °C"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "không lớn hơn 30 °C"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(60 ± 15) %RH"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(101 ± 3) kPa"}
+{"doc": "QTKĐ_9.003_2026_Huyet_ap_ke", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "working_range", "value_text": "từ 2,5 m3/h đến 16 m3/h"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "term", "term_vi": "Lưu lượng danh định", "term_en": "Permanent flow rate Q3"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "term", "term_vi": "Lưu lượng tối thiểu", "term_en": "Minimum flow rate Q1"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số tại lưu lượng thấp"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số tại lưu lượng cao"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "standard", "name_vi": "Bể chuẩn thể tích", "range_text": "(0 ÷ 200) L"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "standard", "name_vi": "Đồng hồ bấm giây", "range_text": "(0 ÷ 3 600) s"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "standard", "name_vi": "Nhiệt kế", "range_text": "(0 ÷ 50) °C"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "≤ 35 oC"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "≤ 85 %"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "không lớn hơn 106 kPa"}
+{"doc": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "60 tháng"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "working_range", "value_text": "(0 đến 150 000) kg"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "term", "term_vi": "Mức cân lớn nhất", "term_en": "Maximum capacity"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "term", "term_vi": "Độ chia kiểm", "term_en": "Verification scale interval"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "term", "term_vi": "Cấp chính xác", "term_en": "Accuracy class"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số ở các mức tải"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra độ lặp lại"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "standard", "name_vi": "Quả cân chuẩn hạng M1", "range_text": "(0 ÷ 150 000) kg"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "standard", "name_vi": "Xe tải chuẩn", "range_text": "(0 ÷ 150 000) kg"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "standard", "name_vi": "Nhiệt kế", "range_text": "(0 ÷ 50) °C"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.005_2026_Can_o_to", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "working_range", "value_text": "từ 5 A đến 60 A"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "term", "term_vi": "Công tơ điện cảm ứng", "term_en": "Induction watt-hour meter"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "term", "term_vi": "Hằng số công tơ", "term_en": "Meter constant"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số cơ bản"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra hằng số công tơ"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "standard", "name_vi": "Công tơ chuẩn", "range_text": "(0 ÷ 100) A"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "standard", "name_vi": "Nguồn dòng áp chuẩn", "range_text": "(0 ÷ 250) V"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "standard", "name_vi": "Đồng hồ bấm giây", "range_text": "(0 ÷ 3 600) s"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(25 ± 3) oC"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "không lớn hơn 80 %RH"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "≤ 106 kPa"}
+{"doc": "QTKĐ_9.006_2026_Cong_to_dien", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "60 tháng"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "working_range", "value_text": "(10 đến 60) km/h"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "term", "term_vi": "Taximet", "term_en": "Taximeter"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "term", "term_vi": "Hệ số taximet", "term_en": "Taximeter constant"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số quãng đường"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số cước phí"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "standard", "name_vi": "Đường thử chuẩn", "range_text": "(0 ÷ 5) km"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "standard", "name_vi": "Tốc kế chuẩn", "range_text": "(0 ÷ 200) km/h"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "standard", "name_vi": "Đồng hồ bấm giây", "range_text": "(0 ÷ 3 600) s"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "không lớn hơn 30 °C"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(60 ± 15) %RH"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(101 ± 3) kPa"}
+{"doc": "QTKĐ_9.007_2026_Taximet", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 320 km/h"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "term", "term_vi": "Phương tiện đo tốc độ", "term_en": "Speed measuring device"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "term", "term_vi": "Hiệu ứng Doppler", "term_en": "Doppler effect"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra sai số đo khoảng cách"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra sai số đo tốc độ"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "standard", "name_vi": "Máy phát tốc độ chuẩn", "range_text": "(0 ÷ 320) km/h"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "standard", "name_vi": "Xe thử có định vị GPS chuẩn", "range_text": "(0 ÷ 320) km/h"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "standard", "name_vi": "Thước đo khoảng cách chuẩn", "range_text": "(0 ÷ 1 000) m"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "≤ 35 oC"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "≤ 85 %"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "không lớn hơn 106 kPa"}
+{"doc": "QTKĐ_9.008_2026_May_do_toc_do", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "working_range", "value_text": "từ 0,000 mg/L đến 3,000 mg/L"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "term", "term_vi": "Phương tiện đo hàm lượng cồn", "term_en": "Breath alcohol analyzer"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "term", "term_vi": "Khí chuẩn ethanol", "term_en": "Ethanol reference gas"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra khí không"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số tại các mức nồng độ chuẩn"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "standard", "name_vi": "Khí chuẩn ethanol", "range_text": "(0,000 ÷ 3,000) mg/L"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "standard", "name_vi": "Hệ thống chuẩn khí ướt", "range_text": "(30 ÷ 40) °C"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.009_2026_May_do_nong_do_con", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "fact", "fact_kind": "working_range", "value_text": "(35,0 đến 42,0) °C"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "term", "term_vi": "Nhiệt kế y học điện tử", "term_en": "Electronic clinical thermometer"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "term", "term_vi": "Cơ cấu cực đại", "term_en": "Maximum device"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số tại các điểm nhiệt độ chuẩn"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "standard", "name_vi": "Bể điều nhiệt chuẩn", "range_text": "(30 ÷ 45) °C"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "standard", "name_vi": "Nhiệt kế chuẩn platinum", "range_text": "(0 ÷ 100) °C"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "standard", "name_vi": "Đồng hồ bấm giây", "range_text": "(0 ÷ 3 600) s"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(25 ± 3) oC"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "không lớn hơn 80 %RH"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "≤ 106 kPa"}
+{"doc": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "6 tháng"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 120 L/min"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "term", "term_vi": "Đồng hồ xăng dầu", "term_en": "Fuel dispenser meter"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "term", "term_vi": "Thể tích thử tiêu chuẩn", "term_en": "Standard test volume"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số tại lưu lượng lớn nhất"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số tại lưu lượng nhỏ nhất"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "standard", "name_vi": "Bình chuẩn dung tích hạng 2", "range_text": "(0 ÷ 20) L"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "standard", "name_vi": "Nhiệt kế", "range_text": "(0 ÷ 50) °C"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "standard", "name_vi": "Tỷ trọng kế", "range_text": "(0,7 ÷ 1,0) kg/L"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "không lớn hơn 30 °C"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(60 ± 15) %RH"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(101 ± 3) kPa"}
+{"doc": "QTKĐ_9.011_2026_Dong_ho_xang_dau", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "fact", "fact_kind": "working_range", "value_text": "từ 5 % đến 40 %"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "term", "term_vi": "Độ ẩm hạt tuyệt đối", "term_en": "Grain moisture content"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "term", "term_vi": "Phương pháp sấy khô chuẩn", "term_en": "Standard oven-drying method"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "fact", "fact_kind": "inspection_step", "label": "So sánh với mẫu chuẩn tại các mức ẩm khác nhau"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "standard", "name_vi": "Mẫu hạt chuẩn", "range_text": "(5 ÷ 40) %"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "standard", "name_vi": "Cân phân tích", "range_text": "(0 ÷ 200) g"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "standard", "name_vi": "Tủ sấy chuẩn", "range_text": "(50 ÷ 150) °C"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "≤ 35 oC"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "≤ 85 %"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "không lớn hơn 106 kPa"}
+{"doc": "QTKĐ_9.012_2026_May_do_do_am_hat", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKD_9.013_2026_Van_an_toan_ban_khong_dau", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.014_2026_Van_an_toan_bien_phu_luc", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.015_2026_Van_an_toan_bang_gop_o", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.016_2026_Van_an_toan_bien_chu_ky", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "6 tháng"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20,5 ± 2) °C"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.017_2026_Van_an_toan_bien_dieu_kien", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.018_2026_Van_an_toan_bien_heading", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "working_range", "value_text": "đến 1 400 bar"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.019_2026_Van_an_toan_bang2_ket_thuc", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "working_range", "value_text": "(0,500 đến 1 000) mm"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.020_2026_Van_an_toan_so_viet", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "working_range", "value_text": "từ 0 bar đến 1 400 bar"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "term", "term_vi": "Van an toàn", "term_en": "Safety valve"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "term", "term_vi": "Áp suất chỉnh đặt", "term_en": "Set pressure"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "term", "term_vi": "Độ chênh áp", "term_en": "Blowdown"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra bên ngoài"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "inspection_step", "label": "Kiểm tra kỹ thuật"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định sai số áp suất chỉnh đặt"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "inspection_step", "label": "Xác định độ chênh áp"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "standard", "name_vi": "Áp kế hiện số chuẩn", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "standard", "name_vi": "Thiết bị tạo áp suất", "range_text": "(0 ÷ 1 500) bar"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "standard", "name_vi": "Ẩm kế", "range_text": "(0 ÷ 100) %RH"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "standard", "name_vi": "Barômét", "range_text": "(800 ÷ 1 100) mbar"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "standard", "name_vi": "Thước đo", "range_text": "(0 ÷ 500) mm"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "env_condition", "label": "Nhiệt độ môi trường", "value_text": "(20 ± 5) °C"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "env_condition", "label": "Độ ẩm tương đối", "value_text": "(65 ± 20) %"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "env_condition", "label": "Áp suất khí quyển", "value_text": "(100 ± 4) kPa"}
+{"doc": "QTKĐ_9.021_2026_Van_an_toan_pham_vi_cham", "kind": "fact", "fact_kind": "calibration_interval", "value_text": "12 tháng"}

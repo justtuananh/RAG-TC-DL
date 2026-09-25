@@ -1,0 +1,47 @@
+{
+  "kind": "bien_ban",
+  "procedure_number": "9.005",
+  "style": "paragraph",
+  "values": {
+    "Tên phương tiện đo": "Cân ô tô",
+    "Ký hiệu": "CAN-400",
+    "Số hiệu": "SN-2026-401",
+    "Nơi (hãng) sản xuất": "Công ty Đo lường ABC",
+    "Mức cân lớn nhất": "150000 kg",
+    "Đơn vị sử dụng": "Nhà máy XYZ",
+    "Nhiệt độ": "22",
+    "Độ ẩm": "60",
+    "Chế độ kiểm định": "Định kỳ",
+    "Phương pháp kiểm định": "QTKĐ 9.005 : 2026",
+    "Ngày kiểm định": "03/08/2026",
+    "Người kiểm định": "Nguyễn Văn A",
+    "Người soát lại": "Nguyễn Văn B"
+  },
+  "points": [
+    {
+      "ordinal": 1,
+      "nominal": 10000.0,
+      "measured": 10010.0,
+      "error": 10.0,
+      "limit": 20.0,
+      "note": ""
+    },
+    {
+      "ordinal": 2,
+      "nominal": 50000.0,
+      "measured": 50015.0,
+      "error": 15.0,
+      "limit": 20.0,
+      "note": ""
+    },
+    {
+      "ordinal": 3,
+      "nominal": 100000.0,
+      "measured": 99990.0,
+      "error": -10.0,
+      "limit": 20.0,
+      "note": ""
+    }
+  ],
+  "verdict_text": "Đạt"
+}

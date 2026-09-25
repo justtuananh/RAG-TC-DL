@@ -1,0 +1,18 @@
+{
+  "kind": "phieu_do_k05",
+  "procedure_number": "9.003",
+  "values": {
+    "Tên phương tiện đo": "Huyết áp kế",
+    "Ký hiệu": "HA-710",
+    "Số hiệu": "SN-2026-711",
+    "Nơi (hãng) sản xuất": "Công ty Đo lường ABC",
+    "Đơn vị sử dụng": "Nhà máy XYZ",
+    "Nhiệt độ": "22",
+    "Độ ẩm": "60",
+    "Chế độ kiểm định": "Định kỳ",
+    "Phương pháp kiểm định": "QTKĐ 9.003 : 2026",
+    "Ngày kiểm định": "2026-07-20",
+    "Người kiểm định": "Nguyễn Văn A",
+    "Người soát lại": "Nguyễn Văn B"
+  }
+}

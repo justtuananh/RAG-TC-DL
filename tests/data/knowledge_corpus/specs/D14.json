@@ -1,0 +1,19 @@
+{
+  "kind": "bien_ban_k06",
+  "procedure_number": "9.001",
+  "values": {
+    "Tên phương tiện đo": "Van an toàn",
+    "Ký hiệu": "VA-902",
+    "Số hiệu": "SN-2026-902",
+    "Nơi (hãng) sản xuất": "Công ty Đo lường ABC",
+    "Cỡ van": "DN25",
+    "Áp suất chỉnh đặt": "50 bar",
+    "Đơn vị sử dụng": "Nhà máy XYZ",
+    "Nhiệt độ": "22",
+    "Độ ẩm": "60",
+    "Chế độ kiểm định": "Định kỳ",
+    "Phương pháp kiểm định": "QTKĐ 9.001 : 2026",
+    "Người kiểm định": "Nguyễn Văn A",
+    "Người soát lại": "Nguyễn Văn B"
+  }
+}

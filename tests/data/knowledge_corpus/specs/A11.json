@@ -1,0 +1,124 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.011",
+    "short": "Đồng hồ xăng dầu",
+    "heading_style": "dot",
+    "title": "Đồng hồ xăng dầu (cột đo nhiên liệu)",
+    "range": {
+      "pattern": "den_only",
+      "value_text": "đến 120 L/min",
+      "prefix": "Phạm vi đo của đồng hồ xăng dầu kiểm định theo quy trình này "
+    },
+    "references": [
+      "Đồng hồ xăng dầu (cột đo nhiên liệu) - chưa xác minh số hiệu ĐLVN",
+      "Thông tư 23/2013/TT-BKHCN, mục 23"
+    ],
+    "terms": [
+      {
+        "vi": "Đồng hồ xăng dầu",
+        "en": "Fuel dispenser meter",
+        "definition": "là phương tiện đo thể tích xăng dầu bán ra tại cột đo nhiên liệu.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Thể tích thử tiêu chuẩn",
+        "en": "Standard test volume",
+        "definition": "là thể tích quy định dùng để xác định sai số của đồng hồ xăng dầu trong một lần thử.",
+        "chu_thich": null
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số tại lưu lượng lớn nhất",
+        "ref": "7.3.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số tại lưu lượng nhỏ nhất",
+        "ref": "7.3.2",
+        "modes": [
+          "bd",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Bình chuẩn dung tích hạng 2",
+        "range": "(0 ÷ 20) L",
+        "accuracy": "± 0,02 %"
+      },
+      {
+        "name": "Nhiệt kế",
+        "range": "(0 ÷ 50) °C",
+        "accuracy": "± 0,1 °C"
+      },
+      {
+        "name": "Tỷ trọng kế",
+        "range": "(0,7 ÷ 1,0) kg/L",
+        "accuracy": "± 0,001 kg/L"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "không lớn hơn 30 °C"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "(60 ± 15) %RH"
+      ],
+      [
+        "Áp suất khí quyển",
+        "(101 ± 3) kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số thể tích thử",
+        "sentence": "Sai số cho phép bằng ± 0,3 % thể tích thử nhưng không nhỏ hơn ± 0,05 lít trên một lần đo 20 lít.",
+        "rel_op": "±",
+        "value_text": "0,3 %",
+        "condition_text": "không nhỏ hơn ± 0,05 lít",
+        "limit": {
+          "value": 0.3,
+          "unit": "%",
+          "quote": "± 0,3 % thể tích thử"
+        },
+        "floor": {
+          "value": 0.05,
+          "unit": "lít",
+          "quote": "không nhỏ hơn ± 0,05 lít"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Số cột bơm"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.011_2026_Dong_ho_xang_dau"
+}

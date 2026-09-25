@@ -1,0 +1,119 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.010",
+    "short": "Nhiệt kế y học",
+    "heading_style": "space",
+    "title": "Nhiệt kế y học điện tử tiếp xúc có cơ cấu cực đại",
+    "range": {
+      "pattern": "paren",
+      "value_text": "(35,0 đến 42,0) °C",
+      "prefix": "Phạm vi đo của nhiệt kế y học kiểm định theo quy trình này là "
+    },
+    "references": [
+      "Nhiệt kế y học điện tử tiếp xúc - chưa xác minh số hiệu ĐLVN",
+      "Thông tư 23/2013/TT-BKHCN, mục 40"
+    ],
+    "terms": [
+      {
+        "vi": "Nhiệt kế y học điện tử",
+        "en": "Electronic clinical thermometer",
+        "definition": "là phương tiện đo thân nhiệt cơ thể người bằng cảm biến điện tử.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Cơ cấu cực đại",
+        "en": "Maximum device",
+        "definition": "là bộ phận giữ lại giá trị nhiệt độ cao nhất đo được trong một lần đo.",
+        "chu_thich": "Cơ cấu cực đại giúp đọc kết quả sau khi rút nhiệt kế ra khỏi cơ thể."
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số tại các điểm nhiệt độ chuẩn",
+        "ref": "7.3",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Bể điều nhiệt chuẩn",
+        "range": "(30 ÷ 45) °C",
+        "accuracy": "± 0,02 °C"
+      },
+      {
+        "name": "Nhiệt kế chuẩn platinum",
+        "range": "(0 ÷ 100) °C",
+        "accuracy": "± 0,02 °C"
+      },
+      {
+        "name": "Đồng hồ bấm giây",
+        "range": "(0 ÷ 3 600) s",
+        "accuracy": "± 0,2 s"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "(25 ± 3) oC"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "không lớn hơn 80 %RH"
+      ],
+      [
+        "Áp suất khí quyển",
+        "≤ 106 kPa"
+      ]
+    ],
+    "interval_months": 6,
+    "section6": [
+      {
+        "label": "Sai số trong vùng thang đo chính",
+        "sentence": "Sai số cho phép trong khoảng (35,5 đến 42,0) °C là ± 0,1 °C.",
+        "rel_op": "=",
+        "value_text": "0,1 °C",
+        "limit": {
+          "value": 0.1,
+          "unit": "°C",
+          "quote": "là ± 0,1 °C"
+        }
+      },
+      {
+        "label": "Sai số ngoài vùng thang đo chính",
+        "sentence": "Sai số cho phép ngoài khoảng (35,5 đến 42,0) °C là ± 0,2 °C.",
+        "rel_op": "=",
+        "value_text": "0,2 °C",
+        "limit": {
+          "value": 0.2,
+          "unit": "°C",
+          "quote": "là ± 0,2 °C"
+        }
+      }
+    ],
+    "appendix_extra": []
+  },
+  "doc_stem": "QTKĐ_9.010_2026_Nhiet_ke_y_hoc"
+}

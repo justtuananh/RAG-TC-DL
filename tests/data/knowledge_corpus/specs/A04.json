@@ -1,0 +1,135 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.004",
+    "short": "Đồng hồ nước lạnh",
+    "heading_style": "space",
+    "title": "Đồng hồ nước lạnh cơ khí DN15 đến DN50",
+    "range": {
+      "pattern": "tu_den",
+      "value_text": "từ 2,5 m3/h đến 16 m3/h",
+      "prefix": "Phạm vi đo của đồng hồ nước lạnh kiểm định theo quy trình này "
+    },
+    "references": [
+      "ĐLVN 17 : 2017, Đồng hồ đo nước - Quy trình kiểm định",
+      "Thông tư 23/2013/TT-BKHCN, mục 20-21"
+    ],
+    "terms": [
+      {
+        "vi": "Lưu lượng danh định",
+        "en": "Permanent flow rate Q3",
+        "definition": "là giá trị lưu lượng cao nhất mà đồng hồ hoạt động ổn định trong điều kiện bình thường.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Lưu lượng tối thiểu",
+        "en": "Minimum flow rate Q1",
+        "definition": "là giá trị lưu lượng nhỏ nhất tại đó đồng hồ vẫn chỉ thị đúng sai số cho phép.",
+        "chu_thich": "Q1 xác định vùng lưu lượng thấp cùng với Q2."
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số tại lưu lượng thấp",
+        "ref": "7.3.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số tại lưu lượng cao",
+        "ref": "7.3.2",
+        "modes": [
+          "bd",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Bể chuẩn thể tích",
+        "range": "(0 ÷ 200) L",
+        "accuracy": "± 1/3 sai số cho phép"
+      },
+      {
+        "name": "Đồng hồ bấm giây",
+        "range": "(0 ÷ 3 600) s",
+        "accuracy": "± 0,2 s"
+      },
+      {
+        "name": "Nhiệt kế",
+        "range": "(0 ÷ 50) °C",
+        "accuracy": "± 0,5 °C"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "≤ 35 oC"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "≤ 85 %"
+      ],
+      [
+        "Áp suất khí quyển",
+        "không lớn hơn 106 kPa"
+      ]
+    ],
+    "interval_months": 60,
+    "section6": [
+      {
+        "label": "Sai số ở vùng lưu lượng thấp",
+        "sentence": "Sai số cho phép ở vùng lưu lượng thấp (từ Q1 đến Q2) bằng ± 5 % giá trị đo nhưng không nhỏ hơn 0,02 m3 cho một lần thử thể tích.",
+        "rel_op": "±",
+        "value_text": "5 %",
+        "condition_text": "không nhỏ hơn 0,02 m3",
+        "limit": {
+          "value": 5.0,
+          "unit": "%",
+          "quote": "± 5 % giá trị đo"
+        },
+        "floor": {
+          "value": 0.02,
+          "unit": "m3",
+          "quote": "không nhỏ hơn 0,02 m3"
+        }
+      },
+      {
+        "label": "Sai số ở vùng lưu lượng cao",
+        "sentence": "Sai số cho phép ở vùng lưu lượng cao (từ Q2 đến Q4) là ± 2 % giá trị đo.",
+        "rel_op": "=",
+        "value_text": "2 %",
+        "limit": {
+          "value": 2.0,
+          "unit": "%",
+          "quote": "là ± 2 % giá trị đo"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Cỡ đồng hồ DN"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.004_2026_Dong_ho_nuoc_lanh"
+}

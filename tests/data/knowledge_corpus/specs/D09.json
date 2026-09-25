@@ -1,0 +1,45 @@
+{
+  "kind": "bien_ban",
+  "procedure_number": "9.003",
+  "style": "multi",
+  "values": {
+    "Tên phương tiện đo": "Huyết áp kế",
+    "Ký hiệu": "HA-302",
+    "Nơi (hãng) sản xuất": "Công ty Đo lường ABC",
+    "Đơn vị sử dụng": "Nhà máy XYZ",
+    "Nhiệt độ": "22",
+    "Độ ẩm": "60",
+    "Chế độ kiểm định": "Định kỳ",
+    "Phương pháp kiểm định": "QTKĐ 9.003 : 2026",
+    "Ngày kiểm định": "15/07/2026",
+    "Người kiểm định": "Nguyễn Văn A",
+    "Người soát lại": "Nguyễn Văn B"
+  },
+  "points": [
+    {
+      "ordinal": 1,
+      "nominal": 10.0,
+      "measured": 10.2,
+      "error": 0.2,
+      "limit": 0.4,
+      "note": ""
+    },
+    {
+      "ordinal": 2,
+      "nominal": 20.0,
+      "measured": 20.3,
+      "error": 0.3,
+      "limit": 0.4,
+      "note": ""
+    },
+    {
+      "ordinal": 3,
+      "nominal": 30.0,
+      "measured": 30.6,
+      "error": 0.6,
+      "limit": 0.4,
+      "note": ""
+    }
+  ],
+  "verdict_text": "Không đạt"
+}

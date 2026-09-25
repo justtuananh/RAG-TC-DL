@@ -1,0 +1,116 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.012",
+    "short": "Máy đo độ ẩm hạt",
+    "heading_style": "paren",
+    "title": "Phương tiện đo độ ẩm hạt nông sản",
+    "range": {
+      "pattern": "tu_den",
+      "value_text": "từ 5 % đến 40 %",
+      "prefix": "Phạm vi đo của máy đo độ ẩm hạt kiểm định theo quy trình này "
+    },
+    "references": [
+      "Phương tiện đo độ ẩm hạt nông sản - chưa xác minh số hiệu ĐLVN",
+      "Thông tư 23/2013/TT-BKHCN, mục 42"
+    ],
+    "terms": [
+      {
+        "vi": "Độ ẩm hạt tuyệt đối",
+        "en": "Grain moisture content",
+        "definition": "là tỷ lệ phần trăm khối lượng nước chứa trong hạt so với khối lượng hạt ướt.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Phương pháp sấy khô chuẩn",
+        "en": "Standard oven-drying method",
+        "definition": "là phương pháp xác định độ ẩm hạt bằng cách sấy mẫu đến khối lượng không đổi.",
+        "chu_thich": "Phương pháp sấy khô chuẩn dùng làm chuẩn đối chiếu."
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "So sánh với mẫu chuẩn tại các mức ẩm khác nhau",
+        "ref": "7.3",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Mẫu hạt chuẩn",
+        "range": "(5 ÷ 40) %",
+        "accuracy": "± 0,1 %"
+      },
+      {
+        "name": "Cân phân tích",
+        "range": "(0 ÷ 200) g",
+        "accuracy": "± 0,1 mg"
+      },
+      {
+        "name": "Tủ sấy chuẩn",
+        "range": "(50 ÷ 150) °C",
+        "accuracy": "± 1 °C"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "≤ 35 oC"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "≤ 85 %"
+      ],
+      [
+        "Áp suất khí quyển",
+        "không lớn hơn 106 kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số so với mẫu chuẩn",
+        "sentence": "Sai số cho phép bằng ± 3 % giá trị đo nhưng không nhỏ hơn ± 0,3 điểm % ẩm tuyệt đối.",
+        "rel_op": "±",
+        "value_text": "3 %",
+        "condition_text": "không nhỏ hơn ± 0,3 điểm %",
+        "limit": {
+          "value": 3.0,
+          "unit": "%",
+          "quote": "± 3 % giá trị đo"
+        },
+        "floor": {
+          "value": 0.3,
+          "unit": "%",
+          "quote": "không nhỏ hơn ± 0,3 điểm %"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Loại hạt thử"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.012_2026_May_do_do_am_hat"
+}

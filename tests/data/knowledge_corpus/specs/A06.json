@@ -1,0 +1,130 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.006",
+    "short": "Công tơ điện",
+    "heading_style": "paren",
+    "title": "Công tơ điện xoay chiều 1 pha kiểu cảm ứng",
+    "range": {
+      "pattern": "tu_den",
+      "value_text": "từ 5 A đến 60 A",
+      "prefix": "Phạm vi đo của công tơ điện kiểm định theo quy trình này "
+    },
+    "references": [
+      "ĐLVN 07 : 2012, Công tơ điện xoay chiều kiểu cảm ứng - Quy trình kiểm định",
+      "Thông tư 23/2013/TT-BKHCN, mục 49-50"
+    ],
+    "terms": [
+      {
+        "vi": "Công tơ điện cảm ứng",
+        "en": "Induction watt-hour meter",
+        "definition": "là công tơ đo điện năng dựa trên nguyên lý cảm ứng điện từ giữa đĩa nhôm và cuộn dây.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Hằng số công tơ",
+        "en": "Meter constant",
+        "definition": "là số vòng quay của đĩa nhôm ứng với một đơn vị điện năng đo được.",
+        "chu_thich": null
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số cơ bản",
+        "ref": "7.3.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra hằng số công tơ",
+        "ref": "7.3.2",
+        "modes": [
+          "bd",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Công tơ chuẩn",
+        "range": "(0 ÷ 100) A",
+        "accuracy": "cấp 0,2"
+      },
+      {
+        "name": "Nguồn dòng áp chuẩn",
+        "range": "(0 ÷ 250) V",
+        "accuracy": "± 0,05 %"
+      },
+      {
+        "name": "Đồng hồ bấm giây",
+        "range": "(0 ÷ 3 600) s",
+        "accuracy": "± 0,2 s"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "(25 ± 3) oC"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "không lớn hơn 80 %RH"
+      ],
+      [
+        "Áp suất khí quyển",
+        "≤ 106 kPa"
+      ]
+    ],
+    "interval_months": 60,
+    "section6": [
+      {
+        "label": "Sai số cơ bản tại dòng điện lớn",
+        "sentence": "Sai số cho phép tại dòng điện từ 10 % Iđm đến Imax là ± 2,0 %.",
+        "rel_op": "=",
+        "value_text": "2,0 %",
+        "limit": {
+          "value": 2.0,
+          "unit": "%",
+          "quote": "là ± 2,0 %"
+        }
+      },
+      {
+        "label": "Sai số cơ bản tại dòng điện nhỏ",
+        "sentence": "Sai số cho phép tại dòng điện bằng 5 % Iđm là ± 2,5 %.",
+        "rel_op": "=",
+        "value_text": "2,5 %",
+        "limit": {
+          "value": 2.5,
+          "unit": "%",
+          "quote": "là ± 2,5 %"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Dòng điện danh định",
+      "Điện áp danh định"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.006_2026_Cong_to_dien"
+}

@@ -1,0 +1,142 @@
+{
+  "kind": "qtkd_edge",
+  "case": "B05",
+  "target_kcode": "K02",
+  "device": {
+    "number": "9.017",
+    "short": "Van an toàn",
+    "heading_style": "space",
+    "title": "Van an toàn có phạm vi làm việc đến 1 400 bar",
+    "range": {
+      "pattern": "den_only",
+      "value_text": "đến 1 400 bar",
+      "prefix": "Phạm vi đo của van an toàn kiểm định theo quy trình này "
+    },
+    "references": [
+      "QTKĐ 1.061 : 2021, Van an toàn - Quy trình kiểm định",
+      "Thông tư 23/2013/TT-BKHCN, Danh mục phương tiện đo phải kiểm định"
+    ],
+    "terms": [
+      {
+        "vi": "Van an toàn",
+        "en": "Safety valve",
+        "definition": "là van tự động xả một phần môi chất để ngăn ngừa áp suất vượt quá giá trị đã chỉnh đặt trước.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Áp suất chỉnh đặt",
+        "en": "Set pressure",
+        "definition": "là áp suất tại đó van an toàn bắt đầu mở trong điều kiện vận hành.",
+        "chu_thich": "Áp suất chỉnh đặt được xác định tại đường vào của van."
+      },
+      {
+        "vi": "Độ chênh áp",
+        "en": "Blowdown",
+        "definition": "là độ chênh lệch giữa áp suất chỉnh đặt và áp suất đóng của van.",
+        "chu_thich": null
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số áp suất chỉnh đặt",
+        "ref": "7.3.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định độ chênh áp",
+        "ref": "7.3.2",
+        "modes": [
+          "bd",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Áp kế hiện số chuẩn",
+        "range": "(0 ÷ 1 500) bar",
+        "accuracy": "≤ 1/4 sai số cho phép của van"
+      },
+      {
+        "name": "Thiết bị tạo áp suất",
+        "range": "(0 ÷ 1 500) bar",
+        "accuracy": "ổn định, trôi không quá 5 % trong 5 phút"
+      },
+      {
+        "name": "Ẩm kế",
+        "range": "(0 ÷ 100) %RH",
+        "accuracy": "± 5 %RH"
+      },
+      {
+        "name": "Barômét",
+        "range": "(800 ÷ 1 100) mbar",
+        "accuracy": "± 2 mbar"
+      },
+      {
+        "name": "Thước đo",
+        "range": "(0 ÷ 500) mm",
+        "accuracy": "± 1 mm"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "(20,5 ± 2) °C"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "(65 ± 20) %"
+      ],
+      [
+        "Áp suất khí quyển",
+        "(100 ± 4) kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số áp suất chỉnh đặt",
+        "sentence": "Sai số cho phép của áp suất chỉnh đặt bằng ± 3 % áp suất chỉnh đặt nhưng không nhỏ hơn ± 0,15 bar.",
+        "rel_op": "±",
+        "value_text": "3 %",
+        "condition_text": "không nhỏ hơn ± 0,15 bar",
+        "limit": {
+          "value": 3.0,
+          "unit": "%",
+          "quote": "± 3 % áp suất chỉnh đặt"
+        },
+        "floor": {
+          "value": 0.15,
+          "unit": "bar",
+          "quote": "không nhỏ hơn ± 0,15 bar"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Cỡ van",
+      "Áp suất chỉnh đặt"
+    ]
+  }
+}

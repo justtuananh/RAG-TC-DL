@@ -1,0 +1,114 @@
+{
+  "B01": [
+    {
+      "code": "K11",
+      "current": "parse_procedure_header -> ProcedureHeader(number='1.061', year=2021, title='- Thông tư 23/2013/TT-BKHCN, Danh mục phương tiện đo phải kiểm định; # 3 Thuật ngữ và định nghĩa Các thuật ngữ, định nghĩa trong quy trình này được hiểu như sau: Van an toàn (Safety valve): là van tự động xả một phần môi chất để ngăn ngừa áp suất vượt quá giá trị đã chỉnh đặt trước. Áp suất chỉnh đặt (Set pressure): là áp suất tại đó van an toàn bắt đầu mở trong điều kiện vận hành. CHÚ THÍCH: Áp suất chỉnh đặt được xác định tại đường vào của van. Độ chênh áp (Blowdown): là độ chênh lệch giữa áp suất chỉnh đặt và áp suất đóng của van. # 4 Các phép kiểm định Thực hiện các phép kiểm định được quy định trong Bảng 1. Bảng 1 - Các phép kiểm định | TT | Tên phép kiểm định | Theo điều (mục) của QTKĐ | Chế độ kiểm định |  |  | | --- | --- | --- | --- | --- | --- | |  |  |  | Ban đầu | Định kỳ | Sau sửa chữa | | 1 | Kiểm tra bên ngoài | 7.1 | + | + | + | | 2 | Kiểm tra kỹ thuật | 7.2 | + | + | + | | 3 | Xác định sai số áp suất chỉnh đặt | 7.3.1 | + | + | + | | 4 | Xác định độ chênh áp | 7.3.2 | + |  | + | # 5 Phương tiện kiểm định Khi tiến hành kiểm định phải sử dụng các phương tiện được quy định trong Bảng 2. Bảng 2 - Danh mục phương tiện kiểm định | TT | Tên phương tiện kiểm định | Đặc trưng kỹ thuật đo lường |  | | --- | --- | --- | --- | |  |  | Phạm vi đo | Cấp chính xác hoặc độ chính xác hoặc sai số hoặc độ không đảm bảo đo | | 1 | Áp kế hiện số chuẩn | (0 ÷ 1 500) bar | ≤ 1/4 sai số cho phép của van | | 2 | Thiết bị tạo áp suất | (0 ÷ 1 500) bar | ổn định, trôi không quá 5 % trong 5 phút | | 3 | Ẩm kế | (0 ÷ 100) %RH | ± 5 %RH | | 4 | Barômét | (800 ÷ 1 100) mbar | ± 2 mbar | | 5 | Thước đo | (0 ÷ 500) mm | ± 1 mm | # 6 Điều kiện và chuẩn bị kiểm định ## 6.1 Điều kiện kiểm định Phải tiến hành kiểm định trong các điều kiện sau: - Nhiệt độ môi trường: (20 ± 5) °C; - Độ ẩm tương đối: (65 ± 20) %; - Áp suất khí quyển: (100 ± 4) kPa; ## 6.2 Chuẩn bị kiểm định Trước khi tiến hành kiểm định phải để phương tiện đo và chuẩn đo lường trong phòng thí nghiệm đến khi đạt điều kiện quy định tại điều 6.1, sau đó lắp đặt theo sơ đồ kết nối chuẩn. # 7 Tiến hành kiểm định Trong quá trình kiểm định, nếu một nội dung kiểm tra không đạt yêu cầu thì kết luận không đạt và không tiến hành các bước tiếp theo. ## 7.1 Kiểm tra bên ngoài Kiểm tra bên ngoài van an toàn theo yêu cầu về tình trạng nguyên vẹn, nhãn mác. ## 7.2 Kiểm tra kỹ thuật Kiểm tra khả năng làm việc bình thường của van an toàn. ## 7.3 Kiểm tra đo lường Van an toàn được kiểm tra đo lường theo trình tự và yêu cầu sau: Sai số cho phép của áp suất chỉnh đặt bằng ± 3 % áp suất chỉnh đặt nhưng không nhỏ hơn ± 0,15 bar. # 8 Xử lý chung Nếu sau khi kiểm định van an toàn đạt các yêu cầu kỹ thuật trong phần Tiến hành kiểm định thì cấp Giấy chứng nhận kiểm định và dán Tem kiểm định. Chu kỳ kiểm định của van an toàn là 12 tháng. Nếu van an toàn không đạt một trong các yêu cầu kỹ thuật thì cấp Biên bản kiểm định và xóa bỏ Tem kiểm định cũ (nếu có). # Phụ lục A (Quy định) MẪU BIÊN BẢN KIỂM ĐỊNH Tên phương tiện đo: Ký hiệu: Số hiệu: Nơi (hãng) sản xuất: Cỡ van: Áp suất chỉnh đặt: Đơn vị sử dụng: Nhiệt độ: Độ ẩm: Chế độ kiểm định: Phương pháp kiểm định: QTKD 9.013 : 2026 Ngày kiểm định: Người kiểm định: Người soát lại: Bảng A.1 - Kết quả kiểm tra đo lường | Lần đo | Giá trị danh nghĩa | Giá trị đo | Sai số | Giới hạn cho phép | Ghi chú | | --- | --- | --- | --- | --- | --- | | 1 |  |  |  |  |  | | 2 |  |  |  |  |  | | 3 |  |  |  |  |  | Kết luận: Đạt (không đạt) yêu cầu kỹ thuật đo lường.', edition=None)",
+      "expected": "number=\"9.013\"",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "B02": [
+    {
+      "code": "K12",
+      "current": "0 appendix_field (đoạn \"(Quy định)\" thành heading cắt mục)",
+      "expected": ">= 12 appendix_field (nhãn đầu mục Phụ lục A)",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "B04": [
+    {
+      "code": "K10",
+      "current": "0 dòng calibration_interval (thiếu chữ \"là\" trong câu)",
+      "expected": "value_text=\"6 tháng\"",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "B05": [
+    {
+      "code": "K02",
+      "current": "value_text='(20' (tách sai ở dấu phẩy thập phân)",
+      "expected": "value_text=\"(20,5 ± 2) °C\"",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "B06": [
+    {
+      "code": "K13",
+      "current": "find_section6 -> None (style TieuDeMuc1 không được nhận diện)",
+      "expected": "tìm thấy mục \"Tiến hành kiểm định\" và các dữ kiện §6 bên trong",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "B09": [
+    {
+      "code": "K15",
+      "current": "value_text='từ 0 bar đến 1 400 bar.', unit_max='bar.' (dấu chấm câu bị nuốt vào đơn vị)",
+      "expected": "value_text=\"từ 0 bar đến 1 400 bar\", unit resolve được thành \"bar\"",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "D02": [
+    {
+      "code": "K03",
+      "current": "_table_field_value so khớp slugify(cell) == slugify(label); ô có dấu ':' cho slug khác nhãn -> mọi trường bảng bị bỏ qua (đo bằng self-check bước 4)",
+      "expected": "nhận diện nhãn dù ô có kèm dấu hai chấm",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "D04": [
+    {
+      "code": "K05",
+      "current": "parse_date đọc ISO 'YYYY-MM-DD' theo mẫu D/M/Y nên ra ngày sai (đo bằng self-check bước 4)",
+      "expected": "10/04/2026",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "D03": [
+    {
+      "code": "K04",
+      "current": "_parse_verdict trả 'khong_dat' (khớp chuỗi con 'không đạt' trong mẫu \"Đạt (không đạt)\")",
+      "expected": "None -- không kết luận được từ câu mẫu mập mờ, cần người soát xét xác định",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "D13": [
+    {
+      "code": "K07",
+      "current": "docx_reader gán role cột 'Áp suất'=None (bị bỏ), 'Sai số'=giá trị cột 'Đóng', 'Ghi chú'=giá trị cột 'Độ chênh áp'; đo thật self-check bước 4: point[0].error=120.0 (đúng phải là 0.05)",
+      "expected": "measured=Mở, error=Độ chênh áp, note chứa Đóng",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "D14": [
+    {
+      "code": "K06",
+      "current": "phuluc_a._header_fields không khớp dòng \"Ngày kiểm định tháng năm 2026\" (không có ':') nên MappingConfig không có trường ngày kiểm định (xác minh trực tiếp trên đoạn Phụ lục A tương ứng)",
+      "expected": "MappingConfig có trường \"Ngày kiểm định\" ánh xạ được ngày kiểm định",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "E06": [
+    {
+      "code": "K01",
+      "current": "vnnum.parse_number('100.125') = 100125.0 (đo bằng self-check bước 4)",
+      "expected": "100.125 (giữ nguyên số thực đã có trong ô, không coi '.' là phân nhóm nghìn)",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "E07": [
+    {
+      "code": "K05",
+      "current": "xlsx_reader trả nguyên số serial Excel (vd 46224), không đổi ra ngày",
+      "expected": "20/07/2026",
+      "fixed": "2026-09-25"
+    }
+  ],
+  "F02": [
+    {
+      "code": "K08",
+      "current": "Phiên bản mới là document mới; dữ kiện đã duyệt của bản cũ không tự supersede (theo input-contract §6)",
+      "expected": "Dữ kiện Phụ lục A/LLM của bản cũ chuyển superseded khi bản mới được duyệt",
+      "fixed": "2026-09-25"
+    }
+  ]
+}

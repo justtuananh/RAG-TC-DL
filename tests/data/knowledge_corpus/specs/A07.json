@@ -1,0 +1,124 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.007",
+    "short": "Taximet",
+    "heading_style": "space",
+    "title": "Taximet",
+    "range": {
+      "pattern": "paren",
+      "value_text": "(10 đến 60) km/h",
+      "prefix": "Phạm vi đo của taximet kiểm định theo quy trình này là "
+    },
+    "references": [
+      "Taximet - chưa xác minh số hiệu/phiên bản ĐLVN chính xác (nhiều bản ĐLVN 01 lưu hành)",
+      "Thông tư 23/2013/TT-BKHCN, mục 2"
+    ],
+    "terms": [
+      {
+        "vi": "Taximet",
+        "en": "Taximeter",
+        "definition": "là phương tiện đo tính và hiển thị tiền cước theo quãng đường và thời gian di chuyển của xe taxi.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Hệ số taximet",
+        "en": "Taximeter constant",
+        "definition": "là số xung phát ra tương ứng với một đơn vị quãng đường xe đã đi.",
+        "chu_thich": "Hệ số taximet phụ thuộc cỡ lốp xe."
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số quãng đường",
+        "ref": "7.3.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số cước phí",
+        "ref": "7.3.2",
+        "modes": [
+          "bd",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Đường thử chuẩn",
+        "range": "(0 ÷ 5) km",
+        "accuracy": "± 0,1 %"
+      },
+      {
+        "name": "Tốc kế chuẩn",
+        "range": "(0 ÷ 200) km/h",
+        "accuracy": "± 1 %"
+      },
+      {
+        "name": "Đồng hồ bấm giây",
+        "range": "(0 ÷ 3 600) s",
+        "accuracy": "± 0,2 s"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "không lớn hơn 30 °C"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "(60 ± 15) %RH"
+      ],
+      [
+        "Áp suất khí quyển",
+        "(101 ± 3) kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số quãng đường thử",
+        "sentence": "Sai số cho phép của quãng đường thử bằng ± 2 % quãng đường thử nhưng không nhỏ hơn ± 10 m trên một lần thử 1 km.",
+        "rel_op": "±",
+        "value_text": "2 %",
+        "condition_text": "không nhỏ hơn ± 10 m",
+        "limit": {
+          "value": 2.0,
+          "unit": "%",
+          "quote": "± 2 % quãng đường thử"
+        },
+        "floor": {
+          "value": 10.0,
+          "unit": "m",
+          "quote": "không nhỏ hơn ± 10 m"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Biển số xe"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.007_2026_Taximet"
+}

@@ -1,0 +1,124 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.009",
+    "short": "Máy đo nồng độ cồn",
+    "heading_style": "paren",
+    "title": "Phương tiện đo hàm lượng cồn trong hơi thở",
+    "range": {
+      "pattern": "tu_den",
+      "value_text": "từ 0,000 mg/L đến 3,000 mg/L",
+      "prefix": "Phạm vi đo của máy đo nồng độ cồn kiểm định theo quy trình này "
+    },
+    "references": [
+      "ĐLVN 107 : 2012, Phương tiện đo hàm lượng cồn trong hơi thở - Quy trình kiểm định",
+      "Thông tư 23/2013/TT-BKHCN, mục 45"
+    ],
+    "terms": [
+      {
+        "vi": "Phương tiện đo hàm lượng cồn",
+        "en": "Breath alcohol analyzer",
+        "definition": "là phương tiện đo xác định nồng độ cồn ethanol trong hơi thở của người được kiểm tra.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Khí chuẩn ethanol",
+        "en": "Ethanol reference gas",
+        "definition": "là hỗn hợp khí đã biết trước nồng độ ethanol dùng làm chuẩn khi kiểm định.",
+        "chu_thich": "Khí chuẩn ethanol phải còn hiệu lực hiệu chuẩn."
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra khí không",
+        "ref": "7.3.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Xác định sai số tại các mức nồng độ chuẩn",
+        "ref": "7.3.2",
+        "modes": [
+          "bd",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Khí chuẩn ethanol",
+        "range": "(0,000 ÷ 3,000) mg/L",
+        "accuracy": "± 2 %"
+      },
+      {
+        "name": "Hệ thống chuẩn khí ướt",
+        "range": "(30 ÷ 40) °C",
+        "accuracy": "± 1 °C"
+      },
+      {
+        "name": "Ẩm kế",
+        "range": "(0 ÷ 100) %RH",
+        "accuracy": "± 5 %RH"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "(20 ± 5) °C"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "(65 ± 20) %"
+      ],
+      [
+        "Áp suất khí quyển",
+        "(100 ± 4) kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số tại vùng nồng độ thấp",
+        "sentence": "Sai số cho phép bằng ± 5 % giá trị đo nhưng không nhỏ hơn ± 0,020 mg/L ở vùng nồng độ thấp.",
+        "rel_op": "±",
+        "value_text": "5 %",
+        "condition_text": "không nhỏ hơn ± 0,020 mg/L",
+        "limit": {
+          "value": 5.0,
+          "unit": "%",
+          "quote": "± 5 % giá trị đo"
+        },
+        "floor": {
+          "value": 0.02,
+          "unit": "mg/L",
+          "quote": "không nhỏ hơn ± 0,020 mg/L"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Số seri đầu đo"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.009_2026_May_do_nong_do_con"
+}

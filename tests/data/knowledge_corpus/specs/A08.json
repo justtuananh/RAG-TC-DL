@@ -1,0 +1,135 @@
+{
+  "kind": "qtkd",
+  "device": {
+    "number": "9.008",
+    "short": "Máy đo tốc độ",
+    "heading_style": "dot",
+    "title": "Phương tiện đo tốc độ phương tiện giao thông kiểu laser, radar",
+    "range": {
+      "pattern": "den_only",
+      "value_text": "đến 320 km/h",
+      "prefix": "Phạm vi đo của máy đo tốc độ kiểm định theo quy trình này "
+    },
+    "references": [
+      "ĐLVN 157 : 2019, Phương tiện đo kiểm tra tốc độ phương tiện giao thông - Quy trình kiểm định",
+      "Thông tư 23/2013/TT-BKHCN, mục 3"
+    ],
+    "terms": [
+      {
+        "vi": "Phương tiện đo tốc độ",
+        "en": "Speed measuring device",
+        "definition": "là phương tiện đo dùng sóng laser hoặc radar để xác định tốc độ di chuyển của phương tiện giao thông.",
+        "chu_thich": null
+      },
+      {
+        "vi": "Hiệu ứng Doppler",
+        "en": "Doppler effect",
+        "definition": "là hiện tượng thay đổi tần số sóng phản xạ dùng để tính tốc độ mục tiêu.",
+        "chu_thich": "Radar tốc độ hoạt động dựa trên hiệu ứng Doppler."
+      }
+    ],
+    "bang1": [
+      {
+        "label": "Kiểm tra bên ngoài",
+        "ref": "7.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra kỹ thuật",
+        "ref": "7.2",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra sai số đo khoảng cách",
+        "ref": "7.3.1",
+        "modes": [
+          "bd",
+          "dk",
+          "ssc"
+        ]
+      },
+      {
+        "label": "Kiểm tra sai số đo tốc độ",
+        "ref": "7.3.2",
+        "modes": [
+          "bd",
+          "ssc"
+        ]
+      }
+    ],
+    "bang2": [
+      {
+        "name": "Máy phát tốc độ chuẩn",
+        "range": "(0 ÷ 320) km/h",
+        "accuracy": "± 0,5 km/h"
+      },
+      {
+        "name": "Xe thử có định vị GPS chuẩn",
+        "range": "(0 ÷ 320) km/h",
+        "accuracy": "± 0,3 km/h"
+      },
+      {
+        "name": "Thước đo khoảng cách chuẩn",
+        "range": "(0 ÷ 1 000) m",
+        "accuracy": "± 0,05 m"
+      }
+    ],
+    "env": [
+      [
+        "Nhiệt độ môi trường",
+        "≤ 35 oC"
+      ],
+      [
+        "Độ ẩm tương đối",
+        "≤ 85 %"
+      ],
+      [
+        "Áp suất khí quyển",
+        "không lớn hơn 106 kPa"
+      ]
+    ],
+    "interval_months": 12,
+    "section6": [
+      {
+        "label": "Sai số đo tốc độ",
+        "sentence": "Sai số cho phép của phép đo tốc độ bằng ± 1 % giá trị đo nhưng không nhỏ hơn ± 1 km/h.",
+        "rel_op": "±",
+        "value_text": "1 %",
+        "condition_text": "không nhỏ hơn ± 1 km/h",
+        "limit": {
+          "value": 1.0,
+          "unit": "%",
+          "quote": "± 1 % giá trị đo"
+        },
+        "floor": {
+          "value": 1.0,
+          "unit": "km/h",
+          "quote": "không nhỏ hơn ± 1 km/h"
+        }
+      },
+      {
+        "label": "Sai số đo khoảng cách",
+        "sentence": "Sai số cho phép của phép đo khoảng cách không lớn hơn ± 0,15 m.",
+        "rel_op": "<=",
+        "value_text": "0,15 m",
+        "limit": {
+          "value": 0.15,
+          "unit": "m",
+          "quote": "không lớn hơn ± 0,15 m"
+        }
+      }
+    ],
+    "appendix_extra": [
+      "Địa điểm thử"
+    ]
+  },
+  "doc_stem": "QTKĐ_9.008_2026_May_do_toc_do"
+}
