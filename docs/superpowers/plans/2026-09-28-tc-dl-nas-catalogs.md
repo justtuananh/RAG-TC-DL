@@ -89,3 +89,30 @@ Trích Phụ lục A cho 6 QTKĐ còn lại (để chờ duyệt) để hệ th�
 ## 6. Nhật ký
 
 - 2026-09-28: lập kế hoạch sau khi khảo sát 4 hồ sơ NAS (chuyển đổi thử bằng LibreOffice trong scratchpad).
+- 2026-09-28, K1 xong (`bb5c6ff`, `0883cd6`):
+  `.doc`/`.xls` được chuyển đổi bằng LibreOffice headless, cache theo sha256 trong `build/converted/`, bản gốc không bị sửa.
+  4 hồ sơ NAS xử lý qua API thật đều về trạng thái `ready`; fidelity công thức vẫn 351/351.
+- 2026-09-28, K2 xong (`c82727e`, `3bd1a2b`):
+  bảng dài hơn 15 dòng được chia nhóm 8 dòng, lặp tiêu đề cột và đề mục nhóm La Mã.
+  `eval.run_eval` giữ nguyên recall@5 0,982 và MRR 0,870 trước và sau khi chia.
+  Ô bảng Word nhiều đoạn được nối bằng " / " thay vì dính chữ.
+- 2026-09-28, D1 xong (`253481f`, `0531331`, `90d7f35`, `9083006`):
+  bộ đọc 4 biểu cho 84 chuẩn mẫu, 8 kiểm định viên, 70 tiêu chuẩn/quy trình, 39 lĩnh vực công nhận trên fixture thật.
+  Mỗi lần đọc tạo một extraction `catalog:*` chờ duyệt đúng số dòng; sau khi duyệt, tab Dữ liệu tìm kiếm/lọc được, mỗi ô mở được dòng nguyên văn (P1), chỉ hiện bản đã duyệt (P3).
+  "nt" kế thừa dòng trên và được đánh dấu; chu kỳ ghi trơn "1" không bị đoán số tháng, người duyệt thấy 12 cảnh báo.
+- 2026-09-28, D2 xong (`ae96f50`, `add1991`, `3640630`):
+  4 intent danh mục (`lab_standard_lookup`, `inspector_lookup`, `procedure_catalog_lookup`, `capability_lookup`) với bộ gỡ nhầm tất định trong `query/signals.py`.
+  RAG văn bản thuần chỉ đúng 2/10 câu danh mục vì qwen2.5:3b đọc bảng dài sai, nên danh mục đi nhánh số liệu có cấu trúc.
+  Bảng số liệu rỗng rơi về câu trả lời văn bản thay vì để người dùng không có câu trả lời.
+  `3640630` sửa 3 lỗi định tuyến còn lại: liệt kê chuẩn theo loại ("những áp kế píttông chuẩn nào"), ký hiệu chuẩn bị coi là loại thiết bị (Fluke 7302 số 1274), và mục sử dụng Biểu 1 bị đưa vào `standards_for`.
+  Đo với qwen2.5:3b thật: `intent_eval` 102/102, tập giữ kín của Claude (ngoài repo) 16/16, cả 10 câu mục 5 đều đúng intent và ra bảng có xuất xứ.
+- 2026-09-28, E2E:
+  chat thật qua `/api/chat/stream` đạt 12/12 câu (10 câu danh mục, 1 câu lịch sử thiết bị, 1 câu văn bản), trước bản sửa `3640630` là 10/12.
+  `make check` 1522 passed; gate frontend (typecheck, lint, 103/103 test, build) xanh ở `9083006` và từ đó không đổi frontend.
+  Phụ lục A của 6 QTKĐ còn lại đã trích, 124 + 109 dữ kiện tri thức đang chờ người dùng duyệt ở tab Tri thức.
+  Tài khoản test tạm `e2e_claude` đã tắt (`is_active=0`, giữ lại vì là người duyệt trong audit).
+- Còn mở, chưa làm:
+  câu từ chối tính toán đang dùng chung câu "Không tìm thấy thông tin...", nên có câu riêng "Hệ thống chỉ tra cứu, không tính toán".
+  Số thập phân hiển thị dấu chấm thay vì dấu phẩy kiểu Việt trên toàn app.
+  Câu không nêu QTKĐ ("Thời gian quay tự do tối thiểu cho phép") đang trích 1.071 thay vì 1.159.
+  Bảng 2 (phương tiện chuẩn) của 1.159 chưa duyệt nên `standards_for` trả rỗng, đúng theo P3.
