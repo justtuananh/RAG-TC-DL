@@ -371,16 +371,6 @@
       ]
     },
     {
-      "file": "4. Bieu 1 Kiem dinh-Hieu chuan 2022 NAS 12.2022.doc",
-      "status": "skipped-legacy",
-      "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
-    },
-    {
-      "file": "6. Bieu 3 Danh muc chuan mau 2022 NAS.xls",
-      "status": "skipped-legacy",
-      "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
-    },
-    {
       "file": "7. Biểu 4 Danh mục QT 2022 NAS.doc",
       "status": "skipped-legacy",
       "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
@@ -4894,11 +4884,69 @@
           "latex": "U_{c}=k×u_{c}"
         }
       ]
+    },
+    {
+      "file": "4. Bieu 1 Kiem dinh-Hieu chuan 2022 NAS 12.2022.doc",
+      "status": "ok",
+      "headings": 0,
+      "tables": 1,
+      "paragraphs": 5,
+      "media_parts": 0,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": [],
+      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/8ef493bb49f0e01a015c900721603a5e6d8305d45a5819bf245a135689985a8e.docx"
+    },
+    {
+      "file": "6. Bieu 3 Danh muc chuan mau 2022 NAS.xls",
+      "status": "ok",
+      "source_format": "xls",
+      "headings": 1,
+      "tables": 1,
+      "paragraphs": 0,
+      "table_rows": 87,
+      "media_parts": 0,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": [],
+      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/982f3c1e2b7c65e2bdfbb418c7bf2b0e57fafff5af737a893b55b6c7f107ef08.xlsx"
+    },
+    {
+      "file": "7. Biểu 4 Danh mục QT 2022 NAS.doc",
+      "status": "ok",
+      "headings": 0,
+      "tables": 1,
+      "paragraphs": 5,
+      "media_parts": 0,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": [],
+      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/ccb1d7f6284996bcb8d9c2d183e7fda88d8832c20c6eeb68ac6dea038a16e0b5.docx"
+    },
+    {
+      "file": "10. Bieu 7 Danh sách KĐV (NAS).doc",
+      "status": "ok",
+      "headings": 0,
+      "tables": 1,
+      "paragraphs": 5,
+      "media_parts": 0,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": [],
+      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/db767bb2a6dcbdbec7c56f01709e175a30e9cc7ba9ce693b02b220a7f5600f25.docx"
     }
   ],
   "totals": {
-    "docx_processed": 7,
-    "legacy_skipped": 4,
+    "docx_processed": 11,
+    "legacy_skipped": 2,
     "formulas_found": 351,
     "formulas_ole_mathtype": 232,
     "formulas_omml_native": 119,
