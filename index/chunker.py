@@ -38,6 +38,14 @@ _FORMULA_ONLY_RE = re.compile(r"^\s*\$[^$]+\$\s*$")
 # with MarkItDown's PDF output on multi-column layouts) almost none at all.
 _SYNTH_SECTION_CHARS = 4000
 
+# Bảng dài (danh mục chuẩn, danh mục quy trình... hàng chục dòng) nếu để nguyên
+# một chunk thì một dòng cụ thể bị "loãng" trong embedding. Bảng vượt ngưỡng được
+# chia theo nhóm dòng; mỗi nhóm lặp lại tiêu đề cột và mang đề mục nhóm gần nhất.
+_MAX_TABLE_ROWS = 15
+_TABLE_GROUP_ROWS = 8
+_TABLE_SEPARATOR_RE = re.compile(r"^\|\s*:?-{3,}")
+_GROUP_HEADING_RE = re.compile(r"^\|\s*[IVXLC]+\s*\|")
+
 
 def _make_id(file_stem: str, section: str, text: str) -> str:
     raw = f"{file_stem}\x00{section}\x00{text}"
@@ -46,6 +54,40 @@ def _make_id(file_stem: str, section: str, text: str) -> str:
 
 def _is_blank(line: str) -> bool:
     return line.strip() == ""
+
+
+def _split_table(text: str) -> list[str]:
+    """Chia bảng dài thành các nhóm dòng; bảng ngắn/không chuẩn trả nguyên bảng.
+
+    Mỗi nhóm = dòng tiêu đề + dòng phân cách + (đề mục nhóm đang hiệu lực, nếu
+    nhóm bắt đầu giữa chừng một nhóm) + tối đa ``_TABLE_GROUP_ROWS`` dòng dữ liệu.
+    Dòng đề mục (ô đầu là số La Mã: "| IV | PHƯƠNG TIỆN ĐO ÁP SUẤT |") là ngữ
+    cảnh, không tính vào số dòng dữ liệu.
+    """
+    rows = text.split("\n")
+    if len(rows) < 3 or not _TABLE_SEPARATOR_RE.match(rows[1]):
+        return [text]
+    header, body = rows[:2], rows[2:]
+    if sum(not _GROUP_HEADING_RE.match(row) for row in body) <= _MAX_TABLE_ROWS:
+        return [text]
+    groups: list[list[str]] = []
+    current: list[str] = []
+    heading: str | None = None
+    count = 0
+    for row in body:
+        if _GROUP_HEADING_RE.match(row):
+            heading = row
+            current.append(row)
+            continue
+        if count == _TABLE_GROUP_ROWS:
+            groups.append(current)
+            current = [heading] if heading else []
+            count = 0
+        current.append(row)
+        count += 1
+    if current:
+        groups.append(current)
+    return ["\n".join(header + group) for group in groups]
 
 
 def _split_body_into_children(
@@ -67,16 +109,17 @@ def _split_body_into_children(
             return
         if kind == "paragraph" and _FORMULA_ONLY_RE.match(text):
             kind = "formula"
-        cid = _make_id(file_stem, section_path, text)
-        children.append(Chunk(
-            chunk_id=cid,
-            parent_id=parent_id,
-            is_parent=False,
-            kind=kind,
-            text=text,
-            section_path=section_path,
-            file_stem=file_stem,
-        ))
+        parts = _split_table(text) if kind == "table" else [text]
+        for part in parts:
+            children.append(Chunk(
+                chunk_id=_make_id(file_stem, section_path, part),
+                parent_id=parent_id,
+                is_parent=False,
+                kind=kind,
+                text=part,
+                section_path=section_path,
+                file_stem=file_stem,
+            ))
         buffer.clear()
 
     for line in lines:

@@ -56,3 +56,45 @@ def test_make_id_is_16_hex_and_fits_uint64():
 def test_make_id_distinct_and_stable():
     assert _make_id("f", "s", "t1") != _make_id("f", "s", "t2")
     assert _make_id("f", "s", "t") == _make_id("f", "s", "t")
+
+
+def _catalog_md(tmp_path, n_rows: int):
+    """Danh mục kiểu Biểu 4: một bảng dài có đề mục nhóm số La Mã."""
+    lines = [
+        "# Danh mục",
+        "",
+        "| TT | Số hiệu | Tên |",
+        "|---|---|---|",
+        "| I | Lĩnh vực áp suất |  |",
+    ]
+    for i in range(1, n_rows + 1):
+        if i == 11:
+            lines.append("| II | Lĩnh vực nhiệt độ |  |")
+        lines.append(f"| {i} | QTKĐ 1.{i:03d} : 2021 | Quy trình số {i} |")
+    path = tmp_path / "danh_muc.md"
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return [c for c in parse_file(path) if not c.is_parent and c.kind == "table"]
+
+
+def test_short_table_stays_one_chunk(tmp_path):
+    assert len(_catalog_md(tmp_path, 12)) == 1
+
+
+def test_long_table_split_into_row_groups_with_header(tmp_path):
+    tables = _catalog_md(tmp_path, 30)
+    assert len(tables) > 1
+    for chunk in tables:
+        rows = chunk.text.split("\n")
+        assert rows[0] == "| TT | Số hiệu | Tên |" and rows[1] == "|---|---|---|"
+    # Mọi dòng dữ liệu có mặt đúng một lần (không mất, không lặp).
+    data = [row for chunk in tables for row in chunk.text.split("\n")[2:] if "QTKĐ" in row]
+    assert len(data) == 30 and len(set(data)) == 30
+
+
+def test_row_group_carries_nearest_group_heading(tmp_path):
+    tables = _catalog_md(tmp_path, 30)
+    holder = next(c for c in tables if "QTKĐ 1.020 : 2021" in c.text)
+    # Dòng 20 thuộc nhóm II: chunk chứa nó phải mang đề mục "II" làm ngữ cảnh.
+    assert "| II | Lĩnh vực nhiệt độ |  |" in holder.text
+    assert "| I | Lĩnh vực áp suất |  |" not in holder.text
+    assert len({c.chunk_id for c in tables}) == len(tables)
