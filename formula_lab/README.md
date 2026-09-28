@@ -35,3 +35,11 @@ Qdrant local and cache live in each worktree's `.formula-runtime`. Copy an immut
 ## Decision rule
 
 Exclude any strategy returning an unsafe result or with incomplete/infrastructure-failed measurement. Among eligible strategies choose highest e2e pass rate; if within 5 percentage points, use 30 fresh cases, then provenance/maintenance/cost as tie-breakers. Do not select a winner if none qualifies. Rates are empirical on this small fixture set, not population accuracy guarantees.
+
+## Selected result
+
+The held-out comparison selected **registry**: 180/180 passes and zero observed unsafe outputs; parser 174/180 with 6 unsafe outputs; LLM 118/180 with 20. These are 60 unique UC repeated three times, limited to the six prepared calculators. See `reports/KET_QUA.md`, `reports/COMPARISON.md` and `reports/KNOWN_LIMITS.md`.
+
+Run the selected demo with `./formula_lab/run.sh serve` (port 8093). The original React chatbot has not been changed.
+
+Post-benchmark tooling guard: `build_data.py` now checks `data/review_approvals.json`. It cannot silently approve a changed source/formula when regenerating fixtures. Updating that manifest requires a new documented source review; the generator does not update it. This guard does not change the frozen runtime or the benchmark fixture contents.

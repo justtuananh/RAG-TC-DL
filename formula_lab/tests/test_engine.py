@@ -48,3 +48,12 @@ def test_all_strategies_reject_unknown_source_revision():
     c=copy.deepcopy(SOURCES[0]);c['revision']='999'
     for strategy in ['registry','parser','llm']:
         assert prepare(c,strategy)['status']=='blocked'
+
+
+def test_dataset_rebuild_cannot_auto_approve_changed_formulas():
+    from formula_lab.build_data import check_approval
+    c=copy.deepcopy(SOURCES[0])
+    check_approval(c)
+    c['fingerprint']='0'*64
+    with pytest.raises(ValueError,match='new technical review'):
+        check_approval(c)
