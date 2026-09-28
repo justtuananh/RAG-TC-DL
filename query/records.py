@@ -251,9 +251,7 @@ def serialize_record(
     record["within_limit"] = None  # cấp hồ sơ không có cờ này
     unit_id = record.get("range_unit_id")
     unit = (
-        unit_factors.get(int(unit_id))
-        if unit_factors is not None and unit_id is not None
-        else None
+        unit_factors.get(int(unit_id)) if unit_factors is not None and unit_id is not None else None
     )
     record["range_min_display"] = units_query.from_si(record.get("range_min"), unit)
     record["range_max_display"] = units_query.from_si(record.get("range_max"), unit)

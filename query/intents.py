@@ -373,12 +373,8 @@ _RANGE_DMY_RE = re.compile(
     r"(?:ngày\s+)?(\d{1,2}[/\-.]\d{1,2}[/\-.]\d{4})",
     re.IGNORECASE,
 )
-_RANGE_YEAR_RE = re.compile(
-    r"từ\s+(?:năm\s+)?(\d{4})\s+đến\s+(?:năm\s+)?(\d{4})", re.IGNORECASE
-)
-_MONTH_RE = re.compile(
-    r"tháng\s+(\d{1,2})\s*(?:[/\-]\s*|năm\s+)(\d{4})", re.IGNORECASE
-)
+_RANGE_YEAR_RE = re.compile(r"từ\s+(?:năm\s+)?(\d{4})\s+đến\s+(?:năm\s+)?(\d{4})", re.IGNORECASE)
+_MONTH_RE = re.compile(r"tháng\s+(\d{1,2})\s*(?:[/\-]\s*|năm\s+)(\d{4})", re.IGNORECASE)
 _YEAR_RE = re.compile(r"năm\s+(\d{4})", re.IGNORECASE)
 
 
@@ -438,9 +434,7 @@ def _resolve_intent_alias(intent: str, params: dict[str, Any]) -> str:
     return _INTENT_ALIASES.get(intent, intent)
 
 
-def sanitize_classification(
-    payload: dict[str, Any] | None, question: str
-) -> dict[str, Any] | None:
+def sanitize_classification(payload: dict[str, Any] | None, question: str) -> dict[str, Any] | None:
     """Chuẩn hoá payload LLM trước ``decide``: khoá chuẩn + tham số có căn cứ."""
     if not isinstance(payload, dict):
         return payload

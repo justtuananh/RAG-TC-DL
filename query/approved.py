@@ -42,7 +42,9 @@ def _where(conditions: list[str], params: dict[str, Any]) -> str:
     return f" WHERE {' AND '.join(conditions)}" if conditions else ""
 
 
-def _rows(session: Session, base_sql: str, conditions: list[str], params: dict[str, Any]) -> list[dict]:
+def _rows(
+    session: Session, base_sql: str, conditions: list[str], params: dict[str, Any]
+) -> list[dict]:
     sql = base_sql + _where(conditions, params)
     return [dict(row) for row in session.execute(text(sql), params).mappings().all()]
 
@@ -64,7 +66,9 @@ def list_approved_facts(
     if fact_kind is not None:
         conditions.append("fact_kind = :fact_kind")
         params["fact_kind"] = fact_kind
-    sql = APPROVED_FACT_SQL + _where(conditions, params) + " ORDER BY id LIMIT :limit OFFSET :offset"
+    sql = (
+        APPROVED_FACT_SQL + _where(conditions, params) + " ORDER BY id LIMIT :limit OFFSET :offset"
+    )
     return [dict(row) for row in session.execute(text(sql), params).mappings().all()]
 
 
@@ -102,7 +106,9 @@ def list_approved_terms(
     if procedure_id is not None:
         conditions.append("procedure_id = :procedure_id")
         params["procedure_id"] = procedure_id
-    sql = APPROVED_TERM_SQL + _where(conditions, params) + " ORDER BY id LIMIT :limit OFFSET :offset"
+    sql = (
+        APPROVED_TERM_SQL + _where(conditions, params) + " ORDER BY id LIMIT :limit OFFSET :offset"
+    )
     return [dict(row) for row in session.execute(text(sql), params).mappings().all()]
 
 
@@ -155,9 +161,7 @@ def list_approved_measurements(
 def approved_counts(session: Session) -> dict[str, int]:
     """Số dòng tri thức đã duyệt — luôn đọc qua view, không bao giờ bảng gốc."""
     return {
-        "facts": session.execute(
-            text("SELECT COUNT(*) FROM v_procedure_fact")
-        ).scalar_one(),
+        "facts": session.execute(text("SELECT COUNT(*) FROM v_procedure_fact")).scalar_one(),
         "standards": session.execute(
             text("SELECT COUNT(*) FROM v_procedure_standard")
         ).scalar_one(),
@@ -168,9 +172,7 @@ def approved_counts(session: Session) -> dict[str, int]:
 def approved_record_counts(session: Session) -> dict[str, int]:
     """Số hồ sơ/số liệu đo đã duyệt — đọc ``v_calibration_record``/``v_measurement_point``."""
     return {
-        "records": session.execute(
-            text("SELECT COUNT(*) FROM v_calibration_record")
-        ).scalar_one(),
+        "records": session.execute(text("SELECT COUNT(*) FROM v_calibration_record")).scalar_one(),
         "measurements": session.execute(
             text("SELECT COUNT(*) FROM v_measurement_point")
         ).scalar_one(),
