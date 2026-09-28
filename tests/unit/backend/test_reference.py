@@ -56,7 +56,7 @@ def _create_procedures(session) -> None:
 
 
 def test_seed_counts(session):
-    assert len(load_quantities(session)) == 6
+    assert len(load_quantities(session)) == 7
     assert len(load_device_types(session)) == len(DEVICE_TYPES) == 7
 
 

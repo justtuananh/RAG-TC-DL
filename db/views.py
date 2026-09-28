@@ -60,6 +60,15 @@ REFERENCE_VIEWS: tuple[str, ...] = (
     "v_procedure",
 )
 
+# Pha D1: view đã duyệt cho bốn danh mục hồ sơ NAS. Mỗi view chỉ lộ dòng có
+# extraction ``approved`` (P3) và kèm tên tài liệu để dựng xuất xứ P1.
+CATALOG_VIEWS: tuple[str, ...] = (
+    "v_lab_standard",
+    "v_inspector",
+    "v_procedure_catalog",
+    "v_capability",
+)
+
 # Bảng gốc giữ cả dữ liệu chưa duyệt — cấm truy cập trực tiếp từ tầng ``query/``.
 RAW_TABLES: tuple[str, ...] = (
     "extraction",
@@ -69,6 +78,10 @@ RAW_TABLES: tuple[str, ...] = (
     "device",
     "calibration_record",
     "measurement_point",
+    "lab_standard",
+    "inspector",
+    "procedure_catalog",
+    "capability",
 )
 
 _VIEW_SQL: dict[str, str] = {
@@ -110,6 +123,55 @@ _RECORD_VIEW_SQL: dict[str, str] = {
         "WHERE e.status = 'approved'"
     ),
 }
+
+# Định nghĩa ``v_measurement_detail`` TRƯỚC Sprint M (một đơn vị dùng chung cho cả
+# giá trị đo lẫn sai số). Migration 007 tạo view này khi cột ``error_unit_id`` chưa
+# tồn tại, nên định nghĩa cũ vẫn được giữ nguyên ở đây cho lịch sử migration.
+_MEASUREMENT_DETAIL_SQL_BASE: str = (
+    "CREATE VIEW v_measurement_detail AS "
+    "SELECT "
+    "m.id AS id, m.record_id AS record_id, m.ord AS ord, "
+    "m.step_code AS step_code, m.label AS label, "
+    "m.nominal_value AS nominal_value, m.measured_value AS measured_value, "
+    "m.error_value AS error_value, m.unit_id AS unit_id, "
+    "m.limit_value AS limit_value, m.within_limit AS within_limit, "
+    "m.note AS note, m.quote AS quote, m.nominal_text AS nominal_text, "
+    "m.measured_text AS measured_text, m.error_text AS error_text, "
+    "m.limit_text AS limit_text, u.code AS unit_code, u.name_vi AS unit_name, "
+    "r.device_id AS device_id, r.calibrated_at AS calibrated_at, "
+    "r.extraction_id AS extraction_id, r.verdict AS verdict, "
+    "r.procedure_id AS procedure_id, r.serial_no AS serial_no, "
+    "r.procedure_number AS procedure_number, r.file_stem AS file_stem "
+    "FROM measurement_point m "
+    "JOIN v_record_detail r ON r.id = m.record_id "
+    "LEFT JOIN unit u ON u.id = m.unit_id"
+)
+
+# Định nghĩa HIỆN HÀNH (Sprint M): thêm đơn vị riêng của sai số/giới hạn. Chỉ áp
+# dụng SAU migration 010 (khi cột ``error_unit_id`` đã tồn tại) qua
+# ``recreate_measurement_detail_view``; test SQLite dựng view trực tiếp cũng dùng nó.
+_MEASUREMENT_DETAIL_SQL: str = (
+    "CREATE VIEW v_measurement_detail AS "
+    "SELECT "
+    "m.id AS id, m.record_id AS record_id, m.ord AS ord, "
+    "m.step_code AS step_code, m.label AS label, "
+    "m.nominal_value AS nominal_value, m.measured_value AS measured_value, "
+    "m.error_value AS error_value, m.unit_id AS unit_id, "
+    "m.error_unit_id AS error_unit_id, "
+    "m.limit_value AS limit_value, m.within_limit AS within_limit, "
+    "m.note AS note, m.quote AS quote, m.nominal_text AS nominal_text, "
+    "m.measured_text AS measured_text, m.error_text AS error_text, "
+    "m.limit_text AS limit_text, u.code AS unit_code, u.name_vi AS unit_name, "
+    "eu.code AS error_unit_code, eu.name_vi AS error_unit_name, "
+    "r.device_id AS device_id, r.calibrated_at AS calibrated_at, "
+    "r.extraction_id AS extraction_id, r.verdict AS verdict, "
+    "r.procedure_id AS procedure_id, r.serial_no AS serial_no, "
+    "r.procedure_number AS procedure_number, r.file_stem AS file_stem "
+    "FROM measurement_point m "
+    "JOIN v_record_detail r ON r.id = m.record_id "
+    "LEFT JOIN unit u ON u.id = m.unit_id "
+    "LEFT JOIN unit eu ON eu.id = m.error_unit_id"
+)
 
 # View Sprint 8: xuất xứ P1 cho extraction đã duyệt và một dòng tra cứu "dày" đã
 # nối sẵn. `v_record_detail` tham chiếu `v_procedure_fact`/`v_extraction` nên phải
@@ -169,25 +231,7 @@ _QUERY_VIEW_SQL: dict[str, str] = {
     ),
     # Một dòng số liệu đo đã duyệt, kèm đơn vị và ngữ cảnh hồ sơ để bề mặt tra cứu
     # chỉ quét DUY NHẤT một view (không đọc bảng đơn vị trực tiếp).
-    "v_measurement_detail": (
-        "CREATE VIEW v_measurement_detail AS "
-        "SELECT "
-        "m.id AS id, m.record_id AS record_id, m.ord AS ord, "
-        "m.step_code AS step_code, m.label AS label, "
-        "m.nominal_value AS nominal_value, m.measured_value AS measured_value, "
-        "m.error_value AS error_value, m.unit_id AS unit_id, "
-        "m.limit_value AS limit_value, m.within_limit AS within_limit, "
-        "m.note AS note, m.quote AS quote, m.nominal_text AS nominal_text, "
-        "m.measured_text AS measured_text, m.error_text AS error_text, "
-        "m.limit_text AS limit_text, u.code AS unit_code, u.name_vi AS unit_name, "
-        "r.device_id AS device_id, r.calibrated_at AS calibrated_at, "
-        "r.extraction_id AS extraction_id, r.verdict AS verdict, "
-        "r.procedure_id AS procedure_id, r.serial_no AS serial_no, "
-        "r.procedure_number AS procedure_number, r.file_stem AS file_stem "
-        "FROM measurement_point m "
-        "JOIN v_record_detail r ON r.id = m.record_id "
-        "LEFT JOIN unit u ON u.id = m.unit_id"
-    ),
+    "v_measurement_detail": _MEASUREMENT_DETAIL_SQL_BASE,
 }
 
 # View tham chiếu Sprint 9: dữ liệu nền để phân giải tham số chat số liệu. Không
@@ -237,6 +281,26 @@ DROP_REFERENCE_VIEW_STATEMENTS: tuple[str, ...] = tuple(
     f"DROP VIEW IF EXISTS {name}" for name in REFERENCE_VIEWS
 )
 
+# View danh mục NAS: ``c.*`` cộng tên tài liệu; chỉ dòng đã duyệt mới lộ (P3).
+_CATALOG_VIEW_SQL: dict[str, str] = {
+    name: (
+        f"CREATE VIEW {name} AS "
+        f"SELECT c.*, d.file_stem AS file_stem, d.display_name AS display_name "
+        f"FROM {name[2:]} c "
+        "JOIN extraction e ON e.id = c.extraction_id "
+        "LEFT JOIN document d ON d.id = c.document_id "
+        "WHERE e.status = 'approved'"
+    )
+    for name in CATALOG_VIEWS
+}
+
+CREATE_CATALOG_VIEW_STATEMENTS: tuple[str, ...] = tuple(
+    _CATALOG_VIEW_SQL[name] for name in CATALOG_VIEWS
+)
+DROP_CATALOG_VIEW_STATEMENTS: tuple[str, ...] = tuple(
+    f"DROP VIEW IF EXISTS {name}" for name in CATALOG_VIEWS
+)
+
 
 def create_approved_views(connection) -> None:
     """Tạo ba view đã duyệt tri thức trên một connection đang mở (Alembic hoặc test)."""
@@ -278,6 +342,18 @@ def drop_query_views(connection) -> None:
         connection.execute(text(sql))
 
 
+def recreate_measurement_detail_view(connection, *, with_error_unit: bool = True) -> None:
+    """Tạo lại ``v_measurement_detail`` (migration 010 và test SQLite).
+
+    ``with_error_unit=True`` dùng định nghĩa hiện hành có cột ``error_unit_id``/
+    ``error_unit_code``; ``False`` là định nghĩa cũ để khôi phục khi downgrade.
+    Phải chạy SAU ``create_query_views`` vì view tham chiếu ``v_record_detail``.
+    """
+    connection.execute(text("DROP VIEW IF EXISTS v_measurement_detail"))
+    sql = _MEASUREMENT_DETAIL_SQL if with_error_unit else _MEASUREMENT_DETAIL_SQL_BASE
+    connection.execute(text(sql))
+
+
 def create_reference_views(connection) -> None:
     """Tạo view tham chiếu cho chat số liệu (Sprint 9) — migration 008/test."""
     for sql in CREATE_REFERENCE_VIEW_STATEMENTS:
@@ -290,12 +366,27 @@ def drop_reference_views(connection) -> None:
         connection.execute(text(sql))
 
 
+def create_catalog_views(connection) -> None:
+    """Tạo view đã duyệt cho bốn danh mục NAS (Pha D1) — migration 011/test."""
+    for sql in CREATE_CATALOG_VIEW_STATEMENTS:
+        connection.execute(text(sql))
+
+
+def drop_catalog_views(connection) -> None:
+    """Gỡ view danh mục NAS; an toàn khi chưa tồn tại."""
+    for sql in DROP_CATALOG_VIEW_STATEMENTS:
+        connection.execute(text(sql))
+
+
 def create_all_approved_views(connection) -> None:
     """Tạo toàn bộ view đã duyệt (tri thức + dữ liệu đo + tra cứu + tham chiếu)."""
     create_approved_views(connection)
     create_record_views(connection)
     create_reference_views(connection)
     create_query_views(connection)
+    create_catalog_views(connection)
+    # Sprint M: view hiện hành có thêm đơn vị sai số; tạo lại sau nhóm query.
+    recreate_measurement_detail_view(connection)
 
 
 # `FROM`/`JOIN`/`INSERT INTO`/`UPDATE`/`DELETE FROM` theo sau là tên bảng gốc.

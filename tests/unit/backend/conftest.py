@@ -70,8 +70,11 @@ def seed_dataset(session) -> dict:
     unit_bar = Unit(
         code="bar", name_vi="Bar", quantity_id=quantity.id, factor_to_si=100000.0, offset_to_si=0.0
     )
+    unit_percent = Unit(
+        code="%", name_vi="phần trăm", quantity_id=quantity.id, factor_to_si=1.0, offset_to_si=0.0
+    )
     device_type = DeviceType(name_vi="Van an toàn", quantity_id=quantity.id)
-    session.add_all([unit_pa, unit_bar, device_type])
+    session.add_all([unit_pa, unit_bar, unit_percent, device_type])
     session.flush()
 
     session.add_all(
@@ -252,6 +255,7 @@ def seed_dataset(session) -> dict:
                 measured_value=10.1,
                 error_value=0.1,
                 unit_id=unit_bar.id,
+                error_unit_id=unit_percent.id,
                 limit_value=0.5,
                 within_limit=1,
                 quote="1 | 10 | 10,1 | 0,1 | 0,5",
@@ -313,6 +317,7 @@ def seed_dataset(session) -> dict:
         "device_type_id": device_type.id,
         "unit_pa_id": unit_pa.id,
         "unit_bar_id": unit_bar.id,
+        "unit_percent_id": unit_percent.id,
         "procedure_id": procedure.id,
         "device_id": device.id,
         "pending_device_id": pending_device.id,

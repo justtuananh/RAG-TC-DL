@@ -266,3 +266,151 @@ def test_missing_serial_flags_device(session):
     session.commit()
     assert result.needs_identification is True
     assert session.get(Device, result.device_id).needs_identification == 1
+
+
+def test_record_only_alias_maps_cert_no(session):
+    """B6: "Số" (số biên bản) chỉ dùng khi ghi hồ sơ, không vào ``HEADER_ALIASES``."""
+    draft = _draft()
+    draft.fields.append(FieldDraft("Số", "012/BBKĐ-ĐLAS/2024"))
+    result = store_record_draft(
+        session, document=_document(session), draft=draft, procedure=_procedure(session)
+    )
+    session.commit()
+    assert session.get(CalibrationRecord, result.record_id).cert_no == "012/BBKĐ-ĐLAS/2024"
+
+
+def test_header_alias_variants_map_manufacturer_reviewer_cert(session):
+    """B6: biến thể nhãn biên bản pittông ánh xạ đúng trường."""
+    draft = _draft()
+    draft.fields += [
+        FieldDraft("Nước (hãng) sản xuất", "Budenberg"),
+        FieldDraft("Người kiểm soát", "Nguyễn Văn B"),
+        FieldDraft("Số biên bản", "012/BBKĐ"),
+    ]
+    result = store_record_draft(
+        session, document=_document(session), draft=draft, procedure=_procedure(session)
+    )
+    session.commit()
+    record = session.get(CalibrationRecord, result.record_id)
+    assert record.reviewer_name == "Nguyễn Văn B"
+    assert record.cert_no == "012/BBKĐ"
+    assert session.get(Device, result.device_id).manufacturer == "Budenberg"
+
+
+def _add_working_range_fact(session) -> int:
+    """Dữ kiện phạm vi đo ĐÃ DUYỆT mang đơn vị MPa (nguồn đơn vị mặc định K09)."""
+    from db.models import Quantity, Unit
+
+    quantity = Quantity(code="pressure_test", name_vi="Áp suất", si_unit_code="Pa")
+    session.add(quantity)
+    session.flush()
+    unit = Unit(code="MPa_test", name_vi="MPa", quantity_id=quantity.id, factor_to_si=1e6)
+    session.add(unit)
+    session.flush()
+    extraction = Extraction(
+        document_id=QTKD_STEM,
+        section_path="1 Phạm vi áp dụng",
+        quote="Phạm vi đo (0 đến 100) MPa",
+        extractor="rule:phamvi.v1",
+        extractor_version="v1",
+        confidence=0.95,
+        status=ExtractionStatus.APPROVED,
+    )
+    session.add(extraction)
+    session.flush()
+    session.add(
+        ProcedureFact(
+            extraction_id=extraction.id,
+            procedure_id=_procedure(session).id,
+            fact_kind="working_range",
+            label="Phạm vi đo",
+            value_text="(0 đến 100) MPa",
+            unit_id=unit.id,
+        )
+    )
+    session.commit()
+    return unit.id
+
+
+def test_point_without_unit_inherits_range_unit_only_when_allowed(session):
+    unit_id = _add_working_range_fact(session)
+    draft = RecordDraft(
+        extractor="record:xlsx.v1",
+        source_text="Số hiệu: SN-1",
+        fields=[FieldDraft(label="Số hiệu", value="SN-1")],
+        measurements=[
+            MeasurementDraft(ord=1, measured_text="10", measured_value=10.0),
+            # Bảng đã neo (ví dụ góc "2'" của bảng 2.1): không được gán MPa.
+            MeasurementDraft(ord=2, measured_text="2'", measured_value=2.0, inherit_unit=False),
+        ],
+    )
+    result = store_record_draft(
+        session, document=_document(session), draft=draft, procedure=_procedure(session)
+    )
+    points = (
+        session.query(MeasurementPoint)
+        .filter(MeasurementPoint.record_id == result.record_id)
+        .order_by(MeasurementPoint.ord)
+        .all()
+    )
+    assert [point.unit_id for point in points] == [unit_id, None]
+
+
+def _add_mass_and_percent_units(session) -> tuple[int, int]:
+    """Thêm đơn vị khối lượng ``g`` và đơn vị tương đối ``%``; trả (g_id, percent_id)."""
+    from db.models import Quantity, Unit
+
+    mass = Quantity(code="mass_test", name_vi="Khối lượng", si_unit_code="kg")
+    ratio = Quantity(code="ratio_test", name_vi="Tỉ lệ", si_unit_code="%")
+    session.add_all([mass, ratio])
+    session.flush()
+    gram = Unit(code="g", name_vi="gam", quantity_id=mass.id, factor_to_si=0.001)
+    percent = Unit(code="%", name_vi="phần trăm", quantity_id=ratio.id, factor_to_si=1.0)
+    session.add_all([gram, percent])
+    session.commit()
+    return gram.id, percent.id
+
+
+def test_measurement_error_unit_never_inherits_value_unit(session):
+    """Sprint M: bảng A.4 đo theo ``g`` nhưng sai số theo ``%``; điểm không có cột
+    sai số thì ``error_unit_id`` để trống, KHÔNG kế thừa đơn vị giá trị đo (P2)."""
+    gram_id, percent_id = _add_mass_and_percent_units(session)
+    draft = RecordDraft(
+        extractor="record:xlsx.v1",
+        source_text="Số hiệu: SN-1",
+        fields=[FieldDraft(label="Số hiệu", value="SN-1")],
+        measurements=[
+            MeasurementDraft(
+                ord=1,
+                measured_text="100",
+                measured_value=100.0,
+                unit_text="g",
+                error_text="0,017",
+                error_value=0.017,
+                error_unit_text="%",
+                inherit_unit=False,
+            ),
+            MeasurementDraft(
+                ord=2,
+                measured_text="200",
+                measured_value=200.0,
+                unit_text="g",
+                error_text="0,02",
+                error_value=0.02,
+                inherit_unit=False,
+            ),
+        ],
+    )
+    result = store_record_draft(
+        session, document=_document(session), draft=draft, procedure=_procedure(session)
+    )
+    points = (
+        session.query(MeasurementPoint)
+        .filter(MeasurementPoint.record_id == result.record_id)
+        .order_by(MeasurementPoint.ord)
+        .all()
+    )
+    assert [point.unit_id for point in points] == [gram_id, gram_id]
+    assert [point.error_unit_id for point in points] == [percent_id, None]
+    # P2: giá trị sai số giữ nguyên trạng từ tài liệu.
+    assert [point.error_value for point in points] == [0.017, 0.02]

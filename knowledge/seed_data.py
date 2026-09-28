@@ -18,6 +18,8 @@ QUANTITIES: list[dict] = [
     {"id": 4, "code": "length", "name_vi": "Độ dài", "si_unit_code": "m"},
     {"id": 5, "code": "mass", "name_vi": "Khối lượng", "si_unit_code": "kg"},
     {"id": 6, "code": "time", "name_vi": "Thời gian", "si_unit_code": "s"},
+    # Sprint M: đại lượng không thứ nguyên cho sai số tương đối ("%").
+    {"id": 7, "code": "ratio", "name_vi": "Tỉ lệ", "si_unit_code": "%"},
 ]
 
 # factor_to_si / offset_to_si theo công thức si = factor * x + offset.
@@ -55,6 +57,9 @@ UNITS: list[dict] = [
     {"id": 25, "code": "s", "name_vi": "giây", "quantity_id": 6, "factor_to_si": 1.0, "offset_to_si": 0.0, "aliases": ["s", "giây", "sec"]},
     {"id": 26, "code": "min", "name_vi": "phút", "quantity_id": 6, "factor_to_si": 60.0, "offset_to_si": 0.0, "aliases": ["min", "phút"]},
     {"id": 27, "code": "h", "name_vi": "giờ", "quantity_id": 6, "factor_to_si": 3600.0, "offset_to_si": 0.0, "aliases": ["h", "giờ", "hr"]},
+    # ── Không thứ nguyên ───────────────────────────────────────────────────────
+    # Sai số TƯƠNG ĐỐI trong biên bản ghi theo "%"; giữ hệ số 1 để không đổi số.
+    {"id": 28, "code": "%", "name_vi": "phần trăm", "quantity_id": 7, "factor_to_si": 1.0, "offset_to_si": 0.0, "aliases": ["%"]},
 ]
 
 # Loại phương tiện đo. Alias ở đây thay thế `_DEVICE_ALIASES` hardcode trong

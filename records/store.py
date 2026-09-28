@@ -93,8 +93,17 @@ class StoreResult:
         }
 
 
+# Alias CHỈ dùng khi ghi hồ sơ, xét SAU ``HEADER_ALIASES``. Không đưa vào
+# ``knowledge.record_labels`` vì ``all_labels()`` sẽ khiến luật Phụ lục A bắt nhầm
+# mọi dòng mở đầu bằng "Số" (ví dụ "Số: 012/BBKĐ-ĐLAS/2024") thành trường đầu mục.
+_RECORD_ONLY_ALIASES: dict[str, tuple[str, ...]] = {
+    "cert_no": ("số",),
+}
+
+
 def _lookup(header: dict[str, str], field_name: str) -> str | None:
-    for alias in _HEADER_ALIASES.get(field_name, ()):  # pragma: no branch
+    aliases = _HEADER_ALIASES.get(field_name, ()) + _RECORD_ONLY_ALIASES.get(field_name, ())
+    for alias in aliases:  # pragma: no branch
         value = header.get(vnnum.normalize_spaces(alias).casefold())
         if value:
             return value
@@ -281,7 +290,11 @@ def _working_range_unit_id(session: Session, procedure: Procedure | None) -> int
 
 
 def _measurement_row(
-    draft: MeasurementDraft, *, unit_id: int | None, record_id: int | None = None
+    draft: MeasurementDraft,
+    *,
+    unit_id: int | None,
+    error_unit_id: int | None = None,
+    record_id: int | None = None,
 ) -> MeasurementPoint:
     """Ánh xạ bản nháp sang bản ghi; KHÔNG tính lại bất kỳ số liệu nào (P2)."""
     within_limit: int | None = None
@@ -296,6 +309,7 @@ def _measurement_row(
         measured_value=draft.measured_value,
         error_value=draft.error_value,
         unit_id=unit_id,
+        error_unit_id=error_unit_id,
         limit_value=draft.limit_value,
         within_limit=within_limit,
         note=draft.note,
@@ -388,12 +402,25 @@ def store_record_draft(
     result.record_id = record.id
 
     for draft_point in draft.measurements:
-        # K09: đơn vị ưu tiên từ tiêu đề cột; không có thì lấy đơn vị working_range.
+        # K09: đơn vị ưu tiên từ tiêu đề cột; không có thì lấy đơn vị working_range,
+        # trừ khi bộ đọc báo bảng tự mang đơn vị (``inherit_unit=False``).
         if draft_point.unit_text:
             unit_id = _resolve_unit_id(session, draft_point.unit_text)
-        else:
+        elif draft_point.inherit_unit:
             unit_id = _working_range_unit_id(session, procedure)
-        session.add(_measurement_row(draft_point, unit_id=unit_id, record_id=record.id))
+        else:
+            unit_id = None
+        # Sprint M: đơn vị sai số CHỈ đến từ cột sai số của tài liệu (ví dụ "%" ở
+        # bảng A.4); KHÔNG kế thừa đơn vị giá trị đo hay working_range (P2).
+        error_unit_id = _resolve_unit_id(session, draft_point.error_unit_text)
+        session.add(
+            _measurement_row(
+                draft_point,
+                unit_id=unit_id,
+                error_unit_id=error_unit_id,
+                record_id=record.id,
+            )
+        )
         result.measurement_points += 1
 
     session.flush()

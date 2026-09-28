@@ -155,9 +155,10 @@ def test_section6_values_normalised_and_text_preserved(session, corpus_text):
     limit = next(
         row for row in rows if row.fact_kind == "max_permissible_error" and row.value_text == "3%"
     )
-    # "%" chưa seed → để trống số, giữ nguyên văn, không đoán đơn vị.
-    assert limit.value_min is None and limit.value_max is None
-    assert limit.unit_id is None
+    # Sprint M: "%" đã seed nên quy đổi được theo hệ số 1; giữ nguyên văn nguồn.
+    assert limit.value_min == pytest.approx(3.0)
+    assert limit.value_max == pytest.approx(3.0)
+    assert limit.unit_id is not None
 
 
 def test_section6_views_hide_pending_until_approved(session, corpus_text):

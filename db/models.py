@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy import (
     BigInteger,
     Column,
+    Date,
     DateTime,
     Enum as SQLEnum,
     Float,
@@ -454,6 +455,9 @@ class MeasurementPoint(Base):
     measured_value = Column(Float, nullable=True)
     error_value = Column(Float, nullable=True)
     unit_id = Column(Integer, ForeignKey("unit.id"), nullable=True)
+    # Sprint M: đơn vị RIÊNG của sai số/giới hạn khi khác đơn vị giá trị đo
+    # (sai số tương đối "%"). Không kế thừa ``unit_id`` (P2: chỉ đọc từ tài liệu).
+    error_unit_id = Column(Integer, ForeignKey("unit.id"), nullable=True)
     limit_value = Column(Float, nullable=True)
     within_limit = Column(Integer, nullable=True)  # SQLite compat: int bool
     note = Column(Text, nullable=True)
@@ -465,7 +469,137 @@ class MeasurementPoint(Base):
     limit_text = Column(Text, nullable=True)
 
     record = relationship("CalibrationRecord", back_populates="points")
-    unit = relationship("Unit")
+    unit = relationship("Unit", foreign_keys=[unit_id])
+    error_unit = relationship("Unit", foreign_keys=[error_unit_id])
 
     def __repr__(self) -> str:
         return f"<MeasurementPoint id={self.id} record_id={self.record_id} ord={self.ord}>"
+
+
+# ── Pha D1: danh mục hồ sơ NAS (Biểu 1, 3, 4, 7) ──────────────────────────────
+# Bốn bảng danh mục có cấu trúc, mỗi dòng gắn một ``extraction`` (giữ xuất xứ P1
+# và trạng thái duyệt P3) của tài liệu danh mục. Mỗi lần đọc sinh MỘT extraction
+# ``pending`` mang toàn bộ dòng; bản cũ chuyển ``superseded`` chứ không bị xóa.
+#
+# ``quote`` NOT NULL giữ nguyên văn dòng nguồn. Các danh sách (``usage_refs``,
+# ``inherited``, ``fields``, ``codes``, ``parameters``, ``procedure_codes``) lưu
+# JSON. ``search_text`` là cột DẪN XUẤT: bản không dấu, chữ thường của các trường
+# tra cứu, phục vụ tìm kiếm không dấu thống nhất trên SQLite lẫn PostgreSQL.
+# ``lab_standard.next_due_year``/``next_due_month`` cũng là giá trị DẪN XUẤT (lần
+# KĐ/HC gần nhất + chu kỳ), luôn đi kèm cờ ``next_due_derived`` để UI ghi "ước tính".
+
+
+class LabStandard(Base):
+    """Một chuẩn mẫu / phương tiện đo / phương tiện thử nghiệm (Biểu 3)."""
+    __tablename__ = "lab_standard"
+
+    id = Column(Integer, primary_key=True)
+    document_id = Column(String(128), ForeignKey("document.id"), nullable=False, index=True)
+    extraction_id = Column(Integer, ForeignKey("extraction.id"), nullable=False, index=True)
+    ord = Column(Integer, nullable=True)
+    quote = Column(Text, nullable=False)
+    name = Column(Text, nullable=False)
+    model = Column(String(255), nullable=True)
+    serial = Column(String(255), nullable=True)
+    characteristics = Column(Text, nullable=True)
+    interval_text = Column(String(128), nullable=True)
+    interval_months = Column(Integer, nullable=True)
+    last_cal_text = Column(Text, nullable=True)
+    last_cal_year = Column(Integer, nullable=True)
+    last_cal_month = Column(Integer, nullable=True)
+    last_cal_place = Column(Text, nullable=True)
+    usage_text = Column(Text, nullable=True)
+    usage_refs = Column(JSON, nullable=False, default=list)
+    inherited = Column(JSON, nullable=False, default=list)
+    # Hạn KĐ/HC kế tiếp (dẫn xuất) + cờ cho UI biết đây là "ước tính".
+    next_due_year = Column(Integer, nullable=True)
+    next_due_month = Column(Integer, nullable=True)
+    next_due_derived = Column(Integer, nullable=False, default=0)
+    search_text = Column(Text, nullable=True)
+
+    document = relationship("Document")
+    extraction = relationship("Extraction")
+
+    def __repr__(self) -> str:
+        return f"<LabStandard id={self.id} name={self.name!r}>"
+
+
+class Inspector(Base):
+    """Một kiểm định viên (Biểu 7)."""
+    __tablename__ = "inspector"
+
+    id = Column(Integer, primary_key=True)
+    document_id = Column(String(128), ForeignKey("document.id"), nullable=False, index=True)
+    extraction_id = Column(Integer, ForeignKey("extraction.id"), nullable=False, index=True)
+    ord = Column(Integer, nullable=True)
+    quote = Column(Text, nullable=False)
+    name = Column(Text, nullable=False)
+    birth_year = Column(Integer, nullable=True)
+    rank = Column(String(128), nullable=True)
+    position = Column(Text, nullable=True)
+    education = Column(Text, nullable=True)
+    specialization = Column(Text, nullable=True)
+    fields = Column(JSON, nullable=False, default=list)
+    card_no = Column(String(128), nullable=True)
+    card_date = Column(Date, nullable=True)
+    search_text = Column(Text, nullable=True)
+
+    document = relationship("Document")
+    extraction = relationship("Extraction")
+
+    def __repr__(self) -> str:
+        return f"<Inspector id={self.id} name={self.name!r}>"
+
+
+class ProcedureCatalog(Base):
+    """Một dòng danh mục tiêu chuẩn, quy trình áp dụng (Biểu 4)."""
+    __tablename__ = "procedure_catalog"
+
+    id = Column(Integer, primary_key=True)
+    document_id = Column(String(128), ForeignKey("document.id"), nullable=False, index=True)
+    extraction_id = Column(Integer, ForeignKey("extraction.id"), nullable=False, index=True)
+    ord = Column(Integer, nullable=True)
+    quote = Column(Text, nullable=False)
+    domain = Column(Text, nullable=True)
+    group_code = Column(String(16), nullable=True)
+    group_title = Column(Text, nullable=True)
+    code_text = Column(Text, nullable=False)
+    codes = Column(JSON, nullable=False, default=list)
+    title = Column(Text, nullable=False)
+    issuer = Column(Text, nullable=True)
+    year_issued = Column(Integer, nullable=True)
+    inherited = Column(JSON, nullable=False, default=list)
+    # Số QTKĐ để khớp ``procedure.number`` khi bề mặt tra cứu nối sang QTKĐ trong kho.
+    procedure_number = Column(String(32), nullable=True, index=True)
+    search_text = Column(Text, nullable=True)
+
+    document = relationship("Document")
+    extraction = relationship("Extraction")
+
+    def __repr__(self) -> str:
+        return f"<ProcedureCatalog id={self.id} number={self.procedure_number!r}>"
+
+
+class Capability(Base):
+    """Một lĩnh vực kiểm định/hiệu chuẩn được công nhận (Biểu 1)."""
+    __tablename__ = "capability"
+
+    id = Column(Integer, primary_key=True)
+    document_id = Column(String(128), ForeignKey("document.id"), nullable=False, index=True)
+    extraction_id = Column(Integer, ForeignKey("extraction.id"), nullable=False, index=True)
+    ord = Column(Integer, nullable=True)
+    quote = Column(Text, nullable=False)
+    group_code = Column(String(16), nullable=True)
+    group_title = Column(Text, nullable=True)
+    name = Column(Text, nullable=False)
+    parameters = Column(JSON, nullable=False, default=list)
+    procedure_codes = Column(JSON, nullable=False, default=list)
+    inspector_count = Column(Integer, nullable=True)
+    recognition = Column(String(32), nullable=True)
+    search_text = Column(Text, nullable=True)
+
+    document = relationship("Document")
+    extraction = relationship("Extraction")
+
+    def __repr__(self) -> str:
+        return f"<Capability id={self.id} name={self.name!r}>"

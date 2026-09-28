@@ -49,8 +49,8 @@ def test_migration_up_down_up(monkeypatch, tmp_path):
     _upgrade(url)
     tables = _table_names(url)
     assert NEW_TABLES <= tables
-    assert _count(url, "quantity") == 6
-    assert _count(url, "unit") == 27
+    assert _count(url, "quantity") == 7
+    assert _count(url, "unit") == 28
     assert _count(url, "device_type") == 7
 
     _downgrade(url, "base")
@@ -62,7 +62,7 @@ def test_migration_up_down_up(monkeypatch, tmp_path):
     _upgrade(url)
     tables = _table_names(url)
     assert NEW_TABLES <= tables
-    assert _count(url, "unit") == 27
+    assert _count(url, "unit") == 28
 
 
 def test_migration_downgrade_one_step_keeps_document(monkeypatch, tmp_path):
