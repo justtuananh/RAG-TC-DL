@@ -1,0 +1,435 @@
+[
+  {
+    "status": "clarify",
+    "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+    "prepare_seconds": 5.924957804381847e-06
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "id": "volume",
+      "title": "Dung tích làm việc bình phân ly",
+      "variables": [
+        {
+          "key": "vd",
+          "label": "Nước còn lại trong ống đong 500 mL",
+          "unit": "mL",
+          "min": 0,
+          "max": 500,
+          "exclusive_min": false
+        }
+      ],
+      "expression": "500-vd",
+      "unit": "mL",
+      "conditions": [
+        "initial"
+      ],
+      "source_fingerprint": "b28865136c08738c04c9c0448b11b395c327ff08b90029d5bcfc607b5dad5c4f",
+      "revision": "1"
+    },
+    "source": {
+      "id": "volume",
+      "title": "Dung tích làm việc bình phân ly",
+      "file": "QTKD 1.063 2021 BPL.docx",
+      "stem": "QTKD_1.063_2021_BPL",
+      "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật",
+      "docx_sha256": "88a6b7c26022b6985b3cd55392b6dacf8adfc156a46cec7b13dc5e228f09fe15",
+      "context": "\n* Đối với trường hợp kiểm định ban đầu: Dùng thước cặp, ống đong chia độ tiến hành kiểm tra dung tích chứa và các kích thước ngoài theo thuyết minh kỹ thuật.\n\nTiến hành kiểm tra dung tích làm việc của bình phân ly theo thứ tự các bước và yêu cầu sau đây:\n\n- Dùng chìa vặn tháo cút nối trên ra khỏi bình phân ly và dốc ngược để cho chất lỏng trong bình chảy ra hết;\n\n- Dùng ống đong chia độ 500 mL, đổ nước cất vào ống cho đến vạch mức 500 mL;\n\n- Để bình phân ly thẳng đứng, rót nước cất từ ống đong vào bình phân ly qua cút nối trên cho đến khi thấy nước bắt đầu chảy ra ở cút dưới thì ngừng rót;\n\n- Xác định định dung tích làm việc của bình phân ly theo công thức sau:\n\n$ V_{pl}=500- V_{đ} $ [1]\n\nTrong đó:\n\n$ V_{pl} $ - dung tích làm việc của bình phân ly, mL;\n\n$ V_{đ} $ - thể tích của lượng nước còn lại trong ống đong, ml.\n\n- Dung tích làm việc của bình phân ly phải đạt yêu cầu theo công bố của nhà sản xuất.\n\n* Đối với trường hợp kiểm định định kỳ: không áp dụng kiểm tra kỹ thuật\n\n",
+      "formulas": [
+        {
+          "fid": "F001",
+          "latex": "V_{pl}=500- V_{đ}",
+          "kind": "omml"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "b28865136c08738c04c9c0448b11b395c327ff08b90029d5bcfc607b5dad5c4f"
+    },
+    "metadata": {},
+    "prepare_seconds": 0.0017156470566987991
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "id": "rotation",
+      "title": "Hiệu chỉnh thời gian quay tự do pít tông H3000",
+      "variables": [
+        {
+          "key": "tau_t",
+          "label": "Thời gian ở nhiệt độ t",
+          "unit": "s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "eta_t",
+          "label": "Độ nhớt tại t",
+          "unit": "Pa.s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "eta",
+          "label": "Độ nhớt tiêu chuẩn",
+          "unit": "Pa.s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "dt",
+          "label": "Độ lớn chênh nhiệt độ",
+          "unit": "delta_degC",
+          "min": 3,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "expression": "tau_t*eta_t/eta",
+      "unit": "s",
+      "conditions": [
+        "rotation_conditions"
+      ],
+      "source_fingerprint": "6468470cf88c8aa670a58ef49d0e9bea8e06e061aaae2e518f56305eff041a74",
+      "revision": "1"
+    },
+    "source": {
+      "id": "rotation",
+      "title": "Hiệu chỉnh thời gian quay tự do pít tông H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\nThời gian quay tự do là khoảng thời gian mà pít tông tự quay trong xi lanh đo sau khi nó đã đạt một vận tốc góc nhất định và không có ngoại lực tác dụng thêm.\n\nThời gian quay tự do của pít tông được xác định trong các điều kiện sau:\n\n- Môi trường truyền áp suất phải phù hợp với môi trường mà nhà sản xuất quy định;\n\n- Ở áp suất 140 bar;\n\n- Vận tốc góc ban đầu là (30 ± 1,5) r/min;\n\n- Ở nhiệt độ tiêu chuẩn của pít tông/xi lanh hoặc lệch với nhiệt độ tiêu chuẩn được nhà sản xuất quy định;\n\n- Xác định thời gian quay tự do khi pít tông quay cùng chiều và ngược chiều kim đồng hồ.\n\nTrong trường hợp chênh lệch nhiệt độ pít tông/xi lanh lớn hơn 3 oC so với nhiệt độ tiêu chuẩn do nhà sản xuất quy định, thời gian quay tự do được tính như sau:\n\n$ τ=τ_{t}\\frac{η_{t}}{η} $ $\\tau = \\tau_{t} \\times \\frac{\\eta_{t}}{\\eta}$\n\nTrong đó:\n\n$ τ $ - Thời gian quay tự do ở nhiệt độ tiêu chuẩn, s;\n\n$ τ_{t} $ - Thời gian quay tự do ở nhiệt độ t, s;\n\n$ η $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, Pa · s;\n\n$ η_{t} $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ t, Pa · s.\n\nSai số cho phép của các phép đo đối với:\n\n- Thời gian quay tự do là: ± 10 s;\n\n- Nhiệt độ môi trường truyền áp suất là: ± 0,5 oC;\n\n- Vận tốc góc ban đầu là: ± 1,5 r/min.\n\nThời gian quay tự do của pít tông không nhỏ hơn 3 min.\n",
+      "formulas": [
+        {
+          "fid": "F002",
+          "latex": "\\tau = \\tau_{t} \\times \\frac{\\eta_{t}}{\\eta}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "6468470cf88c8aa670a58ef49d0e9bea8e06e061aaae2e518f56305eff041a74"
+    },
+    "metadata": {},
+    "prepare_seconds": 0.0025669439928606153
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "id": "fall",
+      "title": "Hiệu chỉnh tốc độ hạ pít tông H3000",
+      "variables": [
+        {
+          "key": "vt",
+          "label": "Tốc độ trung bình ba lần đo tại t",
+          "unit": "mm/min",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "eta_t",
+          "label": "Độ nhớt tại t",
+          "unit": "Pa.s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "eta",
+          "label": "Độ nhớt tiêu chuẩn",
+          "unit": "Pa.s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "dt",
+          "label": "Độ lớn chênh nhiệt độ",
+          "unit": "delta_degC",
+          "min": 2,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "expression": "vt*eta_t/eta",
+      "unit": "mm/min",
+      "conditions": [
+        "three_readings",
+        "fall_conditions"
+      ],
+      "source_fingerprint": "350e3d2ca50992133e4cd526cf30422e62b689ddd58f643997640fab5a722731",
+      "revision": "1"
+    },
+    "source": {
+      "id": "fall",
+      "title": "Hiệu chỉnh tốc độ hạ pít tông H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\n- Môi trường truyền áp suất phải phù hợp với môi trường mà nhà sản xuất quy định;\n\n- Ở áp suất 700 bar;\n\n- Ở nhiệt độ tiêu chuẩn, hoặc lệch với nhiệt độ tiêu chuẩn mà nhà sản xuất cho phép;\n\n- Pít tông đo được khoá kín và tách biệt khi hệ thống tạo áp.\n\nTrường hợp chênh lệch nhiệt độ pít tông so với nhiệt độ tiêu chuẩn lớn hơn 2 oC thì tốc độ hạ của pít tông tính như sau:\n\n$ V=V_{t}\\frac{η_{t}}{η} $ $V = V_{t} \\times \\frac{\\eta_{t}}{\\eta}$\n\nTrong đó:\n\n$ V $ - Tốc độ hạ của pít tông ở nhiệt độ tiêu chuẩn, mm/min;\n\n$ V_{t} $ - Tốc độ hạ của pít tông ở nhiệt độ t, mm/min;\n\n$ η $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, Pa · s;\n\n$ η_{t} $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ t, Pa · s.\n\nTốc độ hạ của pít tông là giá trị trung bình của ba lần đo và không vượt quá 3 mm/min.\n\n\n### 5.2.5 Kiểm tra độ nhạy của áp kế pít tông\n\n\nĐộ nhạy của H3000 được xác định ở áp suất 70 bar. H3000 được gọi là nhạy khi đặt một khối lượng 290 mg tương đương với áp suất 0,007 bar thì giá trị áp suất thay đổi nhận biết được trên AKC.",
+      "formulas": [
+        {
+          "fid": "F008",
+          "latex": "V = V_{t} \\times \\frac{\\eta_{t}}{\\eta}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "350e3d2ca50992133e4cd526cf30422e62b689ddd58f643997640fab5a722731"
+    },
+    "metadata": {},
+    "prepare_seconds": 0.0020457180216908455
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "id": "gravity",
+      "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+      "variables": [
+        {
+          "key": "p0",
+          "label": "Tổng áp suất khắc độ",
+          "unit": "bar",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "gd",
+          "label": "Gia tốc tại nơi đo",
+          "unit": "m/s2",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "g0",
+          "label": "Gia tốc khi khắc độ",
+          "unit": "m/s2",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "expression": "p0*gd/g0",
+      "unit": "bar",
+      "conditions": [
+        "different_gravity"
+      ],
+      "source_fingerprint": "7bc589a3b123fd1903ac7ffb9bb4d11982c5c6a6823753f1a4c39a48d0540c22",
+      "revision": "1"
+    },
+    "source": {
+      "id": "gravity",
+      "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\nNếu bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường tại nơi đo thì giá trị P tính bằng tổng giá trị áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra:\n\n\n| $P = P_{0}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$P_{0}$ $ Δ_{i} $ - Giá trị tổng áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra, bar.\n\nTrường hợp bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường khác với gia tốc trọng trường tại nơi đo, giá trị P được tính theo công thức sau:\n\n\n| $P = P_{0} \\times \\frac{g_{d}}{g_{0}}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$g_{0}$ $ Δ_{i} $ - Gia tốc trọng trường được sử dụng để khắc độ quả cân áp suất, m/s2;\n\n$g_{d}$ $ Δ_{i} $ - Gia tốc trọng trường tại nơi đo, m/s2.\n",
+      "formulas": [
+        {
+          "fid": "F027",
+          "latex": "P = P_{0} \\times \\frac{g_{d}}{g_{0}}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "7bc589a3b123fd1903ac7ffb9bb4d11982c5c6a6823753f1a4c39a48d0540c22"
+    },
+    "metadata": {},
+    "prepare_seconds": 0.002050076029263437
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "id": "valve",
+      "title": "Sai số áp suất chỉnh đặt van an toàn",
+      "variables": [
+        {
+          "key": "pm",
+          "label": "Áp suất mở van",
+          "unit": "Pa",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "pcd",
+          "label": "Áp suất chỉnh đặt",
+          "unit": "Pa",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "expression": "pm-pcd",
+      "unit": "Pa",
+      "conditions": [],
+      "source_fingerprint": "a17f9541a72ed70159256372650636d7bfa198d0dc29deb8c2f9478b0c214c29",
+      "revision": "1"
+    },
+    "source": {
+      "id": "valve",
+      "title": "Sai số áp suất chỉnh đặt van an toàn",
+      "file": "QTKD 1.061 2021 ND V2.docx",
+      "stem": "QTKD_1.061_2021_ND_V2",
+      "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
+      "docx_sha256": "e015e7615952b6aa5b9e48772536adce395efe5409d378dcd2c7412d69e838f5",
+      "context": "6.3.1 Xác định sai số của áp suất chỉnh đặt\n\nTăng áp suất hệ thống một cách từ từ đến điểm áp suất chỉnh đặt của van an toàn, khi gần đến điểm áp suất chỉnh đặt thì tập trung quan sát giá trị áp suất của hệ thống trên áp kế chuẩn đồng thời chậm rãi tăng giá trị áp suất của hệ thống. Khi giá trị áp suất hệ thống bắt đầu bị tụt chính là lúc van an toàn mở ra, giá trị áp suất lớn nhất mà hệ thống đạt được chính là giá trị áp suất mở van. Ghi kết quả vào Bảng của Phụ lục A.\n\nSai số của áp suất chỉnh đặt được xác định theo công thức sau:\n\n\n|  | $\\DeltaP_{cd} = P_{m} - P_{cd}$ |  |\n| --- | --- | --- |\n\n\ntrong đó:\n\n$\\DeltaP_{cd}$ - sai số của áp suất chỉnh đặt, Pa;\n\n$P_{cd}$ - áp suất chỉnh đặt, Pa;\n\n$P_{m}$ - áp suất mở van, Pa.\n\nGiá trị cho phép của sai số áp suất chỉnh đặt bằng ± 3% áp suất chỉnh đặt của van nhưng không nhỏ hơn ± 0,15 bar.",
+      "formulas": [
+        {
+          "fid": "F001",
+          "latex": "\\DeltaP_{cd} = P_{m} - P_{cd}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "a17f9541a72ed70159256372650636d7bfa198d0dc29deb8c2f9478b0c214c29"
+    },
+    "metadata": {},
+    "prepare_seconds": 0.0010251009371131659
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "id": "error",
+      "title": "Sai số tương đối H3000 từ hai lần đo",
+      "variables": [
+        {
+          "key": "p",
+          "label": "Áp suất danh nghĩa đã hiệu chỉnh trọng trường",
+          "unit": "bar",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "pc1",
+          "label": "Chỉ thị chuẩn lần 1",
+          "unit": "bar",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "pc2",
+          "label": "Chỉ thị chuẩn lần 2",
+          "unit": "bar",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        }
+      ],
+      "expression": "((p-pc1)+(p-pc2))/2/p*100",
+      "unit": "%",
+      "conditions": [
+        "pressure_corrected"
+      ],
+      "source_fingerprint": "cccdc26dfb87a81e5132ce81271ee9207abeafb2765e02a7b1499f1c0f889afa",
+      "revision": "1"
+    },
+    "source": {
+      "id": "error",
+      "title": "Sai số tương đối H3000 từ hai lần đo",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "- Sai số trong cả 3 trường hợp nêu trên đều được xác định theo các công thức sau:\n\n\n|  | $\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}$ |  |\n| --- | --- | --- |\n|  | $\\Delta_{1} = P - P_{c1}$ |  |\n|  | $\\Delta_{2} = P - P_{c2}$ |  |\n\n\nTrong đó:\n\n$\\Delta$ $ Δ_{i} $ - Sai số đo, bar;\n\n$\\Delta_{1},\\Delta_{2}$ $ Δ_{i} $ - Lần lượt là sai số đo của lần đo thứ nhất và thứ hai, bar;\n\n$P_{c1},P_{c2}$ $ Δ_{i} $ - Lần lượt là giá trị chỉ thị trên AKC tại lần đo thứ nhất và thứ hai, bar;\n\n$P$ $ P_{i} $ - Giá trị áp suất danh nghĩa tạo bởi H3000 tương ứng với giá trị gia tốc trọng trường tại nơi đo, bar.\n\nNếu bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường tại nơi đo thì giá trị P tính bằng tổng giá trị áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra:\n\n\n| $P = P_{0}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$P_{0}$ $ Δ_{i} $ - Giá trị tổng áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra, bar.\n\nTrường hợp bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường khác với gia tốc trọng trường tại nơi đo, giá trị P được tính theo công thức sau:\n\n\n| $P = P_{0} \\times \\frac{g_{d}}{g_{0}}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$g_{0}$ $ Δ_{i} $ - Gia tốc trọng trường được sử dụng để khắc độ quả cân áp suất, m/s2;\n\n$g_{d}$ $ Δ_{i} $ - Gia tốc trọng trường tại nơi đo, m/s2.\n\nSai số tương đối $\\delta$ được tính theo công thức sau:\n\n\n| $\\delta = \\frac{\\Delta}{P} \\times 100$ |  |\n| --- | --- |\n\n\nSai số tương đối của H3000 không được vượt quá ± 0,1 %.",
+      "formulas": [
+        {
+          "fid": "F013",
+          "latex": "\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F014",
+          "latex": "\\Delta_{1} = P - P_{c1}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F015",
+          "latex": "\\Delta_{2} = P - P_{c2}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F033",
+          "latex": "\\delta = \\frac{\\Delta}{P} \\times 100",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "cccdc26dfb87a81e5132ce81271ee9207abeafb2765e02a7b1499f1c0f889afa"
+    },
+    "metadata": {},
+    "prepare_seconds": 0.002154054003767669
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.001100903027690947
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.001107306918129325
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.0021040979772806168
+  },
+  {
+    "status": "blocked",
+    "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+    "prepare_seconds": 0.0015874520177021623
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.0018622110364958644
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.0017188999336212873
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.0011064501013606787
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.0012241880176588893
+  },
+  {
+    "status": "blocked",
+    "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+    "prepare_seconds": 0.0018356440123170614
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.002209229045547545
+  }
+]

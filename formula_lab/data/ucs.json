@@ -1,0 +1,3309 @@
+[
+  {
+    "id": "selection-01",
+    "split": "dev",
+    "group": "selection",
+    "formula": null,
+    "question": "Công thức sai số là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103000",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "clarify",
+    "unit": "Pa",
+    "result": "3000",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-02",
+    "split": "dev",
+    "group": "selection",
+    "formula": "volume",
+    "question": "Tôi cần nhập số liệu để tính dung tích làm việc bình phân ly theo quy trình.",
+    "inputs": {
+      "vd": {
+        "value": "126",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "374",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-03",
+    "split": "dev",
+    "group": "selection",
+    "formula": "rotation",
+    "question": "Giải thích hiệu chỉnh thời gian quay tự do pít tông h3000 và cho tôi công thức để nhập số.",
+    "inputs": {
+      "tau_t": {
+        "value": "202",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "161.6",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-04",
+    "split": "dev",
+    "group": "selection",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "5",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "ok",
+    "unit": "mm/min",
+    "result": "4.0",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-05",
+    "split": "dev",
+    "group": "selection",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "104",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "ok",
+    "unit": "bar",
+    "result": "101.92",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-06",
+    "split": "dev",
+    "group": "selection",
+    "formula": null,
+    "question": "Công thức sai số là gì?",
+    "inputs": {
+      "p": {
+        "value": "105",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "clarify",
+    "unit": "%",
+    "result": "6.190476190476190476190476190",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-07",
+    "split": "dev",
+    "group": "selection",
+    "formula": "valve",
+    "question": "Tôi cần nhập số liệu để tính sai số áp suất chỉnh đặt van an toàn theo quy trình.",
+    "inputs": {
+      "pm": {
+        "value": "103006",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3006",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-08",
+    "split": "dev",
+    "group": "selection",
+    "formula": "volume",
+    "question": "Giải thích dung tích làm việc bình phân ly và cho tôi công thức để nhập số.",
+    "inputs": {
+      "vd": {
+        "value": "132",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "368",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-09",
+    "split": "dev",
+    "group": "selection",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "208",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "166.4",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-10",
+    "split": "dev",
+    "group": "selection",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "11",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "ok",
+    "unit": "mm/min",
+    "result": "8.8",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-11",
+    "split": "holdout",
+    "group": "selection",
+    "formula": null,
+    "question": "Công thức sai số là gì?",
+    "inputs": {
+      "p0": {
+        "value": "110",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "clarify",
+    "unit": "bar",
+    "result": "107.80",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-12",
+    "split": "holdout",
+    "group": "selection",
+    "formula": "error",
+    "question": "Tôi cần nhập số liệu để tính sai số tương đối h3000 từ hai lần đo theo quy trình.",
+    "inputs": {
+      "p": {
+        "value": "111",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "ok",
+    "unit": "%",
+    "result": "11.26126126126126126126126126",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-13",
+    "split": "holdout",
+    "group": "selection",
+    "formula": "valve",
+    "question": "Giải thích sai số áp suất chỉnh đặt van an toàn và cho tôi công thức để nhập số.",
+    "inputs": {
+      "pm": {
+        "value": "103012",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3012",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-14",
+    "split": "holdout",
+    "group": "selection",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "138",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "362",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-15",
+    "split": "holdout",
+    "group": "selection",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "214",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "171.2",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-16",
+    "split": "holdout",
+    "group": "selection",
+    "formula": null,
+    "question": "Công thức sai số là gì?",
+    "inputs": {
+      "vt": {
+        "value": "17",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "clarify",
+    "unit": "mm/min",
+    "result": "13.6",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-17",
+    "split": "holdout",
+    "group": "selection",
+    "formula": "gravity",
+    "question": "Tôi cần nhập số liệu để tính hiệu chỉnh áp suất theo gia tốc trọng trường h3000 theo quy trình.",
+    "inputs": {
+      "p0": {
+        "value": "116",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "ok",
+    "unit": "bar",
+    "result": "113.68",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-18",
+    "split": "holdout",
+    "group": "selection",
+    "formula": "error",
+    "question": "Giải thích sai số tương đối h3000 từ hai lần đo và cho tôi công thức để nhập số.",
+    "inputs": {
+      "p": {
+        "value": "117",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "ok",
+    "unit": "%",
+    "result": "15.81196581196581196581196581",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-19",
+    "split": "holdout",
+    "group": "selection",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103018",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3018",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "selection-20",
+    "split": "holdout",
+    "group": "selection",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "144",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "356",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-01",
+    "split": "dev",
+    "group": "valid",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103",
+        "unit": "kPa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3000",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-02",
+    "split": "dev",
+    "group": "valid",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "126",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "374",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-03",
+    "split": "dev",
+    "group": "valid",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "202",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "161.6",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-04",
+    "split": "dev",
+    "group": "valid",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "0.08333333333333333333333333333",
+        "unit": "mm/s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "ok",
+    "unit": "mm/min",
+    "result": "4.0",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-05",
+    "split": "dev",
+    "group": "valid",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "104",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "ok",
+    "unit": "bar",
+    "result": "101.92",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-06",
+    "split": "dev",
+    "group": "valid",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "105",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "ok",
+    "unit": "%",
+    "result": "6.190476190476190476190476190",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-07",
+    "split": "dev",
+    "group": "valid",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103.006",
+        "unit": "kPa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3006",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-08",
+    "split": "dev",
+    "group": "valid",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "132",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "368",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-09",
+    "split": "dev",
+    "group": "valid",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "208",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "166.4",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-10",
+    "split": "dev",
+    "group": "valid",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "0.1833333333333333333333333333",
+        "unit": "mm/s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "ok",
+    "unit": "mm/min",
+    "result": "8.8",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-11",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "110",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "ok",
+    "unit": "bar",
+    "result": "107.80",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-12",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "111",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "ok",
+    "unit": "%",
+    "result": "11.26126126126126126126126126",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-13",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103.012",
+        "unit": "kPa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3012",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-14",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "138",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "362",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-15",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "214",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "171.2",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-16",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "0.2833333333333333333333333333",
+        "unit": "mm/s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "ok",
+    "unit": "mm/min",
+    "result": "13.6",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-17",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "116",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "ok",
+    "unit": "bar",
+    "result": "113.68",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-18",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "117",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "ok",
+    "unit": "%",
+    "result": "15.81196581196581196581196581",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-19",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103.018",
+        "unit": "kPa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3018",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "valid-20",
+    "split": "holdout",
+    "group": "valid",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "144",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "356",
+    "tolerance": "0.00000001",
+    "severity": "normal"
+  },
+  {
+    "id": "input-01",
+    "split": "dev",
+    "group": "input",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "Pa",
+    "result": "3000",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-02",
+    "split": "dev",
+    "group": "input",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "invalid",
+    "unit": "mL",
+    "result": "374",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-03",
+    "split": "dev",
+    "group": "input",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "1,234",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "s",
+    "result": "161.6",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-04",
+    "split": "dev",
+    "group": "input",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "5",
+        "unit": "kg"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "mm/min",
+    "result": "4.0",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-05",
+    "split": "dev",
+    "group": "input",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "NaN",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "invalid",
+    "unit": "bar",
+    "result": "101.92",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-06",
+    "split": "dev",
+    "group": "input",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "invalid",
+    "unit": "%",
+    "result": "6.190476190476190476190476190",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-07",
+    "split": "dev",
+    "group": "input",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "Pa",
+    "result": "3006",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-08",
+    "split": "dev",
+    "group": "input",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "1,234",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "invalid",
+    "unit": "mL",
+    "result": "368",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-09",
+    "split": "dev",
+    "group": "input",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "208",
+        "unit": "kg"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "s",
+    "result": "166.4",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-10",
+    "split": "dev",
+    "group": "input",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "NaN",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "mm/min",
+    "result": "8.8",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-11",
+    "split": "holdout",
+    "group": "input",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "invalid",
+    "unit": "bar",
+    "result": "107.80",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-12",
+    "split": "holdout",
+    "group": "input",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "invalid",
+    "unit": "%",
+    "result": "11.26126126126126126126126126",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-13",
+    "split": "holdout",
+    "group": "input",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "1,234",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "Pa",
+    "result": "3012",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-14",
+    "split": "holdout",
+    "group": "input",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "138",
+        "unit": "kg"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "invalid",
+    "unit": "mL",
+    "result": "362",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-15",
+    "split": "holdout",
+    "group": "input",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "NaN",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "s",
+    "result": "171.2",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-16",
+    "split": "holdout",
+    "group": "input",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "mm/min",
+    "result": "13.6",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-17",
+    "split": "holdout",
+    "group": "input",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "invalid",
+    "unit": "bar",
+    "result": "113.68",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-18",
+    "split": "holdout",
+    "group": "input",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "1,234",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "invalid",
+    "unit": "%",
+    "result": "15.81196581196581196581196581",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-19",
+    "split": "holdout",
+    "group": "input",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103018",
+        "unit": "kg"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "Pa",
+    "result": "3018",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "input-20",
+    "split": "holdout",
+    "group": "input",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "NaN",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "invalid",
+    "unit": "mL",
+    "result": "356",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-01",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103000",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "0",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "Pa",
+    "result": "3000",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-02",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "126",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "mL",
+    "result": "374",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-03",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "202",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "s",
+    "result": "161.6",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-04",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "5",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "mm/min",
+    "result": "4.0",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-05",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "0",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "invalid",
+    "unit": "bar",
+    "result": "101.92",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-06",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "105",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "%",
+    "result": "6.190476190476190476190476190",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-07",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103006",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "0",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "Pa",
+    "result": "3006",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-08",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "132",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "mL",
+    "result": "368",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-09",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "208",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "s",
+    "result": "166.4",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-10",
+    "split": "dev",
+    "group": "boundary",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "11",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "mm/min",
+    "result": "8.8",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-11",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "0",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "invalid",
+    "unit": "bar",
+    "result": "107.80",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-12",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "111",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "%",
+    "result": "11.26126126126126126126126126",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-13",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103012",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "0",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "Pa",
+    "result": "3012",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-14",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "138",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "mL",
+    "result": "362",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-15",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "214",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "invalid",
+    "unit": "s",
+    "result": "171.2",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-16",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "17",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "mm/min",
+    "result": "13.6",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-17",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "0",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "invalid",
+    "unit": "bar",
+    "result": "113.68",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-18",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "117",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "%",
+    "result": "15.81196581196581196581196581",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-19",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103018",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "0",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "Pa",
+    "result": "3018",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "boundary-20",
+    "split": "holdout",
+    "group": "boundary",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "144",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {},
+    "expect": "invalid",
+    "unit": "mL",
+    "result": "356",
+    "tolerance": "0.00000001",
+    "severity": "critical"
+  },
+  {
+    "id": "source-01",
+    "split": "dev",
+    "group": "source",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103000",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "blocked",
+    "unit": "Pa",
+    "result": "3000",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "operator"
+  },
+  {
+    "id": "source-02",
+    "split": "dev",
+    "group": "source",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "126",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "blocked",
+    "unit": "mL",
+    "result": "374",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "missing_definition"
+  },
+  {
+    "id": "source-03",
+    "split": "dev",
+    "group": "source",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "202",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "blocked",
+    "unit": "s",
+    "result": "161.6",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "version"
+  },
+  {
+    "id": "source-04",
+    "split": "dev",
+    "group": "source",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "5",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "blocked",
+    "unit": "mm/min",
+    "result": "4.0",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "wrong_source"
+  },
+  {
+    "id": "source-05",
+    "split": "dev",
+    "group": "source",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "104",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "blocked",
+    "unit": "bar",
+    "result": "101.92",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "missing_formula"
+  },
+  {
+    "id": "source-06",
+    "split": "dev",
+    "group": "source",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "105",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "blocked",
+    "unit": "%",
+    "result": "6.190476190476190476190476190",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "operator"
+  },
+  {
+    "id": "source-07",
+    "split": "dev",
+    "group": "source",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103006",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "blocked",
+    "unit": "Pa",
+    "result": "3006",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "missing_definition"
+  },
+  {
+    "id": "source-08",
+    "split": "dev",
+    "group": "source",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "132",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "blocked",
+    "unit": "mL",
+    "result": "368",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "version"
+  },
+  {
+    "id": "source-09",
+    "split": "dev",
+    "group": "source",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "208",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "blocked",
+    "unit": "s",
+    "result": "166.4",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "wrong_source"
+  },
+  {
+    "id": "source-10",
+    "split": "dev",
+    "group": "source",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "11",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "blocked",
+    "unit": "mm/min",
+    "result": "8.8",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "missing_formula"
+  },
+  {
+    "id": "source-11",
+    "split": "holdout",
+    "group": "source",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "110",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "blocked",
+    "unit": "bar",
+    "result": "107.80",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "operator"
+  },
+  {
+    "id": "source-12",
+    "split": "holdout",
+    "group": "source",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "111",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "blocked",
+    "unit": "%",
+    "result": "11.26126126126126126126126126",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "missing_definition"
+  },
+  {
+    "id": "source-13",
+    "split": "holdout",
+    "group": "source",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103012",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "blocked",
+    "unit": "Pa",
+    "result": "3012",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "version"
+  },
+  {
+    "id": "source-14",
+    "split": "holdout",
+    "group": "source",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "138",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "blocked",
+    "unit": "mL",
+    "result": "362",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "wrong_source"
+  },
+  {
+    "id": "source-15",
+    "split": "holdout",
+    "group": "source",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "214",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "blocked",
+    "unit": "s",
+    "result": "171.2",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "missing_formula"
+  },
+  {
+    "id": "source-16",
+    "split": "holdout",
+    "group": "source",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "17",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "blocked",
+    "unit": "mm/min",
+    "result": "13.6",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "operator"
+  },
+  {
+    "id": "source-17",
+    "split": "holdout",
+    "group": "source",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "116",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "blocked",
+    "unit": "bar",
+    "result": "113.68",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "missing_definition"
+  },
+  {
+    "id": "source-18",
+    "split": "holdout",
+    "group": "source",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "117",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "blocked",
+    "unit": "%",
+    "result": "15.81196581196581196581196581",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "version"
+  },
+  {
+    "id": "source-19",
+    "split": "holdout",
+    "group": "source",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103018",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "blocked",
+    "unit": "Pa",
+    "result": "3018",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "wrong_source"
+  },
+  {
+    "id": "source-20",
+    "split": "holdout",
+    "group": "source",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "144",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "blocked",
+    "unit": "mL",
+    "result": "356",
+    "tolerance": "0.00000001",
+    "severity": "critical",
+    "mutation": "missing_formula"
+  },
+  {
+    "id": "ui-01",
+    "split": "dev",
+    "group": "ui",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103000",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3000",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "edit_invalidates"
+  },
+  {
+    "id": "ui-02",
+    "split": "dev",
+    "group": "ui",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "126",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "374",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "late_response"
+  },
+  {
+    "id": "ui-03",
+    "split": "dev",
+    "group": "ui",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "202",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "161.6",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "restore"
+  },
+  {
+    "id": "ui-04",
+    "split": "dev",
+    "group": "ui",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "5",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "ok",
+    "unit": "mm/min",
+    "result": "4.0",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "source_binding"
+  },
+  {
+    "id": "ui-05",
+    "split": "dev",
+    "group": "ui",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "104",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "ok",
+    "unit": "bar",
+    "result": "101.92",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "revision"
+  },
+  {
+    "id": "ui-06",
+    "split": "dev",
+    "group": "ui",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "105",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "ok",
+    "unit": "%",
+    "result": "6.190476190476190476190476190",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "edit_invalidates"
+  },
+  {
+    "id": "ui-07",
+    "split": "dev",
+    "group": "ui",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103006",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3006",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "late_response"
+  },
+  {
+    "id": "ui-08",
+    "split": "dev",
+    "group": "ui",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "132",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "368",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "restore"
+  },
+  {
+    "id": "ui-09",
+    "split": "dev",
+    "group": "ui",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "208",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "166.4",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "source_binding"
+  },
+  {
+    "id": "ui-10",
+    "split": "dev",
+    "group": "ui",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "11",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "ok",
+    "unit": "mm/min",
+    "result": "8.8",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "revision"
+  },
+  {
+    "id": "ui-11",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "110",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "ok",
+    "unit": "bar",
+    "result": "107.80",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "edit_invalidates"
+  },
+  {
+    "id": "ui-12",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "111",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "ok",
+    "unit": "%",
+    "result": "11.26126126126126126126126126",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "late_response"
+  },
+  {
+    "id": "ui-13",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103012",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3012",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "restore"
+  },
+  {
+    "id": "ui-14",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "138",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "362",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "source_binding"
+  },
+  {
+    "id": "ui-15",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "rotation",
+    "question": "Công thức hiệu chỉnh thời gian quay tự do pít tông h3000 là gì?",
+    "inputs": {
+      "tau_t": {
+        "value": "214",
+        "unit": "s"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "4",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "rotation_conditions": true
+    },
+    "expect": "ok",
+    "unit": "s",
+    "result": "171.2",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "revision"
+  },
+  {
+    "id": "ui-16",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "fall",
+    "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
+    "inputs": {
+      "vt": {
+        "value": "17",
+        "unit": "mm/min"
+      },
+      "eta_t": {
+        "value": "0.8",
+        "unit": "Pa.s"
+      },
+      "eta": {
+        "value": "1",
+        "unit": "Pa.s"
+      },
+      "dt": {
+        "value": "3",
+        "unit": "delta_degC"
+      }
+    },
+    "confirmations": {
+      "three_readings": true,
+      "fall_conditions": true
+    },
+    "expect": "ok",
+    "unit": "mm/min",
+    "result": "13.6",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "edit_invalidates"
+  },
+  {
+    "id": "ui-17",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "gravity",
+    "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
+    "inputs": {
+      "p0": {
+        "value": "116",
+        "unit": "bar"
+      },
+      "gd": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "g0": {
+        "value": "10",
+        "unit": "m/s2"
+      }
+    },
+    "confirmations": {
+      "different_gravity": true
+    },
+    "expect": "ok",
+    "unit": "bar",
+    "result": "113.68",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "late_response"
+  },
+  {
+    "id": "ui-18",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "error",
+    "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
+    "inputs": {
+      "p": {
+        "value": "117",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "99",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "98",
+        "unit": "bar"
+      }
+    },
+    "confirmations": {
+      "pressure_corrected": true
+    },
+    "expect": "ok",
+    "unit": "%",
+    "result": "15.81196581196581196581196581",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "restore"
+  },
+  {
+    "id": "ui-19",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "valve",
+    "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+    "inputs": {
+      "pm": {
+        "value": "103018",
+        "unit": "Pa"
+      },
+      "pcd": {
+        "value": "100000",
+        "unit": "Pa"
+      }
+    },
+    "confirmations": {},
+    "expect": "ok",
+    "unit": "Pa",
+    "result": "3018",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "source_binding"
+  },
+  {
+    "id": "ui-20",
+    "split": "holdout",
+    "group": "ui",
+    "formula": "volume",
+    "question": "Công thức dung tích làm việc bình phân ly là gì?",
+    "inputs": {
+      "vd": {
+        "value": "144",
+        "unit": "mL"
+      }
+    },
+    "confirmations": {
+      "initial": true
+    },
+    "expect": "ok",
+    "unit": "mL",
+    "result": "356",
+    "tolerance": "0.00000001",
+    "severity": "normal",
+    "ui_action": "revision"
+  }
+]
