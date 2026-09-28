@@ -427,6 +427,7 @@ class CalibrationRecord(Base):
     points = relationship(
         "MeasurementPoint", back_populates="record", order_by="MeasurementPoint.ord"
     )
+    fields = relationship("RecordField", back_populates="record", order_by="RecordField.ord")
 
     def __repr__(self) -> str:
         return f"<CalibrationRecord id={self.id} device_id={self.device_id} verdict={self.verdict}>"
@@ -467,6 +468,10 @@ class MeasurementPoint(Base):
     measured_text = Column(Text, nullable=True)
     error_text = Column(Text, nullable=True)
     limit_text = Column(Text, nullable=True)
+    # Nguyên văn MỌI ô của dòng kèm tên cột lấy từ chính biên bản:
+    # ``[{"column": "Kết quả, s Cùng chiều kim đồng hồ", "text": "212,0"}, ...]``.
+    # Giữ được từng lượt đo, áp suất khí quyển... mà các cột vai trò bỏ qua (P1).
+    cells = Column(JSON, nullable=True)
 
     record = relationship("CalibrationRecord", back_populates="points")
     unit = relationship("Unit", foreign_keys=[unit_id])
@@ -474,6 +479,41 @@ class MeasurementPoint(Base):
 
     def __repr__(self) -> str:
         return f"<MeasurementPoint id={self.id} record_id={self.record_id} ord={self.ord}>"
+
+
+class RecordField(Base):
+    """Một trường đầu mục của biên bản (phạm vi đo, A0, uCmax...), giữ nguyên văn.
+
+    ``field_key`` là slug của nhãn (``Phạm vi đo`` → ``pham_vi_do``). ``source`` cho
+    biết nhãn đến từ Phụ lục A đã duyệt (``appendix``) hay là dòng nhãn tự do của
+    chính biên bản (``record``, ví dụ ``U(p) =``). Các cột số CHỈ là kết quả phân
+    tích ``value_text`` (P2), lưu theo SI giống ``procedure_fact``; ``unit_text``
+    giữ nguyên đơn vị gốc. Trường chỉ lộ qua ``v_record_field`` khi hồ sơ đã duyệt.
+    """
+
+    __tablename__ = "record_field"
+
+    id = Column(Integer, primary_key=True)
+    record_id = Column(
+        Integer, ForeignKey("calibration_record.id"), nullable=False, index=True
+    )
+    ord = Column(Integer, nullable=True)
+    field_key = Column(String(128), nullable=False, index=True)
+    label = Column(Text, nullable=False)
+    value_text = Column(Text, nullable=True)
+    quote = Column(Text, nullable=True)
+    source = Column(String(16), nullable=False, default="appendix")
+    rel_op = Column(String(16), nullable=True)
+    value_min = Column(Float, nullable=True)
+    value_max = Column(Float, nullable=True)
+    unit_id = Column(Integer, ForeignKey("unit.id"), nullable=True)
+    unit_text = Column(String(64), nullable=True)
+
+    record = relationship("CalibrationRecord", back_populates="fields")
+    unit = relationship("Unit")
+
+    def __repr__(self) -> str:
+        return f"<RecordField id={self.id} record_id={self.record_id} key={self.field_key}>"
 
 
 # ── Pha D1: danh mục hồ sơ NAS (Biểu 1, 3, 4, 7) ──────────────────────────────

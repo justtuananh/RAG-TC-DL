@@ -372,8 +372,15 @@ export interface DataRecordRow {
   range_max_display: number | null;
   range_unit_code: string | null;
   range_fact_id: number | null;
+  /** Pha R: trường phạm vi đo ghi trên chính biên bản (null nếu rơi về QTKĐ). */
+  range_field_id?: number | null;
+  /** "record": phạm vi của chính thiết bị; "procedure": phạm vi áp dụng của QTKĐ. */
+  range_source?: "record" | "procedure" | null;
+  /** Nguyên văn phạm vi đo, ví dụ "(50 đến 2 500) kgf/cm2;". */
+  range_text?: string | null;
   accuracy_text: string | null;
   accuracy_fact_id: number | null;
+  accuracy_field_id?: number | null;
   measurement_count: number | null;
   document_id: string | null;
   file_stem: string | null;

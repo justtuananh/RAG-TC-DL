@@ -36,6 +36,9 @@ class MeasurementDraft:
     # Thiếu đơn vị thì tầng store được dùng đơn vị ``working_range`` của QTKĐ (K09).
     # Bảng đã nhận diện rõ cấu trúc đặt False: đơn vị chỉ đến từ chính bảng đó.
     inherit_unit: bool = True
+    # Nguyên văn MỌI ô của dòng kèm tên cột của chính bảng nguồn (P1), kể cả ô không
+    # có vai trò: ``[{"column": "Lượt 1", "text": "0,33"}, ...]``.
+    cells: list[dict[str, str]] = field(default_factory=list)
 
     # Chỉ là kết quả phân tích các ``*_text`` ở trên — không bao giờ được tính lại.
     nominal_value: float | None = None
@@ -63,6 +66,9 @@ class FieldDraft:
     label: str
     value: str
     quote: str = ""
+    # ``appendix``: nhãn Phụ lục A đã duyệt; ``record``: dòng nhãn tự do của chính
+    # biên bản (``U(p) =``) mà Phụ lục A không liệt kê.
+    source: str = "appendix"
 
 
 @dataclass

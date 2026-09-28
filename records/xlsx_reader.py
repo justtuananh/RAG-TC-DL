@@ -161,6 +161,56 @@ def _header_fields(
     return fields
 
 
+# Dòng nhãn tự do của chính biên bản, ngoài Phụ lục A: "U(p) = | 1 575,000 × 10-3".
+_FREE_LABEL_RE = re.compile(r"^(?P<label>[^\d\s:=][^:=]{0,60}?)\s*[:=]\s*$")
+_MAX_FREE_LABEL_WORDS = 8
+
+
+def _compact(label: str) -> str:
+    """Slug liền không dấu gạch: "pít tông" và "píttông" cùng một khóa."""
+    return _slug(label).replace("_", "")
+
+
+def _free_fields(sheets: list[Sheet], regions: list[TableRegion], known) -> list[FieldDraft]:
+    """Trường ``nhãn =`` / ``nhãn:`` mà Phụ lục A không liệt kê nhưng biên bản có ghi.
+
+    Chỉ nhận ô nhãn đứng đầu dòng (ngoài mọi bảng đã neo), có giá trị chứa số ở các
+    ô bên phải. Bỏ qua nhãn đã đọc (so slug liền) và giá trị trùng một trường đã
+    đọc ("Nhiệt độ môi trường" lặp lại "Nhiệt độ"). Giá trị giữ nguyên văn (P1).
+    """
+    seen = {_compact(item.label) for item in known}
+    values = {_clean(item.value) for item in known if _clean(item.value)}
+    fields: list[FieldDraft] = []
+    for sheet_index, sheet in enumerate(sheets):
+        for row, cells in enumerate(sheet.rows):
+            outside = [
+                _clean(cell)
+                for col, cell in enumerate(cells)
+                if _clean(cell) and not any(region.covers(sheet_index, row, col) for region in regions)
+            ]
+            if len(outside) < 2:
+                continue
+            match = _FREE_LABEL_RE.match(outside[0])
+            if match is None:
+                continue
+            label = match.group("label").strip()
+            value = _clean(" ".join(outside[1:]))
+            key = _compact(label)
+            if (
+                not key
+                or key in seen
+                or value in values
+                or len(label.split()) > _MAX_FREE_LABEL_WORDS
+                or not any(char.isdigit() for char in value)
+            ):
+                continue
+            quote = " | ".join(_clean(cell) for cell in cells if _clean(cell))
+            fields.append(FieldDraft(label=label, value=value, quote=quote, source="record"))
+            seen.add(key)
+            values.add(value)
+    return fields
+
+
 def _legacy_table(grid: list[list[str]], table) -> list[MeasurementDraft] | None:
     """Một bảng theo cách cũ trên MỘT sheet; ``None`` nếu sheet không có dòng tiêu đề khớp."""
     header_index = next(
@@ -225,6 +275,7 @@ def read_xlsx(
     mark_fields, warnings = record_mark_fields([sheet.rows for sheet in sheets])
     seen = {_slug(field.label) for field in fields}
     fields.extend(field for field in mark_fields if _slug(field.label) not in seen)
+    fields.extend(_free_fields(sheets, regions, fields))
     return RecordDraft(
         extractor=EXTRACTOR,
         source_text=_source_text(sheets),

@@ -29,14 +29,17 @@ from db.models import (
     ExtractionStatus,
     MeasurementPoint,
     Procedure,
+    RecordField,
     Unit,
 )
 from knowledge import units as units_module
 from knowledge import vnnum
 from knowledge.record_labels import HEADER_ALIASES as _HEADER_ALIASES
 from query import approved as approved_query
+from records.field_values import parse_field_value
 from records.matching import find_or_create_device
-from records.types import MeasurementDraft, RecordDraft
+from records.template import slugify
+from records.types import FieldDraft, MeasurementDraft, RecordDraft
 
 EXTRACTOR_VERSION = "v1"
 DEFAULT_CONFIDENCE = 0.9
@@ -318,7 +321,50 @@ def _measurement_row(
         measured_text=draft.measured_text,
         error_text=draft.error_text,
         limit_text=draft.limit_text,
+        cells=list(draft.cells) or None,
     )
+
+
+def field_rows(
+    session: Session, fields: list[FieldDraft], *, record_id: int | None = None
+) -> list[RecordField]:
+    """Ánh xạ trường đầu mục sang ``record_field``; số CHỈ phân tích từ nguyên văn (P2).
+
+    Trường rỗng (giá trị mẫu để trống) không ghi. Số lưu theo SI khi đơn vị nhận
+    diện được (giống ``procedure_fact``); đơn vị lạ giữ số theo đơn vị gốc và
+    ``unit_id`` rỗng, ``unit_text`` luôn giữ nguyên văn đơn vị.
+    """
+    unit_defs = units_module.load_unit_defs(session)
+    unit_ids = {row.code: row.id for row in session.query(Unit).all()}
+    rows: list[RecordField] = []
+    for ord_, item in enumerate(fields, start=1):
+        value_text = vnnum.normalize_spaces(item.value or "").strip()
+        key = slugify(item.label)
+        if not value_text or not key:
+            continue
+        parsed = parse_field_value(value_text)
+        unit_def = units_module.resolve_unit(parsed.unit_text, unit_defs)
+        value_min, value_max = parsed.value_min, parsed.value_max
+        if unit_def is not None:
+            value_min = None if value_min is None else units_module.to_si(value_min, unit_def)
+            value_max = None if value_max is None else units_module.to_si(value_max, unit_def)
+        rows.append(
+            RecordField(
+                record_id=record_id,
+                ord=ord_,
+                field_key=key[:128],
+                label=item.label,
+                value_text=value_text,
+                quote=item.quote or None,
+                source=item.source,
+                rel_op=parsed.rel_op,
+                value_min=value_min,
+                value_max=value_max,
+                unit_id=unit_ids.get(unit_def.code) if unit_def is not None else None,
+                unit_text=(parsed.unit_text or None) and parsed.unit_text[:64],
+            )
+        )
+    return rows
 
 
 def store_record_draft(
@@ -400,6 +446,8 @@ def store_record_draft(
     session.add(record)
     session.flush()
     result.record_id = record.id
+    for row in field_rows(session, draft.fields, record_id=record.id):
+        session.add(row)
 
     for draft_point in draft.measurements:
         # K09: đơn vị ưu tiên từ tiêu đề cột; không có thì lấy đơn vị working_range,

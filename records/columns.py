@@ -180,7 +180,13 @@ def map_measurement_row(columns: list[str], cells: list[str]) -> MeasurementDraf
     Giá trị số chỉ được phân tích từ chính ô nguồn (P2). Cột không nhận vai trò
     nào được giữ trong ``note`` để không mất dữ liệu.
     """
-    draft = MeasurementDraft(quote=" | ".join(cells))
+    draft = MeasurementDraft(
+        quote=" | ".join(cells),
+        cells=[
+            {"column": column, "text": cell.strip()}
+            for column, cell in zip(columns, cells, strict=False)
+        ],
+    )
     extras: list[str] = []
     for column, cell in zip(columns, cells, strict=False):
         _apply_cell(draft, role_for_column(column), column, cell.strip(), extras)

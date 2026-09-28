@@ -1,3 +1,4 @@
+import type { DataRecordRow } from "../../types";
 import { COLOR } from "../../theme";
 
 // Định dạng hiển thị dùng chung cho tab Dữ liệu.
@@ -19,11 +20,7 @@ export function formatDate(value: string | null | undefined): string {
   return `${day}/${month}/${date.getFullYear()}`;
 }
 
-export function formatRange(
-  min: number | null | undefined,
-  max: number | null | undefined,
-  unit: string | null | undefined,
-): string {
+export function formatRange(min: number | null | undefined, max: number | null | undefined, unit: string | null | undefined): string {
   const hasMin = min !== null && min !== undefined;
   const hasMax = max !== null && max !== undefined;
   if (!hasMin && !hasMax) return "—";
@@ -54,4 +51,10 @@ export function withinLimitTone(within: boolean | null | undefined): Tone {
   if (within === true) return { label: "Trong giới hạn", fg: COLOR.textOnDark, bg: COLOR.success };
   if (within === false) return { label: "Vượt giới hạn", fg: COLOR.textOnDark, bg: COLOR.danger };
   return { label: "Chưa đủ dữ liệu", fg: COLOR.textSecondary, bg: COLOR.neutralBg };
+}
+
+/** Phạm vi đo: nguyên văn biên bản khi có; phạm vi áp dụng của QTKĐ thì ghi rõ nguồn. */
+export function rangeLabel(record: DataRecordRow): string {
+  const text = record.range_text ?? formatRange(record.range_min_display, record.range_max_display, record.range_unit_code);
+  return record.range_source === "procedure" && text !== "—" ? `${text} (theo QTKĐ)` : text;
 }

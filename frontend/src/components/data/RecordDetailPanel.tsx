@@ -1,7 +1,7 @@
 import type { DataCellRef, DataMeasurement, DataRecordRow } from "../../types";
 import { COLOR } from "../../theme";
 import { IcArrowRight, IcClock, IcFile, IcLink, IcX } from "../common/icons";
-import { formatDate, formatNumber, formatRange, verdictTone, withinLimitTone } from "./format";
+import { formatDate, formatNumber, rangeLabel, verdictTone, withinLimitTone } from "./format";
 
 // Bảng chi tiết một hồ sơ: các trường đầu mục + điểm đo. Mỗi ô số là nút mở xuất xứ.
 
@@ -126,7 +126,7 @@ export default function RecordDetailPanel({
           <dt style={dtStyle}>Phạm vi đo</dt>
           <dd style={ddStyle}>
             <ProvButton
-              label={formatRange(record.range_min_display, record.range_max_display, record.range_unit_code)}
+              label={rangeLabel(record)}
               cellRef={ref("range_min")}
               onOpen={onOpenProvenance}
             />

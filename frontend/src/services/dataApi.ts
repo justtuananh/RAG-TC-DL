@@ -114,7 +114,7 @@ export function provenanceParams(ref: DataCellRef): Record<string, string | numb
   if (ref.kind === "measurement") return { measurement_id: ref.id, field: ref.field };
   if (ref.kind === "fact") return { fact_id: ref.id };
   if (ref.kind === "extraction") return { extraction_id: ref.id };
-  return { record_id: ref.id };
+  return { record_id: ref.id, field: ref.field };
 }
 
 export async function fetchProvenance(ref: DataCellRef): Promise<ProvenanceSource> {

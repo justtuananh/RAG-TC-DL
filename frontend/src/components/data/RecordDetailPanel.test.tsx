@@ -1,6 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import type { DataMeasurement, DataRecordRow } from "../../types";
+import { rangeLabel } from "./format";
 import RecordDetailPanel from "./RecordDetailPanel";
 
 // Panel "Chi tiết hồ sơ" > "Điểm đo": M1 đơn vị sai số riêng, M2 giá trị trống
@@ -87,13 +88,7 @@ function makeRecord(measurements: DataMeasurement[]): DataRecordRow {
 
 function render(measurements: DataMeasurement[]): string {
   return renderToStaticMarkup(
-    <RecordDetailPanel
-      record={makeRecord(measurements)}
-      loading={false}
-      onClose={() => {}}
-      onOpenProvenance={() => {}}
-      onOpenDevice={() => {}}
-    />,
+    <RecordDetailPanel record={makeRecord(measurements)} loading={false} onClose={() => {}} onOpenProvenance={() => {}} onOpenDevice={() => {}} />,
   );
 }
 
@@ -140,5 +135,21 @@ describe("RecordDetailPanel — điểm đo", () => {
   it("M3: thiếu mục đo hoặc nhãn vẫn có nhãn mốc", () => {
     expect(render([makePoint({ step_code: "A.4", label: null })])).toContain("A.4");
     expect(render([makePoint({ step_code: null, label: "5" })])).toContain("5");
+  });
+});
+
+describe("RecordDetailPanel — phạm vi đo", () => {
+  it("R1: hiện nguyên văn phạm vi đo ghi trên chính biên bản", () => {
+    const record = { ...makeRecord([]), range_text: "(50 đến 2 500) kgf/cm2;", range_source: "record" as const };
+    expect(rangeLabel(record)).toBe("(50 đến 2 500) kgf/cm2;");
+  });
+
+  it("R2: phạm vi lấy theo QTKĐ được ghi rõ nguồn", () => {
+    const record = { ...makeRecord([]), range_text: "(- 0,1 đến 500) MPa", range_source: "procedure" as const };
+    expect(rangeLabel(record)).toBe("(- 0,1 đến 500) MPa (theo QTKĐ)");
+  });
+
+  it("R3: không có phạm vi thì hiện gạch", () => {
+    expect(rangeLabel(makeRecord([]))).toBe("—");
   });
 });

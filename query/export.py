@@ -191,8 +191,17 @@ def build_export_rows(
             section_path=record.get("extraction_section_path"),
             chunk_id=record.get("extraction_chunk_id"),
         )
-        range_ref = _fact_ref(record.get("range_fact_id"), fact_lookup)
-        accuracy_ref = _fact_ref(record.get("accuracy_fact_id"), fact_lookup)
+        # Pha R: phạm vi đo / cấp chính xác ghi trên chính biên bản → nguồn là hồ sơ.
+        range_ref = (
+            record_ref
+            if record.get("range_field_id") is not None
+            else _fact_ref(record.get("range_fact_id"), fact_lookup)
+        )
+        accuracy_ref = (
+            record_ref
+            if record.get("accuracy_field_id") is not None
+            else _fact_ref(record.get("accuracy_fact_id"), fact_lookup)
+        )
         expires_ref = record_ref
         if record.get("expires_from_fact_id") is not None:
             expires_ref = _fact_ref(record.get("expires_from_fact_id"), fact_lookup)

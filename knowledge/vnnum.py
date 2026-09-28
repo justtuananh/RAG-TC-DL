@@ -147,6 +147,16 @@ def parse_number(text: str | None) -> float | None:
         return None
 
 
+def prepare_numbers(text: str | None) -> str:
+    """Chuẩn hóa khoảng trắng, ký hiệu khoa học và nhóm nghìn trước khi tách số."""
+    return _strip_grouping(_normalize_scientific(normalize_spaces(text or "")))
+
+
+def first_number_token(prepared: str) -> re.Match[str] | None:
+    """Token số đầu tiên trong chuỗi ĐÃ qua ``prepare_numbers`` (giữ vị trí để đọc đơn vị)."""
+    return _NUMBER_TOKEN_RE.search(prepared)
+
+
 def _numbers(text: str) -> list[float]:
     prepared = _strip_grouping(_normalize_scientific(normalize_spaces(text)))
     values: list[float] = []

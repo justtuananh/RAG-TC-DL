@@ -32,7 +32,10 @@ describe("dataApi", () => {
       field: "error",
     });
     expect(provenanceParams({ field: "range_min", kind: "fact", id: 12 })).toEqual({ fact_id: 12 });
-    expect(provenanceParams({ field: "calibrated_at", kind: "record", id: 3 })).toEqual({ record_id: 3 });
+    expect(provenanceParams({ field: "calibrated_at", kind: "record", id: 3 })).toEqual({
+      record_id: 3,
+      field: "calibrated_at",
+    });
     expect(provenanceParams({ field: "quote", kind: "extraction", id: 5 })).toEqual({ extraction_id: 5 });
   });
 
@@ -52,6 +55,13 @@ describe("dataApi", () => {
     expect(calls[0]).toContain("/api/data/provenance?");
     expect(calls[0]).toContain("measurement_id=9");
     expect(calls[0]).toContain("field=error");
+  });
+
+  it("fetchProvenance của ô hồ sơ gửi kèm field để tô đúng trường", async () => {
+    const calls = mockJson({ kind: "record" });
+    await fetchProvenance({ field: "range_min", kind: "record", id: 21 });
+    expect(calls[0]).toContain("record_id=21");
+    expect(calls[0]).toContain("field=range_min");
   });
 
   it("exportFilename có tiền tố và đuôi .xlsx", () => {

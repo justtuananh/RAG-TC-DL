@@ -217,11 +217,19 @@ def _record_cells(record: dict[str, Any]) -> list[dict[str, Any]]:
     for field in ("env_temp_c", "env_humidity_pct"):
         if record.get(field) is not None:
             cells.append({"field": field, "kind": "record", "id": record_id})
-    if record.get("range_fact_id") is not None:
+    # Pha R: phạm vi đo / cấp chính xác ghi trên chính biên bản trỏ về trường của hồ
+    # sơ; chỉ khi biên bản không ghi mới trỏ về dữ kiện QTKĐ.
+    if record.get("range_field_id") is not None:
+        for field in ("range_min", "range_max"):
+            if record.get(field) is not None:
+                cells.append({"field": field, "kind": "record", "id": record_id})
+    elif record.get("range_fact_id") is not None:
         for field in ("range_min", "range_max"):
             if record.get(field) is not None:
                 cells.append({"field": field, "kind": "fact", "id": record["range_fact_id"]})
-    if record.get("accuracy_fact_id") is not None and record.get("accuracy_text"):
+    if record.get("accuracy_field_id") is not None and record.get("accuracy_text"):
+        cells.append({"field": "accuracy_text", "kind": "record", "id": record_id})
+    elif record.get("accuracy_fact_id") is not None and record.get("accuracy_text"):
         cells.append(
             {
                 "field": "accuracy_text",

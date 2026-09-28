@@ -67,18 +67,10 @@ def test_catalog_migration_indexes_procedure_number(monkeypatch, tmp_path):
     assert "ix_procedure_catalog_procedure_number" in names
 
 
-def test_head_revision_is_catalog_migration(monkeypatch, tmp_path):
-    url = f"sqlite:///{tmp_path / 'sprint11_head.db'}"
-    monkeypatch.setenv("DATABASE_URL", url)
-    _run(url, "upgrade", "head")
-    engine = create_engine(url)
-    try:
-        from sqlalchemy import text
+def test_catalog_migration_is_in_head_chain():
+    # Head đi tiếp sau 011 (Pha R); 011 phải còn nằm trên chuỗi revision.
+    from alembic.script import ScriptDirectory
 
-        with engine.connect() as connection:
-            revision = connection.execute(
-                text("select version_num from alembic_version")
-            ).scalar_one()
-    finally:
-        engine.dispose()
-    assert revision == NEW_REVISION
+    script = ScriptDirectory.from_config(_config())
+    chain = {revision.revision for revision in script.walk_revisions("base", "heads")}
+    assert NEW_REVISION in chain

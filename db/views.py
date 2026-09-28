@@ -69,6 +69,16 @@ CATALOG_VIEWS: tuple[str, ...] = (
     "v_capability",
 )
 
+# Pha R: trường đầu mục của biên bản (phạm vi đo, A0, uCmax...). Tách nhóm vì
+# migration 012 tạo view này SAU khi bảng ``record_field`` tồn tại.
+FIELD_VIEWS: tuple[str, ...] = ("v_record_field",)
+
+# Slug nhãn của trường phạm vi đo / cấp chính xác ghi trên CHÍNH biên bản. Đây là
+# đặc tính của thiết bị; dữ kiện ``working_range`` của QTKĐ chỉ là phạm vi áp dụng
+# của quy trình và chỉ dùng khi biên bản không ghi (``range_source = 'procedure'``).
+RANGE_FIELD_KEYS: tuple[str, ...] = ("pham_vi_do", "pham_vi_lam_viec", "gioi_han_do")
+ACCURACY_FIELD_KEYS: tuple[str, ...] = ("cap_chinh_xac",)
+
 # Bảng gốc giữ cả dữ liệu chưa duyệt — cấm truy cập trực tiếp từ tầng ``query/``.
 RAW_TABLES: tuple[str, ...] = (
     "extraction",
@@ -78,6 +88,7 @@ RAW_TABLES: tuple[str, ...] = (
     "device",
     "calibration_record",
     "measurement_point",
+    "record_field",
     "lab_standard",
     "inspector",
     "procedure_catalog",
@@ -172,6 +183,100 @@ _MEASUREMENT_DETAIL_SQL: str = (
     "LEFT JOIN unit u ON u.id = m.unit_id "
     "LEFT JOIN unit eu ON eu.id = m.error_unit_id"
 )
+
+# Định nghĩa HIỆN HÀNH (Pha R): thêm ``cells`` (nguyên văn mọi ô của dòng kèm tên
+# cột). Chỉ áp dụng SAU migration 012 khi cột ``measurement_point.cells`` tồn tại.
+_MEASUREMENT_DETAIL_SQL_CELLS: str = _MEASUREMENT_DETAIL_SQL.replace(
+    "m.limit_text AS limit_text, ", "m.limit_text AS limit_text, m.cells AS cells, "
+)
+
+
+def _sql_list(values: tuple[str, ...]) -> str:
+    return ", ".join(f"'{value}'" for value in values)
+
+
+# ``v_record_detail`` HIỆN HÀNH (Pha R). Khác định nghĩa Sprint 8 ở hai điểm:
+# - phạm vi đo / cấp chính xác lấy từ trường ghi trên CHÍNH biên bản
+#   (``record_field``); chỉ khi biên bản không ghi mới rơi về dữ kiện QTKĐ;
+# - khi rơi về QTKĐ, chọn MỘT dữ kiện ``working_range`` (khoảng rộng nhất) thay vì
+#   ``MAX()`` từng cột — trước đây cận dưới và cận trên có thể đến từ hai dữ kiện
+#   khác nhau, sinh ra một khoảng không tài liệu nào ghi (vi phạm P1/P2).
+_RECORD_DETAIL_SQL: str = (
+    "CREATE VIEW v_record_detail AS "
+    "SELECT "
+    "r.id AS id, r.document_id AS document_id, r.extraction_id AS extraction_id, "
+    "r.device_id AS device_id, r.procedure_id AS procedure_id, r.mode AS mode, "
+    "r.calibrated_at AS calibrated_at, r.expires_at AS expires_at, "
+    "r.expires_from_fact_id AS expires_from_fact_id, r.verdict AS verdict, "
+    "r.cert_no AS cert_no, r.inspector_name AS inspector_name, "
+    "r.reviewer_name AS reviewer_name, r.lab_name AS lab_name, "
+    "r.env_temp_c AS env_temp_c, r.env_humidity_pct AS env_humidity_pct, "
+    "r.created_at AS created_at, "
+    "d.device_type_id AS device_type_id, d.serial_no AS serial_no, "
+    "d.model_code AS model_code, d.manufacturer AS manufacturer, "
+    "d.owner_org AS owner_org, d.needs_identification AS needs_identification, "
+    "dt.name_vi AS device_type_name, dt.quantity_id AS quantity_id, "
+    "q.name_vi AS quantity_name, "
+    "p.number AS procedure_number, p.title AS procedure_title, p.year AS procedure_year, "
+    "e.section_path AS extraction_section_path, e.chunk_id AS extraction_chunk_id, "
+    "e.quote AS extraction_quote, e.file_stem AS file_stem, "
+    "e.extractor AS extractor, e.confidence AS confidence, "
+    "CASE WHEN rf.id IS NOT NULL THEN rf.value_min ELSE pf.value_min END AS range_min, "
+    "CASE WHEN rf.id IS NOT NULL THEN rf.value_max ELSE pf.value_max END AS range_max, "
+    "CASE WHEN rf.id IS NOT NULL THEN rf.unit_id ELSE pf.unit_id END AS range_unit_id, "
+    "ru.code AS range_unit_code, "
+    "CASE WHEN rf.id IS NULL THEN pf.id END AS range_fact_id, "
+    "rf.id AS range_field_id, "
+    "CASE WHEN rf.id IS NOT NULL THEN 'record' "
+    "WHEN pf.id IS NOT NULL THEN 'procedure' END AS range_source, "
+    "CASE WHEN rf.id IS NOT NULL THEN rf.value_text ELSE pf.value_text END AS range_text, "
+    "CASE WHEN af.id IS NOT NULL THEN af.value_text ELSE apf.value_text END "
+    "AS accuracy_text, "
+    "CASE WHEN af.id IS NULL THEN apf.id END AS accuracy_fact_id, "
+    "af.id AS accuracy_field_id "
+    "FROM calibration_record r "
+    "JOIN v_extraction e ON e.id = r.extraction_id "
+    "LEFT JOIN device d ON d.id = r.device_id "
+    "LEFT JOIN device_type dt ON dt.id = d.device_type_id "
+    "LEFT JOIN quantity q ON q.id = dt.quantity_id "
+    "LEFT JOIN procedure p ON p.id = r.procedure_id "
+    "LEFT JOIN record_field rf ON rf.id = ("
+    "SELECT MIN(f.id) FROM record_field f WHERE f.record_id = r.id "
+    f"AND f.field_key IN ({_sql_list(RANGE_FIELD_KEYS)}) "
+    "AND (f.value_min IS NOT NULL OR f.value_max IS NOT NULL)) "
+    "LEFT JOIN record_field af ON af.id = ("
+    "SELECT MIN(f.id) FROM record_field f WHERE f.record_id = r.id "
+    f"AND f.field_key IN ({_sql_list(ACCURACY_FIELD_KEYS)}) "
+    "AND f.value_text IS NOT NULL AND f.value_text <> '') "
+    "LEFT JOIN v_procedure_fact pf ON pf.id = ("
+    "SELECT f.id FROM v_procedure_fact f WHERE f.procedure_id = r.procedure_id "
+    "AND f.fact_kind = 'working_range' "
+    "ORDER BY COALESCE(f.value_max, 0) - COALESCE(f.value_min, 0) DESC, f.id DESC LIMIT 1) "
+    "LEFT JOIN v_procedure_fact apf ON apf.id = ("
+    "SELECT f.id FROM v_procedure_fact f WHERE f.procedure_id = r.procedure_id "
+    "AND f.fact_kind = 'accuracy_class' ORDER BY f.id DESC LIMIT 1) "
+    "LEFT JOIN unit ru ON ru.id = "
+    "(CASE WHEN rf.id IS NOT NULL THEN rf.unit_id ELSE pf.unit_id END)"
+)
+
+# Trường đầu mục đã duyệt: lộ khi hồ sơ chứa nó có extraction ``approved`` (P3).
+_FIELD_VIEW_SQL: dict[str, str] = {
+    "v_record_field": (
+        "CREATE VIEW v_record_field AS "
+        "SELECT f.id AS id, f.record_id AS record_id, f.ord AS ord, "
+        "f.field_key AS field_key, f.label AS label, f.value_text AS value_text, "
+        "f.quote AS quote, f.source AS source, f.rel_op AS rel_op, "
+        "f.value_min AS value_min, f.value_max AS value_max, "
+        "f.unit_id AS unit_id, f.unit_text AS unit_text, u.code AS unit_code, "
+        "r.extraction_id AS extraction_id, r.device_id AS device_id, "
+        "r.procedure_id AS procedure_id, r.calibrated_at AS calibrated_at "
+        "FROM record_field f "
+        "JOIN calibration_record r ON r.id = f.record_id "
+        "JOIN extraction e ON e.id = r.extraction_id "
+        "LEFT JOIN unit u ON u.id = f.unit_id "
+        "WHERE e.status = 'approved'"
+    ),
+}
 
 # View Sprint 8: xuất xứ P1 cho extraction đã duyệt và một dòng tra cứu "dày" đã
 # nối sẵn. `v_record_detail` tham chiếu `v_procedure_fact`/`v_extraction` nên phải
@@ -378,6 +483,35 @@ def drop_catalog_views(connection) -> None:
         connection.execute(text(sql))
 
 
+def create_field_views(connection) -> None:
+    """Tạo view trường đầu mục biên bản (Pha R) — migration 012/test."""
+    for name in FIELD_VIEWS:
+        connection.execute(text(_FIELD_VIEW_SQL[name]))
+
+
+def drop_field_views(connection) -> None:
+    """Gỡ view trường đầu mục biên bản; an toàn khi chưa tồn tại."""
+    for name in FIELD_VIEWS:
+        connection.execute(text(f"DROP VIEW IF EXISTS {name}"))
+
+
+def recreate_record_detail_views(connection, *, with_record_fields: bool = True) -> None:
+    """Tạo lại ``v_record_detail`` + ``v_measurement_detail`` (migration 012/test).
+
+    ``with_record_fields=True`` dùng định nghĩa hiện hành (phạm vi đo của thiết bị,
+    cột ``cells``); ``False`` khôi phục định nghĩa Sprint M khi downgrade.
+    ``v_measurement_detail`` tham chiếu ``v_record_detail`` nên gỡ nó trước.
+    """
+    connection.execute(text("DROP VIEW IF EXISTS v_measurement_detail"))
+    connection.execute(text("DROP VIEW IF EXISTS v_record_detail"))
+    if with_record_fields:
+        connection.execute(text(_RECORD_DETAIL_SQL))
+        connection.execute(text(_MEASUREMENT_DETAIL_SQL_CELLS))
+    else:
+        connection.execute(text(_QUERY_VIEW_SQL["v_record_detail"]))
+        connection.execute(text(_MEASUREMENT_DETAIL_SQL))
+
+
 def create_all_approved_views(connection) -> None:
     """Tạo toàn bộ view đã duyệt (tri thức + dữ liệu đo + tra cứu + tham chiếu)."""
     create_approved_views(connection)
@@ -387,6 +521,9 @@ def create_all_approved_views(connection) -> None:
     create_catalog_views(connection)
     # Sprint M: view hiện hành có thêm đơn vị sai số; tạo lại sau nhóm query.
     recreate_measurement_detail_view(connection)
+    # Pha R: trường đầu mục + phạm vi đo của thiết bị + nguyên văn từng ô.
+    create_field_views(connection)
+    recreate_record_detail_views(connection)
 
 
 # `FROM`/`JOIN`/`INSERT INTO`/`UPDATE`/`DELETE FROM` theo sau là tên bảng gốc.

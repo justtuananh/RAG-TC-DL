@@ -78,11 +78,38 @@ def _source(
     return payload
 
 
-def record_provenance(session: Session, record_id: int) -> dict[str, Any]:
-    """Xuất xứ của một hồ sơ (các ô đầu mục: ngày, nhiệt độ, độ ẩm…)."""
+# Ô cấp hồ sơ lấy từ một trường đầu mục (Pha R): cột id trường trong ``v_record_detail``.
+_DETAIL_FIELD_COLUMNS: dict[str, str] = {
+    "range_min": "range_field_id",
+    "range_max": "range_field_id",
+    "accuracy_text": "accuracy_field_id",
+}
+
+
+def _record_field(session: Session, record_id: int, detail: Any, field: str | None) -> Any:
+    """Trường đầu mục ứng với ô ``field`` (``range_min`` → trường phạm vi đo; hoặc khóa trường)."""
+    if not field:
+        return None
+    field_id = detail.get(_DETAIL_FIELD_COLUMNS[field]) if field in _DETAIL_FIELD_COLUMNS else None
+    if field_id is not None:
+        sql, params = "SELECT * FROM v_record_field WHERE id = :id", {"id": field_id}
+    else:
+        sql = (
+            "SELECT * FROM v_record_field WHERE record_id = :record_id AND field_key = :key "
+            "ORDER BY ord LIMIT 1"
+        )
+        params = {"record_id": record_id, "key": field}
+    return session.execute(text(sql), params).mappings().first()
+
+
+def record_provenance(session: Session, record_id: int, field: str | None = None) -> dict[str, Any]:
+    """Xuất xứ của một hồ sơ; ``field`` là ô đầu mục (phạm vi đo, A0...) để tô đúng dòng."""
     row = (
         session.execute(
-            text("SELECT id, extraction_id FROM v_record_detail WHERE id = :id"),
+            text(
+                "SELECT id, extraction_id, range_field_id, accuracy_field_id "
+                "FROM v_record_detail WHERE id = :id"
+            ),
             {"id": record_id},
         )
         .mappings()
@@ -90,11 +117,23 @@ def record_provenance(session: Session, record_id: int) -> dict[str, Any]:
     )
     if row is None:
         raise ProvenanceError(f"Không tìm thấy hồ sơ đã duyệt {record_id}.")
+    record_field = _record_field(session, record_id, row, field)
+    if record_field is None:
+        return _source(
+            session, row["extraction_id"], kind="record", field=field, extra={"record_id": record_id}
+        )
     return _source(
         session,
         row["extraction_id"],
         kind="record",
-        extra={"record_id": record_id},
+        field=field,
+        quote=record_field["quote"] or record_field["value_text"],
+        value_text=record_field["value_text"],
+        extra={
+            "record_id": record_id,
+            "record_field_id": record_field["id"],
+            "label": record_field["label"],
+        },
     )
 
 
@@ -174,7 +213,7 @@ def resolve(
     if fact_id is not None:
         return fact_provenance(session, fact_id)
     if record_id is not None:
-        return record_provenance(session, record_id)
+        return record_provenance(session, record_id, field)
     if extraction_id is not None:
         return extraction_provenance(session, extraction_id)
     raise ProvenanceError("Cần ít nhất một tham chiếu xuất xứ.")
