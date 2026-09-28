@@ -38,3 +38,13 @@ def test_ambiguous_query(): assert select('Công thức sai số là gì?') is N
 
 def test_ast_zero_division():
     with pytest.raises(Invalid): expression('a/b',{'a':Decimal(1),'b':Decimal(0)})
+
+
+def test_decimal_literal_is_not_rounded_through_float():
+    text='0.123456789012345678901234567890'
+    assert expression(text,{})==Decimal(text)
+
+def test_all_strategies_reject_unknown_source_revision():
+    c=copy.deepcopy(SOURCES[0]);c['revision']='999'
+    for strategy in ['registry','parser','llm']:
+        assert prepare(c,strategy)['status']=='blocked'

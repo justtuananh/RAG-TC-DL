@@ -27,7 +27,7 @@ def expression(text,values):
         if isinstance(n,ast.Name):
             if n.id not in values: raise Invalid('Biến chưa được định nghĩa: '+n.id)
             return values[n.id]
-        if isinstance(n,ast.Constant) and type(n.value) in (int,float): return Decimal(str(n.value))
+        if isinstance(n,ast.Constant) and type(n.value) in (int,float): return number(ast.get_source_segment(text,n))
         if isinstance(n,ast.UnaryOp) and isinstance(n.op,(ast.USub,ast.UAdd)):
             return -walk(n.operand) if isinstance(n.op,ast.USub) else walk(n.operand)
         if isinstance(n,ast.BinOp):
@@ -58,7 +58,9 @@ def calculate(spec,inputs,confirmations):
         n=number(entry.get('value'))
         src=UNITS.get(entry.get('unit')); dst=UNITS.get(v['unit'])
         if not src or not dst or src[0]!=dst[0]: raise Invalid('Đơn vị không tương thích: '+v['key'])
-        n=n*Decimal(src[1])/Decimal(dst[1])
+        with localcontext() as ctx:
+            ctx.prec=34
+            n=n*Decimal(src[1])/Decimal(dst[1])
         if v.get('min') is not None:
             low=Decimal(str(v['min']))
             if n<low or (v.get('exclusive_min') and n==low): raise Invalid('Ngoài miền giá trị: '+v['key'])
