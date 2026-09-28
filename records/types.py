@@ -28,9 +28,14 @@ class MeasurementDraft:
     error_text: str | None = None
     limit_text: str | None = None
     unit_text: str | None = None
+    # Đơn vị của sai số/giới hạn khi khác đơn vị giá trị đo (sai số tương đối "%").
+    error_unit_text: str | None = None
     note: str | None = None
     # Nguyên văn cả dòng nguồn (P1).
     quote: str = ""
+    # Thiếu đơn vị thì tầng store được dùng đơn vị ``working_range`` của QTKĐ (K09).
+    # Bảng đã nhận diện rõ cấu trúc đặt False: đơn vị chỉ đến từ chính bảng đó.
+    inherit_unit: bool = True
 
     # Chỉ là kết quả phân tích các ``*_text`` ở trên — không bao giờ được tính lại.
     nominal_value: float | None = None

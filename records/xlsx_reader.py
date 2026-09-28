@@ -1,9 +1,15 @@
-"""Đọc phiếu đo Excel theo mẫu cố định (spec §5.5, §9 S7).
+"""Đọc biên bản/phiếu đo Excel theo cấu hình ánh xạ trường (spec §5.5, §9 S7).
 
 Giống ``docx_reader``, bộ đọc này dùng OOXML thô (``zipfile`` + ``lxml``) thay vì
-``openpyxl`` để giữ tính offline và không thêm phụ thuộc. Nó nhận diện dải bảng
-và tiêu đề cột từ cấu hình ánh xạ trường (``records.template``), rồi trả
-``RecordDraft`` thuần dữ liệu.
+``openpyxl`` để giữ tính offline và không thêm phụ thuộc. Trình tự:
+
+1. đọc MỌI sheet (``records.xlsx_grid``), vì sheet đầu có thể chỉ là bảng tra phụ;
+2. neo các bảng kết quả theo tiêu đề bảng (``records.xlsx_tables``);
+3. đọc trường đầu mục, BỎ QUA ô thuộc bảng đã neo để giá trị không bị lấy nhầm
+   từ bảng đặt song song;
+4. thêm kết luận, ô đánh dấu, tên người ký (``records.record_marks``).
+
+Bảng không neo được dùng cách cũ: tìm dòng tiêu đề cột khớp cấu hình.
 
 Bất biến P1/P2 giữ nguyên: mỗi ô số giữ nguyên văn; ``error_value`` chỉ đọc từ
 cột sai số của phiếu, không bao giờ tính từ ``measured``/``nominal``.
@@ -12,243 +18,218 @@ cột sai số của phiếu, không bao giờ tính từ ``measured``/``nominal
 from __future__ import annotations
 
 import re
-import zipfile
-from datetime import datetime, timedelta
 from pathlib import Path
 
-from lxml import etree
-
 from knowledge import vnnum
-from records.docx_reader import (
-    _extract_labeled_fields,
-    _map_measurement_row,
-    _row_is_header,
-    _slug,
-)
+from records.columns import map_measurement_row
+from records.docx_reader import _extract_labeled_fields, _row_is_header, _slug
+from records.record_marks import record_mark_fields
 from records.template import MappingConfig
 from records.types import FieldDraft, MeasurementDraft, RecordDraft
-
-NS = {
-    "main": "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-    "rel": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
-    "pkg": "http://schemas.openxmlformats.org/package/2006/relationships",
-}
-_M = f"{{{NS['main']}}}"
+from records.xlsx_grid import Sheet, read_sheets
+from records.xlsx_tables import TableRegion, locate_tables, step_code_for
 
 EXTRACTOR = "record:xlsx.v1"
 DEFAULT_SECTION_PATH = "Phiếu đo"
 
-_CELL_REF_RE = re.compile(r"^([A-Za-z]+)(\d+)$")
+_WORD_RE = re.compile(r"\w+")
+# Số thứ tự đứng trước nhãn ("1. ", "3.2 ", "a) ", "II. ").
+_ENUMERATOR_RE = re.compile(r"^(?:\d+(?:\.\d+)*\.?|[IVX]+\.|[a-zđ]\))\s+", re.IGNORECASE)
+# Giá trị mẫu để trống: chỉ gồm dấu chấm, dấu chấm lửng, gạch dưới.
+_PLACEHOLDER_RE = re.compile(r"^[.\u2026_\s]*$")
+# Phần dư sau nhãn được coi là phần của nhãn ("Nhiệt độ môi trường:"): ngắn, không số.
+_MAX_LABEL_TAIL_WORDS = 3
+_MIN_LABEL_WORDS_FOR_TAIL = 2
 
 
-def _column_index(ref: str) -> int:
-    """``"B12"`` → 1 (0-based) để đặt ô đúng cột kể cả khi có ô trống."""
-    match = _CELL_REF_RE.match(ref or "")
-    if not match:
-        return 0
-    letters = match.group(1).upper()
-    index = 0
-    for char in letters:
-        index = index * 26 + (ord(char) - ord("A") + 1)
-    return index - 1
-
-
-def _shared_strings(archive: zipfile.ZipFile) -> list[str]:
-    try:
-        root = etree.fromstring(archive.read("xl/sharedStrings.xml"))
-    except KeyError:
-        return []
-    values: list[str] = []
-    for si in root.findall(f"{_M}si"):
-        values.append("".join(node.text or "" for node in si.iter(f"{_M}t")))
-    return values
-
-
-def _first_sheet_path(archive: zipfile.ZipFile) -> str:
-    root = etree.fromstring(archive.read("xl/workbook.xml"))
-    sheets = root.findall(f"{_M}sheets/{_M}sheet")
-    if not sheets:
-        raise ValueError("Tệp Excel không có sheet nào.")
-    rid = sheets[0].get(f"{{{NS['rel']}}}id")
-    rels = etree.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
-    for rel in rels.findall(f"{{{NS['pkg']}}}Relationship"):
-        if rel.get("Id") == rid:
-            target = rel.get("Target") or "worksheets/sheet1.xml"
-            return f"xl/{target.lstrip('/')}"
-    return "xl/worksheets/sheet1.xml"
-
-
-def _cell_value(cell, shared: list[str], date_styles: set[int]) -> str:
-    cell_type = cell.get("t")
-    if cell_type == "inlineStr":
-        return "".join(node.text or "" for node in cell.iter(f"{_M}t"))
-    value_node = cell.find(f"{_M}v")
-    if value_node is None or value_node.text is None:
-        return ""
-    if cell_type == "s":
-        try:
-            return shared[int(value_node.text)]
-        except (ValueError, IndexError):
-            return ""
-    if cell_type in (None, "n"):
-        # K05: ô số mang style ngày (xl/styles.xml) là số serial Excel, đổi sang
-        # "DD/MM/YYYY" TRƯỚC bước đổi dấu chấm của K01.
-        if _style_index(cell) in date_styles:
-            return _serial_to_date(value_node.text)
-        # K01: ô số là số máy, luôn dùng dấu chấm thập phân; đổi sang chuỗi kiểu
-        # Việt (phẩy thập phân, không nhóm nghìn) trước khi xuống tầng parse.
-        return value_node.text.replace(".", ",")
-    return value_node.text
-
-
-def _style_index(cell) -> int:
-    """Chỉ số ``cellXfs`` của ô (thuộc tính ``s``); -1 nếu không có/không hợp lệ."""
-    try:
-        return int(cell.get("s"))
-    except (TypeError, ValueError):
-        return -1
-
-
-# Định dạng ngày/giờ dựng sẵn của Excel (mục 14..22 theo ECMA-376).
-_BUILTIN_DATE_FMT_IDS = frozenset(range(14, 23))
-
-
-def _is_date_format(code: str) -> bool:
-    """``formatCode`` tuỳ biến là định dạng ngày, không phải chỉ giờ.
-
-    Bỏ literal trong ngoặc kép/vuông trước khi xét; có ``d``/``y`` là ngày; chỉ
-    còn ``m`` thì phải không kèm ``h`` hoặc ``:`` (nếu không là phút).
-    """
-    cleaned = re.sub(r'"[^"]*"', "", code or "")
-    cleaned = re.sub(r"\[[^\]]*\]", "", cleaned)
-    if not re.search(r"[dmyDMY]", cleaned):
-        return False
-    if re.search(r"[dDyY]", cleaned):
-        return True
-    return not (re.search(r"[hH]", cleaned) or ":" in cleaned)
-
-
-def _date_styles(archive: zipfile.ZipFile) -> set[int]:
-    """Tập chỉ số ``cellXfs`` có định dạng ngày (dựng sẵn 14..22 hoặc tuỳ biến)."""
-    try:
-        root = etree.fromstring(archive.read("xl/styles.xml"))
-    except KeyError:
-        return set()
-    custom: dict[int, str] = {}
-    for numfmt in root.findall(f"{_M}numFmts/{_M}numFmt"):
-        try:
-            custom[int(numfmt.get("numFmtId"))] = numfmt.get("formatCode") or ""
-        except (TypeError, ValueError):
-            continue
-    styles: set[int] = set()
-    for index, xf in enumerate(root.findall(f"{_M}cellXfs/{_M}xf")):
-        try:
-            fmt_id = int(xf.get("numFmtId") or 0)
-        except ValueError:
-            continue
-        if fmt_id in _BUILTIN_DATE_FMT_IDS or _is_date_format(custom.get(fmt_id, "")):
-            styles.add(index)
-    return styles
-
-
-def _serial_to_date(text: str) -> str:
-    """Số serial Excel (gốc 1899-12-30) → ``"DD/MM/YYYY"``; lỗi thì giữ nguyên."""
-    try:
-        serial = float(text)
-    except (TypeError, ValueError):
-        return text
-    moment = datetime(1899, 12, 30) + timedelta(days=serial)
-    return moment.strftime("%d/%m/%Y")
-
+def _clean(text: str) -> str:
+    return vnnum.normalize_spaces(text or "").strip()
 
 
 def _read_grid(path: str | Path) -> list[list[str]]:
-    with zipfile.ZipFile(path) as archive:
-        shared = _shared_strings(archive)
-        date_styles = _date_styles(archive)
-        sheet_path = _first_sheet_path(archive)
-        root = etree.fromstring(archive.read(sheet_path))
-
-    grid: list[list[str]] = []
-    for row in root.findall(f"{_M}sheetData/{_M}row"):
-        cells: dict[int, str] = {}
-        for cell in row.findall(f"{_M}c"):
-            index = _column_index(cell.get("r", ""))
-            cells[index] = _cell_value(cell, shared, date_styles)
-        width = max(cells) + 1 if cells else 0
-        grid.append([cells.get(i, "") for i in range(width)])
-    return grid
+    """Mọi dòng của mọi sheet nối liền (dùng để nhận diện nhanh mã QTKĐ)."""
+    return [row for sheet in read_sheets(path) for row in sheet.rows]
 
 
-def _header_fields(grid: list[list[str]], labels: list[str]) -> list[FieldDraft]:
-    """Trường đầu mục: nhãn ở một ô, giá trị ở ô kế bên phải cùng dòng."""
-    label_keys = {_slug(label) for label in labels}
+def _label_prefix(text: str, label: str) -> str | None:
+    """Phần còn lại của ``text`` nếu ``text`` mở đầu bằng ``label`` (so từng từ).
+
+    So theo slug liền không dấu cách nên "pít tông" khớp "píttông"; ranh giới từ
+    được giữ nên nhãn "Số" không khớp "Sổ tay"/"Sốc".
+    """
+    target = _slug(label).replace("_", "")
+    if not target:
+        return None
+    compact = ""
+    for match in _WORD_RE.finditer(text):
+        compact += _slug(match.group(0)).replace("_", "")
+        if compact == target:
+            return text[match.end() :]
+        if not target.startswith(compact):
+            return None
+    return None
+
+
+def _is_label_cell(label: str, rest: str) -> bool:
+    """Ô chỉ chứa nhãn (giá trị nằm ở ô bên phải)."""
+    tail = rest.strip()
+    if tail in ("", ":"):
+        return True
+    if len(label.split()) < _MIN_LABEL_WORDS_FOR_TAIL:
+        return False
+    body = tail[:-1] if tail.endswith(":") else tail
+    if ":" in body or any(char.isdigit() for char in body):
+        return False
+    return len(body.split()) <= _MAX_LABEL_TAIL_WORDS
+
+
+def _match_label(text: str, labels: list[str]) -> tuple[str, str, bool] | None:
+    """``(nhãn, phần còn lại, là ô nhãn)`` cho nhãn dài nhất mở đầu ô; ``None`` nếu không."""
+    for label in labels:
+        rest = _label_prefix(text, label)
+        if rest is None:
+            continue
+        if _is_label_cell(label, rest):
+            return label, rest, True
+        if rest.lstrip().startswith(":"):
+            return label, rest, False
+    return None
+
+
+def _neighbour_value(sheet: Sheet, sheet_index: int, row: int, col: int, labels, regions) -> str:
+    """Ghép các ô có chữ bên phải cùng dòng, dừng ở ô thuộc bảng hoặc ô nhãn kế tiếp."""
+    parts: list[str] = []
+    for next_col in range(col + 1, len(sheet.rows[row])):
+        if any(region.covers(sheet_index, row, next_col) for region in regions):
+            break
+        text = _clean(sheet.cell(row, next_col))
+        if not text:
+            continue
+        if text.endswith(":") or _match_label(text, labels) is not None:
+            break
+        parts.append(text)
+    return _clean(" ".join(parts))
+
+
+def _inline_fields(text: str, label: str, rest: str, labels: list[str]) -> list[tuple[str, str]]:
+    """Nhãn và giá trị chung ô ("Số: 012/BBKĐ", "Ký hiệu: X Số hiệu: Y")."""
+    pairs = _extract_labeled_fields(text, labels)
+    if pairs and _slug(pairs[0][0]) == _slug(label):
+        return [(label, pairs[0][1]), *pairs[1:]]
+    return [(label, rest.lstrip().lstrip(":").strip())]
+
+
+def _value(text: str) -> str:
+    return "" if _PLACEHOLDER_RE.match(text or "") else text
+
+
+def _cell_fields(sheet, sheet_index, row, col, labels, regions) -> list[tuple[str, str]]:
+    """Trường mở đầu ô (sau số thứ tự nếu có); nhãn nằm giữa câu không phải trường."""
+    text = _ENUMERATOR_RE.sub("", _clean(sheet.cell(row, col)))
+    matched = _match_label(text, labels)
+    if matched is None:
+        pairs = _extract_labeled_fields(text, labels)
+        leading = bool(pairs) and _label_prefix(text, pairs[0][0]) is not None
+        return [(label, _value(value)) for label, value in pairs] if leading else []
+    label, rest, is_label_cell = matched
+    if is_label_cell:
+        return [(label, _value(_neighbour_value(sheet, sheet_index, row, col, labels, regions)))]
+    return [(name, _value(value)) for name, value in _inline_fields(text, label, rest, labels)]
+
+
+def _header_fields(
+    sheets: list[Sheet], labels: list[str], regions: list[TableRegion]
+) -> list[FieldDraft]:
+    ordered = sorted({label.strip() for label in labels if label.strip()}, key=len, reverse=True)
     fields: list[FieldDraft] = []
     seen: set[str] = set()
-    for row in grid:
-        for index, cell in enumerate(row):
-            if not cell.strip():
-                continue
-            text = vnnum.normalize_spaces(cell).strip()
-            # Mẫu Excel: nhãn ở một ô, giá trị ở ô kế bên phải cùng dòng.
-            if _slug(text) in label_keys and _slug(text) not in seen:
-                value = next(
-                    (candidate.strip() for candidate in row[index + 1 :] if candidate.strip()),
-                    "",
-                )
-                fields.append(
-                    FieldDraft(
-                        label=text.rstrip(":").strip(),
-                        value=value,
-                        quote=" | ".join(c for c in row if c.strip()),
-                    )
-                )
-                seen.add(_slug(text))
-                continue
-            # Nhãn và giá trị có thể nằm chung ô ("Số hiệu: ABC").
-            for label, value in _extract_labeled_fields(text, labels):
-                key = _slug(label)
-                if key and key not in seen:
-                    fields.append(FieldDraft(label=label, value=value, quote=text))
-                    seen.add(key)
+    for sheet_index, sheet in enumerate(sheets):
+        for row, cells in enumerate(sheet.rows):
+            quote = " | ".join(_clean(cell) for cell in cells if _clean(cell))
+            for col, cell in enumerate(cells):
+                if not _clean(cell) or any(
+                    region.covers(sheet_index, row, col) for region in regions
+                ):
+                    continue
+                for label, value in _cell_fields(sheet, sheet_index, row, col, ordered, regions):
+                    key = _slug(label)
+                    if key and key not in seen:
+                        fields.append(
+                            FieldDraft(label=label.rstrip(":").strip(), value=value, quote=quote)
+                        )
+                        seen.add(key)
     return fields
 
 
-def _measurements(grid: list[list[str]], config: MappingConfig) -> list[MeasurementDraft]:
+def _legacy_table(grid: list[list[str]], table) -> list[MeasurementDraft] | None:
+    """Một bảng theo cách cũ trên MỘT sheet; ``None`` nếu sheet không có dòng tiêu đề khớp."""
+    header_index = next(
+        (i for i, row in enumerate(grid) if _row_is_header(row, table.columns)), None
+    )
+    if header_index is None:
+        return None
+    data_rows = grid[header_index + 1 :]
+    # Bỏ dòng header tầng dưới (ô đầu rỗng, ô khác có chữ) ngay sau header.
+    if data_rows and data_rows[0] and not data_rows[0][0].strip():
+        data_rows = data_rows[1:]
     measurements: list[MeasurementDraft] = []
-    for table in config.result_tables:
-        if not table.columns:
-            continue
-        header_index = next(
-            (i for i, row in enumerate(grid) if _row_is_header(row, table.columns)),
-            None,
-        )
-        if header_index is None:
-            continue
-        data_rows = grid[header_index + 1 :]
-        # Bỏ dòng header tầng dưới (ô đầu rỗng, ô khác có chữ) ngay sau header.
-        if data_rows and data_rows[0] and not data_rows[0][0].strip():
-            data_rows = data_rows[1:]
-        for row in data_rows:
-            cells = list(row) + [""] * (len(table.columns) - len(row))
-            cells = cells[: len(table.columns)]
-            if not any(cell.strip() for cell in cells):
-                continue
-            measurements.append(_map_measurement_row(table.columns, cells))
+    for row in data_rows:
+        cells = (list(row) + [""] * len(table.columns))[: len(table.columns)]
+        if any(cell.strip() for cell in cells):
+            measurements.append(map_measurement_row(table.columns, cells))
     return measurements
+
+
+def _legacy_measurements(sheets: list[Sheet], tables) -> list[MeasurementDraft]:
+    """Cách cũ cho bảng không neo được: dòng tiêu đề cột khớp cấu hình, map theo vị trí.
+
+    Mỗi bảng lấy ở sheet ĐẦU TIÊN có dòng tiêu đề khớp và không bao giờ đọc tràn
+    sang sheet sau. Lưới thưa (bỏ dòng không có ô nào) giữ đúng ngữ nghĩa cũ.
+    """
+    measurements: list[MeasurementDraft] = []
+    for table in tables:
+        for sheet in sheets:
+            found = _legacy_table([row for row in sheet.rows if row], table)
+            if found is not None:
+                measurements.extend(found)
+                break
+    return measurements
+
+
+def _measurements(sheets: list[Sheet], config: MappingConfig, regions: list[TableRegion]):
+    anchored = {region.step_code for region in regions}
+    pending = [table for table in config.result_tables if step_code_for(table) not in anchored]
+    anchored_points = [point for region in regions for point in region.measurements]
+    return anchored_points + _legacy_measurements(sheets, pending)
+
+
+def _source_text(sheets: list[Sheet]) -> str:
+    lines: list[str] = []
+    for sheet in sheets:
+        lines.append(f"[Sheet: {sheet.name}]")
+        lines.extend(
+            line
+            for line in (" | ".join(cell for cell in row if cell.strip()) for row in sheet.rows)
+            if line
+        )
+    return "\n".join(lines)
 
 
 def read_xlsx(
     path: str | Path, config: MappingConfig, *, section_path: str | None = None
 ) -> RecordDraft:
-    """Đọc một phiếu đo Excel theo ``config``; trả ``RecordDraft`` giữ nguyên văn."""
-    grid = _read_grid(path)
-    labels = [item.label for item in config.header_fields]
-    source_lines = [" | ".join(cell for cell in row if cell.strip()) for row in grid]
+    """Đọc một biên bản/phiếu đo Excel theo ``config``; trả ``RecordDraft`` giữ nguyên văn."""
+    sheets = read_sheets(path)
+    regions = locate_tables(sheets, config)
+    fields = _header_fields(sheets, [item.label for item in config.header_fields], regions)
+    mark_fields, warnings = record_mark_fields([sheet.rows for sheet in sheets])
+    seen = {_slug(field.label) for field in fields}
+    fields.extend(field for field in mark_fields if _slug(field.label) not in seen)
     return RecordDraft(
         extractor=EXTRACTOR,
-        source_text="\n".join(line for line in source_lines if line),
+        source_text=_source_text(sheets),
         section_path=section_path or DEFAULT_SECTION_PATH,
-        fields=_header_fields(grid, labels),
-        measurements=_measurements(grid, config),
+        fields=fields,
+        measurements=_measurements(sheets, config, regions),
+        warnings=warnings,
     )

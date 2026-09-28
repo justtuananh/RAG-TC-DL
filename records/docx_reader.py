@@ -22,10 +22,15 @@ from pathlib import Path
 
 from lxml import etree
 
-from knowledge import vnnum
 from ingestion.docx_grid import grid_slots
+from knowledge import vnnum
+from records.columns import map_measurement_row as _map_measurement_row
+from records.columns import role_for_column as _role_for_column
+from records.columns import unit_from_header as _unit_from_header
 from records.template import MappingConfig
 from records.types import FieldDraft, MeasurementDraft, RecordDraft
+
+__all__ = ["read_docx", "_map_measurement_row", "_role_for_column", "_unit_from_header"]
 
 NS = {"w": "http://schemas.openxmlformats.org/wordprocessingml/2006/main"}
 _W = f"{{{NS['w']}}}"
@@ -37,34 +42,6 @@ _W_TC = f"{_W}tc"
 
 EXTRACTOR = "record:docx.v1"
 DEFAULT_SECTION_PATH = "Phụ lục A"
-
-# Vai trò của từng cột kết quả, khóa bằng slug không dấu. Cột không có vai trò
-# vẫn được giữ trong ``note``/``quote`` để không mất dữ liệu nguồn.
-_COLUMN_ROLES: dict[str, str] = {
-    "lan_kiem_tra": "ord",
-    "lan": "ord",
-    "tt": "ord",
-    "stt": "ord",
-    "mo": "measured",
-    "gia_tri_do": "measured",
-    "ap_suat": "measured",
-    "measured": "measured",
-    "dong": "measured_secondary",
-    "gia_tri_danh_nghia": "nominal",
-    "danh_nghia": "nominal",
-    "nominal": "nominal",
-    "diem_do": "label",
-    "diem_kiem_tra": "label",
-    "sai_so": "error",
-    "do_chenh_ap": "error",
-    "sai_so_do": "error",
-    "error": "error",
-    "gioi_han": "limit",
-    "sai_so_cho_phep": "limit",
-    "limit": "limit",
-    "ghi_chu": "note",
-    "note": "note",
-}
 
 
 def _slug(text: str) -> str:
@@ -171,46 +148,6 @@ def _table_field_value(rows: list[list[str]], labels: list[str]) -> list[FieldDr
     return drafts
 
 
-_UNIT_IN_HEADER_RE = re.compile(r"\(([^()]*)\)")
-_UNIT_HEADER_CANDIDATE_RE = re.compile(r"^[^\d()]{1,15}$")
-
-
-def _unit_from_header(column: str) -> str | None:
-    """Đơn vị trong ngoặc ở tiêu đề cột giá trị (``Giá trị đo (bar)`` → ``bar``).
-
-    Lấy nhóm ngoặc cuối cùng trông giống đơn vị (không chứa chữ số, không quá
-    dài). Không có → ``None`` để tầng store dùng đơn vị của ``working_range``.
-    """
-    for candidate in reversed(_UNIT_IN_HEADER_RE.findall(column or "")):
-        text = candidate.strip()
-        if text and _UNIT_HEADER_CANDIDATE_RE.match(text):
-            return text
-    return None
-
-
-def _role_for_column(column: str) -> str | None:
-    """Suy vai trò của một cột từ tên cột (khớp chính xác rồi tới từ khóa con)."""
-    slug = _slug(column)
-    if slug in _COLUMN_ROLES:
-        return _COLUMN_ROLES[slug]
-    tokens = set(slug.split("_"))
-    if {"lan", "tt", "stt"} & tokens or "lan_kiem_tra" in slug:
-        return "ord"
-    if "sai_so" in slug or "chenh_ap" in slug or "error" in slug:
-        return "error"
-    if "danh_nghia" in slug or "nominal" in slug:
-        return "nominal"
-    if "gioi_han" in slug or "cho_phep" in slug or "limit" in slug:
-        return "limit"
-    if "ghi_chu" in slug or "note" in slug:
-        return "note"
-    if "diem_do" in slug or "diem_kiem_tra" in slug:
-        return "label"
-    if {"mo", "do", "measured"} & tokens or "ap_suat" in slug:
-        return "measured"
-    return None
-
-
 def _row_is_header(row: list[str], columns: list[str]) -> bool:
     """Điểm khớp giữa một dòng và bộ cột cấu hình (đã slug)."""
     row_slugs = {_slug(cell) for cell in row if cell}
@@ -218,48 +155,6 @@ def _row_is_header(row: list[str], columns: list[str]) -> bool:
     if not column_slugs:
         return False
     return len(row_slugs & column_slugs) >= max(1, len(column_slugs) // 2)
-
-
-def _map_measurement_row(columns: list[str], cells: list[str]) -> MeasurementDraft:
-    """Ánh xạ một dòng dữ liệu sang ``MeasurementDraft``, giữ nguyên văn từng ô.
-
-    Giá trị số chỉ được phân tích từ chính ô nguồn (P2). Cột không nhận vai trò
-    nào được giữ trong ``note`` để không mất dữ liệu.
-    """
-    draft = MeasurementDraft(quote=" | ".join(cells))
-    extras: list[str] = []
-    for column, cell in zip(columns, cells, strict=False):
-        role = _role_for_column(column)
-        text = cell.strip()
-        if role == "ord":
-            number = vnnum.parse_number(text)
-            draft.ord = int(number) if number is not None else None
-            if draft.label is None:
-                draft.label = text or None
-        elif role == "measured" and draft.measured_text is None:
-            draft.measured_text = text or None
-            draft.measured_value = vnnum.parse_number(text)
-            # K09: ưu tiên đơn vị trong ngoặc ở tiêu đề cột giá trị.
-            draft.unit_text = _unit_from_header(column)
-        elif role == "measured_secondary" and text:
-            extras.append(f"{column}: {text}")
-        elif role == "nominal" and draft.nominal_text is None:
-            draft.nominal_text = text or None
-            draft.nominal_value = vnnum.parse_number(text)
-        elif role == "error" and draft.error_text is None:
-            # P2: chỉ đọc từ tài liệu; không suy ra từ measured/nominal.
-            draft.error_text = text or None
-            draft.error_value = vnnum.parse_number(text)
-        elif role == "limit" and draft.limit_text is None:
-            draft.limit_text = text or None
-            draft.limit_value = vnnum.parse_number(text)
-        elif role == "note" and draft.note is None:
-            draft.note = text or None
-        elif text:
-            extras.append(f"{column}={text}")
-    if extras:
-        draft.note = "; ".join(filter(None, [draft.note, *extras]))
-    return draft
 
 
 def _extract_measurements(

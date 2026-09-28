@@ -168,3 +168,10 @@ def test_parse_quantity_returns_none_without_numbers():
 )
 def test_split_value_unit(raw, value, unit):
     assert split_value_unit(raw) == (value, unit)
+
+
+def test_parse_number_accepts_uppercase_exponent_from_excel():
+    # Excel lưu số nhỏ dạng "6.0000000000000001E-3"; sau K01 thành "6,0000000000000001E-3".
+    assert parse_number("6,0000000000000001E-3") == pytest.approx(0.006)
+    assert parse_number("9,9924E-05") == pytest.approx(9.9924e-05)
+    assert parse_number("1E+3") == 1000.0

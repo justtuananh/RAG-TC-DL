@@ -21,7 +21,9 @@ from records.store import StoreResult, store_record_draft
 from records.template import TemplateError, derive_mapping_config
 from records.xlsx_reader import _read_grid, read_xlsx
 
-# Mã QTKĐ dạng "1.061" xuất hiện trong hồ sơ.
+# Mã QTKĐ dạng "1.061" xuất hiện trong hồ sơ. Ưu tiên mã đứng sau chữ "QTKĐ"
+# vì biên bản nhiều sheet còn chứa số khác cùng dạng (ví dụ "0.006" trong bảng).
+_QTKD_CODE_RE = re.compile(r"QTK[ĐD]\s*(\d{1,4}\.\d{2,3})\b", re.IGNORECASE)
 _PROCEDURE_RE = re.compile(r"\b(\d{1,4}\.\d{2,3})\b")
 SUPPORTED_SUFFIXES = (".docx", ".xlsx")
 
@@ -34,7 +36,7 @@ def detect_procedure_number(text: str | None) -> str | None:
     """Tìm mã QTKĐ trong văn bản hồ sơ; ``None`` nếu không thấy."""
     if not text:
         return None
-    match = _PROCEDURE_RE.search(text)
+    match = _QTKD_CODE_RE.search(text) or _PROCEDURE_RE.search(text)
     return match.group(1) if match else None
 
 

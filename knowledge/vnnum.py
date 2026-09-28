@@ -116,7 +116,8 @@ def parse_number(text: str | None) -> float | None:
         return None
     s = _normalize_minus(_normalize_scientific(normalize_spaces(text)))
     s = _strip_grouping(s)
-    m = re.fullmatch(r"([+\-]?)(\d+(?:[.,]\d+)?)(?:e([+\-]?\d+))?", s)
+    # Excel ghi số mũ bằng "E" hoa ("6.0000000000000001E-3").
+    m = re.fullmatch(r"([+\-]?)(\d+(?:[.,]\d+)?)(?:[eE]([+\-]?\d+))?", s)
     if not m:
         return None
     sign, body, exponent = m.group(1), m.group(2), m.group(3)
