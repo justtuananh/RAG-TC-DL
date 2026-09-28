@@ -35,6 +35,8 @@ from query import intents
 from query import records as records_query
 from query import units as units_query
 from query.catalog_router import CATALOG_RESOLVERS
+from query.record_fields import normalize_phrase
+from query.record_query import RECORD_RESOLVERS
 from query.table_model import (
     FACT_KIND_LABELS,
     LEDGER_NOTE,
@@ -117,12 +119,13 @@ def _find_procedure(
         if row is not None:
             return dict(row)
     if device_type:
-        needle = device_type.strip().lower()
+        # So theo cụm từ đã chuẩn hóa: "áp kế pít tông" khớp "Áp kế píttông tiêu chuẩn".
+        needle = normalize_phrase(device_type)
         if needle:
             rows = session.execute(text("SELECT * FROM v_procedure")).mappings().all()
             for row in rows:
-                haystack = (row["device_type_name"] or "").lower()
-                if needle in haystack or haystack in needle:
+                haystack = normalize_phrase(row["device_type_name"])
+                if haystack and (needle in haystack or haystack in needle):
                     return dict(row)
     return None
 
@@ -578,6 +581,7 @@ _RESOLVERS: dict[str, Any] = {
     "devices_by_range": resolve_devices_by_range,
     "error_trend": resolve_error_trend,
     **CATALOG_RESOLVERS,
+    **RECORD_RESOLVERS,
 }
 
 

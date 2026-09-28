@@ -177,7 +177,8 @@ def _provenance_params(ref: dict[str, Any]) -> dict[str, Any]:
         return {"fact_id": ref_id}
     if kind == "extraction":
         return {"extraction_id": ref_id}
-    return {"record_id": ref_id}
+    # Ô hồ sơ mang khóa trường (Pha R) để trích dẫn đúng dòng nguồn của trường đó.
+    return {"record_id": ref_id, "field": ref.get("field")}
 
 
 def _iter_cells(tables: list[DataTable]):
