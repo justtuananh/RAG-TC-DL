@@ -2,7 +2,7 @@
   {
     "status": "clarify",
     "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
-    "prepare_seconds": 5.924957804381847e-06
+    "prepare_seconds": 9.896932169795036e-06
   },
   {
     "status": "ready",
@@ -48,7 +48,7 @@
       "fingerprint": "b28865136c08738c04c9c0448b11b395c327ff08b90029d5bcfc607b5dad5c4f"
     },
     "metadata": {},
-    "prepare_seconds": 0.0017156470566987991
+    "prepare_seconds": 0.00272250606212765
   },
   {
     "status": "ready",
@@ -118,7 +118,7 @@
       "fingerprint": "6468470cf88c8aa670a58ef49d0e9bea8e06e061aaae2e518f56305eff041a74"
     },
     "metadata": {},
-    "prepare_seconds": 0.0025669439928606153
+    "prepare_seconds": 0.004185580997727811
   },
   {
     "status": "ready",
@@ -189,7 +189,7 @@
       "fingerprint": "350e3d2ca50992133e4cd526cf30422e62b689ddd58f643997640fab5a722731"
     },
     "metadata": {},
-    "prepare_seconds": 0.0020457180216908455
+    "prepare_seconds": 0.00265233195386827
   },
   {
     "status": "ready",
@@ -251,7 +251,7 @@
       "fingerprint": "7bc589a3b123fd1903ac7ffb9bb4d11982c5c6a6823753f1a4c39a48d0540c22"
     },
     "metadata": {},
-    "prepare_seconds": 0.002050076029263437
+    "prepare_seconds": 0.0025652360636740923
   },
   {
     "status": "ready",
@@ -303,7 +303,7 @@
       "fingerprint": "a17f9541a72ed70159256372650636d7bfa198d0dc29deb8c2f9478b0c214c29"
     },
     "metadata": {},
-    "prepare_seconds": 0.0010251009371131659
+    "prepare_seconds": 0.0020732159027829766
   },
   {
     "status": "ready",
@@ -380,56 +380,56 @@
       "fingerprint": "cccdc26dfb87a81e5132ce81271ee9207abeafb2765e02a7b1499f1c0f889afa"
     },
     "metadata": {},
-    "prepare_seconds": 0.002154054003767669
+    "prepare_seconds": 0.001886175014078617
   },
   {
     "status": "blocked",
     "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
-    "prepare_seconds": 0.001100903027690947
+    "prepare_seconds": 0.0009244669927284122
   },
   {
     "status": "blocked",
     "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
-    "prepare_seconds": 0.001107306918129325
-  },
-  {
-    "status": "blocked",
-    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
-    "prepare_seconds": 0.0021040979772806168
+    "prepare_seconds": 0.000846771989017725
   },
   {
     "status": "blocked",
     "message": "Không xác nhận được phiên bản tài liệu nguồn.",
-    "prepare_seconds": 0.0015874520177021623
-  },
-  {
-    "status": "blocked",
-    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
-    "prepare_seconds": 0.0018622110364958644
-  },
-  {
-    "status": "blocked",
-    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
-    "prepare_seconds": 0.0017188999336212873
-  },
-  {
-    "status": "blocked",
-    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
-    "prepare_seconds": 0.0011064501013606787
-  },
-  {
-    "status": "blocked",
-    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
-    "prepare_seconds": 0.0012241880176588893
+    "prepare_seconds": 9.018927812576294e-06
   },
   {
     "status": "blocked",
     "message": "Không xác nhận được phiên bản tài liệu nguồn.",
-    "prepare_seconds": 0.0018356440123170614
+    "prepare_seconds": 6.042071618139744e-06
   },
   {
     "status": "blocked",
     "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
-    "prepare_seconds": 0.002209229045547545
+    "prepare_seconds": 0.001783291925676167
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.001590909087099135
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.0007985549746081233
+  },
+  {
+    "status": "blocked",
+    "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+    "prepare_seconds": 7.900060154497623e-06
+  },
+  {
+    "status": "blocked",
+    "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+    "prepare_seconds": 6.071990355849266e-06
+  },
+  {
+    "status": "blocked",
+    "message": "Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.",
+    "prepare_seconds": 0.001588975079357624
   }
 ]
