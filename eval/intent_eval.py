@@ -262,6 +262,50 @@ def build_session():
             ),
         ]
     )
+    # Thiết bị áp kế pittông (số hiệu thật của tập vàng) cần ít nhất một hồ sơ đã
+    # duyệt để resolver không báo "không tìm thấy thiết bị" khi chấm định tuyến.
+    for serial in (
+        "6112",
+        "1046",
+        "1045",
+        "0391",
+        "1A0043219",
+        "B280-7702",
+        "2218",
+        "4471",
+        "58-3312",
+        "YS600-19087",
+        "T23-0512",
+        "1520",
+    ):
+        pittong_device = Device(
+            device_type_id=device_type.id,
+            serial_no=serial,
+            serial_norm=serial.lower(),
+            model_code="МП",
+        )
+        session.add(pittong_device)
+        session.flush()
+        record_extraction = extraction(
+            "Phụ lục A",
+            f"chunk-pittong-{serial}",
+            f"Số hiệu: {serial}\nKết luận: Đạt",
+            "record:docx.v1",
+        )
+        session.add(record_extraction)
+        session.flush()
+        session.add(
+            CalibrationRecord(
+                document_id="BB_2024_001",
+                extraction_id=record_extraction.id,
+                device_id=pittong_device.id,
+                procedure_id=procedure.id,
+                calibrated_at=datetime(2024, 6, 25),
+                expires_at=datetime(2026, 6, 25),
+                verdict="dat",
+            )
+        )
+    session.flush()
     session.commit()
     return session
 

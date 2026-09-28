@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import pytest
 
+from db.models import ProcedureFact, Unit
 from query import records as qr
 
 
@@ -130,6 +131,62 @@ def test_provenance_cells_cover_numeric_fields(data_db):
     assert cells["calibrated_at"]["kind"] == "record"
 
 
+def _set_range_unit(db, ids, unit_id):
+    """Đổi đơn vị gốc của dữ kiện phạm vi để kiểm quy đổi hiển thị."""
+    fact = db.get(ProcedureFact, ids["range_fact_id"])
+    fact.unit_id = unit_id
+    db.commit()
+
+
+def test_range_display_keeps_si_and_adds_original_unit(data_db):
+    db, _ = data_db
+    record = qr.list_records(db, sort="calibrated_at", order="asc")[0][0]
+    # SI giữ nguyên (bộ lọc range_min_si dùng nó).
+    assert record["range_min"] == pytest.approx(0.0)
+    assert record["range_max"] == pytest.approx(160000000.0)
+    # Đơn vị gốc Pa trùng SI nên hiển thị bằng đúng giá trị SI.
+    assert record["range_min_display"] == pytest.approx(0.0)
+    assert record["range_max_display"] == pytest.approx(160000000.0)
+
+
+def test_range_display_converts_to_bar(data_db):
+    db, ids = data_db
+    _set_range_unit(db, ids, ids["unit_bar_id"])
+    record = qr.list_records(db, sort="calibrated_at", order="asc")[0][0]
+    # 0..1,6e8 Pa đổi về bar = 0..1600.
+    assert record["range_min_display"] == pytest.approx(0.0)
+    assert record["range_max_display"] == pytest.approx(1600.0)
+    # Trường SI không bị đổi theo đơn vị hiển thị.
+    assert record["range_max"] == pytest.approx(160000000.0)
+
+
+def test_range_display_converts_to_mpa(data_db):
+    db, ids = data_db
+    mpa = Unit(
+        code="MPa",
+        name_vi="Megapascal",
+        quantity_id=ids["quantity_id"],
+        factor_to_si=1000000.0,
+        offset_to_si=0.0,
+    )
+    db.add(mpa)
+    db.commit()
+    _set_range_unit(db, ids, mpa.id)
+    record = qr.list_records(db, sort="calibrated_at", order="asc")[0][0]
+    # 1,6e8 Pa đổi về MPa = 160; bỏ nhiễu dấu phẩy động.
+    assert record["range_min_display"] == pytest.approx(0.0)
+    assert record["range_max_display"] == pytest.approx(160.0)
+
+
+def test_range_display_falls_back_to_si_without_unit(data_db):
+    db, ids = data_db
+    _set_range_unit(db, ids, None)
+    record = qr.list_records(db, sort="calibrated_at", order="asc")[0][0]
+    # Không có đơn vị gốc → giữ giá trị SI (giống ``_from_si`` của router).
+    assert record["range_min_display"] == pytest.approx(0.0)
+    assert record["range_max_display"] == pytest.approx(160000000.0)
+
+
 def test_get_record_detail_with_measurements(data_db):
     db, ids = data_db
     record = qr.get_record(db, ids["record_a_id"])
@@ -138,6 +195,10 @@ def test_get_record_detail_with_measurements(data_db):
     point = record["measurements"][0]
     assert point["step_code"] == "6.3.1"
     assert point["error_value"] == pytest.approx(0.1)
+    # Sprint M: sai số có đơn vị riêng "%" tách khỏi đơn vị giá trị đo "bar".
+    assert point["unit_code"] == "bar"
+    assert point["error_unit_id"] == ids["unit_percent_id"]
+    assert point["error_unit_code"] == "%"
     assert point["within_limit"] is True
     assert {cell["field"] for cell in point["provenance"]} == {
         "nominal",
@@ -146,6 +207,24 @@ def test_get_record_detail_with_measurements(data_db):
         "limit",
     }
     assert all(cell["kind"] == "measurement" for cell in point["provenance"])
+
+
+def test_get_record_measurements_sorted_by_step_then_ord(data_db):
+    """Điểm đo sắp theo ``step_code`` rồi ``ord`` để không xen kẽ A.4/A.5."""
+    from db.models import MeasurementPoint
+
+    db, ids = data_db
+    db.add_all(
+        [
+            MeasurementPoint(record_id=ids["record_a_id"], ord=2, step_code="A.4", label="2"),
+            MeasurementPoint(record_id=ids["record_a_id"], ord=1, step_code="A.5", label="1"),
+            MeasurementPoint(record_id=ids["record_a_id"], ord=1, step_code="A.4", label="1"),
+        ]
+    )
+    db.commit()
+    points = qr.get_record(db, ids["record_a_id"])["measurements"]
+    labels = [(point["step_code"], point["ord"]) for point in points]
+    assert labels == [("6.3.1", 1), ("A.4", 1), ("A.4", 2), ("A.5", 1)]
 
 
 def test_get_record_missing_raises(data_db):

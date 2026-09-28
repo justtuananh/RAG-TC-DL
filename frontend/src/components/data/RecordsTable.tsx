@@ -164,7 +164,7 @@ export default function RecordsTable(props: RecordsTableProps) {
                   value={filters.quantity_id ?? ""}
                   onChange={(e) => onFilterChange({ quantity_id: e.target.value ? Number(e.target.value) : undefined })}
                   aria-label="Lọc theo đại lượng"
-                  style={filterInput}
+                  style={filterSelectWide}
                 >
                   <option value="">Mọi đại lượng</option>
                   {(options?.quantities ?? []).map((choice) => (
@@ -177,7 +177,7 @@ export default function RecordsTable(props: RecordsTableProps) {
                   value={filters.procedure_id ?? ""}
                   onChange={(e) => onFilterChange({ procedure_id: e.target.value ? Number(e.target.value) : undefined })}
                   aria-label="Lọc theo QTKĐ"
-                  style={filterInput}
+                  style={filterSelectWide}
                 >
                   <option value="">Mọi QTKĐ</option>
                   {(options?.procedures ?? []).map((choice) => (
@@ -311,7 +311,7 @@ export default function RecordsTable(props: RecordsTableProps) {
                       <ProvCell
                         row={row}
                         field="range_min"
-                        text={formatRange(row.range_min, row.range_max, row.range_unit_code)}
+                        text={formatRange(row.range_min_display, row.range_max_display, row.range_unit_code)}
                         onOpenProvenance={onOpenProvenance}
                       />
                     </td>
@@ -375,6 +375,8 @@ export default function RecordsTable(props: RecordsTableProps) {
 const thStyle: React.CSSProperties = { textAlign: "left", padding: "7px 9px", borderBottom: `1px solid ${COLOR.border}`, color: COLOR.textSecondary, fontWeight: 700, whiteSpace: "nowrap" };
 const filterThStyle: React.CSSProperties = { padding: "4px 6px", borderBottom: `1px solid ${COLOR.border}`, background: COLOR.surfaceAlt, verticalAlign: "top" };
 const filterInput: React.CSSProperties = { width: "100%", minWidth: 60, height: 26, padding: "0 6px", borderRadius: 6, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textPrimary, fontSize: "11.5px", fontFamily: "inherit" };
+// Ô chọn "Đại lượng"/"QTKĐ": đủ rộng để hiện trọn nhãn mặc định "Mọi đại lượng"/"Mọi QTKĐ".
+const filterSelectWide: React.CSSProperties = { ...filterInput, minWidth: 96 };
 const tdStyle: React.CSSProperties = { padding: "7px 9px", borderBottom: `1px solid ${COLOR.surfaceAlt}`, color: COLOR.textPrimary, whiteSpace: "nowrap" };
 const numericStyle: React.CSSProperties = { fontVariantNumeric: "tabular-nums", color: COLOR.textPrimary };
 const provButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 4, border: `1px solid ${COLOR.accentSoftBorder}`, background: COLOR.accentSoft, color: COLOR.accentDark, borderRadius: 7, padding: "1px 7px", fontSize: "11.5px", fontWeight: 700, cursor: "pointer", fontVariantNumeric: "tabular-nums" };

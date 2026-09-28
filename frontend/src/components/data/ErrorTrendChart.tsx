@@ -43,7 +43,8 @@ function Chart({ series }: { series: TrendSeries }) {
     .join(" ");
 
   const firstLimit = series.points.find((point) => point.limit_value !== null && point.limit_value !== undefined)?.limit_value ?? null;
-  const unit = series.unit_code ? ` ${series.unit_code}` : "";
+  const errorUnit = series.error_unit_code ?? series.unit_code;
+  const unit = errorUnit ? ` ${errorUnit}` : "";
   const description = `Diễn biến sai số mốc ${series.step_code ?? series.label ?? series.key}: ${series.points
     .map((point) => `${formatDate(point.calibrated_at)} ${formatNumber(point.error_value)}${unit}`)
     .join(", ")}.`;
@@ -103,7 +104,7 @@ export default function ErrorTrendChart({
             <span style={{ fontWeight: 700, fontSize: "13px", color: COLOR.textPrimary }}>
               Mốc {item.step_code ?? item.label ?? item.key}
             </span>
-            {item.unit_code && <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>đơn vị {item.unit_code}</span>}
+            {(item.error_unit_code ?? item.unit_code) && <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>đơn vị {item.error_unit_code ?? item.unit_code}</span>}
           </div>
           <Chart series={item} />
           <details style={{ marginTop: 8 }}>
@@ -131,7 +132,7 @@ export default function ErrorTrendChart({
                       <td style={tdStyle}>{formatDate(point.calibrated_at)}</td>
                       <td style={{ ...tdStyle, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
                         {formatNumber(point.error_value)}
-                        {point.unit_code ? ` ${point.unit_code}` : ""}
+                        {(point.error_unit_code ?? point.unit_code) ? ` ${point.error_unit_code ?? point.unit_code}` : ""}
                       </td>
                       <td style={{ ...tdStyle, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
                         {formatNumber(point.limit_value)}

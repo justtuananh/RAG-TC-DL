@@ -28,6 +28,9 @@ def test_device_history_identity_timeline_trend(data_db):
     series = history["trend"][0]
     assert series["step_code"] == "6.3.1"
     assert [point["error_value"] for point in series["points"]] == [0.1, 0.8]
+    # Sprint M: chuỗi diễn biến mang đơn vị riêng của sai số.
+    assert series["error_unit_code"] == "%"
+    assert series["points"][0]["error_unit_code"] == "%"
     assert series["points"][0]["provenance"][0]["kind"] == "measurement"
     assert series["points"][0]["verdict_label"] == "Đạt"
     # Mỗi điểm đo có nguồn (P1).
@@ -71,3 +74,34 @@ def test_list_devices_search(data_db):
     assert total == 1
     _, total = qr.list_devices(db, q="khong-co")
     assert total == 0
+
+
+def test_device_history_timeline_counts_approved_measurements(data_db):
+    """Cột "Số điểm đo" của dòng thời gian phải có số, không được thiếu khóa."""
+    db, ids = data_db
+    history = qr.device_history(db, device_id=ids["device_id"])
+    assert [record["measurement_count"] for record in history["records"]] == [1, 1]
+
+
+def _add_point(db, record_id: int, **fields) -> None:
+    from db.models import MeasurementPoint
+
+    db.add(MeasurementPoint(record_id=record_id, quote=fields.pop("quote", "nguồn"), **fields))
+    db.commit()
+
+
+def test_trend_series_are_per_step_and_label_and_skip_points_without_error(data_db):
+    """Mốc đo = mục đo + nhãn: quả cân "2" không lẫn vào chuỗi của quả cân "1";
+    điểm không có sai số (chỉ có giới hạn) không phải dữ liệu diễn biến sai số."""
+    db, ids = data_db
+    first = qr.device_history(db, device_id=ids["device_id"])["records"][0]["id"]
+    _add_point(
+        db, first, ord=2, step_code="6.3.1", label="20 bar", error_value=0.2, error_text="0,2"
+    )
+    _add_point(
+        db, first, ord=3, step_code="6.2.1", label="Độ kín", limit_value=30.0, limit_text="≤ 30"
+    )
+    history = qr.device_history(db, device_id=ids["device_id"])
+    keys = [(series["step_code"], series["label"]) for series in history["trend"]]
+    assert keys == [("6.3.1", "10 bar"), ("6.3.1", "20 bar")]
+    assert [len(series["points"]) for series in history["trend"]] == [2, 1]

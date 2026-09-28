@@ -28,8 +28,10 @@ export function formatRange(
   const hasMax = max !== null && max !== undefined;
   if (!hasMin && !hasMax) return "—";
   const suffix = unit ? ` ${unit}` : "";
-  if (hasMin && hasMax) return `${formatNumber(min)} – ${formatNumber(max)}${suffix}`;
-  return `${formatNumber(hasMin ? min : max)}${suffix}`;
+  // Hai tham số đã ở ĐƠN VỊ GỐC của dữ kiện (backend đổi từ SI và làm tròn 9 chữ
+  // số có nghĩa). Dùng 9 chữ số để không nuốt mất giá trị nhỏ như 0,0015 MPa.
+  if (hasMin && hasMax) return `${formatNumber(min, 9)} – ${formatNumber(max, 9)}${suffix}`;
+  return `${formatNumber(hasMin ? min : max, 9)}${suffix}`;
 }
 
 export interface Tone {

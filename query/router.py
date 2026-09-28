@@ -33,6 +33,7 @@ from query import approved as approved_query
 from query import intents
 from query import provenance as provenance_query
 from query import records as records_query
+from query import units as units_query
 
 logger = logging.getLogger(__name__)
 
@@ -115,15 +116,17 @@ def _num_text(value: Any, digits: int = 3) -> str:
     return fixed or "0"
 
 
-def _range_text(minimum: Any, maximum: Any, unit: str | None) -> str:
+def _range_text(minimum: Any, maximum: Any, unit: dict[str, Any] | None) -> str:
+    """Khoảng giá trị: ``minimum``/``maximum`` theo SI, hiển thị theo ``unit`` của dữ kiện."""
     has_min = minimum is not None
     has_max = maximum is not None
     if not has_min and not has_max:
         return "—"
-    suffix = f" {unit}" if unit else ""
+    low, high = units_query.from_si(minimum, unit), units_query.from_si(maximum, unit)
+    suffix = f" {unit['code']}" if unit else ""
     if has_min and has_max:
-        return f"{_num_text(minimum)} – {_num_text(maximum)}{suffix}"
-    return f"{_num_text(minimum if has_min else maximum)}{suffix}"
+        return f"{_num_text(low, digits=9)} – {_num_text(high, digits=9)}{suffix}"
+    return f"{_num_text(low if has_min else high, digits=9)}{suffix}"
 
 
 # ── Tham chiếu xuất xứ của hồ sơ/số liệu đo ──────────────────────────────────
@@ -147,17 +150,28 @@ def _text_cell(record: dict[str, Any], value: Any, *, field_name: str | None = N
     )
 
 
-def _num_cell(record: dict[str, Any], field_name: str, value: Any, *, digits: int = 3) -> Cell:
+def _num_cell(
+    record: dict[str, Any],
+    field_name: str,
+    value: Any,
+    *,
+    digits: int = 3,
+    unit: str | None = None,
+) -> Cell:
     """Ô số: CHỈ hiện con số khi có tham chiếu xuất xứ; thiếu nguồn → để trống.
 
     Đây là hàng rào P1 ở tầng trình bày: không bao giờ đưa ra một con số không
     truy được về nguyên văn (spec §8 cổng: không có số không truy được nguồn).
+    ``unit`` là hậu tố đơn vị (ví dụ "%") gắn liền con số cùng dòng.
     """
     ref = _prov_of(record, field_name)
     if ref is None:
         return Cell(text="—", numeric=False)
+    text = _num_text(value, digits)
+    if unit and text != "—":
+        text = f"{text} {unit}"
     return Cell(
-        text=_num_text(value, digits),
+        text=text,
         numeric=True,
         provenance=ref,
         device_id=record.get("device_id"),
@@ -233,11 +247,6 @@ def _find_quantity(session: Session, name: str) -> dict[str, Any] | None:
         if needle == code or needle in label or label in needle:
             return dict(row)
     return None
-
-
-def _unit_codes(session: Session) -> dict[int, str]:
-    rows = session.execute(text("SELECT id, code FROM v_unit")).mappings().all()
-    return {int(row["id"]): row["code"] for row in rows}
 
 
 # ── Trích dẫn sổ cái (tách bạch với trích dẫn QTKĐ) ───────────────────────────
@@ -344,6 +353,17 @@ def _empty_payload(intent: str, title: str, note: str) -> DataPayload:
     )
 
 
+def _document_label(record: dict[str, Any]) -> str:
+    """Tên tài liệu người đọc hiểu: ``display_name`` (tên tệp gốc), lùi về ``file_stem``."""
+    return record.get("display_name") or record.get("file_stem") or "—"
+
+
+def _record_label(point: dict[str, Any]) -> str:
+    """Nhãn hồ sơ cho bảng diễn biến: số GCN, lùi về tên tài liệu rồi id nội bộ."""
+    value = point.get("cert_no") or point.get("display_name") or point.get("record_id")
+    return str(value) if value not in (None, "") else "—"
+
+
 def _timeline_table(history: dict[str, Any]) -> DataTable:
     columns = [
         Column("calibrated_at", "Ngày kiểm định"),
@@ -366,7 +386,7 @@ def _timeline_table(history: dict[str, Any]) -> DataTable:
                     record, "measurement_count", record.get("measurement_count"), digits=0
                 ),
                 "cert_no": _text_cell(record, record.get("cert_no")),
-                "file_stem": _text_cell(record, record.get("file_stem")),
+                "file_stem": _text_cell(record, _document_label(record)),
             }
         )
     return DataTable(
@@ -395,12 +415,15 @@ def _trend_tables(history: dict[str, Any], *, step_code: str | None = None) -> l
             if count >= TREND_POINT_CAP:
                 break
             count += 1
+            # Sai số/giới hạn dùng đơn vị riêng nếu có, nếu không theo đơn vị giá trị đo.
+            error_unit = point.get("error_unit_code") or point.get("unit_code")
+            record_id = point.get("record_id")
             rows.append(
                 {
                     "step": Cell(text=key or "—"),
                     "calibrated_at": Cell(text=_date_text(point.get("calibrated_at"))),
-                    "error": _num_cell(point, "error", point.get("error_value")),
-                    "limit": _num_cell(point, "limit", point.get("limit_value")),
+                    "error": _num_cell(point, "error", point.get("error_value"), unit=error_unit),
+                    "limit": _num_cell(point, "limit", point.get("limit_value"), unit=error_unit),
                     "within": Cell(
                         text=(
                             "Trong giới hạn"
@@ -411,9 +434,14 @@ def _trend_tables(history: dict[str, Any], *, step_code: str | None = None) -> l
                         )
                     ),
                     "record_id": Cell(
-                        text=str(point.get("record_id") or "—"),
-                        record_id=point.get("record_id"),
+                        text=_record_label(point),
+                        record_id=record_id,
                         device_id=history.get("device", {}).get("id"),
+                        provenance=(
+                            {"field": "calibrated_at", "kind": "record", "id": record_id}
+                            if record_id is not None
+                            else None
+                        ),
                     ),
                 }
             )
@@ -490,7 +518,7 @@ def resolve_latest_record(session: Session, params: intents.LatestRecordParams) 
                     record, "measurement_count", record.get("measurement_count"), digits=0
                 ),
                 "cert_no": _text_cell(record, record.get("cert_no")),
-                "file_stem": _text_cell(record, record.get("file_stem")),
+                "file_stem": _text_cell(record, _document_label(record)),
             }
         ],
     )
@@ -568,7 +596,7 @@ def resolve_procedure_params(
             "Không tìm thấy QTKĐ đã có dữ kiện được duyệt khớp yêu cầu.",
         )
     facts = approved_query.list_approved_facts(session, procedure_id=procedure["id"], limit=200)
-    units = _unit_codes(session)
+    units = units_query.unit_defs_by_id(session)
     columns = [
         Column("fact_kind", "Loại dữ kiện"),
         Column("label", "Nhãn"),
@@ -693,6 +721,7 @@ def resolve_devices_by_range(session: Session, params: intents.DevicesByRangePar
         Column("calibrated_at", "Ngày kiểm định"),
         Column("verdict", "Kết luận"),
     ]
+    units = units_query.unit_defs_by_id(session)
     rows: list[dict[str, Cell]] = []
     for record in records:
         device_id = record.get("device_id")
@@ -702,7 +731,9 @@ def resolve_devices_by_range(session: Session, params: intents.DevicesByRangePar
             seen.add(device_id)
         range_ref = _prov_of(record, "range_min")
         range_text = _range_text(
-            record.get("range_min"), record.get("range_max"), record.get("range_unit_code")
+            record.get("range_min"),
+            record.get("range_max"),
+            units.get(record.get("range_unit_id")) if record.get("range_unit_id") else None,
         )
         rows.append(
             {

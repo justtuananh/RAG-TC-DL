@@ -10,6 +10,10 @@ Bộ test khoá bốn cổng của spec §9 Sprint 9 ở tầng đơn vị:
 
 from __future__ import annotations
 
+import json
+import re
+from pathlib import Path
+
 import pytest
 
 from query import intents, router
@@ -275,8 +279,33 @@ def test_error_trend_series_traces_each_point(data_db):
     )
     assert not payload.empty
     errors = [row["error"].text for row in payload.tables[0].rows]
-    assert errors == ["0.1", "0.8"]
+    # Kèm đơn vị sai số: error_unit_code nếu có, không thì unit_code của giá trị đo.
+    assert errors == ["0.1 %", "0.8 bar"]
     assert router.untraceable_cells(payload) == []
+
+
+def test_error_trend_shows_units_and_readable_record_label(data_db):
+    """Cột Sai số/Giới hạn có đơn vị; cột Hồ sơ hiện số GCN thay vì id nội bộ."""
+    session, _ = data_db
+    payload = router.build_data_payload(
+        session, _request({"intent": "error_trend", "params": {"serial": "SN-1"}})
+    )
+    table = payload.tables[0]
+    assert [row["limit"].text for row in table.rows] == ["0.5 %", "0.5 bar"]
+    assert [row["record_id"].text for row in table.rows] == ["C-1", "C-2"]
+    # Ô Hồ sơ vẫn bấm được để mở nguồn (P1).
+    assert all(row["record_id"].provenance["kind"] == "record" for row in table.rows)
+    assert router.untraceable_cells(payload) == []
+
+
+def test_timeline_shows_document_display_name(data_db):
+    """Cột Hồ sơ gốc hiện ``display_name`` của tài liệu, không phải file_stem."""
+    session, _ = data_db
+    payload = router.build_data_payload(
+        session, _request({"intent": "device_history", "params": {"serial": "SN-1"}})
+    )
+    labels = [row["file_stem"].text for row in payload.tables[0].rows]
+    assert labels == ["BB_2024_001.docx", "BB_2024_001.docx"]
 
 
 def test_unknown_serial_raises_not_found(data_db):
@@ -305,3 +334,194 @@ def test_payload_serializes_for_sse(data_db):
     assert body["branch"] == "data"
     assert body["tables"][0]["columns"][0]["key"] == "calibrated_at"
     assert body["tables"][0]["rows"][0]["calibrated_at"]["provenance"]["kind"] == "record"
+
+
+def test_procedure_params_range_is_shown_in_fact_unit_not_si(data_db):
+    """``value_min``/``value_max`` lưu theo SI (Pa); khoảng hiển thị phải đổi về
+    đơn vị của dữ kiện, không gắn nhãn "bar" cho con số Pa (lệch 10^5 lần)."""
+    from db.models import ProcedureFact, Unit
+
+    session, _ = data_db
+    bar = session.query(Unit).filter(Unit.code == "bar").one()
+    fact = session.query(ProcedureFact).filter(ProcedureFact.fact_kind == "working_range").one()
+    fact.unit_id = bar.id
+    session.commit()
+    payload = router.build_data_payload(
+        session, _request({"intent": "procedure_params", "params": {"procedure_number": "1.061"}})
+    )
+    ranges = [
+        row["value_range"].text for row in payload.tables[0].rows if row["value_range"].numeric
+    ]
+    assert ranges == ["0 – 1600 bar"]
+
+
+# ── Cổng tín hiệu mở rộng + chuẩn hoá tham số tất định ────────────────────────
+
+
+def test_data_signal_gate_covers_real_phrasings():
+    """Cổng tín hiệu mở cho câu số liệu thật, kể cả số hiệu chữ-số và số 0 đầu."""
+    for question in (
+        "Thiết bị 1046 kiểm định lần cuối khi nào",
+        "Lần gần đây nhất thiết bị 6112 được kiểm định là khi nào",
+        "1A0043219 khi nào hết hạn kiểm định",
+        "B280-7702 đã kiểm mấy lần",
+        "0391 có biên bản nào không đạt",
+        "Các biên bản không đạt năm 2024",
+        "Hồ sơ kiểm định trong tháng 5/2026",
+        "Danh sách hồ sơ từ 2023 đến 2024",
+        "Xu hướng sai số quả cân của áp kế 6112",
+        "Thông số tham chiếu của QTKĐ 1.159",
+    ):
+        assert intents.looks_like_data_question(question) is True, question
+
+
+def test_data_signal_gate_keeps_text_questions_closed():
+    """Câu quy định/công thức về áp kế pittông vẫn đi thẳng nhánh văn bản."""
+    for question in (
+        "Chu kỳ kiểm định áp kế píttông theo quy định là bao lâu?",
+        "Công thức tính diện tích hiệu dụng của píttông áp kế?",
+        "Sai số cho phép của áp kế píttông tiêu chuẩn là bao nhiêu?",
+        "Cách hiệu chỉnh áp suất khi nhiệt độ thay đổi?",
+    ):
+        assert intents.looks_like_data_question(question) is False, question
+
+
+def test_ground_params_keeps_grounded_identifiers():
+    grounded = intents.ground_params(
+        {"serial": "SN-1", "verdict": "khong_dat"}, "Hồ sơ không đạt của thiết bị SN-1"
+    )
+    assert grounded == {"serial": "SN-1", "verdict": "khong_dat"}
+
+
+def test_ground_params_drops_invented_identifiers():
+    """Số hiệu/số QTKĐ không có trong câu hỏi (do LLM bịa) bị loại bỏ."""
+    assert intents.ground_params({"serial": "SN-1"}, "Lịch sử kiểm định của thiết bị?") == {}
+    assert intents.ground_params({"procedure_number": "1.061"}, "Bảng phương tiện?") == {}
+
+
+def test_ground_params_drops_verdict_without_cue():
+    assert intents.ground_params(
+        {"date_from": "2024-01-01", "date_to": "2024-12-31", "verdict": "dat_khoang"},
+        "Hồ sơ kiểm định trong năm 2024?",
+    ) == {"date_from": "2024-01-01", "date_to": "2024-12-31"}
+
+
+def test_sanitize_classification_enforces_grounding():
+    payload = {
+        "branch": "data",
+        "intent": "device_history",
+        "params": {"so_hieu": "SN-1"},
+        "confidence": 0.9,
+    }
+    sanitized = intents.sanitize_classification(payload, "Lịch sử kiểm định của thiết bị?")
+    assert sanitized["params"] == {}
+
+
+def _normalize_question(text: str) -> str:
+    return re.sub(r"[^\w\s]", " ", text, flags=re.UNICODE).lower()
+
+
+def test_prompt_does_not_leak_golden_questions():
+    """Không câu hỏi vàng nào (đã bỏ dấu câu, hạ chữ thường) được nhúng vào prompt."""
+    golden_path = Path(__file__).resolve().parents[3] / "eval" / "intent_golden.jsonl"
+    prompt = _normalize_question(intents.build_classifier_prompt("câu thăm dò ngoài tập vàng"))
+    for line in golden_path.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        question = _normalize_question(json.loads(line)["question"]).strip()
+        assert question and question not in prompt, question
+
+
+def test_extract_json_takes_first_valid_object():
+    raw = '{"branch":"data","intent":"latest_record","params":{"serial":"A1"}}\n{"branch":"text"}'
+    payload = intents.extract_json(raw)
+    assert payload == {
+        "branch": "data",
+        "intent": "latest_record",
+        "params": {"serial": "A1"},
+    }
+
+
+def test_data_signal_uses_device_context_serial():
+    for question in (
+        "Áp kế 2218 kiểm mấy lần rồi",
+        "Thiết bị 4471 lần kiểm mới nhất ra sao",
+        "Máy 58-3312 đã kiểm mấy lần",
+        "Phương tiện YS600-19087 thay đổi thế nào qua các năm",
+    ):
+        assert intents.looks_like_data_question(question) is True, question
+
+
+def test_data_signal_stays_closed_for_device_words_without_serial():
+    for question in (
+        "Thiết bị chuẩn cần thiết để kiểm định đồng hồ áp suất?",
+        "Áp kế píttông hoạt động thế nào?",
+        "Máy móc cần bảo trì ra sao?",
+    ):
+        assert intents.looks_like_data_question(question) is False, question
+
+
+def test_data_signal_uses_approved_ledger_serials(data_db):
+    from datetime import datetime
+
+    from db.models import CalibrationRecord, Device
+
+    session, ids = data_db
+    device = Device(device_type_id=ids["device_type_id"], serial_no="4471", serial_norm="4471")
+    session.add(device)
+    session.flush()
+    session.add(
+        CalibrationRecord(
+            document_id="BB_2024_001",
+            extraction_id=ids["record_a_extraction_id"],
+            device_id=device.id,
+            procedure_id=ids["procedure_id"],
+            calibrated_at=datetime(2024, 1, 1),
+            verdict="dat",
+        )
+    )
+    session.commit()
+    question = "xem 4471 biến thiên ra sao"
+    assert intents.looks_like_data_question(question) is False
+    assert intents.looks_like_data_question(question, session=session) is True
+
+
+def test_ground_params_recovers_serial_with_device_prefix():
+    grounded = intents.ground_params({"serial": "AP-0391"}, "Áp kế 0391 lần kiểm mới nhất khi nào")
+    assert grounded == {"serial": "0391"}
+    assert intents.ground_params({"serial": "Máy 58-3312"}, "Máy 58-3312 đã kiểm mấy lần rồi") == {
+        "serial": "58-3312"
+    }
+    assert intents.ground_params({"serial": "SN-1"}, "Lịch sử kiểm định của thiết bị SN-1?") == {
+        "serial": "SN-1"
+    }
+
+
+def test_extract_date_range_patterns():
+    assert intents.extract_date_range("Hồ sơ trong năm 2024") == {
+        "date_from": "2024-01-01",
+        "date_to": "2024-12-31",
+    }
+    assert intents.extract_date_range("Hồ sơ trong tháng 5/2026") == {
+        "date_from": "2026-05-01",
+        "date_to": "2026-05-31",
+    }
+    assert intents.extract_date_range("Hồ sơ từ 2023 đến 2024") == {
+        "date_from": "2023-01-01",
+        "date_to": "2024-12-31",
+    }
+    assert intents.extract_date_range("Hồ sơ từ 2025 đến 2024") == {
+        "date_from": "2025-01-01",
+        "date_to": "2024-12-31",
+    }
+
+
+def test_sanitize_classification_normalizes_period_dates():
+    payload = {
+        "branch": "data",
+        "intent": "records_by_period",
+        "params": {"date_from": "2024-01-01", "date_to": "2025-12-31"},
+    }
+    out = intents.sanitize_classification(payload, "Hồ sơ kiểm định từ 2025 đến 2024")
+    assert out["params"] == {"date_from": "2025-01-01", "date_to": "2024-12-31"}

@@ -1,7 +1,7 @@
 import type { DataCellRef, DataMeasurement, DataRecordRow } from "../../types";
 import { COLOR } from "../../theme";
 import { IcArrowRight, IcClock, IcFile, IcLink, IcX } from "../common/icons";
-import { formatDate, formatNumber, verdictTone, withinLimitTone } from "./format";
+import { formatDate, formatNumber, formatRange, verdictTone, withinLimitTone } from "./format";
 
 // Bảng chi tiết một hồ sơ: các trường đầu mục + điểm đo. Mỗi ô số là nút mở xuất xứ.
 
@@ -35,6 +35,18 @@ function ProvButton({
 
 function measurementRef(point: DataMeasurement, field: string): DataCellRef | null {
   return point.provenance.find((cell) => cell.field === field) ?? null;
+}
+
+/** Nhãn mốc đo "mục đo · nhãn" (ví dụ "A.4 · 5"), khớp khóa ở ``_build_trend``. */
+function measurementLabel(point: DataMeasurement): string {
+  const parts = [point.step_code, point.label].filter((part): part is string => Boolean(part));
+  return parts.length > 0 ? parts.join(" · ") : "—";
+}
+
+/** Giá trị kèm đơn vị; giá trị trống trả "—" KHÔNG kèm đơn vị (M2). */
+function valueWithUnit(value: number | null, unit: string | null | undefined): string {
+  if (value === null || value === undefined) return "—";
+  return `${formatNumber(value)}${unit ? ` ${unit}` : ""}`;
 }
 
 export default function RecordDetailPanel({
@@ -114,7 +126,7 @@ export default function RecordDetailPanel({
           <dt style={dtStyle}>Phạm vi đo</dt>
           <dd style={ddStyle}>
             <ProvButton
-              label={record.range_min == null && record.range_max == null ? "—" : `${formatNumber(record.range_min)} – ${formatNumber(record.range_max)}${record.range_unit_code ? ` ${record.range_unit_code}` : ""}`}
+              label={formatRange(record.range_min_display, record.range_max_display, record.range_unit_code)}
               cellRef={ref("range_min")}
               onOpen={onOpenProvenance}
             />
@@ -148,45 +160,49 @@ export default function RecordDetailPanel({
               Điểm đo ({record.measurements?.length ?? 0})
             </span>
           </div>
-          <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px" }}>
-            <caption style={{ textAlign: "left", color: COLOR.textSecondary, fontSize: "11.5px", paddingBottom: 4 }}>
-              Điểm đo của hồ sơ — mỗi ô số bấm để mở nguồn.
-            </caption>
-            <thead>
-              <tr>
-                {["Mốc", "Danh nghĩa", "Đo được", "Sai số", "Giới hạn", "Đối chiếu"].map((heading) => (
-                  <th key={heading} scope="col" style={thStyle}>{heading}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {(record.measurements ?? []).length === 0 ? (
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px" }}>
+              <caption style={{ textAlign: "left", color: COLOR.textSecondary, fontSize: "11.5px", paddingBottom: 4 }}>
+                Điểm đo của hồ sơ: mỗi ô số bấm để mở nguồn.
+              </caption>
+              <thead>
                 <tr>
-                  <td colSpan={6} style={{ ...tdStyle, color: COLOR.textSecondary, textAlign: "center" }}>
-                    Hồ sơ không có điểm đo.
-                  </td>
+                  {["Mốc", "Danh nghĩa", "Đo được", "Sai số", "Giới hạn", "Đối chiếu"].map((heading) => (
+                    <th key={heading} scope="col" style={thStyle}>{heading}</th>
+                  ))}
                 </tr>
-              ) : (
-                (record.measurements ?? []).map((point) => {
-                  const limitTone = withinLimitTone(point.within_limit);
-                  return (
-                    <tr key={point.id}>
-                      <td style={tdStyle}>{point.step_code ?? point.label ?? "—"}</td>
-                      <td style={tdStyle}><ProvButton label={formatNumber(point.nominal_value)} cellRef={measurementRef(point, "nominal")} onOpen={onOpenProvenance} /></td>
-                      <td style={tdStyle}><ProvButton label={formatNumber(point.measured_value)} cellRef={measurementRef(point, "measured")} onOpen={onOpenProvenance} /></td>
-                      <td style={tdStyle}><ProvButton label={`${formatNumber(point.error_value)}${point.unit_code ? ` ${point.unit_code}` : ""}`} cellRef={measurementRef(point, "error")} onOpen={onOpenProvenance} /></td>
-                      <td style={tdStyle}><ProvButton label={formatNumber(point.limit_value)} cellRef={measurementRef(point, "limit")} onOpen={onOpenProvenance} /></td>
-                      <td style={tdStyle}>
-                        <span style={{ fontSize: "10.5px", fontWeight: 700, color: limitTone.fg, background: limitTone.bg, padding: "2px 7px", borderRadius: 9999 }}>
-                          {limitTone.label}
-                        </span>
-                      </td>
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {(record.measurements ?? []).length === 0 ? (
+                  <tr>
+                    <td colSpan={6} style={{ ...tdStyle, color: COLOR.textSecondary, textAlign: "center" }}>
+                      Hồ sơ không có điểm đo.
+                    </td>
+                  </tr>
+                ) : (
+                  (record.measurements ?? []).map((point) => {
+                    const limitTone = withinLimitTone(point.within_limit);
+                    // Sai số/giới hạn dùng đơn vị riêng nếu có, nếu không mới theo đơn vị giá trị đo.
+                    const errorUnit = point.error_unit_code ?? point.unit_code;
+                    return (
+                      <tr key={point.id}>
+                        <td style={{ ...tdStyle, whiteSpace: "nowrap" }}>{measurementLabel(point)}</td>
+                        <td style={tdStyle}><ProvButton label={formatNumber(point.nominal_value)} cellRef={measurementRef(point, "nominal")} onOpen={onOpenProvenance} /></td>
+                        <td style={tdStyle}><ProvButton label={formatNumber(point.measured_value)} cellRef={measurementRef(point, "measured")} onOpen={onOpenProvenance} /></td>
+                        <td style={tdStyle}><ProvButton label={valueWithUnit(point.error_value, errorUnit)} cellRef={measurementRef(point, "error")} onOpen={onOpenProvenance} /></td>
+                        <td style={tdStyle}><ProvButton label={valueWithUnit(point.limit_value, errorUnit)} cellRef={measurementRef(point, "limit")} onOpen={onOpenProvenance} /></td>
+                        <td style={tdStyle}>
+                          <span style={{ fontSize: "10.5px", fontWeight: 700, color: limitTone.fg, background: limitTone.bg, padding: "2px 7px", borderRadius: 9999, whiteSpace: "nowrap" }}>
+                            {limitTone.label}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </aside>
@@ -198,7 +214,7 @@ const gridStyle: React.CSSProperties = { display: "grid", gridTemplateColumns: "
 const dtStyle: React.CSSProperties = { fontWeight: 700, color: COLOR.textSecondary };
 const ddStyle: React.CSSProperties = { margin: 0, color: COLOR.textPrimary, wordBreak: "break-word" };
 const mono: React.CSSProperties = { fontVariantNumeric: "tabular-nums" };
-const provButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 4, border: `1px solid ${COLOR.accentSoftBorder}`, background: COLOR.accentSoft, color: COLOR.accentDark, borderRadius: 7, padding: "1px 7px", fontSize: "11.5px", fontWeight: 700, cursor: "pointer", fontVariantNumeric: "tabular-nums" };
+const provButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 4, border: `1px solid ${COLOR.accentSoftBorder}`, background: COLOR.accentSoft, color: COLOR.accentDark, borderRadius: 7, padding: "1px 7px", fontSize: "11.5px", fontWeight: 700, cursor: "pointer", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" };
 const ghostButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 6, height: 32, padding: "0 12px", borderRadius: 9, border: `1px solid ${COLOR.accentSoftBorder}`, background: COLOR.surface, color: COLOR.accentDark, fontWeight: 700, fontSize: "12.5px", cursor: "pointer" };
 const iconButton: React.CSSProperties = { width: 28, height: 28, borderRadius: 8, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, cursor: "pointer", display: "inline-flex", alignItems: "center", justifyContent: "center" };
 const thStyle: React.CSSProperties = { textAlign: "left", color: COLOR.textSecondary, borderBottom: `1px solid ${COLOR.border}`, padding: "5px 7px", fontWeight: 700 };

@@ -5,6 +5,9 @@ from __future__ import annotations
 import io
 import zipfile
 
+import pytest
+
+from db.models import ProcedureFact
 from query import export as qe
 from query import provenance as qp
 from query import records as qr
@@ -57,6 +60,20 @@ def test_export_rows_carry_source_refs(data_db):
     # Nguồn phạm vi trỏ về QTKĐ + dữ kiện đã duyệt.
     assert "QTKD_1.061_2021_ND_V2" in first["Nguồn phạm vi"]
     assert "1 Phạm vi áp dụng" in first["Nguồn phạm vi"]
+
+
+def test_export_range_uses_display_unit(data_db):
+    db, ids = data_db
+    # Đổi dữ kiện phạm vi sang bar: cột xuất phải theo đơn vị gốc, không phải SI.
+    fact = db.get(ProcedureFact, ids["range_fact_id"])
+    fact.unit_id = ids["unit_bar_id"]
+    db.commit()
+    records, _ = qr.list_records(db, sort="calibrated_at", order="asc")
+    rows = qe.build_export_rows(records)
+    first = dict(zip(qe.EXPORT_HEADERS, rows[0], strict=True))
+    assert first["Đơn vị phạm vi"] == "bar"
+    assert first["Phạm vi đo – nhỏ nhất"] == pytest.approx(0.0)
+    assert first["Phạm vi đo – lớn nhất"] == pytest.approx(1600.0)
 
 
 def test_export_only_approved(data_db):

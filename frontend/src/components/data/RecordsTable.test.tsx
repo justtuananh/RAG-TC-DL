@@ -45,6 +45,8 @@ function makeRow(overrides: Partial<DataRecordRow> = {}): DataRecordRow {
     env_humidity_pct: 55,
     range_min: 0,
     range_max: 160000000,
+    range_min_display: 0,
+    range_max_display: 160000000,
     range_unit_code: "Pa",
     range_fact_id: 12,
     accuracy_text: "± 0,5 %",
@@ -142,6 +144,29 @@ describe("RecordsTable — accessibility", () => {
   it("mở chi tiết hồ sơ bằng nút bàn phím, không chỉ click hàng", () => {
     const html = render();
     expect(html).toContain('aria-label="Xem chi tiết hồ sơ SN-1"');
+  });
+
+  it("phạm vi đo hiển thị theo đơn vị gốc, không ghép giá trị SI với đơn vị", () => {
+    const html = render([
+      makeRow({
+        range_min: 1500,
+        range_max: 500000000,
+        range_min_display: 0.0015,
+        range_max_display: 500,
+        range_unit_code: "MPa",
+      }),
+    ]);
+    // 1500 Pa và 5e8 Pa đổi về MPa là 0,0015 và 500 (formatNumber dùng dấu chấm).
+    expect(html).toContain("0.0015 – 500 MPa");
+    // Không còn lộ giá trị SI thô ghép với nhãn MPa.
+    expect(html).not.toContain("500000000 MPa");
+  });
+
+  it("ô lọc Đại lượng/QTKĐ đủ rộng cho nhãn mặc định", () => {
+    const html = render();
+    expect(html).toContain("Mọi đại lượng");
+    expect(html).toContain("Mọi QTKĐ");
+    expect(html).toContain("min-width:96px");
   });
 
   it("trạng thái rỗng có thông báo thay vì bảng trống", () => {

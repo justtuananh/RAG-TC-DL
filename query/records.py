@@ -20,6 +20,8 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from query import units as units_query
+
 # Cột được phép sắp xếp — whitelist để không bao giờ nối tham số vào SQL.
 RECORD_SORTS: dict[str, str] = {
     "calibrated_at": "r.calibrated_at",
@@ -232,14 +234,29 @@ def _record_cells(record: dict[str, Any]) -> list[dict[str, Any]]:
     return cells
 
 
-def serialize_record(row: Any) -> dict[str, Any]:
-    """Chuẩn hóa một dòng ``v_record_detail`` cho JSON, kèm tham chiếu xuất xứ."""
+def serialize_record(
+    row: Any, unit_factors: dict[int, dict[str, Any]] | None = None
+) -> dict[str, Any]:
+    """Chuẩn hóa một dòng ``v_record_detail`` cho JSON, kèm tham chiếu xuất xứ.
+
+    ``range_min``/``range_max`` giữ nguyên theo SI; thêm ``range_min_display``/
+    ``range_max_display`` là giá trị đã đổi về đơn vị GỐC của dữ kiện
+    (``range_unit_code``) để tầng hiển thị không còn ghép SI với đơn vị gốc.
+    """
     record = _row_to_dict(row)
     for key in ("calibrated_at", "expires_at", "created_at"):
         record[key] = _iso(record.get(key))
     record["verdict_label"] = VERDICT_LABELS.get(record.get("verdict"), record.get("verdict"))
     record["mode_label"] = MODE_LABELS.get(record.get("mode"), record.get("mode"))
     record["within_limit"] = None  # cấp hồ sơ không có cờ này
+    unit_id = record.get("range_unit_id")
+    unit = (
+        unit_factors.get(int(unit_id))
+        if unit_factors is not None and unit_id is not None
+        else None
+    )
+    record["range_min_display"] = units_query.from_si(record.get("range_min"), unit)
+    record["range_max_display"] = units_query.from_si(record.get("range_max"), unit)
     record["provenance"] = _record_cells(record)
     return record
 
@@ -259,6 +276,9 @@ def _measurement_cells(point: dict[str, Any]) -> list[dict[str, Any]]:
 
 def serialize_measurement(row: Any) -> dict[str, Any]:
     point = _row_to_dict(row)
+    # Sprint M: đơn vị riêng của sai số; view cũ chưa có cột thì để trống, không lỗi.
+    point.setdefault("error_unit_id", None)
+    point.setdefault("error_unit_code", None)
     point["calibrated_at"] = _iso(point.get("calibrated_at"))
     point["within_limit"] = (
         None if point.get("within_limit") is None else bool(point["within_limit"])
@@ -330,7 +350,8 @@ def _query_records(
         .mappings()
         .all()
     )
-    return [serialize_record(row) for row in rows], int(total)
+    unit_factors = units_query.unit_defs_by_id(session)
+    return [serialize_record(row, unit_factors) for row in rows], int(total)
 
 
 def list_records(
@@ -396,12 +417,12 @@ def get_record(session: Session, record_id: int) -> dict[str, Any]:
     )
     if row is None:
         raise NotFoundError(f"Không tìm thấy hồ sơ đã duyệt {record_id}.")
-    record = serialize_record(row)
+    record = serialize_record(row, units_query.unit_defs_by_id(session))
     points = (
         session.execute(
             text(
                 "SELECT * FROM v_measurement_detail WHERE record_id = :id "
-                "ORDER BY COALESCE(ord, 999999), id"
+                "ORDER BY COALESCE(step_code, ''), COALESCE(ord, 999999), id"
             ),
             {"id": record_id},
         )
@@ -469,10 +490,18 @@ def list_devices(
 
 
 def _build_trend(points: list[Any]) -> list[dict[str, Any]]:
-    """Gom điểm đo theo mốc (``step_code``/nhãn) để vẽ diễn biến sai số."""
+    """Gom điểm đo theo mốc (mục đo ``step_code`` + nhãn) để vẽ diễn biến sai số.
+
+    Một mốc đo là một cặp (mục đo, nhãn): quả cân "2" của bảng A.4 chỉ so với
+    chính nó qua các lần kiểm định. Điểm không có sai số đọc từ tài liệu (chỉ có
+    giới hạn hoặc giá trị đo) không phải dữ liệu diễn biến sai số nên bị bỏ.
+    """
     buckets: dict[str, dict[str, Any]] = {}
     for row in points:
-        key = row["step_code"] or row["label"] or "(không có mốc)"
+        if row["error_value"] is None and not row["error_text"]:
+            continue
+        parts = [part for part in (row["step_code"], row["label"]) if part]
+        key = " · ".join(parts) or "(không có mốc)"
         bucket = buckets.setdefault(
             key,
             {
@@ -481,12 +510,16 @@ def _build_trend(points: list[Any]) -> list[dict[str, Any]]:
                 "label": row["label"],
                 "unit_code": row["unit_code"],
                 "unit_name": row["unit_name"],
+                "error_unit_code": row["error_unit_code"],
                 "points": [],
+                "_ord": row["ord"] if row["ord"] is not None else 999999,
             },
         )
         if bucket["unit_code"] is None:
             bucket["unit_code"] = row["unit_code"]
             bucket["unit_name"] = row["unit_name"]
+        if bucket["error_unit_code"] is None:
+            bucket["error_unit_code"] = row["error_unit_code"]
         point = serialize_measurement(row)
         point["provenance"] = [
             {"field": cell["field"], "kind": "measurement", "id": row["id"]}
@@ -499,6 +532,8 @@ def _build_trend(points: list[Any]) -> list[dict[str, Any]]:
                 "calibrated_at": _iso(row["calibrated_at"]),
                 "verdict": row["verdict"],
                 "verdict_label": VERDICT_LABELS.get(row["verdict"], row["verdict"]),
+                "cert_no": row["cert_no"],
+                "display_name": row["display_name"],
                 "error_value": row["error_value"],
                 "error_text": row["error_text"],
                 "limit_value": row["limit_value"],
@@ -507,13 +542,19 @@ def _build_trend(points: list[Any]) -> list[dict[str, Any]]:
                     None if row["within_limit"] is None else bool(row["within_limit"])
                 ),
                 "unit_code": row["unit_code"],
+                "error_unit_code": row["error_unit_code"],
                 "provenance": [
                     {"field": "error", "kind": "measurement", "id": row["id"]},
                     {"field": "limit", "kind": "measurement", "id": row["id"]},
                 ],
             }
         )
-    return sorted(buckets.values(), key=lambda item: item["key"] or "")
+    ordered = sorted(
+        buckets.values(), key=lambda item: (item["step_code"] or "", item["_ord"], item["key"])
+    )
+    for item in ordered:
+        item.pop("_ord")
+    return ordered
 
 
 def device_history(
@@ -540,7 +581,15 @@ def device_history(
 
     rows = (
         session.execute(
-            text("SELECT * FROM v_record_detail WHERE device_id = :id ORDER BY calibrated_at, id"),
+            text(
+                "SELECT r.*, mc.measurement_count AS measurement_count, "
+                "e.display_name AS display_name "
+                "FROM v_record_detail r "
+                "LEFT JOIN (SELECT record_id, COUNT(*) AS measurement_count "
+                "FROM v_measurement_detail GROUP BY record_id) mc ON mc.record_id = r.id "
+                "LEFT JOIN v_extraction e ON e.id = r.extraction_id "
+                "WHERE r.device_id = :id ORDER BY r.calibrated_at, r.id"
+            ),
             {"id": device_id},
         )
         .mappings()
@@ -563,8 +612,9 @@ def device_history(
     }
 
     records = []
+    unit_factors = units_query.unit_defs_by_id(session)
     for row in rows:
-        record = serialize_record(row)
+        record = serialize_record(row, unit_factors)
         records.append(
             {
                 "id": record["id"],
@@ -579,6 +629,7 @@ def device_history(
                 "cert_no": record["cert_no"],
                 "document_id": record["document_id"],
                 "file_stem": record["file_stem"],
+                "display_name": record.get("display_name"),
                 "extraction_id": record["extraction_id"],
                 "measurement_count": record.get("measurement_count"),
                 "provenance": record["provenance"],
@@ -588,8 +639,12 @@ def device_history(
     points = (
         session.execute(
             text(
-                "SELECT * FROM v_measurement_detail WHERE device_id = :id "
-                "ORDER BY calibrated_at, COALESCE(ord, 999999), id"
+                "SELECT m.*, r.cert_no AS cert_no, e.display_name AS display_name "
+                "FROM v_measurement_detail m "
+                "LEFT JOIN v_record_detail r ON r.id = m.record_id "
+                "LEFT JOIN v_extraction e ON e.id = r.extraction_id "
+                "WHERE m.device_id = :id "
+                "ORDER BY m.calibrated_at, COALESCE(m.ord, 999999), m.id"
             ),
             {"id": device_id},
         )
