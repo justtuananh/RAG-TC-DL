@@ -16,10 +16,10 @@ Endpoints:
     Sprint 9: định tuyến 3 nhánh — text (RAG hiện tại) / data (sổ cái) / mixed.
     Event: status | sources | data (khối số liệu) | delta | done{branch,data} | error
   GET    /api/documents              — list real files in TC_DL/ + ingestion status
-  POST   /api/documents/upload       — save a .docx/.pdf (multipart "file"), status "pending"
+  POST   /api/documents/upload       — save a .docx/.xlsx/.pdf (multipart "file"), status "pending"
   POST   /api/documents/{id}/process — extract → chunk → embed (background thread)
   GET    /api/documents/{id}/markdown
-  GET    /api/documents/{id}/file    — tệp gốc (.docx/.pdf) thô, dùng để hiển thị "tài liệu gốc"
+  GET    /api/documents/{id}/file    — tệp gốc (.docx/.xlsx/.pdf) thô, dùng để hiển thị "tài liệu gốc"
   DELETE /api/documents/{id}
   PATCH  /api/documents/{id}         — {"name": str} display-name override
 
@@ -41,6 +41,10 @@ Endpoints:
   GET    /api/data/devices/{id}/history — định danh + dòng thời gian + diễn biến sai số
   GET    /api/data/devices/by-serial/{serial} — trang thiết bị theo số hiệu
   GET    /api/data/provenance        — mở đoạn nguyên văn của một ô số (tài liệu/mục/chunk)
+
+  Pha D1 — danh mục hồ sơ NAS (mọi vai trò đã đăng nhập, chỉ đọc view đã duyệt):
+  GET    /api/data/catalogs          — số dòng đã duyệt của bốn loại danh mục
+  GET    /api/data/catalogs/{kind}   — tìm không dấu, lọc nhóm, phân trang, kèm xuất xứ
 """
 
 from __future__ import annotations
@@ -75,6 +79,7 @@ from latex import fix_latex
 import ingestion_jobs
 import review.queue as review
 from query import export as data_export
+from query import catalogs as catalog_query
 from query import provenance as provenance_query
 from query import records as data_query
 from query import router as query_router
@@ -485,12 +490,13 @@ def document_markdown(file_stem: str):
 _FILE_MEDIA_TYPES = {
     ".pdf": "application/pdf",
     ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 }
 
 
 @app.get("/api/documents/{file_stem}/file")
 def document_file(file_stem: str):
-    """Trả về tệp .docx/.pdf gốc (không phải Markdown đã trích xuất/embed) để
+    """Trả về tệp .docx/.xlsx/.pdf gốc (không phải Markdown đã trích xuất/embed) để
     frontend hiển thị đúng tài liệu nguồn."""
     path = ingestion_jobs.get_source_path(file_stem)
     if path is None:
@@ -953,6 +959,46 @@ def data_provenance(
         )
     except provenance_query.ProvenanceError as exc:
         raise _data_http(exc)
+
+
+# ── Pha D1: danh mục hồ sơ NAS (chuẩn mẫu, KĐV, quy trình, lĩnh vực) ──────────
+# Mọi route chỉ ĐỌC qua view đã duyệt ở `query/catalogs.py` (P3); cần đăng nhập.
+
+
+@app.get("/api/data/catalogs")
+def data_catalog_counts(
+    user: AppUser = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Số dòng đã duyệt của từng loại danh mục NAS (P3)."""
+    return {"counts": catalog_query.catalog_counts(db)}
+
+
+@app.get("/api/data/catalogs/{kind}")
+def data_catalog(
+    kind: str,
+    q: str | None = None,
+    group: str | None = None,
+    limit: int = 50,
+    offset: int = 0,
+    user: AppUser = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Bảng danh mục NAS đã duyệt: tìm không dấu, lọc nhóm, phân trang, kèm xuất xứ."""
+    try:
+        items, total = catalog_query.list_catalog(
+            db, kind, q=q, group=group, limit=limit, offset=offset
+        )
+        groups = catalog_query.catalog_groups(db, kind)
+    except data_query.QueryError as exc:
+        raise _data_http(exc)
+    return {
+        "items": items,
+        "total": total,
+        "limit": max(1, min(limit, catalog_query.LIST_LIMIT_MAX)),
+        "offset": max(0, offset),
+        "groups": groups,
+    }
 
 
 if __name__ == "__main__":

@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { AppState, DataCellRef, DataRecordRow, DeviceHistory, FilterOptions } from "../../types";
+import type { AppState, CatalogKind, DataCellRef, DataRecordRow, DeviceHistory, FilterOptions } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import type { RecordFilters } from "../../services/dataApi";
 import {
   downloadBlob,
   exportFilename,
   exportRecords,
+  fetchCatalogCounts,
   fetchDeviceHistory,
   fetchFilterOptions,
   fetchRecord,
@@ -17,6 +18,8 @@ import RecordsTable from "./RecordsTable";
 import RecordDetailPanel from "./RecordDetailPanel";
 import DeviceHistoryView from "./DeviceHistoryView";
 import ProvenanceDrawer from "./ProvenanceDrawer";
+import CatalogsView from "./CatalogsView";
+import { CATALOG_KINDS, CATALOG_TAB_LABELS } from "./catalogFormat";
 
 // Tab "Dữ liệu": bảng dày + lọc ở đầu cột + xuất xứ từng ô số + trang thiết bị.
 // Chỉ đọc dữ liệu ĐÃ DUYỆT từ `/api/data/*` (P3). Cần đăng nhập (mọi vai trò đọc).
@@ -44,6 +47,8 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
   const [detailLoading, setDetailLoading] = useState(false);
 
   const [view, setView] = useState<"table" | "device">("table");
+  const [dataset, setDataset] = useState<"records" | CatalogKind>("records");
+  const [catalogCounts, setCatalogCounts] = useState<Partial<Record<CatalogKind, number>>>({});
   const [deviceHistory, setDeviceHistory] = useState<DeviceHistory | null>(null);
   const [deviceLoading, setDeviceLoading] = useState(false);
   const [deviceError, setDeviceError] = useState<string | null>(null);
@@ -80,6 +85,13 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
   useEffect(() => {
     if (!user) return;
     fetchFilterOptions().then(setOptions).catch(() => setOptions(null));
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    fetchCatalogCounts()
+      .then((data) => setCatalogCounts(data.counts))
+      .catch(() => setCatalogCounts({}));
   }, [user]);
 
   useEffect(() => {
@@ -208,62 +220,86 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
     <main aria-label="Dữ liệu" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", background: COLOR.bg }}>
       <div style={{ flexShrink: 0, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", padding: "11px 20px", background: COLOR.surface, borderBottom: `1px solid ${COLOR.border}` }}>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 700, fontSize: "14.5px", color: COLOR.textPrimary }}>
-          <IcTable size={16} style={{ color: COLOR.accent }} /> Dữ liệu kiểm định
+          <IcTable size={16} style={{ color: COLOR.accent }} /> Dữ liệu
         </span>
-        <span className="tabular-nums" style={{ fontSize: "11.5px", fontWeight: 700, background: COLOR.accentSoft, color: COLOR.accentDark, padding: "3px 10px", borderRadius: 9999 }}>
-          {total} hồ sơ đã duyệt
-        </span>
-        <div style={{ flex: 1 }} />
-        <button type="button" onClick={resetFilters} style={ghostButton}>
-          <IcRefresh size={14} /> Xoá lọc
-        </button>
-        <button type="button" onClick={() => void doExport()} disabled={exporting} style={ghostButton}>
-          <IcDownload size={14} /> {exporting ? "Đang xuất…" : "Xuất Excel"}
-        </button>
-      </div>
-
-      <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
-        <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
-          <RecordsTable
-            rows={rows}
-            options={options}
-            filters={filters}
-            sort={filters.sort ?? "calibrated_at"}
-            order={(filters.order as "asc" | "desc") ?? "desc"}
-            loading={loading}
-            error={error}
-            selectedId={selectedId}
-            onFilterChange={patchFilters}
-            onSort={onSort}
-            onOpenRecord={(row) => setSelectedId(row.id)}
-            onOpenDevice={(row) => void openDevice(row)}
-            onOpenProvenance={setProvenanceRef}
-          />
-          <nav aria-label="Phân trang" style={pagerStyle}>
-            <span style={{ fontSize: "12px", color: COLOR.textSecondary }} className="tabular-nums">
-              {pageStart}–{pageEnd} / {total}
+        <select
+          value={dataset}
+          onChange={(e) => setDataset(e.target.value as "records" | CatalogKind)}
+          aria-label="Chọn loại dữ liệu tra cứu"
+          style={datasetSelect}
+        >
+          <option value="records">Hồ sơ kiểm định</option>
+          {CATALOG_KINDS.map((kind) => (
+            <option key={kind} value={kind}>
+              {CATALOG_TAB_LABELS[kind]}
+              {catalogCounts[kind] !== undefined ? ` (${catalogCounts[kind]})` : ""}
+            </option>
+          ))}
+        </select>
+        {dataset === "records" && (
+          <>
+            <span className="tabular-nums" style={{ fontSize: "11.5px", fontWeight: 700, background: COLOR.accentSoft, color: COLOR.accentDark, padding: "3px 10px", borderRadius: 9999 }}>
+              {total} hồ sơ đã duyệt
             </span>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button type="button" onClick={() => setOffset((value) => Math.max(0, value - PAGE_SIZE))} disabled={offset === 0 || loading} style={ghostButton}>
-                Trang trước
-              </button>
-              <button type="button" onClick={() => setOffset((value) => value + PAGE_SIZE)} disabled={pageEnd >= total || loading} style={ghostButton}>
-                Trang sau
-              </button>
-            </div>
-          </nav>
-        </div>
-
-        <RecordDetailPanel
-          record={detail}
-          loading={detailLoading}
-          onClose={() => setSelectedId(null)}
-          onOpenProvenance={setProvenanceRef}
-          onOpenDevice={(row) => void openDevice(row)}
-        />
+            <div style={{ flex: 1 }} />
+            <button type="button" onClick={resetFilters} style={ghostButton}>
+              <IcRefresh size={14} /> Xoá lọc
+            </button>
+            <button type="button" onClick={() => void doExport()} disabled={exporting} style={ghostButton}>
+              <IcDownload size={14} /> {exporting ? "Đang xuất…" : "Xuất Excel"}
+            </button>
+          </>
+        )}
       </div>
 
-      <ProvenanceDrawer cellRef={provenanceRef} onClose={() => setProvenanceRef(null)} />
+      {dataset !== "records" ? (
+        <CatalogsView kind={dataset} />
+      ) : (
+        <>
+          <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
+            <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
+              <RecordsTable
+                rows={rows}
+                options={options}
+                filters={filters}
+                sort={filters.sort ?? "calibrated_at"}
+                order={(filters.order as "asc" | "desc") ?? "desc"}
+                loading={loading}
+                error={error}
+                selectedId={selectedId}
+                onFilterChange={patchFilters}
+                onSort={onSort}
+                onOpenRecord={(row) => setSelectedId(row.id)}
+                onOpenDevice={(row) => void openDevice(row)}
+                onOpenProvenance={setProvenanceRef}
+              />
+              <nav aria-label="Phân trang" style={pagerStyle}>
+                <span style={{ fontSize: "12px", color: COLOR.textSecondary }} className="tabular-nums">
+                  {pageStart}–{pageEnd} / {total}
+                </span>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <button type="button" onClick={() => setOffset((value) => Math.max(0, value - PAGE_SIZE))} disabled={offset === 0 || loading} style={ghostButton}>
+                    Trang trước
+                  </button>
+                  <button type="button" onClick={() => setOffset((value) => value + PAGE_SIZE)} disabled={pageEnd >= total || loading} style={ghostButton}>
+                    Trang sau
+                  </button>
+                </div>
+              </nav>
+            </div>
+
+            <RecordDetailPanel
+              record={detail}
+              loading={detailLoading}
+              onClose={() => setSelectedId(null)}
+              onOpenProvenance={setProvenanceRef}
+              onOpenDevice={(row) => void openDevice(row)}
+            />
+          </div>
+
+          <ProvenanceDrawer cellRef={provenanceRef} onClose={() => setProvenanceRef(null)} />
+        </>
+      )}
     </main>
   );
 }
@@ -272,4 +308,5 @@ const centered: React.CSSProperties = { flex: 1, minHeight: 0, display: "flex", 
 const noticeCard: React.CSSProperties = { maxWidth: 420, padding: "28px 26px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, background: COLOR.surface, border: `1px solid ${COLOR.border}`, borderRadius: 13 };
 const primaryButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 7, height: 38, padding: "0 16px", marginTop: 4, borderRadius: 9, border: "none", background: COLOR.accent, color: COLOR.textOnDark, fontWeight: 700, fontSize: "13px", cursor: "pointer" };
 const ghostButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 6, height: 34, padding: "0 12px", borderRadius: 9, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, fontWeight: 600, fontSize: "12.5px", cursor: "pointer" };
+const datasetSelect: React.CSSProperties = { height: 34, maxWidth: 260, padding: "0 10px", borderRadius: 9, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, fontSize: "12.5px", fontFamily: "inherit", cursor: "pointer" };
 const pagerStyle: React.CSSProperties = { flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 16px", borderTop: `1px solid ${COLOR.border}`, background: COLOR.surface };

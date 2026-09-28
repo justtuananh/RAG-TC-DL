@@ -26,14 +26,19 @@ from sqlalchemy.orm import Session
 from db.models import (
     AppUser,
     AuditLog,
+    Capability,
     Document,
     Extraction,
     ExtractionStatus,
+    Inspector,
+    LabStandard,
     Procedure,
+    ProcedureCatalog,
     ProcedureFact,
     ProcedureStandard,
     Term,
 )
+from catalogs.labels import kind_from_extractor, label_for
 
 ENTITY_TYPE = "extraction"
 
@@ -127,7 +132,13 @@ def _log(
 
 
 def _data_row(db: Session, extraction: Extraction) -> tuple[str | None, Any]:
-    """Trả ``(kind, row)`` của dòng dữ kiện gắn với extraction (fact/standard/term)."""
+    """Trả ``(kind, row)`` của dòng dữ kiện gắn với extraction (fact/standard/term).
+
+    Extraction danh mục NAS (``catalog:*``) mang NHIỀU dòng trong bảng danh mục nên
+    trả ``("catalog", None)``; phần tóm tắt dựng riêng ở ``_catalog_snapshot``.
+    """
+    if kind_from_extractor(extraction.extractor) is not None:
+        return "catalog", None
     fact = (
         db.query(ProcedureFact)
         .filter(ProcedureFact.extraction_id == extraction.id)
@@ -157,6 +168,70 @@ def _data_snapshot(kind: str | None, row: Any) -> dict | None:
     if row is None or kind is None:
         return None
     return {field: getattr(row, field) for field in _DISPLAY_FIELDS[kind]}
+
+
+# ── Pha D1: tóm tắt extraction danh mục NAS cho hàng đợi duyệt ────────────────
+# Một extraction danh mục mang NHIỀU dòng; UI chỉ cần số dòng và vài dòng mẫu để
+# người duyệt nhận diện, rồi duyệt/từ chối cả lần đọc. Bảng danh mục không sửa
+# từng trường nên không nằm trong EDITABLE_FIELDS.
+_CATALOG_MODELS: dict[str, Any] = {
+    "lab_standard": LabStandard,
+    "inspector": Inspector,
+    "procedure_catalog": ProcedureCatalog,
+    "capability": Capability,
+}
+_CATALOG_SAMPLE_LIMIT = 5
+
+
+def _sample_row(kind: str, row: Any) -> dict:
+    """Vài trường nhận diện của một dòng danh mục để hiển thị trong hàng đợi."""
+    if kind == "lab_standard":
+        due = None
+        if row.next_due_year and row.next_due_month:
+            due = f"{row.next_due_month:02d}/{row.next_due_year}"
+        return {
+            "name": row.name,
+            "model": row.model,
+            "serial": row.serial,
+            "interval_text": row.interval_text,
+            "next_due": due,
+        }
+    if kind == "inspector":
+        return {
+            "name": row.name,
+            "birth_year": row.birth_year,
+            "rank": row.rank,
+            "position": row.position,
+            "card_no": row.card_no,
+        }
+    if kind == "procedure_catalog":
+        return {
+            "code_text": row.code_text,
+            "title": row.title,
+            "issuer": row.issuer,
+            "year_issued": row.year_issued,
+        }
+    return {
+        "name": row.name,
+        "group_code": row.group_code,
+        "group_title": row.group_title,
+        "inspector_count": row.inspector_count,
+        "recognition": row.recognition,
+    }
+
+
+def _catalog_snapshot(db: Session, extraction: Extraction) -> dict:
+    """Tóm tắt một extraction danh mục: nhãn loại, số dòng, vài dòng mẫu."""
+    kind = kind_from_extractor(extraction.extractor)
+    model = _CATALOG_MODELS[kind]
+    query = db.query(model).filter(model.extraction_id == extraction.id)
+    rows = query.order_by(model.id).limit(_CATALOG_SAMPLE_LIMIT).all()
+    return {
+        "catalog_kind": kind,
+        "catalog_label": label_for(kind),
+        "row_count": query.count(),
+        "sample": [_sample_row(kind, row) for row in rows],
+    }
 
 
 def build_source_view(file_stem: str | None, extraction: Extraction) -> dict:
@@ -203,7 +278,11 @@ def serialize(db: Session, extraction: Extraction, *, with_source: bool = False)
         "review_note": extraction.review_note,
         "created_at": _iso(extraction.created_at),
         "kind": kind,
-        "data": _data_snapshot(kind, row),
+        "data": (
+            _catalog_snapshot(db, extraction)
+            if kind == "catalog"
+            else _data_snapshot(kind, row)
+        ),
     }
     if with_source:
         item["source"] = build_source_view(file_stem, extraction)

@@ -1,4 +1,7 @@
 import type {
+  CatalogCounts,
+  CatalogKind,
+  CatalogPage,
   DataCellRef,
   DataRecordRow,
   DataRecordsPage,
@@ -58,6 +61,27 @@ export async function fetchRecords(filters: RecordFilters = {}): Promise<DataRec
 export async function fetchRecord(recordId: number): Promise<DataRecordRow> {
   const res = await authFetch(`/api/data/records/${recordId}`);
   return parse<DataRecordRow>(res);
+}
+
+// ── Pha D1: danh mục hồ sơ NAS (chỉ đọc view đã duyệt, P3) ──
+export interface CatalogFilters {
+  q?: string;
+  group?: string;
+  limit?: number;
+  offset?: number;
+}
+
+export async function fetchCatalogCounts(): Promise<CatalogCounts> {
+  const res = await authFetch("/api/data/catalogs");
+  return parse<CatalogCounts>(res);
+}
+
+export async function fetchCatalogRows(
+  kind: CatalogKind,
+  filters: CatalogFilters = {},
+): Promise<CatalogPage> {
+  const res = await authFetch(`/api/data/catalogs/${kind}${query({ ...filters })}`);
+  return parse<CatalogPage>(res);
 }
 
 export async function fetchFilterOptions(): Promise<FilterOptions> {

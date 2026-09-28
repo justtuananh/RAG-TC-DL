@@ -140,6 +140,8 @@ export interface DocItem {
   status: DocStatus;
   progress?: number;
   error?: string;
+  /** Kết quả ghi hồ sơ (StoreResult.as_dict) khi bước "Xử lý" là nạp hồ sơ. */
+  result?: Record<string, unknown> | null;
 }
 
 export interface LlmConfig {
@@ -206,7 +208,7 @@ export interface FaqItem {
 // ── Hàng đợi duyệt tri thức (Sprint 6) ──
 // Khớp response của `review/queue.py` (api_server.py /api/extractions/*).
 export type ExtractionStatus = "pending" | "approved" | "rejected" | "superseded";
-export type ExtractionKind = "fact" | "standard" | "term";
+export type ExtractionKind = "fact" | "standard" | "term" | "catalog";
 
 /** Dòng dữ kiện đã trích — trường nào có mặt tùy `kind`. */
 export interface ExtractionData {
@@ -226,6 +228,32 @@ export interface ExtractionData {
   term_vi?: string | null;
   term_en?: string | null;
   definition?: string | null;
+  // Pha D1: extraction danh mục NAS mang nhiều dòng, chỉ tóm tắt để duyệt.
+  catalog_kind?: CatalogKind | null;
+  catalog_label?: string | null;
+  row_count?: number | null;
+  sample?: CatalogSampleRow[] | null;
+}
+
+/** Vài trường nhận diện của một dòng danh mục hiển thị trong hàng đợi duyệt. */
+export interface CatalogSampleRow {
+  name?: string | null;
+  model?: string | null;
+  serial?: string | null;
+  interval_text?: string | null;
+  next_due?: string | null;
+  birth_year?: number | null;
+  rank?: string | null;
+  position?: string | null;
+  card_no?: string | null;
+  code_text?: string | null;
+  title?: string | null;
+  issuer?: string | null;
+  year_issued?: number | null;
+  group_code?: string | null;
+  group_title?: string | null;
+  inspector_count?: number | null;
+  recognition?: string | null;
 }
 
 /** Nguồn nguyên văn để tô sáng an toàn (văn bản thuần, không nhúng HTML). */
@@ -298,6 +326,9 @@ export interface DataMeasurement {
   unit_id: number | null;
   unit_code: string | null;
   unit_name: string | null;
+  /** Đơn vị riêng của sai số/giới hạn khi khác đơn vị giá trị đo (ví dụ "%"). */
+  error_unit_id: number | null;
+  error_unit_code: string | null;
   limit_value: number | null;
   within_limit: boolean | null;
   note: string | null;
@@ -336,6 +367,9 @@ export interface DataRecordRow {
   env_humidity_pct: number | null;
   range_min: number | null;
   range_max: number | null;
+  /** Giá trị phạm vi đã đổi về đơn vị gốc của dữ kiện để hiển thị (backend). */
+  range_min_display: number | null;
+  range_max_display: number | null;
   range_unit_code: string | null;
   range_fact_id: number | null;
   accuracy_text: string | null;
@@ -433,6 +467,7 @@ export interface TrendPoint {
   limit_text: string | null;
   within_limit: boolean | null;
   unit_code: string | null;
+  error_unit_code: string | null;
   provenance: DataCellRef[];
 }
 
@@ -442,6 +477,7 @@ export interface TrendSeries {
   label: string | null;
   unit_code: string | null;
   unit_name: string | null;
+  error_unit_code: string | null;
   points: TrendPoint[];
 }
 
@@ -464,6 +500,97 @@ export interface FilterOptions {
   procedures: FilterChoice[];
   verdicts: FilterChoice[];
   sorts: string[];
+}
+
+// ── Pha D1: danh mục hồ sơ NAS (chuẩn mẫu, KĐV, quy trình, lĩnh vực) ──
+// Khớp response của `query/catalogs.py` (api_server.py /api/data/catalogs/*).
+export type CatalogKind = "lab_standard" | "inspector" | "procedure_catalog" | "capability";
+
+export interface CatalogProvenance {
+  document_id: string | null;
+  display_name: string | null;
+  file_stem: string | null;
+  extraction_id: number;
+  quote: string;
+}
+
+export interface CatalogProcedureLink {
+  procedure_id: number;
+  number: string;
+  title: string | null;
+  year: number | null;
+  document_id: string;
+}
+
+/** Một dòng danh mục đã duyệt; trường nào có mặt tùy loại danh mục. */
+export interface CatalogRow {
+  id: number;
+  ord: number | null;
+  document_id: string;
+  extraction_id: number;
+  quote: string;
+  display_name: string | null;
+  file_stem: string | null;
+  provenance: CatalogProvenance;
+  // Chuẩn mẫu (Biểu 3)
+  name?: string | null;
+  model?: string | null;
+  serial?: string | null;
+  characteristics?: string | null;
+  interval_text?: string | null;
+  interval_months?: number | null;
+  last_cal_text?: string | null;
+  last_cal_year?: number | null;
+  last_cal_month?: number | null;
+  last_cal_place?: string | null;
+  usage_text?: string | null;
+  usage_refs?: [string, string][] | null;
+  inherited?: string[] | null;
+  next_due_year?: number | null;
+  next_due_month?: number | null;
+  next_due_derived?: number | null;
+  // Kiểm định viên (Biểu 7)
+  birth_year?: number | null;
+  rank?: string | null;
+  position?: string | null;
+  education?: string | null;
+  specialization?: string | null;
+  fields?: string[] | null;
+  card_no?: string | null;
+  card_date?: string | null;
+  // Danh mục tiêu chuẩn, quy trình (Biểu 4)
+  domain?: string | null;
+  group_code?: string | null;
+  group_title?: string | null;
+  code_text?: string | null;
+  codes?: { raw: string; normalized: string }[] | null;
+  title?: string | null;
+  issuer?: string | null;
+  year_issued?: number | null;
+  procedure_number?: string | null;
+  procedure_link?: CatalogProcedureLink | null;
+  // Lĩnh vực công nhận (Biểu 1)
+  parameters?: string[] | null;
+  procedure_codes?: { raw: string; normalized: string }[] | null;
+  inspector_count?: number | null;
+  recognition?: string | null;
+}
+
+export interface CatalogGroup {
+  code: string;
+  title: string | null;
+}
+
+export interface CatalogPage {
+  items: CatalogRow[];
+  total: number;
+  limit: number;
+  offset: number;
+  groups: CatalogGroup[];
+}
+
+export interface CatalogCounts {
+  counts: Record<CatalogKind, number>;
 }
 
 export interface AppState {

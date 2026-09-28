@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { AppState, AuditEntry, ExtractionData, ExtractionItem, ExtractionKind } from "../../types";
+import type { AppState, AuditEntry, CatalogSampleRow, ExtractionData, ExtractionItem, ExtractionKind } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import { COLOR } from "../../theme";
 import {
@@ -15,6 +15,7 @@ import {
   IcX,
 } from "../common/icons";
 import QuoteHighlight from "./QuoteHighlight";
+import { recognitionLabel } from "../data/catalogFormat";
 import {
   approveExtraction,
   bulkApproveExtractions,
@@ -45,6 +46,7 @@ const KIND_LABEL: Record<ExtractionKind, string> = {
   fact: "Dữ kiện",
   standard: "Bảng 2",
   term: "Thuật ngữ",
+  catalog: "Danh mục NAS",
 };
 
 interface FieldDef {
@@ -82,6 +84,7 @@ const ACTION_LABEL: Record<string, string> = {
 function fieldsFor(kind: ExtractionKind | null): FieldDef[] {
   if (kind === "standard") return STANDARD_FIELDS;
   if (kind === "term") return TERM_FIELDS;
+  if (kind === "catalog") return [];
   return FACT_FIELDS;
 }
 
@@ -482,7 +485,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                 <div style={{ display: "flex", alignItems: "center", gap: 9, flexWrap: "wrap", marginBottom: 12 }}>
                   <IcFile size={15} style={{ color: COLOR.accent }} />
                   <span style={{ fontWeight: 700, fontSize: "14px", color: COLOR.textPrimary }}>{detail.file_stem}</span>
-                  <span style={kindBadge}>{detail.kind ? KIND_LABEL[detail.kind] : "—"}</span>
+                  <span style={kindBadge}>{detail.data?.catalog_label ?? (detail.kind ? KIND_LABEL[detail.kind] : "—")}</span>
                   {detail.data?.fact_kind && <span style={kindBadge}>{FACT_KIND_LABEL[detail.data.fact_kind] ?? detail.data.fact_kind}</span>}
                   <ConfidenceBadge score={detail.confidence} />
                   <div style={{ flex: 1 }} />
@@ -491,27 +494,31 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                   </span>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 10 }}>
-                  {currentFields.map((field) => (
-                    <label key={field.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                      <span style={{ fontSize: "11px", fontWeight: 700, color: COLOR.textSecondary }}>{field.label}</span>
-                      {field.multiline ? (
-                        <textarea
-                          value={draft[field.key] ?? ""}
-                          onChange={(e) => setDraft((d) => ({ ...d, [field.key]: e.target.value }))}
-                          rows={2}
-                          style={inputStyle}
-                        />
-                      ) : (
-                        <input
-                          value={draft[field.key] ?? ""}
-                          onChange={(e) => setDraft((d) => ({ ...d, [field.key]: e.target.value }))}
-                          style={inputStyle}
-                        />
-                      )}
-                    </label>
-                  ))}
-                </div>
+                {detail.kind === "catalog" ? (
+                  <CatalogSummary data={detail.data} />
+                ) : (
+                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 10 }}>
+                    {currentFields.map((field) => (
+                      <label key={field.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                        <span style={{ fontSize: "11px", fontWeight: 700, color: COLOR.textSecondary }}>{field.label}</span>
+                        {field.multiline ? (
+                          <textarea
+                            value={draft[field.key] ?? ""}
+                            onChange={(e) => setDraft((d) => ({ ...d, [field.key]: e.target.value }))}
+                            rows={2}
+                            style={inputStyle}
+                          />
+                        ) : (
+                          <input
+                            value={draft[field.key] ?? ""}
+                            onChange={(e) => setDraft((d) => ({ ...d, [field.key]: e.target.value }))}
+                            style={inputStyle}
+                          />
+                        )}
+                      </label>
+                    ))}
+                  </div>
+                )}
 
                 <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: 14 }}>
                   <button
@@ -530,14 +537,16 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                   >
                     <IcX size={15} /> Từ chối <kbd style={kbdStyle}>R</kbd>
                   </button>
-                  <button
-                    onClick={() => void doEdit()}
-                    disabled={busy}
-                    title="Sửa giá trị rồi duyệt"
-                    className={`${buttonBase} border border-[#DEE3EA] bg-white text-[#475467] hover:border-brand hover:text-brand`}
-                  >
-                    Sửa &amp; duyệt
-                  </button>
+                  {detail.kind !== "catalog" && (
+                    <button
+                      onClick={() => void doEdit()}
+                      disabled={busy}
+                      title="Sửa giá trị rồi duyệt"
+                      className={`${buttonBase} border border-[#DEE3EA] bg-white text-[#475467] hover:border-brand hover:text-brand`}
+                    >
+                      Sửa &amp; duyệt
+                    </button>
+                  )}
                   <div style={{ flex: 1 }} />
                   <button
                     onClick={() => void doBulk()}
@@ -686,8 +695,94 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
   );
 }
 
+// Bảng mẫu cho extraction danh mục NAS: số dòng + vài dòng mẫu để người duyệt
+// nhận diện trước khi duyệt/từ chối cả lần đọc.
+const SAMPLE_COLUMNS: Record<string, { key: keyof CatalogSampleRow; label: string }[]> = {
+  lab_standard: [
+    { key: "name", label: "Tên chuẩn mẫu" },
+    { key: "model", label: "Ký hiệu" },
+    { key: "serial", label: "Số hiệu" },
+    { key: "interval_text", label: "Chu kỳ" },
+    { key: "next_due", label: "Hạn kế tiếp" },
+  ],
+  inspector: [
+    { key: "name", label: "Họ và tên" },
+    { key: "birth_year", label: "Năm sinh" },
+    { key: "rank", label: "Cấp bậc" },
+    { key: "position", label: "Chức vụ" },
+    { key: "card_no", label: "Số thẻ" },
+  ],
+  procedure_catalog: [
+    { key: "code_text", label: "Số hiệu" },
+    { key: "title", label: "Tên tiêu chuẩn, quy trình" },
+    { key: "issuer", label: "Cấp ban hành" },
+    { key: "year_issued", label: "Năm" },
+  ],
+  capability: [
+    { key: "name", label: "Tên đại lượng, trang bị" },
+    { key: "group_title", label: "Nhóm" },
+    { key: "inspector_count", label: "Số KĐV" },
+    { key: "recognition", label: "Công nhận" },
+  ],
+};
+
+function sampleText(key: keyof CatalogSampleRow, value: unknown): string {
+  if (value === null || value === undefined || value === "") return "—";
+  if (key === "recognition") return recognitionLabel(String(value));
+  return String(value);
+}
+
+function CatalogSummary({ data }: { data: ExtractionData | null }) {
+  if (!data) return null;
+  const columns = SAMPLE_COLUMNS[data.catalog_kind ?? ""] ?? [];
+  const sample = data.sample ?? [];
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+        <span style={kindBadge}>{data.catalog_label ?? "Danh mục NAS"}</span>
+        <span className="tabular-nums" style={{ fontSize: "12.5px", color: COLOR.textSecondary }}>
+          {data.row_count ?? 0} dòng
+        </span>
+      </div>
+      <div style={{ overflowX: "auto", border: `1px solid ${COLOR.border}`, borderRadius: 9 }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "12px" }}>
+          <thead style={{ background: COLOR.surfaceAlt }}>
+            <tr>
+              {columns.map((column) => (
+                <th key={column.key} scope="col" style={{ textAlign: "left", padding: "6px 9px", color: COLOR.textSecondary, fontWeight: 700, whiteSpace: "nowrap" }}>
+                  {column.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {sample.map((row, index) => (
+              <tr key={index}>
+                {columns.map((column) => (
+                  <td key={column.key} style={{ padding: "6px 9px", borderTop: `1px solid ${COLOR.surfaceAlt}`, color: COLOR.textPrimary }}>
+                    {sampleText(column.key, row[column.key])}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ marginTop: 6, fontSize: "11.5px", color: COLOR.textMuted }}>
+        Hiện {sample.length} dòng mẫu đầu tiên. Duyệt để đưa toàn bộ {data.row_count ?? 0} dòng vào tab Dữ liệu.
+      </div>
+    </div>
+  );
+}
+
 function QueueRow({ item, active, onClick }: { item: ExtractionItem; active: boolean; onClick: () => void }) {
-  const label = item.data?.fact_kind ? (FACT_KIND_LABEL[item.data.fact_kind] ?? item.data.fact_kind) : item.kind ? KIND_LABEL[item.kind] : "—";
+  const label =
+    item.data?.catalog_label ??
+    (item.data?.fact_kind
+      ? (FACT_KIND_LABEL[item.data.fact_kind] ?? item.data.fact_kind)
+      : item.kind
+        ? KIND_LABEL[item.kind]
+        : "—");
   return (
     <button
       onClick={onClick}
