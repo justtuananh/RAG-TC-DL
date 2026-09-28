@@ -5,6 +5,7 @@ Usage:
 
 Requires: all Docker services running (embedding :8010, reranker :8011, qdrant :6333).
 """
+
 from __future__ import annotations
 
 import argparse
@@ -19,21 +20,21 @@ from pathlib import Path
 # Allow running from project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from retrieval.bm25_index import bm25_search
 from retrieval.retriever import (
-    TOP_K,
     RERANK_POOL,
-    embed_query,
+    TOP_K,
+    _expand_query,
+    _filter_noise,
     dense_search,
+    embed_query,
     rerank_hits,
     rrf_fuse,
-    _filter_noise,
-    _expand_query,
 )
-from retrieval.bm25_index import bm25_search
 from retrieval.router import route
 
-
 # ── match logic ───────────────────────────────────────────────────────────────
+
 
 def _matches(result_payload: dict, expected: dict) -> bool:
     """A hit matches if file_stem equals AND section_path starts with expected."""
@@ -57,6 +58,7 @@ def _hit_rank(results: list[dict], expected_list: list[dict]) -> int | None:
 
 # ── retrieval pipelines ───────────────────────────────────────────────────────
 
+
 def run_hybrid(query: str, top_n: int = 10) -> list[dict]:
     """Hybrid pipeline = ĐÚNG đường production (qua production_retrieve) — chống drift.
 
@@ -65,6 +67,7 @@ def run_hybrid(query: str, top_n: int = 10) -> list[dict]:
     dưới vẫn soi từng stage (cố ý nhân bản phễu CHỈ để chẩn đoán).
     """
     from eval._pipeline import production_retrieve
+
     return production_retrieve(query, top_n=top_n)
 
 
@@ -96,12 +99,15 @@ def _debug_miss(query: str, expected: list[dict]) -> None:
     r_rank = _hit_rank(reranked, expected)
     exp = expected[0]
     router_label = file_stem if file_stem else "None"
-    print(f"    DEBUG router={router_label} "
-          f"dense={d_rank} bm25={b_rank} fused={f_rank} rerank={r_rank}")
+    print(
+        f"    DEBUG router={router_label} "
+        f"dense={d_rank} bm25={b_rank} fused={f_rank} rerank={r_rank}"
+    )
     print(f"    expected: {exp['file_stem']} | {exp['section_path']}")
 
 
 # ── metrics ───────────────────────────────────────────────────────────────────
+
 
 def compute_metrics(ranks: list[int | None], ks: list[int]) -> dict:
     n = len(ranks)
@@ -121,14 +127,18 @@ def compute_metrics(ranks: list[int | None], ks: list[int]) -> dict:
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Spike E — recall@k eval")
     parser.add_argument("--mode", choices=["hybrid", "dense", "both"], default="both")
     parser.add_argument("--top-k", type=int, default=5, help="k for recall@k (primary)")
     parser.add_argument("--eval-file", default="eval/eval_set.jsonl")
     parser.add_argument("--verbose", "-v", action="store_true")
-    parser.add_argument("--debug-miss", action="store_true",
-                        help="For each MISS, re-run and print stage-by-stage ranks")
+    parser.add_argument(
+        "--debug-miss",
+        action="store_true",
+        help="For each MISS, re-run and print stage-by-stage ranks",
+    )
     args = parser.parse_args()
 
     eval_path = Path(args.eval_file)
@@ -136,7 +146,11 @@ def main() -> None:
         print(f"ERROR: {eval_path} not found", file=sys.stderr)
         sys.exit(1)
 
-    items = [json.loads(line) for line in eval_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    items = [
+        json.loads(line)
+        for line in eval_path.read_text(encoding="utf-8").splitlines()
+        if line.strip()
+    ]
     print(f"Loaded {len(items)} eval pairs from {eval_path}\n")
 
     modes = ["hybrid", "dense"] if args.mode == "both" else [args.mode]
@@ -182,7 +196,9 @@ def main() -> None:
     for mode in modes:
         m = compute_metrics(all_ranks[mode], ks)
         mean_r = f"{m['mean_rank']:.1f}" if not math.isnan(m["mean_rank"]) else "n/a"
-        print(f"\n[{mode.upper()}]  n={m['n']}  found={m['found']}  miss={m['miss']}  mean_rank={mean_r}")
+        print(
+            f"\n[{mode.upper()}]  n={m['n']}  found={m['found']}  miss={m['miss']}  mean_rank={mean_r}"
+        )
         for k in ks:
             bar = "█" * round(m[f"recall@{k}"] * 20)
             print(f"  recall@{k:2d}: {m[f'recall@{k}']:.3f}  nDCG@{k}: {m[f'ndcg@{k}']:.3f}  {bar}")
@@ -194,14 +210,14 @@ def main() -> None:
             h = compute_metrics(all_ranks["hybrid"], [k])[f"recall@{k}"]
             d = compute_metrics(all_ranks["dense"], [k])[f"recall@{k}"]
             sign = "+" if h >= d else "-"
-            print(f"  recall@{k:2d}: {sign}{abs(h-d):.3f}  (hybrid={h:.3f} dense={d:.3f})")
+            print(f"  recall@{k:2d}: {sign}{abs(h - d):.3f}  (hybrid={h:.3f} dense={d:.3f})")
 
     # Per-file recall@5 breakdown (hybrid only)
     primary_k = args.top_k
     if "hybrid" in modes:
         print(f"\n[PER-FILE recall@{primary_k} — hybrid]")
         by_file: dict[str, list] = defaultdict(list)
-        for stem, rank in zip(all_file_stems, all_ranks["hybrid"]):
+        for stem, rank in zip(all_file_stems, all_ranks["hybrid"], strict=True):
             by_file[stem].append(rank)
         _stem_num = re.compile(r'QTKD_(\d+\.\d+)')
         for stem in sorted(by_file):
@@ -209,7 +225,7 @@ def main() -> None:
             hits = sum(1 for r in file_ranks if r is not None and r <= primary_k)
             m2 = _stem_num.search(stem)
             label = f"QTKD_{m2.group(1)}" if m2 else stem
-            print(f"  {label}: {hits}/{len(file_ranks)} ({hits/len(file_ranks):.2f})")
+            print(f"  {label}: {hits}/{len(file_ranks)} ({hits / len(file_ranks):.2f})")
 
     # Goal check
     if "hybrid" in modes:

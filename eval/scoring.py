@@ -10,6 +10,7 @@ khoan dung tiếng Việt + đo lường. Ngoài ra kiểm:
 
 Module này được unit-test dưới guard chặn mạng → tuyệt đối không import gì chạm mạng.
 """
+
 from __future__ import annotations
 
 import re
@@ -36,6 +37,7 @@ NUMBER_UNIT_RE = re.compile(
 
 
 # ── Chuẩn hoá ─────────────────────────────────────────────────────────────────
+
 
 def normalize_text(s: str) -> str:
     """NFC → bỏ NBSP → lower → ',' giữa số thành '.' → bỏ space nhóm nghìn → dính
@@ -88,6 +90,7 @@ def normalize_latex(s: str) -> str:
 
 # ── Khớp một fact ─────────────────────────────────────────────────────────────
 
+
 def _candidates(fact: dict) -> list[str]:
     cands = [fact.get("text", "")] + list(fact.get("aliases", []) or [])
     return [c for c in cands if c]
@@ -120,6 +123,7 @@ def fact_coverage(required_facts: list[dict], answer: str) -> tuple[float, list[
 
 
 # ── Khớp nguồn (mirror eval.run_eval._matches) ────────────────────────────────
+
 
 def _source_retrieved(file_stem: str, section_path: str, src: dict) -> bool:
     """Section của hit có khớp 'source' của fact: cùng file_stem VÀ section_path là
@@ -188,6 +192,7 @@ def citation_correctness(required_facts: list[dict], answer: str, retrieved: lis
 
 # ── Từ chối + ảo giác ─────────────────────────────────────────────────────────
 
+
 def is_refusal(answer: str) -> bool:
     """True nếu câu trả lời chứa lõi câu từ chối chuẩn."""
     return normalize_text(REFUSAL_CORE) in normalize_text(answer)
@@ -227,6 +232,7 @@ def hallucination_flags(required_facts: list[dict], answer: str, retrieved: list
 
 
 # ── Gộp một câu ───────────────────────────────────────────────────────────────
+
 
 def score_question(item: dict, answer: str, retrieved: list[dict]) -> dict:
     """Gộp toàn bộ chấm cho một câu eval thành một record. out_of_scope: coverage=None

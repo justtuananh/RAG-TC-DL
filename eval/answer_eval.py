@@ -13,6 +13,7 @@ Usage:
 Requires: 4 service Docker (embedding :8010, reranker :8011, qdrant :6333, ollama :11434)
 + model đã pull. Chạy bằng kotaemon/.venv (qdrant-client, requests, rank_bm25).
 """
+
 from __future__ import annotations
 
 import argparse
@@ -30,8 +31,8 @@ import generation  # noqa: E402
 from eval import scoring  # noqa: E402
 from eval._pipeline import production_retrieve  # noqa: E402
 
-
 # ── service / model helpers ───────────────────────────────────────────────────
+
 
 def _services_up() -> bool:
     from scripts.healthcheck import wait_for
@@ -95,6 +96,7 @@ def _warmup(model: str) -> None:
 
 # ── tổng hợp báo cáo ──────────────────────────────────────────────────────────
 
+
 def _aggregate(records: list[dict]) -> dict:
     """Gộp list record (cùng 1 model) thành metric theo category + tổng."""
     by_cat: dict[str, list[dict]] = defaultdict(list)
@@ -103,8 +105,12 @@ def _aggregate(records: list[dict]) -> dict:
 
     def _metrics(rs: list[dict]) -> dict:
         covs = [r["coverage"] for r in rs if r["coverage"] is not None]
-        cite_strict = [r["citation"]["accuracy_strict"] for r in rs if r["citation"]["present_with_source"]]
-        cite_lenient = [r["citation"]["accuracy_lenient"] for r in rs if r["citation"]["present_with_source"]]
+        cite_strict = [
+            r["citation"]["accuracy_strict"] for r in rs if r["citation"]["present_with_source"]
+        ]
+        cite_lenient = [
+            r["citation"]["accuracy_lenient"] for r in rs if r["citation"]["present_with_source"]
+        ]
         refus = [r for r in rs if r["expected_refusal"]]
         refus_ok = sum(1 for r in refus if r["refusal_correct"])
         wrong_refusal = sum(1 for r in rs if not r["expected_refusal"] and r["refused"])
@@ -113,7 +119,9 @@ def _aggregate(records: list[dict]) -> dict:
             "n": len(rs),
             "coverage": sum(covs) / len(covs) if covs else float("nan"),
             "citation_strict": sum(cite_strict) / len(cite_strict) if cite_strict else float("nan"),
-            "citation_lenient": sum(cite_lenient) / len(cite_lenient) if cite_lenient else float("nan"),
+            "citation_lenient": sum(cite_lenient) / len(cite_lenient)
+            if cite_lenient
+            else float("nan"),
             "refusal_acc": refus_ok / len(refus) if refus else float("nan"),
             "wrong_refusal": wrong_refusal,
             "hallucination_rate": hall / len(rs) if rs else float("nan"),
@@ -154,7 +162,13 @@ def _print_side_by_side(aggs: dict[str, dict]) -> None:
     if len(models) < 2:
         return
     print(f"\n{'=' * 64}\n[SO SÁNH MODEL — overall]\n{'=' * 64}")
-    metrics = ["coverage", "citation_strict", "citation_lenient", "refusal_acc", "hallucination_rate"]
+    metrics = [
+        "coverage",
+        "citation_strict",
+        "citation_lenient",
+        "refusal_acc",
+        "hallucination_rate",
+    ]
     head = f"{'metric':<18}" + "".join(f"{m.split(':')[-1]:>12}" for m in models) + f"{'Δ':>10}"
     print(head)
     print("-" * len(head))
@@ -171,16 +185,23 @@ def _print_side_by_side(aggs: dict[str, dict]) -> None:
 
 # ── main ──────────────────────────────────────────────────────────────────────
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Eval chất lượng câu trả lời QTKĐ")
-    parser.add_argument("--model", default="qwen2.5:1.5b,qwen2.5:7b",
-                        help="Danh sách model (phân tách dấu phẩy) để so sánh.")
+    parser.add_argument(
+        "--model",
+        default="qwen2.5:1.5b,qwen2.5:7b",
+        help="Danh sách model (phân tách dấu phẩy) để so sánh.",
+    )
     parser.add_argument("--answer-file", default="eval/answer_set.jsonl")
     parser.add_argument("--category", default=None, help="Chỉ chạy 1 category.")
     parser.add_argument("--limit", type=int, default=None, help="Giới hạn số câu (smoke).")
-    parser.add_argument("--dump", default=None,
-                        help="Ghi record từng câu (answer + chấm điểm) ra JSONL để soi "
-                             "hậu kiểm (vd cờ ảo giác là token nào).")
+    parser.add_argument(
+        "--dump",
+        default=None,
+        help="Ghi record từng câu (answer + chấm điểm) ra JSONL để soi "
+        "hậu kiểm (vd cờ ảo giác là token nào).",
+    )
     parser.add_argument("--verbose", "-v", action="store_true")
     args = parser.parse_args()
 
@@ -193,7 +214,9 @@ def main() -> None:
         print("❌ Service chưa sẵn sàng. Chạy `make up` trước.", file=sys.stderr)
         sys.exit(1)
 
-    items = [json.loads(ln) for ln in eval_path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    items = [
+        json.loads(ln) for ln in eval_path.read_text(encoding="utf-8").splitlines() if ln.strip()
+    ]
     if args.category:
         items = [it for it in items if it.get("category") == args.category]
     if args.limit:
@@ -238,9 +261,11 @@ def main() -> None:
             records.append(rec)
             if args.verbose:
                 cov = "—" if rec["coverage"] is None else f"{rec['coverage']:.2f}"
-                print(f"  [{it['id']}] {it['category']:<13} cov={cov} "
-                      f"refuse_ok={rec['refusal_correct']} halluc={rec['hallucination']['count']} "
-                      f"({time.time() - t0:.1f}s)")
+                print(
+                    f"  [{it['id']}] {it['category']:<13} cov={cov} "
+                    f"refuse_ok={rec['refusal_correct']} halluc={rec['hallucination']['count']} "
+                    f"({time.time() - t0:.1f}s)"
+                )
         agg = _aggregate(records)
         aggs[model] = agg
         _print_model_report(model, agg)

@@ -27,6 +27,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
+from catalogs.readers import read_catalog
+from catalogs.store import store_catalog_draft
 from db.models import (
     Base,
     CalibrationRecord,
@@ -44,8 +46,6 @@ from db.models import (
     Unit,
 )
 from db.views import create_all_approved_views
-from catalogs.readers import read_catalog
-from catalogs.store import store_catalog_draft
 from query import intents, router
 
 ROOT = Path(__file__).resolve().parent.parent

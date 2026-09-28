@@ -120,7 +120,11 @@ def record_provenance(session: Session, record_id: int, field: str | None = None
     record_field = _record_field(session, record_id, row, field)
     if record_field is None:
         return _source(
-            session, row["extraction_id"], kind="record", field=field, extra={"record_id": record_id}
+            session,
+            row["extraction_id"],
+            kind="record",
+            field=field,
+            extra={"record_id": record_id},
         )
     return _source(
         session,

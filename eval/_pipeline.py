@@ -6,6 +6,7 @@ viết lại phễu với `top_k=50, top_n=10` → eval đo một đường khá
 
 Đổi `TOP_K_PROD` ở MỘT chỗ này (đồng bộ với app.py) nếu cần nới phễu.
 """
+
 from __future__ import annotations
 
 from retrieval.retriever import retrieve
