@@ -271,6 +271,23 @@ def _inline(el, rels, formulas, section_path, *, in_table=False, counter=None):
     return re.sub(r"[ \t]{2,}", " ", text).strip()
 
 
+def _cell_md(cell, rels, formulas, section_path, counter) -> str:
+    """Văn bản một ô bảng: mỗi đoạn (``w:p``) render riêng, nối bằng " / ".
+
+    Nối liền mọi đoạn làm dính chữ ở ô nhiều đoạn ("Nguyễn Đăng Vinh" + "1970"
+    thành "Nguyễn Đăng Vinh1970"). Phần tử con không phải đoạn (bảng lồng...)
+    vẫn render như trước, giữ đúng thứ tự tài liệu nên thứ tự công thức không đổi.
+    """
+    parts: list[str] = []
+    for child in cell:
+        if child.tag == _q("w:tcPr"):
+            continue
+        text = _inline(child, rels, formulas, section_path, in_table=True, counter=counter)
+        if text:
+            parts.append(text)
+    return " / ".join(parts)
+
+
 def _table_md(tbl, rels, formulas, section_path, counter) -> str:
     rows: list[list[str]] = []
     for tr in tbl.findall(_q("w:tr")):
@@ -281,9 +298,7 @@ def _table_md(tbl, rels, formulas, section_path, counter) -> str:
             text = (
                 ""
                 if slot.continues
-                else _inline(
-                    slot.cell, rels, formulas, section_path, in_table=True, counter=counter
-                )
+                else _cell_md(slot.cell, rels, formulas, section_path, counter)
             )
             cells.append(text.replace("|", "\\|"))
             cells.extend([""] * (slot.span - 1))

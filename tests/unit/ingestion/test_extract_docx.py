@@ -173,3 +173,18 @@ def test_table_md_k07_honors_gridspan_and_vmerge():
     lines = md.split("\n")
     assert lines[0] == "| Áp suất |  |  | Ghi chú |"
     assert lines[2] == "| Mở | Đóng | Độ chênh |  |"
+
+
+def test_table_md_keeps_paragraph_boundary_inside_cell():
+    """Ô nhiều đoạn (Biểu 7: tên + năm sinh; Biểu 1: nhiều mã quy trình) không được
+    dính chữ ("Nguyễn Đăng Vinh1970", "2001QTKĐ 1.019")."""
+    tbl = etree.fromstring(
+        f'<w:tbl xmlns:w="{W}">'
+        "<w:tr><w:tc><w:p><w:r><w:t>Nguyễn Đăng Vinh</w:t></w:r></w:p>"
+        "<w:p><w:r><w:t>1970</w:t></w:r></w:p><w:p/></w:tc>"
+        "<w:tc><w:p><w:r><w:t>23 QTKĐ 1.039 : 2001</w:t></w:r></w:p>"
+        "<w:p><w:r><w:t>QTKĐ 1.019 : 2014</w:t></w:r></w:p></w:tc></w:tr>"
+        "</w:tbl>"
+    )
+    first = _table_md(tbl, {}, [], [], [0]).split("\n")[0]
+    assert first == "| Nguyễn Đăng Vinh / 1970 | 23 QTKĐ 1.039 : 2001 / QTKĐ 1.019 : 2014 |"
