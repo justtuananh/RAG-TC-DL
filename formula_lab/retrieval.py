@@ -16,9 +16,14 @@ class Retriever:
             text=p.read_text()
             for start in range(0,len(text),1200):
                 self.docs.append({'text':p.stem+'\n'+text[start:start+1800],'stem':p.stem})
+        v2=DATA/'v2/sources.json'
+        if v2.exists():
+            for card in json.loads(v2.read_text()):
+                self.docs.append({'text':card['title']+'\n'+card['section']+'\n'+'; '.join(card['aliases'])+'\n'+card['formulas'][0]['latex']+'\n'+card['context'],
+                                  'stem':card['stem'],'formula_id':card['id']})
         self.bm=BM25Okapi([self.tokens(x['text']) for x in self.docs])
         self.client=QdrantClient(path=str(RUNTIME/'qdrant'))
-        self.collection='formula_docx_v1'
+        self.collection='formula_docx_v2'
     @staticmethod
     def tokens(s): return re.findall(r'\w+',s.lower())
     def embed(self,texts):
@@ -55,11 +60,20 @@ class Retriever:
         marker.write_text(json.dumps({'fingerprint':fingerprint,'dimensions':dim,'chunks':len(vectors)}))
     def search(self,q):
         self.index()
-        dense=self.client.query_points(self.collection,query=self.embed([q])[0],limit=20).points
+        formula_mode=bool(re.search(r'\bdpi\s*610\b|\bqtk[đd]\s*[:\-]?\s*1\.190\b',q.lower()))
+        eligible=[i for i,d in enumerate(self.docs) if not formula_mode or d.get('formula_id')]
+        query_filter=models.Filter(must=[models.HasIdCondition(has_id=eligible)]) if formula_mode else None
+        dense=self.client.query_points(self.collection,query=self.embed([q])[0],query_filter=query_filter,limit=20).points
         scores={}
         for rank,h in enumerate(dense): scores[h.id]=1/(60+rank+1)
-        b=self.bm.get_scores(self.tokens(q))
-        for rank,i in enumerate(sorted(range(len(b)),key=lambda i:b[i],reverse=True)[:20]): scores[i]=scores.get(i,0)+1/(60+rank+1)
+        if formula_mode:
+            scoped=BM25Okapi([self.tokens(self.docs[i]['text']) for i in eligible])
+            b=scoped.get_scores(self.tokens(q))
+            lexical=[eligible[j] for j in sorted(range(len(b)),key=lambda j:b[j],reverse=True)[:20]]
+        else:
+            b=self.bm.get_scores(self.tokens(q))
+            lexical=sorted(range(len(b)),key=lambda i:b[i],reverse=True)[:20]
+        for rank,i in enumerate(lexical): scores[i]=scores.get(i,0)+1/(60+rank+1)
         ids=sorted(scores,key=scores.get,reverse=True)[:5]
         return [self.docs[i] for i in ids]
 

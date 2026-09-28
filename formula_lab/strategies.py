@@ -8,6 +8,10 @@ import sympy
 from .provider import CONFIG, DATA, ROOT, completion
 
 SOURCES=json.loads((DATA/'sources.json').read_text())
+V2_DATA=DATA/'v2'
+V2_SOURCES=json.loads((V2_DATA/'sources.json').read_text()) if (V2_DATA/'sources.json').exists() else []
+V2_INPUT_KEYS={id:{v['key'] for v in spec['variables']} for id,spec in json.loads((V2_DATA/'registry.json').read_text()).items()} if V2_SOURCES else {}
+SOURCES+=V2_SOURCES
 # Public symbol vocabulary normalizes input field keys across approaches, not equations or answers.
 GLOSSARY={
  'valve':{'pm':('P_{m}','Áp suất mở van','Pa'),'pcd':('P_{cd}','Áp suất chỉnh đặt','Pa')},
@@ -25,16 +29,59 @@ CONDITION_LABELS={
  'different_gravity':'Gia tốc khắc độ khác gia tốc nơi đo.',
  'pressure_corrected':'Áp suất danh nghĩa đã được hiệu chỉnh theo gia tốc nơi đo.',
 }
+if (V2_DATA/'conditions.json').exists(): CONDITION_LABELS.update(json.loads((V2_DATA/'conditions.json').read_text()))
 
 def norm(s):
     return ''.join(c for c in unicodedata.normalize('NFD',s.lower().replace('đ','d')) if not unicodedata.combining(c))
 
 def select(question,passages=None):
     q=norm(question)
+    procedures=re.findall(r'\bqtkd\s*[:\-]?\s*(\d+\.\d{3})\b',q)
+    dpi_scope='1.190' in procedures or bool(re.search(r'\bdpi\s*610\b',q))
+    # Formula references use the displayed F001/F036 format. The measured
+    # quantity f0 must never be interpreted as a nonexistent equation F000.
+    requested_fids=re.findall(r'\bf(\d{3})\b',q)
+    matches=[]
+    for c in V2_SOURCES:
+        for alias in c['aliases']:
+            matches.extend((c,m.start(),m.end()) for m in re.finditer(r'(?<!\w)'+re.escape(norm(alias))+r'(?!\w)',q))
+    # A component name nested inside a more specific formula name is not a
+    # second intent; separately mentioned component names remain ambiguous.
+    matches=[(c,start,end) for c,start,end in matches if not any(
+        other['id']!=c['id'] and left<=start and end<=right and right-left>end-start
+        for other,left,right in matches)]
+    candidates=list({c['id']:c for c,start,end in matches if not (
+        re.search(r'\b(?:tu|voi)\s*$',q[:start]) and any(
+            other['id']!=c['id'] and q[start:end] in V2_INPUT_KEYS.get(other['id'],set())
+            for other,left,right in matches))}.values())
+    # The full catalog title can include names of intermediate quantities.
+    # Only the exact example wrapper gets this disambiguation; multi-intent
+    # natural-language requests still require clarification.
+    titled=[c for c in V2_SOURCES if q in (norm(c['title']), 'cong thuc '+norm(c['title'])+' la gi?')]
+    if len(titled)==1: candidates=titled
+    if dpi_scope:
+        if any(code!='1.190' for code in procedures) or 'h3000' in q: return None
+        if requested_fids:
+            if len(set(requested_fids))!=1: return None
+            fid=f'F{int(requested_fids[0]):03}'
+            by_fid=[c for c in V2_SOURCES if c['formulas'][0]['fid']==fid]
+            if len(by_fid)!=1 or any(c['id']!=by_fid[0]['id'] for c in candidates): return None
+            candidates=by_fid
+        if len(candidates)!=1: return None
+        card=copy.deepcopy(candidates[0])
+        # Require the retrieved reviewed formula, not merely any chunk from its document.
+        if passages is not None and card['id'] not in {p.get('formula_id') for p in passages}: return None
+        return card
+    if candidates: return None  # a new formula needs an explicit procedure/device
     rules=[('valve',['van an toan','chinh dat']),('volume',['binh phan ly','dung tich']),('rotation',['thoi gian quay']),('fall',['toc do ha']),('gravity',['gia toc','trong truong']),('error',['hai lan do','sai so tuong doi'])]
     ids=[id for id,terms in rules if any(t in q for t in terms)]
     if len(ids)!=1: return None
     card=copy.deepcopy(next(c for c in SOURCES if c['id']==ids[0]))
+    # An explicit procedure/device takes precedence over generic formula keywords.
+    procedures=re.findall(r'\bqtkd\s*[:\-]?\s*(\d+\.\d{3})\b',q)
+    if any(code not in card['file'] for code in procedures): return None
+    devices=[('dpi 610','1.190'),('h3000','1.071')]
+    if any(device in q and code not in card['file'] for device,code in devices): return None
     if passages is not None and card['stem'] not in {p['stem'] for p in passages}: return None
     return card
 
@@ -55,6 +102,13 @@ def prepare(card,strategy=None):
     try:
         if strategy=='registry':
             registry=json.loads((DATA/'registry.json').read_text())
+            if card['id'].startswith('dpi190_'):
+                registry=json.loads((V2_DATA/'registry.json').read_text())
+                approvals=json.loads((V2_DATA/'review_approvals.json').read_text())
+                reviewed=approvals.get(card['id'],{})
+                spec_hash=hashlib.sha256(json.dumps(registry[card['id']],sort_keys=True,ensure_ascii=False).encode()).hexdigest()
+                if reviewed.get('spec_sha256')!=spec_hash or reviewed.get('card_fingerprint')!=canonical_fingerprint(card):
+                    return {'status':'blocked','message':'Định nghĩa mới chưa khớp hồ sơ đối chiếu.'}
             spec=copy.deepcopy(registry[card['id']])
             if card['source_status']!='technical-reviewed' or canonical_fingerprint(card)!=spec['source_fingerprint']:
                 return {'status':'blocked','message':'Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.'}
@@ -63,7 +117,7 @@ def prepare(card,strategy=None):
         else: spec,meta=llm(card)
         # Bound output structure before exposing it to the calculator.
         if not spec or not isinstance(spec.get('variables'),list) or not spec['variables'] or len(spec['variables'])>12: raise ValueError('Không có định nghĩa biến đầy đủ.')
-        if not isinstance(spec.get('expression'),str) or spec.get('unit') not in {'Pa','mL','s','mm/min','bar','%'}: raise ValueError('Thiếu biểu thức hoặc đơn vị kết quả.')
+        if not isinstance(spec.get('expression'),str) or spec.get('unit') not in {'Pa','mL','s','mm/min','bar','%','1'}: raise ValueError('Thiếu biểu thức hoặc đơn vị kết quả.')
         keys=[v['key'] for v in spec['variables']]
         if len(set(keys))!=len(keys) or any(not re.fullmatch('[a-z][a-z0-9_]*',k) for k in keys): raise ValueError('Biến không hợp lệ.')
         spec.update(id=card['id'],title=card['title'],revision=card['revision'])

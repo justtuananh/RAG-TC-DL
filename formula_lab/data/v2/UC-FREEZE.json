@@ -1,0 +1,9 @@
+{
+  "hashes": {
+    "dev-ucs.json": "344438c75ba24aad6d89acab202a54df14e918499da5110da8c924899002d503",
+    "holdout-ucs.json": "b55a78d8f30fe0dfc5be85c27f8b4bb5947814326f4a187b2270aa452eec978d"
+  },
+  "oracle": "independent hand-written math functions, 20 literal anchors",
+  "tolerance": "abs <= max(1e-9, abs(gold)*1e-11)",
+  "holdout_policy": "Unseen numbers/phrasing within the same 20 formula definitions; not unseen formula families."
+}

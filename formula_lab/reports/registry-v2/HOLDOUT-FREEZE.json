@@ -1,0 +1,21 @@
+{
+  "frozen_at": "2026-09-28T04:31:05.670254+00:00",
+  "purpose": "Runtime and UC fixed before first final-catalog holdout execution",
+  "sha256": {
+    "formula_lab/engine.py": "f5fc9908bd2c8d5373b88507970e1e709ccda942e3313c8541c779b9c7b4a12b",
+    "formula_lab/strategies.py": "aa10323ce5c3c43dcb64d3c52a8e396868d2c8dde6ec8647850e3f205c7f5cc4",
+    "formula_lab/retrieval.py": "26e9baa84e0a93559b1ebb3bf531fb9ebdd5e07bb2cc768475bd4e616962d061",
+    "formula_lab/app.py": "8a3ab2569079667b7cf2659e661b6107ba801d5950b8765a022549010223098e",
+    "formula_lab/static/index.html": "48f12b8c46f9450cfa5574a2d121f1c9f36f2a28afa5e1b3a1025d6d55672431",
+    "ingestion/omml.py": "dc0adab39a576a5b3146888a2777b12815336b1d3195cbbfa1bb68e0d423df3e",
+    "formula_lab/v2/benchmark.py": "c09e5a76f0e0d666a69d92f2a5182c2616dafd054a56532963ffbfa5cf048f86",
+    "formula_lab/v2/gold.py": "9cd54571b8d4133cb527413d1ea158a134444c8c58aa69495047b0215cfce90e",
+    "formula_lab/data/v2/UC-FREEZE.json": "59d58777c31b32b35842beeb5233643cf75decba0ae32cbebd370f3aa4930d9c",
+    "formula_lab/data/v2/conditions.json": "5b637d1b69c639b8101e896a98bc7abdbe03818f9754dee0d056a4eb1a8f5240",
+    "formula_lab/data/v2/dev-ucs.json": "344438c75ba24aad6d89acab202a54df14e918499da5110da8c924899002d503",
+    "formula_lab/data/v2/holdout-ucs.json": "b55a78d8f30fe0dfc5be85c27f8b4bb5947814326f4a187b2270aa452eec978d",
+    "formula_lab/data/v2/registry.json": "8f38553d9d2c5ed38d8f81b6d48fba8026a5f98bf29248c2df8b384a34abad96",
+    "formula_lab/data/v2/review_approvals.json": "8bb2cd6be82227bd836d813d9e5c50b6537e2361204db14dac9a85d146e6f968",
+    "formula_lab/data/v2/sources.json": "4fb98a6e392211e2d2481540824bcba4abbcfd92ce681e0d38b80f3187fa3201"
+  }
+}

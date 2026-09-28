@@ -1,5 +1,13 @@
 # DOCX Formula Lab
 
+## Current registry extension (v2)
+
+The `dev` branch now has **26 calculators: the original 6 plus 20 technically reviewed definitions from QTKĐ 1.190**. It supports bounded series inputs, square roots, absolute values, maximums and regression slope. See [v2 instructions](v2/README.md), [catalog](reports/registry-v2/CATALOG.md), and [v2 results](reports/registry-v2/KET_QUA.md). The v2 benchmark uses a live HTTP server and real browser requests, including actual embedding retrieval.
+
+The remaining sections describe the **historical v1 comparison**. Its three worktrees and reports are preserved; the current expanded registry must not be compared to their six-calculator scores as if scope were unchanged. Production React/chatbot integration remains outside this research prototype.
+
+## Historical v1 comparison
+
 Research prototype comparing LLM-generated definitions, strict LaTeX parser and reviewed registry. Production RAG remains unchanged. All strategies use the same Decimal arithmetic engine, units, symbol glossary, six candidate calculators and retrieval. Only preparation/validation of the formula definition differs.
 
 ## Setup

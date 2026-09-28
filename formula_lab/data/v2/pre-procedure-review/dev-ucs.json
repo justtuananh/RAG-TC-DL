@@ -1,0 +1,4472 @@
+[
+  {
+    "id": "dev-F001-00",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1000",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.2",
+        "unit": "m"
+      }
+    },
+    "expected": "1960.0000000000002",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-01",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "738.61955037589",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "8.29454224901474",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.322688039487254",
+        "unit": "m"
+      }
+    },
+    "expected": "1976.9518449591098",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-02",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1676.10236086051",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "8.94682923456282",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.177587052887195",
+        "unit": "m"
+      }
+    },
+    "expected": "2663.0602122275973",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-03",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "639.952780745928",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "11.0614287228982",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.200461571863899",
+        "unit": "m"
+      }
+    },
+    "expected": "1419.0257852983314",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-04",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "741.248024569248",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "7.3389968636152",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.314624683889993",
+        "unit": "m"
+      }
+    },
+    "expected": "1711.5636061629298",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-05",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1083.98657018689",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "14.3008831776032",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.333498472784139",
+        "unit": "m"
+      }
+    },
+    "expected": "5169.8817548149254",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-06",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1034.39041394363",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "16.6111716790005",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.292472047265082",
+        "unit": "m"
+      }
+    },
+    "expected": "5025.3824530208394",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-07",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1186.71453582119",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "7.8696244302862",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.166836716737744",
+        "unit": "m"
+      }
+    },
+    "expected": "1558.0877143688626",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-08",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1517.5126086084",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "6.50722834141629",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.200576021368796",
+        "unit": "m"
+      }
+    },
+    "expected": "1980.6483074590299",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F001-09",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1437.18665331987",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "8.93058856685881",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.226404270429174",
+        "unit": "m"
+      }
+    },
+    "expected": "2905.8813086813479",
+    "unit": "Pa",
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-00",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "101",
+          "102",
+          "103"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "100",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-01",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "153.037006674977",
+          "165.773779877406",
+          "128.187450464409"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "113.083707822257",
+        "unit": "Pa"
+      }
+    },
+    "expected": "35.915704516673685",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-02",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "134.622709589902",
+          "128.582880273192",
+          "158.458193870075"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "90.897585327981",
+        "unit": "Pa"
+      }
+    },
+    "expected": "49.657009249742003",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-03",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "171.228278660146",
+          "142.313493225125",
+          "122.74056211608"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "71.6695655077765",
+        "unit": "Pa"
+      }
+    },
+    "expected": "73.75787915934049",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-04",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "154.607083406025",
+          "129.978189503078",
+          "110.562878549428"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "120.845896721065",
+        "unit": "Pa"
+      }
+    },
+    "expected": "10.870153765112008",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-05",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "57.0942239502488",
+          "77.7425734103589",
+          "143.593854622207"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "138.599541430413",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-45.789324102808109",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-06",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "130.012578706567",
+          "70.2120032737135",
+          "162.262978238456"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "108.836084712054",
+        "unit": "Pa"
+      }
+    },
+    "expected": "11.993102027524841",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-07",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "129.665618479676",
+          "150.064181084519",
+          "126.004351203391"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "60.0378682573568",
+        "unit": "Pa"
+      }
+    },
+    "expected": "75.20684866517189",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-08",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "97.2019236583596",
+          "157.664868150295",
+          "146.023007466629"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "56.6506078918556",
+        "unit": "Pa"
+      }
+    },
+    "expected": "76.979325199905617",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F004-09",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "137.747356343773",
+          "92.3339196890573",
+          "168.165475207952"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "128.515569455717",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.2333476245437396",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch trung bình",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-00",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-3",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "2",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-01",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-3.09746206463301",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "1.34473592857741",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.4421979932104207",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-02",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.01030279640166",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "3.26150255401118",
+        "unit": "Pa"
+      }
+    },
+    "expected": "7.2718053504128406",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-03",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.12652039220964",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "1.81768081394559",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.9442012061552303",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-04",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-2.75023940846185",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "2.46262738465682",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.2128667931186703",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-05",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.30853723305992",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "3.04858873217818",
+        "unit": "Pa"
+      }
+    },
+    "expected": "7.3571259652381",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-06",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-2.8571842513299",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "2.20248259335703",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.0596668446869302",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-07",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.23679929088008",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "1.39532264114921",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.632121932029289",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-08",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.5247768574217",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "2.4376309846222",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.9624078420439002",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F005-09",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-3.9232629347069",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "1.92576711957571",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.8490300542826104",
+    "unit": "Pa",
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-00",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2",
+        "unit": "1"
+      },
+      "x": {
+        "value": "5",
+        "unit": "Pa"
+      }
+    },
+    "expected": "9",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-01",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.36871502608337",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.55894612426132",
+        "unit": "1"
+      },
+      "x": {
+        "value": "7.09979403033077",
+        "unit": "Pa"
+      }
+    },
+    "expected": "16.799275390885214",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-02",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.48155809483902",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.18201293260813",
+        "unit": "1"
+      },
+      "x": {
+        "value": "6.71457139748164",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13.169723531386564",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-03",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-0.609657567596998",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3.03985144614148",
+        "unit": "1"
+      },
+      "x": {
+        "value": "5.29286303103282",
+        "unit": "Pa"
+      }
+    },
+    "expected": "15.4798597715169",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-04",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.30244674183588",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.44046214035476",
+        "unit": "1"
+      },
+      "x": {
+        "value": "5.52980704918207",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.6630309559777636",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-05",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.47067601100568",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.85828098274326",
+        "unit": "1"
+      },
+      "x": {
+        "value": "2.96066674812665",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.0310747032784038",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-06",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.41399195275009",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.0783078151469",
+        "unit": "1"
+      },
+      "x": {
+        "value": "3.02437537687239",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.8715910289416495",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-07",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.0075005727608",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.26957915677722",
+        "unit": "1"
+      },
+      "x": {
+        "value": "7.87753954513662",
+        "unit": "Pa"
+      }
+    },
+    "expected": "8.9936594404329568",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-08",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.33898347452166",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.6229947493212",
+        "unit": "1"
+      },
+      "x": {
+        "value": "6.96970044532899",
+        "unit": "Pa"
+      }
+    },
+    "expected": "16.942504197917913",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F006-09",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.0670338091681",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3.1889563780198",
+        "unit": "1"
+      },
+      "x": {
+        "value": "5.91933477093827",
+        "unit": "Pa"
+      }
+    },
+    "expected": "17.809466562249867",
+    "unit": "Pa",
+    "question": "DPI 610: chỉ thị dự đoán",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-00",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "10",
+          "20",
+          "30"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "20",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-01",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "16.3685097581693",
+          "13.7400228296785",
+          "35.565627066162"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "21.891386551336598",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-02",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "8.30188726997795",
+          "11.810461635719",
+          "30.6587990192386"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "16.923715974978517",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-03",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "8.1508167425529",
+          "15.9676076325906",
+          "19.5981686568115"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "14.572197677318334",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-04",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "7.39899451162798",
+          "22.6915762250885",
+          "36.0741716114322"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "22.054914116049559",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-05",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "15.8767685133566",
+          "32.2918278332459",
+          "38.4853573754732"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "28.884651240691898",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-06",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "11.8054950952139",
+          "23.808113203172",
+          "19.7666450005717"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "18.460084432985866",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-07",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "12.3110269746092",
+          "30.180421057789",
+          "23.9569846956213"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "22.1494775760065",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-08",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "13.7305611321001",
+          "31.9833452675815",
+          "46.0157907866426"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "30.576565728774735",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F007-09",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "14.0570675821718",
+          "27.9263420904639",
+          "24.9172311811535"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "22.300213617929732",
+    "unit": "Pa",
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-00",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1",
+          "2",
+          "3"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "3",
+          "5",
+          "7"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "2",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-01",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.33796960266223",
+          "2.92375606745571",
+          "4.86786656950016"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "4.66433738058773",
+          "3.14492980070686",
+          "6.52585394465135"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.57236505757167722",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-02",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.43321837063709",
+          "3.3535091399527",
+          "3.87927993972987"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "1.82485401761509",
+          "4.00836251783151",
+          "6.76279357649596"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.781378724865218",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-03",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "0.91533131666845",
+          "1.16542969591304",
+          "3.40733766754427"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "4.02739418169318",
+          "3.9192470188849",
+          "10.7640932888251"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.8415739484427847",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-04",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.00028575527914",
+          "1.34071071533897",
+          "4.97829062009838"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "2.28752867305574",
+          "7.51891352501818",
+          "7.65005209699055"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.80864329809612212",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-05",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "0.550696045941999",
+          "3.04007734686635",
+          "1.72751598260701"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "3.18601249331904",
+          "6.96023589398006",
+          "8.87726301279545"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.4591315756277419",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-06",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.35223265123912",
+          "3.05903432818885",
+          "2.71941937329837"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "1.77774115159377",
+          "7.88356129223626",
+          "10.638746117598"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.4103001677426317",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-07",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.39788220279899",
+          "1.28845456744816",
+          "3.3348167949884"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "3.07431383588502",
+          "3.05209674707562",
+          "9.14977177750829"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.0495998243997748",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-08",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "0.764992433917349",
+          "2.37097641469656",
+          "3.69639509437095"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "3.38187743855304",
+          "4.29326016323006",
+          "4.13261555648418"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.26695409724358188",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F009-09",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.10080947776249",
+          "3.30945150439567",
+          "5.09453337982467"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "1.96060625559269",
+          "7.57697572012621",
+          "5.12302844001495"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.86006117282027572",
+    "unit": "1",
+    "question": "DPI 610: hệ số góc hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-00",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "5",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-01",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "4.48383431121519",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3.00414552161172",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.65081603096106",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-0.47545727520131198",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-02",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "4.38950671973316",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.77290639674224",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.31266755543289",
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.74960245847730089",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-03",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "4.1587621055438",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.24229580300626",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2.35849649327303",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.2288118105457322",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-04",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "7.98274784265347",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3.35190815446242",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2.45349714790804",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-0.24114925436978041",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-05",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "6.69818066094249",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.51403195984077",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2.19921431130528",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.1692855957818082",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-06",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "4.35444392658641",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.85276328656081",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2.15939681650106",
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.35359278385695525",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-07",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "4.54600405157578",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.57527010992357",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "3.33260209946428",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-0.70374442397883641",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-08",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "8.03534334257163",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.18897801942402",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "3.29020651531106",
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.83315360119002069",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F010-09",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "7.80687090171463",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.96379879973394",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.13075405418004",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.5862974473215807",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-00",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "12",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "6",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-01",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "11.0281275496627",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.30636261468346",
+        "unit": "1"
+      }
+    },
+    "expected": "4.7816104369070649",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-02",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "13.1067034746749",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.24354735542723",
+        "unit": "1"
+      }
+    },
+    "expected": "4.0408546688070555",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-03",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "16.5505444682042",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.22514400170115",
+        "unit": "1"
+      }
+    },
+    "expected": "5.1317226329969667",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-04",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "20.2564748762566",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.28024827918054",
+        "unit": "1"
+      }
+    },
+    "expected": "8.883451447460903",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-05",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "13.5450618654984",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.77605468802906",
+        "unit": "1"
+      }
+    },
+    "expected": "7.6264891823402987",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-06",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "13.6781027140009",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.35579515201285",
+        "unit": "1"
+      }
+    },
+    "expected": "4.07596473992061",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-07",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "13.9309382274904",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.60358488814408",
+        "unit": "1"
+      }
+    },
+    "expected": "8.687371856948257",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-08",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "10.9221249472574",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.27076292503847",
+        "unit": "1"
+      }
+    },
+    "expected": "8.5949351622189898",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F016-09",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "14.3715387833359",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.48815083694643",
+        "unit": "1"
+      }
+    },
+    "expected": "5.7759917806965815",
+    "unit": "Pa",
+    "question": "DPI 610: u_ch1",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-00",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "8",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "4",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-01",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "12.0581419419028",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.31016295343472",
+        "unit": "1"
+      }
+    },
+    "expected": "9.2035436586656694",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-02",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "13.3081429595473",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.23817001842603",
+        "unit": "1"
+      }
+    },
+    "expected": "4.1097727678968381",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-03",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "10.0889298870779",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.19667510062307",
+        "unit": "1"
+      }
+    },
+    "expected": "8.4308012106418193",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-04",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "4.48171093216779",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.4202580439419",
+        "unit": "1"
+      }
+    },
+    "expected": "3.1555610272967609",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-05",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "4.69300528964099",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.90805924122179",
+        "unit": "1"
+      }
+    },
+    "expected": "1.613792877090521",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-06",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "5.07153145544551",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.24758454848662",
+        "unit": "1"
+      }
+    },
+    "expected": "1.5616318466008383",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-07",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "4.95312837544838",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.3253673676599",
+        "unit": "1"
+      }
+    },
+    "expected": "2.1300412331978711",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-08",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "11.2915981533967",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.04812570936893",
+        "unit": "1"
+      }
+    },
+    "expected": "3.7044397869451586",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F017-09",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "8.51395767197081",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.05697235486435",
+        "unit": "1"
+      }
+    },
+    "expected": "2.7850947550844332",
+    "unit": "Pa",
+    "question": "DPI 610: u_amb",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-00",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "3",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.7320508075688774",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-01",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "2.75502910662111",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.5906167963329523",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-02",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "4.33612862097642",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.5034650265615772",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-03",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "1.97113865923387",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.138037435518753",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-04",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "2.39404181718993",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.382200687605827",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-05",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "2.38963601197196",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.379656994777235",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-06",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "2.74648215341822",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.5856822106005126",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-07",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "4.21955843922993",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.4361632007507574",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-08",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "3.25437621712315",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.8789149850003666",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F018-09",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "2.26397077390564",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.3071041357518667",
+    "unit": "Pa",
+    "question": "DPI 610: độ trôi của chuẩn",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-00",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "12",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-01",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3.40738597478879",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "3.57880897208678",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "19.5579166206542",
+        "unit": "Pa"
+      }
+    },
+    "expected": "20.172512371550006",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-02",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "1.81503641596495",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "6.09284224497162",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "15.7814195219175",
+        "unit": "Pa"
+      }
+    },
+    "expected": "17.013826316856196",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-03",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3.31934850299352",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4.23286815555804",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "8.15165725741846",
+        "unit": "Pa"
+      }
+    },
+    "expected": "9.7665123431594392",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-04",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "2.24461557374565",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4.21555035432836",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "12.4178469951391",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13.304588977434239",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-05",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "2.18246558044142",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "5.30060644453613",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "12.1934583194709",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13.473678431606698",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-06",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "2.47149618473283",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4.30211622878191",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "17.6152615520035",
+        "unit": "Pa"
+      }
+    },
+    "expected": "18.300654004231387",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-07",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3.56630536812816",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "5.54460480362673",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "10.703210020809",
+        "unit": "Pa"
+      }
+    },
+    "expected": "12.570595895051536",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-08",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3.94752206576211",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "6.59305156882766",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "11.1311825801735",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13.526066874079012",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F019-09",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "1.94512889562321",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "2.58036239540455",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "18.2617952017527",
+        "unit": "Pa"
+      }
+    },
+    "expected": "18.545483560774688",
+    "unit": "Pa",
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-00",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1000",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.002",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "4e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "1",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-01",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1003.31422417111",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00123860157626049",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "5.85465258116187e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.87570121018579",
+        "unit": "1"
+      }
+    },
+    "expected": "1.6491596853232657",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-02",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1480.94835031857",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00218432513072501",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "2.3786745695255e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "3.37669528760978",
+        "unit": "1"
+      }
+    },
+    "expected": "0.47760161614080332",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-03",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1390.11076173695",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00316134084900143",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "2.37688313740862e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "1.45219138583816",
+        "unit": "1"
+      }
+    },
+    "expected": "0.71971748846040773",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-04",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1037.6411125553",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00243336587953566",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "4.48129693959946e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "1.57603365717723",
+        "unit": "1"
+      }
+    },
+    "expected": "1.2124895122724439",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-05",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1453.61290920644",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00249119774505424",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "6.14825283863078e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.70810370050239",
+        "unit": "1"
+      }
+    },
+    "expected": "1.3247288589073904",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-06",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "665.850131733569",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00194204544924028",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "6.3447442325638e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "3.26196289929614",
+        "unit": "1"
+      }
+    },
+    "expected": "0.66688692554728313",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-07",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1401.24178943451",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00258922649300666",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "5.01974487177946e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.86835610529464",
+        "unit": "1"
+      }
+    },
+    "expected": "0.94709079510746197",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-08",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1683.11511706781",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00220731804184039",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "4.22068152584128e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.595897384644",
+        "unit": "1"
+      }
+    },
+    "expected": "1.2397781274908253",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F022-09",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1566.00524449961",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00242183630328178",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "4.67139688148629e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.25015027261172",
+        "unit": "1"
+      }
+    },
+    "expected": "1.3424053395539255",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-00",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1000",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "-1",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-01",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "791.357261941378",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "1.81576869834601e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "1.51825207930332",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.74896552002007688",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-02",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1052.46469575134",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "3.18428550475231e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "1.59951147062283",
+        "unit": "1"
+      }
+    },
+    "expected": "-2.2051580103266835",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-03",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1663.90279526429",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.28126656020547e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "2.56444415524357",
+        "unit": "1"
+      }
+    },
+    "expected": "-2.4628541348490613",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-04",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "576.153167676162",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "1.15056274941945e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "1.81243072898802",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.21072923972728849",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-05",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "697.585895284705",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.1609674667265e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "3.25724903391849",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.32284394567313662",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-06",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1539.17949598967",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "1.81971086002464e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "1.95531641284576",
+        "unit": "1"
+      }
+    },
+    "expected": "-2.2047729900956639",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-07",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "796.050988457134",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.10018447191187e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "2.92587304281136",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.45486627407468438",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-08",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1368.26013546285",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "1.59321035471052e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "3.02416415149044",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.98629108403415411",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F024-09",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "941.667618441567",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.94802653520674e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "3.39640578549328",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.76967448377781411",
+    "unit": "Pa",
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-00",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1000",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "10",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.02",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "1",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-01",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "969.03347438183",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "13.3617343282619",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0307293161501679",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.36913289509296",
+        "unit": "1"
+      }
+    },
+    "expected": "1.6277332603411969",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-02",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1439.04235242423",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "14.4866966876147",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0174155491594219",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.91941297573056",
+        "unit": "1"
+      }
+    },
+    "expected": "0.90130743918183154",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-03",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "553.97692941499",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "9.96085483370843",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0228803674990723",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "2.68488039541923",
+        "unit": "1"
+      }
+    },
+    "expected": "0.47395064629702238",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-04",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1448.82329050654",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "15.2054381035777",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0225685024181705",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.5580338044541",
+        "unit": "1"
+      }
+    },
+    "expected": "1.380201027490366",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-05",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1360.59042848604",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "11.4050592321527",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0337004429685262",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.73211728635912",
+        "unit": "1"
+      }
+    },
+    "expected": "2.3210696871753749",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-06",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1145.23667953963",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "6.27816857881599",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.030899275548705",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.97110024450893",
+        "unit": "1"
+      }
+    },
+    "expected": "2.8595774361012571",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-07",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "655.50485250591",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "5.53911218772065",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0313727229971059",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.34162510448336",
+        "unit": "1"
+      }
+    },
+    "expected": "2.7673034748442165",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-08",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "759.717351148248",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "8.1906800499076",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0263658818970354",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "2.28121101576856",
+        "unit": "1"
+      }
+    },
+    "expected": "1.072034905137037",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F026-09",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1513.72085762496",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "12.4005682080099",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0315807465568643",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.3205507387232",
+        "unit": "1"
+      }
+    },
+    "expected": "2.919251482983436",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-00",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1000",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.001",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "4.9000000000000004",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-01",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "786.637342724803",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "16.6266798229133",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00139270429340991",
+        "unit": "m"
+      },
+      "k": {
+        "value": "1.68088543268329",
+        "unit": "1"
+      }
+    },
+    "expected": "10.836795897661933",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-02",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "617.361627773398",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "5.69472010002779",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.000733515407571147",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.93760513230412",
+        "unit": "1"
+      }
+    },
+    "expected": "0.87786520914578903",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-03",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1015.34686700362",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "8.5752018330191",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00137814352099524",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.67882283674728",
+        "unit": "1"
+      }
+    },
+    "expected": "4.4792906013785849",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-04",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1512.97889442861",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "12.6713070962432",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.000981570685797188",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.5369034672657",
+        "unit": "1"
+      }
+    },
+    "expected": "7.4177454198189547",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-05",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1289.11393227712",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.0489063828262",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00118193074223976",
+        "unit": "m"
+      },
+      "k": {
+        "value": "1.50763005560854",
+        "unit": "1"
+      }
+    },
+    "expected": "9.1450195734337054",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-06",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1016.81465566039",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "16.5688224162423",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00142022925983009",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.60950021691521",
+        "unit": "1"
+      }
+    },
+    "expected": "9.1692657294665363",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-07",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "597.818635694136",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "12.0940148671958",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.000685319235118411",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.02886909043866",
+        "unit": "1"
+      }
+    },
+    "expected": "2.4421865942883985",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-08",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1410.1241990638",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "13.0136079359211",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00115093592796804",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.17645074853808",
+        "unit": "1"
+      }
+    },
+    "expected": "9.704147466739002",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F031-09",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "638.69494184527",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "11.5062634858486",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.0011944555186366",
+        "unit": "m"
+      },
+      "k": {
+        "value": "3.02929758851157",
+        "unit": "1"
+      }
+    },
+    "expected": "2.8977161002769773",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-00",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1",
+          "-2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "19.621416870348583",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-01",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.68790427980974",
+          "-3.10160911668405",
+          "3.65691411567873",
+          "2.70100970484493",
+          "5.69322621150073",
+          "5.6247759918697",
+          "6.21448792159634",
+          "5.36130678153529",
+          "5.24493760769327",
+          "5.84678034058876"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "15.041478826655998",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-02",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.933275323785378",
+          "-1.70022331809033",
+          "3.46814326591167",
+          "4.48935052959453",
+          "7.58270466741583",
+          "6.11198427058522",
+          "5.0160458349752",
+          "8.11737736788489",
+          "14.9824620389698",
+          "10.3990604160261"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "23.547079803778402",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-03",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.905202635726354",
+          "-1.58047915252744",
+          "5.02675338196092",
+          "2.95696917153961",
+          "6.38357213314987",
+          "10.1234319810496",
+          "7.90115571727895",
+          "9.27890697510244",
+          "7.21306827659515",
+          "5.95782664402089"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "20.411112641553363",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-04",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.07366872060306",
+          "-1.29413212544445",
+          "2.8237577480821",
+          "5.16847249713508",
+          "5.66128927243001",
+          "6.39444389331435",
+          "11.6252881951535",
+          "7.55335021926853",
+          "5.06309713577269",
+          "12.883462582129"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "22.232236798189412",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-05",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.5813514976255",
+          "-2.48363602385916",
+          "5.01552788345214",
+          "4.11915570976843",
+          "5.49455064731174",
+          "8.67558093964004",
+          "11.7490801521452",
+          "4.84427081279193",
+          "9.71051801680724",
+          "14.2455578044523"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "24.798907174895962",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-06",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.594058930995614",
+          "-2.43435306430572",
+          "2.01240527114102",
+          "4.30797705363741",
+          "2.93602739041852",
+          "7.96277868788702",
+          "8.50905427959187",
+          "13.4118845503956",
+          "8.28015370725748",
+          "11.1801655340672"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "23.382754801474167",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-07",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.08774909875366",
+          "-3.02651361849599",
+          "2.12148290036736",
+          "4.4904138123223",
+          "6.12289663909835",
+          "7.99995890830716",
+          "4.56289812528633",
+          "9.93600031393537",
+          "5.78675105691133",
+          "6.52603222383963"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "18.224061577936872",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-08",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.94495911618697",
+          "-2.22654090610409",
+          "4.08646494056608",
+          "3.49308859972864",
+          "7.3450544149576",
+          "6.54416375605018",
+          "5.78286636058221",
+          "9.13798850344237",
+          "12.8943490212036",
+          "14.7369824319617"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "25.137908913680526",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F033-09",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.01488648536188",
+          "-1.36445409268583",
+          "3.41127647254375",
+          "3.32327922742839",
+          "3.63635319567792",
+          "6.4215104738836",
+          "9.92799977173917",
+          "13.4513496722871",
+          "11.002536235026",
+          "8.59281645829876"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "23.546292035850996",
+    "unit": "Pa",
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-00",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "6",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.4494897427831783",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-01",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "5.0806628069061",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.0741719053427476",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-02",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "7.91319606562746",
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.2305487658977774",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-03",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "6.66659921361802",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.7216277321672906",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-04",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "5.17950926903798",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.1145258045264881",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-05",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "8.04174432636136",
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.2830283735844956",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-06",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "9.92481901073379",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.0517903942953186",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-07",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "7.19421438404045",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.9370257235150472",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-08",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "6.11948581355001",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.4982696218996536",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F034-09",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "6.31497289107907",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.5780768871086694",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải tam giác",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-00",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "3",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.7320508075688774",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-01",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.05255014949333",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.1850403813351806",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-02",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "1.69344062541627",
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.97770840094073175",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-03",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.56275146732391",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.4796052495255678",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-04",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.65160528826777",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.5309050269660325",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-05",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "3.07368107853492",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.7745905980951955",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-06",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "1.75165870729551",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.0113206261854146",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-07",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.07800057680577",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.1997341923950091",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-08",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "5.05157756578413",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.9165296674377421",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F035-09",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "3.35400831131128",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.9364376013998099",
+    "unit": "Pa",
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-00",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "2",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-3",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "4",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "5",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-01",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.42474290296623",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "2.35606295042847",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "2.17746439090742",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-4.25199210553229",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "2.47446726494248",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "3.04936002585739",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.4294564964397098",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-02",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.28134560816069",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "2.4482776955543",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "2.01385746242546",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-4.65259571679841",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "4.7738615195445",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "5.00210168115432",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.6664531792238702",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-03",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.65675127491997",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3.19515598502772",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "1.50275058679045",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-1.81512663459978",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "5.87208450529108",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "6.33404133334941",
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.3178772213902299",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-04",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.20831382925598",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "4.84948043672034",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "1.37407967372679",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-4.73818694910552",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "5.75302128713744",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "8.0624436418226",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.1122666228323101",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-05",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "0.998063658059134",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "4.72687028518288",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "2.31972082599271",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-3.70697482638856",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "6.09100533292826",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "3.48330940707057",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.02669565238127",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-06",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.30517316471538",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "2.69576603304408",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "3.18689618807977",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-4.93181566964226",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "6.32320305639713",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "3.04996145319486",
+        "unit": "Pa"
+      }
+    },
+    "expected": "8.1187118577220296",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-07",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.49592778353198",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3.26919919001317",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "1.87021301016728",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-2.49642854633186",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "6.00116829223754",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "7.95577232961893",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.3666415564991397",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-08",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.45258268660695",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "2.99270846521334",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "3.0443799148217",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-2.75987237222857",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "4.0125023894934",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "7.9093894763124",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.8042522870502697",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F036-09",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.14804007025812",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3.34591462395855",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "2.3752661132595",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-4.38963774255435",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "6.49742933873851",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "3.62808429981973",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.7649038558138503",
+    "unit": "Pa",
+    "question": "DPI 610: độ lệch điểm không",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-00",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "2",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "4",
+        "unit": "Pa"
+      }
+    },
+    "expected": "8",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-01",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.22074009749046",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "5.3587515232613",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.5416428569331506",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-02",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "2.00858743663018",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "5.46683319752411",
+        "unit": "Pa"
+      }
+    },
+    "expected": "10.980612478699722",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-03",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "3.29630457470714",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "3.72079642410255",
+        "unit": "Pa"
+      }
+    },
+    "expected": "12.264878274323202",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-04",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "2.10416348368793",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "2.71033189563421",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.7029814034681898",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-05",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "2.66728608803939",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "5.4074765829287",
+        "unit": "Pa"
+      }
+    },
+    "expected": "14.423287061044499",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-06",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.45743105127704",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "3.05400691158663",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.4510045037610482",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-07",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.75339997623528",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "4.69163925691064",
+        "unit": "Pa"
+      }
+    },
+    "expected": "8.226320161571623",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-08",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.9405796553648",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "3.22489726462912",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.2581700223808641",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "dev-F050-09",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "2.10226706346165",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "3.23131339014731",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.7930837118292944",
+    "unit": "Pa",
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  }
+]

@@ -1,0 +1,523 @@
+[
+  {
+    "id": "dpi190_f001",
+    "title": "Bù áp suất do chênh cao cột chất lỏng — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt / F001",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "- Khi lắp DPI 610 và chuẩn vào vị trí làm việc chú ý lắp ráp sao cho cùng nằm trên một độ cao.\nChú ý: Nếu có chênh lệch chiều cao cột chất lỏng thì phải tính bù áp suất theo công thức (1): \n∆P0=ρ×g×h                                                                                (1)\ntrong đó: \nΔP0 là áp suất do chênh lệch chiều cao cột chất lỏng gây ra, Pa;\nρ là khối lượng riêng của môi trường truyền áp suất, kg/m3;\ng là giá trị gia tốc tại nơi kiểm định, m/s2;",
+    "formulas": [
+      {
+        "fid": "F001",
+        "latex": "∆P_{0}=ρ×g×h (1)",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "bù áp suất do chênh cao",
+      "bù áp suất cột chất lỏng",
+      "hiệu chỉnh cột áp",
+      "rho*g*h"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "131acca8a718ffd81e7f988173577bc1dac6be5059dca465cf8dbecd29d42cf7"
+  },
+  {
+    "id": "dpi190_f004",
+    "title": "Độ lệch trung bình so với áp suất chuẩn — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số / F004",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "t  là nhiệt độ môi trường không khí, oC.\n- Độ lệch được xác định theo công thức (4):\nρ=i=1nPk,in-PC                                                                (4)\ntrong đó:\nρ là độ lệch, Pa;\nn là tổng số loạt đo;\nPk,i là giá trị áp suất đọc được trên DPI 610 tại loạt đo thứ i, Pa;",
+    "formulas": [
+      {
+        "fid": "F004",
+        "latex": "ρ=\\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} (4)",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "độ lệch trung bình",
+      "độ lệch so với áp suất chuẩn",
+      "độ lệch rho"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "6b86da44af23d23dd0cfe189159a9078dc20008aecc6b51542943c40ba2eacb8"
+  },
+  {
+    "id": "dpi190_f005",
+    "title": "Sai số gồm độ lệch và độ không đảm bảo mở rộng — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số / F005",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "Pc là giá trị áp suất đọc được trên AKC, Pa;\nSai số được xác định bằng công thức (5):\n∆P=ρ+U                                                                      (5)\ntrong đó:\n∆P là sai số, Pa;\nU là độ không đảm bảo đo mở rộng (k = 2, P = 95 %), Pa.\nSai số của DPI 610 không được vượt quá sai số cơ bản cho phép.",
+    "formulas": [
+      {
+        "fid": "F005",
+        "latex": "∆P=\\left| ρ \\right|+U (5)",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "sai số gồm độ lệch",
+      "sai số cộng độ không đảm bảo",
+      "abs(rho)+u"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "24585e8a8813f6c0ddce492093ce57640cbe43bba2aa0058372f97c31249ce5c"
+  },
+  {
+    "id": "dpi190_f006",
+    "title": "Chỉ thị dự đoán theo quan hệ tuyến tính — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F006",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "Lấy trục Y biểu thị tập hợp các giá trị chỉ thị trên áp kế kiểm (Yi), trục X biểu thị tập hợp các giá trị áp suất chỉ thị trên chuẩn đo lường (Xi), thì tập hợp các điểm đo sẽ là (Xi ,Yi), số lần đo (quan trắc) là n.\nVì X và Y có mối quan hệ tuyến tính nên công thức thể hiện mối tương quan là:\nY=a+b×X\nGiá trị của hệ số a, b được tìm bằng phương pháp bình phương cực tiểu:\nx=xiny=yinb=xi-xyi-yxi-x2a=y-b×x\nD.2 Ước lượng độ không đảm bảo đo\nD.2.1 Độ không đảm bảo đo kiểu A: ua",
+    "formulas": [
+      {
+        "fid": "F006",
+        "latex": "Y=a+b×X",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "chỉ thị dự đoán",
+      "quan hệ tuyến tính",
+      "y=a+b*x"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "9e7a8a9fca5ad10eccafbecc202ebbf69fa7128bc3c2d57337f87f52cafe1828"
+  },
+  {
+    "id": "dpi190_f007",
+    "title": "Trung bình các giá trị áp suất chuẩn — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F007",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "Y=a+b×X\nGiá trị của hệ số a, b được tìm bằng phương pháp bình phương cực tiểu:\nx=xiny=yinb=xi-xyi-yxi-x2a=y-b×x\nD.2 Ước lượng độ không đảm bảo đo\nD.2.1 Độ không đảm bảo đo kiểu A: ua\nDùng phương pháp bình phương cực tiểu để lập biểu thức tính toán độ không đảm bảo đo kiểu A\nĐộ không đảm bảo đo kiểu A tại điểm đo thứ i được tính theo công thức:",
+    "formulas": [
+      {
+        "fid": "F007",
+        "latex": "\\overline{x}=\\frac{\\sum{x_{i}}}{n}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "trung bình các giá trị áp suất chuẩn",
+      "trung bình áp suất chuẩn",
+      "trung bình x"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "35cdb637328160df0e6d4d38353d5c461c5d0c44fa0cfbc925582e46b2bdf812"
+  },
+  {
+    "id": "dpi190_f009",
+    "title": "Hệ số góc hồi quy bình phương tối thiểu — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F009",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "Y=a+b×X\nGiá trị của hệ số a, b được tìm bằng phương pháp bình phương cực tiểu:\nx=xiny=yinb=xi-xyi-yxi-x2a=y-b×x\nD.2 Ước lượng độ không đảm bảo đo\nD.2.1 Độ không đảm bảo đo kiểu A: ua\nDùng phương pháp bình phương cực tiểu để lập biểu thức tính toán độ không đảm bảo đo kiểu A\nĐộ không đảm bảo đo kiểu A tại điểm đo thứ i được tính theo công thức:",
+    "formulas": [
+      {
+        "fid": "F009",
+        "latex": "b=\\frac{\\sum{\\left( x_{i}-\\overline{x} \\right)\\left( y_{i}-\\overline{y} \\right)}}{\\sum{\\left( x_{i}-\\overline{x} \\right)^{2}}}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "hệ số góc hồi quy",
+      "hệ số b hồi quy",
+      "độ dốc hồi quy"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "a2a4bb6b7e7138c83536a8c72d9fd664d5ed25291e5f7024357028158429d5e6"
+  },
+  {
+    "id": "dpi190_f010",
+    "title": "Hệ số chặn hồi quy — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F010",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "Y=a+b×X\nGiá trị của hệ số a, b được tìm bằng phương pháp bình phương cực tiểu:\nx=xiny=yinb=xi-xyi-yxi-x2a=y-b×x\nD.2 Ước lượng độ không đảm bảo đo\nD.2.1 Độ không đảm bảo đo kiểu A: ua\nDùng phương pháp bình phương cực tiểu để lập biểu thức tính toán độ không đảm bảo đo kiểu A\nĐộ không đảm bảo đo kiểu A tại điểm đo thứ i được tính theo công thức:",
+    "formulas": [
+      {
+        "fid": "F010",
+        "latex": "a=\\overline{y}-b×\\overline{x}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "hệ số chặn hồi quy",
+      "hệ số a hồi quy",
+      "tung độ gốc hồi quy"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "eb4907092a49857f3dd3e63f321231600261cd2820021f4b7381a67271f37ff0"
+  },
+  {
+    "id": "dpi190_f016",
+    "title": "Độ không đảm bảo của áp suất chuẩn u_ch1 — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F016",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "- Độ không đảm bảo đo của áp suất chuẩn: uch1\nThành phần này được lấy trong giấy chứng nhận hiệu chuẩn, tính từ độ không đảm bảo đo mở rộng Uch1, tính theo công thức:\nuch1=Uch1k\n - Độ không đảm bảo đo của phương tiện đo áp suất khí quyển: uamb\nÁp dụng khi sử dụng chuẩn đo áp suất tương đối và thiết bị đo áp suất khí quyển (Bảng 2) để kiểm định các áp kế đo áp suất tuyệt đối. Thành phần này được lấy trong giấy chứng nhận hiệu chuẩn, tính từ độ không đảm bảo đo mở rộng Uamb, tính theo công thức:\nuamb=Uambk\n- Độ không đảm bảo đo do độ ổn định của chuẩn: ustability",
+    "formulas": [
+      {
+        "fid": "F016",
+        "latex": "u_{ch1}=\\frac{U_{ch1}}{k}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "áp suất chuẩn u_ch1",
+      "u_ch1",
+      "uch1"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "3c371162967158ca844e938d8becaa28a0ea0cede8d1a1ee2019dfd5e46dc835"
+  },
+  {
+    "id": "dpi190_f017",
+    "title": "Độ không đảm bảo phương tiện đo khí quyển u_amb — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F017",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": " - Độ không đảm bảo đo của phương tiện đo áp suất khí quyển: uamb\nÁp dụng khi sử dụng chuẩn đo áp suất tương đối và thiết bị đo áp suất khí quyển (Bảng 2) để kiểm định các áp kế đo áp suất tuyệt đối. Thành phần này được lấy trong giấy chứng nhận hiệu chuẩn, tính từ độ không đảm bảo đo mở rộng Uamb, tính theo công thức:\nuamb=Uambk\n- Độ không đảm bảo đo do độ ổn định của chuẩn: ustability\nThành phần này lấy từ thực nghiệm để có được độ tái lặp lại của chuẩn:\nustability=driffvalue3\n- Độ không đảm bảo đo chuẩn liên hợp của tổ hợp chuẩn: uch",
+    "formulas": [
+      {
+        "fid": "F017",
+        "latex": "u_{amb}=\\frac{U_{amb}}{k}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "phương tiện đo khí quyển",
+      "u_amb",
+      "uamb"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "eaf7449fe8bb3314d59fe21a15e9dbb60e0c125f0ac412eefb27c83e04f7de24"
+  },
+  {
+    "id": "dpi190_f018",
+    "title": "Độ không đảm bảo do độ ổn định chuẩn — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F018",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "- Độ không đảm bảo đo do độ ổn định của chuẩn: ustability\nThành phần này lấy từ thực nghiệm để có được độ tái lặp lại của chuẩn:\nustability=driffvalue3\n- Độ không đảm bảo đo chuẩn liên hợp của tổ hợp chuẩn: uch\nuch=uch12+uamb2+ustability2\nD.2.2.2 Độ không đảm bảo đo của chuẩn đối với trường hợp chuẩn được sử dụng là áp kế pít tông chuẩn, các thành phần độ không đảm bảo đo của chuẩn bao gồm:\n- Độ không đảm bảo đo do độ ổn định của giá trị áp suất chuẩn: u1",
+    "formulas": [
+      {
+        "fid": "F018",
+        "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "độ không đảm bảo do độ ổn định chuẩn",
+      "độ trôi của chuẩn",
+      "u_stability"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "55c9e2a7d9357b05ceec3a83dce0f274da94feee667bc2df44e6b0207f37fdd8"
+  },
+  {
+    "id": "dpi190_f019",
+    "title": "Độ không đảm bảo liên hợp của tổ hợp chuẩn — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F019",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "ustability=driffvalue3\n- Độ không đảm bảo đo chuẩn liên hợp của tổ hợp chuẩn: uch\nuch=uch12+uamb2+ustability2\nD.2.2.2 Độ không đảm bảo đo của chuẩn đối với trường hợp chuẩn được sử dụng là áp kế pít tông chuẩn, các thành phần độ không đảm bảo đo của chuẩn bao gồm:\n- Độ không đảm bảo đo do độ ổn định của giá trị áp suất chuẩn: u1\nĐược lấy từ giấy chứng nhận hiệu chuẩn hoặc lấy từ tính toán thực nghiệm cho từng điểm đo:\nu1=a+b×p",
+    "formulas": [
+      {
+        "fid": "F019",
+        "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "liên hợp của tổ hợp chuẩn",
+      "tổ hợp chuẩn ba thành phần",
+      "u_ch"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "781c73921567530ca0aa9292bb567281ee12e0772ff0de9692686f63a7410df8"
+  },
+  {
+    "id": "dpi190_f022",
+    "title": "Thành phần độ không đảm bảo do diện tích hiệu dụng u2 — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F022",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "- Độ không đảm bảo đo của diện tích hiệu dụng: u2\nThành phần này được lấy trong giấy chứng nhận hiệu chuẩn, tính từ độ không đảm bảo đo mở rộng UA0,c, tính theo công thức:\nu2=pA0,c×UA0,ck\n- Độ không đảm bảo đo của hệ số dãn nở áp suất: u3\nThành phần này được lấy trong giấy chứng nhận hiệu chuẩn, tính từ độ không đảm bảo đo mở rộng Uλc, tính theo công thức:\nu3=-p2×Uλck\nPhụ lục D (tiếp theo)",
+    "formulas": [
+      {
+        "fid": "F022",
+        "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "diện tích hiệu dụng u2",
+      "độ không đảm bảo diện tích",
+      "u2"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "7eb377ecd827d7246fd48fd53743884653549b955ecadf099f525fd06a88a8bb"
+  },
+  {
+    "id": "dpi190_f024",
+    "title": "Thành phần có dấu do hệ số giãn nở áp suất u3 — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F024",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "- Độ không đảm bảo đo của hệ số dãn nở áp suất: u3\nThành phần này được lấy trong giấy chứng nhận hiệu chuẩn, tính từ độ không đảm bảo đo mở rộng Uλc, tính theo công thức:\nu3=-p2×Uλck\nPhụ lục D (tiếp theo)\n- Độ không đảm bảo đo của khối lượng quả cân pít tông chuẩn: u4\nThành phần này được lấy trong giấy chứng nhận hiệu chuẩn, tính từ độ không đảm bảo đo mở rộng UMc, tính theo công thức:\nu4=pMc×UMck",
+    "formulas": [
+      {
+        "fid": "F024",
+        "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "giãn nở áp suất u3",
+      "hệ số giãn nở áp suất",
+      "u3"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "b110169a2c88062f83bd6aaa76dc0754d34f41d9fb6939c633a7465e139d45e4"
+  },
+  {
+    "id": "dpi190_f026",
+    "title": "Thành phần độ không đảm bảo do khối lượng u4 — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F026",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "- Độ không đảm bảo đo của khối lượng quả cân pít tông chuẩn: u4\nThành phần này được lấy trong giấy chứng nhận hiệu chuẩn, tính từ độ không đảm bảo đo mở rộng UMc, tính theo công thức:\nu4=pMc×UMck\n- Độ không đảm bảo đo của nhiệt độ pít tông/xylanh chuẩn: u5\nNhiệt độ pít tông/xylanh được đo trực tiếp với điều kiện nhiệt độ duy trì trong khoảng  1 oC và độ không đảm bảo đo có thể được lấy bằng Ut = 2 oC, tính theo công thức:\nu5=p×αp,c+αc,c×Ut2\n- Độ không đảm bảo đo của hệ số dãn nở nhiệt: u6",
+    "formulas": [
+      {
+        "fid": "F026",
+        "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "khối lượng u4",
+      "độ không đảm bảo khối lượng",
+      "u4"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "49ec159a17d36eba143dfd11d5f6d6dfc0649bf475a1caa05cb00ff947e41936"
+  },
+  {
+    "id": "dpi190_f031",
+    "title": "Thành phần độ không đảm bảo do chênh cao u9 — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F031",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "- Độ không đảm bảo đo của chênh lệch chiều cao cột chất lỏng: u9 \nĐộ không đảm bảo đo của chênh lệch chiều cao cột chất lỏng tối đa bằng Uh = 2 mm, tính theo công thức:\nu9=ρf×g×U∆hk\nPhụ lục D (tiếp theo)\n- Độ không đảm bảo đo của lực tác dụng theo phương thẳng đứng: u10\nLực tác dụng theo phương thẳng đứng: F’ = F  cos. Trong trường hợp khi  < 0,5’ độ không đảm bảo đo theo   được ước lượng bằng: U = 5,82.10-4 rad và lấy theo phân bố hình chữ nhật, tính theo công thức:\nu10=p×sinθc×Uθc3",
+    "formulas": [
+      {
+        "fid": "F031",
+        "latex": "u_{9}=ρ_{f}×g×\\frac{U_{∆h}}{k}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "chênh cao u9",
+      "độ không đảm bảo chênh cao",
+      "u9"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "2017c96e87e0dcb7ce0a5f86c9f4a60d81fd79fd89dc3964331683eda19c628f"
+  },
+  {
+    "id": "dpi190_f033",
+    "title": "Tổng hợp mười thành phần chuẩn pít tông — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F033",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "u10=p×sinθc×Uθc3\n- Độ không đảm bảo đo chuẩn liên hợp của tổ hợp chuẩn: uch\nuc=u12+u22+…+u102\nD.2.3 Độ không đảm bảo đo của áp kế kiểm: ubk\nD.2.3.1 Độ không đảm bảo đo do độ phân giải: ur\n- Đối với các áp kế kiểm kiểu chỉ thị tương tự: Độ phân giải (r) của áp kế kiểm kiểu chỉ thị tương tự là khoảng cách nh nhất giữa hai vạch chia liền kề có thể chia một cách ước lượng để xác định kim chỉ của chỉ thị chỉ vào giá trị nào. Đối với áp kế chỉ thị tương tự độ phân giải có thể được lấy bằng 1/2 hoặc 1/5 giá trị áp suất giữa hai vạch chia liền kề. Trường hợp khoảng cách giữa hai vạch chia liền kề lớn hơn hoặc bằng 2,5 mm độ phân giải có thể được lấy bằng 1/10 giá trị áp suất của khoảng cách đó . Đối với các cơ cấu chỉ thị kim, dạng của phân bố là hình tam giác. Đối với cơ cấu chỉ thị vạch dạng thước, dạng của phân bố là hình chữ nhật.\n- Đối với các áp kế kiểm kiểu chỉ thị số: Độ phân giải (r) của áp kế kiểm kiểu chỉ thị số là giá trị tương ứng với một bước nhảy nhỏ nhất, dạng của phân bố là hình chữ nhật. Đối với các áp kế kiểm có các bước nhảy khác nhau trong toàn thang đo thì độ phân giải được chọn là giá trị lớn nhất.",
+    "formulas": [
+      {
+        "fid": "F033",
+        "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "tổng hợp mười thành phần",
+      "tổng hợp 10 thành phần",
+      "căn tổng bình phương u1"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "a51177c9b8be307c452a0447f0de4e7393f7251eccfd72b1112e6ec332b815c2"
+  },
+  {
+    "id": "dpi190_f034",
+    "title": "Độ phân giải theo phân bố tam giác — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F034",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "- Đối với các áp kế kiểm chỉ thị có dao động thăng giáng bất thường: Nếu các áp kế kiểm chỉ thị có dao động thăng giáng bất thường thì độ phân giải (r) sẽ tính bằng 1/2 khoảng dao động đối với các áp kế kiểm kiểu chỉ thị tương tự, và bằng 1/2 khoảng dao động cộng với một bước nhảy nhỏ nhất về giá trị đối với áp kế kiểm kiểu chị thị số.\n- Đối với cơ cấu chỉ thị có dạng phân bố là hình tam giác công thức tính độ không đảm bảo đo ur như sau:\nur=r6\n- Đối với cơ cấu chỉ thị có dạng phân bố là hình chữ nhật công thức tính độ không đảm bảo đo ur như sau:\nur=r3\nD.2.3.2 Độ không đảm bảo đo do độ lệch “0”: uf0\nĐộ lệch “0” cần được xác định với mỗi chu kỳ đo bao gồm cả chu trình đo khi tăng và giảm áp suất. Các giá trị độ lệch “0” được tính như sau:",
+    "formulas": [
+      {
+        "fid": "F034",
+        "latex": "u_{r}=\\frac{r}{\\sqrt{6}}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "độ phân giải theo phân bố tam giác",
+      "độ phân giải tam giác",
+      "u_r tam giác"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "d5b9fb6728e593383f3b8846f40f80d1e374c32d94e186bd14f316b3266a2f5d"
+  },
+  {
+    "id": "dpi190_f035",
+    "title": "Độ phân giải theo phân bố chữ nhật — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F035",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "ur=r6\n- Đối với cơ cấu chỉ thị có dạng phân bố là hình chữ nhật công thức tính độ không đảm bảo đo ur như sau:\nur=r3\nD.2.3.2 Độ không đảm bảo đo do độ lệch “0”: uf0\nĐộ lệch “0” cần được xác định với mỗi chu kỳ đo bao gồm cả chu trình đo khi tăng và giảm áp suất. Các giá trị độ lệch “0” được tính như sau:\nf0=maxx2,0-x1,0,x4,0-x3,0,x6,0-x5,0\nCác chỉ số của giá trị đo đọc tại điểm “0” của một loạt đo M1 đến M6",
+    "formulas": [
+      {
+        "fid": "F035",
+        "latex": "u_{r}=\\frac{r}{\\sqrt{3}}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "độ phân giải theo phân bố chữ nhật",
+      "độ phân giải chữ nhật",
+      "u_r chữ nhật"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "024ed6916dcc0091055c216590c52960b0fbe997703d5ad7c8cbcbf31bfa8bf7"
+  },
+  {
+    "id": "dpi190_f036",
+    "title": "Độ lệch điểm không qua ba chu kỳ — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F036",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "D.2.3.2 Độ không đảm bảo đo do độ lệch “0”: uf0\nĐộ lệch “0” cần được xác định với mỗi chu kỳ đo bao gồm cả chu trình đo khi tăng và giảm áp suất. Các giá trị độ lệch “0” được tính như sau:\nf0=maxx2,0-x1,0,x4,0-x3,0,x6,0-x5,0\nCác chỉ số của giá trị đo đọc tại điểm “0” của một loạt đo M1 đến M6\nPhụ lục D (kết thúc)\nCông thức tính độ không đảm bảo đo uf0 như sau:\nuf0=f023",
+    "formulas": [
+      {
+        "fid": "F036",
+        "latex": "f_{0}=max\\left\\{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right\\}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "độ lệch điểm không",
+      "độ lệch zero",
+      "f0"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "7288ebfab3fcd3f1fc92936e4ae5e961ee1228366a274141e3cec0e57dc92ade"
+  },
+  {
+    "id": "dpi190_f050",
+    "title": "Độ không đảm bảo đo mở rộng U_c — QTKĐ 1.190 / DPI 610",
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+    "section": "Đánh giá độ không đảm bảo đo / F050",
+    "docx_sha256": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+    "context": "uc=ua2+uc2+ubk2\nD.2.5 Độ không đảm bảo đo mở rộng: Uc\nUc=k×uc\n122364535242500\n",
+    "formulas": [
+      {
+        "fid": "F050",
+        "latex": "U_{c}=k×u_{c}",
+        "kind": "omml"
+      }
+    ],
+    "revision": "2",
+    "source_status": "technical-reviewed",
+    "review_evidence": "formula_lab/reports/registry-v2/source-review/REVIEW.md",
+    "aliases": [
+      "độ không đảm bảo đo mở rộng",
+      "độ không đảm bảo mở rộng",
+      "u_c mở rộng"
+    ],
+    "technical_review_only": true,
+    "fingerprint": "01d77f0c5c13d0eb22f22724c71edb0adc3fbc993b45fb38b28495a2072c5896"
+  }
+]

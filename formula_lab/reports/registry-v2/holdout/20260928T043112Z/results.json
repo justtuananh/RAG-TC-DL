@@ -1,0 +1,7004 @@
+[
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f001",
+    "pass": true,
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "status": "ready",
+    "selected": "dpi190_f001",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f001"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f016"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f036"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f007"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-00",
+    "pass": true,
+    "expected": "1960.0000000000002",
+    "result": {
+      "status": "ok",
+      "value": "1960.00",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "1000",
+        "g": "9.8",
+        "h": "0.2"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f001/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F001-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f001/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F001-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f001/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: rho",
+      "request_id": "holdout-F001-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f001/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F001-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f001/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F001-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f001/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F001-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f001/zero_rho",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: rho",
+      "request_id": "holdout-F001-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f001/zero_g",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: g",
+      "request_id": "holdout-F001-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f001",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-01",
+    "pass": true,
+    "expected": "2865.039822979465",
+    "result": {
+      "status": "ok",
+      "value": "2865.039822979465227016762145928387",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "653.561763526467",
+        "g": "15.3418927634854",
+        "h": "0.285736081142773"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-02",
+    "pass": true,
+    "expected": "1180.0005261585011",
+    "result": {
+      "status": "ok",
+      "value": "1180.000526158501164900489232026872",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "622.178515298457",
+        "g": "8.42689547149552",
+        "h": "0.225060657773407"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-03",
+    "pass": true,
+    "expected": "1674.1416492232772",
+    "result": {
+      "status": "ok",
+      "value": "1674.141649223277131403495967868575",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "1447.02737587072",
+        "g": "9.27666554490721",
+        "h": "0.124716396575363"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-04",
+    "pass": true,
+    "expected": "678.84248528739272",
+    "result": {
+      "status": "ok",
+      "value": "678.8424852873928200477114338221831",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "574.047856817631",
+        "g": "10.4555580909232",
+        "h": "0.113102888298751"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-05",
+    "pass": true,
+    "expected": "1233.4844705039629",
+    "result": {
+      "status": "ok",
+      "value": "1233.484470503963191562591011631074",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "1245.01105340956",
+        "g": "6.20776966317053",
+        "h": "0.159597059238842"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-06",
+    "pass": true,
+    "expected": "2823.6430793933901",
+    "result": {
+      "status": "ok",
+      "value": "2823.643079393390059190784018910734",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "1094.61288689307",
+        "g": "8.81691531546397",
+        "h": "0.292571873579594"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-07",
+    "pass": true,
+    "expected": "3605.8555919580449",
+    "result": {
+      "status": "ok",
+      "value": "3605.855591958044782265382555259640",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "869.384374146143",
+        "g": "14.0304920013142",
+        "h": "0.295613047988384"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-08",
+    "pass": true,
+    "expected": "1720.0682208733299",
+    "result": {
+      "status": "ok",
+      "value": "1720.068220873329520804890595325536",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "937.348629133239",
+        "g": "8.06994357757747",
+        "h": "0.227391394619944"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F001-09",
+    "pass": true,
+    "expected": "4238.0031148030212",
+    "result": {
+      "status": "ok",
+      "value": "4238.003114803020759132394535800766",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "824.467123254747",
+        "g": "16.5851401881118",
+        "h": "0.309933686870062"
+      },
+      "expression": "rho*g*h",
+      "revision": "2",
+      "formula_id": "dpi190_f001",
+      "request_id": "holdout-F001-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f005",
+    "pass": true,
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "status": "ready",
+    "selected": "dpi190_f005",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f005"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f036"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f034"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f010"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-00",
+    "pass": true,
+    "expected": "5",
+    "result": {
+      "status": "ok",
+      "value": "5",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-3",
+        "u": "2"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f005/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F005-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f005/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F005-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f005/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: bias",
+      "request_id": "holdout-F005-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f005/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F005-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f005/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F005-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f005/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F005-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f005",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-01",
+    "pass": true,
+    "expected": "3.3615082671600103",
+    "result": {
+      "status": "ok",
+      "value": "3.36150826716001",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-1.97740374114051",
+        "u": "1.3841045260195"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-02",
+    "pass": true,
+    "expected": "5.2516779250149295",
+    "result": {
+      "status": "ok",
+      "value": "5.25167792501493",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-2.74457145103564",
+        "u": "2.50710647397929"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-03",
+    "pass": true,
+    "expected": "5.9582810030068503",
+    "result": {
+      "status": "ok",
+      "value": "5.95828100300685",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-2.67990007330159",
+        "u": "3.27838092970526"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-04",
+    "pass": true,
+    "expected": "3.3743168475171199",
+    "result": {
+      "status": "ok",
+      "value": "3.37431684751712",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-2.02176939278759",
+        "u": "1.35254745472953"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-05",
+    "pass": true,
+    "expected": "6.8156393928238401",
+    "result": {
+      "status": "ok",
+      "value": "6.81563939282384",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-4.84850109981094",
+        "u": "1.9671382930129"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-06",
+    "pass": true,
+    "expected": "5.1469492942122503",
+    "result": {
+      "status": "ok",
+      "value": "5.14694929421225",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-2.12184382615376",
+        "u": "3.02510546805849"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-07",
+    "pass": true,
+    "expected": "4.0683025787697895",
+    "result": {
+      "status": "ok",
+      "value": "4.06830257876979",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-2.55580846485347",
+        "u": "1.51249411391632"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-08",
+    "pass": true,
+    "expected": "5.8487692905747197",
+    "result": {
+      "status": "ok",
+      "value": "5.84876929057472",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-4.4204228455811",
+        "u": "1.42834644499362"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F005-09",
+    "pass": true,
+    "expected": "7.2483227546707605",
+    "result": {
+      "status": "ok",
+      "value": "7.24832275467076",
+      "unit": "Pa",
+      "normalized": {
+        "bias": "-4.68337225188438",
+        "u": "2.56495050278638"
+      },
+      "expression": "abs(bias)+u",
+      "revision": "2",
+      "formula_id": "dpi190_f005",
+      "request_id": "holdout-F005-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f006",
+    "pass": true,
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "status": "ready",
+    "selected": "dpi190_f006",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f006"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f033"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f016"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f034"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f001"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-00",
+    "pass": true,
+    "expected": "9",
+    "result": {
+      "status": "ok",
+      "value": "9",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-1",
+        "b": "2",
+        "x": "5"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f006/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F006-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f006/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F006-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f006/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: a",
+      "request_id": "holdout-F006-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f006/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F006-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f006/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F006-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f006/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F006-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f006",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-01",
+    "pass": true,
+    "expected": "10.569913652474519",
+    "result": {
+      "status": "ok",
+      "value": "10.5699136524745190037290154471",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-1.07624343636642",
+        "b": "1.58151738295137",
+        "x": "7.36391342541383"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-02",
+    "pass": true,
+    "expected": "15.927286066138137",
+    "result": {
+      "status": "ok",
+      "value": "15.9272860661381375496223274566",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-1.54047300441384",
+        "b": "2.82151763047922",
+        "x": "6.19090906321403"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-03",
+    "pass": true,
+    "expected": "5.3749247648992409",
+    "result": {
+      "status": "ok",
+      "value": "5.3749247648992403157588522536",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-0.922551177645479",
+        "b": "1.19312945681704",
+        "x": "5.27811622331809"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-04",
+    "pass": true,
+    "expected": "11.979470260146742",
+    "result": {
+      "status": "ok",
+      "value": "11.9794702601467437465267850265",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-0.59400915358546",
+        "b": "1.98423197829495",
+        "x": "6.33669830507247"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-05",
+    "pass": true,
+    "expected": "9.9151735687844216",
+    "result": {
+      "status": "ok",
+      "value": "9.915173568784421885084258304",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-0.776340053408857",
+        "b": "1.7341916894548",
+        "x": "6.16512793090048"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-06",
+    "pass": true,
+    "expected": "12.277632135686217",
+    "result": {
+      "status": "ok",
+      "value": "12.27763213568621599480316311",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-1.67037494589423",
+        "b": "2.5800086191859",
+        "x": "5.4061862343629"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-07",
+    "pass": true,
+    "expected": "21.782816425698158",
+    "result": {
+      "status": "ok",
+      "value": "21.7828164256981625240952983956",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-1.08468681662272",
+        "b": "2.79772173782092",
+        "x": "8.17361602949543"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-08",
+    "pass": true,
+    "expected": "9.5820972012237107",
+    "result": {
+      "status": "ok",
+      "value": "9.5820972012237109767597223136",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-1.01196196574214",
+        "b": "2.94865759011928",
+        "x": "3.59284143485012"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F006-09",
+    "pass": true,
+    "expected": "8.3434341219506507",
+    "result": {
+      "status": "ok",
+      "value": "8.3434341219506508802311665016",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-0.976077799200318",
+        "b": "1.34357367508932",
+        "x": "6.93636091115838"
+      },
+      "expression": "a+b*x",
+      "revision": "2",
+      "formula_id": "dpi190_f006",
+      "request_id": "holdout-F006-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f007",
+    "pass": true,
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "status": "ready",
+    "selected": "dpi190_f007",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f007"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f006"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f010"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f009"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f033"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-00",
+    "pass": true,
+    "expected": "20",
+    "result": {
+      "status": "ok",
+      "value": "20",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "10",
+          "20",
+          "30"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f007/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F007-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f007/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: readings",
+      "request_id": "holdout-F007-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f007/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: readings",
+      "request_id": "holdout-F007-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f007/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F007-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f007/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F007-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f007/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: readings",
+      "request_id": "holdout-F007-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f007/empty_readings",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: readings",
+      "request_id": "holdout-F007-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f007/long_readings",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: readings",
+      "request_id": "holdout-F007-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f007",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-01",
+    "pass": true,
+    "expected": "20.667765813216565",
+    "result": {
+      "status": "ok",
+      "value": "20.66776581321656666666666666666667",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "16.8015085713495",
+          "16.0027475931169",
+          "29.1990412751833"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-02",
+    "pass": true,
+    "expected": "32.085786602580662",
+    "result": {
+      "status": "ok",
+      "value": "32.08578660258066666666666666666667",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "16.1351681926278",
+          "32.6323799793924",
+          "47.4898116357218"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-03",
+    "pass": true,
+    "expected": "25.361372669786018",
+    "result": {
+      "status": "ok",
+      "value": "25.36137266978602",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "5.85494693600696",
+          "23.1657304059191",
+          "47.063440667432"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-04",
+    "pass": true,
+    "expected": "23.285647662690167",
+    "result": {
+      "status": "ok",
+      "value": "23.28564766269016666666666666666667",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "12.9705742416698",
+          "17.07003891",
+          "39.8163298364007"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-05",
+    "pass": true,
+    "expected": "25.926547168341031",
+    "result": {
+      "status": "ok",
+      "value": "25.92654716834103333333333333333333",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "11.9893106360319",
+          "31.6920270074936",
+          "34.0983038614976"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-06",
+    "pass": true,
+    "expected": "20.138883143527266",
+    "result": {
+      "status": "ok",
+      "value": "20.13888314352726666666666666666667",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "14.6376605238635",
+          "18.1782815199056",
+          "27.6007073868127"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-07",
+    "pass": true,
+    "expected": "22.565887341104599",
+    "result": {
+      "status": "ok",
+      "value": "22.5658873411046",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "15.7098339633636",
+          "22.7265500709166",
+          "29.2612779890336"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-08",
+    "pass": true,
+    "expected": "30.824982185261732",
+    "result": {
+      "status": "ok",
+      "value": "30.82498218526173333333333333333333",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "15.2658497053067",
+          "26.8277293955196",
+          "50.3813674549589"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F007-09",
+    "pass": true,
+    "expected": "20.184063847169735",
+    "result": {
+      "status": "ok",
+      "value": "20.18406384716973333333333333333333",
+      "unit": "Pa",
+      "normalized": {
+        "readings": [
+          "14.134270493867",
+          "15.9619456249748",
+          "30.4559754226674"
+        ]
+      },
+      "expression": "mean(readings)",
+      "revision": "2",
+      "formula_id": "dpi190_f007",
+      "request_id": "holdout-F007-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f009",
+    "pass": true,
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "status": "ready",
+    "selected": "dpi190_f009",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f009"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f010"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f026"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f019"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f018"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-00",
+    "pass": true,
+    "expected": "2",
+    "result": {
+      "status": "ok",
+      "value": "2",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "1",
+          "2",
+          "3"
+        ],
+        "ys": [
+          "3",
+          "5",
+          "7"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: xs",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: xs",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: xs",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/empty_xs",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: xs",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/long_xs",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: xs",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/empty_ys",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: ys",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/long_ys",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: ys",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/constant_x",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Không tính được trong miền số cho phép.",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f009/unequal_pairs",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Không tính được trong miền số cho phép.",
+      "request_id": "holdout-F009-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f009",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-01",
+    "pass": true,
+    "expected": "1.8480583016853964",
+    "result": {
+      "status": "ok",
+      "value": "1.848058301685396866732413091447923",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "0.571144182991787",
+          "2.86192819205727",
+          "4.40010768554819"
+        ],
+        "ys": [
+          "3.04976889497097",
+          "7.55555542725278",
+          "10.0877357988463"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-02",
+    "pass": true,
+    "expected": "0.86731314824670724",
+    "result": {
+      "status": "ok",
+      "value": "0.8673131482467082272192097324381962",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "1.15572292426873",
+          "2.98106384229664",
+          "3.02129856882422"
+        ],
+        "ys": [
+          "4.64772168290596",
+          "8.18062071383502",
+          "4.43949063839722"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-03",
+    "pass": true,
+    "expected": "-0.0068414982940008346",
+    "result": {
+      "status": "ok",
+      "value": "-0.006841498294002591115582941259802862",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "1.20057465697151",
+          "3.38565176946438",
+          "2.50387083291353"
+        ],
+        "ys": [
+          "4.59591528200399",
+          "3.79144618430167",
+          "10.3313829071177"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-04",
+    "pass": true,
+    "expected": "0.70738792464277112",
+    "result": {
+      "status": "ok",
+      "value": "0.7073879246427717895786612223339050",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "1.5910766164201",
+          "2.21768794694064",
+          "4.70910565216219"
+        ],
+        "ys": [
+          "3.75604605635334",
+          "3.76823384087609",
+          "5.81839725294946"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-05",
+    "pass": true,
+    "expected": "0.036131890435804184",
+    "result": {
+      "status": "ok",
+      "value": "0.03613189043580363747961930218504037",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "1.32488882120501",
+          "3.35323301153856",
+          "3.20654857250902"
+        ],
+        "ys": [
+          "4.70643577119307",
+          "2.80384213464278",
+          "7.25146120785097"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-06",
+    "pass": true,
+    "expected": "0.81507510533458838",
+    "result": {
+      "status": "ok",
+      "value": "0.8150751053345889754199531588375979",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "1.42782016748929",
+          "2.65838571781781",
+          "3.53126647031383"
+        ],
+        "ys": [
+          "3.46616357805559",
+          "3.498504587263",
+          "5.29728117199614"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-07",
+    "pass": true,
+    "expected": "1.8161671299497462",
+    "result": {
+      "status": "ok",
+      "value": "1.816167129949746177583989931901531",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "0.82452227386667",
+          "2.58282579316724",
+          "1.92186827989008"
+        ],
+        "ys": [
+          "1.83428966062671",
+          "3.87064022086953",
+          "10.2415825766725"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-08",
+    "pass": true,
+    "expected": "4.3996815136998819",
+    "result": {
+      "status": "ok",
+      "value": "4.399681513699883375472932853970546",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "1.14105941246368",
+          "2.28347821143943",
+          "1.66619106139107"
+        ],
+        "ys": [
+          "2.04529571351542",
+          "7.4307524500772",
+          "11.2141960323672"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F009-09",
+    "pass": true,
+    "expected": "0.51569244684047166",
+    "result": {
+      "status": "ok",
+      "value": "0.5156924468404740299189301949525021",
+      "unit": "1",
+      "normalized": {
+        "xs": [
+          "0.570812602748783",
+          "2.76871962721898",
+          "1.83414869061218"
+        ],
+        "ys": [
+          "2.93010594006318",
+          "3.63458931971966",
+          "7.66874079556996"
+        ]
+      },
+      "expression": "slope(xs,ys)",
+      "revision": "2",
+      "formula_id": "dpi190_f009",
+      "request_id": "holdout-F009-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f010",
+    "pass": true,
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "status": "ready",
+    "selected": "dpi190_f010",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f010"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f009"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f007"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f034"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f006"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-00",
+    "pass": true,
+    "expected": "1",
+    "result": {
+      "status": "ok",
+      "value": "1",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "5",
+        "b": "2",
+        "x_mean": "2"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f010/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F010-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f010/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F010-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f010/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: y_mean",
+      "request_id": "holdout-F010-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f010/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F010-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f010/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F010-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f010/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F010-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f010",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-01",
+    "pass": true,
+    "expected": "1.3856350164507356",
+    "result": {
+      "status": "ok",
+      "value": "1.3856350164507358005541477860",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "7.02550261350042",
+        "b": "2.37773473588556",
+        "x_mean": "2.37194986973565"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-02",
+    "pass": true,
+    "expected": "-0.080651286831400881",
+    "result": {
+      "status": "ok",
+      "value": "-0.080651286831400443144009832",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "4.66205802778317",
+        "b": "3.01222134525919",
+        "x_mean": "1.5744889803928"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-03",
+    "pass": true,
+    "expected": "2.2775464290725354",
+    "result": {
+      "status": "ok",
+      "value": "2.2775464290725357833140148397",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "6.02358629332329",
+        "b": "2.39639456451961",
+        "x_mean": "1.56319828116523"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-04",
+    "pass": true,
+    "expected": "0.52153786087647003",
+    "result": {
+      "status": "ok",
+      "value": "0.5215378608764699721289394962",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "6.10972727752114",
+        "b": "2.83691553857243",
+        "x_mean": "1.96981169889066"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-05",
+    "pass": true,
+    "expected": "-2.7456017932745054",
+    "result": {
+      "status": "ok",
+      "value": "-2.745601793274506849953225357",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "6.05752580416346",
+        "b": "3.34148709556947",
+        "x_mean": "2.6344939680031"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-06",
+    "pass": true,
+    "expected": "1.1315786389063414",
+    "result": {
+      "status": "ok",
+      "value": "1.1315786389063421090216922982",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "5.67085536652927",
+        "b": "2.28614146865922",
+        "x_mean": "1.98556248152269"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-07",
+    "pass": true,
+    "expected": "0.67849389914133074",
+    "result": {
+      "status": "ok",
+      "value": "0.6784938991413306135983076150",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "5.38064752000124",
+        "b": "2.53997690228525",
+        "x_mean": "1.85125841759794"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-08",
+    "pass": true,
+    "expected": "-0.71699641826966065",
+    "result": {
+      "status": "ok",
+      "value": "-0.7169964182696613651519504980",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "4.09129477014343",
+        "b": "2.87809255969932",
+        "x_mean": "1.67065203383015"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F010-09",
+    "pass": true,
+    "expected": "-3.729884676080494",
+    "result": {
+      "status": "ok",
+      "value": "-3.7298846760804940452027597139",
+      "unit": "Pa",
+      "normalized": {
+        "y_mean": "4.17716127617572",
+        "b": "2.44967185042277",
+        "x_mean": "3.22779802155607"
+      },
+      "expression": "y_mean-b*x_mean",
+      "revision": "2",
+      "formula_id": "dpi190_f010",
+      "request_id": "holdout-F010-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f016",
+    "pass": true,
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "status": "ready",
+    "selected": "dpi190_f016",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f016"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f024"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f026"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-00",
+    "pass": true,
+    "expected": "6",
+    "result": {
+      "status": "ok",
+      "value": "6",
+      "unit": "Pa",
+      "normalized": {
+        "u": "12",
+        "k": "2"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f016/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F016-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f016/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F016-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f016/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: u",
+      "request_id": "holdout-F016-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f016/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F016-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f016/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F016-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f016/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F016-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f016/zero_k",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: k",
+      "request_id": "holdout-F016-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f016",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-01",
+    "pass": true,
+    "expected": "3.4041975580846016",
+    "result": {
+      "status": "ok",
+      "value": "3.404197558084601196104008291189952",
+      "unit": "Pa",
+      "normalized": {
+        "u": "9.48981042804559",
+        "k": "2.78767911266146"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-02",
+    "pass": true,
+    "expected": "13.643458830450307",
+    "result": {
+      "status": "ok",
+      "value": "13.64345883045030834127659177817450",
+      "unit": "Pa",
+      "normalized": {
+        "u": "16.6809234902494",
+        "k": "1.22263157001067"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-03",
+    "pass": true,
+    "expected": "7.9334498499961246",
+    "result": {
+      "status": "ok",
+      "value": "7.933449849996124956182423355053874",
+      "unit": "Pa",
+      "normalized": {
+        "u": "9.18044014588499",
+        "k": "1.15718134222396"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-04",
+    "pass": true,
+    "expected": "13.5655144425521",
+    "result": {
+      "status": "ok",
+      "value": "13.56551444255209894576666467195169",
+      "unit": "Pa",
+      "normalized": {
+        "u": "16.9934118486115",
+        "k": "1.25269203173798"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-05",
+    "pass": true,
+    "expected": "9.7979866390689772",
+    "result": {
+      "status": "ok",
+      "value": "9.797986639068978585167694383468015",
+      "unit": "Pa",
+      "normalized": {
+        "u": "14.6168002580767",
+        "k": "1.49181671669085"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-06",
+    "pass": true,
+    "expected": "9.124316427914767",
+    "result": {
+      "status": "ok",
+      "value": "9.124316427914765437749208486806154",
+      "unit": "Pa",
+      "normalized": {
+        "u": "20.3637010476247",
+        "k": "2.23180566001902"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-07",
+    "pass": true,
+    "expected": "4.148997427902831",
+    "result": {
+      "status": "ok",
+      "value": "4.148997427902830903472464990852433",
+      "unit": "Pa",
+      "normalized": {
+        "u": "10.2118250257899",
+        "k": "2.46127533295474"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-08",
+    "pass": true,
+    "expected": "6.7429516151986961",
+    "result": {
+      "status": "ok",
+      "value": "6.742951615198696569305283935927670",
+      "unit": "Pa",
+      "normalized": {
+        "u": "17.0208620904501",
+        "k": "2.52424502825808"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F016-09",
+    "pass": true,
+    "expected": "5.6155856176748973",
+    "result": {
+      "status": "ok",
+      "value": "5.615585617674897506685576777114797",
+      "unit": "Pa",
+      "normalized": {
+        "u": "7.72437764588646",
+        "k": "1.3755248645082"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f016",
+      "request_id": "holdout-F016-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f017",
+    "pass": true,
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "status": "ready",
+    "selected": "dpi190_f017",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f017"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f016"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f024"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f026"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-00",
+    "pass": true,
+    "expected": "4",
+    "result": {
+      "status": "ok",
+      "value": "4",
+      "unit": "Pa",
+      "normalized": {
+        "u": "8",
+        "k": "2"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f017/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F017-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f017/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F017-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f017/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: u",
+      "request_id": "holdout-F017-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f017/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F017-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f017/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F017-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f017/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F017-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f017/zero_k",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: k",
+      "request_id": "holdout-F017-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f017",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-01",
+    "pass": true,
+    "expected": "4.5870625864936789",
+    "result": {
+      "status": "ok",
+      "value": "4.587062586493679141065664195659106",
+      "unit": "Pa",
+      "normalized": {
+        "u": "5.67182655997615",
+        "k": "1.2364833601086"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-02",
+    "pass": true,
+    "expected": "3.9369643094200599",
+    "result": {
+      "status": "ok",
+      "value": "3.936964309420060076885934583097629",
+      "unit": "Pa",
+      "normalized": {
+        "u": "6.23719792407511",
+        "k": "1.58426580326147"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-03",
+    "pass": true,
+    "expected": "3.7411154322416555",
+    "result": {
+      "status": "ok",
+      "value": "3.741115432241655339708167470024084",
+      "unit": "Pa",
+      "normalized": {
+        "u": "6.45350188728776",
+        "k": "1.72502078702791"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-04",
+    "pass": true,
+    "expected": "2.5166136718934222",
+    "result": {
+      "status": "ok",
+      "value": "2.516613671893421922336649468253638",
+      "unit": "Pa",
+      "normalized": {
+        "u": "8.38089006363544",
+        "k": "3.33022511847435"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-05",
+    "pass": true,
+    "expected": "2.2200335399059261",
+    "result": {
+      "status": "ok",
+      "value": "2.220033539905925711282023586582523",
+      "unit": "Pa",
+      "normalized": {
+        "u": "7.25331141731103",
+        "k": "3.26720803399141"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-06",
+    "pass": true,
+    "expected": "2.2925647454012421",
+    "result": {
+      "status": "ok",
+      "value": "2.292564745401242314640814647394941",
+      "unit": "Pa",
+      "normalized": {
+        "u": "6.50984666537887",
+        "k": "2.8395475758917"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-07",
+    "pass": true,
+    "expected": "6.9632863700148881",
+    "result": {
+      "status": "ok",
+      "value": "6.963286370014887407497937185017894",
+      "unit": "Pa",
+      "normalized": {
+        "u": "11.881644156938",
+        "k": "1.70632708832749"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-08",
+    "pass": true,
+    "expected": "2.2629610263093829",
+    "result": {
+      "status": "ok",
+      "value": "2.262961026309383086041845869389356",
+      "unit": "Pa",
+      "normalized": {
+        "u": "5.08407043021763",
+        "k": "2.24664515699112"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F017-09",
+    "pass": true,
+    "expected": "5.583529230416711",
+    "result": {
+      "status": "ok",
+      "value": "5.583529230416711290843724607216177",
+      "unit": "Pa",
+      "normalized": {
+        "u": "8.28786512730442",
+        "k": "1.48434167446561"
+      },
+      "expression": "u/k",
+      "revision": "2",
+      "formula_id": "dpi190_f017",
+      "request_id": "holdout-F017-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f018",
+    "pass": true,
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "status": "ready",
+    "selected": "dpi190_f018",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f018"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f026"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f016"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f024"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-00",
+    "pass": true,
+    "expected": "1.7320508075688774",
+    "result": {
+      "status": "ok",
+      "value": "1.732050807568877293527446341505873",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "3"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f018/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F018-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f018/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F018-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f018/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: drift",
+      "request_id": "holdout-F018-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f018/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F018-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f018/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F018-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f018/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F018-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f018",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-01",
+    "pass": true,
+    "expected": "1.4056064646072663",
+    "result": {
+      "status": "ok",
+      "value": "1.405606464607266222444903197283116",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "2.43458181214705"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-02",
+    "pass": true,
+    "expected": "1.4446776488610915",
+    "result": {
+      "status": "ok",
+      "value": "1.444677648861091226116849094088675",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "2.50225508838656"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-03",
+    "pass": true,
+    "expected": "1.7476708238489911",
+    "result": {
+      "status": "ok",
+      "value": "1.747670823848991025441613135352892",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "3.02705466181221"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-04",
+    "pass": true,
+    "expected": "2.6813937826425414",
+    "result": {
+      "status": "ok",
+      "value": "2.681393782642541133060994251072052",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "4.64431026663618"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-05",
+    "pass": true,
+    "expected": "1.906669743434916",
+    "result": {
+      "status": "ok",
+      "value": "1.906669743434915807700134395074909",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "3.30244886888359"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-06",
+    "pass": true,
+    "expected": "2.317188985231144",
+    "result": {
+      "status": "ok",
+      "value": "2.317188985231143858408823829436859",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "4.01348905315931"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-07",
+    "pass": true,
+    "expected": "2.0816905004892297",
+    "result": {
+      "status": "ok",
+      "value": "2.081690500489229322081827365799260",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "3.60559371248083"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-08",
+    "pass": true,
+    "expected": "0.98460530193925799",
+    "result": {
+      "status": "ok",
+      "value": "0.9846053019392579519406793137657169",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "1.70538640836049"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F018-09",
+    "pass": true,
+    "expected": "1.0761736520170215",
+    "result": {
+      "status": "ok",
+      "value": "1.076173652017021487681457470423700",
+      "unit": "Pa",
+      "normalized": {
+        "drift": "1.86398744306043"
+      },
+      "expression": "drift/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f018",
+      "request_id": "holdout-F018-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f019",
+    "pass": true,
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "status": "ready",
+    "selected": "dpi190_f019",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f019"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f016"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f024"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f026"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-00",
+    "pass": true,
+    "expected": "13",
+    "result": {
+      "status": "ok",
+      "value": "13",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "3",
+        "u_amb": "4",
+        "u_stability": "12"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f019/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F019-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f019/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F019-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f019/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: u_ch1",
+      "request_id": "holdout-F019-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f019/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F019-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f019/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F019-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f019/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F019-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f019",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-01",
+    "pass": true,
+    "expected": "14.099662448891744",
+    "result": {
+      "status": "ok",
+      "value": "14.09966244889174397596716069054883",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "3.78844622950784",
+        "u_amb": "4.15139558119255",
+        "u_stability": "12.9311279889757"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-02",
+    "pass": true,
+    "expected": "7.5236153011562994",
+    "result": {
+      "status": "ok",
+      "value": "7.523615301156299605396168121325971",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "2.1733704942684",
+        "u_amb": "2.50688050144635",
+        "u_stability": "6.75254011805223"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-03",
+    "pass": true,
+    "expected": "19.048753472904917",
+    "result": {
+      "status": "ok",
+      "value": "19.04875347290491634964469443404915",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "2.69097540280543",
+        "u_amb": "4.72955100286683",
+        "u_stability": "18.25499952244"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-04",
+    "pass": true,
+    "expected": "11.976567741329326",
+    "result": {
+      "status": "ok",
+      "value": "11.97656774132932722213429094098259",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "2.03329455775085",
+        "u_amb": "3.49596053860621",
+        "u_stability": "11.2730718092532"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-05",
+    "pass": true,
+    "expected": "15.319106616005032",
+    "result": {
+      "status": "ok",
+      "value": "15.31910661600503072212880416163803",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "3.74835225762746",
+        "u_amb": "4.4536835033047",
+        "u_stability": "14.1700242102002"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-06",
+    "pass": true,
+    "expected": "13.661319697580781",
+    "result": {
+      "status": "ok",
+      "value": "13.66131969758078040089821493406387",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "3.54963000535093",
+        "u_amb": "6.16502005200903",
+        "u_stability": "11.6629460456159"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-07",
+    "pass": true,
+    "expected": "14.624503385413657",
+    "result": {
+      "status": "ok",
+      "value": "14.62450338541365797123526625013782",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "3.52412409698401",
+        "u_amb": "6.32797991179951",
+        "u_stability": "12.7048541453609"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-08",
+    "pass": true,
+    "expected": "9.5634962325936925",
+    "result": {
+      "status": "ok",
+      "value": "9.563496232593693389078855997726923",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "1.97379392948434",
+        "u_amb": "4.9243723850971",
+        "u_stability": "7.95708202343407"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F019-09",
+    "pass": true,
+    "expected": "13.898409670993123",
+    "result": {
+      "status": "ok",
+      "value": "13.89840967099312350673293969765659",
+      "unit": "Pa",
+      "normalized": {
+        "u_ch1": "4.33205163624752",
+        "u_amb": "6.59246123623911",
+        "u_stability": "11.4428394575964"
+      },
+      "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+      "revision": "2",
+      "formula_id": "dpi190_f019",
+      "request_id": "holdout-F019-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f022",
+    "pass": true,
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "status": "ready",
+    "selected": "dpi190_f022",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f024"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f034"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f016"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-00",
+    "pass": true,
+    "expected": "1",
+    "result": {
+      "status": "ok",
+      "value": "1.000",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1000",
+        "area": "0.002",
+        "ua": "0.000004",
+        "k": "2"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f022/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F022-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f022/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F022-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f022/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: p",
+      "request_id": "holdout-F022-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f022/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F022-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f022/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F022-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f022/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F022-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f022/zero_area",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: area",
+      "request_id": "holdout-F022-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f022/zero_k",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: k",
+      "request_id": "holdout-F022-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f022",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-01",
+    "pass": true,
+    "expected": "0.82956447759829499",
+    "result": {
+      "status": "ok",
+      "value": "0.8295644775982949436828617957129767",
+      "unit": "Pa",
+      "normalized": {
+        "p": "910.347977565655",
+        "area": "0.00290578374019924",
+        "ua": "0.0000050924430862169",
+        "k": "1.9231810868674"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-02",
+    "pass": true,
+    "expected": "1.6805703553132829",
+    "result": {
+      "status": "ok",
+      "value": "1.680570355313282807598119125809957",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1666.46251029968",
+        "area": "0.00246472804540875",
+        "ua": "0.00000605280035099446",
+        "k": "2.43515265683991"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-03",
+    "pass": true,
+    "expected": "0.82699788937695917",
+    "result": {
+      "status": "ok",
+      "value": "0.8269978893769590935615873529893393",
+      "unit": "Pa",
+      "normalized": {
+        "p": "911.181834695493",
+        "area": "0.00201089766801617",
+        "ua": "0.00000345793994194467",
+        "k": "1.89464621911884"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-04",
+    "pass": true,
+    "expected": "0.79220104297230698",
+    "result": {
+      "status": "ok",
+      "value": "0.7922010429723068681328075373248168",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1494.80516819396",
+        "area": "0.0023413471230417",
+        "ua": "0.00000407040820993109",
+        "k": "3.28035873778496"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-05",
+    "pass": true,
+    "expected": "1.3397283569790974",
+    "result": {
+      "status": "ok",
+      "value": "1.339728356979097224290493568197741",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1203.83574961028",
+        "area": "0.00286209682387971",
+        "ua": "0.00000503506049277383",
+        "k": "1.58077790591941"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-06",
+    "pass": true,
+    "expected": "1.00303516360821",
+    "result": {
+      "status": "ok",
+      "value": "1.003035163608209820518795653495286",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1120.09281761274",
+        "area": "0.00202290624622096",
+        "ua": "0.00000596053050403322",
+        "k": "3.29038724871109"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-07",
+    "pass": true,
+    "expected": "1.0963647479540712",
+    "result": {
+      "status": "ok",
+      "value": "1.096364747954071455861123451558409",
+      "unit": "Pa",
+      "normalized": {
+        "p": "935.234167062245",
+        "area": "0.0022355082515257",
+        "ua": "0.000003326428044176",
+        "k": "1.26930841074377"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-08",
+    "pass": true,
+    "expected": "0.55324707933728057",
+    "result": {
+      "status": "ok",
+      "value": "0.5532470793372803988953264131738283",
+      "unit": "Pa",
+      "normalized": {
+        "p": "712.199480549967",
+        "area": "0.00155763727558478",
+        "ua": "0.0000038691104856935",
+        "k": "3.19762346728634"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F022-09",
+    "pass": true,
+    "expected": "1.8279658970641388",
+    "result": {
+      "status": "ok",
+      "value": "1.827965897064138299889714219757521",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1624.47390365404",
+        "area": "0.00211727501829513",
+        "ua": "0.00000470607864350684",
+        "k": "1.9752704054105"
+      },
+      "expression": "p/area*ua/k",
+      "revision": "2",
+      "formula_id": "dpi190_f022",
+      "request_id": "holdout-F022-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f024",
+    "pass": true,
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "status": "ready",
+    "selected": "dpi190_f024",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f024"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f026"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f019"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-00",
+    "pass": true,
+    "expected": "-1",
+    "result": {
+      "status": "ok",
+      "value": "-1.000000",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1000",
+        "ulambda": "0.000002",
+        "k": "2"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f024/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F024-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f024/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F024-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f024/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: p",
+      "request_id": "holdout-F024-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f024/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F024-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f024/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F024-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f024/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F024-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f024/zero_k",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: k",
+      "request_id": "holdout-F024-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f024",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-01",
+    "pass": true,
+    "expected": "-0.55446446017547502",
+    "result": {
+      "status": "ok",
+      "value": "-0.5544644601754749333498959125061809",
+      "unit": "Pa",
+      "normalized": {
+        "p": "883.323930916517",
+        "ulambda": "0.00000161745594141575",
+        "k": "2.2761387806663"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-02",
+    "pass": true,
+    "expected": "-1.2469773277774152",
+    "result": {
+      "status": "ok",
+      "value": "-1.246977327777415419860389199539419",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1669.80246465036",
+        "ulambda": "0.00000130088763209951",
+        "k": "2.90878366671574"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-03",
+    "pass": true,
+    "expected": "-0.30038619376240255",
+    "result": {
+      "status": "ok",
+      "value": "-0.3003861937624025223644312726331850",
+      "unit": "Pa",
+      "normalized": {
+        "p": "600.334393205248",
+        "ulambda": "0.00000166679036027913",
+        "k": "1.9998041341388"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-04",
+    "pass": true,
+    "expected": "-4.4487450781029345",
+    "result": {
+      "status": "ok",
+      "value": "-4.448745078102934967523279784747332",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1545.14956677417",
+        "ulambda": "0.00000301436959137558",
+        "k": "1.61770760967503"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-05",
+    "pass": true,
+    "expected": "-0.77600566251318115",
+    "result": {
+      "status": "ok",
+      "value": "-0.7760056625131811224920755454438658",
+      "unit": "Pa",
+      "normalized": {
+        "p": "668.209043594848",
+        "ulambda": "0.00000267951365790822",
+        "k": "1.54175648188979"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-06",
+    "pass": true,
+    "expected": "-1.3724276470512486",
+    "result": {
+      "status": "ok",
+      "value": "-1.372427647051248440490245049519948",
+      "unit": "Pa",
+      "normalized": {
+        "p": "700.654147040084",
+        "ulambda": "0.00000310328499347333",
+        "k": "1.11004247441893"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-07",
+    "pass": true,
+    "expected": "-1.7024246448049611",
+    "result": {
+      "status": "ok",
+      "value": "-1.702424644804961084490067923725061",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1492.31491556453",
+        "ulambda": "0.00000172374897828809",
+        "k": "2.25489894606918"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-08",
+    "pass": true,
+    "expected": "-1.293039833936255",
+    "result": {
+      "status": "ok",
+      "value": "-1.293039833936255168739892209227007",
+      "unit": "Pa",
+      "normalized": {
+        "p": "950.988147948631",
+        "ulambda": "0.00000293044781206799",
+        "k": "2.0496150254769"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F024-09",
+    "pass": true,
+    "expected": "-1.7071306639117871",
+    "result": {
+      "status": "ok",
+      "value": "-1.707130663911786677372318683841570",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1589.74566923999",
+        "ulambda": "0.00000218133364598826",
+        "k": "3.22931668142626"
+      },
+      "expression": "-p**2*ulambda/k",
+      "revision": "2",
+      "formula_id": "dpi190_f024",
+      "request_id": "holdout-F024-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f026",
+    "pass": true,
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "status": "ready",
+    "selected": "dpi190_f026",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f026"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f024"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f034"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-00",
+    "pass": true,
+    "expected": "1",
+    "result": {
+      "status": "ok",
+      "value": "1.00",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1000",
+        "mass": "10",
+        "um": "0.02",
+        "k": "2"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f026/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F026-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f026/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F026-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f026/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: p",
+      "request_id": "holdout-F026-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f026/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F026-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f026/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F026-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f026/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F026-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f026/zero_mass",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: mass",
+      "request_id": "holdout-F026-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f026/zero_k",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: k",
+      "request_id": "holdout-F026-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f026",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-01",
+    "pass": true,
+    "expected": "0.78983745683823559",
+    "result": {
+      "status": "ok",
+      "value": "0.7898374568382356568596425610291237",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1191.94214274194",
+        "mass": "9.5212407160591",
+        "um": "0.0169853428992233",
+        "k": "2.69214360959037"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-02",
+    "pass": true,
+    "expected": "1.5229458264516575",
+    "result": {
+      "status": "ok",
+      "value": "1.522945826451657610165939421398923",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1227.39039528661",
+        "mass": "9.22348208579471",
+        "um": "0.0303820688107494",
+        "k": "2.65473209161998"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-03",
+    "pass": true,
+    "expected": "0.75289419006641789",
+    "result": {
+      "status": "ok",
+      "value": "0.7528941900664177433007130554272897",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1472.33943969172",
+        "mass": "16.6196134277374",
+        "um": "0.0270972697516666",
+        "k": "3.18844270127999"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-04",
+    "pass": true,
+    "expected": "2.2551344047422854",
+    "result": {
+      "status": "ok",
+      "value": "2.255134404742285156026438660156987",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1673.98724236416",
+        "mass": "6.10985872742411",
+        "um": "0.0126122456472072",
+        "k": "1.53228999348659"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-05",
+    "pass": true,
+    "expected": "0.83819292009150714",
+    "result": {
+      "status": "ok",
+      "value": "0.8381929200915072245919444039818268",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1260.29328218254",
+        "mass": "11.3914261592834",
+        "um": "0.0215560492445068",
+        "k": "2.84523865839474"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-06",
+    "pass": true,
+    "expected": "1.759499986073213",
+    "result": {
+      "status": "ok",
+      "value": "1.759499986073212823440928515874852",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1232.12420906244",
+        "mass": "5.53256038934207",
+        "um": "0.0236470920560793",
+        "k": "2.99306950423283"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-07",
+    "pass": true,
+    "expected": "0.90509120055381309",
+    "result": {
+      "status": "ok",
+      "value": "0.9050912005538129294411400160384861",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1094.1377049328",
+        "mass": "8.34330277275271",
+        "um": "0.0143921416763241",
+        "k": "2.08529289381565"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-08",
+    "pass": true,
+    "expected": "0.97421228030800366",
+    "result": {
+      "status": "ok",
+      "value": "0.9742122803080036137408405092198398",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1623.80786813563",
+        "mass": "7.70596414691401",
+        "um": "0.0126807827907413",
+        "k": "2.74283776995522"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F026-09",
+    "pass": true,
+    "expected": "0.51876278296908884",
+    "result": {
+      "status": "ok",
+      "value": "0.5187627829690888395362533817075959",
+      "unit": "Pa",
+      "normalized": {
+        "p": "1528.44440552448",
+        "mass": "15.4880909266694",
+        "um": "0.0126493462243332",
+        "k": "2.40630695001112"
+      },
+      "expression": "p/mass*um/k",
+      "revision": "2",
+      "formula_id": "dpi190_f026",
+      "request_id": "holdout-F026-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f031",
+    "pass": true,
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "status": "ready",
+    "selected": "dpi190_f031",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f010"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f005"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f007"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f034"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-00",
+    "pass": true,
+    "expected": "4.9000000000000004",
+    "result": {
+      "status": "ok",
+      "value": "4.9000",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "1000",
+        "g": "9.8",
+        "uh": "0.001",
+        "k": "2"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: rho",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/zero_rho",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: rho",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/zero_g",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: g",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f031/zero_k",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: k",
+      "request_id": "holdout-F031-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f031",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-01",
+    "pass": true,
+    "expected": "2.641167316366734",
+    "result": {
+      "status": "ok",
+      "value": "2.641167316366734119452339921760224",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "750.6220325321",
+        "g": "12.4415599069574",
+        "uh": "0.000960628088062368",
+        "k": "3.39668684656119"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-02",
+    "pass": true,
+    "expected": "2.0012153394763827",
+    "result": {
+      "status": "ok",
+      "value": "2.001215339476382592118712588604213",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "696.601384894575",
+        "g": "8.68986217246044",
+        "uh": "0.00077187237828896",
+        "k": "2.33479577376069"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-03",
+    "pass": true,
+    "expected": "9.6012526537562053",
+    "result": {
+      "status": "ok",
+      "value": "9.601252653756203736883417225047039",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "1334.86846761421",
+        "g": "14.3190244341414",
+        "uh": "0.000935929726365819",
+        "k": "1.86323334349791"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-04",
+    "pass": true,
+    "expected": "31.192037119103926",
+    "result": {
+      "status": "ok",
+      "value": "31.19203711910392295955620327892056",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "1687.8725372921",
+        "g": "14.517961475344",
+        "uh": "0.00151963739988958",
+        "k": "1.19382734163266"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-05",
+    "pass": true,
+    "expected": "4.1657023996975564",
+    "result": {
+      "status": "ok",
+      "value": "4.165702399697556612954457432743296",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "966.058754421534",
+        "g": "7.03933367294231",
+        "uh": "0.00160349950868357",
+        "k": "2.61767474470165"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-06",
+    "pass": true,
+    "expected": "4.7075597295588913",
+    "result": {
+      "status": "ok",
+      "value": "4.707559729558891189366196937356527",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "1066.53683872919",
+        "g": "11.1797935815916",
+        "uh": "0.000720649357864418",
+        "k": "1.82531494959862"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-07",
+    "pass": true,
+    "expected": "3.6475728631532984",
+    "result": {
+      "status": "ok",
+      "value": "3.647572863153298818379907054597987",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "827.981120042641",
+        "g": "12.4415422154164",
+        "uh": "0.000693748900148607",
+        "k": "1.95926410966692"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-08",
+    "pass": true,
+    "expected": "6.362741683449304",
+    "result": {
+      "status": "ok",
+      "value": "6.362741683449303641744240940481106",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "921.411209744864",
+        "g": "12.9178285955645",
+        "uh": "0.00100946991416062",
+        "k": "1.88839176180792"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F031-09",
+    "pass": true,
+    "expected": "8.2993065616851904",
+    "result": {
+      "status": "ok",
+      "value": "8.299306561685192439558414224335697",
+      "unit": "Pa",
+      "normalized": {
+        "rho": "816.377435980534",
+        "g": "16.300688072304",
+        "uh": "0.00130676345629996",
+        "k": "2.0953284196504"
+      },
+      "expression": "rho*g*uh/k",
+      "revision": "2",
+      "formula_id": "dpi190_f031",
+      "request_id": "holdout-F031-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f033",
+    "pass": true,
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "status": "ready",
+    "selected": "dpi190_f033",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f033"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f007"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f035"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f019"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-00",
+    "pass": true,
+    "expected": "19.621416870348583",
+    "result": {
+      "status": "ok",
+      "value": "19.62141687034858346852600378918177",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "1",
+          "-2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: components",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: components",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: components",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/empty_components",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: components",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/long_components",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: components",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f033/missing_component",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Số phần tử không hợp lệ: components",
+      "request_id": "holdout-F033-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f033",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-01",
+    "pass": true,
+    "expected": "22.665915173612383",
+    "result": {
+      "status": "ok",
+      "value": "22.66591517361238353213397917104636",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "1.63850706352321",
+          "-1.33772739115943",
+          "4.87767432848726",
+          "3.68235437042499",
+          "4.88061701009214",
+          "10.0878127693753",
+          "8.87378033236009",
+          "6.32120283678737",
+          "13.0029484800825",
+          "7.65215063804323"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-02",
+    "pass": true,
+    "expected": "22.828843687400077",
+    "result": {
+      "status": "ok",
+      "value": "22.82884368740007835467251120057403",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "0.99598581427382",
+          "-2.10473217714542",
+          "3.77223103545673",
+          "6.7298965979472",
+          "3.45800063410469",
+          "5.80954882849829",
+          "4.12262685429863",
+          "6.72251504767778",
+          "15.070385178409",
+          "11.0090684198189"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-03",
+    "pass": true,
+    "expected": "22.564789601320445",
+    "result": {
+      "status": "ok",
+      "value": "22.56478960132044514954645749889773",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "1.01146756562732",
+          "-1.87836495159534",
+          "4.2637242787686",
+          "4.66029797250384",
+          "7.96744228278539",
+          "7.97858479370242",
+          "7.13620807878728",
+          "10.4709591258788",
+          "11.2399388770081",
+          "7.11899274813578"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-04",
+    "pass": true,
+    "expected": "23.43393295778796",
+    "result": {
+      "status": "ok",
+      "value": "23.43393295778795705552146288979105",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "1.32976645728572",
+          "-1.25441475549556",
+          "3.03063042538156",
+          "3.06375465631125",
+          "3.04123502902384",
+          "8.97041478170267",
+          "4.72056733698545",
+          "10.3635316791882",
+          "7.59662755542271",
+          "15.815287489298"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-05",
+    "pass": true,
+    "expected": "19.241282886214055",
+    "result": {
+      "status": "ok",
+      "value": "19.24128288621405521160447257435603",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "0.560837714737371",
+          "-3.19556428207293",
+          "3.04224753383232",
+          "3.14317105551781",
+          "3.47975444723516",
+          "3.91569057830023",
+          "4.78260135453072",
+          "5.89035420765816",
+          "14.9403995910454",
+          "5.68679089440091"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-06",
+    "pass": true,
+    "expected": "24.947229154305855",
+    "result": {
+      "status": "ok",
+      "value": "24.94722915430585566897330724013633",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "1.2587175976365",
+          "-1.44959242183367",
+          "2.642183999687",
+          "4.94451855653425",
+          "6.78964680442941",
+          "4.71170983408815",
+          "5.38949571956631",
+          "11.0961740176017",
+          "14.554956971318",
+          "12.4471332678137"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-07",
+    "pass": true,
+    "expected": "23.215370464576427",
+    "result": {
+      "status": "ok",
+      "value": "23.21537046457642662711201972612760",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "1.49408859663868",
+          "-2.39731932752741",
+          "3.05825281254109",
+          "4.1057631756176",
+          "8.32783588166433",
+          "5.41122700896094",
+          "8.80829742935798",
+          "10.7515056082142",
+          "5.23345754563906",
+          "13.6220226490476"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-08",
+    "pass": true,
+    "expected": "21.823556667560368",
+    "result": {
+      "status": "ok",
+      "value": "21.82355666756036762324336302882764",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "0.562139437319025",
+          "-3.14032362692689",
+          "2.15443531525208",
+          "5.48034316655159",
+          "3.22474324378476",
+          "7.56725338413766",
+          "10.7667627504298",
+          "11.3926352795383",
+          "8.76574223541348",
+          "6.41859729225993"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F033-09",
+    "pass": true,
+    "expected": "16.685346914993076",
+    "result": {
+      "status": "ok",
+      "value": "16.68534691499307610952640315136776",
+      "unit": "Pa",
+      "normalized": {
+        "components": [
+          "1.5921109659837",
+          "-2.28056910338529",
+          "2.67323432886051",
+          "6.51491128296295",
+          "6.55755266081988",
+          "3.95719526213546",
+          "5.44448854358805",
+          "4.98433531074611",
+          "7.0951356556718",
+          "7.58859953501178"
+        ]
+      },
+      "expression": "rss(components)",
+      "revision": "2",
+      "formula_id": "dpi190_f033",
+      "request_id": "holdout-F033-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f034",
+    "pass": true,
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "status": "ready",
+    "selected": "dpi190_f034",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f034"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f035"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f033"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f037"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f005"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-00",
+    "pass": true,
+    "expected": "2.4494897427831783",
+    "result": {
+      "status": "ok",
+      "value": "2.449489742783178098197284074705892",
+      "unit": "Pa",
+      "normalized": {
+        "r": "6"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f034/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F034-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f034/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F034-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f034/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: r",
+      "request_id": "holdout-F034-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f034/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F034-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f034/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F034-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f034/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F034-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f034",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-01",
+    "pass": true,
+    "expected": "1.6300830695084352",
+    "result": {
+      "status": "ok",
+      "value": "1.630083069508435051743438822352632",
+      "unit": "Pa",
+      "normalized": {
+        "r": "3.99287175864543"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-02",
+    "pass": true,
+    "expected": "3.3208324137179783",
+    "result": {
+      "status": "ok",
+      "value": "3.320832413717977834173945955406988",
+      "unit": "Pa",
+      "normalized": {
+        "r": "8.13434493490409"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-03",
+    "pass": true,
+    "expected": "2.338572944672614",
+    "result": {
+      "status": "ok",
+      "value": "2.338572944672613733564955645336175",
+      "unit": "Pa",
+      "normalized": {
+        "r": "5.72831044072582"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-04",
+    "pass": true,
+    "expected": "2.9048871249275541",
+    "result": {
+      "status": "ok",
+      "value": "2.904887124927554004029571436664317",
+      "unit": "Pa",
+      "normalized": {
+        "r": "7.11549121645296"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-05",
+    "pass": true,
+    "expected": "3.2765937578657858",
+    "result": {
+      "status": "ok",
+      "value": "3.276593757865785555981961634719320",
+      "unit": "Pa",
+      "normalized": {
+        "r": "8.02598280115963"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-06",
+    "pass": true,
+    "expected": "2.7516022787838015",
+    "result": {
+      "status": "ok",
+      "value": "2.751602278783801234758054964013665",
+      "unit": "Pa",
+      "normalized": {
+        "r": "6.74002155809974"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-07",
+    "pass": true,
+    "expected": "3.3616272904163265",
+    "result": {
+      "status": "ok",
+      "value": "3.361627290416326688108927833495028",
+      "unit": "Pa",
+      "normalized": {
+        "r": "8.2342715669348"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-08",
+    "pass": true,
+    "expected": "3.4230916345890989",
+    "result": {
+      "status": "ok",
+      "value": "3.423091634589098680809040602982154",
+      "unit": "Pa",
+      "normalized": {
+        "r": "8.3848278475329"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F034-09",
+    "pass": true,
+    "expected": "1.7524212492120748",
+    "result": {
+      "status": "ok",
+      "value": "1.752421249212074495309961862858493",
+      "unit": "Pa",
+      "normalized": {
+        "r": "4.29253787498026"
+      },
+      "expression": "r/sqrt(6)",
+      "revision": "2",
+      "formula_id": "dpi190_f034",
+      "request_id": "holdout-F034-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f035",
+    "pass": true,
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "status": "ready",
+    "selected": "dpi190_f035",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f035"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f034"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f033"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f037"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-00",
+    "pass": true,
+    "expected": "1.7320508075688774",
+    "result": {
+      "status": "ok",
+      "value": "1.732050807568877293527446341505873",
+      "unit": "Pa",
+      "normalized": {
+        "r": "3"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f035/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F035-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f035/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F035-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f035/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: r",
+      "request_id": "holdout-F035-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f035/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F035-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f035/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F035-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f035/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F035-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f035",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-01",
+    "pass": true,
+    "expected": "2.27477101679685",
+    "result": {
+      "status": "ok",
+      "value": "2.274771016796849897815919466056438",
+      "unit": "Pa",
+      "normalized": {
+        "r": "3.94001897667726"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-02",
+    "pass": true,
+    "expected": "1.9200926449004756",
+    "result": {
+      "status": "ok",
+      "value": "1.920092644900475424013968572614058",
+      "unit": "Pa",
+      "normalized": {
+        "r": "3.32569801620693"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-03",
+    "pass": true,
+    "expected": "2.8139529268063419",
+    "result": {
+      "status": "ok",
+      "value": "2.813952926806341700393764501062487",
+      "unit": "Pa",
+      "normalized": {
+        "r": "4.87390943933573"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-04",
+    "pass": true,
+    "expected": "1.9290096451137131",
+    "result": {
+      "status": "ok",
+      "value": "1.929009645113713003165600089429412",
+      "unit": "Pa",
+      "normalized": {
+        "r": "3.34114271362736"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-05",
+    "pass": true,
+    "expected": "2.4567012453820696",
+    "result": {
+      "status": "ok",
+      "value": "2.456701245382069467504680124858655",
+      "unit": "Pa",
+      "normalized": {
+        "r": "4.25513137601948"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-06",
+    "pass": true,
+    "expected": "1.5650013631266224",
+    "result": {
+      "status": "ok",
+      "value": "1.565001363126622335956547275725996",
+      "unit": "Pa",
+      "normalized": {
+        "r": "2.71066187484986"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-07",
+    "pass": true,
+    "expected": "1.6976583795094129",
+    "result": {
+      "status": "ok",
+      "value": "1.697658379509412795031534476080683",
+      "unit": "Pa",
+      "normalized": {
+        "r": "2.94043056720535"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-08",
+    "pass": true,
+    "expected": "1.5517761653490574",
+    "result": {
+      "status": "ok",
+      "value": "1.551776165349057093159409462687693",
+      "unit": "Pa",
+      "normalized": {
+        "r": "2.68775516035897"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F035-09",
+    "pass": true,
+    "expected": "1.7663974938786635",
+    "result": {
+      "status": "ok",
+      "value": "1.766397493878663441763947040497999",
+      "unit": "Pa",
+      "normalized": {
+        "r": "3.05949020576018"
+      },
+      "expression": "r/sqrt(3)",
+      "revision": "2",
+      "formula_id": "dpi190_f035",
+      "request_id": "holdout-F035-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f036",
+    "pass": false,
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "status": "clarify",
+    "selected": null,
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f036"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f037"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f035"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f010"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f005"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F036-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f037",
+    "pass": false,
+    "question": "Theo QTKĐ 1.190, tính độ không đảm bảo do độ lệch điểm không từ f0.",
+    "status": "clarify",
+    "selected": null,
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f037"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f036"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f031"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f018"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F037-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f050",
+    "pass": true,
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "status": "ready",
+    "selected": "dpi190_f050",
+    "hits": [
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f050"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f022"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f016"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f024"
+      },
+      {
+        "stem": "2023._QTKD_1.190_2023_DPI_610_ND_24.01.24",
+        "formula_id": "dpi190_f005"
+      }
+    ],
+    "wrong_ready": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-00",
+    "pass": true,
+    "expected": "8",
+    "result": {
+      "status": "ok",
+      "value": "8",
+      "unit": "Pa",
+      "normalized": {
+        "k": "2",
+        "uc": "4"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-00",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f050/missing",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào.",
+      "request_id": "holdout-F050-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f050/blank",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F050-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f050/unit",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: k",
+      "request_id": "holdout-F050-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f050/unit_type",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Đơn vị phải là chuỗi ký tự.",
+      "request_id": "holdout-F050-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f050/conditions",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng.",
+      "request_id": "holdout-F050-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f050/injection",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn.",
+      "request_id": "holdout-F050-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "invalid_input",
+    "id": "dpi190_f050/zero_k",
+    "pass": true,
+    "result": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: k",
+      "request_id": "holdout-F050-00"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "source_mutation_isolated",
+    "id": "dpi190_f050",
+    "pass": true,
+    "result": {
+      "status": "blocked",
+      "message": "Định nghĩa mới chưa khớp hồ sơ đối chiếu."
+    }
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-01",
+    "pass": true,
+    "expected": "15.393236227702628",
+    "result": {
+      "status": "ok",
+      "value": "15.3932362277026287211532686086",
+      "unit": "Pa",
+      "normalized": {
+        "k": "2.39100697279757",
+        "uc": "6.43797211920798"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-01",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-02",
+    "pass": true,
+    "expected": "11.406778965357804",
+    "result": {
+      "status": "ok",
+      "value": "11.4067789653578030619699015774",
+      "unit": "Pa",
+      "normalized": {
+        "k": "2.98733291363162",
+        "uc": "3.81838224769227"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-02",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-03",
+    "pass": true,
+    "expected": "16.334946392215222",
+    "result": {
+      "status": "ok",
+      "value": "16.3349463922152223450961129524",
+      "unit": "Pa",
+      "normalized": {
+        "k": "2.44227950196596",
+        "uc": "6.68840170793969"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-03",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-04",
+    "pass": true,
+    "expected": "12.941404973488936",
+    "result": {
+      "status": "ok",
+      "value": "12.941404973488936576504364604",
+      "unit": "Pa",
+      "normalized": {
+        "k": "2.38055742267923",
+        "uc": "5.4362918744148"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-04",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-05",
+    "pass": true,
+    "expected": "10.821369094922805",
+    "result": {
+      "status": "ok",
+      "value": "10.8213690949228056752046352788",
+      "unit": "Pa",
+      "normalized": {
+        "k": "3.29307030689484",
+        "uc": "3.28610326729607"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-05",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-06",
+    "pass": true,
+    "expected": "5.4654892114811373",
+    "result": {
+      "status": "ok",
+      "value": "5.4654892114811378375406724807",
+      "unit": "Pa",
+      "normalized": {
+        "k": "2.04552219778211",
+        "uc": "2.67192857521037"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-06",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-07",
+    "pass": true,
+    "expected": "9.4693749531047953",
+    "result": {
+      "status": "ok",
+      "value": "9.4693749531047950370804653167",
+      "unit": "Pa",
+      "normalized": {
+        "k": "3.17451232768509",
+        "uc": "2.98293847231963"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-07",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-08",
+    "pass": true,
+    "expected": "16.466402013188485",
+    "result": {
+      "status": "ok",
+      "value": "16.4664020131884851224339262485",
+      "unit": "Pa",
+      "normalized": {
+        "k": "3.23178558348881",
+        "uc": "5.09514062359685"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-08",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "holdout-F050-09",
+    "pass": true,
+    "expected": "15.161569498945582",
+    "result": {
+      "status": "ok",
+      "value": "15.1615694989455817960111094904",
+      "unit": "Pa",
+      "normalized": {
+        "k": "2.44037757454906",
+        "uc": "6.21279660043884"
+      },
+      "expression": "k*uc",
+      "revision": "2",
+      "formula_id": "dpi190_f050",
+      "request_id": "holdout-F050-09",
+      "source": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "source_hash": "0646012c8f3e44046865d38ee48db80eeb74a7e4e7e3c2f62a1cd6e0c27133ab",
+      "strategy": "registry"
+    },
+    "unsafe": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R00",
+    "pass": true,
+    "question": "QTKĐ 1.190: độ phân giải",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R01",
+    "pass": true,
+    "question": "DPI 610: u_r",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R02",
+    "pass": true,
+    "question": "DPI 610: độ phân giải tam giác và độ phân giải chữ nhật",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R03",
+    "pass": true,
+    "question": "QTKĐ 1.190: F014",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R04",
+    "pass": true,
+    "question": "QTKĐ 1.190: F049",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R05",
+    "pass": true,
+    "question": "QTKĐ 1.190: F040",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R06",
+    "pass": true,
+    "question": "QTKĐ 1.160: độ phân giải tam giác",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R07",
+    "pass": true,
+    "question": "QTKĐ 1.159: u_ch1",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R08",
+    "pass": true,
+    "question": "Tính hệ số góc hồi quy",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R09",
+    "pass": true,
+    "question": "DPI 610 theo QTKĐ 1.071: u_amb",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R10",
+    "pass": true,
+    "question": "QTKĐ 1.190: F034 và F035",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R11",
+    "pass": true,
+    "question": "DPI 610: F999",
+    "status": "clarify",
+    "wrong_ready": false
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f001",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f005",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f006",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f007",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f009",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f010",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f016",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f017",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f018",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f019",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f022",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f024",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f026",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f031",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f033",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f034",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f035",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f036",
+    "pass": false,
+    "error": "AssertionError: Wrong/no calculator"
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f037",
+    "pass": false,
+    "error": "AssertionError: Wrong/no calculator"
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f050",
+    "pass": true
+  }
+]

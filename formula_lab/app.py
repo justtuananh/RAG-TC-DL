@@ -37,6 +37,7 @@ def form(req:PrepareRequest):
             if retriever is None: retriever=Retriever()
             hits=retriever.search(req.question)
         result=prepare(select(req.question,hits))
+        result['retrieval_evidence']=[{'stem':h['stem'],'formula_id':h.get('formula_id')} for h in hits]
     except Exception as e:
         raise HTTPException(503,detail={'error_type':type(e).__name__})
     if result['status']=='ready':
