@@ -71,6 +71,8 @@ def build():
             vals=dict(base)
             # Unseen numeric cases in holdout, no strategy reads this file.
             first=variables[0]['key']; vals[first]=str(D(vals[first])+D(i))
+            for key in vals:
+                if key != first: vals[key]=str(D(vals[key])+D(i)/D(100))
             inputs={k:{'value':v,'unit':next(x['unit'] for x in variables if x['key']==k)} for k,v in vals.items()}
             uc=dict(id=f'{group}-{i+1:02}',split='dev' if i<10 else 'holdout',group=group,
                     formula=id,question=f'Công thức {title.lower()} là gì?',inputs=inputs,

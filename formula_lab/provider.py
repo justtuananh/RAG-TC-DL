@@ -24,7 +24,8 @@ def completion(messages):
     )
     raw = response.choices[0].message.content or '{}'
     metadata = {'model':response.model, 'usage':response.usage.model_dump(),
-                'provider':response._hidden_params.get('custom_llm_provider'),
+                'provider':response.model_dump().get('provider',response._hidden_params.get('custom_llm_provider')),
+                'response_cost':response._hidden_params.get('response_cost'),
                 'response_id':response.id}
     return json.loads(raw), metadata
 
