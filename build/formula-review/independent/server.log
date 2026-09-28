@@ -1,0 +1,51 @@
+INFO:     Started server process [764446]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8081 (Press CTRL+C to quit)
+INFO:     127.0.0.1:46488 - "POST /api/documents/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46498 - "POST /api/documents/independent/formula-drafts/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46508 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46522 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46216 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46204 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46234 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46230 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46216 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46248 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46248 - "GET /api/documents/independent/markdown HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46230 - "GET /api/documents/independent/file HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46230 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46248 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46274 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46290 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42958 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42970 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42986 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42994 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43004 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42984 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42984 - "GET /api/documents/independent/markdown HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:43004 - "GET /api/documents/independent/file HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43004 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42984 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42984 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42984 - "POST /api/formula-drafts/620d274cf17e832d2822f842124bb966/approve HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42984 - "POST /api/formula-drafts/620d274cf17e832d2822f842124bb966/calculate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42984 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42984 - "POST /api/formula-drafts/620d274cf17e832d2822f842124bb966/reject HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48478 - "POST /api/chat/stream HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48480 - "POST /api/documents/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48496 - "POST /api/documents/unsupported/formula-drafts/generate HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:60478 - "POST /api/documents/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60484 - "POST /api/documents/restore_round1/formula-drafts/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60496 - "GET /api/documents/restore_round1/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60498 - "DELETE /api/documents/restore_round1 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:60504 - "POST /api/documents/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60520 - "POST /api/documents/restore_round1/formula-drafts/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60530 - "GET /api/documents/restore_round1/formula-drafts HTTP/1.1" 200 OK
+/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/qdrant_client/qdrant_remote.py:292: UserWarning: Failed to obtain server version. Unable to check client-server compatibility. Set check_compatibility=False to skip version check.
+  show_warning(
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [764446]

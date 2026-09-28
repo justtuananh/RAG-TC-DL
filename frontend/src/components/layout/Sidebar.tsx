@@ -6,6 +6,7 @@ import { COLOR, SHADOW } from "../../theme";
 import { IcBrand, IcChevronLeft, IcChevronRight, IcFile, IcHelp, IcMessage, IcPencil, IcPin, IcPlus, IcSearch, IcTrash } from "../common/icons";
 
 const NAV_KEY = "nav_collapsed";
+const COMPACT_VIEWPORT = "(max-width: 767px)";
 
 function loadCollapsed(): boolean {
   try {
@@ -34,19 +35,32 @@ const GROUPS: { key: "pinned" | ConvGroup; label: string; pinned: boolean }[] = 
  * trong CÙNG một cột (kiểu ChatGPT/Claude), thay vì hai thanh bên đặt cạnh nhau.
  */
 export default function Sidebar({ state, actions }: { state: AppState; actions: Actions }) {
-  const [collapsed, setCollapsed] = useState(loadCollapsed);
+  const [desktopCollapsed, setDesktopCollapsed] = useState(loadCollapsed);
+  const [compact, setCompact] = useState(() => window.matchMedia(COMPACT_VIEWPORT).matches);
+  const [mobileExpanded, setMobileExpanded] = useState(false);
+  const collapsed = compact ? !mobileExpanded : desktopCollapsed;
+
+  useEffect(() => {
+    const query = window.matchMedia(COMPACT_VIEWPORT);
+    const update = () => {
+      setCompact(query.matches);
+      setMobileExpanded(false);
+    };
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     try {
-      localStorage.setItem(NAV_KEY, collapsed ? "1" : "0");
+      localStorage.setItem(NAV_KEY, desktopCollapsed ? "1" : "0");
     } catch {
       /* noop */
     }
-  }, [collapsed]);
+  }, [desktopCollapsed]);
 
   const startNewChat = () => {
     actions.newChat();
-    actions.go("chat");
+    setMobileExpanded(false);
   };
 
   const showHistory = !collapsed && state.tab === "chat";
@@ -129,7 +143,11 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
           return (
             <button
               key={it.tab}
-              onClick={() => actions.go(it.tab)}
+              onClick={() => {
+                actions.go(it.tab);
+                setMobileExpanded(false);
+              }}
+              aria-label={it.label}
               title={it.label}
               aria-current={active ? "page" : undefined}
               className="relative flex items-center gap-3 h-[38px] border-none rounded-[9px] font-sans text-[13.5px] font-semibold cursor-pointer transition-colors"
@@ -225,7 +243,11 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
       {/* thu gọn / mở rộng */}
       <div style={{ flexShrink: 0, padding: 10, display: "flex", justifyContent: collapsed ? "center" : "flex-end" }}>
         <button
-          onClick={() => setCollapsed((v) => !v)}
+          onClick={() => {
+            if (compact) setMobileExpanded((v) => !v);
+            else setDesktopCollapsed((v) => !v);
+          }}
+          aria-expanded={!collapsed}
           title={collapsed ? "Mở rộng menu" : "Thu gọn menu"}
           aria-label={collapsed ? "Mở rộng menu" : "Thu gọn menu"}
           className="w-8 h-8 rounded-[8px] border flex items-center justify-center cursor-pointer transition-colors active:scale-90"

@@ -16,11 +16,13 @@ class Retriever:
             text=p.read_text()
             for start in range(0,len(text),1200):
                 self.docs.append({'text':p.stem+'\n'+text[start:start+1800],'stem':p.stem})
-        v2=DATA/'v2/sources.json'
-        if v2.exists():
-            for card in json.loads(v2.read_text()):
-                self.docs.append({'text':card['title']+'\n'+card['section']+'\n'+'; '.join(card['aliases'])+'\n'+card['formulas'][0]['latex']+'\n'+card['context'],
-                                  'stem':card['stem'],'formula_id':card['id']})
+        for version in ('v2','v3'):
+            source_file=DATA/version/'sources.json'
+            if source_file.exists():
+                for card in json.loads(source_file.read_text()):
+                    self.docs.append({'text':card['title']+'\n'+card['section']+'\n'+'; '.join(card['aliases'])+'\n'+card['formulas'][0]['latex']+'\n'+card['context'],
+                                      'stem':card['stem'],'formula_id':card['id'],
+                                      'procedure':card.get('procedure','1.190')})
         self.bm=BM25Okapi([self.tokens(x['text']) for x in self.docs])
         self.client=QdrantClient(path=str(RUNTIME/'qdrant'))
         self.collection='formula_docx_v2'
@@ -60,8 +62,13 @@ class Retriever:
         marker.write_text(json.dumps({'fingerprint':fingerprint,'dimensions':dim,'chunks':len(vectors)}))
     def search(self,q):
         self.index()
-        formula_mode=bool(re.search(r'\bdpi\s*610\b|\bqtk[đd]\s*[:\-]?\s*1\.190\b',q.lower()))
-        eligible=[i for i,d in enumerate(self.docs) if not formula_mode or d.get('formula_id')]
+        from .strategies import norm
+        normalized=norm(q)
+        scopes=set(re.findall(r'\bqtkd\s*[:\-]?\s*(1\.(?:061|062|063|071|159|160|190))\b',normalized))
+        if re.search(r'\bdpi\s*610\b',normalized): scopes.add('1.190')
+        if re.search(r'\bh3000\b',normalized): scopes.add('1.071')
+        formula_mode=bool(scopes)
+        eligible=[i for i,d in enumerate(self.docs) if not formula_mode or d.get('procedure') in scopes]
         query_filter=models.Filter(must=[models.HasIdCondition(has_id=eligible)]) if formula_mode else None
         dense=self.client.query_points(self.collection,query=self.embed([q])[0],query_filter=query_filter,limit=20).points
         scores={}

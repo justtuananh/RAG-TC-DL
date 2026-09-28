@@ -1,368 +1,134 @@
-# RAG_TC_DL — Chatbot tra cứu tài liệu Đo lường (QTKĐ)
+# RAG-TC-DL — Tra cứu QTKĐ và tính công thức đã phê duyệt
 
-Hệ thống **RAG chạy hoàn toàn offline** để **tra cứu & trích dẫn** các Quy trình Kiểm định
-(QTKĐ — *Quy trình Kiểm định*) của Cục Tiêu chuẩn–Đo lường–Chất lượng. Người dùng hỏi bằng
-tiếng Việt → bot trả lời kèm **trích đoạn chính xác + công thức (LaTeX) + dẫn nguồn** (tên
-file, mục/điều khoản). **Chỉ tra cứu — không tự tính toán.** Không gọi API cloud: mọi model
-chạy local. Mục tiêu prod: 1 máy đơn **RTX 5060 8GB**, mở rộng từ vài file lên hàng nghìn QTKĐ.
+Ứng dụng React + FastAPI tra cứu tài liệu đo lường bằng RAG, trả lời tiếng Việt kèm nguồn và hiển thị công thức. Luồng tính riêng trong màn hình **Tài liệu → chọn DOCX → Công thức và phê duyệt**:
 
-> **Hai cách triển khai (ngang nhau):**
-> - **Mode A — Docker (stack standalone):** một lệnh `make up` dựng `app.py` + Qdrant + dịch vụ
->   embedding/reranker + Ollama. Đây là đường đã được **đo chất lượng** (eval recall@5 = **1.000**,
->   55/55 — xem §5).
-> - **Mode B — kotaemon (UI tương tác):** chạy giao diện kotaemon trên host với Chroma + adapter
->   `kotaemon_ext/`, phong phú cho quản lý tài liệu & chat.
->
-> **Giao diện web React (mới).** Ngoài UI Gradio `:7861` của Mode A, repo còn có **frontend React +
-> TypeScript** (`frontend/`, nginx `:3000`, dev Vite `:5173`) nói chuyện với **FastAPI backend**
-> `api_server.py` (`:8080`, cùng pipeline truy hồi/sinh đáp với `app.py`). Bản `frontend/` (dựng 1:1
-> từ `design/kiemdinh.html`) nay **đã nối backend thật**: chat streaming SSE, render Markdown +
-> **bảng** (remark-gfm) + **công thức** `$LaTeX$` (KaTeX), trích dẫn `[n]` bấm được + panel nguồn,
-> **lưu lịch sử hội thoại** (localStorage) và **bộ nhớ ngắn hạn** cho LLM (gửi lại các lượt trước).
-> `frontend-legacy/` là bản React (JS thuần) đời trước, giữ để tham khảo. Chạy nhanh local (api_server
-> + Vite): `./run.sh`. Chi tiết: [`frontend/README.md`](frontend/README.md).
+**Ingestion → bản nháp → người dùng đối chiếu và phê duyệt → nhập số liệu → backend tính.**
 
-**Mục lục**
-1. [Tổng quan & vấn đề cốt lõi](#1-tổng-quan--vấn-đề-cốt-lõi)
-2. [Công nghệ](#2-công-nghệ)
-3. [Cài đặt chi tiết](#3-cài-đặt-chi-tiết)
-4. [Workflow & luồng xử lý](#4-workflow--luồng-xử-lý)
-5. [Kết quả Eval](#5-kết-quả-eval)
-6. [Tham khảo](#6-tham-khảo)
+LLM không tự tạo phép tính được phép chạy. Ingestion chỉ gợi ý biểu thức/metadata; công thức chưa duyệt, sai phiên bản hoặc nguồn hết hiệu lực đều bị chặn. Chat hiện hướng dẫn mở form, chưa tự chọn ID công thức đã duyệt từ hội thoại. Các model chạy local; lần cài đặt/build đầu cần tải thư viện và model trước khi vận hành offline.
 
----
+## Trạng thái và giới hạn
 
-## 1. Tổng quan & vấn đề cốt lõi
+- BE/FE có tạo/lấy/sửa/duyệt/từ chối nháp, ca đối chứng, kiểm tra đơn vị/miền/điều kiện và form tính. Chỉnh định nghĩa thu hồi phê duyệt; xóa rồi tải lại nguồn cũ phải duyệt lại.
+- Bảy DOCX hiện có **334 ứng viên chờ duyệt**, trong đó **57 có biểu thức gợi ý**, 277 chưa có biểu thức. Đây không phải 334 bộ tính hoạt động. Registry lab 47 bộ tính là thí nghiệm riêng.
+- PDF có trích text để tra cứu nhưng chưa tạo được nháp công thức có định vị. OLE/MathType lỗi và biểu thức phức tạp cần đối chiếu thủ công.
+- Chưa có xác thực/phân quyền người duyệt. Tên người duyệt tự nhập và nhật ký không chứng minh danh tính hay thay thế phê duyệt chuyên môn.
+- Điểm **96% trước đây là điểm checklist sau sửa các ca đã biết**, không chứng minh độ chính xác nghiệp vụ hoặc khả năng tổng quát. Trọng số và tolerance hậu kiểm có rủi ro bias. Xem [audit đánh giá](build/formula-review/BIAS_AUDIT.md); giữ [báo cáo cũ](build/formula-review/INDEPENDENT_REVIEW.md) để truy vết.
 
-### Repo này là gì
-Một chatbot hỏi–đáp trên kho tài liệu kỹ thuật đo lường. Người dùng gõ câu hỏi tiếng Việt
-(ví dụ *"sai số cho phép của áp kế theo QTKĐ 1.061 là bao nhiêu?"*), hệ thống tìm đúng đoạn
-trong tài liệu gốc, đưa cho LLM **chỉ những đoạn đó**, và trả về câu trả lời **kèm trích dẫn
-nguồn** để người dùng tự đối chiếu. Toàn bộ chạy offline để dùng được trong môi trường nội bộ,
-không phụ thuộc internet.
+## Thành phần
 
-### Vấn đề cốt lõi: công thức KHÔNG phải text  *(Risk #1)*
-Trong file `.docx` nguồn, công thức được nhúng dưới dạng **OLE object MathType (MTEF nhị
-phân)** — `word/embeddings/oleObject*.bin` — kèm một ảnh WMF đã render. **Không có** công
-thức dạng text (OMML / `m:oMath`). Trích text thông thường sẽ **mất sạch công thức**. Toàn
-bộ tầng `ingestion/` tồn tại để **khôi phục công thức trung thực** thành `$LaTeX$`. Đây là rủi
-ro lớn nhất của dự án — *độ chính xác công thức là mối quan tâm số 1 trong mọi thay đổi ingestion.*
-
-```
-.docx  →  OLE MathType (.bin, MTEF)  →  gem mathtype_to_mathml (Ruby)  →  MathML  →  LaTeX
-                                                                                      ▲
-                                          ⟦Fxxx⟧ placeholder trong Markdown được thay bằng $LaTeX$
-```
-
----
-
-## 2. Công nghệ
-
-| Lớp | Thành phần | Ghi chú |
+| Thành phần | Mã / cổng | Chức năng |
 |---|---|---|
-| **Giao diện** | **Gradio** `app.py` `:7861` · **React** `frontend/` `:3000` (dev Vite `:5173`, + `api_server.py` FastAPI `:8080`) · **kotaemon** (Mode B) | React UI **đã nối backend thật** (SSE, bảng + công thức, lịch sử/bộ nhớ) — [`frontend/README.md`](frontend/README.md) |
-| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | `qwen2.5:1.5b` (dev) / `qwen2.5:7b` (prod), `:11434`; `generation.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
-| **Embedding** | **bge-m3** (1024 chiều) qua **inference server tự viết** | `docker/inference/server.py` (FastAPI + sentence-transformers), `:8010`, `/v1/embeddings` |
-| **Reranker** | **bge-reranker-v2-m3** qua cùng server (CrossEncoder) | `:8011`, `/v1/rerank` (Cohere-style); env `RERANKER_MAX_LENGTH` (mặc định 1024) |
-| **Vector store** | **A: Qdrant** `:6333` (collection `qtkd_rag`) · **B: Chroma** (nhúng) | `VECTOR_SIZE = 1024` |
-| **Trích xuất công thức** | Python `lxml` + `olefile`; **Ruby gem `mathtype_to_mathml`**; XSLT `vendor/xsltml/mml2tex.xsl` | OLE MathType → LaTeX |
-| **Hybrid retrieval** | **A:** `retrieval/` (router → lexicon → dense + BM25 → RRF k=60 → rerank trên parent → parent) · **B:** kotaemon built-in | |
-| **Adapter (Mode B)** | `kotaemon_ext/` | `QTKDDocxReader` (reader), `QTKDReranking` (reranker) |
+| React + TypeScript | `frontend/`, Docker `3000`, dev `5173` | Chat SSE, tài liệu gốc, duyệt công thức, nhập số liệu |
+| FastAPI | `api_server.py`, `8080` | API tài liệu/chat và router `formula_registry/api.py` |
+| Registry công thức | `formula_registry/` | SQLite, phiên bản, nguồn/hash, nhật ký và phê duyệt |
+| Bộ tính | `formula_lab/engine.py` | Decimal, biểu thức giới hạn, scalar/series, đổi đơn vị |
+| Ingestion | `ingestion/`, `ingestion_jobs.py` | DOCX OMML/OLE, PDF text, nháp trước embedding |
+| Truy hồi | `retrieval/`, `index/` | Dense + BM25 + RRF + rerank, Qdrant `6333` |
+| Model local | `docker/inference/`, Ollama | bge-m3 `8010`, reranker `8011`, LLM `11434` |
 
-### Hai mode triển khai
-Hai dịch vụ **embedding `:8010`** và **reranker `:8011`** (cùng **Ollama `:11434`**) dùng chung
-cho cả hai mode; chỉ khác phần UI + vector store + tầng truy hồi.
+Gradio `app.py`, `frontend-legacy/` và adapter `kotaemon_ext/` được giữ để tương thích/tham khảo. Luồng phê duyệt mới nằm trong React/API chính; không mặc định có trên các UI cũ.
 
-| | **Mode A — Docker (standalone)** | **Mode B — kotaemon (host)** |
-|---|---|---|
-| Khởi chạy | `make up` (1 lệnh) | `.venv/bin/python app.py` (trong `../kotaemon`) |
-| UI | `app.py` Gradio `:7861` | kotaemon Gradio `:7861` |
-| Vector store | **Qdrant** `:6333` | **Chroma** (nhúng) |
-| Truy hồi | `retrieval/`: router → lexicon → dense + BM25 → RRF → rerank (parent) → parent | kotaemon hybrid + `QTKDReranking` |
-| Nạp tài liệu | `ingestion.spike_a` (host) → `build/spike_a/` → `indexer` | `QTKDDocxReader` chạy khi upload |
-| Eval | **Có** — retrieval recall@5 = 1.000 + answer-quality (xem §5) | Không qua harness này |
-| Điểm mạnh | Tái lập, 1 lệnh, đã đo chất lượng | UI quản lý file/chat phong phú |
+## Chạy local
 
-> Repo này (`RAG_TC_DL`) cung cấp **ingestion / index / retrieval / eval** và adapter
-> `kotaemon_ext/`; [kotaemon](https://github.com/Cinnamon/kotaemon) (`../kotaemon`) là repo anh
-> em, clone riêng (không phải submodule), chỉ dùng cho Mode B.
+Python **3.12** và Node **24** là môi trường được dùng để kiểm tra cập nhật này. Cần Ruby và gem `mathtype_to_mathml` + `pry` để chuyển MathType OLE; nếu thiếu, các công thức đó vẫn phải được ghi nhận là chưa trích xuất được.
 
----
-
-## 3. Cài đặt chi tiết
-
-### 3.1 Yêu cầu trước
-| Thành phần | Phiên bản | Dùng cho |
-|---|---|---|
-| Docker + Docker Compose | bất kỳ | **Mode A** (toàn bộ stack) |
-| Python | 3.x + `.venv` (ingestion) · 3.10 cho kotaemon (Mode B, qua `uv`) | |
-| Ruby | **2.6** + gem `mathtype_to_mathml` | Bóc công thức MathType (ingestion — cả 2 mode) |
-| Ollama | ≥ 0.24 (nếu chạy native, ví dụ macOS) | Chạy LLM Qwen2.5 |
-
-### 3.2 Ingestion — bóc công thức, tạo `build/spike_a/` *(chung cho cả 2 mode)*
-Tầng ingestion **chạy trên host** (không nằm trong app container) và là bước **bắt buộc trước**
-khi index ở Mode A.
 ```bash
-cd /Users/mac/Desktop/AI4TA/RAG_TC_DL
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt          # olefile, lxml, scikit-image, rank-bm25
-gem install mathtype_to_mathml           # cần Ruby 2.6 (macOS system Ruby)
+python3.12 -m venv .venv-dev
+.venv-dev/bin/python -m pip install -r requirements-app.lock -r requirements-dev.txt
+# Khi cần chuyển MathType trên host:
+gem install mathtype_to_mathml pry
 
-python -m ingestion.spike_a              # đọc TC_DL/ → ghi build/spike_a/*.md + extraction_report.json
+cd frontend
+npm ci
+cd ..
+./run.sh --no-docker
 ```
-> `ingestion/mtef_to_latex.py` hardcode `_GEM_PATHS` cho Ruby 2.6 macOS. Ruby khác chỗ → chỉnh
-> `_GEM_PATHS` hoặc đặt biến `GEM_PATH`. Kiểm tra `build/spike_a/extraction_report.json` để xác
-> nhận tỉ lệ chuyển công thức.
 
-### 3.3 Mode A — Triển khai bằng Docker  *(stack standalone)*
-Toàn bộ stack gói trong `docker-compose.yml` + điều khiển qua `Makefile`. **Trình tự:**
+`run.sh` chọn venv trong dự án trước; có thể đặt `QTKD_PYTHON=/path/to/python`. Mở `http://localhost:5173`. RAG cần Qdrant, embedding, reranker và Ollama; riêng tạo nháp từ DOCX hiện có/phê duyệt/tính không cần các service model này.
+
+Chạy từng phần nếu muốn:
+
 ```bash
-# 0) Đã chạy ingestion (§3.2) → có build/spike_a/   (compose mount thư mục này read-only)
-make up            # build images + start: qdrant, embedding, reranker, ollama, api, frontend  (~10–20' lần đầu: tải model)
-make pull-model    # tải qwen2.5:1.5b vào container ollama (~940MB); prod: make pull-model-7b
-make index         # indexer: index.embed_store --force → nhúng build/spike_a/ vào Qdrant
-# → mở http://localhost:3000
+.venv-dev/bin/python -m uvicorn api_server:app --host 127.0.0.1 --port 8080
+# Terminal khác
+cd frontend && npm run dev
 ```
 
-**Các service (`docker-compose.yml`):**
-| Service | Image / build | Port | Ghi chú |
-|---|---|---|---|
-| `qdrant` | `qdrant/qdrant:v1.10.1` | 6333 | Vector DB, volume `qdrant_storage` |
-| `embedding` | build `docker/inference` (`MODE=embedding`, `BAAI/bge-m3`) | 8010 | `/v1/embeddings`, 1024-dim |
-| `reranker` | build `docker/inference` (`MODE=reranker`, `BAAI/bge-reranker-v2-m3`) | 8011 | `/v1/rerank` (Cohere-style) |
-| `ollama` | `ollama/ollama:latest` | 11434 | LLM, volume `ollama_data` |
-| `api` | build `.` → `uvicorn api_server:app` | 8080 | **FastAPI + SSE** cho React frontend (`/api/health`, `/api/examples`, `/api/chat/stream`); mount `build/spike_a` + `TC_DL` (writable, cho upload); đọc env `EMBED_URL/RERANK_URL/QDRANT_URL/OLLAMA_URL/OLLAMA_MODEL` |
-| `frontend` | build `frontend/` → nginx | 3000 | Serve bản React build; proxy `/api` → `api:8080`. **Đã nối backend thật** (chat SSE, bảng/công thức, lịch sử + bộ nhớ ngắn hạn) |
-| `indexer` | reuse `qtkd-app:local` (profile `tools`) | — | Chạy 1 lần: `index.embed_store --force` |
+## Docker
 
-**Inference server tự viết** — `docker/inference/server.py`: FastAPI + `sentence-transformers`
-(`SentenceTransformer` cho embedding, `CrossEncoder` cho reranker). Model được **tải sẵn vào
-image lúc build** (qua ARG `MODE` / `EMBEDDING_MODEL` / `RERANKER_MODEL`). Đây **không phải**
-HuggingFace TEI; nó cài đúng định dạng `/v1/embeddings` + `/v1/rerank` mà code dự án cần (nên
-không có vấn đề tương thích).
+```bash
+cp .env.example .env
+mkdir -p .formula-registry build/spike_a
+make up
+make pull-model
+# Mở http://localhost:3000
+```
 
-**Lệnh `make` thường dùng:**
-| Lệnh | Tác dụng |
+Compose đầy đủ hiện khai báo NVIDIA GPU cho embedding, reranker và Ollama; cần Docker Compose v2, NVIDIA driver và Container Toolkit. API/FE cùng registry không cần GPU. Để thử riêng giao diện và luồng duyệt/tính, không dựng model:
+
+```bash
+docker compose build api frontend
+docker compose up -d --no-deps api
+docker compose up -d --no-deps frontend
+```
+
+Lúc này RAG chưa hoạt động. Tạo nháp cho tài liệu có sẵn qua nút trong UI, hoặc:
+
+```bash
+make formula-drafts-docker
+```
+
+Lệnh chỉ tạo nháp, không phê duyệt. Upload rồi “Xử lý” trên UI tạo nháp trước embedding; nếu model/Qdrant chưa chạy, trạng thái xử lý tài liệu có thể báo lỗi nhưng vẫn mở được phần công thức.
+
+| Dữ liệu | Nơi lưu bền |
 |---|---|
-| `make up` / `make start` | Start (có / không rebuild) |
-| `make down` | Dừng toàn bộ |
-| `make logs` / `make status` | Xem log realtime / trạng thái container |
-| `make pull-model` / `make pull-model-7b` | Tải `qwen2.5:1.5b` / `qwen2.5:7b` |
-| `make index` | Index `build/spike_a/` vào Qdrant |
-| `make rebuild` | Build lại images `--no-cache` rồi up |
-| `make clean-volumes` | ⚠ Xoá toàn bộ data (Qdrant + Ollama models) |
-| `make eval` | Chạy eval retrieval (trên host, dùng `kotaemon/.venv` — xem §5) |
-| `make test-embed` / `make test-qdrant` | Smoke-test service `:8010` / collection Qdrant |
+| Tài liệu gốc | `TC_DL/` → `/app/TC_DL` |
+| Markdown, báo cáo ingestion | `build/spike_a/` → `/app/build/spike_a` |
+| Nháp, quyết định, lịch sử | `.formula-registry/` → `/app/.formula-registry` |
+| Vector/model | volumes Qdrant, Ollama và cache Hugging Face |
 
-**Cấu hình `.env`** (sao chép từ `.env.example`): `OLLAMA_MODEL=qwen2.5:1.5b` (prod đổi `qwen2.5:7b`).
+Registry không commit vào Git. Sao lưu đồng thời nguồn và DB; giữ hash nguồn để quyết định duyệt còn hiệu lực. Xem [hướng dẫn vận hành](docs/FORMULA_DRAFT_APPROVAL.md). `docker compose down` giữ dữ liệu; `down -v` xóa named volumes, nhưng không xóa các thư mục bind-mount trên host.
 
-**GPU / nền tảng:**
-- **macOS:** Docker không dùng được GPU Apple Silicon. Nên chạy **Ollama native** (`brew install
-  ollama` + `ollama serve`), comment service `ollama` trong compose và đặt
-  `OLLAMA_URL=http://host.docker.internal:11434/v1/chat/completions`.
-  > Đặt env dạng `/v1/...` cho tương thích; `generation.py` **tự map sang native `/api/chat`**
-  > lúc gọi — vì endpoint OpenAI-compat `/v1` của Ollama **bỏ qua trường `options`** (num_ctx /
-  > num_predict không có hiệu lực, prompt dài bị cắt từ đầu — đo 2026-06-11). Có unit-test ghim.
-- **Linux + RTX 5060 (Blackwell, sm_120):** cần **`nvidia-container-toolkit`**, bỏ comment khối
-  `deploy.resources` của service `ollama`, và driver/toolkit **CUDA 12.8+**. Embedding & reranker
-  chạy **CPU** là đủ (theo `docs/PLAN.md`), giữ VRAM cho LLM.
-- **Volumes bền:** `qdrant_storage`, `ollama_data` (giữ qua restart; `make clean-volumes` để xoá).
+## API công thức
 
-### 3.4 Mode B — kotaemon (UI tương tác trên host)
-Giao diện kotaemon với Chroma + adapter `kotaemon_ext/`. Dùng chung service `:8010/:8011/:11434`
-với Mode A (cần các container đó chạy, hoặc tự dựng).
+API chính có OpenAPI tại `http://localhost:8080/docs` và `/openapi.json`.
+
+| Method | Đường dẫn |
+|---|---|
+| GET | `/api/documents/{document_id}/formula-drafts` |
+| POST | `/api/documents/{document_id}/formula-drafts/generate` |
+| GET / PUT | `/api/formula-drafts/{id}` |
+| POST | `/api/formula-drafts/{id}/approve` |
+| POST | `/api/formula-drafts/{id}/reject` |
+| POST | `/api/formula-drafts/{id}/calculate` |
+
+Mọi thao tác sửa/quyết định/tính gửi `revision`; sai phiên bản trả409. Dữ liệu sai trả422, không ghi đè bản đã lưu. Payload và quy tắc duyệt: [hợp đồng API](docs/FORMULA_DRAFT_APPROVAL.md).
+
+## Thư viện và kiểm thử
+
+- `requirements-app.txt`: dải phụ thuộc runtime; `requirements-app.lock`: phiên bản trực tiếp và bắc cầu đã resolve cho Python 3.12, dùng chung local/Docker/CI. SQLite/Decimal/AST dùng thư viện chuẩn Python.
+- `requirements-dev.txt`: pytest, HTTP mocks, lint; không ghim ngược runtime theo mã cũ.
+- `requirements.txt`: phụ thuộc bổ sung cho QA ảnh ingestion.
+- `formula_lab/requirements.lock`: môi trường thí nghiệm lab riêng, không dùng làm requirements cho API sản phẩm.
+- `frontend/package-lock.json`: lock npm; Docker và local dùng `npm ci`.
+
 ```bash
-cd /Users/mac/Desktop/AI4TA
-git clone https://github.com/Cinnamon/kotaemon.git      # repo anh em (cạnh RAG_TC_DL)
-cd kotaemon
-uv python install 3.10 && uv sync --python 3.10         # tạo .venv + deps (gradio, chromadb, lancedb…)
-```
-Tuỳ biến trong **`../kotaemon/flowsettings.py`**:
-```python
-sys.path.insert(0, str(Path(__file__).parent.parent / "RAG_TC_DL"))   # import ingestion/index/kotaemon_ext
-KH_VECTORSTORE = {"__type__": "kotaemon.storages.ChromaVectorStore", "path": ...}   # Chroma
-KH_EMBEDDINGS["bge-local"] = {"spec": {..., "base_url": "http://localhost:8010/v1",
-                                       "model": "bge-large-en-v1.5"}, "default": True}   # gọi service :8010 (thực tế phục vụ bge-m3)
-KH_RERANKINGS["qtkd"] = {"spec": {"__type__": "kotaemon_ext.reranker.QTKDReranking",
-                                  "endpoint_url": "http://localhost:8011/v1/rerank"}, "default": True}
-FILE_INDEX_PIPELINE_FILE_EXTRACTORS = {".docx": "kotaemon_ext.reader.QTKDDocxReader"}
-FILE_INDEX_PIPELINE_SPLITTER_CHUNK_SIZE = 8192          # tránh double-chunking làm vỡ công thức
-KH_INDICES = [{"name": "File Collection", "config": {"supported_file_types": ".docx"}, ...}]
-```
-> Chuỗi `"model": "bge-large-en-v1.5"` chỉ là nhãn gửi kèm request; inference server bỏ qua và
-> dùng đúng model đã nạp (**bge-m3**). Cả 2 mode vì vậy đều nhúng bằng bge-m3, 1024 chiều.
-
-`../kotaemon/.env`: `KH_FEATURE_USER_MANAGEMENT=false`, `KH_ENABLE_FIRST_SETUP=false` (tắt login),
-`LOCAL_MODEL=qwen2.5:1.5b`, `KH_OLLAMA_URL=http://localhost:11434/v1/`, `OPENAI_API_KEY=` (trống).
-
-**Patch LaTeX inline (bắt buộc)** — Gradio mặc định chỉ render `$$...$$`; thêm delimiter `$...$`
-vào `kotaemon/libs/ktem/ktem/pages/chat/chat_panel.py` (chi tiết
-[`docs/spike_c_ui_setup.md`](docs/spike_c_ui_setup.md) §6).
-
-**Chạy:**
-```bash
-cd /Users/mac/Desktop/AI4TA/kotaemon
-GRADIO_SERVER_PORT=7861 .venv/bin/python app.py     # → http://localhost:7861
-```
-> Cả hai mode đều dùng `:7861` → chạy **lần lượt** hoặc đổi port.
-
-### 3.5 Cơ sở dữ liệu & lưu trữ
-| Mode | Vị trí | Loại | Nội dung |
-|---|---|---|---|
-| A | Qdrant volume `qdrant_storage` | **Qdrant** | Collection `qtkd_rag` (cosine, 1024) |
-| B | `kotaemon/ktem_app_data/user_data/vectorstore/` | **Chroma** | Vector child chunks |
-| B | `kotaemon/ktem_app_data/user_data/docstore/` | **LanceDB** | Văn bản gốc chunks |
-| B | `kotaemon/ktem_app_data/user_data/sql.db` | **SQLite** | Mặc định model, danh sách file, hội thoại |
-
-> Mode B: `.env` **chỉ đọc lần đầu**; muốn reset → xoá `ktem_app_data/`. Mode A: `make clean-volumes`.
-
----
-
-## 4. Workflow & luồng xử lý
-
-Cả hai mode dùng chung tầng **ingestion** (bóc công thức) và 3 dịch vụ (embedding `:8010`,
-reranker `:8011`, Ollama `:11434`); khác nhau ở vector store + tầng truy hồi.
-
-### Mode A — Docker (standalone, `app.py` + Qdrant)
-```mermaid
-flowchart TB
-    D["TC_DL/*.docx"] -->|"ingestion.spike_a (host + Ruby gem)"| MD["build/spike_a/*.md<br/>+ extraction_report.json"]
-    MD -->|"make index → index.embed_store"| QD[("Qdrant qtkd_rag<br/>:6333")]
-    EMB["embedding :8010 · bge-m3<br/>(custom FastAPI)"] -. embed .-> QD
-    Q["Câu hỏi tiếng Việt"] --> GUARD{"yêu cầu tính toán?<br/>(is_calculation_request)"}
-    GUARD -->|"có → từ chối tất định"| APP
-    GUARD -->|"không"| RET["retrieval.retriever<br/>router → lexicon → dense + BM25 → RRF → rerank(parent) → parent"]
-    QD -. "tìm child chunks" .-> RET
-    RK["reranker :8011<br/>bge-reranker-v2-m3"] -. rerank .-> RET
-    RET --> OL["Ollama :11434 · qwen2.5<br/>(native /api/chat)"]
-    OL --> APP["app.py · Gradio :7861<br/>trả lời + trích dẫn"]
+make test-unit PY=.venv-dev/bin/python
+make test-formula PY=.venv-dev/bin/python
+make check-frontend
+# Lint/fidelity gate cũ:
+make check PY=.venv-dev/bin/python
 ```
 
-### Mode B — kotaemon (UI tương tác, Chroma)
-Hai thời điểm: **nạp tài liệu** (index-time) và **hỏi đáp** (query-time).
-```mermaid
-flowchart TB
-    subgraph IDX["① Index-time — nạp .docx"]
-        direction TB
-        U["Upload .docx<br/>(kotaemon UI)"] --> RD["QTKDDocxReader<br/>kotaemon_ext/reader.py"]
-        RD --> SP["ingestion.spike_a.run<br/>OLE→MTEF→Ruby gem→MathML→LaTeX<br/>thay ⟦Fxxx⟧ = $LaTeX$"]
-        SP --> CH["index.chunker.parse_file<br/>parent (mục) + child (đoạn/bảng/công thức)"]
-        CH --> EM["Embed child chunks<br/>:8010 · bge-m3 · 1024d"]
-        EM --> VS[("Chroma<br/>vectorstore")]
-    end
-    subgraph QRY["② Query-time — hỏi đáp"]
-        direction TB
-        Q["Câu hỏi tiếng Việt"] --> HY["Hybrid retrieval<br/>dense + BM25"]
-        HY --> RR["QTKDReranking<br/>:8011 · bge-reranker-v2-m3"]
-        RR --> CTX["Context = đoạn nguồn liên quan"]
-        CTX --> LLM["Ollama qwen2.5<br/>:11434"]
-        LLM --> ANS["Trả lời + [n] citation<br/>+ panel nguồn highlight"]
-    end
-    VS -. "tìm child chunks" .-> HY
-```
+Test hồi quy do dev viết, test giữ riêng có đáp án khóa trước, kiểm thử service/model thật và phê duyệt chuyên môn là các lớp bằng chứng khác nhau. Không cộng chúng thành một tỷ lệ “chính xác toàn hệ thống”. Bất kỳ ca giữ riêng nào đã lộ đều trở thành hồi quy cho lần sửa tiếp theo.
 
-**Luồng logic & ranh giới trách nhiệm:**
-- **Ingestion** (`spike_a` → `chunker`) bóc công thức MathType → `$LaTeX$` và chia parent/child.
-  Mode A chạy batch trên host (`make index`); Mode B chạy trong bộ nhớ mỗi lần upload qua
-  `QTKDDocxReader`. `CHUNK_SIZE=8192` (Mode B) ngăn kotaemon cắt lại child chunk làm **vỡ công
-  thức inline**.
-- **Truy hồi** lấy child chunk liên quan → rerank cross-encoder (`:8011`) → ghép context → Ollama
-  sinh đáp án **chỉ dựa trên context**, tiếng Việt, **không tính lại công thức**, kèm trích dẫn.
-- **Lookup-only được cưỡng chế TẤT ĐỊNH** (Mode A): câu yêu cầu tính toán có số liệu cho sẵn bị
-  từ chối **trước khi** retrieve (`is_calculation_request`); mọi nội dung model viết thêm sau câu
-  từ chối chuẩn bị cắt (`enforce_refusal_stop`) — không trông vào model tự tuân prompt.
-- **Độ trung thực công thức thuộc về `ingestion/`** — không phụ thuộc framework truy hồi.
+## Tài liệu
 
-### Kho tài liệu & trạng thái
-`TC_DL/` có **11 file**: 7 `.docx` (đã xử lý) + 3 `.doc` + 1 `.xls` (**legacy — báo cáo nhưng
-bỏ qua**, cần LibreOffice chuyển `.docx` trước = "Spike B", chưa làm).
-
----
-
-## 5. Kết quả Eval
-
-`eval/run_eval.py` đo chất lượng **tầng truy hồi standalone** (`retrieval/retriever.py` + Qdrant —
-tức Mode A) trên bộ **55 câu hỏi** `eval/eval_set.jsonl` (mỗi câu gắn `file_stem` + `section_path`
-kỳ vọng). Một câu tính là *hit* nếu kết quả khớp đúng file và đúng mục (hoặc mục con). Metrics:
-**recall@{1,3,5,10}, nDCG@k, MRR**. Tiêu chí đạt: **recall@5 ≥ 0.85**.
-*(Mode B kotaemon có tầng truy hồi riêng, không nằm trong harness này.)*
-
-### Kết quả hiện tại — 2026-06-11 (đợt R1–R6), hybrid
-| Metric | 2026-06-07 | **2026-06-11** |
-|---|---|---|
-| **recall@5** | 0.909 (50/55) | **1.000 (55/55)** ✅ |
-| recall@10 | 0.982 | **1.000** |
-| recall@1 | 0.655 | **0.782** |
-| nDCG@5 | 0.799 | **0.908** |
-| MRR | 0.771 | **0.876** |
-| Bộ gold mở rộng (10 câu chưa từng tune) | — | recall@5 = 1.000, MRR 0.925 |
-
-**recall@5 theo từng tài liệu: 7/7 file = 1.00** (QTKD_1.063 từ 0.67 → 1.00).
-
-**Tiến trình:** 0.709 → 0.909 (Phase 1–3, 2026-06-07: parent-rerank, lexicon, sửa heading) →
-**1.000** (R1–R6, 2026-06-11):
-- **R1** — chặn boilerplate "Phụ lục A/B" trần (form MẪU BIÊN BẢN nằm trong body heading
-  trần ở 1.061/62/63 → honeypot cho cross-encoder; predicate `is_noise_path` dùng chung).
-- **R2** — lexicon "điều kiện kiểm định" → từ vựng body (cầu tiêu-đề→nội-dung).
-- **R3** — document rerank = breadcrumb `file — mục` + cửa sổ 1400 ký tự neo theo child
-  (server reranker cắt 512 token → mục dài bị chấm mù phần chứa đáp án).
-- **R4/R6** — router gom MỌI tín hiệu file; câu so sánh ≥2 thiết bị chạy phễu RIÊNG
-  từng file + quota đại diện trong top-5 (trước đây bị ghim 1 file → nửa kia không bao
-  giờ được retrieve).
-- **R5** — guard heading mở rộng (câu kết thúc `.`/caption Hình/Bảng) → re-extract +
-  re-index 1.071 (guardrail 351 span $LaTeX$ byte-identical).
-
-> Chất lượng CÂU TRẢ LỜI (qwen2.5:7b, 29 câu khó, cùng backend + cùng scorer):
-> coverage 0.725→**0.877**, citation_strict 0.806→**0.857**, ảo giác 0.069→**0.034**,
-> từ chối oan 4→**1** — chi tiết tại [`result_eval.md`](result_eval.md).
-> Lưu ý hạ tầng: endpoint OpenAI-compat `/v1` của Ollama **bỏ qua `options`** →
-> `generation.py` nay gọi native `/api/chat` (num_ctx/num_predict có hiệu lực thật).
-
-### Chạy lại eval
-
-**Retrieval** (recall@k + nDCG + MRR — cần `:8010`/`:8011`/`:6333` + `kotaemon/.venv`):
-```bash
-make eval                                          # = run_eval --mode hybrid (55 câu)
-python -m eval.run_eval --mode both -v             # so sánh hybrid vs dense, in section_path mỗi hit
-python -m eval.run_eval --debug-miss               # mỗi câu trượt: rank từng tầng (dense/bm25/fused/rerank)
-python -m eval.run_eval --eval-file eval/eval_set_ext.jsonl   # bộ gold MỞ RỘNG 10 câu (chống overfit)
-```
-
-**Answer-quality** (coverage / citation / refusal / ảo giác — cần thêm Ollama `:11434` + model đã pull):
-```bash
-make answer-eval                                   # so 1.5b vs 7b (29 câu khó, eval/answer_set.jsonl)
-make answer-eval-dev                               # chỉ 1.5b (nhanh)
-python -m eval.answer_eval --model qwen2.5:7b -v --dump /tmp/rec_{model}.jsonl   # chấm prod + dump từng câu
-```
-> ⚠ Số answer-quality chỉ đáng tin trên **qwen2.5:7b** (1.5b không ghi `[n]` — model-bound) và
-> trên backend ổn định (GPU prod, hoặc Ollama native; 7b trong Docker-VM hay bị OOM-kill → 500).
-
-Yêu cầu: service `:8010`/`:8011`/`:6333` (+ `:11434` cho answer-eval) đang chạy + `kotaemon/.venv`
-trên host. `make check` (115+ unit test + guard công thức 351/351) là cổng CI không cần Docker.
-Lịch sử số liệu lưu ở [`result_eval.md`](result_eval.md).
-
----
-
-## 6. Tham khảo
-
-**Framework & mô hình**
-- [kotaemon](https://github.com/Cinnamon/kotaemon) — RAG UI framework (Cinnamon, Apache-2.0, Gradio 4.x)
-- [Ollama](https://ollama.com) — runtime LLM local · [Qwen2.5](https://github.com/QwenLM/Qwen2.5) (Alibaba) — LLM sinh đáp án
-- [BGE — FlagEmbedding](https://github.com/FlagOpen/FlagEmbedding) (BAAI) — `bge-m3` (embedding, 1024d) + `bge-reranker-v2-m3` (reranker)
-
-**Hạ tầng truy hồi & phục vụ**
-- [sentence-transformers](https://www.sbert.net/) + [FastAPI](https://fastapi.tiangolo.com/) — inference server tự viết (`docker/inference/`)
-- [Qdrant](https://github.com/qdrant/qdrant) — vector DB (Mode A, collection `qtkd_rag`) · [Chroma](https://github.com/chroma-core/chroma) — vector store nhúng (Mode B)
-- [rank-bm25](https://github.com/dorianbrown/rank_bm25) — BM25 in-memory · RRF (k=60, Cormack et al. 2009)
-- [Docker Compose](https://docs.docker.com/compose/) — điều phối stack (Mode A)
-
-**Trích xuất công thức**
-- [mathtype_to_mathml](https://rubygems.org/gems/mathtype_to_mathml) — Ruby gem: MathType MTEF → MathML
-- [xsltml (`mml2tex.xsl`)](https://sourceforge.net/projects/xsltml/) — XSLT MathML → LaTeX (vendored `vendor/xsltml/`)
-- [lxml](https://lxml.de/) — đọc `word/document.xml` · [olefile](https://github.com/decalage2/olefile) — đọc OLE `.bin` · [scikit-image](https://scikit-image.org/) — SSIM so ảnh công thức
-- [Gradio](https://www.gradio.app/) + [KaTeX](https://katex.org/) — UI web Gradio + render công thức
-- [React](https://react.dev/) + [Vite](https://vite.dev/) + [Tailwind CSS](https://tailwindcss.com/) + [lucide](https://lucide.dev/) — frontend web mới (`frontend/`); [FastAPI](https://fastapi.tiangolo.com/) cho `api_server.py`; font tự host qua [@fontsource](https://fontsource.org/) (Be Vietnam Pro + Lora)
-
-**Tài liệu nội bộ**
-- [`docs/PLAN.md`](docs/PLAN.md) — thiết kế & kế hoạch đầy đủ · [`docs/spike_c_ui_setup.md`](docs/spike_c_ui_setup.md) — bake-off UI + setup
-- [`docs/archive/plan-7.md`](docs/archive/plan-7.md) — kế hoạch cải thiện retrieval (lưu trữ) · [`result_eval.md`](result_eval.md) — log kết quả eval · [`CLAUDE.md`](CLAUDE.md) — hướng dẫn kiến trúc cho agent
+- [FE và hệ thiết kế](frontend/README.md)
+- [Luồng phê duyệt, API, lưu trữ](docs/FORMULA_DRAFT_APPROVAL.md)
+- [Thư viện và vận hành](docs/SYSTEM_DEPENDENCIES.md)
+- [Harness kiểm thử](tests/README.md)
+- [Audit bias và thử giữ riêng](build/formula-review/BIAS_AUDIT.md)
+- [Tiến độ và số liệu lịch sử](TC_DL/TIEN_DO_NGHIEN_CUU_CONG_THUC.md)
+- [Thí nghiệm công thức](formula_lab/README.md)
+- [Retrieval/eval](eval/README.md)

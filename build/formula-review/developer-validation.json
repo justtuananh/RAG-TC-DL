@@ -1,0 +1,31 @@
+{
+  "backend_regression": {
+    "command": ".venv-formula/bin/python -m pytest tests/unit/backend/test_formula_registry.py formula_lab/tests tests/unit/llm tests/unit/ingestion/test_extract_docx.py -q",
+    "passed": 459,
+    "failed": 0,
+    "scope": "Before adding one source-relocation regression; no test removed."
+  },
+  "backend_latest_registry": {
+    "command": ".venv-formula/bin/python -m pytest tests/unit/backend/test_formula_registry.py -q",
+    "passed": 45,
+    "failed": 0,
+    "scope": "After malformed shape rejection and deleted-source reopening fix."
+  },
+  "frontend": {
+    "tests_passed": 47,
+    "typecheck": "pass",
+    "lint": "pass",
+    "build": "pass",
+    "source": "FE agent final after structural response guard; independent retest logs separate."
+  },
+  "container": {
+    "yaml_parse": "pass",
+    "persistence_mount_check": "pass",
+    "docker_runtime": "not tested: Docker executable unavailable"
+  },
+  "warnings": [
+    "Starlette/httpx deprecation",
+    "Vite/Vitest esbuild deprecation",
+    "Production JavaScript chunk exceeds 500kB"
+  ]
+}

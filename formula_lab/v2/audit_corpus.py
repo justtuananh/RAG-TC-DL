@@ -12,7 +12,7 @@ from formula_lab import strategies
 ROOT=Path(__file__).resolve().parents[2]
 OUT=ROOT/'formula_lab/reports/registry-v2'
 
-def run():
+def run(output_dir=None):
     docs=json.loads((ROOT/'formula_lab/reports/expanded-registry/corpus-manifest.json').read_text())
     rows=[];parsed={}
     for doc in docs:
@@ -44,12 +44,22 @@ def run():
     for eq in inventory:
         ids=[c['id'] for c in strategies.SOURCES if c['file']==eq['file'] and any(f['fid']==eq['fid'] for f in c['formulas'])]
         covered.append({'file':eq['file'],'fid':eq['fid'],'calculator_ids':ids,'available':bool(ids)})
-    result={'original_documents':7,'synthetic_documents':23,'new_calculators':20,'total_calculators':len(strategies.SOURCES),
+    by_source=[]
+    for filename in sorted(originals):
+        source_cards=[c for c in strategies.SOURCES if c['file']==filename]
+        equations=[eq for eq in covered if eq['file']==filename]
+        by_source.append({'file':filename,'calculators':len(source_cards),
+                          'prose_rules':sum(c['formulas'][0]['kind']=='prose-rule' for c in source_cards),
+                          'equation_occurrences':len(equations),'covered_occurrences':sum(eq['available'] for eq in equations)})
+    result={'original_documents':7,'synthetic_documents':23,'new_calculators':len(strategies.SOURCES)-6,'total_calculators':len(strategies.SOURCES),
+        'by_source':by_source,
         'equation_occurrences':len(covered),'covered_occurrences':sum(c['available'] for c in covered),
         'coverage_fraction':sum(c['available'] for c in covered)/len(covered),
         'groups':{g:{'passed':sum(r['pass'] for r in rows if r['group']==g),'total':sum(r['group']==g for r in rows)} for g in ['ingestion','source_binding']},
         'rows':rows,'coverage':covered,'limitations':'7 independent documents; descendants do not expand formula families. OLE conversion not rerun. Occurrence coverage is not mathematical-family coverage.'}
-    (OUT/'corpus-audit.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
+    target=Path(output_dir) if output_dir else OUT
+    target.mkdir(parents=True,exist_ok=True)
+    (target/'corpus-audit.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     print(json.dumps({k:v for k,v in result.items() if k not in ('rows','coverage')},ensure_ascii=False,indent=2))
 
 if __name__=='__main__':run()

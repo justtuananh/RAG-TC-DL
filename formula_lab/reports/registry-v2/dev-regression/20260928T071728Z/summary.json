@@ -1,0 +1,48 @@
+{
+  "split": "dev",
+  "evaluation_role": "regression_on_seen_cases",
+  "groups": {
+    "ambiguous_or_unsupported": {
+      "passed": 12,
+      "total": 12
+    },
+    "browser_e2e": {
+      "passed": 20,
+      "total": 20
+    },
+    "invalid_input": {
+      "passed": 144,
+      "total": 144
+    },
+    "retrieval_and_selection": {
+      "passed": 20,
+      "total": 20
+    },
+    "source_mutation_isolated": {
+      "passed": 20,
+      "total": 20
+    },
+    "valid_calculation": {
+      "passed": 200,
+      "total": 200
+    }
+  },
+  "total": 416,
+  "passed": 416,
+  "supported_formula_selection_rate": 1.0,
+  "useful_answer_rate": 1.0,
+  "false_refusals": 0,
+  "unsafe_numeric_outputs": 0,
+  "wrong_ready_forms": 0,
+  "infrastructure_affected_cases": 0,
+  "uc_hash": "344438c75ba24aad6d89acab202a54df14e918499da5110da8c924899002d503",
+  "runtime_hashes": {
+    "formula_lab/engine.py": "71993ba39d5ac69745b27293018c7e4db2c6d0e9d7e1746f67ba4e35c396ddad",
+    "formula_lab/strategies.py": "aa95b27758d6e634893a9eeb66747664bfe506900263e18c62e1dc7294217d46",
+    "formula_lab/retrieval.py": "b47ce22e1646c5e6d8da97e078407d9f5e23dd878a14d2dacd1b474ed2d517a1",
+    "formula_lab/app.py": "2ab9555327a716af1855ea42b3ae3c0c6770b252a1460fc6367de51a65b433e1",
+    "formula_lab/static/index.html": "a06e64a5113f23a75eefe491280edb6b188710e001815402a5ec70626f55b4d7",
+    "formula_lab/data/v2/registry.json": "8f38553d9d2c5ed38d8f81b6d48fba8026a5f98bf29248c2df8b384a34abad96"
+  },
+  "scope": "Actual HTTP and Chromium with OpenRouter embedding retrieval; deterministic registry, no chat LLM. Source mutation cases are isolated."
+}

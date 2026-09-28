@@ -28,7 +28,11 @@ class CalculateRequest(BaseModel):
 @app.get('/')
 def home(): return FileResponse(ROOT/'formula_lab/static/index.html')
 @app.get('/api/lab/info')
-def info(): return {'strategy':CONFIG['strategy'],'examples':[c['title'] for c in SOURCES],'conditions':CONDITION_LABELS}
+def info():
+    documents=[{'file':name,'examples':[c['title'] for c in SOURCES if c['file']==name]}
+               for name in sorted({c['file'] for c in SOURCES})]
+    return {'strategy':CONFIG['strategy'],'examples':[c['title'] for c in SOURCES],
+            'documents':documents,'conditions':CONDITION_LABELS}
 @app.post('/api/lab/prepare')
 def form(req:PrepareRequest):
     global retriever

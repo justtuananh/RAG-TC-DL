@@ -20,7 +20,7 @@ def run(split,url,regression=False):
     # Abort before recording model/registry scores when the server is still starting.
     health=requests.get(url+'/api/lab/info',timeout=10)
     health.raise_for_status()
-    assert health.json()['strategy']=='registry' and len(health.json()['examples'])==26
+    assert health.json()['strategy']=='registry' and set(c['title'] for c in SOURCES)<=set(health.json()['examples'])
     cases=json.loads((DATA/(split+'-ucs.json')).read_text())
     frozen=json.loads((DATA/'UC-FREEZE.json').read_text())
     assert hashlib.sha256((DATA/(split+'-ucs.json')).read_bytes()).hexdigest()==frozen['hashes'][split+'-ucs.json']
@@ -82,7 +82,7 @@ def run(split,url,regression=False):
         'QTKĐ 1.190: độ phân giải', 'DPI 610: u_r',
         'DPI 610: độ phân giải tam giác và độ phân giải chữ nhật',
         'QTKĐ 1.190: F014', 'QTKĐ 1.190: F049', 'QTKĐ 1.190: F040',
-        'QTKĐ 1.160: độ phân giải tam giác', 'QTKĐ 1.159: u_ch1',
+        'QTKĐ 1.159: độ phân giải tam giác', 'QTKĐ 1.159: u_ch1',
         'Tính hệ số góc hồi quy', 'DPI 610 theo QTKĐ 1.071: u_amb',
         'QTKĐ 1.190: F034 và F035', 'DPI 610: F999',
     ]

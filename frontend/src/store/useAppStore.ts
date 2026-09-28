@@ -62,6 +62,7 @@ function makeInitialState(): AppState {
 
 export interface Actions {
   go: (tab: AppState["tab"]) => void;
+  setFormulaDirty: (dirty: boolean) => void;
   setInput: (v: string) => void;
   send: (text?: string) => void;
   regenerate: () => void;
@@ -140,6 +141,12 @@ export function useAppStore(): { state: AppState; actions: Actions } {
   const [state, set] = useReducer(reducer, undefined, makeInitialState);
   const stateRef = useRef(state);
   stateRef.current = state;
+
+  const formulaDirty = useRef(false);
+  const setFormulaDirty = useCallback((dirty: boolean) => {
+    formulaDirty.current = dirty;
+  }, []);
+  const mayLeaveFormula = () => !formulaDirty.current || window.confirm("Có chỉnh sửa công thức chưa lưu. Bỏ các chỉnh sửa này để tiếp tục?");
 
   const toastTimer = useRef<number | undefined>(undefined);
   const upTimer = useRef<number | undefined>(undefined);
@@ -287,7 +294,11 @@ export function useAppStore(): { state: AppState; actions: Actions } {
   };
 
   const actions: Actions = {
-    go: (tab) => set({ tab }),
+    setFormulaDirty,
+    go: (tab) => {
+      if (tab !== stateRef.current.tab && !mayLeaveFormula()) return;
+      set({ tab });
+    },
     setInput: (v) => set({ input: v }),
     send,
     regenerate: () => {
@@ -309,17 +320,22 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     },
     feedback: (type) => showToast(type === "up" ? "Cảm ơn phản hồi của bạn!" : "Đã ghi nhận — trợ lý sẽ cải thiện."),
     askSample: (q) => {
+      if (!mayLeaveFormula()) return;
       set({ tab: "chat" });
       window.setTimeout(() => send(q), 30);
     },
     newChat: () => {
+      if (!mayLeaveFormula()) return;
       abortRef.current?.abort();
-      set({ messages: [], proc: null, input: "", activeConvId: null, pinIndex: -1, streaming: false, liveSources: [] });
+      set({ tab: "chat", messages: [], proc: null, input: "", activeConvId: null, pinIndex: -1, streaming: false, liveSources: [] });
       showToast("Đã tạo hội thoại mới");
     },
-    openCite: (id) => set((s) => ({ tab: "chat", activeCite: id, pulse: s.pulse + 1 })),
+    openCite: (id) => {
+      if (!mayLeaveFormula()) return;
+      set((s) => ({ tab: "chat", activeCite: id, pulse: s.pulse + 1 }));
+    },
     openConv: (conv) => {
-      if (stateRef.current.renamingConv === conv.id) return;
+      if (stateRef.current.renamingConv === conv.id || !mayLeaveFormula()) return;
       abortRef.current?.abort();
       const stored = stateRef.current.conversations.find((c) => c.id === conv.id) || conv;
       // NẠP đúng hội thoại đã lưu — KHÔNG hỏi lại, KHÔNG gọi backend
@@ -400,10 +416,9 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         });
     },
     viewDoc: (d) => {
-      if (d.status && d.status !== "ready") {
-        showToast("Tài liệu đang được xử lý — vui lòng đợi");
-        return;
-      }
+      if (d.id !== stateRef.current.viewingDoc?.code && !mayLeaveFormula()) return;
+      // Tệp gốc đã được lưu khi upload; xem nguồn/phê duyệt công thức không
+      // phụ thuộc bước embedding hoặc trạng thái sẵn sàng tìm kiếm của tài liệu.
       // Hiện tệp gốc (.docx/.pdf) thô ngay; markdown chỉ tải nền làm phương án dự phòng
       // (ext không phải PDF/DOCX, hoặc tệp gốc không mở được trong trình duyệt).
       set({
@@ -420,10 +435,11 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         },
       });
       fetchDocumentMarkdown(d.id)
-        .then((markdown) => set((st) => (st.viewingDoc ? { viewingDoc: { ...st.viewingDoc, markdown } } : {})))
+        .then((markdown) => set((st) => (st.viewingDoc?.code === d.id ? { viewingDoc: { ...st.viewingDoc, markdown } } : {})))
         .catch(() => {});
     },
     openSourceDoc: () => {
+      if (!mayLeaveFormula()) return;
       const s = stateRef.current.liveSources.find((x) => String(x.index) === stateRef.current.activeCite) || stateRef.current.liveSources[0];
       if (!s) return;
       // doc thật trong danh sách (nếu có) — cung cấp ext/size/ngày/trạng thái thật cho panel "Thông tin tệp"
@@ -438,7 +454,10 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         .then((markdown) => set((st) => (st.viewingDoc ? { viewingDoc: { ...st.viewingDoc, markdown } } : {})))
         .catch(() => {});
     },
-    closeViewer: () => set({ viewingDoc: null }),
+    closeViewer: () => {
+      if (!mayLeaveFormula()) return;
+      set({ viewingDoc: null });
+    },
     setDocSearch: (v) => set({ docSearch: v, docPage: 1 }),
     setDocStatusFilter: (v) => set({ docStatusFilter: v, docPage: 1 }),
     setDocPageSize: (n) => set({ docPageSize: n, docPage: 1 }),

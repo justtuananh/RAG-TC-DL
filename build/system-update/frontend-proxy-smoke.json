@@ -1,0 +1,18 @@
+[
+  {
+    "mode": "dev",
+    "port": 15173,
+    "API_PORT": 18180,
+    "get_proxy": true,
+    "post_proxy": true,
+    "spa": true
+  },
+  {
+    "mode": "preview",
+    "port": 14173,
+    "API_PORT": 18180,
+    "get_proxy": true,
+    "post_proxy": true,
+    "spa": true
+  }
+]

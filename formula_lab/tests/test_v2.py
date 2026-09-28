@@ -39,7 +39,7 @@ def test_new_numeric_dev(uc):
 @pytest.mark.parametrize('query',[
     'QTKĐ 1.190: u_r', 'DPI 610: độ phân giải',
     'DPI 610: độ phân giải tam giác và độ phân giải chữ nhật',
-    'QTKĐ 1.160: độ phân giải tam giác',
+    'QTKĐ 1.159: độ phân giải tam giác',
     'QTKĐ 1.190: F014', 'QTKĐ 1.190: F049', 'QTKĐ 1.190: F004',
     'QTKĐ 1.190: F034 F035', 'DPI 610 theo QTKĐ 1.071: u_ch1',
     'Công thức trung bình áp suất chuẩn',

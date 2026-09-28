@@ -104,6 +104,13 @@ def process_one(f: Path, out_dir: Path) -> dict:
             })
     # Replace ⟦Fxxx⟧ placeholders with $LaTeX$ in Markdown
     md = res.markdown
+    cursor = 0
+    for fm, detail in zip(res.formulas, per_formula):
+        token = f'⟦{fm.fid}⟧' if fm.kind == 'ole' else f'${fm.latex}$'
+        at = res.markdown.find(token, cursor)
+        if at >= 0:
+            detail['context'] = res.markdown[max(0, at-700):at+len(token)+1200]
+            cursor = at+len(token)
     for fm in res.formulas:
         if fm.kind == "ole":
             replacement = f"${fm.latex}$" if fm.latex else "[công thức không đọc được]"

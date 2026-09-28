@@ -12,6 +12,14 @@ V2_DATA=DATA/'v2'
 V2_SOURCES=json.loads((V2_DATA/'sources.json').read_text()) if (V2_DATA/'sources.json').exists() else []
 V2_INPUT_KEYS={id:{v['key'] for v in spec['variables']} for id,spec in json.loads((V2_DATA/'registry.json').read_text()).items()} if V2_SOURCES else {}
 SOURCES+=V2_SOURCES
+V3_DATA=DATA/'v3'
+V3_SOURCES=json.loads((V3_DATA/'sources.json').read_text()) if (V3_DATA/'sources.json').exists() else []
+SOURCES+=V3_SOURCES
+REVIEWED_SOURCES=V2_SOURCES+V3_SOURCES
+REVIEW_DATA={c['id']:folder for folder,cards in [(V2_DATA,V2_SOURCES),(V3_DATA,V3_SOURCES)] for c in cards}
+INPUT_KEYS=dict(V2_INPUT_KEYS)
+if V3_SOURCES:
+    INPUT_KEYS.update({id:{v['key'] for v in spec['variables']} for id,spec in json.loads((V3_DATA/'registry.json').read_text()).items()})
 # Public symbol vocabulary normalizes input field keys across approaches, not equations or answers.
 GLOSSARY={
  'valve':{'pm':('P_{m}','Áp suất mở van','Pa'),'pcd':('P_{cd}','Áp suất chỉnh đặt','Pa')},
@@ -30,6 +38,7 @@ CONDITION_LABELS={
  'pressure_corrected':'Áp suất danh nghĩa đã được hiệu chỉnh theo gia tốc nơi đo.',
 }
 if (V2_DATA/'conditions.json').exists(): CONDITION_LABELS.update(json.loads((V2_DATA/'conditions.json').read_text()))
+if (V3_DATA/'conditions.json').exists(): CONDITION_LABELS.update(json.loads((V3_DATA/'conditions.json').read_text()))
 
 def norm(s):
     return ''.join(c for c in unicodedata.normalize('NFD',s.lower().replace('đ','d')) if not unicodedata.combining(c))
@@ -37,12 +46,18 @@ def norm(s):
 def select(question,passages=None):
     q=norm(question)
     procedures=re.findall(r'\bqtkd\s*[:\-]?\s*(\d+\.\d{3})\b',q)
-    dpi_scope='1.190' in procedures or bool(re.search(r'\bdpi\s*610\b',q))
+    scopes=set(procedures)
+    if re.search(r'\bdpi\s*610\b',q): scopes.add('1.190')
+    if re.search(r'\bh3000\b',q): scopes.add('1.071')
+    if len(scopes)>1: return None
+    scope=next(iter(scopes),None)
+    reviewed_scope=scope in {c.get('procedure','1.190') for c in REVIEWED_SOURCES}
+    pool=[c for c in REVIEWED_SOURCES if not scope or c.get('procedure','1.190')==scope]
     # Formula references use the displayed F001/F036 format. The measured
     # quantity f0 must never be interpreted as a nonexistent equation F000.
-    requested_fids=re.findall(r'\bf(\d{3})\b',q)
+    requested_fids=re.findall(r'\b([fp]\d{3})\b',q)
     matches=[]
-    for c in V2_SOURCES:
+    for c in pool:
         for alias in c['aliases']:
             matches.extend((c,m.start(),m.end()) for m in re.finditer(r'(?<!\w)'+re.escape(norm(alias))+r'(?!\w)',q))
     # A component name nested inside a more specific formula name is not a
@@ -52,19 +67,18 @@ def select(question,passages=None):
         for other,left,right in matches)]
     candidates=list({c['id']:c for c,start,end in matches if not (
         re.search(r'\b(?:tu|voi)\s*$',q[:start]) and any(
-            other['id']!=c['id'] and q[start:end] in V2_INPUT_KEYS.get(other['id'],set())
+            other['id']!=c['id'] and q[start:end] in INPUT_KEYS.get(other['id'],set())
             for other,left,right in matches))}.values())
     # The full catalog title can include names of intermediate quantities.
     # Only the exact example wrapper gets this disambiguation; multi-intent
     # natural-language requests still require clarification.
-    titled=[c for c in V2_SOURCES if q in (norm(c['title']), 'cong thuc '+norm(c['title'])+' la gi?')]
+    titled=[c for c in pool if q in (norm(c['title']), 'cong thuc '+norm(c['title'])+' la gi?')]
     if len(titled)==1: candidates=titled
-    if dpi_scope:
-        if any(code!='1.190' for code in procedures) or 'h3000' in q: return None
+    if reviewed_scope and (candidates or requested_fids or scope in ('1.160','1.190','1.159','1.062')):
         if requested_fids:
             if len(set(requested_fids))!=1: return None
-            fid=f'F{int(requested_fids[0]):03}'
-            by_fid=[c for c in V2_SOURCES if c['formulas'][0]['fid']==fid]
+            fid=requested_fids[0].upper()
+            by_fid=[c for c in pool if c['formulas'][0]['fid']==fid]
             if len(by_fid)!=1 or any(c['id']!=by_fid[0]['id'] for c in candidates): return None
             candidates=by_fid
         if len(candidates)!=1: return None
@@ -102,13 +116,20 @@ def prepare(card,strategy=None):
     try:
         if strategy=='registry':
             registry=json.loads((DATA/'registry.json').read_text())
-            if card['id'].startswith('dpi190_'):
-                registry=json.loads((V2_DATA/'registry.json').read_text())
-                approvals=json.loads((V2_DATA/'review_approvals.json').read_text())
+            if card['id'] in REVIEW_DATA:
+                folder=REVIEW_DATA[card['id']]
+                registry=json.loads((folder/'registry.json').read_text())
+                approvals=json.loads((folder/'review_approvals.json').read_text())
                 reviewed=approvals.get(card['id'],{})
                 spec_hash=hashlib.sha256(json.dumps(registry[card['id']],sort_keys=True,ensure_ascii=False).encode()).hexdigest()
                 if reviewed.get('spec_sha256')!=spec_hash or reviewed.get('card_fingerprint')!=canonical_fingerprint(card):
                     return {'status':'blocked','message':'Định nghĩa mới chưa khớp hồ sơ đối chiếu.'}
+                if folder==V3_DATA:
+                    labels=json.loads((folder/'conditions.json').read_text())
+                    used={key:labels[key] for key in registry[card['id']]['conditions']}
+                    condition_hash=hashlib.sha256(json.dumps(used,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
+                    if reviewed.get('conditions_sha256')!=condition_hash or any(CONDITION_LABELS.get(key)!=value for key,value in used.items()):
+                        return {'status':'blocked','message':'Điều kiện áp dụng đã thay đổi; cần đối chiếu lại.'}
             spec=copy.deepcopy(registry[card['id']])
             if card['source_status']!='technical-reviewed' or canonical_fingerprint(card)!=spec['source_fingerprint']:
                 return {'status':'blocked','message':'Công thức/nguồn chưa được đối chiếu hoặc đã thay đổi.'}

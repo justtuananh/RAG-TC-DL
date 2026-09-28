@@ -24,14 +24,44 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
-      # requirements-dev.txt ghim huggingface_hub<1.0 và qdrant-client==1.10.1 để
-      # tương thích với code (gradio 4.x + QdrantClient.search). Không cài
-      # requirements.txt (scikit-image nặng, không cần cho unit tier).
+      # Runtime lock matches Docker; test tools are separate from runtime.
       - name: Cài đặt phụ thuộc (cloud-feasible)
-        run: pip install -r requirements-app.txt -r requirements-dev.txt
+        run: pip install -r requirements-app.lock -r requirements-dev.txt && pip check
 
       # `make check PY=python` = đúng cổng chạy local → "xanh local ⇒ xanh CI".
       - name: Lint + fidelity + unit tests
         run: make check PY=python
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test -- --maxWorkers=2
+      - run: npm run lint
+      - run: npm run build
+
+  container-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Build only API/FE; no GPU models or real corpus are loaded here.
+      - run: docker compose config --quiet
+      - run: docker compose build api frontend
+      - name: Check API image imports and formula routes
+        run: >-
+          docker run --rm qtkd-app:local python -c
+          "from api_server import app; from formula_registry.store import Registry;
+          assert '/api/formula-drafts/{id}/calculate' in app.openapi()['paths'];
+          assert Registry().list('ci-empty-document') == []"

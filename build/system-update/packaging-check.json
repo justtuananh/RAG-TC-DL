@@ -1,0 +1,7 @@
+{
+  "compose_yaml_and_registry_mount": "pass",
+  "ci_yaml": "pass",
+  "isolated_docker_copy_layout_import": "Isolated Docker COPY layout imports and registry pass",
+  "docker_image_build": "not run: no Docker CLI/daemon",
+  "inference_gpu_runtime": "not run"
+}

@@ -1,18 +1,17 @@
-# Stage 2-3 dependencies (indexing + retrieval + Gradio app)
-# Install via: pip install -r requirements-app.txt
-# Used by: Dockerfile (app container), docker/indexer
-
-qdrant-client>=1.7,<2.0
-gradio>=5.0
-markdown>=3.5
-rank-bm25>=0.2.2
-requests>=2.31
-lxml>=5.0
-fastapi>=0.110
-uvicorn>=0.27
-
-# Document upload (api container): Stage 1 ingestion runs inside the container now
-olefile>=0.47          # read MathType "Equation Native" (MTEF) streams from OLE objects
-python-multipart>=0.0.9 # required by FastAPI's UploadFile / File() form parsing
-pymupdf>=1.24           # PDF -> Markdown (ingestion/extract_pdf.py) — text only, no formula recovery
-python-dotenv>=1.0      # load .env for local dev runs (generation.py: OLLAMA_MODEL / OLLAMA_URL)
+# Runtime: FastAPI/React API, ingestion, retrieval and legacy Gradio.
+# Python 3.12; install with pip install -r requirements-app.txt.
+# sqlite3, decimal and ast (formula registry/calculator) are Python stdlib.
+qdrant-client>=1.10,<2.0  # query_points(), supported by the Qdrant 1.10 server
+# Keep the legacy app on its tested Gradio major; do not silently migrate to 6.
+gradio>=5.0,<6.0
+markdown>=3.5,<4
+rank-bm25>=0.2.2,<0.3
+requests>=2.31,<3
+lxml>=5.0,<7
+fastapi>=0.115,<1
+pydantic>=2.7,<3         # ConfigDict + strict request fields in formula_registry/api.py
+uvicorn>=0.27,<1
+olefile>=0.47,<1
+python-multipart>=0.0.9,<1
+pymupdf>=1.24,<2        # PDF text only; no PDF formula registration
+python-dotenv>=1.0,<2

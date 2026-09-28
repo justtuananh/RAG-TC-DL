@@ -69,18 +69,19 @@ def test_md_to_html_renders_table():
 
 def test_bot_fn_no_results(monkeypatch):
     monkeypatch.setattr(app, "retrieve", lambda q, **k: [])
-    *_, last = app.bot_fn([["câu hỏi", None]])
+    *_, last = app.bot_fn([{"role": "user", "content": "câu hỏi"}])
     hist, _doc = last
-    assert hist[-1][1] == "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ."
+    assert hist[-1]["role"] == "assistant"
+    assert hist[-1]["content"] == "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ."
 
 
 def test_bot_fn_with_results_streams_and_appends_citations(monkeypatch):
     monkeypatch.setattr(app, "retrieve", lambda q, **k: [_r("nội dung")])
     monkeypatch.setattr(app, "_stream_ollama", lambda msgs: iter(["Trả ", "lời"]))
-    *_, last = app.bot_fn([["câu hỏi", None]])
+    *_, last = app.bot_fn([{"role": "user", "content": "câu hỏi"}])
     hist, _doc = last
-    assert hist[-1][1].startswith("Trả lời")
-    assert "Nguồn tham khảo" in hist[-1][1]
+    assert hist[-1]["content"].startswith("Trả lời")
+    assert "Nguồn tham khảo" in hist[-1]["content"]
 
 
 def test_bot_fn_retrieve_error_is_shown(monkeypatch):
@@ -88,6 +89,17 @@ def test_bot_fn_retrieve_error_is_shown(monkeypatch):
         raise RuntimeError("qdrant chết")
 
     monkeypatch.setattr(app, "retrieve", boom)
-    *_, last = app.bot_fn([["câu hỏi", None]])
+    *_, last = app.bot_fn([{"role": "user", "content": "câu hỏi"}])
     hist, _doc = last
-    assert "Lỗi tìm kiếm" in hist[-1][1]
+    assert "Lỗi tìm kiếm" in hist[-1]["content"]
+
+
+def test_legacy_numeric_refusal_appends_assistant_message(monkeypatch):
+    def unexpected(*args, **kwargs):
+        raise AssertionError("A numeric refusal must not call retrieval or the LLM")
+
+    monkeypatch.setattr(app, "retrieve", unexpected)
+    monkeypatch.setattr(app, "_stream_ollama", unexpected)
+    user = {"role": "user", "content": "Hãy tính sai số khi P = 100 bar"}
+    *_, (history, _) = app.bot_fn([user.copy()])
+    assert history == [user, {"role": "assistant", "content": app._REFUSAL_SENTENCE}]

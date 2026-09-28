@@ -1,0 +1,30 @@
+{
+  "original_results_unchanged": true,
+  "raw_pass": 25,
+  "locked_total": 32,
+  "raw_percent": 78.125,
+  "not_quality_percent": true,
+  "product_or_capability_nonpass": [
+    "N06",
+    "B08"
+  ],
+  "invalid_test_design": [
+    "N07",
+    "N08",
+    "U02"
+  ],
+  "blocked_harness": [
+    "U03",
+    "U04"
+  ],
+  "explanations": {
+    "N06": "Numerical stress exceeds preregistered relative1e-24; precision not an established product SLA",
+    "B08": "No whole-expression dimensional analysis; capability probe beyond existing per-variable unit checks",
+    "N07": "Expected Decimal90 string exceeds input parser60 characters; computation never reached",
+    "N08": "Same oracle serialization problem; computation never reached",
+    "U02": "Assumes confirmation for tab navigation although editor stays mounted/hidden; actual value retained",
+    "U03": "Runner did not switch back to formulas tab, save locator timeout",
+    "U04": "Blocked by previous UI harness timeout"
+  },
+  "conclusion": "Withdraw96 as general quality/capability or independent acceptance; retain historical checklist total only. No replacement overall quality percentage."
+}

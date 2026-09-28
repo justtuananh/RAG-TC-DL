@@ -56,3 +56,4 @@ design/_ref/
 # Formula experiments
 .venv-formula/
 .formula-runtime/
+.formula-registry/

@@ -3,13 +3,13 @@
 # run.sh — Bật BACKEND (api_server.py :8080) + FRONTEND (React :5173) cho QTKĐ RAG.
 #
 # Tương đương run_all.bat (Windows) cho macOS/Linux, nhưng:
-#   • tự chọn venv CÓ fastapi (ưu tiên ../kotaemon/.venv, fallback ./.venv)
+#   • chọn venv dự án có đủ runtime API, hoặc QTKD_PYTHON do người dùng đặt
 #   • tự dựng dịch vụ phụ thuộc qua Docker nếu thiếu (qdrant/embedding/reranker)
 #   • đảm bảo Ollama đang chạy
 #   • dọn tiến trình con khi Ctrl-C
 #
-# Lưu ý: frontend hiện MOCK-ONLY (chưa gọi /api) — backend vẫn bật để test SSE
-# trực tiếp và sẵn sàng khi nối UI. Xem frontend/README.md.
+# React gọi API thật: tra cứu, phê duyệt công thức và tính toán.
+# Form công thức dùng được khi service RAG chưa chạy. Xem frontend/README.md.
 #
 # Cách dùng:
 #   ./run.sh                 # bật full: (docker services nếu cần) + api + frontend dev
@@ -63,7 +63,7 @@ up() { curl -s -o /dev/null --max-time 2 "$1" 2>/dev/null; }   # 0 = có phản 
 
 # ── 1) Frontend deps ─────────────────────────────────────────────────────────
 if [ ! -d "$ROOT/frontend/node_modules" ]; then
-  info "Cài deps frontend (npm install)…"; ( cd "$ROOT/frontend" && npm install ) || { err "npm install lỗi"; exit 1; }
+  info "Cài deps frontend (npm ci)…"; ( cd "$ROOT/frontend" && npm ci ) || { err "npm ci lỗi"; exit 1; }
 fi
 
 start_frontend() {
@@ -84,14 +84,14 @@ if [ "$FRONTEND_ONLY" = 1 ]; then
   info "Ctrl-C để dừng."; wait; exit 0
 fi
 
-# ── 2) Chọn Python có fastapi (cho api_server.py) ────────────────────────────
+# ── 2) Chọn Python có runtime API (cho api_server.py) ────────────────────────────
 PY=""
-for cand in "$ROOT/../kotaemon/.venv/bin/python" "$ROOT/.venv/bin/python"; do
-  if [ -x "$cand" ] && "$cand" -c 'import fastapi, uvicorn' >/dev/null 2>&1; then PY="$cand"; break; fi
+for cand in "${QTKD_PYTHON:-}" "$ROOT/.venv-dev/bin/python" "$ROOT/.venv/bin/python" "$ROOT/.venv-formula/bin/python" "$ROOT/../kotaemon/.venv/bin/python"; do
+  if [ -x "$cand" ] && "$cand" -c 'import api_server, uvicorn; from pydantic import ConfigDict' >/dev/null 2>&1; then PY="$cand"; break; fi
 done
 if [ -z "$PY" ]; then
-  err "Không tìm thấy venv có fastapi+uvicorn (thử ../kotaemon/.venv hoặc ./.venv)."
-  err "Cài: <venv>/bin/pip install fastapi uvicorn"; exit 1
+  err "Không tìm thấy Python có đủ runtime API. Tạo .venv-dev hoặc đặt QTKD_PYTHON."
+  err "Cài: <venv>/bin/python -m pip install -r requirements-app.lock"; exit 1
 fi
 ok "Python API: $PY"
 

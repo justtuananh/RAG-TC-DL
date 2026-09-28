@@ -103,7 +103,9 @@ def calculate(spec,inputs,confirmations):
             if v.get('min') is not None:
                 low=Decimal(str(v['min']))
                 if n<low or (v.get('exclusive_min') and n==low): raise Invalid('Ngoài miền giá trị: '+v['key'])
-            if v.get('max') is not None and n>Decimal(str(v['max'])): raise Invalid('Ngoài miền giá trị: '+v['key'])
+            if v.get('max') is not None:
+                high=Decimal(str(v['max']))
+                if n>high or (v.get('exclusive_max') and n==high): raise Invalid('Ngoài miền giá trị: '+v['key'])
             normalized.append(n)
         values[v['key']]=normalized if is_series else normalized[0]
     if any(confirmations.get(c) is not True for c in spec.get('conditions',[])):
