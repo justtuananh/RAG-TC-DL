@@ -48,4 +48,16 @@ Không có text-to-SQL.
 
 ## Nhật ký
 
-(điền khi xong từng phần)
+- R1 (`42d6946`, `90df2a4`): sửa `vnnum` đọc `× 10-5` có khoảng trắng; bảng `record_field` + `measurement_point.cells` + `v_record_field`; `v_record_detail` lấy phạm vi đo của thiết bị (trước đây cả 20 biên bản hiện cùng khoảng "0,0015 đến 500 MPa" ghép từ ba dữ kiện QTKĐ).
+  Chạy migration 012 trên Postgres local (sao lưu trước ở scratchpad) và `records.backfill`: 20 biên bản, mỗi biên bản 21 trường, 700 dòng có `cells`, không trường nào bị bỏ.
+- R2 + R3 (`241ae42`): `record_lookup`, `records_summary`, danh mục trường, định tuyến tất định sau LLM.
+  Phát hiện thêm: prompt phân loại ~4 000 token trong khi `num_ctx` 4096, không còn chỗ cho câu trả lời; nâng lên 8192 (bằng `generation.NUM_CTX` và `OLLAMA_CONTEXT_LENGTH` của container).
+- Review (`a7c6c2b`): cực trị chỉ so trong một QTKĐ; số hiệu toàn chữ số cần chữ "số hiệu" hoặc từ chỉ thiết bị đứng trước; "áp kế"/"thiết bị" không còn mở nhánh số liệu từ `text`; lỗi DB của danh mục được ghi log.
+- R4: `make record-eval` 34/34 (20 câu gốc + 14 câu diễn đạt khác), `intent_eval --live` 102/102, `make check` xanh (1591 test).
+  E2E trên giao diện React (:5173) với API mới: câu 15 và câu 9 ra đúng bảng; cột được hỏi đưa lên đầu bảng.
+
+Còn mở:
+
+- Ngăn xuất xứ của tab chat đòi đăng nhập (`/api/data/provenance` cần token); đã kiểm xuất xứ ở backend, chưa bấm được trên giao diện khi chưa đăng nhập.
+- 20 biên bản chưa được đưa vào Qdrant; câu hỏi rơi về nhánh văn bản vẫn không tìm được nội dung biên bản.
+- `records_summary` đọc toàn bộ hồ sơ khớp bộ lọc vào Python rồi mới cắt 50 dòng; cần đẩy `COUNT`/`LIMIT` xuống SQL khi sổ cái lên hàng nghìn hồ sơ.

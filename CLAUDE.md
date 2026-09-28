@@ -99,6 +99,16 @@ answer + citations  ──►  UI (one of):
   con số kèm tham chiếu xuất xứ (P1) và trích dẫn sổ cái tách bạch với nguồn QTKĐ. Tích hợp ở
   `/api/chat/stream` (SSE event `data`, `done.branch`/`done.data`); câu trả lời nhánh số liệu
   không nhét số vào văn xuôi — frontend render bảng (`components/chat/DataResultTable.tsx`).
+- `query/record_*.py` — **tra cứu biên bản có cấu trúc** (Pha R). Hai intent `record_lookup`
+  (một biên bản theo số hiệu / số biên bản / ngày: trường được hỏi, bảng kết quả, căn cứ kết
+  luận không đạt) và `records_summary` (đếm / liệt kê / cực trị trên sổ cái, lọc theo người,
+  đơn vị phạm vi đo, ngày). Trường đầu mục của biên bản nằm ở bảng `record_field` (view
+  `v_record_field`), nguyên văn từng ô ở `measurement_point.cells`; `v_record_detail` lấy phạm
+  vi đo của CHÍNH thiết bị. `record_fields.py` dựng danh mục trường từ nhãn Phụ lục A đã duyệt
+  + bí danh ký hiệu (A0, uCmax, U(p)); `record_signals.py` sửa lựa chọn của LLM bằng định danh
+  khớp đúng sổ cái (chạy sau `disambiguate_catalogs`). Cực trị chỉ so biên bản cùng một QTKĐ.
+  Biên bản đã duyệt trước migration 012 được bổ sung bằng `python -m records.backfill`.
+  Prompt phân loại ở `query/intent_prompt.py` (~4 000 token → bộ phân loại dùng `num_ctx` 8192).
 - `frontend/` — **React 18 + TypeScript + Vite + Tailwind** web UI (Docker nginx on **:3000**,
   proxies `/api` → `api_server.py`; dev server is Vite on **:5173**). A 1:1 rebuild of
   `design/kiemdinh.html`, now **wired to the real backend**: `src/services/liveApi.ts`
@@ -121,6 +131,9 @@ answer + citations  ──►  UI (one of):
   parameter-validation fallback to `text`, zero untraceable numbers, and text questions never
   routed to the data branch. Runs a scripted classifier by default (no Ollama); `--live` measures
   the real model. Part of `make check` via `intent-eval`.
+- `eval/record_query_eval.py` — `make record-eval`: bộ 20 câu `Bo_20_cau` + câu diễn đạt khác
+  (`eval/record_query_set.jsonl`) chạy trên sổ cái thật (cần Postgres + Ollama, không nằm trong
+  `make check`); đạt khi intent đúng và bảng chứa đủ số liệu bắt buộc. Cổng ≥ 0.90.
 
 ## Two virtualenvs — this matters
 
