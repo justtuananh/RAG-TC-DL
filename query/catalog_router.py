@@ -18,7 +18,8 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from catalogs.text import fold
-from query import catalog_intents, catalogs as catalogs_query
+from query import catalog_intents
+from query import catalogs as catalogs_query
 from query.table_model import (
     CITATION_CAP,
     Cell,
@@ -35,6 +36,9 @@ CATALOG_NOTE = (
 )
 _ROW_LIMIT = 200
 _TOKEN_RE = re.compile(r"[\w\-]+", re.UNICODE)
+# Từ chung trong câu hỏi liệt kê chuẩn theo loại ("áp kế píttông chuẩn"): không
+# dùng để chấm điểm, nếu không chỉ các dòng có chữ "chuẩn" trong tên được giữ lại.
+_STANDARD_STOPWORDS = frozenset({"chuan", "mau", "cac", "nhung", "nao", "phong", "loai"})
 
 # Cột JSON cần chuẩn hoá: SQLite trả chuỗi, Postgres trả list/dict.
 _JSON_COLUMNS: dict[str, tuple[str, ...]] = {
@@ -126,8 +130,8 @@ def _filter_standards(
             for item in items
             if any(_ref_key(pair) == needle for pair in (item.get("usage_refs") or []))
         ]
-    if query:
-        tokens = _query_tokens(query)
+    tokens = [token for token in _query_tokens(query) if token not in _STANDARD_STOPWORDS]
+    if query and tokens:
         needle_compact = re.sub(r"\s+", "", fold(query))
         scored = [
             (score, item)
@@ -147,13 +151,13 @@ def _match_code(item: dict[str, Any], code: str) -> bool:
     if not needle or len(needle) < 3:
         return False
     candidates = [_norm_code(item.get("code_text"))]
-    candidates += [
-        _norm_code(entry.get("normalized")) for entry in (item.get("codes") or [])
-    ]
+    candidates += [_norm_code(entry.get("normalized")) for entry in (item.get("codes") or [])]
     if item.get("procedure_number"):
         candidates.append(_norm_code(str(item["procedure_number"])))
-    return any(candidate and (needle == candidate or needle in candidate or candidate in needle)
-               for candidate in candidates)
+    return any(
+        candidate and (needle == candidate or needle in candidate or candidate in needle)
+        for candidate in candidates
+    )
 
 
 def _procedure_haystack(item: dict[str, Any]) -> str:
@@ -204,7 +208,9 @@ def _cell(item: dict[str, Any], field_name: str, value: Any, *, numeric: bool = 
             "field": field_name,
             "quote": item.get("quote"),
         }
-    return Cell(text="—" if value in (None, "") else str(value), numeric=numeric, provenance=provenance)
+    return Cell(
+        text="—" if value in (None, "") else str(value), numeric=numeric, provenance=provenance
+    )
 
 
 def _catalog_citations(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -385,9 +391,7 @@ def resolve_procedure_catalog_lookup(
         items = [item for item in items if needle and needle in _procedure_haystack(item)]
     if params.group:
         needle = fold(params.group)
-        items = [
-            item for item in items if needle and needle in fold(item.get("group_title") or "")
-        ]
+        items = [item for item in items if needle and needle in fold(item.get("group_title") or "")]
     columns = [
         Column("ord", "TT"),
         Column("group_title", "Nhóm lĩnh vực"),

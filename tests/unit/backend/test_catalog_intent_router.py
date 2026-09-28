@@ -19,6 +19,7 @@ from catalogs.store import store_catalog_draft
 from db.models import Base, Document, DocumentType, Extraction, ExtractionStatus
 from db.views import create_all_approved_views
 from query import intents, router
+from query.signals import disambiguate_catalogs, looks_like_data_question
 
 NAS = Path(__file__).resolve().parents[2] / "data" / "nas"
 FIXTURES = (
@@ -192,3 +193,99 @@ def test_pending_catalog_hidden_until_approved():
         db.close()
         Base.metadata.drop_all(engine)
         engine.dispose()
+
+
+# ── Liệt kê chuẩn theo loại + gỡ nhầm intent sang chuẩn mẫu ───────────────────
+
+# Gồm cả "Áp chân không kế píttông" (586): cũng là chuẩn kiểu píttông.
+PISTON_SERIALS = {"1274", "586", "5393", "651", "994", "92", "2113021", "2113011", "2338"}
+
+
+@pytest.mark.parametrize("query", ["áp kế píttông", "áp kế pittông chuẩn", "Áp kế píttông chuẩn"])
+def test_lab_standard_by_type_name_lists_every_match(session, query):
+    # "chuẩn" là từ chung: không được thu hẹp danh sách về hai chuẩn WIKA có chữ "chuẩn".
+    result = _payload(session, {"intent": "lab_standard_lookup", "params": {"query": query}})
+    serials = {row["serial"].text for row in result.tables[0].rows}
+    assert serials == PISTON_SERIALS
+
+
+def test_catalog_gate_opens_for_listing_standards_by_type():
+    assert looks_like_data_question("Phòng có những áp kế píttông chuẩn nào?")
+    assert looks_like_data_question("Các chuẩn nhiệt độ của phòng gồm những gì?")
+
+
+def _disambiguate(session, question: str, payload: dict) -> dict:
+    return disambiguate_catalogs({"branch": "data", **payload}, question, session)
+
+
+def test_lab_standard_without_params_rescues_type_name(session):
+    question = "Phòng có những áp kế píttông chuẩn nào?"
+    fixed = _disambiguate(session, question, {"intent": "lab_standard_lookup", "params": {}})
+    assert fixed["intent"] == "lab_standard_lookup"
+    assert fixed["params"] == {"query": "áp kế píttông"}
+
+
+def test_procedure_params_on_standard_model_goes_to_lab_standard(session):
+    question = "Chuẩn Fluke 7302 số 1274 có phạm vi đo và độ không đảm bảo đo thế nào?"
+    fixed = _disambiguate(
+        session,
+        question,
+        {"intent": "procedure_params", "params": {"device_type": "Fluke 7302", "serial": "1274"}},
+    )
+    assert fixed["intent"] == "lab_standard_lookup"
+    result = _payload(session, fixed)
+    assert [row["serial"].text for row in result.tables[0].rows] == ["1274"]
+
+
+def test_usage_ref_goes_to_lab_standard(session):
+    question = "Liệt kê các chuẩn dùng cho mục VI.1 của Biểu 1"
+    fixed = _disambiguate(
+        session, question, {"intent": "standards_for", "params": {"usage_ref": "VI.1"}}
+    )
+    assert fixed["intent"] == "lab_standard_lookup"
+    assert fixed["params"] == {"usage_ref": "VI.1"}
+    result = _payload(session, fixed)
+    assert "20373-3" in {row["serial"].text for row in result.tables[0].rows}
+
+
+def test_procedure_params_for_device_type_stays(session):
+    question = "Phạm vi đo của áp kế píttông là bao nhiêu?"
+    payload = {"intent": "procedure_params", "params": {"device_type": "áp kế píttông"}}
+    assert _disambiguate(session, question, payload)["intent"] == "procedure_params"
+
+
+def test_text_branch_is_never_opened_by_disambiguation(session):
+    payload = {"branch": "text", "intent": "text", "params": {}}
+    question = "Phòng có những áp kế píttông chuẩn nào?"
+    assert disambiguate_catalogs(payload, question, session) == payload
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {"intent": "procedure_catalog_lookup", "params": {"group": "áp kế pít-tông"}},
+        {"intent": "capability_lookup", "params": {"keyword": "áp kế píttông"}},
+    ],
+)
+def test_listing_standards_by_type_overrides_other_catalogs(session, payload):
+    # Tên loại lấy nguyên văn từ câu hỏi (LLM hay đổi chính tả "pít-tông").
+    fixed = _disambiguate(session, "Phòng có những áp kế píttông chuẩn nào?", payload)
+    assert fixed["intent"] == "lab_standard_lookup"
+    assert fixed["params"] == {"query": "áp kế píttông"}
+
+
+@pytest.mark.parametrize(
+    ("question", "payload"),
+    [
+        (
+            "QTKĐ 3.204 dùng những phương tiện chuẩn nào?",
+            {"intent": "standards_for", "params": {"procedure_number": "3.204"}},
+        ),
+        (
+            "Thiết bị 6112 được kiểm bằng những áp kế chuẩn nào?",
+            {"intent": "device_history", "params": {"serial": "6112"}},
+        ),
+    ],
+)
+def test_listing_cue_does_not_steal_procedure_or_device_questions(session, question, payload):
+    assert _disambiguate(session, question, payload)["intent"] == payload["intent"]

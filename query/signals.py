@@ -59,6 +59,8 @@ _SERIAL_TOKEN_RE = re.compile(r"[\w\-]+", re.UNICODE)
 _CATALOG_SIGNAL_RE = re.compile(
     r"("
     r"chuẩn mẫu|chuan mau|"
+    r"chuẩn nào|chuan nao|những chuẩn|nhung chuan|các chuẩn|cac chuan|"
+    r"\bptđ\b|\bpttn\b|"
     r"kiểm định viên|kiem dinh vien|\bkdv\b|"
     r"số thẻ|so the|"
     r"chứng nhận|chung nhan|được công nhận|duoc cong nhan|"
@@ -150,7 +152,9 @@ def looks_like_data_question(question: str, session: Any | None = None) -> bool:
         serials = ledger_serials(session)
         if serials and tokens & serials:
             return True
-        catalog_tokens, catalog_codes, catalog_phrases = catalogs_query.catalog_signal_terms(session)
+        catalog_tokens, catalog_codes, catalog_phrases = catalogs_query.catalog_signal_terms(
+            session
+        )
         if catalog_tokens and {fold(token) for token in tokens} & catalog_tokens:
             return True
         compact = re.sub(r"\s+", "", fold(text))
@@ -168,6 +172,9 @@ def looks_like_data_question(question: str, session: Any | None = None) -> bool:
 # không đổi hành vi cũ và KHÔNG bao giờ tự mở nhánh số liệu từ ``text``.
 
 _DEVICE_INTENTS: frozenset[str] = frozenset({"device_history", "latest_record", "error_trend"})
+_NON_STANDARD_CATALOG_INTENTS: frozenset[str] = frozenset(
+    {"procedure_catalog_lookup", "capability_lookup", "inspector_lookup"}
+)
 _DEVICE_TYPE_CUES_RE = re.compile(r"quy trình|tiêu chuẩn", re.IGNORECASE)
 _GROUP_CUES_RE = re.compile(r"thuộc lĩnh vực|lĩnh vực|nhóm", re.IGNORECASE)
 # Trích mã quy trình/tiêu chuẩn và tên thiết bị khi LLM bỏ trống tham số.
@@ -177,6 +184,10 @@ _CODE_RE = re.compile(
 _PROC_IS_RE = re.compile(r"quy trình kiểm định\s+(.+?)\s+là gì", re.IGNORECASE)
 _STD_IS_RE = re.compile(r"tiêu chuẩn\s+(.+?)\s+là gì", re.IGNORECASE)
 _USAGE_REF_RE = re.compile(r"\b([IVXLC]+\.\d+)\b")
+# Liệt kê chuẩn theo loại: "những áp kế píttông chuẩn nào" -> "áp kế píttông".
+_STANDARD_TYPE_RE = re.compile(
+    r"(?:những|các)\s+(.+?)\s+chuẩn(?:\s+mẫu)?\s+(?:nào|gì)\b", re.IGNORECASE
+)
 # Ranh giới Biểu 4 (danh mục quy trình) vs Biểu 1 (lĩnh vực công nhận).
 _CAPABILITY_CUES_RE = re.compile(
     r"được công nhận|công nhận|chứng nhận|dải đo|cấp chính xác|"
@@ -184,9 +195,7 @@ _CAPABILITY_CUES_RE = re.compile(
     r"áp dụng quy trình nào|theo quy trình nào",
     re.IGNORECASE,
 )
-_PROC_IS_QUESTION_RE = re.compile(
-    r"(?:quy trình|tiêu chuẩn)[^.?!]{0,60}là gì", re.IGNORECASE
-)
+_PROC_IS_QUESTION_RE = re.compile(r"(?:quy trình|tiêu chuẩn)[^.?!]{0,60}là gì", re.IGNORECASE)
 # Suy keyword lĩnh vực công nhận khi LLM chọn đúng intent nhưng bỏ trống tham số.
 _CAPABILITY_RESCUE_RE = re.compile(
     r"(?:lĩnh vực|thiết bị|phương tiện|đại lượng)\s+(.+?)\s+"
@@ -233,6 +242,11 @@ def _rescue_lab_standard(
     found = _match_standard_phrase(question, phrases)
     if found:
         return {"query": found}
+    match = _STANDARD_TYPE_RE.search(question or "")
+    if match:
+        type_name = match.group(1).strip(" ,;")
+        if type_name:
+            return {"query": type_name}
     return None
 
 
@@ -254,6 +268,18 @@ def _match_standard_phrase(question: str, phrases: frozenset[str] | set[str]) ->
     if not matches:
         return None
     return max(matches, key=len)
+
+
+def _standard_values(
+    params: dict[str, Any], tokens: frozenset[str], phrases: frozenset[str]
+) -> list[str]:
+    """Giá trị tham số trùng số hiệu/ký hiệu chuẩn mẫu đã duyệt, giữ thứ tự khoá."""
+    values: list[str] = []
+    for key in ("device_type", "serial", "query"):
+        value = str(params.get(key) or "").strip()
+        if value and (fold(value) in tokens or _match_standard_phrase(value, phrases)):
+            values.append(value)
+    return values
 
 
 def disambiguate_catalogs(
@@ -284,6 +310,20 @@ def disambiguate_catalogs(
             "params": new_params,
             "confidence": payload.get("confidence", 0.9),
         }
+
+    # Mục sử dụng của Biểu 1 ("mục VI.1") chỉ có ở danh mục chuẩn mẫu.
+    usage_ref = str(params.get("usage_ref") or "").strip()
+    if usage_ref and intent != "lab_standard_lookup":
+        return override("lab_standard_lookup", {"usage_ref": usage_ref})
+
+    # "Phòng có những <loại> chuẩn nào" là câu liệt kê chuẩn mẫu, không phải danh
+    # mục quy trình/lĩnh vực; tên loại lấy nguyên văn từ câu hỏi. Chỉ sửa giữa các
+    # danh mục NAS: "QTKĐ X dùng những phương tiện chuẩn nào" vẫn là standards_for.
+    type_match = _STANDARD_TYPE_RE.search(question or "")
+    if type_match and intent in _NON_STANDARD_CATALOG_INTENTS:
+        type_name = type_match.group(1).strip(" ,;")
+        if type_name:
+            return override("lab_standard_lookup", {"query": type_name})
 
     # Ranh giới Biểu 4 vs Biểu 1: câu nêu "được công nhận", "dải đo", "mấy KĐV",
     # "áp dụng quy trình nào" mà không có mã quy trình -> lĩnh vực công nhận.
@@ -328,6 +368,13 @@ def disambiguate_catalogs(
 
     if intent in ("procedure_params", "standards_for"):
         number = str(params.get("procedure_number") or "").strip()
+        # "Chuẩn Fluke 7302 số 1274 có phạm vi đo..." : LLM hay coi ký hiệu chuẩn là
+        # loại thiết bị của QTKĐ. Chỉ chuyển khi không nêu số QTKĐ.
+        standard_values = _standard_values(params, tokens, phrases)
+        if standard_values and not number:
+            return override("lab_standard_lookup", {"query": " ".join(standard_values)})
+        if not number and (ref_match := _USAGE_REF_RE.search(question or "")):
+            return override("lab_standard_lookup", {"usage_ref": ref_match.group(1)})
         if number:
             try:
                 kho = catalogs_query.kho_procedure_numbers(session)
@@ -347,10 +394,7 @@ def disambiguate_catalogs(
             kho_devices = catalogs_query.kho_device_types(session)
         except Exception:  # noqa: BLE001 - thiếu DB thì giữ nguyên
             return payload
-        if (
-            _DEVICE_TYPE_CUES_RE.search(question or "")
-            and fold(device_type) not in kho_devices
-        ):
+        if _DEVICE_TYPE_CUES_RE.search(question or "") and fold(device_type) not in kho_devices:
             return override("procedure_catalog_lookup", {"keyword": device_type})
     # Hỏi một quy trình/tiêu chuẩn "là gì" -> danh mục quy trình (Biểu 4).
     if intent == "capability_lookup" and _PROC_IS_QUESTION_RE.search(question or ""):
