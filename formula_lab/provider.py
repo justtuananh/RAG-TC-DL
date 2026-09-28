@@ -1,6 +1,7 @@
 """Secrets never enter requests persisted in the research artifacts."""
 import json
 import os
+import re
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -27,7 +28,12 @@ def completion(messages):
                 'provider':response.model_dump().get('provider',response._hidden_params.get('custom_llm_provider')),
                 'response_cost':response._hidden_params.get('response_cost'),
                 'response_id':response.id}
-    return json.loads(raw), metadata
+    raw = re.sub(r'^```(?:json)?\s*|\s*```$', '', raw.strip())
+    try:
+        parsed = json.loads(raw)
+    except ValueError:
+        parsed = {'blocked': True, 'parse_error': 'invalid_json'}
+    return parsed, metadata
 
 
 def embeddings(texts):
