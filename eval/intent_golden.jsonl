@@ -69,3 +69,34 @@
 {"question": "Số hiệu 6112 thay đổi sai số thế nào qua các năm", "branch": "data", "intent": "error_trend", "params": {"serial": "6112"}, "confidence": 0.92}
 {"question": "Cấp chính xác của áp kế píttông chuẩn được quy định ra sao?", "branch": "text"}
 {"question": "Nhiệt độ chuẩn khi hiệu chuẩn quả cân píttông là bao nhiêu?", "branch": "text"}
+{"question": "Chuẩn hiệu MΠ-60M có chu kỳ hiệu chuẩn bao lâu", "branch": "data", "intent": "lab_standard_lookup", "params": {"query": "MΠ-60M"}, "confidence": 0.92}
+{"question": "Chuẩn mẫu nào phục vụ mục IV.3 của Biểu 1", "branch": "data", "intent": "lab_standard_lookup", "params": {"usage_ref": "IV.3"}, "confidence": 0.9}
+{"question": "Áp kế lò xo chuẩn MO-1226 số hiệu 3967 hiệu chuẩn gần nhất khi nào", "branch": "data", "intent": "lab_standard_lookup", "params": {"query": "3967"}, "confidence": 0.91}
+{"question": "Chuẩn mẫu số hiệu 651 có đặc tính đo lường gì", "branch": "data", "intent": "lab_standard_lookup", "params": {"query": "651"}, "confidence": 0.91}
+{"question": "Danh sách kiểm định viên được chứng nhận đo dung tích", "branch": "data", "intent": "inspector_lookup", "params": {"field": "dung tích"}, "confidence": 0.91}
+{"question": "Kiểm định viên Nguyễn Thị Hương có số thẻ là bao nhiêu", "branch": "data", "intent": "inspector_lookup", "params": {"name": "Nguyễn Thị Hương"}, "confidence": 0.93}
+{"question": "Cho biết trình độ của kiểm định viên Vũ Đức Tuấn", "branch": "data", "intent": "inspector_lookup", "params": {"name": "Vũ Đức Tuấn"}, "confidence": 0.92}
+{"question": "Có bao nhiêu kiểm định viên được chứng nhận đo độ pH", "branch": "data", "intent": "inspector_lookup", "params": {"field": "độ pH"}, "confidence": 0.9}
+{"question": "QTKĐ 1.039 : 2001 là quy trình gì, cơ quan nào ban hành", "branch": "data", "intent": "procedure_catalog_lookup", "params": {"code": "QTKĐ 1.039:2001"}, "confidence": 0.92}
+{"question": "Liệt kê các quy trình thuộc nhóm lĩnh vực nhiệt độ, độ ẩm", "branch": "data", "intent": "procedure_catalog_lookup", "params": {"group": "nhiệt độ, độ ẩm"}, "confidence": 0.91}
+{"question": "Quy trình kiểm định nhiệt kế điện trở là gì", "branch": "data", "intent": "procedure_catalog_lookup", "params": {"keyword": "nhiệt kế điện trở"}, "confidence": 0.9}
+{"question": "ĐLVN 263 : 2014 do cấp nào ban hành", "branch": "data", "intent": "procedure_catalog_lookup", "params": {"code": "ĐLVN 263:2014"}, "confidence": 0.9}
+{"question": "Danh mục quy trình áp dụng cho thiết bị đo độ pH", "branch": "data", "intent": "procedure_catalog_lookup", "params": {"keyword": "độ pH"}, "confidence": 0.9}
+{"question": "Phòng được công nhận kiểm định áp kế píttông với dải đo nào", "branch": "data", "intent": "capability_lookup", "params": {"keyword": "áp kế píttông"}, "confidence": 0.91}
+{"question": "Lĩnh vực van an toàn có bao nhiêu kiểm định viên", "branch": "data", "intent": "capability_lookup", "params": {"keyword": "van an toàn"}, "confidence": 0.92}
+{"question": "Thiết bị đo độ dẫn điện được công nhận theo quy trình nào", "branch": "data", "intent": "capability_lookup", "params": {"keyword": "độ dẫn điện"}, "confidence": 0.9}
+{"question": "Phòng được công nhận hiệu chuẩn nhiệt kế với dải đo ra sao", "branch": "data", "intent": "capability_lookup", "params": {"keyword": "nhiệt kế"}, "confidence": 0.9}
+{"question": "Mã số quy trình kiểm định được cấp theo quy tắc nào", "branch": "text"}
+{"question": "Tần suất hiệu chuẩn định kỳ dựa trên tiêu chí nào", "branch": "text"}
+{"question": "Tiêu chí đánh giá năng lực phòng thí nghiệm gồm những gì", "branch": "text"}
+{"question": "Cấp bậc và chức vụ ảnh hưởng thế nào tới phân công kiểm định", "branch": "text"}
+{"question": "Ký hiệu chuẩn Fluke 5624-20-B có chu kỳ hiệu chuẩn bao nhiêu lâu", "branch": "data", "intent": "lab_standard_lookup", "params": {"query": "Fluke 5624-20-B"}, "confidence": 0.91}
+{"question": "Chuẩn hiệu KYDO 400 lần hiệu chuẩn gần nhất là tháng nào", "branch": "data", "intent": "lab_standard_lookup", "params": {"query": "KYDO 400"}, "confidence": 0.91}
+{"question": "Hạn hiệu chuẩn kế tiếp của chuẩn TESON II", "branch": "data", "intent": "lab_standard_lookup", "params": {"query": "TESON II"}, "confidence": 0.9}
+{"question": "Ai trong phòng kiểm định được thiết bị đo độ dẫn điện", "branch": "data", "intent": "inspector_lookup", "params": {"field": "độ dẫn điện"}, "confidence": 0.9}
+{"question": "Những ai có thể hiệu chuẩn phương tiện đo dung tích", "branch": "data", "intent": "inspector_lookup", "params": {"field": "dung tích"}, "confidence": 0.9}
+{"question": "Kiểm định viên nào hiệu chuẩn được đồng hồ tốc độ vòng quay", "branch": "data", "intent": "inspector_lookup", "params": {"field": "tốc độ vòng quay"}, "confidence": 0.91}
+{"question": "Lĩnh vực thiết bị đo độ dẫn điện được công nhận với dải đo nào", "branch": "data", "intent": "capability_lookup", "params": {"keyword": "độ dẫn điện"}, "confidence": 0.91}
+{"question": "Lĩnh vực cột đo xăng dầu áp dụng quy trình nào", "branch": "data", "intent": "capability_lookup", "params": {"keyword": "cột đo xăng dầu"}, "confidence": 0.9}
+{"question": "Mã quy trình ĐLVN 10 : 2017 là gì", "branch": "data", "intent": "procedure_catalog_lookup", "params": {"code": "ĐLVN 10:2017"}, "confidence": 0.91}
+{"question": "Danh mục quy trình nhóm thử nghiệm môi trường", "branch": "data", "intent": "procedure_catalog_lookup", "params": {"group": "thử nghiệm môi trường"}, "confidence": 0.9}

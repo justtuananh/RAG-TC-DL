@@ -22,7 +22,6 @@ import json
 import logging
 import os
 import re
-import time
 from dataclasses import dataclass
 from datetime import date, datetime
 from typing import Annotated, Any, Literal, Protocol
@@ -36,6 +35,14 @@ from pydantic import (
     model_validator,
 )
 
+from query.catalog_intents import (
+    CATALOG_INTENT_NAMES,
+    CATALOG_PARAM_ALIASES,
+    CATALOG_PARAM_MODELS,
+    CATALOG_REQUESTS,
+)
+from query.signals import disambiguate_catalogs, looks_like_data_question
+
 logger = logging.getLogger(__name__)
 
 # ── Danh mục intent (spec §8) ─────────────────────────────────────────────────
@@ -48,6 +55,10 @@ IntentName = Literal[
     "devices_by_range",
     "standards_for",
     "error_trend",
+    "lab_standard_lookup",
+    "inspector_lookup",
+    "procedure_catalog_lookup",
+    "capability_lookup",
 ]
 
 Branch = Literal["text", "data", "mixed"]
@@ -61,6 +72,7 @@ INTENT_NAMES: tuple[str, ...] = (
     "devices_by_range",
     "standards_for",
     "error_trend",
+    *CATALOG_INTENT_NAMES,
 )
 
 # Mô tả intent + tham số cho prompt phân loại. Giữ ngắn gọn, đúng khoá JSON.
@@ -112,6 +124,57 @@ INTENT_CATALOG: dict[str, dict[str, Any]] = {
         "params": {
             "serial": "số hiệu thiết bị (chuỗi)",
             "step_code": "mã mục đo, ví dụ '6.3.1' (có thể bỏ trống)",
+        },
+    },
+    "lab_standard_lookup": {
+        "mo_ta": (
+            "Danh mục chuẩn mẫu/PTĐ/PTTN: tên, ký hiệu (model), số hiệu, đặc tính đo lường, "
+            "chu kỳ KĐ/HC, lần KĐ/HC gần nhất và nơi thực hiện, hạn kế tiếp ước tính. "
+            "Dùng khi câu hỏi nhắc tới CHUẨN (chuẩn mẫu, PTĐ, PTTN), kể cả khi chỉ nêu KÝ "
+            "HIỆU/MODEL (có thể nhiều từ, ví dụ 'Fluke 5624-20-B', 'Thunder 1200', 'TESON II') "
+            "mà không nói 'chuẩn'; KHÔNG phải thiết bị cần kiểm."
+        ),
+        "params": {
+            "query": "tên/ký hiệu/số hiệu chuẩn mẫu (có thể bỏ trống nếu có usage_ref)",
+            "usage_ref": "mục sử dụng, ví dụ 'IV.1' (có thể bỏ trống nếu có query)",
+        },
+    },
+    "inspector_lookup": {
+        "mo_ta": (
+            "Danh sách kiểm định viên: họ tên, cấp bậc/chức vụ, trình độ, chuyên ngành, "
+            "lĩnh vực được chứng nhận, số thẻ. Dùng khi hỏi kiểm định viên/KĐV, 'ai được', "
+            "'ai có thể', 'kiểm định viên nào' kiểm định/hiệu chuẩn một loại thiết bị hay "
+            "đại lượng (điền loại thiết bị/đại lượng vào field), hoặc hỏi số thẻ."
+        ),
+        "params": {
+            "name": "họ tên kiểm định viên (có thể bỏ trống)",
+            "field": "loại thiết bị/đại lượng được chứng nhận, ví dụ 'nhiệt độ' (có thể bỏ trống)",
+        },
+    },
+    "procedure_catalog_lookup": {
+        "mo_ta": (
+            "Danh mục tiêu chuẩn, quy trình áp dụng (Biểu 4): nhóm lĩnh vực, số hiệu, tên quy "
+            "trình, cấp ban hành, năm ban hành. Dùng khi hỏi MỘT quy trình/tiêu chuẩn 'là gì', "
+            "mã quy trình X 'là gì', cấp nào ban hành, hoặc liệt kê quy trình theo nhóm lĩnh "
+            "vực/tên thiết bị ('danh mục quy trình nhóm Y'). KHÔNG dùng cho câu hỏi về lĩnh "
+            "vực được công nhận của phòng (dải đo, số KĐV)."
+        ),
+        "params": {
+            "code": "số hiệu quy trình, ví dụ 'QTKĐ 1.019:2014' (có thể bỏ trống)",
+            "keyword": "tên thiết bị, ví dụ 'nhiệt kế thủy tinh' (có thể bỏ trống)",
+            "group": "nhóm lĩnh vực, ví dụ 'dung tích, lưu lượng' (có thể bỏ trống)",
+        },
+    },
+    "capability_lookup": {
+        "mo_ta": (
+            "Lĩnh vực KĐ/HC được công nhận (Biểu 1): tên đại lượng/trang bị, dải đo/cấp chính "
+            "xác, quy trình áp dụng, số kiểm định viên, hình thức công nhận. Dùng khi hỏi PHÒNG "
+            "hoặc 'lĩnh vực <thiết bị>' được công nhận kiểm định/hiệu chuẩn ra sao, áp dụng "
+            "quy trình nào, dải đo/CCX nào, mấy KĐV. KHÔNG dùng cho câu hỏi 'quy trình <thiết "
+            "bị> là gì' hay 'mã quy trình X là gì' (đó là procedure_catalog_lookup)."
+        ),
+        "params": {
+            "keyword": "tên đại lượng/trang bị, ví dụ 'van an toàn'",
         },
     },
 }
@@ -212,6 +275,9 @@ _PARAM_KEY_ALIASES: dict[str, str] = {
     "step": "step_code",
     "buoc": "step_code",
 }
+
+# Gộp từ đồng nghĩa riêng của bốn intent danh mục (không trùng khoá trên).
+_PARAM_KEY_ALIASES.update(CATALOG_PARAM_ALIASES)
 
 
 def normalize_param_keys(params: dict[str, Any] | None) -> dict[str, Any]:
@@ -351,6 +417,27 @@ def extract_date_range(question: str) -> dict[str, str]:
     return {}
 
 
+_INTENT_ALIASES: dict[str, str] = {
+    "lab_standard": "lab_standard_lookup",
+    "standard_lookup": "lab_standard_lookup",
+    "standards_lookup": "lab_standard_lookup",
+    "inspector": "inspector_lookup",
+    "inspectors_lookup": "inspector_lookup",
+    "capability": "capability_lookup",
+    "capabilities_lookup": "capability_lookup",
+    "procedure_catalog": "procedure_catalog_lookup",
+    "catalog_lookup": "procedure_catalog_lookup",
+}
+
+
+def _resolve_intent_alias(intent: str, params: dict[str, Any]) -> str:
+    """Đưa tên intent gần đúng của model nhỏ về tên chuẩn; giữ nguyên nếu lạ."""
+    if intent == "procedure_lookup":
+        # Có số QTKĐ thì là thông số QTKĐ, ngược lại là danh mục quy trình.
+        return "procedure_params" if params.get("procedure_number") else "procedure_catalog_lookup"
+    return _INTENT_ALIASES.get(intent, intent)
+
+
 def sanitize_classification(
     payload: dict[str, Any] | None, question: str
 ) -> dict[str, Any] | None:
@@ -360,6 +447,8 @@ def sanitize_classification(
     result = dict(payload)
     params = ground_params(normalize_param_keys(payload.get("params")), question)
     intent = str(result.get("intent") or "").strip().lower()
+    intent = _resolve_intent_alias(intent, params)
+    result["intent"] = intent
     if intent == "records_by_period":
         dates = extract_date_range(question)
         if dates:
@@ -473,7 +562,11 @@ IntentRequest = Annotated[
     | ProcedureParamsRequest
     | DevicesByRangeRequest
     | StandardsForRequest
-    | ErrorTrendRequest,
+    | ErrorTrendRequest
+    | CATALOG_REQUESTS[0]
+    | CATALOG_REQUESTS[1]
+    | CATALOG_REQUESTS[2]
+    | CATALOG_REQUESTS[3],
     Field(discriminator="intent"),
 ]
 
@@ -487,6 +580,7 @@ PARAM_MODELS: dict[str, type[BaseModel]] = {
     "devices_by_range": DevicesByRangeParams,
     "standards_for": StandardsForParams,
     "error_trend": ErrorTrendParams,
+    **CATALOG_PARAM_MODELS,
 }
 
 
@@ -592,112 +686,6 @@ DEFAULT_OLLAMA_URL = "http://localhost:11434/v1/chat/completions"
 DEFAULT_MODEL = "qwen2.5:1.5b"
 _TRUTHY = {"1", "true", "yes", "on"}
 
-# Tín hiệu thô buộc phải gọi LLM phân loại. Không có tín hiệu nào → chắc chắn là
-# câu hỏi văn bản, bỏ qua LLM (giữ nguyên trải nghiệm RAG văn bản, không thêm độ
-# trễ). Cổng này CHỈ bao giờ trả về ``text`` nên không thể định tuyến nhầm sang
-# nhánh số liệu. Cố ý KHÔNG khớp các từ chung như "kiểm định"/"thiết bị" — câu hỏi
-# quy định (sai số, điều kiện, công thức) vẫn đi thẳng pipeline văn bản.
-_DATA_SIGNAL_RE = re.compile(
-    r"("
-    r"số hiệu|so hieu|serial|\bsn[\s\-_]?\w|"
-    r"hồ sơ|ho so|biên bản|bien ban|"
-    r"lịch sử|lich su|gần nhất|gan nhat|lần cuối|lan cuoi|"
-    r"lần gần đây nhất|lan gan day nhat|khi nào hết hạn|khi nao het han|hết hạn|het han|"
-    r"đã kiểm mấy lần|da kiem may lan|kiểm mấy lần|kiem may lan|"
-    r"không đạt|khong dat|"
-    r"từ ngày|tu ngay|đến ngày|den ngay|trong năm|trong tháng|trong khoảng|"
-    r"khoảng thời gian|khoang thoi gian|năm 20\d\d|"
-    r"phạm vi đo|pham vi do|xu hướng|xu huong|diễn biến sai số|dien bien sai so|"
-    r"phương tiện kiểm định|phuong tien kiem dinh|bảng 2|bang 2|"
-    r"bao nhiêu hồ sơ|bao nhieu ho so|đại lượng|dai luong|"
-    r"\b\d\.\d{3}\b|"
-    r"\b\d{1,3}[A-ZĐ]{1,4}\d{2,}\b|"
-    r"\b[A-Z]{1,4}\d{2,}(?:-\d+)*\b|"
-    r"\b\d{2,4}-\d{2,4}\b|"
-    r"\b0\d{2,}\b"
-    r")",
-    re.IGNORECASE,
-)
-
-# Tín hiệu CÓ NGUYÊN TẮC bổ sung: một token giống số hiệu thiết bị (có ít nhất một
-# chữ số, cho phép chữ và gạch nối) đứng ngay sau từ chỉ thiết bị. Bắt được các
-# cách hỏi mới như "áp kế 2218 kiểm mấy lần rồi", "thiết bị 1A0043219 lần mới nhất".
-_DEVICE_SERIAL_CONTEXT_RE = re.compile(
-    r"(?:áp\s*kế|thiết\s*bị|máy|phương\s*tiện|số\s*hiệu|sn|serial)"
-    r"\s*[:#.\-]?\s*"
-    r"(?=[\w\-]*\d)[\w\-]+",
-    re.IGNORECASE | re.UNICODE,
-)
-_SERIAL_TOKEN_RE = re.compile(r"[\w\-]+", re.UNICODE)
-
-# Cache ngắn hạn số hiệu có trong sổ cái đã duyệt, khoá theo engine để tránh lẫn
-# giữa các CSDL in-memory ("sqlite://") trong test.
-_LEDGER_SERIAL_CACHE: dict[str, tuple[float, frozenset[str]]] = {}
-_LEDGER_SERIAL_TTL_SECONDS = 30.0
-
-
-def _ledger_cache_key(session: Any) -> str | None:
-    try:
-        engine = session.get_bind()
-        return f"{engine.url}#{id(engine)}"
-    except Exception:  # noqa: BLE001 - cache chỉ là tối ưu
-        return None
-
-
-def ledger_serials(session: Any) -> frozenset[str]:
-    """Số hiệu thiết bị có trong sổ cái đã duyệt; rỗng nếu không truy được.
-
-    Thất bại DB (chưa migrate, mất kết nối) bị nuốt và coi như không có tín hiệu.
-    """
-    if session is None:
-        return frozenset()
-    key = _ledger_cache_key(session)
-    now = time.monotonic()
-    if key is not None:
-        cached = _LEDGER_SERIAL_CACHE.get(key)
-        if cached is not None and now - cached[0] < _LEDGER_SERIAL_TTL_SECONDS:
-            return cached[1]
-    try:
-        from sqlalchemy import text
-
-        rows = session.execute(text("SELECT DISTINCT serial_no FROM v_record_detail")).all()
-        serials = frozenset(
-            str(row[0]).strip().casefold()
-            for row in rows
-            if row[0] is not None and str(row[0]).strip()
-        )
-    except Exception:  # noqa: BLE001 - thất bại DB thì bỏ qua tín hiệu sổ cái
-        return frozenset()
-    if key is not None:
-        _LEDGER_SERIAL_CACHE[key] = (now, serials)
-    return serials
-
-
-def _question_serial_tokens(question: str) -> set[str]:
-    return {
-        token.casefold()
-        for token in _SERIAL_TOKEN_RE.findall(question or "")
-        if any(char.isdigit() for char in token)
-    }
-
-
-def looks_like_data_question(question: str, session: Any | None = None) -> bool:
-    """True nếu câu hỏi có tín hiệu số liệu đáng để gọi LLM phân loại.
-
-    Ba mức, chỉ để mở/đóng cổng gọi LLM (không quyết định nhánh):
-    1. từ khoá số liệu cũ (``_DATA_SIGNAL_RE``);
-    2. token giống số hiệu đứng sau từ chỉ thiết bị (``_DEVICE_SERIAL_CONTEXT_RE``);
-    3. token trùng số hiệu có trong sổ cái đã duyệt (nếu có ``session``).
-    """
-    text = question or ""
-    if _DATA_SIGNAL_RE.search(text) or _DEVICE_SERIAL_CONTEXT_RE.search(text):
-        return True
-    if session is not None:
-        serials = ledger_serials(session)
-        if serials and _question_serial_tokens(text) & serials:
-            return True
-    return False
-
 
 class IntentClassifier(Protocol):
     """Giao diện bộ phân loại: trả dict/JSON hoặc None (không phân loại được)."""
@@ -740,7 +728,29 @@ _CLASSIFIER_RULES = (
     "B-12-31, giữ ĐÚNG A/B kể cả khi A lớn hơn B (không tự đảo). 'năm 2024' -> "
     "date_from 2024-01-01, date_to 2024-12-31.\n"
     '10. Chỉ điền verdict "khong_dat"/"dat" khi câu hỏi nói đạt/không đạt.\n'
-    '11. Không chắc chắn -> {"branch": "text"}.'
+    "11. Phân biệt THIẾT BỊ cần kiểm (device_history/latest_record/error_trend) với "
+    "CHUẨN MẪU dùng để kiểm (lab_standard_lookup). Câu nhắc 'chuẩn', 'chuẩn mẫu', "
+    "'PTĐ', 'PTTN', chu kỳ hiệu chuẩn, hoặc số hiệu/ký hiệu của chuẩn thì dùng "
+    "lab_standard_lookup, KHÔNG dùng ba intent thiết bị dù có chữ 'số hiệu'/'gần nhất'.\n"
+    "12. Câu hỏi một tiêu chuẩn/quy trình 'là quy trình gì', 'cấp nào ban hành', "
+    "'năm nào', hoặc liệt kê quy trình theo nhóm lĩnh vực/tên thiết bị -> "
+    "procedure_catalog_lookup, KHÔNG dùng procedure_params/standards_for (hai intent "
+    "đó chỉ tra thông số/bảng 2 của QTKĐ đã có trong kho tài liệu).\n"
+    "13. Câu hỏi kiểm định viên, ai được chứng nhận, số thẻ -> inspector_lookup; hỏi "
+    "lĩnh vực/phạm vi được công nhận của phòng, dải đo/CCX theo công nhận, số KĐV -> "
+    "capability_lookup.\n"
+    "14. Chuẩn mẫu có thể được nhắc bằng KÝ HIỆU/MODEL nhiều từ (ví dụ 'Fluke "
+    "5624-20-B', 'Thunder 1200', 'TESON II') chứ không chỉ bằng 'chuẩn'/'số hiệu'. Câu "
+    "hỏi chu kỳ/hạn/lần hiệu chuẩn gần nhất của ký hiệu đó -> lab_standard_lookup với "
+    "query là ký hiệu, KHÔNG dùng ba intent thiết bị.\n"
+    "15. Câu 'ai (trong phòng) được/có thể kiểm định hoặc hiệu chuẩn <loại thiết bị/"
+    "đại lượng>' hay 'kiểm định viên nào ... <loại thiết bị/đại lượng>' -> "
+    "inspector_lookup, field = loại thiết bị/đại lượng (ví dụ 'độ pH').\n"
+    "16. Ranh giới Biểu 4 và Biểu 1: 'quy trình <thiết bị> là gì', 'mã quy trình X là "
+    "gì', 'danh mục quy trình nhóm Y' -> procedure_catalog_lookup; 'lĩnh vực <thiết bị> "
+    "được công nhận ra sao', 'áp dụng quy trình nào', 'dải đo nào', 'mấy KĐV' -> "
+    "capability_lookup.\n"
+    '17. Không chắc chắn -> {"branch": "text"}.'
 )
 
 _CLASSIFIER_EXAMPLES = (
@@ -781,7 +791,29 @@ _CLASSIFIER_EXAMPLES = (
     '{"branch":"mixed","intent":"standards_for","params":{"procedure_number":"3.204"}}\n'
     '- "Làm sao bù nhiệt độ cho kết quả đo" -> {"branch":"text"}\n'
     '- "Mức sai số nào được chấp nhận cho phép đo áp suất" -> {"branch":"text"}\n'
-    '- "Khái niệm độ không đảm bảo đo là gì" -> {"branch":"text"}'
+    '- "Khái niệm độ không đảm bảo đo là gì" -> {"branch":"text"}\n'
+    '- "Chuẩn mẫu hiệu MO-1226 có chu kỳ hiệu chuẩn bao lâu" -> '
+    '{"branch":"data","intent":"lab_standard_lookup","params":{"query":"MO-1226"}}\n'
+    '- "Chuẩn nào phục vụ mục IV.3 của Biểu 1" -> '
+    '{"branch":"data","intent":"lab_standard_lookup","params":{"usage_ref":"IV.3"}}\n'
+    '- "Ai được chứng nhận đo áp suất" -> '
+    '{"branch":"data","intent":"inspector_lookup","params":{"field":"áp suất"}}\n'
+    '- "Số thẻ của kiểm định viên Nguyễn Thị Hương" -> '
+    '{"branch":"data","intent":"inspector_lookup","params":{"name":"Nguyễn Thị Hương"}}\n'
+    '- "ĐLVN 213:2009 là gì, cơ quan nào ban hành" -> '
+    '{"branch":"data","intent":"procedure_catalog_lookup","params":{"code":"ĐLVN 213:2009"}}\n'
+    '- "Liệt kê quy trình nhóm tốc độ vòng quay" -> '
+    '{"branch":"data","intent":"procedure_catalog_lookup","params":{"group":"tốc độ vòng quay"}}\n'
+    '- "Phòng được công nhận hiệu chuẩn nhiệt kế điện trở không" -> '
+    '{"branch":"data","intent":"capability_lookup","params":{"keyword":"nhiệt kế điện trở"}}\n'
+    '- "Hạn hiệu chuẩn ghi trên chuẩn hiệu Thunder 1200 là khi nào" -> '
+    '{"branch":"data","intent":"lab_standard_lookup","params":{"query":"Thunder 1200"}}\n'
+    '- "Trong phòng ai có thể hiệu chuẩn thiết bị đo độ pH" -> '
+    '{"branch":"data","intent":"inspector_lookup","params":{"field":"độ pH"}}\n'
+    '- "Lĩnh vực đồng hồ tốc độ vòng quay áp dụng quy trình nào" -> '
+    '{"branch":"data","intent":"capability_lookup","params":{"keyword":"đồng hồ tốc độ vòng quay"}}\n'
+    '- "Quy trình kiểm định đồng hồ bấm giây là gì" -> '
+    '{"branch":"data","intent":"procedure_catalog_lookup","params":{"keyword":"đồng hồ bấm giây"}}'
 )
 
 
@@ -862,44 +894,45 @@ class OllamaIntentClassifier:
         try:
             if not looks_like_data_question(question, session=session):
                 return {"branch": "text", "confidence": 1.0}
+            import requests
+
+            try:
+                response = requests.post(
+                    _native_chat_url(self.config.url),
+                    json={
+                        "model": self.config.model,
+                        "messages": [
+                            {"role": "system", "content": SYSTEM_PROMPT},
+                            {"role": "user", "content": build_classifier_prompt(question)},
+                        ],
+                        "stream": False,
+                        "keep_alive": self.config.keep_alive,
+                        "options": {
+                            "num_ctx": self.config.num_ctx,
+                            "temperature": self.config.temperature,
+                        },
+                    },
+                    timeout=self.config.timeout,
+                )
+                response.raise_for_status()
+                payload = response.json()
+            except Exception as exc:  # noqa: BLE001 - thất bại an toàn có chủ đích
+                logger.warning("Phân loại intent thất bại: %s", exc)
+                return None
+            content = (payload.get("message") or {}).get("content")
+            if not (isinstance(content, str) and content.strip()):
+                return None
+            parsed = extract_json(content)
+            if parsed is not None:
+                sanitized = sanitize_classification(parsed, question)
+                return disambiguate_catalogs(sanitized, question, session)
+            return content
         finally:
             if session is not None:
                 try:
                     session.close()
                 except Exception:  # noqa: BLE001 - đóng session lỗi không quan trọng
                     pass
-        import requests
-
-        try:
-            response = requests.post(
-                _native_chat_url(self.config.url),
-                json={
-                    "model": self.config.model,
-                    "messages": [
-                        {"role": "system", "content": SYSTEM_PROMPT},
-                        {"role": "user", "content": build_classifier_prompt(question)},
-                    ],
-                    "stream": False,
-                    "keep_alive": self.config.keep_alive,
-                    "options": {
-                        "num_ctx": self.config.num_ctx,
-                        "temperature": self.config.temperature,
-                    },
-                },
-                timeout=self.config.timeout,
-            )
-            response.raise_for_status()
-            payload = response.json()
-        except Exception as exc:  # noqa: BLE001 - thất bại an toàn có chủ đích
-            logger.warning("Phân loại intent thất bại: %s", exc)
-            return None
-        content = (payload.get("message") or {}).get("content")
-        if not (isinstance(content, str) and content.strip()):
-            return None
-        parsed = extract_json(content)
-        if parsed is not None:
-            return sanitize_classification(parsed, question)
-        return content
 
 
 def default_classifier() -> IntentClassifier:

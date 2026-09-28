@@ -83,4 +83,50 @@ describe("DataResultTable — bảng số liệu chat", () => {
     const html = render({ ...PAYLOAD, empty: true, tables: [], citations: [] });
     expect(html).toContain("Không có dữ liệu đã duyệt phù hợp.");
   });
+
+  it("bảng danh mục NAS dùng được ô xuất xứ extraction", () => {
+    const catalog: ChatDataPayload = {
+      intent: "capability_lookup",
+      branch: "data",
+      title: "Lĩnh vực kiểm định, hiệu chuẩn được công nhận",
+      note: "Đọc từ danh mục NAS đã duyệt.",
+      empty: false,
+      tables: [
+        {
+          title: "Lĩnh vực công nhận đã duyệt",
+          note: null,
+          total: 1,
+          columns: [
+            { key: "name", label: "Đại lượng / trang bị" },
+            { key: "inspector_count", label: "Số KĐV" },
+          ],
+          rows: [
+            {
+              name: {
+                text: "Van an toàn",
+                numeric: false,
+                provenance: { field: "name", kind: "extraction", id: 9 },
+                device_id: null,
+                record_id: null,
+              },
+              inspector_count: {
+                text: "3",
+                numeric: true,
+                provenance: { field: "inspector_count", kind: "extraction", id: 9 },
+                device_id: null,
+                record_id: null,
+              },
+            },
+          ],
+        },
+      ],
+      citations: [],
+    };
+    const html = render(catalog);
+    expect(html).toContain("Van an toàn");
+    expect(html).toContain('data-prov-kind="extraction"');
+    expect(html).toContain('data-prov-id="9"');
+    // Ô số vẫn là nút xuất xứ (P1), và bảng danh mục không mở nhầm trang thiết bị.
+    expect(html).not.toContain("Xem lịch sử thiết bị");
+  });
 });

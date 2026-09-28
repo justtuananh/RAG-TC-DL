@@ -21,7 +21,8 @@ def _markdown_files(repo_root):
 
 
 def test_corpus_has_expected_files(repo_root):
-    assert len(_markdown_files(repo_root)) == 7
+    # 7 QTKĐ + 4 Markdown danh mục NAS (trích ở hồ sơ NAS, commit cùng pha K1).
+    assert len(_markdown_files(repo_root)) == 11
 
 
 def test_every_corpus_range_parses(repo_root):

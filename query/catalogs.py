@@ -10,6 +10,8 @@ quét thư mục ``query/`` và fail nếu bắt gặp tên bảng gốc.
 
 from __future__ import annotations
 
+import re
+import time
 from typing import Any
 
 from sqlalchemy import text
@@ -28,6 +30,116 @@ GROUP_COLUMNS: dict[str, str] = {
 }
 # Cột nội bộ (bản không dấu) không lộ ra API.
 _ROW_EXCLUDE = {"search_text"}
+
+# Token số hiệu/ký hiệu chuẩn mẫu (có ít nhất một chữ số) để mở cổng tín hiệu.
+_CATALOG_TOKEN_RE = re.compile(r"[\w\-]+", re.UNICODE)
+_SIGNAL_TTL_SECONDS = 30.0
+# Cache ngắn hạn khoá theo engine để tránh lẫn giữa các CSDL in-memory trong test.
+_SIGNAL_CACHE: dict[str, tuple[float, frozenset[str], frozenset[str], frozenset[str]]] = {}
+_KHO_NUMBER_CACHE: dict[str, tuple[float, frozenset[str]]] = {}
+_KHO_DEVICE_CACHE: dict[str, tuple[float, frozenset[str]]] = {}
+
+
+def _cache_key(session: Session) -> str | None:
+    try:
+        engine = session.get_bind()
+        return f"{engine.url}#{id(engine)}"
+    except Exception:  # noqa: BLE001 - cache chỉ là tối ưu
+        return None
+
+
+def catalog_signal_terms(
+    session: Session,
+) -> tuple[frozenset[str], frozenset[str], frozenset[str]]:
+    """(token số hiệu/ký hiệu, mã quy trình, cụm ký hiệu/model) đã bỏ dấu.
+
+    ``phrases`` là bản gộp khoảng trắng của TỪNG serial/model (``Fluke 5624-20-B``
+    -> ``fluke5624-20-b``) để câu hỏi nhắc ký hiệu nhiều từ vẫn mở được cổng gọi
+    LLM, không chỉ token đơn có chữ số. Chỉ đọc view đã duyệt (P3); thất bại DB
+    (chưa migrate, mất kết nối) trả rỗng để không chặn pipeline; cache ngắn theo
+    engine.
+    """
+    if session is None:
+        return frozenset(), frozenset(), frozenset()
+    key = _cache_key(session)
+    now = time.monotonic()
+    if key is not None:
+        cached = _SIGNAL_CACHE.get(key)
+        if cached is not None and now - cached[0] < _SIGNAL_TTL_SECONDS:
+            return cached[1], cached[2], cached[3]
+    try:
+        standard_rows = session.execute(text("SELECT serial, model FROM v_lab_standard")).all()
+        code_rows = session.execute(
+            text("SELECT code_text, procedure_number FROM v_procedure_catalog")
+        ).all()
+    except Exception:  # noqa: BLE001 - thiếu DB thì bỏ qua tín hiệu danh mục
+        return frozenset(), frozenset(), frozenset()
+    tokens: set[str] = set()
+    phrases: set[str] = set()
+    for serial, model in standard_rows:
+        for raw in (serial, model):
+            folded = fold(raw)
+            compact = re.sub(r"\s+", "", folded)
+            if len(compact) >= 4:
+                phrases.add(compact)
+            for token in _CATALOG_TOKEN_RE.findall(folded):
+                if any(char.isdigit() for char in token):
+                    tokens.add(token)
+    codes: set[str] = set()
+    for code_text, procedure_number in code_rows:
+        folded = fold(code_text).replace(" ", "")
+        if folded:
+            codes.add(folded)
+        if procedure_number:
+            codes.add(str(procedure_number).strip().casefold())
+    result = (frozenset(tokens), frozenset(codes), frozenset(phrases))
+    if key is not None:
+        _SIGNAL_CACHE[key] = (now, result[0], result[1], result[2])
+    return result
+
+
+def _kho_values(session: Session, sql: str, cache: dict) -> frozenset[str]:
+    if session is None:
+        return frozenset()
+    key = _cache_key(session)
+    now = time.monotonic()
+    if key is not None:
+        cached = cache.get(key)
+        if cached is not None and now - cached[0] < _SIGNAL_TTL_SECONDS:
+            return cached[1]
+    try:
+        rows = session.execute(text(sql)).all()
+    except Exception:  # noqa: BLE001 - thiếu DB thì coi như kho rỗng
+        return frozenset()
+    values = frozenset(str(row[0]).strip().casefold() for row in rows if row[0])
+    if key is not None:
+        cache[key] = (now, values)
+    return values
+
+
+def kho_procedure_numbers(session: Session) -> frozenset[str]:
+    """Số QTKĐ đang có trong kho tài liệu (``v_procedure``, P3)."""
+    return _kho_values(session, "SELECT number FROM v_procedure", _KHO_NUMBER_CACHE)
+
+
+def kho_device_types(session: Session) -> frozenset[str]:
+    """Tên loại thiết bị của QTKĐ trong kho (đã bỏ dấu) — để không nhầm danh mục."""
+    if session is None:
+        return frozenset()
+    key = _cache_key(session)
+    now = time.monotonic()
+    if key is not None:
+        cached = _KHO_DEVICE_CACHE.get(key)
+        if cached is not None and now - cached[0] < _SIGNAL_TTL_SECONDS:
+            return cached[1]
+    try:
+        rows = session.execute(text("SELECT name_vi FROM v_device_type")).all()
+    except Exception:  # noqa: BLE001 - thiếu DB thì bỏ qua guard
+        return frozenset()
+    values = frozenset(fold(row[0]) for row in rows if row[0])
+    if key is not None:
+        _KHO_DEVICE_CACHE[key] = (now, values)
+    return values
 
 
 def _where(conditions: list[str]) -> str:

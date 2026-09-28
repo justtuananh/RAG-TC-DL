@@ -44,6 +44,8 @@ from db.models import (
     Unit,
 )
 from db.views import create_all_approved_views
+from catalogs.readers import read_catalog
+from catalogs.store import store_catalog_draft
 from query import intents, router
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -306,8 +308,42 @@ def build_session():
             )
         )
     session.flush()
+    # Danh mục NAS tối thiểu (fixture thật) để resolver danh mục chạy được và chứng
+    # minh mọi ô có xuất xứ; duyệt ngay để bề mặt tra cứu thấy dữ liệu (P3).
+    _seed_catalogs(session)
     session.commit()
     return session
+
+
+_CATALOG_FIXTURES = (
+    "bieu3_chuan_mau.xlsx",
+    "bieu7_kdv.docx",
+    "bieu4_danh_muc_qt.docx",
+    "bieu1_linh_vuc.docx",
+)
+
+
+def _seed_catalogs(session) -> None:
+    """Đọc bốn fixture NAS, ghi ``pending`` rồi duyệt để view lộ dòng (P3)."""
+    nas_dir = ROOT / "tests" / "data" / "nas"
+    for index, name in enumerate(_CATALOG_FIXTURES):
+        stem = name.rsplit(".", 1)[0]
+        document = Document(
+            id=stem,
+            file_stem=stem,
+            display_name=name,
+            ext=name.rsplit(".", 1)[1].upper(),
+            doc_type=DocumentType.DANH_MUC,
+            sha256=str(index + 2) * 64,
+            size_bytes=1,
+        )
+        session.add(document)
+        session.flush()
+        store_catalog_draft(session, document=document, draft=read_catalog(nas_dir / name))
+    session.flush()
+    for row in session.query(Extraction).filter(Extraction.extractor.like("catalog:%")).all():
+        row.status = ExtractionStatus.APPROVED
+    session.flush()
 
 
 # ── Chạy eval ─────────────────────────────────────────────────────────────────
