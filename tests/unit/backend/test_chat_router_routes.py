@@ -200,3 +200,25 @@ def test_data_lookup_failure_falls_back_to_text(client, monkeypatch):
     done = _events(response)[-1]
     assert done["branch"] == "text"
     assert done["data"] is None
+
+
+def test_empty_data_result_falls_back_to_text(client, monkeypatch):
+    """Bảng số liệu rỗng (intent đúng nhánh nhưng không có dòng nào) không được
+    để người dùng không có câu trả lời: rơi về nhánh văn bản như khi tra cứu lỗi."""
+    monkeypatch.setattr(
+        router,
+        "plan_route",
+        lambda *a, **k: _decision(
+            {
+                "branch": "data",
+                "intent": "procedure_params",
+                "params": {"procedure_number": "9.999"},
+                "confidence": 0.9,
+            }
+        ),
+    )
+    monkeypatch.setattr(api_server, "retrieve", lambda *a, **k: [])
+    response = client.post("/api/chat/stream", json={"message": "Chuẩn Fluke 7302 số 1274?"})
+    done = _events(response)[-1]
+    assert done["branch"] == "text"
+    assert done["data"] is None

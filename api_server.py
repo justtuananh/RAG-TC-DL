@@ -279,6 +279,10 @@ def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[s
             try:
                 data_payload = query_router.build_data_payload(db, decision.request)
                 branch = decision.branch
+                if data_payload.empty:
+                    # Bảng rỗng (định tuyến nhầm hoặc chưa có dòng đã duyệt): trả lời
+                    # bằng nhánh văn bản thay vì để người dùng không có câu trả lời.
+                    branch, data_payload = "text", None
             except Exception as e:  # noqa: BLE001 - không chặn câu trả lời văn bản
                 logger.warning("Tra cứu số liệu thất bại, rơi về nhánh văn bản: %s", e)
                 branch = "text"
