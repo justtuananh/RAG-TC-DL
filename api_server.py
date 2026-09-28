@@ -38,7 +38,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from retrieval.retriever import retrieve
 from generation import (
-    REFUSAL_SENTENCE,
     build_context_and_citations,
     build_messages,
     enforce_refusal_stop,
@@ -48,10 +47,13 @@ from generation import (
 )
 from latex import fix_latex
 import ingestion_jobs
+from formula_registry.api import router as formula_review_router
 
 # ── App ───────────────────────────────────────────────────────────────────────
 
 app = FastAPI(title="QTKĐ RAG API", version="1.0.0")
+
+app.include_router(formula_review_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -136,7 +138,7 @@ def _build_sources_payload(results: list[dict]) -> list[dict]:
 
 def _chat_stream_gen(req: ChatRequest) -> Generator[str, None, None]:
     if is_calculation_request(req.message):
-        yield _sse({"type": "done", "answer": REFUSAL_SENTENCE, "sources": []})
+        yield _sse({"type": "done", "answer": "Để tính từ số liệu, mở **Tài liệu → chọn tài liệu → Công thức và phê duyệt**, chọn bộ tính đã được phê duyệt rồi nhập số liệu và xác nhận điều kiện áp dụng. Công thức chưa được duyệt cần hoàn tất bước rà soát trước khi tính.", "sources": []})
         return
 
     yield _sse({"type": "status", "text": "⏳ Đang nhúng câu hỏi (embedding)…"})

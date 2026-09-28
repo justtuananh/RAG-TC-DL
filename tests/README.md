@@ -19,11 +19,10 @@ mọi kết nối socket thật bị chặn → quên mock sẽ fail tức thì 
 
 ```bash
 python3.11 -m venv .venv-dev
-.venv-dev/bin/python -m pip install -r requirements-app.txt -r requirements-dev.txt
+.venv-dev/bin/python -m pip install -r requirements-app.lock -r requirements-dev.txt
 ```
 
-`requirements-dev.txt` ghim hai phiên bản tương thích mà `requirements-app.txt` để hở
-(xem mục Lưu ý). Không cần `requirements.txt` cho test (scikit-image nặng, không dùng).
+`requirements-app.txt` khai báo runtime dùng Pydantic 2 và Qdrant query_points; file dev chỉ khai báo công cụ kiểm thử. Không cần `requirements.txt` cho test (scikit-image nặng, không dùng).
 
 ## Lệnh (Makefile — `PY ?= .venv-dev/bin/python`, override được)
 
@@ -51,12 +50,18 @@ Ruby, dự án offline). Fidelity guard chạy được vì `build/spike_a/` đ�
 
 Pre-commit (tuỳ chọn): `.venv-dev/bin/pre-commit install` — ruff chỉ trên `tests/`+`scripts/`.
 
-## Lưu ý: hai pin tương thích phát hiện khi dựng harness
 
-`requirements-app.txt` để hở hai phụ thuộc, khiến **build mới sẽ vỡ**:
+## Registry và React
 
-1. `huggingface_hub` — gradio 4.x cần `HfFolder` (bị xoá ở hub 1.0) → ghim `<1.0`.
-2. `qdrant-client` — code gọi `.search()` (bị xoá ở client ≥1.14; server là 1.10.1) → ghim `==1.10.1`.
+```bash
+make test-formula PY=.venv-dev/bin/python
+make check-frontend
+```
 
-Đang ghim trong `requirements-dev.txt`. **Nên ghim luôn trong `requirements-app.txt`**
-để build Docker tái lập được.
+Các test registry dùng SQLite/DOCX tạm, kiểm phiên bản, phê duyệt, chặn tính, cấu trúc payload và phục hồi nguồn. FE có test HTTP contract và workflow components. Playwright cần thêm Chromium (`python -m playwright install chromium`) hoặc Chrome đã cài. `formula_lab/tests` là suite thí nghiệm riêng cần môi trường lab; không giả định mọi thư viện LLM/SymPy có trong runtime API.
+
+## Tính khách quan
+
+Test do dev viết và tự chạy lại bởi agent khác vẫn là **hồi quy**, không trở thành holdout. Lượt audit giữ riêng khóa đáp án/tolerance trước chạy, không sửa mã hoặc ngưỡng giữa lượt. Ca đã lộ chỉ dùng làm hồi quy sau này. Không gộp tỷ lệ test qua, năng lực trích xuất và sẵn sàng nghiệp vụ thành một điểm chất lượng.
+
+[Báo cáo audit bias](../build/formula-review/BIAS_AUDIT.md) ghi riêng lỗi implementation và lỗi harness; số96% cũ không dùng như nghiệm thu khách quan.

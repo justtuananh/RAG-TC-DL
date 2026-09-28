@@ -1,0 +1,27 @@
+{
+  "checks": [
+    "incomplete_approval_disabled",
+    "keyboard_tab_order",
+    "unsaved_reload_cancel_preserves",
+    "real_edit_save_api",
+    "real_approve_api",
+    "real_calculation_2000Pa",
+    "no_page_horizontal_overflow_desktop_mobile",
+    "changed_input_removes_old_result",
+    "edit_revokes_approval",
+    "real_reject_api"
+  ],
+  "errors": [],
+  "metrics": {
+    "desktop": {
+      "scroll": 1440,
+      "width": 1440,
+      "font": "\"Be Vietnam Pro\", system-ui, -apple-system, sans-serif"
+    },
+    "mobile": {
+      "scroll": 390,
+      "width": 390,
+      "font": "\"Be Vietnam Pro\", system-ui, -apple-system, sans-serif"
+    }
+  }
+}

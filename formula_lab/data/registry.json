@@ -1,0 +1,215 @@
+{
+  "valve": {
+    "id": "valve",
+    "title": "Sai số áp suất chỉnh đặt van an toàn",
+    "variables": [
+      {
+        "key": "pm",
+        "label": "Áp suất mở van",
+        "unit": "Pa",
+        "min": 0,
+        "max": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "pcd",
+        "label": "Áp suất chỉnh đặt",
+        "unit": "Pa",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "pm-pcd",
+    "unit": "Pa",
+    "conditions": [],
+    "source_fingerprint": "a17f9541a72ed70159256372650636d7bfa198d0dc29deb8c2f9478b0c214c29",
+    "revision": "1"
+  },
+  "volume": {
+    "id": "volume",
+    "title": "Dung tích làm việc bình phân ly",
+    "variables": [
+      {
+        "key": "vd",
+        "label": "Nước còn lại trong ống đong 500 mL",
+        "unit": "mL",
+        "min": 0,
+        "max": 500,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "500-vd",
+    "unit": "mL",
+    "conditions": [
+      "initial"
+    ],
+    "source_fingerprint": "b28865136c08738c04c9c0448b11b395c327ff08b90029d5bcfc607b5dad5c4f",
+    "revision": "1"
+  },
+  "rotation": {
+    "id": "rotation",
+    "title": "Hiệu chỉnh thời gian quay tự do pít tông H3000",
+    "variables": [
+      {
+        "key": "tau_t",
+        "label": "Thời gian ở nhiệt độ t",
+        "unit": "s",
+        "min": 0,
+        "max": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "eta_t",
+        "label": "Độ nhớt tại t",
+        "unit": "Pa.s",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      },
+      {
+        "key": "eta",
+        "label": "Độ nhớt tiêu chuẩn",
+        "unit": "Pa.s",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      },
+      {
+        "key": "dt",
+        "label": "Độ lớn chênh nhiệt độ",
+        "unit": "delta_degC",
+        "min": 3,
+        "max": null,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "tau_t*eta_t/eta",
+    "unit": "s",
+    "conditions": [
+      "rotation_conditions"
+    ],
+    "source_fingerprint": "6468470cf88c8aa670a58ef49d0e9bea8e06e061aaae2e518f56305eff041a74",
+    "revision": "1"
+  },
+  "fall": {
+    "id": "fall",
+    "title": "Hiệu chỉnh tốc độ hạ pít tông H3000",
+    "variables": [
+      {
+        "key": "vt",
+        "label": "Tốc độ trung bình ba lần đo tại t",
+        "unit": "mm/min",
+        "min": 0,
+        "max": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "eta_t",
+        "label": "Độ nhớt tại t",
+        "unit": "Pa.s",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      },
+      {
+        "key": "eta",
+        "label": "Độ nhớt tiêu chuẩn",
+        "unit": "Pa.s",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      },
+      {
+        "key": "dt",
+        "label": "Độ lớn chênh nhiệt độ",
+        "unit": "delta_degC",
+        "min": 2,
+        "max": null,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "vt*eta_t/eta",
+    "unit": "mm/min",
+    "conditions": [
+      "three_readings",
+      "fall_conditions"
+    ],
+    "source_fingerprint": "350e3d2ca50992133e4cd526cf30422e62b689ddd58f643997640fab5a722731",
+    "revision": "1"
+  },
+  "gravity": {
+    "id": "gravity",
+    "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+    "variables": [
+      {
+        "key": "p0",
+        "label": "Tổng áp suất khắc độ",
+        "unit": "bar",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      },
+      {
+        "key": "gd",
+        "label": "Gia tốc tại nơi đo",
+        "unit": "m/s2",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      },
+      {
+        "key": "g0",
+        "label": "Gia tốc khi khắc độ",
+        "unit": "m/s2",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "p0*gd/g0",
+    "unit": "bar",
+    "conditions": [
+      "different_gravity"
+    ],
+    "source_fingerprint": "7bc589a3b123fd1903ac7ffb9bb4d11982c5c6a6823753f1a4c39a48d0540c22",
+    "revision": "1"
+  },
+  "error": {
+    "id": "error",
+    "title": "Sai số tương đối H3000 từ hai lần đo",
+    "variables": [
+      {
+        "key": "p",
+        "label": "Áp suất danh nghĩa đã hiệu chỉnh trọng trường",
+        "unit": "bar",
+        "min": 0,
+        "max": null,
+        "exclusive_min": true
+      },
+      {
+        "key": "pc1",
+        "label": "Chỉ thị chuẩn lần 1",
+        "unit": "bar",
+        "min": 0,
+        "max": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "pc2",
+        "label": "Chỉ thị chuẩn lần 2",
+        "unit": "bar",
+        "min": 0,
+        "max": null,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "((p-pc1)+(p-pc2))/2/p*100",
+    "unit": "%",
+    "conditions": [
+      "pressure_corrected"
+    ],
+    "source_fingerprint": "cccdc26dfb87a81e5132ce81271ee9207abeafb2765e02a7b1499f1c0f889afa",
+    "revision": "1"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "documents": 30,
+  "original_documents": 7,
+  "synthetic_documents": 23,
+  "seed": 20260928,
+  "registered_calculators": 6,
+  "equation_occurrences_original": 174,
+  "distinct_latex_strings_original": 127,
+  "reviewed_equation_occurrences": 9,
+  "suspicious_equation_occurrences": 12,
+  "formula_objects_in_30_documents": 1298,
+  "grouped": {
+    "browser": {
+      "passed": 20,
+      "total": 20
+    },
+    "document_binding": {
+      "passed": 42,
+      "total": 42
+    },
+    "formula_coverage": {
+      "passed": 174,
+      "total": 174
+    },
+    "frozen_boundary": {
+      "passed": 20,
+      "total": 20
+    },
+    "frozen_input": {
+      "passed": 20,
+      "total": 20
+    },
+    "frozen_selection": {
+      "passed": 20,
+      "total": 20
+    },
+    "frozen_source": {
+      "passed": 20,
+      "total": 20
+    },
+    "frozen_valid": {
+      "passed": 20,
+      "total": 20
+    },
+    "ingestion_structure": {
+      "passed": 30,
+      "total": 30
+    },
+    "invalid_input": {
+      "passed": 96,
+      "total": 96
+    },
+    "numeric": {
+      "passed": 600,
+      "total": 600
+    },
+    "unsupported_routing": {
+      "passed": 12,
+      "total": 12
+    }
+  },
+  "total": 1074,
+  "passed": 1074,
+  "commit": "355f442f3ca29950ce5f1b1ebd8707f1178addcf",
+  "scope": "Actual DOCX ingestion + registry source binding + isolated routing/calculation + browser. No new retrieval index or live LLM calls.",
+  "runtime_hashes": {
+    "formula_lab/engine.py": "123fe3f49c6fc7a34dc1bc2b47ab41421fed591ff596f5e73860c7b454cec4d0",
+    "formula_lab/strategies.py": "3343017b7f5fe963437001ca65030558513d53cfe3c9290c044dd621a2c2ad38",
+    "formula_lab/data/registry.json": "3919a2b83631c330e38cb79d2b972aab2a4c678eb120fe33f7da6380eaf70cc3",
+    "formula_lab/expanded/run.py": "69904d860066cd8805cf48d6903dd2dcc53c14dc1e939b6865951aaf716f903a"
+  }
+}

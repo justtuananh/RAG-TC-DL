@@ -1,0 +1,626 @@
+{
+  "dpi190_f001": {
+    "id": "dpi190_f001",
+    "title": "Bù áp suất do chênh cao cột chất lỏng — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "rho",
+        "label": "Khối lượng riêng môi trường",
+        "unit": "kg/m3",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "g",
+        "label": "Gia tốc trọng trường",
+        "unit": "m/s2",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "h",
+        "label": "Chênh cao có dấu theo quy ước",
+        "unit": "m",
+        "min": null,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "rho*g*h",
+    "unit": "Pa",
+    "conditions": [
+      "height_sign"
+    ],
+    "revision": "2",
+    "source_fingerprint": "131acca8a718ffd81e7f988173577bc1dac6be5059dca465cf8dbecd29d42cf7"
+  },
+  "dpi190_f005": {
+    "id": "dpi190_f005",
+    "title": "Sai số gồm độ lệch và độ không đảm bảo mở rộng — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "bias",
+        "label": "Độ lệch rho",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "u",
+        "label": "Độ không đảm bảo đo mở rộng U",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "abs(bias)+u",
+    "unit": "Pa",
+    "conditions": [
+      "expanded_k2"
+    ],
+    "revision": "2",
+    "source_fingerprint": "24585e8a8813f6c0ddce492093ce57640cbe43bba2aa0058372f97c31249ce5c"
+  },
+  "dpi190_f006": {
+    "id": "dpi190_f006",
+    "title": "Chỉ thị dự đoán theo quan hệ tuyến tính — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "a",
+        "label": "Hệ số chặn a",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "b",
+        "label": "Hệ số góc b",
+        "unit": "1",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "x",
+        "label": "Áp suất chuẩn X",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "a+b*x",
+    "unit": "Pa",
+    "conditions": [
+      "linear_fit"
+    ],
+    "revision": "2",
+    "source_fingerprint": "9e7a8a9fca5ad10eccafbecc202ebbf69fa7128bc3c2d57337f87f52cafe1828"
+  },
+  "dpi190_f007": {
+    "id": "dpi190_f007",
+    "title": "Trung bình các giá trị áp suất chuẩn — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "readings",
+        "label": "Các giá trị X_i",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false,
+        "kind": "series",
+        "min_items": 1,
+        "max_items": 100
+      }
+    ],
+    "expression": "mean(readings)",
+    "unit": "Pa",
+    "conditions": [
+      "same_series"
+    ],
+    "revision": "2",
+    "source_fingerprint": "35cdb637328160df0e6d4d38353d5c461c5d0c44fa0cfbc925582e46b2bdf812"
+  },
+  "dpi190_f009": {
+    "id": "dpi190_f009",
+    "title": "Hệ số góc hồi quy bình phương tối thiểu — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "xs",
+        "label": "Các áp suất chuẩn X_i",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false,
+        "kind": "series",
+        "min_items": 2,
+        "max_items": 100
+      },
+      {
+        "key": "ys",
+        "label": "Các chỉ thị Y_i tương ứng",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false,
+        "kind": "series",
+        "min_items": 2,
+        "max_items": 100
+      }
+    ],
+    "expression": "slope(xs,ys)",
+    "unit": "1",
+    "conditions": [
+      "paired_readings"
+    ],
+    "revision": "2",
+    "source_fingerprint": "a2a4bb6b7e7138c83536a8c72d9fd664d5ed25291e5f7024357028158429d5e6"
+  },
+  "dpi190_f010": {
+    "id": "dpi190_f010",
+    "title": "Hệ số chặn hồi quy — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "y_mean",
+        "label": "Trung bình Y",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "b",
+        "label": "Hệ số góc b",
+        "unit": "1",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "x_mean",
+        "label": "Trung bình X",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "y_mean-b*x_mean",
+    "unit": "Pa",
+    "conditions": [
+      "linear_fit"
+    ],
+    "revision": "2",
+    "source_fingerprint": "eb4907092a49857f3dd3e63f321231600261cd2820021f4b7381a67271f37ff0"
+  },
+  "dpi190_f016": {
+    "id": "dpi190_f016",
+    "title": "Độ không đảm bảo của áp suất chuẩn u_ch1 — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "u",
+        "label": "U_ch1 từ chứng nhận",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      },
+      {
+        "key": "k",
+        "label": "Hệ số phủ k theo chứng nhận",
+        "unit": "1",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "u/k",
+    "unit": "Pa",
+    "conditions": [
+      "certificate"
+    ],
+    "revision": "2",
+    "source_fingerprint": "3c371162967158ca844e938d8becaa28a0ea0cede8d1a1ee2019dfd5e46dc835"
+  },
+  "dpi190_f017": {
+    "id": "dpi190_f017",
+    "title": "Độ không đảm bảo phương tiện đo khí quyển u_amb — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "u",
+        "label": "U_amb từ chứng nhận",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      },
+      {
+        "key": "k",
+        "label": "Hệ số phủ k theo chứng nhận",
+        "unit": "1",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "u/k",
+    "unit": "Pa",
+    "conditions": [
+      "certificate",
+      "absolute_from_gauge"
+    ],
+    "revision": "2",
+    "source_fingerprint": "eaf7449fe8bb3314d59fe21a15e9dbb60e0c125f0ac412eefb27c83e04f7de24"
+  },
+  "dpi190_f018": {
+    "id": "dpi190_f018",
+    "title": "Độ không đảm bảo do độ ổn định chuẩn — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "drift",
+        "label": "Độ trôi driffvalue từ thực nghiệm",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "drift/sqrt(3)",
+    "unit": "Pa",
+    "conditions": [
+      "experimental_drift"
+    ],
+    "revision": "2",
+    "source_fingerprint": "55c9e2a7d9357b05ceec3a83dce0f274da94feee667bc2df44e6b0207f37fdd8"
+  },
+  "dpi190_f019": {
+    "id": "dpi190_f019",
+    "title": "Độ không đảm bảo liên hợp của tổ hợp chuẩn — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "u_ch1",
+        "label": "u_ch1",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      },
+      {
+        "key": "u_amb",
+        "label": "u_amb",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      },
+      {
+        "key": "u_stability",
+        "label": "u_stability",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "sqrt(u_ch1**2+u_amb**2+u_stability**2)",
+    "unit": "Pa",
+    "conditions": [
+      "rss_applicable"
+    ],
+    "revision": "2",
+    "source_fingerprint": "781c73921567530ca0aa9292bb567281ee12e0772ff0de9692686f63a7410df8"
+  },
+  "dpi190_f022": {
+    "id": "dpi190_f022",
+    "title": "Thành phần độ không đảm bảo do diện tích hiệu dụng u2 — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "p",
+        "label": "Áp suất p",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "area",
+        "label": "Diện tích hiệu dụng A_0,c",
+        "unit": "m2",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "ua",
+        "label": "U_A0,c",
+        "unit": "m2",
+        "min": 0,
+        "exclusive_min": false
+      },
+      {
+        "key": "k",
+        "label": "Hệ số phủ k theo chứng nhận",
+        "unit": "1",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "p/area*ua/k",
+    "unit": "Pa",
+    "conditions": [
+      "certificate",
+      "piston_standard"
+    ],
+    "revision": "2",
+    "source_fingerprint": "7eb377ecd827d7246fd48fd53743884653549b955ecadf099f525fd06a88a8bb"
+  },
+  "dpi190_f024": {
+    "id": "dpi190_f024",
+    "title": "Thành phần có dấu do hệ số giãn nở áp suất u3 — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "p",
+        "label": "Áp suất p",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "ulambda",
+        "label": "U_lambda,c",
+        "unit": "1/Pa",
+        "min": 0,
+        "exclusive_min": false
+      },
+      {
+        "key": "k",
+        "label": "Hệ số phủ k theo chứng nhận",
+        "unit": "1",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "-p**2*ulambda/k",
+    "unit": "Pa",
+    "conditions": [
+      "certificate",
+      "piston_standard",
+      "signed_component"
+    ],
+    "revision": "2",
+    "source_fingerprint": "b110169a2c88062f83bd6aaa76dc0754d34f41d9fb6939c633a7465e139d45e4"
+  },
+  "dpi190_f026": {
+    "id": "dpi190_f026",
+    "title": "Thành phần độ không đảm bảo do khối lượng u4 — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "p",
+        "label": "Áp suất p",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "mass",
+        "label": "Khối lượng M_c",
+        "unit": "kg",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "um",
+        "label": "U_Mc",
+        "unit": "kg",
+        "min": 0,
+        "exclusive_min": false
+      },
+      {
+        "key": "k",
+        "label": "Hệ số phủ k theo chứng nhận",
+        "unit": "1",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "p/mass*um/k",
+    "unit": "Pa",
+    "conditions": [
+      "certificate",
+      "piston_standard"
+    ],
+    "revision": "2",
+    "source_fingerprint": "49ec159a17d36eba143dfd11d5f6d6dfc0649bf475a1caa05cb00ff947e41936"
+  },
+  "dpi190_f031": {
+    "id": "dpi190_f031",
+    "title": "Thành phần độ không đảm bảo do chênh cao u9 — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "rho",
+        "label": "Khối lượng riêng chất lỏng",
+        "unit": "kg/m3",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "g",
+        "label": "Gia tốc trọng trường",
+        "unit": "m/s2",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "uh",
+        "label": "U_delta_h",
+        "unit": "m",
+        "min": 0,
+        "exclusive_min": false,
+        "max": "0.002"
+      },
+      {
+        "key": "k",
+        "label": "Hệ số phủ k theo chứng nhận",
+        "unit": "1",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "expression": "rho*g*uh/k",
+    "unit": "Pa",
+    "conditions": [
+      "piston_standard"
+    ],
+    "revision": "2",
+    "source_fingerprint": "2017c96e87e0dcb7ce0a5f86c9f4a60d81fd79fd89dc3964331683eda19c628f"
+  },
+  "dpi190_f033": {
+    "id": "dpi190_f033",
+    "title": "Tổng hợp mười thành phần chuẩn pít tông — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "components",
+        "label": "u1 đến u10 theo thứ tự; giữ nguyên dấu",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false,
+        "kind": "series",
+        "min_items": 10,
+        "max_items": 10
+      }
+    ],
+    "expression": "rss(components)",
+    "unit": "Pa",
+    "conditions": [
+      "piston_standard",
+      "rss_applicable"
+    ],
+    "revision": "2",
+    "source_fingerprint": "a51177c9b8be307c452a0447f0de4e7393f7251eccfd72b1112e6ec332b815c2"
+  },
+  "dpi190_f034": {
+    "id": "dpi190_f034",
+    "title": "Độ phân giải theo phân bố tam giác — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "r",
+        "label": "Độ phân giải r theo loại chỉ thị",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "r/sqrt(6)",
+    "unit": "Pa",
+    "conditions": [
+      "triangular_distribution",
+      "resolution_definition"
+    ],
+    "revision": "2",
+    "source_fingerprint": "d5b9fb6728e593383f3b8846f40f80d1e374c32d94e186bd14f316b3266a2f5d"
+  },
+  "dpi190_f035": {
+    "id": "dpi190_f035",
+    "title": "Độ phân giải theo phân bố chữ nhật — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "r",
+        "label": "Độ phân giải r theo loại chỉ thị",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "r/sqrt(3)",
+    "unit": "Pa",
+    "conditions": [
+      "rectangular_distribution",
+      "resolution_definition"
+    ],
+    "revision": "2",
+    "source_fingerprint": "024ed6916dcc0091055c216590c52960b0fbe997703d5ad7c8cbcbf31bfa8bf7"
+  },
+  "dpi190_f036": {
+    "id": "dpi190_f036",
+    "title": "Độ lệch điểm không qua ba chu kỳ — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "x1",
+        "label": "Chỉ thị tại điểm 0 của loạt M1",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "x2",
+        "label": "Chỉ thị tại điểm 0 của loạt M2",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "x3",
+        "label": "Chỉ thị tại điểm 0 của loạt M3",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "x4",
+        "label": "Chỉ thị tại điểm 0 của loạt M4",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "x5",
+        "label": "Chỉ thị tại điểm 0 của loạt M5",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      },
+      {
+        "key": "x6",
+        "label": "Chỉ thị tại điểm 0 của loạt M6",
+        "unit": "Pa",
+        "min": null,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "max(abs(x2-x1),abs(x4-x3),abs(x6-x5))",
+    "unit": "Pa",
+    "conditions": [
+      "zero_cycles"
+    ],
+    "revision": "2",
+    "source_fingerprint": "7288ebfab3fcd3f1fc92936e4ae5e961ee1228366a274141e3cec0e57dc92ade"
+  },
+  "dpi190_f037": {
+    "id": "dpi190_f037",
+    "title": "Độ không đảm bảo do độ lệch điểm không u_f0 — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "f0",
+        "label": "Độ lệch điểm không f0 đã xác định từ M1 đến M6",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "f0/(2*sqrt(3))",
+    "unit": "Pa",
+    "conditions": [
+      "zero_shift_reviewed"
+    ],
+    "revision": "2",
+    "source_fingerprint": "8f80441cd2edc339d809cfb2525d7ce1fdd8a65c468d787814784ff0573a8004"
+  },
+  "dpi190_f050": {
+    "id": "dpi190_f050",
+    "title": "Độ không đảm bảo đo mở rộng U_c — QTKĐ 1.190 / DPI 610",
+    "variables": [
+      {
+        "key": "k",
+        "label": "Hệ số phủ k theo chứng nhận",
+        "unit": "1",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "uc",
+        "label": "Độ không đảm bảo liên hợp đã được xác định",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": false
+      }
+    ],
+    "expression": "k*uc",
+    "unit": "Pa",
+    "conditions": [
+      "combined_reviewed"
+    ],
+    "revision": "2",
+    "source_fingerprint": "01d77f0c5c13d0eb22f22724c71edb0adc3fbc993b45fb38b28495a2072c5896"
+  }
+}

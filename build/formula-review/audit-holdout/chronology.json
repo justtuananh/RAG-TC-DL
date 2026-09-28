@@ -1,0 +1,32 @@
+{
+  "observed_utc": "2026-09-28T08:05:30.069602+00:00",
+  "warning": "mtime/hash support local chronology only; mutable, not third-party timestamp or proof of pre-registration",
+  "files": {
+    "docs/FORMULA_REVIEW_CRITERIA.md": {
+      "mtime_utc": "2026-09-28T07:46:55.055228+00:00",
+      "sha256": "4c0849568a3c598157df61c1cc1dcdb6d0427be5fa1f3c1233300d0e9891cb61"
+    },
+    "docs/FORMULA_DRAFT_APPROVAL.md": {
+      "mtime_utc": "2026-09-28T07:55:40.574885+00:00",
+      "sha256": "4a72c9f87be21f79ad15d4f76af895e08fddb33dddb12df1a66b7948d0a963de"
+    },
+    "build/formula-review/independent/numerical_cases.json": {
+      "mtime_utc": "2026-09-28T07:52:16.313859+00:00",
+      "sha256": "6cac3bf38f9dc8e9d7a9b2700386b96c18fcfcb2094f04967b084337d65a849e"
+    },
+    "build/formula-review/independent/numerical-results-round1.json": {
+      "mtime_utc": "2026-09-28T07:56:01.209183+00:00",
+      "sha256": "f280f9dfe7cdf3f68ee4b868019897c2297bc33bf01097fe971ecbe78b0a4e7f"
+    },
+    "build/formula-review/independent/round2.json": {
+      "mtime_utc": "2026-09-28T07:58:14.789087+00:00",
+      "sha256": "035e44c084d37dcebb4ba51ab8f6322ef6b7189929f18b94b2ce551a02dad219"
+    },
+    "build/formula-review/INDEPENDENT_REVIEW.md": {
+      "mtime_utc": "2026-09-28T07:58:32.771340+00:00",
+      "sha256": "52de6082dba424d619c6acba7bd9b73354a5fba4185c1bec50f3a273b089e239"
+    }
+  },
+  "git_head": "17ada7d1e1d79a64896253580c9b3faea5a72c27",
+  "criteria_git_tracking": false
+}

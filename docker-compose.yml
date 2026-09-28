@@ -6,7 +6,7 @@
 #   make index         → index build/spike_a/ vào Qdrant (chạy 1 lần)
 #
 # ── Sử dụng hằng ngày ──────────────────────────────────────────────────────
-#   make up            → start (không rebuild)
+#   make start         → start (không rebuild)
 #   make down          → dừng tất cả
 #   make logs          → xem log realtime
 #   make index         → re-index khi thêm tài liệu mới
@@ -27,7 +27,7 @@
 #   Sau đó bỏ comment service `ollama` bên dưới.
 #
 # ── Lưu ý Linux + NVIDIA GPU ───────────────────────────────────────────────
-#   Bỏ comment phần deploy.resources trong service `ollama` để dùng GPU.
+#   Các service model hiện đã khai báo deploy.resources cho NVIDIA GPU.
 #   Yêu cầu: nvidia-container-toolkit đã cài.
 
 services:
@@ -178,13 +178,23 @@ services:
       - ./retrieval:/app/retrieval:ro
       - ./index:/app/index:ro
       - ./ingestion:/app/ingestion:ro
+      - ./formula_registry:/app/formula_registry:ro
+      - ./formula_lab/engine.py:/app/formula_lab/engine.py:ro
+      - ${FORMULA_REGISTRY_DIR:-./.formula-registry}:/app/.formula-registry
     environment:
+      FORMULA_REGISTRY_DB: /app/.formula-registry/registry.sqlite3
       EMBED_URL: http://embedding:8010/v1/embeddings
       RERANK_URL: http://reranker:8011/v1/rerank
       QDRANT_URL: http://qdrant:6333
-      OLLAMA_URL: http://ollama:11434/api/chat
+      OLLAMA_URL: ${OLLAMA_URL:-http://ollama:11434/api/chat}
       OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
     command: ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8080"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health', timeout=5)"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     depends_on:
       qdrant:
         condition: service_healthy
@@ -204,7 +214,8 @@ services:
     ports:
       - "3000:80"
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     restart: unless-stopped
 
   # ── One-time Indexer (chạy: make index) ────────────────────────────────────

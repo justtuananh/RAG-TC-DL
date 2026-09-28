@@ -1,0 +1,20 @@
+{
+  "height_sign": "Đã đối chiếu quy ước dấu chênh cao với vị trí chuẩn và thiết bị.",
+  "same_point": "Các chỉ thị thuộc cùng điểm đo và áp suất chuẩn tương ứng.",
+  "expanded_k2": "U nhập là độ không đảm bảo mở rộng với k=2, P=95% theo mục 5.3.2.",
+  "linear_fit": "Hệ số và các giá trị trung bình lấy từ cùng bộ dữ liệu, cùng đơn vị áp suất.",
+  "same_series": "Các giá trị thuộc cùng tập số liệu cần lấy trung bình.",
+  "paired_readings": "Hai danh sách cùng số phần tử, ghép đúng từng cặp X_i/Y_i và có ít nhất hai X khác nhau.",
+  "certificate": "U và k lấy từ cùng chứng nhận hiệu chuẩn; không tự mặc định k=2.",
+  "absolute_from_gauge": "Đang dùng chuẩn áp suất tương đối cùng thiết bị đo khí quyển để kiểm định áp kế tuyệt đối.",
+  "experimental_drift": "Giá trị độ trôi được xác định từ thực nghiệm phù hợp.",
+  "rss_applicable": "Đã xác nhận mô hình cộng bình phương này áp dụng, không cần thêm số hạng tương quan.",
+  "piston_standard": "Chuẩn sử dụng là áp kế pít tông theo mục D.2.2.2.",
+  "signed_component": "Giữ dấu âm của u3 theo biểu thức nguồn; đây là thành phần có dấu, không phải độ không đảm bảo tổng hợp.",
+  "resolution_definition": "r đã được xác định đúng theo loại chỉ thị và tình trạng dao động mô tả ở D.2.3.1.",
+  "triangular_distribution": "Cơ cấu chỉ thị áp dụng phân bố tam giác.",
+  "rectangular_distribution": "Cơ cấu chỉ thị áp dụng phân bố chữ nhật.",
+  "zero_cycles": "Sáu giá trị là chỉ thị điểm 0 từ M1 đến M6 đúng thứ tự chu trình tăng/giảm.",
+  "zero_shift_reviewed": "f0 đã được xác định đúng theo ba cặp M2-M1, M4-M3, M6-M5 theo D.2.3.2.",
+  "combined_reviewed": "u_c đã được xác định bằng mô hình liên hợp được đối chiếu; không tự sử dụng biểu thức F049 còn mâu thuẫn."
+}

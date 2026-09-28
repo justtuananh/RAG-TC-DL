@@ -1,0 +1,15 @@
+{
+  "formula_registry/__init__.py": "ca7c440e058affcbabf20e2862a79a9ac834949fffe590ea5ad23e3da045fe83",
+  "formula_registry/api.py": "873c4c5e0669bef1aad3e68f26d9abe73b89302028ab2aa88127501728a0ebef",
+  "formula_registry/__main__.py": "3a44f0465f1f9bfde56a7d2882a6596557706d46498e5a9183ef969f3ce377c4",
+  "formula_registry/validation.py": "4315fb70ab019b8c6616161a1a18c30349e78324d9d89ae6fa1a8f4cdbee4c09",
+  "formula_registry/drafts.py": "b9b9fffec024d2e2e64555bbb2ec1559cdff6b98d8e5a3fc22ba1482c0a8ac50",
+  "formula_registry/store.py": "cc5674a46d4cd3d3ce7cd7dcab3a7005b3c792b1c177cb5378d074073ebd2707",
+  "formula_lab/engine.py": "71993ba39d5ac69745b27293018c7e4db2c6d0e9d7e1746f67ba4e35c396ddad",
+  "api_server.py": "7b8dd3064821c4fdefb5ce5f0fcd6ea4da974013473e36f3a5b4f26d0084737c",
+  "ingestion_jobs.py": "5443a38db39083c75f6df7755b2841338c328b06904d2a682c252b47e7c90984",
+  "frontend/src/services/formulaApi.ts": "3a95479998fc809d7ed224e4eb9de051457da41da289b6bec731bed81d465ba3",
+  "frontend/src/components/docs/FormulaReviewPanel.tsx": "b1b5f855391eb9c135bd5eca85e88155905bb70a6410f1b3bee5bac2281f5ec3",
+  "frontend/src/components/docs/DocViewerPanel.tsx": "dc625bae4b45c4ca18efef313e3e0399ca26019a7799c89f5fc45a2f935f9a5c",
+  "frontend/src/store/useAppStore.ts": "e0ce5fb4258d90517540fab021f056df9bc53330725c08a0ed78a680d562c841"
+}

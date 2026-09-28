@@ -1,0 +1,8 @@
+{
+  "strategy": "registry",
+  "chat_model": "qwen/qwen3-30b-a3b-instruct-2507",
+  "embedding_model": "openai/text-embedding-3-small",
+  "temperature": 0,
+  "reranker": false,
+  "version": "docx-lab-v1"
+}

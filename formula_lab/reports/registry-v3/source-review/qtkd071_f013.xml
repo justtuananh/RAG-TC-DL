@@ -1,0 +1,231 @@
+<w:tbl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" xmlns:cx2="http://schemas.microsoft.com/office/drawing/2015/10/21/chartex" xmlns:cx3="http://schemas.microsoft.com/office/drawing/2016/5/9/chartex" xmlns:cx4="http://schemas.microsoft.com/office/drawing/2016/5/10/chartex" xmlns:cx5="http://schemas.microsoft.com/office/drawing/2016/5/11/chartex" xmlns:cx6="http://schemas.microsoft.com/office/drawing/2016/5/12/chartex" xmlns:cx7="http://schemas.microsoft.com/office/drawing/2016/5/13/chartex" xmlns:cx8="http://schemas.microsoft.com/office/drawing/2016/5/14/chartex" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:aink="http://schemas.microsoft.com/office/drawing/2016/ink" xmlns:am3d="http://schemas.microsoft.com/office/drawing/2017/model3d" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oel="http://schemas.microsoft.com/office/2019/extlst" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:w16cex="http://schemas.microsoft.com/office/word/2018/wordml/cex" xmlns:w16cid="http://schemas.microsoft.com/office/word/2016/wordml/cid" xmlns:w16="http://schemas.microsoft.com/office/word/2018/wordml" xmlns:w16sdtdh="http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash" xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">
+  <w:tblPr>
+    <w:tblW w:w="9351" w:type="dxa"/>
+    <w:jc w:val="right"/>
+    <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
+  </w:tblPr>
+  <w:tblGrid>
+    <w:gridCol w:w="562"/>
+    <w:gridCol w:w="6946"/>
+    <w:gridCol w:w="1843"/>
+  </w:tblGrid>
+  <w:tr w:rsidR="00F713B4" w:rsidRPr="00DF6547" w14:paraId="0A754A4A" w14:textId="77777777" w:rsidTr="00F713B4">
+    <w:trPr>
+      <w:jc w:val="right"/>
+    </w:trPr>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="562" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="587F3EAD" w14:textId="77777777" w:rsidR="00F713B4" w:rsidRPr="00F713B4" w:rsidRDefault="00F713B4" w:rsidP="00F713B4">
+        <w:pPr>
+          <w:spacing w:before="120" w:after="120"/>
+          <w:jc w:val="center"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+      </w:p>
+    </w:tc>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="6946" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="24945AED" w14:textId="3CA4C8FD" w:rsidR="00F713B4" w:rsidRPr="00F713B4" w:rsidRDefault="00AC7F80" w:rsidP="00F713B4">
+        <w:pPr>
+          <w:spacing w:before="120" w:after="120"/>
+          <w:jc w:val="center"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+        <w:r w:rsidRPr="00AC7F80">
+          <w:rPr>
+            <w:position w:val="-26"/>
+          </w:rPr>
+          <w:object w:dxaOrig="1320" w:dyaOrig="700" w14:anchorId="49F888FE">
+            <v:shape id="_x0000_i1027" type="#_x0000_t75" style="width:65.3pt;height:35.15pt" o:ole="">
+              <v:imagedata r:id="rId18" o:title=""/>
+            </v:shape>
+            <o:OLEObject Type="Embed" ProgID="Equation.DSMT4" ShapeID="_x0000_i1027" DrawAspect="Content" ObjectID="_1728907748" r:id="rId19"/>
+          </w:object>
+        </w:r>
+      </w:p>
+    </w:tc>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="1843" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="6A70F509" w14:textId="77777777" w:rsidR="00F713B4" w:rsidRPr="00F713B4" w:rsidRDefault="00F713B4" w:rsidP="00087262">
+        <w:pPr>
+          <w:pStyle w:val="ListParagraph"/>
+          <w:numPr>
+            <w:ilvl w:val="0"/>
+            <w:numId w:val="28"/>
+          </w:numPr>
+          <w:spacing w:before="120" w:after="120" w:line="240" w:lineRule="auto"/>
+          <w:contextualSpacing w:val="0"/>
+          <w:jc w:val="right"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+      </w:p>
+    </w:tc>
+  </w:tr>
+  <w:tr w:rsidR="001C0D8D" w:rsidRPr="00DF6547" w14:paraId="01538A54" w14:textId="77777777" w:rsidTr="001B248D">
+    <w:trPr>
+      <w:jc w:val="right"/>
+    </w:trPr>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="562" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="046AC490" w14:textId="77777777" w:rsidR="001C0D8D" w:rsidRPr="00F713B4" w:rsidRDefault="001C0D8D" w:rsidP="001B248D">
+        <w:pPr>
+          <w:spacing w:before="120" w:after="120"/>
+          <w:jc w:val="center"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+      </w:p>
+    </w:tc>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="6946" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="0F03883B" w14:textId="7E8F9FA2" w:rsidR="001C0D8D" w:rsidRPr="00F713B4" w:rsidRDefault="00D323D8" w:rsidP="001B248D">
+        <w:pPr>
+          <w:spacing w:before="120" w:after="120"/>
+          <w:jc w:val="center"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+        <w:r w:rsidRPr="00D323D8">
+          <w:rPr>
+            <w:position w:val="-12"/>
+          </w:rPr>
+          <w:object w:dxaOrig="1300" w:dyaOrig="380" w14:anchorId="24484AD0">
+            <v:shape id="_x0000_i1028" type="#_x0000_t75" style="width:65.3pt;height:19.25pt" o:ole="">
+              <v:imagedata r:id="rId20" o:title=""/>
+            </v:shape>
+            <o:OLEObject Type="Embed" ProgID="Equation.DSMT4" ShapeID="_x0000_i1028" DrawAspect="Content" ObjectID="_1728907749" r:id="rId21"/>
+          </w:object>
+        </w:r>
+      </w:p>
+    </w:tc>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="1843" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="158DF097" w14:textId="77777777" w:rsidR="001C0D8D" w:rsidRPr="00F713B4" w:rsidRDefault="001C0D8D" w:rsidP="001B248D">
+        <w:pPr>
+          <w:pStyle w:val="ListParagraph"/>
+          <w:numPr>
+            <w:ilvl w:val="0"/>
+            <w:numId w:val="28"/>
+          </w:numPr>
+          <w:spacing w:before="120" w:after="120" w:line="240" w:lineRule="auto"/>
+          <w:contextualSpacing w:val="0"/>
+          <w:jc w:val="right"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+      </w:p>
+    </w:tc>
+  </w:tr>
+  <w:tr w:rsidR="00157C0F" w:rsidRPr="00F713B4" w14:paraId="00575E3E" w14:textId="77777777" w:rsidTr="001B248D">
+    <w:trPr>
+      <w:jc w:val="right"/>
+    </w:trPr>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="562" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="6C350F12" w14:textId="77777777" w:rsidR="00157C0F" w:rsidRPr="00F713B4" w:rsidRDefault="00157C0F" w:rsidP="001B248D">
+        <w:pPr>
+          <w:spacing w:before="120" w:after="120"/>
+          <w:jc w:val="center"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+      </w:p>
+    </w:tc>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="6946" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="4A9024D8" w14:textId="630AE809" w:rsidR="00157C0F" w:rsidRPr="00F713B4" w:rsidRDefault="00FE342B" w:rsidP="001B248D">
+        <w:pPr>
+          <w:spacing w:before="120" w:after="120"/>
+          <w:jc w:val="center"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+        <w:r w:rsidRPr="00D323D8">
+          <w:rPr>
+            <w:position w:val="-12"/>
+          </w:rPr>
+          <w:object w:dxaOrig="1359" w:dyaOrig="380" w14:anchorId="721008F8">
+            <v:shape id="_x0000_i1029" type="#_x0000_t75" style="width:67.8pt;height:19.25pt" o:ole="">
+              <v:imagedata r:id="rId22" o:title=""/>
+            </v:shape>
+            <o:OLEObject Type="Embed" ProgID="Equation.DSMT4" ShapeID="_x0000_i1029" DrawAspect="Content" ObjectID="_1728907750" r:id="rId23"/>
+          </w:object>
+        </w:r>
+      </w:p>
+    </w:tc>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="1843" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="16E23D53" w14:textId="77777777" w:rsidR="00157C0F" w:rsidRPr="00F713B4" w:rsidRDefault="00157C0F" w:rsidP="001B248D">
+        <w:pPr>
+          <w:pStyle w:val="ListParagraph"/>
+          <w:numPr>
+            <w:ilvl w:val="0"/>
+            <w:numId w:val="28"/>
+          </w:numPr>
+          <w:spacing w:before="120" w:after="120" w:line="240" w:lineRule="auto"/>
+          <w:contextualSpacing w:val="0"/>
+          <w:jc w:val="right"/>
+          <w:rPr>
+            <w:szCs w:val="28"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+      </w:p>
+    </w:tc>
+  </w:tr>
+</w:tbl>

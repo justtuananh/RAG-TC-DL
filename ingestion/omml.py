@@ -32,7 +32,7 @@ def _child(el, name):
 _NARY = {"∑": r"\sum", "∫": r"\int", "∏": r"\prod",
          "∬": r"\iint", "∭": r"\iiint", "∐": r"\coprod",
          "⋃": r"\bigcup", "⋂": r"\bigcap"}
-_ACC = {"̂": r"\hat", "̃": r"\tilde", "̄": r"\bar",
+_ACC = {"̂": r"\hat", "̃": r"\tilde", "̄": r"\bar", "̅": r"\overline",
         "̇": r"\dot", "⃗": r"\vec", "̆": r"\breve"}
 
 
@@ -70,6 +70,8 @@ def _node(el) -> str:  # noqa: C901 - a flat dispatch is clearest here
         if dpr is not None:
             beg = _val(dpr, "begChr") or "("
             end = _val(dpr, "endChr") or ")"
+        beg = {"{": r"\{"}.get(beg, beg)
+        end = {"}": r"\}"}.get(end, end)
         inner = "".join(_seq(c) for c in el if _ln(c) == "e")
         return rf"\left{beg} {inner} \right{end}"
     if tag == "nary":           # ∑ ∫ ∏ with limits

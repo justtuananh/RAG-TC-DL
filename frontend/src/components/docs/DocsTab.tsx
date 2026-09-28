@@ -98,7 +98,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
         />
 
         {state.viewingDoc ? (
-          <DocViewerPanel viewingDoc={state.viewingDoc} onBack={actions.closeViewer} />
+          <DocViewerPanel viewingDoc={state.viewingDoc} onBack={actions.closeViewer} onDirtyChange={actions.setFormulaDirty} />
         ) : (
           <>
             {/* thanh lọc theo trạng thái */}

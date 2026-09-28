@@ -1,0 +1,50 @@
+[
+  {
+    "name": "llm",
+    "branch": "exp/formula-llm",
+    "commit": "4e0d92aa1eeaffd05e16abb504bed3bed18a2bce",
+    "code_hashes": {
+      "__init__.py": "bc78580b07c1ec3990e00002d96b0ad4fbda2f345b5da98526003ffb095c0eb4",
+      "provider.py": "49c39ed0da664776e204687c86353aa3fa997503f7970e645ea9aaddc9165fb1",
+      "build_data.py": "a036f8225ab653c3c579960eff7a85f865b886a4f8a3d899ba915f741f34c9cf",
+      "retrieval.py": "69742edf41d7715458ed7458868de9984cbcaa6012ab26dd1e028fb5f5f2a801",
+      "compare.py": "6f4109ea6fbb536921b0f9f27789286e28aaaae421bb8c6b306c882482a86aac",
+      "strategies.py": "935f511718b20b0682f73a6b8b277601a41247bb75bb5ba28ea6502b2931c855",
+      "engine.py": "da94e67e5fec5de1a360aea6496fa56c4d1aa8cebd53ae55a91a1e60e109b639",
+      "app.py": "8bb3e0190b6dca70650d70bbbe9b23437b06526aecd78d579890c3b75cb309e2",
+      "benchmark.py": "da30eb1eca8c2e07611092a31a257165baf3f0521822ebf49f3b7f924d121f37"
+    }
+  },
+  {
+    "name": "parser",
+    "branch": "exp/formula-parser",
+    "commit": "fc10c90528fa34cf8372a955f9927a558f0df6e7",
+    "code_hashes": {
+      "__init__.py": "bc78580b07c1ec3990e00002d96b0ad4fbda2f345b5da98526003ffb095c0eb4",
+      "provider.py": "49c39ed0da664776e204687c86353aa3fa997503f7970e645ea9aaddc9165fb1",
+      "build_data.py": "a036f8225ab653c3c579960eff7a85f865b886a4f8a3d899ba915f741f34c9cf",
+      "retrieval.py": "69742edf41d7715458ed7458868de9984cbcaa6012ab26dd1e028fb5f5f2a801",
+      "compare.py": "6f4109ea6fbb536921b0f9f27789286e28aaaae421bb8c6b306c882482a86aac",
+      "strategies.py": "935f511718b20b0682f73a6b8b277601a41247bb75bb5ba28ea6502b2931c855",
+      "engine.py": "da94e67e5fec5de1a360aea6496fa56c4d1aa8cebd53ae55a91a1e60e109b639",
+      "app.py": "8bb3e0190b6dca70650d70bbbe9b23437b06526aecd78d579890c3b75cb309e2",
+      "benchmark.py": "da30eb1eca8c2e07611092a31a257165baf3f0521822ebf49f3b7f924d121f37"
+    }
+  },
+  {
+    "name": "registry",
+    "branch": "exp/formula-registry",
+    "commit": "9a559c0606288c49b1280037cd4c405d29bd8d50",
+    "code_hashes": {
+      "__init__.py": "bc78580b07c1ec3990e00002d96b0ad4fbda2f345b5da98526003ffb095c0eb4",
+      "provider.py": "49c39ed0da664776e204687c86353aa3fa997503f7970e645ea9aaddc9165fb1",
+      "build_data.py": "a036f8225ab653c3c579960eff7a85f865b886a4f8a3d899ba915f741f34c9cf",
+      "retrieval.py": "69742edf41d7715458ed7458868de9984cbcaa6012ab26dd1e028fb5f5f2a801",
+      "compare.py": "6f4109ea6fbb536921b0f9f27789286e28aaaae421bb8c6b306c882482a86aac",
+      "strategies.py": "935f511718b20b0682f73a6b8b277601a41247bb75bb5ba28ea6502b2931c855",
+      "engine.py": "da94e67e5fec5de1a360aea6496fa56c4d1aa8cebd53ae55a91a1e60e109b639",
+      "app.py": "8bb3e0190b6dca70650d70bbbe9b23437b06526aecd78d579890c3b75cb309e2",
+      "benchmark.py": "da30eb1eca8c2e07611092a31a257165baf3f0521822ebf49f3b7f924d121f37"
+    }
+  }
+]

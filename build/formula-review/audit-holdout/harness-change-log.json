@@ -1,0 +1,16 @@
+{
+  "execution_count": 1,
+  "post_result_runner_edits": 0,
+  "post_result_manifest_edits": 0,
+  "reruns": 0,
+  "events": [
+    {
+      "stage": "before_execution",
+      "action": "Runner py_compile only; no product invocation"
+    },
+    {
+      "stage": "after_freeze",
+      "action": "Classified N07/N08/U02 as design invalid and U03/U04 blocked, preserved raw non-pass and denominator; no rerun"
+    }
+  ]
+}

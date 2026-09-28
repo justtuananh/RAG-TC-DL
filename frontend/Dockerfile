@@ -1,9 +1,9 @@
-FROM node:20-slim AS build
+FROM node:24-slim AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
-RUN npm run build
+RUN npm run typecheck && npm run build
 
 FROM nginx:alpine
 COPY --from=build /app/dist /usr/share/nginx/html

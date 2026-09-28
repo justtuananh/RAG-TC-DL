@@ -1,0 +1,46 @@
+{
+  "scope": "Actual React + main API, isolated temporary DOCX and SQLite; no real corpus approvals",
+  "checks": [
+    {
+      "check": "review_accessible_after_embedding_failure",
+      "passed": true
+    },
+    {
+      "check": "edit_reference_case_and_approve",
+      "passed": true
+    },
+    {
+      "check": "approved_calculation_with_unit_conversion",
+      "passed": true,
+      "result": {
+        "status": "ok",
+        "value": "1500",
+        "unit": "Pa",
+        "normalized": {
+          "a": "2000",
+          "b": "-500"
+        },
+        "expression": "a+b",
+        "revision": "3",
+        "formula_id": "7c68fec5d95d46dcc308e5c25f73cdce",
+        "source": "e2e_demo.docx",
+        "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+        "approved_by": "Kiểm thử tự động — dữ liệu giả",
+        "approved_at": "2026-09-28T07:42:50.292372+00:00"
+      }
+    },
+    {
+      "check": "input_edit_invalidates_displayed_result",
+      "passed": true
+    },
+    {
+      "check": "saved_change_revokes_approval_and_blocks_calculation",
+      "passed": true
+    },
+    {
+      "check": "reject_incomplete_or_incorrect_draft",
+      "passed": true
+    }
+  ],
+  "browser_errors": []
+}

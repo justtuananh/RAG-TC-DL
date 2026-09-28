@@ -1,0 +1,421 @@
+[
+  {
+    "name": "affine_units",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "1250.00",
+      "unit": "Pa",
+      "normalized": {
+        "a": "3750.00",
+        "b": "1250"
+      },
+      "expression": "(a-b)/2",
+      "revision": "2",
+      "formula_id": "fb79df9d9c3afb6c6bd6b816ebfbfcd3",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.247688+00:00"
+    }
+  },
+  {
+    "name": "negative",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "-6",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-7",
+        "b": "5"
+      },
+      "expression": "(a-b)/2",
+      "revision": "2",
+      "formula_id": "9b9bceadb6fc50c9c6caa752934c7181",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.267681+00:00"
+    }
+  },
+  {
+    "name": "zero",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "0",
+      "unit": "Pa",
+      "normalized": {
+        "a": "0",
+        "b": "0"
+      },
+      "expression": "a-b",
+      "revision": "2",
+      "formula_id": "18aa5db929ea6d2faf238bc053113667",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.290628+00:00"
+    }
+  },
+  {
+    "name": "mean_series",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "5",
+      "unit": "mm",
+      "normalized": {
+        "x": [
+          "-3",
+          "0",
+          "9",
+          "14"
+        ]
+      },
+      "expression": "mean(x)",
+      "revision": "2",
+      "formula_id": "9a9a106c0cdfd3dc5efc076bd4aaa4fe",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.312546+00:00"
+    }
+  },
+  {
+    "name": "rss_series",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "7",
+      "unit": "Pa",
+      "normalized": {
+        "x": [
+          "-2",
+          "3",
+          "6"
+        ]
+      },
+      "expression": "rss(x)",
+      "revision": "2",
+      "formula_id": "d54ac6887aa0f6640982ee00f0f7a508",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.338310+00:00"
+    }
+  },
+  {
+    "name": "slope_series",
+    "passed": false,
+    "actual": {
+      "status": "ok",
+      "value": "2.999999999999999999999999999999999",
+      "unit": "1",
+      "normalized": {
+        "x": [
+          "-2",
+          "0",
+          "3"
+        ],
+        "y": [
+          "-7",
+          "-1",
+          "8"
+        ]
+      },
+      "expression": "slope(x,y)",
+      "revision": "2",
+      "formula_id": "d212a9ea8ddfb52b49d425d75b00c707",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.360524+00:00"
+    }
+  },
+  {
+    "name": "power",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "-15.625",
+      "unit": "1",
+      "normalized": {
+        "a": "-2.5"
+      },
+      "expression": "a**3",
+      "revision": "2",
+      "formula_id": "67f26c9be8ee424cd52b5c8722770651",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.382454+00:00"
+    }
+  },
+  {
+    "name": "sqrt",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "1.5",
+      "unit": "1",
+      "normalized": {
+        "a": "2.25"
+      },
+      "expression": "sqrt(a)",
+      "revision": "2",
+      "formula_id": "131fc87cd7a3d8a10ebb735fa6fb9199",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.405285+00:00"
+    }
+  },
+  {
+    "name": "max_abs",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "17",
+      "unit": "Pa",
+      "normalized": {
+        "a": "-17",
+        "b": "12"
+      },
+      "expression": "max(abs(a),b)",
+      "revision": "2",
+      "formula_id": "9d4380e78b738a6c990d3e04771b9183",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.428629+00:00"
+    }
+  },
+  {
+    "name": "volume_conversion",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "100.000",
+      "unit": "mL",
+      "normalized": {
+        "a": "125.000",
+        "b": "-25"
+      },
+      "expression": "a+b",
+      "revision": "2",
+      "formula_id": "52b1aac801e49b745022cc65ae2ec8af",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.452601+00:00"
+    }
+  },
+  {
+    "name": "area_conversion",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "3.7E+3",
+      "unit": "mm2",
+      "normalized": {
+        "a": "3.7E+3"
+      },
+      "expression": "a",
+      "revision": "2",
+      "formula_id": "84f0df0b6ad6e8abf4556fcc170bcb25",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.480557+00:00"
+    }
+  },
+  {
+    "name": "inverse_pressure_conversion",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "0.000075",
+      "unit": "1/Pa",
+      "normalized": {
+        "a": "0.000075"
+      },
+      "expression": "a",
+      "revision": "2",
+      "formula_id": "49a5902abf49609b38d2cdfe44e80293",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.506475+00:00"
+    }
+  },
+  {
+    "name": "inclusive_lower",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "-4",
+      "unit": "1",
+      "normalized": {
+        "a": "-4"
+      },
+      "expression": "a",
+      "revision": "2",
+      "formula_id": "daf1caf222112f9f3228467b35cb9163",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.532148+00:00"
+    }
+  },
+  {
+    "name": "inclusive_upper",
+    "passed": true,
+    "actual": {
+      "status": "ok",
+      "value": "9",
+      "unit": "1",
+      "normalized": {
+        "a": "9"
+      },
+      "expression": "a",
+      "revision": "2",
+      "formula_id": "dca3a947475d2ad404a05b1a73476db1",
+      "source": "independent.docx",
+      "source_hash": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4",
+      "approved_by": "Independent synthetic tester",
+      "approved_at": "2026-09-28T07:52:17.556665+00:00"
+    }
+  },
+  {
+    "name": "block_nan",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_infinity",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_oversized",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_numeric_json",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_wrong_unit",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_missing_variable",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_extra_variable",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_condition_false",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_condition_string",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_forged_status",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_old_revision",
+    "passed": true,
+    "actual": 409
+  },
+  {
+    "name": "block_slope_constant",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_negative_sqrt",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_below_min",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_above_max",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_series_empty",
+    "passed": true,
+    "actual": 422
+  },
+  {
+    "name": "block_expression___import__(\"os\").system(\"id\")",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "block_expression_a.__class__",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "block_expression_sum([a,b])",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "block_expression_a**9",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "restart_persists",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "edit_revokes",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "pending_blocked",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "old_write_conflict",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "rejection_audit",
+    "passed": true,
+    "actual": null
+  },
+  {
+    "name": "rejected_blocked",
+    "passed": true,
+    "actual": null
+  }
+]

@@ -1,0 +1,16 @@
+
+> tro-ly-kiem-dinh@1.0.0 test
+> vitest run --maxWorkers=2
+
+2:56:03 PM [vite] warning: `esbuild` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `oxc` instead.
+2:56:03 PM [vite] warning: `optimizeDeps.esbuildOptions` option was specified by "vite:react-babel" plugin. This option is deprecated, please use `optimizeDeps.rolldownOptions` instead.
+Both esbuild and oxc options were set. oxc options will be used and esbuild options will be ignored. The following esbuild options were set: `{ jsx: 'automatic', jsxImportSource: undefined }`
+
+ RUN  v4.1.9 /root/RAG-TC-DL/frontend
+
+
+ Test Files  9 passed (9)
+      Tests  47 passed (47)
+   Start at  14:56:04
+   Duration  6.53s (transform 890ms, setup 0ms, import 2.61s, tests 1.62s, environment 5.77s)
+

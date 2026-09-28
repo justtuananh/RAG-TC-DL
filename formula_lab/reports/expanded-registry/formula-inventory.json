@@ -1,0 +1,1784 @@
+[
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F001",
+    "latex": "∆P_{0}=ρ×g×h (1)",
+    "kind": "omml",
+    "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F002",
+    "latex": "P_{c}=\\frac{\\sum{M_{c}×g×\\left( 1-\\frac{ρ_{a}}{ρ_{M,c}} \\right)+γ×C_{c}}}{A_{0,c}\\left( 1+λ_{c} \\right)\\left[ 1+\\left( α_{p,c}+α_{x,c} \\right)×\\left( t_{c}-t_{r} \\right) \\right]}+\\left( ρ_{f}-ρ_{a} \\right)×g×h+P_{vac} (2)",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F003",
+    "latex": "ρ_{a}=\\frac{3,484 4×P_{at}-H×\\left( 0,002 52×t-0,020 582 \\right)}{1 000×\\left( t+273,15 \\right)} (3)",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F004",
+    "latex": "ρ=\\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} (4)",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F005",
+    "latex": "∆P=\\left| ρ \\right|+U (5)",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F006",
+    "latex": "Y=a+b×X",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F007",
+    "latex": "\\hat{x}=\\frac{\\sum{x_{i}}}{n}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F008",
+    "latex": "\\hat{y}=\\frac{\\sum{y_{i}}}{n}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F009",
+    "latex": "b=\\frac{\\sum{\\left( x_{i}-\\hat{x} \\right)\\left( y_{i}-\\hat{y} \\right)}}{\\sum{\\left( x_{i}-\\hat{x} \\right)^{2}}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F010",
+    "latex": "a=\\hat{y}-b×\\hat{x}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F011",
+    "latex": "u_{ai}=\\sqrt{S_{a}^{2}+x_{i}^{2}S_{b}^{2}+2x_{i}S_{a}S_{b}r\\left( a,b \\right)}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F012",
+    "latex": "S_{a}=S_{y}×\\sqrt{\\frac{\\sum{x_{i}^{2}}}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}} }",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F013",
+    "latex": "S_{b}=S_{y}×\\sqrt{\\frac{n}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F014",
+    "latex": "S_{y}=\\sqrt{\\frac{\\sum{\\left( y_{i}-a-bx_{i} \\right)}}{n-2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F015",
+    "latex": "r\\left( a,b \\right)=-\\frac{\\sum{x_{i}}}{\\sqrt{n\\sum{x_{i}^{2}}}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F016",
+    "latex": "u_{ch1}=\\frac{U_{ch1}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F017",
+    "latex": "u_{amb}=\\frac{U_{amb}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F018",
+    "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F019",
+    "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F020",
+    "latex": "u_{1}=a+b×p",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F022",
+    "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F024",
+    "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F026",
+    "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F027",
+    "latex": "u_{5}=p×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{U_{t}}{\\sqrt{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F028",
+    "latex": "u_{6}=p_{c}×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{∆}{2}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F029",
+    "latex": "u_{7}=\\frac{p_{c}}{g}×\\frac{U_{g}}{3}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F030",
+    "latex": "u_{8}=\\frac{p}{\\left( ρ_{M_{c}}-ρ_{a} \\right)}×\\frac{U_{ρ_{a}}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F031",
+    "latex": "u_{9}=ρ_{f}×g×\\frac{U_{∆h}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F032",
+    "latex": "u_{10}=p×sinθ_{c}×\\frac{U_{θ_{c}}}{\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F033",
+    "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F034",
+    "latex": "u_{r}=\\frac{r}{\\sqrt{6}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F035",
+    "latex": "u_{r}=\\frac{r}{\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F036",
+    "latex": "f_{0}=max\\left{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F037",
+    "latex": "u_{f0}=\\frac{f_{0}}{2\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F038",
+    "latex": "b^{'}_{up,j}=\\left| \\left( x_{3,j}-x_{3,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F039",
+    "latex": "b^{'}_{down,j}=\\left| \\left( x_{4,j}-x_{4,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F040",
+    "latex": "b^{'}_{mean,j}=max\\left{ b^{'}_{up,j}-b^{'}_{down,j} \\right}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F041",
+    "latex": "u_{b^{'}}=\\frac{b^{'}_{mean,j}}{2\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F042",
+    "latex": "b_{up,j}=\\left| \\left( x_{5,j}-x_{5,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F043",
+    "latex": "b_{down,j}=\\left| \\left( x_{6,j}-x_{6,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F044",
+    "latex": "b_{mean,j}=max\\left{ b_{up,j}-b_{down,j} \\right}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F045",
+    "latex": "u_{b}=\\frac{b_{mean,j}}{2\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F046",
+    "latex": "h_{mean,j}=\\frac{1}{n}\\left{ \\left| \\left( x_{2,j}-x_{1,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|+\\left| \\left( x_{4,j}-x_{3,0} \\right)-\\left( x_{3,j}-x_{3,0} \\right) \\right|+\\left| \\left( x_{6,j}-x_{5,0} \\right)-\\left( x_{5,j}-x_{5,0} \\right) \\right| \\right}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F047",
+    "latex": "u_{h}=\\frac{h_{mean,j}}{2\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F048",
+    "latex": "u_{bk}=\\sqrt{u_{r}^{2}+u_{f_{0}}^{2}+u_{b^{'}}^{2}+u_{b}^{2}+u_{h}^{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F049",
+    "latex": "u_{c}=\\sqrt{u_{a}^{2}+u_{c}^{2}+u_{bk}^{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+    "fid": "F050",
+    "latex": "U_{c}=k×u_{c}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.061 2021 ND V2.docx",
+    "fid": "F001",
+    "latex": "\\DeltaP_{cd} = P_{m} - P_{cd}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
+    "suspicious": [],
+    "registered": [
+      "valve"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.063 2021 BPL.docx",
+    "fid": "F001",
+    "latex": "V_{pl}=500- V_{đ}",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật",
+    "suspicious": [],
+    "registered": [
+      "volume"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F001",
+    "latex": "τ=τ_{t}\\frac{η_{t}}{η}",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F002",
+    "latex": "\\tau = \\tau_{t} \\times \\frac{\\eta_{t}}{\\eta}",
+    "kind": "ole",
+    "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+    "suspicious": [],
+    "registered": [
+      "rotation"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F007",
+    "latex": "V=V_{t}\\frac{η_{t}}{η}",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F008",
+    "latex": "V = V_{t} \\times \\frac{\\eta_{t}}{\\eta}",
+    "kind": "ole",
+    "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+    "suspicious": [],
+    "registered": [
+      "fall"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F013",
+    "latex": "\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}",
+    "kind": "ole",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+    "suspicious": [],
+    "registered": [
+      "error"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F014",
+    "latex": "\\Delta_{1} = P - P_{c1}",
+    "kind": "ole",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+    "suspicious": [],
+    "registered": [
+      "error"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F015",
+    "latex": "\\Delta_{2} = P - P_{c2}",
+    "kind": "ole",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+    "suspicious": [],
+    "registered": [
+      "error"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F024",
+    "latex": "P = P_{0}",
+    "kind": "ole",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F027",
+    "latex": "P = P_{0} \\times \\frac{g_{d}}{g_{0}}",
+    "kind": "ole",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+    "suspicious": [],
+    "registered": [
+      "gravity"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F033",
+    "latex": "\\delta = \\frac{\\Delta}{P} \\times 100",
+    "kind": "ole",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+    "suspicious": [],
+    "registered": [
+      "error"
+    ],
+    "status": "existing_reviewed"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F034",
+    "latex": "\\frac{g_{d}}{g_{0}} = ................",
+    "kind": "ole",
+    "section": "Mẫu biên bản kiểm định",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.071 2022 FINAL.docx",
+    "fid": "F035",
+    "latex": "\\frac{g_{d}}{g_{0}} = ................",
+    "kind": "ole",
+    "section": "Mẫu biên bản kiểm định (không đạt cấp cho đơn vị)",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F001",
+    "latex": "\\tau = \\tau_{t}\\frac{\\eta_{t}}{\\eta}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.3 Kiểm tra thời gian quay tự do của píttông",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F006",
+    "latex": "V = V_{t}\\frac{\\eta_{t}}{\\eta}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.2 Kiểm tra kỹ thuật > 6.2.4 Kiểm tra tốc độ hạ của píttông",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F011",
+    "latex": "M = P \\times A_{0} \\times \\frac{g_{0}}{g} \\times (1 + \\frac{\\rho_{a}}{\\rho_{Mt}})",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F014",
+    "latex": "\\Delta_{Mi} = \\frac{|M_{i} - M|}{M}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F015",
+    "latex": "P_{s,i} = \\frac{\\sum_{}^{}M_{i,s}g(1 - \\frac{\\rho_{a}}{\\rho_{Ms}}) + \\gammaC_{s}}{A_{0s}(1 + \\lambda_{s}P_{s,i})[1 + (\\alpha_{p,s} + \\alpha_{c,s})(t_{s} - t_{r})]} + (\\rho_{f} - \\rho_{a})gh",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F027",
+    "latex": "\\rho_{a} = \\frac{3,4848P_{a} - 0,009 \\times H \\times e^{0,061 \\times t}}{t + 273,15}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F031",
+    "latex": "P_{abs} = P_{s,i} + \\mu",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F034",
+    "latex": "P_{m} = P_{s,i} \\pm (\\rho_{f} - \\rho_{a})g\\Deltah",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F036",
+    "latex": "P_{m} = P_{abs} \\pm \\rho_{f}g\\Deltah",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F039",
+    "latex": "A_{0t,i}(1 + \\lambda_{t}P_{s,i}) = \\frac{\\sum_{}^{}M_{t,i}g(1 - \\frac{\\rho_{a}}{\\rho_{Mt}}) + \\gammaC_{t}}{P_{s,i}[1 + (\\alpha_{p,t} + \\alpha_{c,t})(t_{t} - t_{r})]} + \\frac{(\\rho_{f} - \\rho_{a})gh}{P_{s,i}}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F047",
+    "latex": "X_{i} = P_{s,i}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F048",
+    "latex": "Y_{i} = A_{0t,i}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F049",
+    "latex": "R = \\frac{n\\sum_{}^{}X_{i}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}}{}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F050",
+    "latex": "a = \\frac{\\sum_{}^{}X_{i}^{2}\\sum_{}^{}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}^{2}}{n\\sum_{}^{}X_{i}^{2} - (\\sum_{}^{}X_{i})^{2}}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F051",
+    "latex": "b = \\frac{n\\sum_{}^{}X_{i}\\sum_{}^{}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}}{n\\sum_{}^{}X_{i}^{2} - (\\sum_{}^{}X_{i})^{2}}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F052",
+    "latex": "A_{0t} = \\overline{A} = \\frac{\\sum_{i = 1}^{n}A_{0t,i}}{n}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F054",
+    "latex": "A_{0t} = a",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F055",
+    "latex": "\\lambda = \\frac{b}{A_{0t}}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F056",
+    "latex": "u_{A} =",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_rhs"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F057",
+    "latex": "u_{A}(p) = \\frac{u_{A}}{A_{0t}} \\times p",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F059",
+    "latex": "S_{y} =",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_rhs"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F060",
+    "latex": "S_{a} = S_{y} \\times",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F061",
+    "latex": "S_{b} = S_{y} \\times",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F062",
+    "latex": "r(a,b) = - \\frac{\\sum_{}^{}X_{i}}{}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F063",
+    "latex": "u_{A,i} =",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_rhs"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F064",
+    "latex": "u_{A}(p) = \\frac{u_{A,i}}{A_{0t}} \\times p",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F067",
+    "latex": "u_{1}(p) = p_{0,s} + \\frac{u(p_{s})}{p_{s}} \\times p",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F070",
+    "latex": "u_{2}(p) = \\frac{p}{A_{0,s}} + \\frac{U(A_{0,s})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F072",
+    "latex": "u_{3}(p) = - p^{2} + \\frac{U(\\lambda_{s})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F074",
+    "latex": "u_{4}(p) = \\frac{p}{M_{s}} + \\frac{U(M_{s})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F076",
+    "latex": "u_{5}(p) = p \\times (\\alpha_{p,s} + \\alpha_{c,s}) \\times \\frac{U(t)}{}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_denominator"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F078",
+    "latex": "u_{6}(p) = p_{s} \\times U(\\alpha_{p,s} - \\alpha_{c,s}) \\times \\frac{\\Deltat}{2}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F080",
+    "latex": "U(g) = 10^{ - 5} \\times g,k = 3",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F081",
+    "latex": "u_{7}(p) = \\frac{p_{s}}{g} \\times \\frac{U(g)}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F084",
+    "latex": "U(\\rho_{a}) = 5 \\times 10^{ - 2} \\times \\rho_{a},k = 3",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F085",
+    "latex": "u_{8}(p) = \\frac{p}{\\rho_{Ms} - \\rho_{a}} \\times \\frac{U(\\rho_{a})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F087",
+    "latex": "u_{9}(p) = \\rho_{f} \\times g \\times \\frac{U(\\Deltah)}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F089",
+    "latex": "F' = F \\times cos\\theta",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F092",
+    "latex": "U(\\theta) = 5,82 \\times 10^{ - 4}rad",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F093",
+    "latex": "u_{10}(p) = p \\times sin\\theta_{s} \\times \\frac{U(\\theta_{s})}{}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F095",
+    "latex": "u_{11}(p) = \\frac{p_{s} \\times \\rho_{a}}{\\rho_{Ms}^{2}} \\times \\frac{U(\\rho_{Ms})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F097",
+    "latex": "u_{12}(p) = \\frac{p_{s} \\times A_{0s} \\times k}{M_{s}} \\times \\frac{U(\\rho_{f})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F099",
+    "latex": "u_{13}(p) = \\frac{p_{s} \\times \\gamma \\times k}{g \\times M_{s}} \\times \\frac{U(C_{s})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F101",
+    "latex": "u_{14}(p) = \\frac{p \\times C_{s}}{g \\times M_{s}} \\times \\frac{U(\\gamma)}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F103",
+    "latex": "u_{s}(p) =",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_rhs"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F105",
+    "latex": "u_{15}(p) = \\frac{p}{A_{0,t}} + \\frac{U(A_{0,t})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F107",
+    "latex": "u_{16}(p) = - p^{2} \\times \\frac{U(\\lambda_{t})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F109",
+    "latex": "u_{17}(p) = \\frac{p}{M_{t}} \\times \\frac{U(M_{t})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F111",
+    "latex": "U(t) = 2^{\\circ}C",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F112",
+    "latex": "u_{18}(p) = p \\times (\\alpha_{p,t} + \\alpha_{c,t}) \\times \\frac{U(t)}{}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_denominator"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F114",
+    "latex": "u_{19}(p) = p \\times U(\\alpha_{p,t} + \\alpha_{c,t}) \\times \\frac{\\Deltat}{}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_denominator"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F116",
+    "latex": "u_{20}(p) = \\frac{p}{g} \\times \\frac{U(g)}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F118",
+    "latex": "u_{21}(p) = \\frac{p}{\\rho_{Mt} - \\rho_{a}} \\times \\frac{U(\\rho_{a})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F120",
+    "latex": "u_{22}(p) = p \\times sin\\theta_{t} \\times \\frac{U(\\theta_{t})}{}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F122",
+    "latex": "u_{23}(p) = \\frac{p \\times \\rho_{a}}{\\rho_{Mt}^{2}} \\times \\frac{U(\\rho_{Mt})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F124",
+    "latex": "u_{24}(p) = \\frac{p_{s} \\times \\gamma}{g \\times M_{t}} \\times \\frac{U(C_{t})}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F126",
+    "latex": "u_{25}(p) = \\frac{p \\times C_{t}}{g \\times M_{t}} \\times \\frac{U(\\gamma)}{k}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F127",
+    "latex": "u_{s}(p) =",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_rhs"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F128",
+    "latex": "u_{c}(p) =",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_rhs"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F129",
+    "latex": "U = k \\times u_{c}(p)",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F130",
+    "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g)",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F131",
+    "latex": "\\delta = \\frac{}{p}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [
+      "empty_numerator"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F132",
+    "latex": "\\delta = \\frac{U(p)}{p}",
+    "kind": "ole",
+    "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F133",
+    "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g) =",
+    "kind": "ole",
+    "section": "Mẫu biên bản kiểm định",
+    "suspicious": [
+      "empty_rhs"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F134",
+    "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g) =",
+    "kind": "ole",
+    "section": "Mẫu biên bản kiểm định (không đạt)",
+    "suspicious": [
+      "empty_rhs"
+    ],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F176",
+    "latex": "\\begin{matrix} \\sum_{i = 1}^{14}u_{i}^{2} = ^{2} \\\\ U_{Bs} = \\end{matrix}",
+    "kind": "ole",
+    "section": "(Quy định)",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.159 2021 ND FINAL.docx",
+    "fid": "F210",
+    "latex": "\\begin{matrix} \\sum_{i = 15}^{25}u_{i}^{2} = ^{2} \\\\ U_{Bt} = \\end{matrix}",
+    "kind": "ole",
+    "section": "(Quy định)",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F001",
+    "latex": "∆P_{0}=ρ×g×h (1)",
+    "kind": "omml",
+    "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F002",
+    "latex": "P_{c}=\\frac{\\sum{M_{c}×g×\\left( 1-\\frac{ρ_{a}}{ρ_{M,c}} \\right)+γ×C_{c}}}{A_{0,c}\\left( 1+λ_{c} \\right)\\left[ 1+\\left( α_{p,c}+α_{x,c} \\right)×\\left( t-t_{r} \\right) \\right]}+\\left( ρ_{f}-ρ_{a} \\right)×g×h+P_{vac} (2)",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F003",
+    "latex": "ρ_{a}=\\frac{3,484 4×P_{at}-H×\\left( 0,002 52×t-0,020 582 \\right)}{1 000×\\left( t+273,15 \\right)} (3)",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F004",
+    "latex": "∆P=\\left| \\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} \\right|+U_{c} (4)",
+    "kind": "omml",
+    "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F005",
+    "latex": "Y=a+b×X",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F006",
+    "latex": "\\hat{x}=\\frac{\\sum{x_{i}}}{n}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F007",
+    "latex": "\\hat{y}=\\frac{\\sum{y_{i}}}{n}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F008",
+    "latex": "b=\\frac{\\sum{\\left( x_{i}-\\hat{x} \\right)\\left( y_{i}-\\hat{y} \\right)}}{\\sum{\\left( x_{i}-\\hat{x} \\right)^{2}}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F009",
+    "latex": "a=\\hat{y}-b×\\hat{x}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F010",
+    "latex": "u_{ai}=\\sqrt{S_{a}^{2}+x_{i}^{2}S_{b}^{2}+2x_{i}S_{a}S_{b}r\\left( a,b \\right)}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F011",
+    "latex": "S_{a}=S_{y}×\\sqrt{\\frac{\\sum{x_{i}^{2}}}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}} }",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F012",
+    "latex": "S_{b}=S_{y}×\\sqrt{\\frac{n}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F013",
+    "latex": "S_{y}=\\sqrt{\\frac{\\sum{\\left( y_{i}-a-bx_{i} \\right)}}{n-2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F014",
+    "latex": "r\\left( a,b \\right)=-\\frac{\\sum{x_{i}}}{\\sqrt{n\\sum{x_{i}^{2}}}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F015",
+    "latex": "u_{ch1}=\\frac{U_{ch1}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F016",
+    "latex": "u_{amb}=\\frac{U_{amb}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F017",
+    "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F018",
+    "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F019",
+    "latex": "u_{1}=a+b×p",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F021",
+    "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F023",
+    "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F025",
+    "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F026",
+    "latex": "u_{5}=p×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{U_{t}}{\\sqrt{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F027",
+    "latex": "u_{6}=p_{c}×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{∆}{2}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F028",
+    "latex": "u_{7}=\\frac{p_{c}}{g}×\\frac{U_{g}}{3}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F029",
+    "latex": "u_{8}=\\frac{p}{\\left( ρ_{M_{c}}-ρ_{a} \\right)}×\\frac{U_{ρ_{a}}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F030",
+    "latex": "u_{9}=ρ_{f}×g×\\frac{U_{∆h}}{k}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F031",
+    "latex": "u_{10}=p×sinθ_{c}×\\frac{U_{θ_{c}}}{\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F032",
+    "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F033",
+    "latex": "u_{r}=\\frac{r}{\\sqrt{6}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F034",
+    "latex": "u_{r}=\\frac{r}{\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F035",
+    "latex": "f_{0}=max\\left{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F036",
+    "latex": "u_{f0}=\\frac{f_{0}}{2\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F037",
+    "latex": "b^{'}_{up,j}=\\left| \\left( x_{3,j}-x_{3,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F038",
+    "latex": "b^{'}_{down,j}=\\left| \\left( x_{4,j}-x_{4,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F039",
+    "latex": "b^{'}_{mean,j}=max\\left{ b^{'}_{up,j}-b^{'}_{down,j} \\right}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F040",
+    "latex": "u_{b^{'}}=\\frac{b^{'}_{mean,j}}{2\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F041",
+    "latex": "b_{up,j}=\\left| \\left( x_{5,j}-x_{5,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F042",
+    "latex": "b_{down,j}=\\left| \\left( x_{6,j}-x_{6,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F043",
+    "latex": "b_{mean,j}=max\\left{ b_{up,j}-b_{down,j} \\right}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F044",
+    "latex": "u_{b}=\\frac{b_{mean,j}}{2\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F045",
+    "latex": "h_{mean,j}=\\frac{1}{n}\\left{ \\left| \\left( x_{2,j}-x_{1,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|+\\left| \\left( x_{4,j}-x_{3,0} \\right)-\\left( x_{3,j}-x_{3,0} \\right) \\right|+\\left| \\left( x_{6,j}-x_{5,0} \\right)-\\left( x_{5,j}-x_{5,0} \\right) \\right| \\right}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F046",
+    "latex": "u_{h}=\\frac{h_{mean,j}}{2\\sqrt{3}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F047",
+    "latex": "u_{bk}=\\sqrt{u_{r}^{2}+u_{f_{0}}^{2}+u_{b^{'}}^{2}+u_{b}^{2}+u_{h}^{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F048",
+    "latex": "u_{c}=\\sqrt{u_{a}^{2}+u_{c}^{2}+u_{bk}^{2}}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  },
+  {
+    "file": "QTKD 1.160 2021 ND FINAL.docx",
+    "fid": "F049",
+    "latex": "U_{c}=k×u_{c}",
+    "kind": "omml",
+    "section": "Đánh giá độ không đảm bảo đo",
+    "suspicious": [],
+    "registered": [],
+    "status": "needs_source_review"
+  }
+]

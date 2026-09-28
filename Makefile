@@ -78,10 +78,10 @@ test-qdrant:
 # PY override được:  make check PY=/đường/dẫn/python
 PY ?= .venv-dev/bin/python
 
-# Lint + format-check CHỈ code harness (không định dạng lại source hiện có).
+# Lint harness and the main formula registry; leave legacy source formatting alone.
 lint:
-	$(PY) -m ruff check tests scripts
-	$(PY) -m ruff format --check tests scripts
+	$(PY) -m ruff check tests scripts formula_registry
+	$(PY) -m ruff format --check tests scripts formula_registry
 
 # Tuỳ chọn: quét toàn repo tìm lỗi đúng/sai (pyflakes) — có thể lộ vài lỗi sẵn có.
 lint-all:
@@ -89,8 +89,8 @@ lint-all:
 
 # Tự sửa + định dạng code harness.
 fmt:
-	$(PY) -m ruff format tests scripts
-	$(PY) -m ruff check --fix tests scripts
+	$(PY) -m ruff format tests scripts formula_registry
+	$(PY) -m ruff check --fix tests scripts formula_registry
 
 # Guard độ trung thực công thức (rủi ro #1) — đọc artifact đã commit, không cần service.
 fidelity:
@@ -119,3 +119,25 @@ test-ruby:
 
 # Tất cả test chạy được trên máy (unit + integration). `make eval` vẫn là eval chuẩn.
 test: test-unit test-int
+
+# Formula registry uses the main API, not the experimental lab server.
+.PHONY: test-formula check-frontend formula-drafts formula-drafts-docker docker-check
+test-formula:
+	$(PY) -m pytest tests/unit/backend/test_formula_registry.py -q
+
+check-frontend:
+	cd frontend && npm run typecheck && npm test -- --maxWorkers=2 && npm run lint && npm run build
+
+formula-drafts:
+	$(PY) -m formula_registry TC_DL/*.docx --report build/formula-review/backfill-latest.json
+
+formula-drafts-docker:
+	docker compose exec api sh -c 'python -m formula_registry TC_DL/*.docx --report build/spike_a/formula-review-backfill.json'
+
+docker-check:
+	docker compose config --quiet
+	docker compose build api frontend
+
+.PHONY: lock-runtime
+lock-runtime:
+	$(PY) -m piptools compile --strip-extras --output-file requirements-app.lock requirements-app.txt

@@ -1,6 +1,8 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ENV FORMULA_REGISTRY_DB=/app/.formula-registry/registry.sqlite3
 
 # System libs needed by lxml + Ruby (Stage 1 formula extraction, now runs
 # inside the api container for uploaded documents — see ingestion_jobs.py)
@@ -17,9 +19,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # LoadError: cannot load such file -- pry, without this).
 RUN gem install mathtype_to_mathml pry
 
-# Stage 2-3 Python deps (index + retrieval + Gradio)
-COPY requirements-app.txt .
-RUN pip install --no-cache-dir -r requirements-app.txt
+# API, ingestion, formula registry and legacy Gradio dependencies.
+COPY requirements-app.txt requirements-app.lock ./
+RUN pip install --no-cache-dir -r requirements-app.lock && pip check
 
 # Copy source (TC_DL/ and build/spike_a/ are mounted as volumes at runtime)
 COPY app.py .
@@ -30,11 +32,14 @@ COPY ingestion_jobs.py .
 COPY retrieval/ retrieval/
 COPY index/ index/
 COPY ingestion/ ingestion/
+COPY formula_registry/ formula_registry/
+COPY formula_lab/__init__.py formula_lab/engine.py formula_lab/
+COPY formula_lab/data/ formula_lab/data/
 COPY eval/ eval/
 COPY vendor/ vendor/
 
-EXPOSE 7861
+RUN mkdir -p /app/.formula-registry /app/TC_DL /app/build/spike_a
+EXPOSE 8080 7861
 
-# Default: run the Gradio chat app
-# Override with: docker compose run --rm indexer python -m index.embed_store --force
-CMD ["python", "app.py"]
+# Legacy Gradio remains available with an explicit `python app.py` command.
+CMD ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8080"]

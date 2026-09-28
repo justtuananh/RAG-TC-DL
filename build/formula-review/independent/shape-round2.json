@@ -1,0 +1,83 @@
+[
+  {
+    "case": "variables_null",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "variables_object",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "variable_null",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "variable_label_object",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "conditions_null",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "condition_number",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "testcases_null",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "testcase_null",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "test_inputs_null",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "test_input_value_number",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "test_input_unit_array",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "title_object",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "variable_kind_object",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "variable_bounds_object",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "condition_label_null",
+    "status": 422,
+    "passed": true
+  },
+  {
+    "case": "legacy_record_does_not_crash_UI",
+    "passed": true,
+    "message": "Dữ liệu công thức từ máy chủ không đúng cấu trúc. Không thể mở hoặc sử dụng bản nháp này. Vui lòng tải lại; nếu lỗi còn xuất hiện, báo quản trị viên kiểm tra dữ liệu đã lưu.",
+    "browser_errors": []
+  }
+]

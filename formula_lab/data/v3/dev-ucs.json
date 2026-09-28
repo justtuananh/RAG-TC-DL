@@ -1,0 +1,848 @@
+[
+  {
+    "id": "qtkd160_f001/anchor",
+    "formula": "qtkd160_f001",
+    "question": "QTKĐ 1.160: bù áp suất do chênh cao",
+    "inputs": {
+      "rho": {
+        "value": "1000",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "-20",
+        "unit": "mm"
+      }
+    },
+    "expected": "-196",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f001/converted_units",
+    "formula": "qtkd160_f001",
+    "question": "QTKĐ 1.160: bù áp suất do chênh cao",
+    "inputs": {
+      "rho": {
+        "value": "1000",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "-0.020",
+        "unit": "m"
+      }
+    },
+    "expected": "-196",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f005/anchor",
+    "formula": "qtkd160_f005",
+    "question": "QTKĐ 1.160: chỉ thị dự đoán",
+    "inputs": {
+      "a": {
+        "value": "-2",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.5",
+        "unit": "1"
+      },
+      "x": {
+        "value": "10",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f005/converted_units",
+    "formula": "qtkd160_f005",
+    "question": "QTKĐ 1.160: chỉ thị dự đoán",
+    "inputs": {
+      "a": {
+        "value": "-0.002",
+        "unit": "kPa"
+      },
+      "b": {
+        "value": "1.5",
+        "unit": "1"
+      },
+      "x": {
+        "value": "0.010",
+        "unit": "kPa"
+      }
+    },
+    "expected": "13",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f006/anchor",
+    "formula": "qtkd160_f006",
+    "question": "QTKĐ 1.160: trung bình áp suất chuẩn",
+    "inputs": {
+      "readings": {
+        "value": [
+          "-3",
+          "0",
+          "6"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "1",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f006/converted_units",
+    "formula": "qtkd160_f006",
+    "question": "QTKĐ 1.160: trung bình áp suất chuẩn",
+    "inputs": {
+      "readings": {
+        "value": [
+          "-0.003",
+          "0.000",
+          "0.006"
+        ],
+        "unit": "kPa"
+      }
+    },
+    "expected": "1",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f007/anchor",
+    "formula": "qtkd160_f007",
+    "question": "QTKĐ 1.160: trung bình chỉ thị",
+    "inputs": {
+      "readings": {
+        "value": [
+          "2",
+          "5",
+          "8"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "5",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f007/converted_units",
+    "formula": "qtkd160_f007",
+    "question": "QTKĐ 1.160: trung bình chỉ thị",
+    "inputs": {
+      "readings": {
+        "value": [
+          "0.002",
+          "0.005",
+          "0.008"
+        ],
+        "unit": "kPa"
+      }
+    },
+    "expected": "5",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f008/anchor",
+    "formula": "qtkd160_f008",
+    "question": "QTKĐ 1.160: hệ số góc hồi quy",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1",
+          "2",
+          "3"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "2",
+          "5",
+          "8"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "3",
+    "unit": "1",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f008/converted_units",
+    "formula": "qtkd160_f008",
+    "question": "QTKĐ 1.160: hệ số góc hồi quy",
+    "inputs": {
+      "xs": {
+        "value": [
+          "0.001",
+          "0.002",
+          "0.003"
+        ],
+        "unit": "kPa"
+      },
+      "ys": {
+        "value": [
+          "0.002",
+          "0.005",
+          "0.008"
+        ],
+        "unit": "kPa"
+      }
+    },
+    "expected": "3",
+    "unit": "1",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f009/anchor",
+    "formula": "qtkd160_f009",
+    "question": "QTKĐ 1.160: hệ số chặn hồi quy",
+    "inputs": {
+      "y_mean": {
+        "value": "5",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-1",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f009/converted_units",
+    "formula": "qtkd160_f009",
+    "question": "QTKĐ 1.160: hệ số chặn hồi quy",
+    "inputs": {
+      "y_mean": {
+        "value": "0.005",
+        "unit": "kPa"
+      },
+      "b": {
+        "value": "3",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "0.002",
+        "unit": "kPa"
+      }
+    },
+    "expected": "-1",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f033/anchor",
+    "formula": "qtkd160_f033",
+    "question": "QTKĐ 1.160: độ phân giải tam giác",
+    "inputs": {
+      "r": {
+        "value": "6",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.449489742783178098197284074705892",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f033/converted_units",
+    "formula": "qtkd160_f033",
+    "question": "QTKĐ 1.160: độ phân giải tam giác",
+    "inputs": {
+      "r": {
+        "value": "0.006",
+        "unit": "kPa"
+      }
+    },
+    "expected": "2.449489742783178098197284074705892",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f034/anchor",
+    "formula": "qtkd160_f034",
+    "question": "QTKĐ 1.160: độ phân giải chữ nhật",
+    "inputs": {
+      "r": {
+        "value": "3",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.732050807568877293527446341505872",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd160_f034/converted_units",
+    "formula": "qtkd160_f034",
+    "question": "QTKĐ 1.160: độ phân giải chữ nhật",
+    "inputs": {
+      "r": {
+        "value": "0.003",
+        "unit": "kPa"
+      }
+    },
+    "expected": "1.732050807568877293527446341505872",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f008/anchor",
+    "formula": "dpi190_f008",
+    "question": "DPI 610: trung bình chỉ thị",
+    "inputs": {
+      "readings": {
+        "value": [
+          "-6",
+          "0",
+          "3"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "-1",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f008/converted_units",
+    "formula": "dpi190_f008",
+    "question": "DPI 610: trung bình chỉ thị",
+    "inputs": {
+      "readings": {
+        "value": [
+          "-0.006",
+          "0.000",
+          "0.003"
+        ],
+        "unit": "kPa"
+      }
+    },
+    "expected": "-1",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f038/anchor",
+    "formula": "dpi190_f038",
+    "question": "DPI 610: độ lặp lại chiều tăng",
+    "inputs": {
+      "x3_j": {
+        "value": "100",
+        "unit": "Pa"
+      },
+      "x3_0": {
+        "value": "3",
+        "unit": "Pa"
+      },
+      "x1_j": {
+        "value": "102",
+        "unit": "Pa"
+      },
+      "x1_0": {
+        "value": "1",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f038/converted_units",
+    "formula": "dpi190_f038",
+    "question": "DPI 610: độ lặp lại chiều tăng",
+    "inputs": {
+      "x3_j": {
+        "value": "0.100",
+        "unit": "kPa"
+      },
+      "x3_0": {
+        "value": "0.003",
+        "unit": "kPa"
+      },
+      "x1_j": {
+        "value": "0.102",
+        "unit": "kPa"
+      },
+      "x1_0": {
+        "value": "0.001",
+        "unit": "kPa"
+      }
+    },
+    "expected": "4",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f039/anchor",
+    "formula": "dpi190_f039",
+    "question": "DPI 610: độ lặp lại chiều giảm",
+    "inputs": {
+      "x4_j": {
+        "value": "98",
+        "unit": "Pa"
+      },
+      "x4_0": {
+        "value": "-2",
+        "unit": "Pa"
+      },
+      "x2_j": {
+        "value": "97",
+        "unit": "Pa"
+      },
+      "x2_0": {
+        "value": "1",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f039/converted_units",
+    "formula": "dpi190_f039",
+    "question": "DPI 610: độ lặp lại chiều giảm",
+    "inputs": {
+      "x4_j": {
+        "value": "0.098",
+        "unit": "kPa"
+      },
+      "x4_0": {
+        "value": "-0.002",
+        "unit": "kPa"
+      },
+      "x2_j": {
+        "value": "0.097",
+        "unit": "kPa"
+      },
+      "x2_0": {
+        "value": "0.001",
+        "unit": "kPa"
+      }
+    },
+    "expected": "4",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f042/anchor",
+    "formula": "dpi190_f042",
+    "question": "DPI 610: độ tái lặp lại chiều tăng",
+    "inputs": {
+      "x5_j": {
+        "value": "-100",
+        "unit": "Pa"
+      },
+      "x5_0": {
+        "value": "-3",
+        "unit": "Pa"
+      },
+      "x1_j": {
+        "value": "-90",
+        "unit": "Pa"
+      },
+      "x1_0": {
+        "value": "-2",
+        "unit": "Pa"
+      }
+    },
+    "expected": "9",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f042/converted_units",
+    "formula": "dpi190_f042",
+    "question": "DPI 610: độ tái lặp lại chiều tăng",
+    "inputs": {
+      "x5_j": {
+        "value": "-0.100",
+        "unit": "kPa"
+      },
+      "x5_0": {
+        "value": "-0.003",
+        "unit": "kPa"
+      },
+      "x1_j": {
+        "value": "-0.090",
+        "unit": "kPa"
+      },
+      "x1_0": {
+        "value": "-0.002",
+        "unit": "kPa"
+      }
+    },
+    "expected": "9",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f043/anchor",
+    "formula": "dpi190_f043",
+    "question": "DPI 610: độ tái lặp lại chiều giảm",
+    "inputs": {
+      "x6_j": {
+        "value": "100",
+        "unit": "Pa"
+      },
+      "x6_0": {
+        "value": "5",
+        "unit": "Pa"
+      },
+      "x2_j": {
+        "value": "99",
+        "unit": "Pa"
+      },
+      "x2_0": {
+        "value": "4",
+        "unit": "Pa"
+      }
+    },
+    "expected": "0",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "dpi190_f043/converted_units",
+    "formula": "dpi190_f043",
+    "question": "DPI 610: độ tái lặp lại chiều giảm",
+    "inputs": {
+      "x6_j": {
+        "value": "0.100",
+        "unit": "kPa"
+      },
+      "x6_0": {
+        "value": "0.005",
+        "unit": "kPa"
+      },
+      "x2_j": {
+        "value": "0.099",
+        "unit": "kPa"
+      },
+      "x2_0": {
+        "value": "0.004",
+        "unit": "kPa"
+      }
+    },
+    "expected": "0",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd061_p001/anchor",
+    "formula": "qtkd061_p001",
+    "question": "QTKĐ 1.061: áp suất thử độ kín",
+    "inputs": {
+      "pmax": {
+        "value": "100",
+        "unit": "bar"
+      }
+    },
+    "expected": "15000000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd061_p001/converted_units",
+    "formula": "qtkd061_p001",
+    "question": "QTKĐ 1.061: áp suất thử độ kín",
+    "inputs": {
+      "pmax": {
+        "value": "10.0",
+        "unit": "MPa"
+      }
+    },
+    "expected": "15000000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd061_p002/anchor",
+    "formula": "qtkd061_p002",
+    "question": "QTKĐ 1.061: giới hạn sai số van",
+    "inputs": {
+      "pcd": {
+        "value": "2",
+        "unit": "bar"
+      }
+    },
+    "expected": "15000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd061_p002/converted_units",
+    "formula": "qtkd061_p002",
+    "question": "QTKĐ 1.061: giới hạn sai số van",
+    "inputs": {
+      "pcd": {
+        "value": "0.2",
+        "unit": "MPa"
+      }
+    },
+    "expected": "15000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd062_p001/anchor",
+    "formula": "qtkd062_p001",
+    "question": "QTKĐ 1.062: mức áp suất bơm phụ",
+    "inputs": {
+      "pmax": {
+        "value": "100",
+        "unit": "bar"
+      }
+    },
+    "expected": "1000000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd062_p001/converted_units",
+    "formula": "qtkd062_p001",
+    "question": "QTKĐ 1.062: mức áp suất bơm phụ",
+    "inputs": {
+      "pmax": {
+        "value": "10.0",
+        "unit": "MPa"
+      }
+    },
+    "expected": "1000000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd062_p002/anchor",
+    "formula": "qtkd062_p002",
+    "question": "QTKĐ 1.062: giới hạn van bơm phụ",
+    "inputs": {
+      "pmax": {
+        "value": "100",
+        "unit": "bar"
+      }
+    },
+    "expected": "2000000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd062_p002/converted_units",
+    "formula": "qtkd062_p002",
+    "question": "QTKĐ 1.062: giới hạn van bơm phụ",
+    "inputs": {
+      "pmax": {
+        "value": "10.0",
+        "unit": "MPa"
+      }
+    },
+    "expected": "2000000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd062_p003/anchor",
+    "formula": "qtkd062_p003",
+    "question": "QTKĐ 1.062: độ tụt áp cho phép",
+    "inputs": {
+      "pmax": {
+        "value": "100",
+        "unit": "bar"
+      }
+    },
+    "expected": "500000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd062_p003/converted_units",
+    "formula": "qtkd062_p003",
+    "question": "QTKĐ 1.062: độ tụt áp cho phép",
+    "inputs": {
+      "pmax": {
+        "value": "10.0",
+        "unit": "MPa"
+      }
+    },
+    "expected": "500000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd063_p001/anchor",
+    "formula": "qtkd063_p001",
+    "question": "QTKĐ 1.063: giới hạn độ tụt áp bình phân ly",
+    "inputs": {
+      "pmax": {
+        "value": "200",
+        "unit": "bar"
+      }
+    },
+    "expected": "1000000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd063_p001/converted_units",
+    "formula": "qtkd063_p001",
+    "question": "QTKĐ 1.063: giới hạn độ tụt áp bình phân ly",
+    "inputs": {
+      "pmax": {
+        "value": "20.0",
+        "unit": "MPa"
+      }
+    },
+    "expected": "1000000",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd071_f013/anchor",
+    "formula": "qtkd071_f013",
+    "question": "H3000: sai số tuyệt đối trung bình",
+    "inputs": {
+      "p": {
+        "value": "100",
+        "unit": "bar"
+      },
+      "pc1": {
+        "value": "101",
+        "unit": "bar"
+      },
+      "pc2": {
+        "value": "103",
+        "unit": "bar"
+      }
+    },
+    "expected": "-2",
+    "unit": "bar",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd071_f013/converted_units",
+    "formula": "qtkd071_f013",
+    "question": "H3000: sai số tuyệt đối trung bình",
+    "inputs": {
+      "p": {
+        "value": "10.0",
+        "unit": "MPa"
+      },
+      "pc1": {
+        "value": "10.1",
+        "unit": "MPa"
+      },
+      "pc2": {
+        "value": "10.3",
+        "unit": "MPa"
+      }
+    },
+    "expected": "-2",
+    "unit": "bar",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd159_f031/anchor",
+    "formula": "qtkd159_f031",
+    "question": "QTKĐ 1.159: áp suất tuyệt đối tại đáy",
+    "inputs": {
+      "ps": {
+        "value": "1500",
+        "unit": "Pa"
+      },
+      "mu": {
+        "value": "5",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1505",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  },
+  {
+    "id": "qtkd159_f031/converted_units",
+    "formula": "qtkd159_f031",
+    "question": "QTKĐ 1.159: áp suất tuyệt đối tại đáy",
+    "inputs": {
+      "ps": {
+        "value": "1.500",
+        "unit": "kPa"
+      },
+      "mu": {
+        "value": "0.005",
+        "unit": "kPa"
+      }
+    },
+    "expected": "1505",
+    "unit": "Pa",
+    "absolute_tolerance": "1e-12",
+    "relative_tolerance": "1e-12"
+  }
+]

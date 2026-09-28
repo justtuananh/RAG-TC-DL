@@ -174,7 +174,7 @@ def bot_fn(history: list):
     # 0. Lookup-only: yêu cầu tính toán với số liệu cho sẵn → từ chối tất định,
     #    không retrieve, không gọi LLM (7b lúc chịu từ chối lúc thay số tính tiếp).
     if _is_calculation_request(query):
-        history[-1][1] = _REFUSAL_SENTENCE
+        history.append({"role": "assistant", "content": _REFUSAL_SENTENCE})
         yield history, gr.update()
         return
 
@@ -385,6 +385,7 @@ def build_ui() -> gr.Blocks:
             # ── Left: chat (60%) ─────────────────────────────────────────
             with gr.Column(scale=6):
                 chatbot = gr.Chatbot(
+                    type="messages",
                     label="Chat",
                     elem_id="qtkd-chat",
                     height=480,

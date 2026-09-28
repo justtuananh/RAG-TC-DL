@@ -7,6 +7,7 @@ subprocess or embedding-service HTTP call never blocks the chat SSE event loop.
 from __future__ import annotations
 
 import json
+import hashlib
 import shutil
 import threading
 import time
@@ -211,12 +212,16 @@ def _merge_report_entry(entry: dict) -> None:
 def _run_job(file_stem: str, source_path: Path) -> None:
     try:
         _set_job(file_stem, "extracting")
+        source_hash = hashlib.sha256(source_path.read_bytes()).hexdigest()
         entry = process_one(source_path, OUT_DIR)
         _merge_report_entry(entry)
 
         md_path = OUT_DIR / f"{file_stem}.md"
         if not md_path.exists():
             raise RuntimeError("Không trích xuất được nội dung — tệp có thể bị lỗi hoặc rỗng.")
+
+        from formula_registry.drafts import register_extraction
+        register_extraction(source_path, file_stem, source_hash, entry, md_path.read_text(encoding='utf-8'))
 
         _set_job(file_stem, "chunking")
         chunks = parse_file(md_path)
@@ -246,6 +251,8 @@ def start_processing(file_stem: str) -> None:
 
 
 def delete_document(file_stem: str) -> None:
+    from formula_registry.store import Registry
+    Registry().invalidate(file_stem)
     source_path = _find_source(file_stem)
     if source_path is not None:
         source_path.unlink()

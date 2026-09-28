@@ -52,3 +52,8 @@ frontend/.env.productiondocker-compose.override.yml
 logs/
 docker-compose.override.yml
 design/_ref/
+
+# Formula experiments
+.venv-formula/
+.formula-runtime/
+.formula-registry/

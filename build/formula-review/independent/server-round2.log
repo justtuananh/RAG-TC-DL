@@ -1,0 +1,49 @@
+INFO:     Started server process [765786]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8081 (Press CTRL+C to quit)
+INFO:     127.0.0.1:35236 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35244 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35252 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35260 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35268 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35282 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35290 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35302 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35314 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35322 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35332 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35334 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35350 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35364 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35368 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35376 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35378 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35386 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35390 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35402 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35404 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35414 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35416 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35422 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35430 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35446 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35454 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35462 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35464 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35470 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:35476 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46590 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46586 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46612 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46594 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46596 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46622 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46622 - "GET /api/documents/independent/markdown HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:46596 - "GET /api/documents/independent/file HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46596 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46622 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [765786]

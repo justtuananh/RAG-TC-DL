@@ -100,3 +100,21 @@ def test_guard_keeps_real_headings():
         "Áp kế pít tông kiểu H3000-SP-70/700",
     ]:
         assert not _is_body_masquerading_as_heading(h), h
+
+
+def test_omml_mean_overline_is_not_a_hat():
+    from ingestion.omml import M, omml_to_latex
+
+    node = etree.fromstring(
+        f'<m:oMath xmlns:m="{M}"><m:acc><m:accPr><m:chr m:val="̅"/></m:accPr><m:e><m:r><m:t>x</m:t></m:r></m:e></m:acc></m:oMath>'
+    )
+    assert omml_to_latex(node) == r'\overline{x}'
+
+
+def test_omml_braces_are_valid_latex_delimiters():
+    from ingestion.omml import M, omml_to_latex
+
+    node = etree.fromstring(
+        f'<m:oMath xmlns:m="{M}"><m:d><m:dPr><m:begChr m:val="{{"/><m:endChr m:val="}}"/></m:dPr><m:e><m:r><m:t>x</m:t></m:r></m:e></m:d></m:oMath>'
+    )
+    assert omml_to_latex(node) == r'\left\{ x \right\}'
