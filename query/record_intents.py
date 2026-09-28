@@ -46,13 +46,16 @@ class RecordLookupParams(BaseModel):
     steps: list[str] = Field(default_factory=list, max_length=12)
     # Điểm đo được hỏi ("tại điểm đo 2 500 kG/cm²"): lọc dòng bảng theo giá trị danh nghĩa.
     nominal: float | None = None
+    # Từ của câu hỏi: cột bảng mà câu hỏi nhắc tới ("áp suất khí quyển") được đưa lên
+    # đầu bảng thay vì nằm khuất bên phải. Chỉ dùng để SẮP cột, không lọc dữ liệu.
+    focus_words: list[str] = Field(default_factory=list, max_length=80)
 
     @field_validator("calibrated_on", mode="before")
     @classmethod
     def _date(cls, value: Any) -> Any:
         return _parse_date(value)
 
-    @field_validator("fields", "steps", mode="before")
+    @field_validator("fields", "steps", "focus_words", mode="before")
     @classmethod
     def _list(cls, value: Any) -> list[str]:
         return _keys(value)
@@ -78,6 +81,9 @@ class RecordsSummaryParams(BaseModel):
     range_unit: str | None = Field(default=None, max_length=32)
     measure: Measure = "list"
     field: str | None = Field(default=None, max_length=_KEY_MAX)
+    # QTKĐ sở hữu bảng được so (lớp định tuyến điền từ danh mục, không từ LLM): mã bảng
+    # như "A.2" lặp lại giữa các QTKĐ với nghĩa khác.
+    procedure_ids: list[int] = Field(default_factory=list, max_length=50)
 
     @field_validator("date_from", "date_to", mode="before")
     @classmethod

@@ -1,4 +1,4 @@
-.PHONY: up down logs pull-model index rebuild status eval answer-eval answer-eval-dev lint lint-all fmt fidelity test-unit check test-int smoke test test-ruby db-upgrade db-downgrade db-backup migrate-documents db-check seed-knowledge generate-procedures extract-eval extract-section6-eval extract-section6 extract-appendix records-fixtures seed-synthetic intent-eval knowledge-corpus
+.PHONY: up down logs pull-model index rebuild status eval answer-eval answer-eval-dev lint lint-all fmt fidelity test-unit check test-int smoke test test-ruby db-upgrade db-downgrade db-backup migrate-documents db-check seed-knowledge generate-procedures extract-eval extract-section6-eval extract-section6 extract-appendix records-fixtures seed-synthetic intent-eval record-eval knowledge-corpus
 
 # ── Khởi động ────────────────────────────────────────────────────────────────
 up:
@@ -109,6 +109,12 @@ extract-section6-eval:
 # 0 ô số không nguồn, câu hỏi văn bản không lạc nhánh số liệu.
 intent-eval:
 	$(PY) -m eval.intent_eval
+
+# Eval tra cứu biên bản trên sổ cái thật (Pha R): cần Postgres + Ollama (`make up`),
+# không nằm trong `check`. Bộ Bo_20_cau + câu diễn đạt khác, cổng ≥ 0,90.
+record-eval:
+	OLLAMA_MODEL=$${OLLAMA_MODEL:-qwen2.5:3b} OLLAMA_URL=$${OLLAMA_URL:-http://localhost:11434/api/chat} \
+		$(PY) -m eval.record_query_eval
 
 # Unit test (mock toàn bộ I/O) — chạy mọi nơi, không cần Docker.
 test-unit:

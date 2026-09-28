@@ -17,14 +17,19 @@ nhãn khớp khi mọi từ mang nghĩa của nó có trong câu hỏi. Từ ti�
 from __future__ import annotations
 
 import json
+import logging
 import re
+import threading
 import time
 import unicodedata
 from dataclasses import dataclass
 from typing import Any
 
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
+
+logger = logging.getLogger(__name__)
 
 # Từ không mang nghĩa phân biệt trong nhãn / tiêu đề bảng.
 _STOPWORDS = frozenset(
@@ -121,11 +126,14 @@ class FieldEntry:
 
 @dataclass(frozen=True)
 class TableEntry:
+    """Một bảng kết quả Phụ lục A của MỘT QTKĐ (mã bảng lặp lại giữa các QTKĐ)."""
+
     step_code: str
     title: str
     words: frozenset[str]
     # Tên cột RIÊNG của bảng (không bảng nào khác có), dạng tập từ.
     columns: tuple[frozenset[str], ...] = ()
+    procedure_id: int | None = None
 
 
 @dataclass(frozen=True)
@@ -136,8 +144,11 @@ class FieldCatalog:
     def field_label(self, key: str) -> str:
         return next((entry.label for entry in self.fields if entry.key == key), key)
 
-    def table_title(self, step_code: str) -> str:
-        return next((t.title for t in self.tables if t.step_code == step_code), step_code)
+    def table_title(self, step_code: str, procedure_id: int | None = None) -> str:
+        """Tiêu đề bảng của đúng QTKĐ khi biết; không thì tiêu đề đầu tiên có mã đó."""
+        tables = [table for table in self.tables if table.step_code == step_code]
+        own = [table for table in tables if table.procedure_id == procedure_id]
+        return (own or tables)[0].title if (own or tables) else step_code
 
     def keys_with_prefix(self, prefix: str) -> list[str]:
         return [entry.key for entry in self.fields if entry.key.startswith(prefix)]
@@ -157,6 +168,8 @@ class Targets:
 
     fields: tuple[str, ...] = ()
     steps: tuple[str, ...] = ()
+    # QTKĐ sở hữu các bảng khớp: cực trị theo bảng chỉ so trong các QTKĐ này.
+    procedures: tuple[int, ...] = ()
 
     @property
     def specific_fields(self) -> tuple[str, ...]:
@@ -165,9 +178,10 @@ class Targets:
 
 
 _CATALOG_CACHE: dict[str, tuple[float, FieldCatalog]] = {}
+_CATALOG_LOCK = threading.Lock()
 
 
-def _label_words(label: str) -> frozenset[str]:
+def label_words(label: str) -> frozenset[str]:
     """Từ mang nghĩa của nhãn; bỏ phần đơn vị sau dấu phẩy và phần trong ngoặc."""
     head = _PARENS_RE.sub(" ", label.split(",")[0])
     return frozenset(token for token in content_tokens(head) if len(token) > 1)
@@ -197,21 +211,24 @@ def load_cells(value: Any) -> list[dict[str, str]]:
     return [cell for cell in value if isinstance(cell, dict)]
 
 
-def _distinctive_columns(session: Session) -> dict[str, tuple[frozenset[str], ...]]:
-    """Tên cột theo từng bảng; chỉ giữ cột chỉ một bảng có (ví dụ "Áp suất khí quyển")."""
-    by_step: dict[str, set[frozenset[str]]] = {}
+TableKey = tuple[Any, str]
+
+
+def _distinctive_columns(session: Session) -> dict[TableKey, tuple[frozenset[str], ...]]:
+    """Tên cột theo từng (QTKĐ, bảng); chỉ giữ cột chỉ một bảng có ("Áp suất khí quyển")."""
+    by_step: dict[TableKey, set[frozenset[str]]] = {}
     rows = session.execute(
         text(
             # Không DISTINCT: kiểu ``json`` của PostgreSQL không so sánh bằng được.
-            "SELECT step_code, cells FROM v_measurement_detail "
+            "SELECT procedure_id, step_code, cells FROM v_measurement_detail "
             "WHERE cells IS NOT NULL AND step_code IS NOT NULL"
         )
     ).all()
-    for step_code, cells in rows:
+    for procedure_id, step_code, cells in rows:
         for cell in load_cells(cells):
-            words = _label_words(str(cell.get("column") or ""))
+            words = label_words(str(cell.get("column") or ""))
             if len(words) >= 3:
-                by_step.setdefault(step_code, set()).add(words)
+                by_step.setdefault((procedure_id, step_code), set()).add(words)
     counts: dict[frozenset[str], int] = {}
     for columns in by_step.values():
         for words in columns:
@@ -243,10 +260,13 @@ def build_catalog(session: Session) -> FieldCatalog:
             ).all()
         }
         columns = _distinctive_columns(session)
-    except Exception:  # noqa: BLE001 - thiếu view (DB cũ) thì coi như danh mục rỗng
+    except SQLAlchemyError as exc:
+        # DB chưa lên migration 012 (thiếu view) thì không có danh mục; lỗi khác vẫn ghi log
+        # vì danh mục rỗng làm tắt lớp định tuyến tất định.
+        logger.warning("Không dựng được danh mục trường biên bản: %s", exc)
         return FieldCatalog()
     fields = tuple(
-        FieldEntry(key=str(key), label=str(label), words=_label_words(str(label)))
+        FieldEntry(key=str(key), label=str(label), words=label_words(str(label)))
         for key, label in field_rows
         if key
     )
@@ -255,7 +275,13 @@ def build_catalog(session: Session) -> FieldCatalog:
         code = _step_code(str(title), str(title))
         if (procedure_id, code) in used:
             tables.append(
-                TableEntry(code, str(title), _title_words(str(title)), columns.get(code, ()))
+                TableEntry(
+                    code,
+                    str(title),
+                    _title_words(str(title)),
+                    columns.get((procedure_id, code), ()),
+                    procedure_id,
+                )
             )
     return FieldCatalog(fields=fields, tables=tuple(tables))
 
@@ -271,15 +297,15 @@ def _cache_key(session: Session) -> str | None:
 def field_catalog(session: Session) -> FieldCatalog:
     """Danh mục có cache ngắn hạn (dữ liệu đã duyệt đổi chậm)."""
     key = _cache_key(session)
-    now = time.monotonic()
-    if key is not None:
+    if key is None:
+        return build_catalog(session)
+    with _CATALOG_LOCK:
         cached = _CATALOG_CACHE.get(key)
-        if cached is not None and now - cached[0] < _CATALOG_TTL_SECONDS:
+        if cached is not None and time.monotonic() - cached[0] < _CATALOG_TTL_SECONDS:
             return cached[1]
-    catalog = build_catalog(session)
-    if key is not None:
-        _CATALOG_CACHE[key] = (now, catalog)
-    return catalog
+        catalog = build_catalog(session)
+        _CATALOG_CACHE[key] = (time.monotonic(), catalog)
+        return catalog
 
 
 def _title_matches(title: frozenset[str], words: frozenset[str]) -> bool:
@@ -316,9 +342,13 @@ def detect_targets(question: str, catalog: FieldCatalog) -> Targets:
         if pattern.search(question or ""):
             keys.extend(key for prefix in prefixes for key in catalog.keys_with_prefix(prefix))
     keys.extend(related for key in list(keys) for related in catalog.related(key))
-    steps = [
-        table.step_code
+    matched = [
+        table
         for table in catalog.tables
         if _title_matches(table.words, words) or any(column <= words for column in table.columns)
     ]
-    return Targets(fields=_ordered(keys), steps=_ordered(steps))
+    return Targets(
+        fields=_ordered(keys),
+        steps=_ordered([table.step_code for table in matched]),
+        procedures=_ordered([t.procedure_id for t in matched if t.procedure_id is not None]),
+    )

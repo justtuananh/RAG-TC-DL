@@ -13,7 +13,10 @@ này sửa lựa chọn đó bằng BẰNG CHỨNG KHỚP CHÍNH XÁC với sổ
 - từ cực trị ("thấp nhất", "lớn nhất") + trường so sánh được → ``records_summary``
   cực trị; "toàn bộ hồ sơ", "bao nhiêu biên bản", lọc đơn vị phạm vi đo
   → ``records_summary``. Các nhóm này chỉ mở nhánh số liệu khi LLM đã chọn nhánh
-  số liệu hoặc câu hỏi nhắc tới biên bản/hồ sơ/thiết bị.
+  số liệu hoặc câu hỏi nói rõ về biên bản/hồ sơ.
+
+Số hiệu toàn chữ số chỉ được nhận khi có chữ "số hiệu" hoặc đứng ngay sau từ chỉ
+thiết bị, để một con số trong câu hỏi quy định không bị hiểu thành số hiệu.
 
 Tham số lấy từ chính câu hỏi (không từ LLM) nên không thể bịa. Chỉ đọc view đã
 duyệt (P3); mọi thất bại DB giữ nguyên quyết định LLM.
@@ -21,7 +24,9 @@ duyệt (P3); mọi thất bại DB giữ nguyên quyết định LLM.
 
 from __future__ import annotations
 
+import logging
 import re
+import threading
 import time
 import unicodedata
 from dataclasses import dataclass, field
@@ -29,9 +34,12 @@ from datetime import date
 from typing import Any
 
 from sqlalchemy import text
+from sqlalchemy.exc import SQLAlchemyError
 
 from knowledge import vnnum
-from query.record_fields import Targets, detect_targets, field_catalog
+from query.record_fields import Targets, content_tokens, detect_targets, field_catalog
+
+logger = logging.getLogger(__name__)
 
 _DMY_RE = re.compile(r"(?<!\d)(\d{1,2})\s*/\s*(\d{1,2})\s*/\s*(\d{4})(?!\d)")
 _CERT_RE = re.compile(r"(?<![\d/])(\d{1,4}/\d{4})(?![\d/])")
@@ -53,9 +61,18 @@ _SUMMARY_RE = re.compile(
 _RECORD_WORD_RE = re.compile(r"biên\s+bản|hồ\s+sơ", re.IGNORECASE)
 # Câu hỏi về danh mục kiểm định viên (Biểu 7), không phải biên bản họ lập.
 _INSPECTOR_CATALOG_RE = re.compile(r"số\s+thẻ|chứng\s+nhận|lĩnh\s+vực|trình\s+độ", re.IGNORECASE)
-_LEDGER_WORD_RE = re.compile(r"biên\s+bản|hồ\s+sơ|áp\s+kế|thiết\s+bị|sổ\s+cái", re.IGNORECASE)
 _SERIAL_WORD_RE = re.compile(r"số\s+hiệu|serial|\bsn\b", re.IGNORECASE)
-_MIN_BARE_SERIAL_DIGITS = 4
+# Token ngay sau từ chỉ thiết bị ("áp kế 1045", "thiết bị 6112", "số hiệu 0391").
+_DEVICE_CONTEXT_RE = re.compile(
+    r"(?:áp\s*kế|thiết\s*bị|máy|số\s*hiệu|sn|serial)\s*[:#.\-]?\s*([\w\-]*\d[\w\-]*)",
+    re.IGNORECASE | re.UNICODE,
+)
+# Liệt kê / đếm: điều kiện để bộ lọc đơn vị phạm vi đo mở tổng hợp sổ cái.
+_LIST_CUE_RE = re.compile(
+    r"liệt\s+kê|danh\s+sách|bao\s+nhiêu|mấy\s|những\s+(?:áp\s+kế|thiết\s+bị|biên\s+bản)|"
+    r"các\s+(?:áp\s+kế|thiết\s+bị|biên\s+bản)",
+    re.IGNORECASE,
+)
 _HISTORY_INTENTS = frozenset({"device_history", "latest_record", "error_trend"})
 _LEDGER_TTL_SECONDS = 30.0
 
@@ -86,9 +103,11 @@ class RecordSignals:
     measure: str | None = None
     summary_cue: bool = False
     targets: Targets = Targets()
+    question_words: frozenset[str] = frozenset()
 
 
 _LEDGER_CACHE: dict[str, tuple[float, LedgerIndex]] = {}
+_LEDGER_LOCK = threading.Lock()
 
 
 def _fold(value: str) -> str:
@@ -109,7 +128,10 @@ def build_ledger_index(session: Any) -> LedgerIndex:
         rows = session.execute(
             text("SELECT serial_no, cert_no, inspector_name, reviewer_name FROM v_record_detail")
         ).all()
-    except Exception:  # noqa: BLE001 - thiếu view/kết nối thì không có tín hiệu sổ cái
+    except SQLAlchemyError as exc:
+        # Thiếu view/kết nối thì không có tín hiệu sổ cái; ghi log vì chỉ mục rỗng làm tắt
+        # lớp định tuyến tất định.
+        logger.warning("Không đọc được chỉ mục sổ cái: %s", exc)
         return LedgerIndex()
     serials: dict[str, str] = {}
     inspectors: dict[str, str] = {}
@@ -130,15 +152,15 @@ def build_ledger_index(session: Any) -> LedgerIndex:
 def ledger_index(session: Any) -> LedgerIndex:
     """Chỉ mục sổ cái có cache ngắn hạn, khóa theo engine (tránh lẫn DB test)."""
     key = _cache_key(session)
-    now = time.monotonic()
-    if key is not None:
+    if key is None:
+        return build_ledger_index(session)
+    with _LEDGER_LOCK:
         cached = _LEDGER_CACHE.get(key)
-        if cached is not None and now - cached[0] < _LEDGER_TTL_SECONDS:
+        if cached is not None and time.monotonic() - cached[0] < _LEDGER_TTL_SECONDS:
             return cached[1]
-    index = build_ledger_index(session)
-    if key is not None:
-        _LEDGER_CACHE[key] = (now, index)
-    return index
+        index = build_ledger_index(session)
+        _LEDGER_CACHE[key] = (time.monotonic(), index)
+        return index
 
 
 def _dates(question: str) -> tuple[date, ...]:
@@ -165,9 +187,23 @@ def _nominal(question: str) -> float | None:
     return vnnum.parse_number(match.group(1).strip()) if match else None
 
 
-def _ambiguous_serial(token: str) -> bool:
-    """Số hiệu toàn chữ số và ngắn dễ trùng một con số bất kỳ trong câu hỏi."""
-    return token.isdigit() and len(token) < _MIN_BARE_SERIAL_DIGITS
+def _serial_tokens(text_value: str, index: LedgerIndex) -> list[str]:
+    """Số hiệu sổ cái trong câu hỏi.
+
+    Số hiệu toàn chữ số ("1045", "2500") dễ trùng một con số của quy định ("đến 2500
+    kgf/cm²"), nên chỉ nhận khi câu hỏi có chữ "số hiệu"/"serial" hoặc số đứng ngay
+    sau từ chỉ thiết bị. Số hiệu có chữ ("1A0043219", "B280-7702") luôn nhận.
+    """
+    has_serial_word = bool(_SERIAL_WORD_RE.search(text_value))
+    in_context = {match.casefold() for match in _DEVICE_CONTEXT_RE.findall(text_value)}
+    found = []
+    for token in (token.casefold() for token in _SERIAL_TOKEN_RE.findall(text_value)):
+        if token not in index.serials:
+            continue
+        if token.isdigit() and not (has_serial_word or token in in_context):
+            continue
+        found.append(index.serials[token])
+    return found
 
 
 def extract_signals(question: str, index: LedgerIndex, session: Any) -> RecordSignals:
@@ -175,13 +211,7 @@ def extract_signals(question: str, index: LedgerIndex, session: Any) -> RecordSi
     text_value = question or ""
     without_dates = _DMY_RE.sub(" ", text_value)
     cert_nos = [cert for cert in _CERT_RE.findall(without_dates) if cert in index.cert_nos]
-    tokens = [token.casefold() for token in _SERIAL_TOKEN_RE.findall(without_dates)]
-    has_serial_word = bool(_SERIAL_WORD_RE.search(text_value))
-    serials = [
-        index.serials[token]
-        for token in tokens
-        if token in index.serials and (has_serial_word or not _ambiguous_serial(token))
-    ]
+    serials = _serial_tokens(without_dates, index)
     unit_match = _RANGE_UNIT_RE.search(text_value)
     measure = "min" if _MIN_RE.search(text_value) else "max" if _MAX_RE.search(text_value) else None
     return RecordSignals(
@@ -195,6 +225,7 @@ def extract_signals(question: str, index: LedgerIndex, session: Any) -> RecordSi
         measure=measure,
         summary_cue=bool(_SUMMARY_RE.search(text_value)),
         targets=detect_targets(text_value, field_catalog(session)),
+        question_words=content_tokens(text_value),
     )
 
 
@@ -219,6 +250,7 @@ def _lookup(base: dict[str, Any], signals: RecordSignals) -> dict[str, Any]:
             "fields": list(signals.targets.fields),
             "steps": list(signals.targets.steps),
             "nominal": signals.nominal,
+            "focus_words": sorted(signals.question_words) if signals.targets.steps else [],
         },
     )
 
@@ -283,8 +315,10 @@ def disambiguate_records(
             params["serial"] = signals.serials[0]
         return {**payload, "params": params}
 
+    # Không có định danh sổ cái: chỉ mở nhánh số liệu từ ``text`` khi câu hỏi nói rõ về
+    # biên bản/hồ sơ ("áp kế"/"thiết bị" có mặt trong mọi câu hỏi quy định).
     is_data = str(payload.get("branch") or "") in ("data", "mixed")
-    if not (is_data or _LEDGER_WORD_RE.search(question)):
+    if not (is_data or _RECORD_WORD_RE.search(question) or signals.summary_cue):
         return payload
 
     person = _person_filter(question, signals)
@@ -292,8 +326,11 @@ def disambiguate_records(
         return _summary(payload, signals, question, **person)
     comparable = _comparable_field(signals)
     if signals.measure and comparable:
-        return _summary(payload, signals, question, measure=signals.measure, field=comparable)
-    if signals.summary_cue or signals.range_unit:
+        scope = {"procedure_ids": list(signals.targets.procedures)} if signals.targets.steps else {}
+        return _summary(
+            payload, signals, question, measure=signals.measure, field=comparable, **scope
+        )
+    if signals.summary_cue or (signals.range_unit and _LIST_CUE_RE.search(question)):
         if intent == "records_by_period" and (payload.get("params") or {}).get("date_from"):
             return payload
         return _summary(payload, signals, question)

@@ -26,6 +26,7 @@ from query.record_fields import (
     FieldCatalog,
     content_tokens,
     field_catalog,
+    label_words,
     load_cells,
 )
 from query.record_intents import RecordLookupParams, RecordsSummaryParams
@@ -67,10 +68,14 @@ def _day_bounds(day: date) -> tuple[datetime, datetime]:
 
 def _select_records(session: Session, conditions: list[str], params: dict[str, Any]) -> list[dict]:
     where = f" WHERE {' AND '.join(conditions)}" if conditions else ""
-    rows = session.execute(
-        text(f"SELECT * FROM v_record_detail r{where} ORDER BY r.calibrated_at, r.id"), params
-    ).mappings()
-    return [dict(row) for row in rows]
+    statement = text(f"SELECT * FROM v_record_detail r{where} ORDER BY r.calibrated_at, r.id")
+    # Tham số danh sách (``IN :ids``) phải bind dạng expanding trên cả SQLite lẫn PostgreSQL.
+    expanding = [
+        bindparam(key, expanding=True) for key, value in params.items() if isinstance(value, list)
+    ]
+    if expanding:
+        statement = statement.bindparams(*expanding)
+    return [dict(row) for row in session.execute(statement, params).mappings()]
 
 
 def find_records(session: Session, params: RecordLookupParams) -> list[dict]:
@@ -229,13 +234,24 @@ def _cell_map(point: dict) -> dict[str, str]:
     }
 
 
-def _cell_columns(points: list[dict]) -> list[str]:
+def _cell_columns(points: list[dict], focus: frozenset[str] = frozenset()) -> list[str]:
+    """Tên cột theo thứ tự biên bản; cột câu hỏi nhắc tới đưa lên sau cột đầu (STT)."""
     names: list[str] = []
     for point in points:
         for name in _cell_map(point):
             if name not in names:
                 names.append(name)
-    return names
+    if not focus or len(names) < 2:
+        return names
+
+    def asked(name: str) -> bool:
+        words = label_words(name)
+        return len(words) >= 2 and words <= focus
+
+    # Cột STT và cột giá trị danh nghĩa giữ ở đầu để dòng vẫn đọc được là điểm đo nào.
+    head = names[:1] + [name for name in names[1:] if "danh nghĩa" in name.casefold()]
+    rest = [name for name in names if name not in head]
+    return head + [name for name in rest if asked(name)] + [n for n in rest if not asked(n)]
 
 
 def _step_rows(points: list[dict], names: list[str]) -> list[dict[str, Cell]]:
@@ -281,6 +297,7 @@ def _step_tables(
     steps: list[str],
     catalog: FieldCatalog,
     nominal: float | None,
+    focus: frozenset[str] = frozenset(),
 ) -> list[DataTable]:
     points = _points(session, [record["id"] for record in records], steps)
     tables = []
@@ -290,13 +307,16 @@ def _step_tables(
             own, filtered = _filter_nominal(own, nominal)
             if not own:
                 continue
-            names = _cell_columns(own) or list(_FALLBACK_POINT_COLUMNS)
+            names = _cell_columns(own, focus) or list(_FALLBACK_POINT_COLUMNS)
             note = "Nguyên văn từng ô của bảng trong biên bản."
             if filtered:
                 note = "Chỉ dòng có giá trị danh nghĩa được hỏi. " + note
             tables.append(
                 DataTable(
-                    title=f"{catalog.table_title(step)} · biên bản {_cert(record)}",
+                    title=(
+                        f"{catalog.table_title(step, record.get('procedure_id'))}"
+                        f" · biên bản {_cert(record)}"
+                    ),
                     columns=[Column(f"c{index}", name) for index, name in enumerate(names)],
                     rows=_step_rows(own, names),
                     total=len(own),
@@ -309,10 +329,11 @@ def _step_tables(
 def _reason_points(points: list[dict], reason: str, catalog: FieldCatalog) -> list[dict]:
     """Dòng số liệu mà kết luận "không đạt" viện dẫn (so từ ngữ, không so số)."""
     words = content_tokens(reason)
-    titles = {table.step_code: table.words for table in catalog.tables}
+    titles = {(table.procedure_id, table.step_code): table.words for table in catalog.tables}
     chosen = []
     for point in points:
-        title_words = titles.get(point.get("step_code") or "", frozenset())
+        key = (point.get("procedure_id"), point.get("step_code") or "")
+        title_words = titles.get(key, frozenset())
         label_words = content_tokens(point.get("label"))
         if (title_words and title_words <= words) or len(
             label_words & words
@@ -335,7 +356,11 @@ def _failure_basis(
             continue
         rows = [
             {
-                "table": Cell(text=catalog.table_title(point.get("step_code") or "")),
+                "table": Cell(
+                    text=catalog.table_title(
+                        point.get("step_code") or "", point.get("procedure_id")
+                    )
+                ),
                 "label": Cell(text=point.get("label") or "—"),
                 "measured": _point_cell(point, point.get("measured_text")),
                 "limit": _point_cell(point, point.get("limit_text")),
@@ -400,7 +425,16 @@ def resolve_record_lookup(session: Session, params: RecordLookupParams) -> DataP
     elif not params.steps:
         tables.extend(_record_cards(records, fields))
     if params.steps:
-        tables.extend(_step_tables(session, records, list(params.steps), catalog, params.nominal))
+        tables.extend(
+            _step_tables(
+                session,
+                records,
+                list(params.steps),
+                catalog,
+                params.nominal,
+                frozenset(params.focus_words),
+            )
+        )
     if VERDICT_KEY in keys:
         tables.extend(_failure_basis(session, records, fields, catalog))
     if not tables:
@@ -463,6 +497,9 @@ def summary_records(session: Session, params: RecordsSummaryParams) -> list[dict
     if params.date_to:
         conditions.append("r.calibrated_at < :date_to")
         values["date_to"] = _day_bounds(params.date_to)[1]
+    if params.procedure_ids:
+        conditions.append("r.procedure_id IN :procedure_ids")
+        values["procedure_ids"] = list(params.procedure_ids)
     if params.range_unit:
         conditions.append("LOWER(COALESCE(r.range_unit_code, '')) = :range_unit")
         values["range_unit"] = unit_code(session, params.range_unit).casefold()
@@ -595,16 +632,19 @@ def _rank_row(
     return cells
 
 
-def _rank_table(
-    session: Session, records: list[dict], params: RecordsSummaryParams, catalog: FieldCatalog
-) -> DataTable | None:
+def _rank_group(
+    session: Session,
+    by_id: dict[int, dict],
+    candidates: list[tuple[float, dict, bool]],
+    params: RecordsSummaryParams,
+    catalog: FieldCatalog,
+    procedure: str | None,
+) -> DataTable:
+    """Bảng xếp hạng cho các biên bản của MỘT QTKĐ (không so chéo quy trình)."""
     field = params.field or ""
-    candidates = _rank_candidates(session, records, field, catalog)
-    if not candidates:
-        return None
-    by_id = {record["id"]: record for record in records}
-    candidates.sort(key=lambda item: item[0], reverse=params.measure == "max")
+    candidates = sorted(candidates, key=lambda item: item[0], reverse=params.measure == "max")
     top = candidates[:RANK_ROWS]
+    procedure_id = top[0][1].get("procedure_id")
     related_keys = [] if _is_step(field, catalog) else catalog.related(field)
     fields = _fields_by_record(session, [row["record_id"] for _, row, _ in top])
     rows = [
@@ -617,10 +657,14 @@ def _rank_table(
         )
         for rank, (_, row, is_point) in enumerate(top, start=1)
     ]
-    label = catalog.table_title(field) if _is_step(field, catalog) else catalog.field_label(field)
+    if _is_step(field, catalog):
+        label = catalog.table_title(field, procedure_id)
+    else:
+        label = catalog.field_label(field)
     order = "nhỏ nhất" if params.measure == "min" else "lớn nhất"
+    scope = f" · QTKĐ {procedure}" if procedure else ""
     return DataTable(
-        title=f"{label}: {order} trước",
+        title=f"{label}: {order} trước{scope}",
         columns=[
             Column("rank", "Hạng"),
             *_IDENTITY_COLUMNS,
@@ -635,9 +679,27 @@ def _rank_table(
         total=len(candidates),
         note=(
             "Sắp theo giá trị ghi trong biên bản (quy đổi về cùng đơn vị SI khi khác đơn vị); "
-            "hiển thị nguyên văn, không tính lại."
+            "hiển thị nguyên văn, không tính lại. Chỉ so biên bản cùng một QTKĐ."
         ),
     )
+
+
+def _rank_tables(
+    session: Session, records: list[dict], params: RecordsSummaryParams, catalog: FieldCatalog
+) -> list[DataTable]:
+    """Một bảng xếp hạng cho mỗi QTKĐ: cùng mã bảng/nhãn ở hai QTKĐ không cùng đại lượng."""
+    candidates = _rank_candidates(session, records, params.field or "", catalog)
+    by_id = {record["id"]: record for record in records}
+    groups: dict[Any, list[tuple[float, dict, bool]]] = {}
+    for item in candidates:
+        procedure_id = by_id[item[1]["record_id"]].get("procedure_id")
+        groups.setdefault(procedure_id, []).append(item)
+    tables = []
+    for group in groups.values():
+        record = by_id[group[0][1]["record_id"]]
+        procedure = record.get("procedure_number") if len(groups) > 1 else None
+        tables.append(_rank_group(session, by_id, group, params, catalog, procedure))
+    return tables
 
 
 def resolve_records_summary(session: Session, params: RecordsSummaryParams) -> DataPayload:
@@ -651,9 +713,7 @@ def resolve_records_summary(session: Session, params: RecordsSummaryParams) -> D
     fields = _fields_by_record(session, [record["id"] for record in records])
     tables: list[DataTable] = []
     if params.measure in ("min", "max"):
-        ranked = _rank_table(session, records, params, catalog)
-        if ranked is not None:
-            tables.append(ranked)
+        tables.extend(_rank_tables(session, records, params, catalog))
     tables.append(_summary_table(records))
     if params.range_unit:
         tables.append(_device_table(records))

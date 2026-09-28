@@ -22,7 +22,12 @@ from knowledge.extract import extract_appendix_and_store
 from query import intents
 from query.record_fields import detect_targets, field_catalog
 from query.record_intents import RecordLookupParams, RecordsSummaryParams
-from query.record_query import resolve_record_lookup, resolve_records_summary
+from query.record_query import (
+    _rank_tables,
+    resolve_record_lookup,
+    resolve_records_summary,
+    summary_records,
+)
 from query.record_signals import disambiguate_records
 from query.table_model import untraceable_cells
 from records.ingest import ingest_record_path
@@ -232,13 +237,29 @@ def test_extreme_question_routes_to_summary_with_the_compared_field(db):
     llm = {"branch": "data", "intent": "error_trend", "params": {"serial": "biên bản"}}
     routed = disambiguate_records(llm, question, db)
     assert routed["intent"] == "records_summary"
-    assert routed["params"] == {"measure": "min", "field": "A.2"}
+    procedure_id = db.query(Procedure).filter(Procedure.number == "1.159").one().id
+    assert routed["params"] == {"measure": "min", "field": "A.2", "procedure_ids": [procedure_id]}
 
 
 def test_unit_filter_routes_to_summary(db):
     question = "Có bao nhiêu áp kế pít tông có phạm vi đo ghi theo đơn vị bar?"
     llm = {"branch": "data", "intent": "devices_by_range", "params": {"unit": "bar"}}
     assert disambiguate_records(llm, question, db)["params"] == {"range_unit": "bar"}
+
+
+def test_number_equal_to_a_serial_in_a_regulation_question_stays_text(db):
+    question = "Áp kế có phạm vi đo đến 1045 kgf/cm2 thì sai số cho phép là bao nhiêu?"
+    assert disambiguate_records(TEXT, question, db) == TEXT
+
+
+def test_bare_serial_after_a_device_word_is_accepted(db):
+    routed = disambiguate_records(TEXT, "Thiết bị 1045 ngày 25/06/2024 kết luận gì?", db)
+    assert routed["params"]["serial"] == "1045"
+
+
+def test_unit_word_in_a_regulation_question_stays_text(db):
+    question = "Sai số cho phép tính theo bar là bao nhiêu đối với áp kế píttông?"
+    assert disambiguate_records(TEXT, question, db) == TEXT
 
 
 def test_regulation_question_is_never_opened(db):
@@ -295,6 +316,26 @@ def test_nominal_point_filters_the_pressure_balance_table(db):
     assert {"1015,99", "60,8", "20,6"} <= {cell.text for cell in table.rows[0].values()}
 
 
+def test_asked_columns_come_first_after_the_point(db):
+    payload = resolve_record_lookup(
+        db,
+        RecordLookupParams(
+            cert_no="013/2024",
+            steps=["A.5"],
+            nominal=2500,
+            focus_words=["áp", "suất", "khí", "quyển", "nhiệt", "độ", "ẩm", "môi", "trường"],
+        ),
+    )
+    labels = [column.label for column in _table(payload, "Bảng A.5").columns]
+    assert labels[0] == "TT"
+    assert labels[1].startswith("Áp suất danh nghĩa")
+    assert set(labels[2:5]) == {
+        "Áp suất khí quyển, hPa",
+        "Độ ẩm môi trường, %RH",
+        "Nhiệt độ môi trường, °C",
+    }
+
+
 def test_run_cells_keep_every_turn(db):
     payload = resolve_record_lookup(
         db, RecordLookupParams(serial="1045", calibrated_on="2024-07-10", steps=["A.3"])
@@ -335,6 +376,23 @@ def test_uncertainty_ranking_compares_across_units_and_shows_expanded_uncertaint
     # 0,025 × 10-3 MPa (25 Pa) < 0,252 × 10-3 bar (25,2 Pa): so sau khi quy đổi SI.
     assert top["serial_no"].text == "1520"
     assert top["related0"].text == "0,050 × 10-3 (MPa) (với k = 2)"
+
+
+def test_ranking_never_compares_records_of_two_procedures(db):
+    params = RecordsSummaryParams(measure="min", field="A.2")
+    records = summary_records(db, params)
+    # Giả lập nửa sổ cái thuộc một QTKĐ khác dùng lại mã bảng A.2.
+    other = [
+        {**record, "procedure_id": 999, "procedure_number": "9.999"} if index % 2 else record
+        for index, record in enumerate(records)
+    ]
+    tables = _rank_tables(db, other, params, field_catalog(db))
+    assert len(tables) == 2
+    assert all("QTKĐ" in table.title for table in tables)
+    for table in tables:
+        certs = {row["cert_no"].text for row in table.rows}
+        procedures = {r["procedure_id"] for r in other if r["cert_no"] in certs}
+        assert len(procedures) == 1
 
 
 def test_range_unit_filter_uses_the_device_range(db):
