@@ -10,6 +10,7 @@ import pytest
 
 from knowledge.vnnum import (
     normalize_spaces,
+    numbers,
     parse_number,
     parse_quantity,
     parse_range,
@@ -175,3 +176,21 @@ def test_parse_number_accepts_uppercase_exponent_from_excel():
     assert parse_number("6,0000000000000001E-3") == pytest.approx(0.006)
     assert parse_number("9,9924E-05") == pytest.approx(9.9924e-05)
     assert parse_number("1E+3") == 1000.0
+
+
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        # Biên bản áp kế pít tông ghi khoảng trắng hai bên dấu nhân.
+        ("A0 = 0,59878 × 10-5 , m2", [0.59878e-5]),
+        ("787,500 × 10-3 (kG/cm2) tại p = 1 750,0 kG/cm2", [0.7875, 1750.0]),
+        ("1 575,000 × 10-3 (kG/cm2)", [1.575]),
+    ],
+)
+def test_numbers_reads_spaced_scientific_notation(raw, expected):
+    assert numbers(raw) == pytest.approx(expected)
+
+
+def test_spaced_letter_x_is_not_scientific():
+    # "5 x 10" (kích thước) không phải ký hiệu khoa học: chỉ dấu "×" mới được cách.
+    assert numbers("tấm 5 x 10 mm") == [5.0, 10.0]

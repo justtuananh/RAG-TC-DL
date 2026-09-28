@@ -34,8 +34,9 @@ _MINUS_CHARS = "\u2212\u2013\u2014"
 # không nhặt nhầm "2" của đơn vị thành một giá trị đo.
 _NUMBER_TOKEN_RE = re.compile(r"(?<![A-Za-zµ%°])([+\-\u2212]?\d+(?:[.,]\d+)?(?:e[+\-]?\d+)?)")
 
-# Ký hiệu khoa học kiểu tài liệu: "8,051516×10-5" / "2,91x10^-9".
-_SCIENTIFIC_RE = re.compile(r"[×xX]\s*10\s*\^?\s*([+\-\u2212]?\d+)")
+# Ký hiệu khoa học kiểu tài liệu: "8,051516×10-5" / "2,91x10^-9" / "0,59878 × 10-5".
+# Khoảng trắng trước dấu nhân chỉ được nuốt với "×": "5 x 10 mm" là kích thước.
+_SCIENTIFIC_RE = re.compile(r"(?:\s*×|[xX])\s*10\s*\^?\s*([+\-\u2212]?\d+)")
 
 # Từ khóa mô tả khoảng (không phải đơn vị).
 _RANGE_WORD_RE = re.compile(r"\b(?:từ|đến|tới|to)\b", re.IGNORECASE)
