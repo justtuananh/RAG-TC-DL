@@ -166,7 +166,7 @@ describe("RecordsTable — accessibility", () => {
     const html = render();
     expect(html).toContain("Mọi đại lượng");
     expect(html).toContain("Mọi QTKĐ");
-    expect(html).toContain("min-width:96px");
+    expect(html).toContain("min-width:128px");
   });
 
   it("trạng thái rỗng có thông báo thay vì bảng trống", () => {

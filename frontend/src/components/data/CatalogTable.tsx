@@ -1,15 +1,7 @@
 import type { CatalogGroup, CatalogKind, CatalogRow } from "../../types";
 import { COLOR } from "../../theme";
 import { IcAlert, IcLink } from "../common/icons";
-import {
-  CATALOG_TABLE_TITLES,
-  formatCatalogDate,
-  formatNextDue,
-  isInherited,
-  isOverdue,
-  joinList,
-  recognitionLabel,
-} from "./catalogFormat";
+import { CATALOG_TABLE_TITLES, formatCatalogDate, formatNextDue, isInherited, isOverdue, joinList, recognitionLabel } from "./catalogFormat";
 
 // Bảng danh mục NAS (Pha D1). Thuần trình bày để test bằng renderToStaticMarkup:
 // nhận rows + bộ lọc, phát callback; mỗi dòng có nút mở nguồn nguyên văn (P1).
@@ -43,39 +35,9 @@ const HEADERS: Record<CatalogKind, string[]> = {
     "Lĩnh vực sử dụng",
     "Nguồn",
   ],
-  inspector: [
-    "TT",
-    "Họ và tên",
-    "Năm sinh",
-    "Cấp bậc",
-    "Chức vụ",
-    "Trình độ",
-    "Chuyên ngành",
-    "Lĩnh vực được chứng nhận",
-    "Số thẻ",
-    "Ngày cấp",
-    "Nguồn",
-  ],
-  procedure_catalog: [
-    "TT",
-    "Nhóm",
-    "Số hiệu",
-    "Tên tiêu chuẩn, quy trình",
-    "Cấp ban hành",
-    "Năm",
-    "QTKĐ trong kho",
-    "Nguồn",
-  ],
-  capability: [
-    "TT",
-    "Nhóm",
-    "Tên đại lượng, trang bị",
-    "Tham số đo lường",
-    "Quy trình áp dụng",
-    "Số KĐV",
-    "Công nhận",
-    "Nguồn",
-  ],
+  inspector: ["TT", "Họ và tên", "Năm sinh", "Cấp bậc", "Chức vụ", "Trình độ", "Chuyên ngành", "Lĩnh vực được chứng nhận", "Số thẻ", "Ngày cấp", "Nguồn"],
+  procedure_catalog: ["TT", "Nhóm", "Số hiệu", "Tên tiêu chuẩn, quy trình", "Cấp ban hành", "Năm", "QTKĐ trong kho", "Nguồn"],
+  capability: ["TT", "Nhóm", "Tên đại lượng, trang bị", "Tham số đo lường", "Quy trình áp dụng", "Số KĐV", "Công nhận", "Nguồn"],
 };
 
 const NEEDS_GROUP: Record<CatalogKind, boolean> = {
@@ -130,10 +92,10 @@ function LabStandardCells({ row, onOpenSource }: { row: CatalogRow; onOpenSource
   return (
     <>
       <td style={tdStyle}>{text(row.ord)}</td>
-      <td style={tdStyle}>{text(row.name)}</td>
+      <td style={nameCell}>{text(row.name)}</td>
       <td style={tdStyle}>{text(row.model)}</td>
       <td style={tdStyle}>{text(row.serial)}</td>
-      <td style={{ ...tdStyle, maxWidth: 320, whiteSpace: "normal" }}>{text(row.characteristics)}</td>
+      <td style={longTextCell}>{text(row.characteristics)}</td>
       <td style={tdStyle}>
         {text(row.interval_text)}
         {isInherited(row, "interval") && <InheritedMark />}
@@ -162,7 +124,7 @@ function InspectorCells({ row, onOpenSource }: { row: CatalogRow; onOpenSource: 
       <td style={tdStyle}>{text(row.position)}</td>
       <td style={tdStyle}>{text(row.education)}</td>
       <td style={tdStyle}>{text(row.specialization)}</td>
-      <td style={{ ...tdStyle, maxWidth: 320, whiteSpace: "normal" }}>{joinList(row.fields)}</td>
+      <td style={longTextCell}>{joinList(row.fields)}</td>
       <td style={tdStyle}>{text(row.card_no)}</td>
       <td style={tdStyle}>{formatCatalogDate(row.card_date)}</td>
       <SourceCell row={row} onOpenSource={onOpenSource} />
@@ -177,7 +139,7 @@ function ProcedureCells({ row, onOpenSource }: { row: CatalogRow; onOpenSource: 
       <td style={tdStyle}>{text(row.ord)}</td>
       <td style={tdStyle}>{text(row.group_code)}</td>
       <td style={tdStyle}>{text(row.code_text)}</td>
-      <td style={{ ...tdStyle, maxWidth: 360, whiteSpace: "normal" }}>{text(row.title)}</td>
+      <td style={longTextCell}>{text(row.title)}</td>
       <td style={tdStyle}>
         {text(row.issuer)}
         {isInherited(row, "issuer") && <InheritedMark />}
@@ -204,8 +166,8 @@ function CapabilityCells({ row, onOpenSource }: { row: CatalogRow; onOpenSource:
       <td style={tdStyle}>{text(row.ord)}</td>
       <td style={tdStyle}>{text(row.group_code)}</td>
       <td style={tdStyle}>{text(row.name)}</td>
-      <td style={{ ...tdStyle, maxWidth: 360, whiteSpace: "normal" }}>{joinList(row.parameters)}</td>
-      <td style={{ ...tdStyle, maxWidth: 300, whiteSpace: "normal" }}>{procedures || "—"}</td>
+      <td style={longTextCell}>{joinList(row.parameters)}</td>
+      <td style={longTextCell}>{procedures || "—"}</td>
       <td style={tdStyle}>{text(row.inspector_count)}</td>
       <td style={tdStyle}>{recognitionLabel(row.recognition)}</td>
       <SourceCell row={row} onOpenSource={onOpenSource} />
@@ -237,12 +199,7 @@ export default function CatalogTable(props: CatalogTableProps) {
           style={searchInput}
         />
         {showGroup && (
-          <select
-            value={group}
-            onChange={(event) => onGroup(event.target.value)}
-            aria-label="Lọc theo nhóm lĩnh vực"
-            style={groupSelect}
-          >
+          <select value={group} onChange={(event) => onGroup(event.target.value)} aria-label="Lọc theo nhóm lĩnh vực" style={groupSelect}>
             <option value="">Mọi nhóm lĩnh vực</option>
             {groups.map((item) => (
               <option key={item.code} value={item.code}>
@@ -264,8 +221,7 @@ export default function CatalogTable(props: CatalogTableProps) {
       <div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
         <table role="table" style={{ width: "100%", borderCollapse: "collapse", fontSize: "12.5px" }}>
           <caption style={visuallyHidden}>
-            {CATALOG_TABLE_TITLES[kind]}. Hạn KĐ/HC kế tiếp là giá trị ước tính từ chu kỳ và lần
-            KĐ/HC gần nhất. Mỗi dòng có nút mở nguồn nguyên văn.
+            {CATALOG_TABLE_TITLES[kind]}. Hạn KĐ/HC kế tiếp là giá trị ước tính từ chu kỳ và lần KĐ/HC gần nhất. Mỗi dòng có nút mở nguồn nguyên văn.
           </caption>
           <thead style={{ position: "sticky", top: 0, zIndex: 2, background: COLOR.surfaceAlt }}>
             <tr>
@@ -314,7 +270,7 @@ const toolbarStyle: React.CSSProperties = {
   background: COLOR.surface,
 };
 const searchInput: React.CSSProperties = {
-  width: 300,
+  width: 380,
   maxWidth: "100%",
   height: 32,
   padding: "0 10px",
@@ -407,3 +363,8 @@ const visuallyHidden: React.CSSProperties = {
   whiteSpace: "nowrap",
   border: 0,
 };
+
+// Cột chữ dài (đặc tính, lĩnh vực, tên quy trình, tham số): đủ rộng để dòng không
+// bị kéo quá cao; cột tên chuẩn giới hạn để nhường chỗ cho cột đặc tính.
+const longTextCell: React.CSSProperties = { ...tdStyle, minWidth: 300, maxWidth: 420, whiteSpace: "normal" };
+const nameCell: React.CSSProperties = { ...tdStyle, minWidth: 170, maxWidth: 240, whiteSpace: "normal" };

@@ -72,17 +72,7 @@ function SortHeader({
   );
 }
 
-function ProvCell({
-  row,
-  field,
-  text,
-  onOpenProvenance,
-}: {
-  row: DataRecordRow;
-  field: string;
-  text: string;
-  onOpenProvenance: (ref: DataCellRef) => void;
-}) {
+function ProvCell({ row, field, text, onOpenProvenance }: { row: DataRecordRow; field: string; text: string; onOpenProvenance: (ref: DataCellRef) => void }) {
   const ref = cellRefFor(row, field);
   if (!ref) return <span style={numericStyle}>{text}</span>;
   return (
@@ -116,24 +106,36 @@ export default function RecordsTable(props: RecordsTableProps) {
       )}
       <div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
         <table role="table" style={{ width: "100%", borderCollapse: "collapse", fontSize: "12.5px" }}>
-          <caption style={captionStyle}>
-            Bảng hồ sơ kiểm định đã duyệt — mỗi ô số bấm để mở đoạn nguyên văn nguồn.
-          </caption>
+          <caption style={captionStyle}>Bảng hồ sơ kiểm định đã duyệt — mỗi ô số bấm để mở đoạn nguyên văn nguồn.</caption>
           <thead style={{ position: "sticky", top: 0, zIndex: 2, background: COLOR.surfaceAlt }}>
             <tr>
               <SortHeader label="Số hiệu" column="serial_no" sort={sort} order={order} onSort={onSort} />
               <SortHeader label="Loại thiết bị" column="device_type_name" sort={sort} order={order} onSort={onSort} />
-              <th scope="col" style={thStyle}>Đại lượng</th>
+              <th scope="col" style={thStyle}>
+                Đại lượng
+              </th>
               <SortHeader label="QTKĐ" column="procedure_number" sort={sort} order={order} onSort={onSort} />
               <SortHeader label="Ngày kiểm định" column="calibrated_at" sort={sort} order={order} onSort={onSort} />
               <SortHeader label="Hết hiệu lực" column="expires_at" sort={sort} order={order} onSort={onSort} />
-              <th scope="col" style={thStyle}>Phạm vi đo</th>
-              <th scope="col" style={thStyle}>Cấp chính xác</th>
-              <th scope="col" style={thStyle}>Nhiệt độ</th>
-              <th scope="col" style={thStyle}>Độ ẩm</th>
-              <th scope="col" style={thStyle}>Số điểm đo</th>
+              <th scope="col" style={thStyle}>
+                Phạm vi đo
+              </th>
+              <th scope="col" style={thStyle}>
+                Cấp chính xác
+              </th>
+              <th scope="col" style={thStyle}>
+                Nhiệt độ
+              </th>
+              <th scope="col" style={thStyle}>
+                Độ ẩm
+              </th>
+              <th scope="col" style={thStyle}>
+                Số điểm đo
+              </th>
               <SortHeader label="Kết luận" column="verdict" sort={sort} order={order} onSort={onSort} />
-              <th scope="col" style={thStyle}>Chi tiết</th>
+              <th scope="col" style={thStyle}>
+                Chi tiết
+              </th>
             </tr>
             <tr>
               <th scope="col" style={filterThStyle}>
@@ -155,7 +157,9 @@ export default function RecordsTable(props: RecordsTableProps) {
                 >
                   <option value="">Mọi loại</option>
                   {(options?.device_types ?? []).map((choice) => (
-                    <option key={choice.value} value={choice.value}>{choice.label}</option>
+                    <option key={choice.value} value={choice.value}>
+                      {choice.label}
+                    </option>
                   ))}
                 </select>
               </th>
@@ -168,7 +172,9 @@ export default function RecordsTable(props: RecordsTableProps) {
                 >
                   <option value="">Mọi đại lượng</option>
                   {(options?.quantities ?? []).map((choice) => (
-                    <option key={choice.value} value={choice.value}>{choice.label}</option>
+                    <option key={choice.value} value={choice.value}>
+                      {choice.label}
+                    </option>
                   ))}
                 </select>
               </th>
@@ -181,7 +187,9 @@ export default function RecordsTable(props: RecordsTableProps) {
                 >
                   <option value="">Mọi QTKĐ</option>
                   {(options?.procedures ?? []).map((choice) => (
-                    <option key={choice.value} value={choice.value}>{choice.label}</option>
+                    <option key={choice.value} value={choice.value}>
+                      {choice.label}
+                    </option>
                   ))}
                 </select>
               </th>
@@ -254,7 +262,9 @@ export default function RecordsTable(props: RecordsTableProps) {
                 >
                   <option value="">Mọi kết luận</option>
                   {verdictChoices.map((choice) => (
-                    <option key={choice.value} value={choice.value}>{choice.label}</option>
+                    <option key={choice.value} value={choice.value}>
+                      {choice.label}
+                    </option>
                   ))}
                 </select>
               </th>
@@ -264,11 +274,15 @@ export default function RecordsTable(props: RecordsTableProps) {
           <tbody>
             {loading && rows.length === 0 ? (
               <tr>
-                <td colSpan={13} style={emptyTd}>Đang tải dữ liệu…</td>
+                <td colSpan={13} style={emptyTd}>
+                  Đang tải dữ liệu…
+                </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={13} style={emptyTd}>Không có hồ sơ đã duyệt khớp bộ lọc.</td>
+                <td colSpan={13} style={emptyTd}>
+                  Không có hồ sơ đã duyệt khớp bộ lọc.
+                </td>
               </tr>
             ) : (
               rows.map((row) => {
@@ -372,17 +386,94 @@ export default function RecordsTable(props: RecordsTableProps) {
   );
 }
 
-const thStyle: React.CSSProperties = { textAlign: "left", padding: "7px 9px", borderBottom: `1px solid ${COLOR.border}`, color: COLOR.textSecondary, fontWeight: 700, whiteSpace: "nowrap" };
-const filterThStyle: React.CSSProperties = { padding: "4px 6px", borderBottom: `1px solid ${COLOR.border}`, background: COLOR.surfaceAlt, verticalAlign: "top" };
-const filterInput: React.CSSProperties = { width: "100%", minWidth: 60, height: 26, padding: "0 6px", borderRadius: 6, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textPrimary, fontSize: "11.5px", fontFamily: "inherit" };
+const thStyle: React.CSSProperties = {
+  textAlign: "left",
+  padding: "7px 9px",
+  borderBottom: `1px solid ${COLOR.border}`,
+  color: COLOR.textSecondary,
+  fontWeight: 700,
+  whiteSpace: "nowrap",
+};
+const filterThStyle: React.CSSProperties = {
+  padding: "4px 6px",
+  borderBottom: `1px solid ${COLOR.border}`,
+  background: COLOR.surfaceAlt,
+  verticalAlign: "top",
+};
+const filterInput: React.CSSProperties = {
+  width: "100%",
+  minWidth: 60,
+  height: 26,
+  padding: "0 6px",
+  borderRadius: 6,
+  border: `1px solid ${COLOR.border}`,
+  background: COLOR.surface,
+  color: COLOR.textPrimary,
+  fontSize: "11.5px",
+  fontFamily: "inherit",
+};
 // Ô chọn "Đại lượng"/"QTKĐ": đủ rộng để hiện trọn nhãn mặc định "Mọi đại lượng"/"Mọi QTKĐ".
-const filterSelectWide: React.CSSProperties = { ...filterInput, minWidth: 96 };
+const filterSelectWide: React.CSSProperties = { ...filterInput, minWidth: 128 };
 const tdStyle: React.CSSProperties = { padding: "7px 9px", borderBottom: `1px solid ${COLOR.surfaceAlt}`, color: COLOR.textPrimary, whiteSpace: "nowrap" };
 const numericStyle: React.CSSProperties = { fontVariantNumeric: "tabular-nums", color: COLOR.textPrimary };
-const provButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 4, border: `1px solid ${COLOR.accentSoftBorder}`, background: COLOR.accentSoft, color: COLOR.accentDark, borderRadius: 7, padding: "1px 7px", fontSize: "11.5px", fontWeight: 700, cursor: "pointer", fontVariantNumeric: "tabular-nums" };
-const deviceButton: React.CSSProperties = { border: "none", background: "transparent", padding: 0, color: COLOR.accentDark, fontWeight: 700, fontSize: "12.5px", cursor: "pointer", textDecoration: "underline dotted" };
-const detailButton: React.CSSProperties = { height: 24, padding: "0 9px", borderRadius: 7, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, fontSize: "11.5px", fontWeight: 700, cursor: "pointer" };
-const sortButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 4, border: "none", background: "transparent", padding: 0, color: "inherit", fontWeight: 700, fontSize: "12.5px", cursor: "pointer", fontFamily: "inherit" };
+const provButton: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 4,
+  border: `1px solid ${COLOR.accentSoftBorder}`,
+  background: COLOR.accentSoft,
+  color: COLOR.accentDark,
+  borderRadius: 7,
+  padding: "1px 7px",
+  fontSize: "11.5px",
+  fontWeight: 700,
+  cursor: "pointer",
+  fontVariantNumeric: "tabular-nums",
+};
+const deviceButton: React.CSSProperties = {
+  border: "none",
+  background: "transparent",
+  padding: 0,
+  color: COLOR.accentDark,
+  fontWeight: 700,
+  fontSize: "12.5px",
+  cursor: "pointer",
+  textDecoration: "underline dotted",
+};
+const detailButton: React.CSSProperties = {
+  height: 24,
+  padding: "0 9px",
+  borderRadius: 7,
+  border: `1px solid ${COLOR.border}`,
+  background: COLOR.surface,
+  color: COLOR.textSecondary,
+  fontSize: "11.5px",
+  fontWeight: 700,
+  cursor: "pointer",
+};
+const sortButton: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 4,
+  border: "none",
+  background: "transparent",
+  padding: 0,
+  color: "inherit",
+  fontWeight: 700,
+  fontSize: "12.5px",
+  cursor: "pointer",
+  fontFamily: "inherit",
+};
 const captionStyle: React.CSSProperties = { textAlign: "left", padding: "6px 9px", color: COLOR.textSecondary, fontSize: "11.5px" };
-const alertStyle: React.CSSProperties = { display: "flex", alignItems: "center", gap: 8, padding: "8px 14px", background: COLOR.dangerBg, color: COLOR.danger, borderBottom: `1px solid ${COLOR.dangerBorder}`, fontSize: "12.5px", fontWeight: 600 };
+const alertStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
+  padding: "8px 14px",
+  background: COLOR.dangerBg,
+  color: COLOR.danger,
+  borderBottom: `1px solid ${COLOR.dangerBorder}`,
+  fontSize: "12.5px",
+  fontWeight: 600,
+};
 const emptyTd: React.CSSProperties = { padding: "30px 12px", textAlign: "center", color: COLOR.textSecondary, fontSize: "13px" };
