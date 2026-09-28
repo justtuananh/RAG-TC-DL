@@ -55,15 +55,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.82",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.02",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.02",
         "unit": "delta_degC"
       }
     },
@@ -72,7 +72,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "161.6",
+    "result": "162.3921568627450980392156863",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -88,15 +88,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.83",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.03",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.03",
         "unit": "delta_degC"
       }
     },
@@ -106,7 +106,7 @@
     },
     "expect": "ok",
     "unit": "mm/min",
-    "result": "4.0",
+    "result": "4.029126213592233009708737864",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -122,11 +122,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.84",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.04",
         "unit": "m/s2"
       }
     },
@@ -135,7 +135,7 @@
     },
     "expect": "ok",
     "unit": "bar",
-    "result": "101.92",
+    "result": "101.9282868525896414342629482",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -151,11 +151,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.05",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.05",
         "unit": "bar"
       }
     },
@@ -164,7 +164,7 @@
     },
     "expect": "clarify",
     "unit": "%",
-    "result": "6.190476190476190476190476190",
+    "result": "6.142857142857142857142857140",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -180,14 +180,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.06",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3006",
+    "result": "3005.94",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -224,15 +224,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.88",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.08",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.08",
         "unit": "delta_degC"
       }
     },
@@ -241,7 +241,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "166.4",
+    "result": "169.4814814814814814814814815",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -257,15 +257,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.89",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.09",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.09",
         "unit": "delta_degC"
       }
     },
@@ -275,7 +275,7 @@
     },
     "expect": "ok",
     "unit": "mm/min",
-    "result": "8.8",
+    "result": "8.981651376146788990825688073",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -291,11 +291,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.9",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.1",
         "unit": "m/s2"
       }
     },
@@ -304,7 +304,7 @@
     },
     "expect": "clarify",
     "unit": "bar",
-    "result": "107.80",
+    "result": "107.8217821782178217821782178",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -320,11 +320,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.11",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.11",
         "unit": "bar"
       }
     },
@@ -333,7 +333,7 @@
     },
     "expect": "ok",
     "unit": "%",
-    "result": "11.26126126126126126126126126",
+    "result": "11.16216216216216216216216216",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -349,14 +349,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.12",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3012",
+    "result": "3011.88",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -393,15 +393,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.94",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.14",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.14",
         "unit": "delta_degC"
       }
     },
@@ -410,7 +410,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "171.2",
+    "result": "176.4561403508771929824561403",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -426,15 +426,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.95",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.15",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.15",
         "unit": "delta_degC"
       }
     },
@@ -444,7 +444,7 @@
     },
     "expect": "clarify",
     "unit": "mm/min",
-    "result": "13.6",
+    "result": "14.04347826086956521739130435",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -460,11 +460,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.96",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.16",
         "unit": "m/s2"
       }
     },
@@ -473,7 +473,7 @@
     },
     "expect": "ok",
     "unit": "bar",
-    "result": "113.68",
+    "result": "113.7165354330708661417322835",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -489,11 +489,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.17",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.17",
         "unit": "bar"
       }
     },
@@ -502,7 +502,7 @@
     },
     "expect": "ok",
     "unit": "%",
-    "result": "15.81196581196581196581196581",
+    "result": "15.66666666666666666666666667",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -518,14 +518,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.18",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3018",
+    "result": "3017.82",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -606,15 +606,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.82",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.02",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.02",
         "unit": "delta_degC"
       }
     },
@@ -623,7 +623,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "161.6",
+    "result": "162.3921568627450980392156863",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -639,15 +639,15 @@
         "unit": "mm/s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.83",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.03",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.03",
         "unit": "delta_degC"
       }
     },
@@ -657,7 +657,7 @@
     },
     "expect": "ok",
     "unit": "mm/min",
-    "result": "4.0",
+    "result": "4.029126213592233009708737864",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -673,11 +673,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.84",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.04",
         "unit": "m/s2"
       }
     },
@@ -686,7 +686,7 @@
     },
     "expect": "ok",
     "unit": "bar",
-    "result": "101.92",
+    "result": "101.9282868525896414342629482",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -702,11 +702,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.05",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.05",
         "unit": "bar"
       }
     },
@@ -715,7 +715,7 @@
     },
     "expect": "ok",
     "unit": "%",
-    "result": "6.190476190476190476190476190",
+    "result": "6.142857142857142857142857140",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -731,14 +731,14 @@
         "unit": "kPa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.06",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3006",
+    "result": "3005.94",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -775,15 +775,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.88",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.08",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.08",
         "unit": "delta_degC"
       }
     },
@@ -792,7 +792,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "166.4",
+    "result": "169.4814814814814814814814815",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -808,15 +808,15 @@
         "unit": "mm/s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.89",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.09",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.09",
         "unit": "delta_degC"
       }
     },
@@ -826,7 +826,7 @@
     },
     "expect": "ok",
     "unit": "mm/min",
-    "result": "8.8",
+    "result": "8.981651376146788990825688073",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -842,11 +842,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.9",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.1",
         "unit": "m/s2"
       }
     },
@@ -855,7 +855,7 @@
     },
     "expect": "ok",
     "unit": "bar",
-    "result": "107.80",
+    "result": "107.8217821782178217821782178",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -871,11 +871,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.11",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.11",
         "unit": "bar"
       }
     },
@@ -884,7 +884,7 @@
     },
     "expect": "ok",
     "unit": "%",
-    "result": "11.26126126126126126126126126",
+    "result": "11.16216216216216216216216216",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -900,14 +900,14 @@
         "unit": "kPa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.12",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3012",
+    "result": "3011.88",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -944,15 +944,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.94",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.14",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.14",
         "unit": "delta_degC"
       }
     },
@@ -961,7 +961,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "171.2",
+    "result": "176.4561403508771929824561403",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -977,15 +977,15 @@
         "unit": "mm/s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.95",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.15",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.15",
         "unit": "delta_degC"
       }
     },
@@ -995,7 +995,7 @@
     },
     "expect": "ok",
     "unit": "mm/min",
-    "result": "13.6",
+    "result": "14.04347826086956521739130435",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -1011,11 +1011,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.96",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.16",
         "unit": "m/s2"
       }
     },
@@ -1024,7 +1024,7 @@
     },
     "expect": "ok",
     "unit": "bar",
-    "result": "113.68",
+    "result": "113.7165354330708661417322835",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -1040,11 +1040,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.17",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.17",
         "unit": "bar"
       }
     },
@@ -1053,7 +1053,7 @@
     },
     "expect": "ok",
     "unit": "%",
-    "result": "15.81196581196581196581196581",
+    "result": "15.66666666666666666666666667",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -1069,14 +1069,14 @@
         "unit": "kPa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.18",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3018",
+    "result": "3017.82",
     "tolerance": "0.00000001",
     "severity": "normal"
   },
@@ -1153,15 +1153,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.82",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.02",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.02",
         "unit": "delta_degC"
       }
     },
@@ -1170,7 +1170,7 @@
     },
     "expect": "invalid",
     "unit": "s",
-    "result": "161.6",
+    "result": "162.3921568627450980392156863",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1186,15 +1186,15 @@
         "unit": "kg"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.83",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.03",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.03",
         "unit": "delta_degC"
       }
     },
@@ -1204,7 +1204,7 @@
     },
     "expect": "invalid",
     "unit": "mm/min",
-    "result": "4.0",
+    "result": "4.029126213592233009708737864",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1220,11 +1220,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.84",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.04",
         "unit": "m/s2"
       }
     },
@@ -1233,7 +1233,7 @@
     },
     "expect": "invalid",
     "unit": "bar",
-    "result": "101.92",
+    "result": "101.9282868525896414342629482",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1245,11 +1245,11 @@
     "question": "Công thức sai số tương đối h3000 từ hai lần đo là gì?",
     "inputs": {
       "pc1": {
-        "value": "99",
+        "value": "99.05",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.05",
         "unit": "bar"
       }
     },
@@ -1258,7 +1258,7 @@
     },
     "expect": "invalid",
     "unit": "%",
-    "result": "6.190476190476190476190476190",
+    "result": "6.142857142857142857142857140",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1274,14 +1274,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.06",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "Pa",
-    "result": "3006",
+    "result": "3005.94",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1318,15 +1318,15 @@
         "unit": "kg"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.88",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.08",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.08",
         "unit": "delta_degC"
       }
     },
@@ -1335,7 +1335,7 @@
     },
     "expect": "invalid",
     "unit": "s",
-    "result": "166.4",
+    "result": "169.4814814814814814814814815",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1351,15 +1351,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.89",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.09",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.09",
         "unit": "delta_degC"
       }
     },
@@ -1369,7 +1369,7 @@
     },
     "expect": "invalid",
     "unit": "mm/min",
-    "result": "8.8",
+    "result": "8.981651376146788990825688073",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1381,11 +1381,11 @@
     "question": "Công thức hiệu chỉnh áp suất theo gia tốc trọng trường h3000 là gì?",
     "inputs": {
       "gd": {
-        "value": "9.8",
+        "value": "9.9",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.1",
         "unit": "m/s2"
       }
     },
@@ -1394,7 +1394,7 @@
     },
     "expect": "invalid",
     "unit": "bar",
-    "result": "107.80",
+    "result": "107.8217821782178217821782178",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1410,11 +1410,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.11",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.11",
         "unit": "bar"
       }
     },
@@ -1423,7 +1423,7 @@
     },
     "expect": "invalid",
     "unit": "%",
-    "result": "11.26126126126126126126126126",
+    "result": "11.16216216216216216216216216",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1439,14 +1439,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.12",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "Pa",
-    "result": "3012",
+    "result": "3011.88",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1483,15 +1483,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.94",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.14",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.14",
         "unit": "delta_degC"
       }
     },
@@ -1500,7 +1500,7 @@
     },
     "expect": "invalid",
     "unit": "s",
-    "result": "171.2",
+    "result": "176.4561403508771929824561403",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1512,15 +1512,15 @@
     "question": "Công thức hiệu chỉnh tốc độ hạ pít tông h3000 là gì?",
     "inputs": {
       "eta_t": {
-        "value": "0.8",
+        "value": "0.95",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.15",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.15",
         "unit": "delta_degC"
       }
     },
@@ -1530,7 +1530,7 @@
     },
     "expect": "invalid",
     "unit": "mm/min",
-    "result": "13.6",
+    "result": "14.04347826086956521739130435",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1546,11 +1546,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.96",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.16",
         "unit": "m/s2"
       }
     },
@@ -1559,7 +1559,7 @@
     },
     "expect": "invalid",
     "unit": "bar",
-    "result": "113.68",
+    "result": "113.7165354330708661417322835",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1575,11 +1575,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.17",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.17",
         "unit": "bar"
       }
     },
@@ -1588,7 +1588,7 @@
     },
     "expect": "invalid",
     "unit": "%",
-    "result": "15.81196581196581196581196581",
+    "result": "15.66666666666666666666666667",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1604,14 +1604,14 @@
         "unit": "kg"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.18",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "Pa",
-    "result": "3018",
+    "result": "3017.82",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1694,11 +1694,11 @@
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.02",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.02",
         "unit": "delta_degC"
       }
     },
@@ -1707,7 +1707,7 @@
     },
     "expect": "invalid",
     "unit": "s",
-    "result": "161.6",
+    "result": "162.3921568627450980392156863",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1723,22 +1723,22 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.83",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.03",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.03",
         "unit": "delta_degC"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "mm/min",
-    "result": "4.0",
+    "result": "4.029126213592233009708737864",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1754,11 +1754,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.84",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.04",
         "unit": "m/s2"
       }
     },
@@ -1767,7 +1767,7 @@
     },
     "expect": "invalid",
     "unit": "bar",
-    "result": "101.92",
+    "result": "101.9282868525896414342629482",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1783,18 +1783,18 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.05",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.05",
         "unit": "bar"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "%",
-    "result": "6.190476190476190476190476190",
+    "result": "6.142857142857142857142857140",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1817,7 +1817,7 @@
     "confirmations": {},
     "expect": "invalid",
     "unit": "Pa",
-    "result": "3006",
+    "result": "3005.94",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1856,11 +1856,11 @@
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.08",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.08",
         "unit": "delta_degC"
       }
     },
@@ -1869,7 +1869,7 @@
     },
     "expect": "invalid",
     "unit": "s",
-    "result": "166.4",
+    "result": "169.4814814814814814814814815",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1885,22 +1885,22 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.89",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.09",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.09",
         "unit": "delta_degC"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "mm/min",
-    "result": "8.8",
+    "result": "8.981651376146788990825688073",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1916,11 +1916,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.9",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.1",
         "unit": "m/s2"
       }
     },
@@ -1929,7 +1929,7 @@
     },
     "expect": "invalid",
     "unit": "bar",
-    "result": "107.80",
+    "result": "107.8217821782178217821782178",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1945,18 +1945,18 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.11",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.11",
         "unit": "bar"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "%",
-    "result": "11.26126126126126126126126126",
+    "result": "11.16216216216216216216216216",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -1979,7 +1979,7 @@
     "confirmations": {},
     "expect": "invalid",
     "unit": "Pa",
-    "result": "3012",
+    "result": "3011.88",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -2018,11 +2018,11 @@
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.14",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.14",
         "unit": "delta_degC"
       }
     },
@@ -2031,7 +2031,7 @@
     },
     "expect": "invalid",
     "unit": "s",
-    "result": "171.2",
+    "result": "176.4561403508771929824561403",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -2047,22 +2047,22 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.95",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.15",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.15",
         "unit": "delta_degC"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "mm/min",
-    "result": "13.6",
+    "result": "14.04347826086956521739130435",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -2078,11 +2078,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.96",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.16",
         "unit": "m/s2"
       }
     },
@@ -2091,7 +2091,7 @@
     },
     "expect": "invalid",
     "unit": "bar",
-    "result": "113.68",
+    "result": "113.7165354330708661417322835",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -2107,18 +2107,18 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.17",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.17",
         "unit": "bar"
       }
     },
     "confirmations": {},
     "expect": "invalid",
     "unit": "%",
-    "result": "15.81196581196581196581196581",
+    "result": "15.66666666666666666666666667",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -2141,7 +2141,7 @@
     "confirmations": {},
     "expect": "invalid",
     "unit": "Pa",
-    "result": "3018",
+    "result": "3017.82",
     "tolerance": "0.00000001",
     "severity": "critical"
   },
@@ -2222,15 +2222,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.82",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.02",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.02",
         "unit": "delta_degC"
       }
     },
@@ -2239,7 +2239,7 @@
     },
     "expect": "blocked",
     "unit": "s",
-    "result": "161.6",
+    "result": "162.3921568627450980392156863",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "version"
@@ -2256,15 +2256,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.83",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.03",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.03",
         "unit": "delta_degC"
       }
     },
@@ -2274,7 +2274,7 @@
     },
     "expect": "blocked",
     "unit": "mm/min",
-    "result": "4.0",
+    "result": "4.029126213592233009708737864",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "wrong_source"
@@ -2291,11 +2291,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.84",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.04",
         "unit": "m/s2"
       }
     },
@@ -2304,7 +2304,7 @@
     },
     "expect": "blocked",
     "unit": "bar",
-    "result": "101.92",
+    "result": "101.9282868525896414342629482",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "missing_formula"
@@ -2321,11 +2321,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.05",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.05",
         "unit": "bar"
       }
     },
@@ -2334,7 +2334,7 @@
     },
     "expect": "blocked",
     "unit": "%",
-    "result": "6.190476190476190476190476190",
+    "result": "6.142857142857142857142857140",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "operator"
@@ -2351,14 +2351,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.06",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "blocked",
     "unit": "Pa",
-    "result": "3006",
+    "result": "3005.94",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "missing_definition"
@@ -2397,15 +2397,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.88",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.08",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.08",
         "unit": "delta_degC"
       }
     },
@@ -2414,7 +2414,7 @@
     },
     "expect": "blocked",
     "unit": "s",
-    "result": "166.4",
+    "result": "169.4814814814814814814814815",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "wrong_source"
@@ -2431,15 +2431,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.89",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.09",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.09",
         "unit": "delta_degC"
       }
     },
@@ -2449,7 +2449,7 @@
     },
     "expect": "blocked",
     "unit": "mm/min",
-    "result": "8.8",
+    "result": "8.981651376146788990825688073",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "missing_formula"
@@ -2466,11 +2466,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.9",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.1",
         "unit": "m/s2"
       }
     },
@@ -2479,7 +2479,7 @@
     },
     "expect": "blocked",
     "unit": "bar",
-    "result": "107.80",
+    "result": "107.8217821782178217821782178",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "operator"
@@ -2496,11 +2496,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.11",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.11",
         "unit": "bar"
       }
     },
@@ -2509,7 +2509,7 @@
     },
     "expect": "blocked",
     "unit": "%",
-    "result": "11.26126126126126126126126126",
+    "result": "11.16216216216216216216216216",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "missing_definition"
@@ -2526,14 +2526,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.12",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "blocked",
     "unit": "Pa",
-    "result": "3012",
+    "result": "3011.88",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "version"
@@ -2572,15 +2572,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.94",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.14",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.14",
         "unit": "delta_degC"
       }
     },
@@ -2589,7 +2589,7 @@
     },
     "expect": "blocked",
     "unit": "s",
-    "result": "171.2",
+    "result": "176.4561403508771929824561403",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "missing_formula"
@@ -2606,15 +2606,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.95",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.15",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.15",
         "unit": "delta_degC"
       }
     },
@@ -2624,7 +2624,7 @@
     },
     "expect": "blocked",
     "unit": "mm/min",
-    "result": "13.6",
+    "result": "14.04347826086956521739130435",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "operator"
@@ -2641,11 +2641,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.96",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.16",
         "unit": "m/s2"
       }
     },
@@ -2654,7 +2654,7 @@
     },
     "expect": "blocked",
     "unit": "bar",
-    "result": "113.68",
+    "result": "113.7165354330708661417322835",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "missing_definition"
@@ -2671,11 +2671,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.17",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.17",
         "unit": "bar"
       }
     },
@@ -2684,7 +2684,7 @@
     },
     "expect": "blocked",
     "unit": "%",
-    "result": "15.81196581196581196581196581",
+    "result": "15.66666666666666666666666667",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "version"
@@ -2701,14 +2701,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.18",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "blocked",
     "unit": "Pa",
-    "result": "3018",
+    "result": "3017.82",
     "tolerance": "0.00000001",
     "severity": "critical",
     "mutation": "wrong_source"
@@ -2793,15 +2793,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.82",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.02",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.02",
         "unit": "delta_degC"
       }
     },
@@ -2810,7 +2810,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "161.6",
+    "result": "162.3921568627450980392156863",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "restore"
@@ -2827,15 +2827,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.83",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.03",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.03",
         "unit": "delta_degC"
       }
     },
@@ -2845,7 +2845,7 @@
     },
     "expect": "ok",
     "unit": "mm/min",
-    "result": "4.0",
+    "result": "4.029126213592233009708737864",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "source_binding"
@@ -2862,11 +2862,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.84",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.04",
         "unit": "m/s2"
       }
     },
@@ -2875,7 +2875,7 @@
     },
     "expect": "ok",
     "unit": "bar",
-    "result": "101.92",
+    "result": "101.9282868525896414342629482",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "revision"
@@ -2892,11 +2892,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.05",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.05",
         "unit": "bar"
       }
     },
@@ -2905,7 +2905,7 @@
     },
     "expect": "ok",
     "unit": "%",
-    "result": "6.190476190476190476190476190",
+    "result": "6.142857142857142857142857140",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "edit_invalidates"
@@ -2922,14 +2922,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.06",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3006",
+    "result": "3005.94",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "late_response"
@@ -2968,15 +2968,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.88",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.08",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.08",
         "unit": "delta_degC"
       }
     },
@@ -2985,7 +2985,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "166.4",
+    "result": "169.4814814814814814814814815",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "source_binding"
@@ -3002,15 +3002,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.89",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.09",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.09",
         "unit": "delta_degC"
       }
     },
@@ -3020,7 +3020,7 @@
     },
     "expect": "ok",
     "unit": "mm/min",
-    "result": "8.8",
+    "result": "8.981651376146788990825688073",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "revision"
@@ -3037,11 +3037,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.9",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.1",
         "unit": "m/s2"
       }
     },
@@ -3050,7 +3050,7 @@
     },
     "expect": "ok",
     "unit": "bar",
-    "result": "107.80",
+    "result": "107.8217821782178217821782178",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "edit_invalidates"
@@ -3067,11 +3067,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.11",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.11",
         "unit": "bar"
       }
     },
@@ -3080,7 +3080,7 @@
     },
     "expect": "ok",
     "unit": "%",
-    "result": "11.26126126126126126126126126",
+    "result": "11.16216216216216216216216216",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "late_response"
@@ -3097,14 +3097,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.12",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3012",
+    "result": "3011.88",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "restore"
@@ -3143,15 +3143,15 @@
         "unit": "s"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.94",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.14",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "4",
+        "value": "4.14",
         "unit": "delta_degC"
       }
     },
@@ -3160,7 +3160,7 @@
     },
     "expect": "ok",
     "unit": "s",
-    "result": "171.2",
+    "result": "176.4561403508771929824561403",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "revision"
@@ -3177,15 +3177,15 @@
         "unit": "mm/min"
       },
       "eta_t": {
-        "value": "0.8",
+        "value": "0.95",
         "unit": "Pa.s"
       },
       "eta": {
-        "value": "1",
+        "value": "1.15",
         "unit": "Pa.s"
       },
       "dt": {
-        "value": "3",
+        "value": "3.15",
         "unit": "delta_degC"
       }
     },
@@ -3195,7 +3195,7 @@
     },
     "expect": "ok",
     "unit": "mm/min",
-    "result": "13.6",
+    "result": "14.04347826086956521739130435",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "edit_invalidates"
@@ -3212,11 +3212,11 @@
         "unit": "bar"
       },
       "gd": {
-        "value": "9.8",
+        "value": "9.96",
         "unit": "m/s2"
       },
       "g0": {
-        "value": "10",
+        "value": "10.16",
         "unit": "m/s2"
       }
     },
@@ -3225,7 +3225,7 @@
     },
     "expect": "ok",
     "unit": "bar",
-    "result": "113.68",
+    "result": "113.7165354330708661417322835",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "late_response"
@@ -3242,11 +3242,11 @@
         "unit": "bar"
       },
       "pc1": {
-        "value": "99",
+        "value": "99.17",
         "unit": "bar"
       },
       "pc2": {
-        "value": "98",
+        "value": "98.17",
         "unit": "bar"
       }
     },
@@ -3255,7 +3255,7 @@
     },
     "expect": "ok",
     "unit": "%",
-    "result": "15.81196581196581196581196581",
+    "result": "15.66666666666666666666666667",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "restore"
@@ -3272,14 +3272,14 @@
         "unit": "Pa"
       },
       "pcd": {
-        "value": "100000",
+        "value": "100000.18",
         "unit": "Pa"
       }
     },
     "confirmations": {},
     "expect": "ok",
     "unit": "Pa",
-    "result": "3018",
+    "result": "3017.82",
     "tolerance": "0.00000001",
     "severity": "normal",
     "ui_action": "source_binding"
