@@ -17,6 +17,7 @@ from index.embed_store import (
     _qtkd_prefix,
     embed_chunks_batched,
     embed_texts,
+    index_chunks,
     indexed_files,
     upsert,
 )
@@ -96,3 +97,69 @@ def test_upsert_batches_by_upsert_batch():
     upsert(c, list(range(130)))  # 64 + 64 + 2
     assert c.calls == 3
     assert UPSERT_BATCH == 64
+
+
+class _FakeQdrant:
+    """Ghi nhận delete/upsert; delete xóa điểm theo payload ``file_stem``."""
+
+    def __init__(self):
+        self.points: dict[int, dict] = {}
+        self.calls: list[tuple] = []
+
+    def delete(self, collection_name, points_selector):
+        stem = points_selector.filter.must[0].match.value
+        self.calls.append(("delete", stem))
+        self.points = {k: v for k, v in self.points.items() if v["file_stem"] != stem}
+
+    def upsert(self, collection_name, points):
+        self.calls.append(("upsert", len(points)))
+        for p in points:
+            self.points[p.id] = p.payload
+
+
+def _chunk(i: int, text: str, stem: str = "QTKD_X") -> Chunk:
+    return Chunk(
+        chunk_id=f"{i:016x}",
+        parent_id=None,
+        is_parent=False,
+        kind="paragraph",
+        text=text,
+        section_path="s",
+        file_stem=stem,
+    )
+
+
+def test_index_chunks_replaces_existing_points_for_file(monkeypatch):
+    """B11: nhúng lại cùng file chỉ còn tập chunk mới, không cộng dồn chunk cũ."""
+    monkeypatch.setattr(
+        ES, "embed_chunks_batched", lambda chunks: [[0.0] * VECTOR_SIZE for _ in chunks]
+    )
+    client = _FakeQdrant()
+
+    index_chunks(client, [_chunk(i, f"cũ {i}") for i in range(3)])
+    index_chunks(client, [_chunk(i + 100, f"mới {i}") for i in range(2)])
+
+    assert len(client.points) == 2
+    assert {p["text"] for p in client.points.values()} == {"mới 0", "mới 1"}
+    assert client.calls == [
+        ("delete", "QTKD_X"),
+        ("upsert", 3),
+        ("delete", "QTKD_X"),
+        ("upsert", 2),
+    ]
+
+
+def test_index_chunks_deletes_each_file_stem_once(monkeypatch):
+    """Tập chunk nhiều file: xóa đúng từng file_stem trước khi ghi."""
+    monkeypatch.setattr(
+        ES, "embed_chunks_batched", lambda chunks: [[0.0] * VECTOR_SIZE for _ in chunks]
+    )
+    client = _FakeQdrant()
+
+    index_chunks(client, [_chunk(1, "a", "F1"), _chunk(2, "b", "F2"), _chunk(3, "c", "F1")])
+
+    assert sorted(c for c in client.calls if c[0] == "delete") == [
+        ("delete", "F1"),
+        ("delete", "F2"),
+    ]
+    assert client.calls[-1] == ("upsert", 3)

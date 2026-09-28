@@ -163,9 +163,9 @@ def build_group_g(a_records: list, e_records: list, run_soffice: bool) -> list[F
                 file=g1_name,
                 group="G",
                 expected_doc_type="qtkd",
-                expected_ingest="skipped-legacy",
+                expected_ingest="ok",
                 procedure_number="9.001",
-                purpose="Định dạng .doc cũ (qua soffice) -- spike_a báo skipped-legacy.",
+                purpose="Định dạng .doc cũ (qua soffice) -- K1 chuyển sang .docx rồi trích như QTKĐ.",
                 spec={"kind": "legacy_doc", "source_procedure": "9.001"},
             )
         )
@@ -181,9 +181,9 @@ def build_group_g(a_records: list, e_records: list, run_soffice: bool) -> list[F
                     file=g2_name,
                     group="G",
                     expected_doc_type="phieu_do",
-                    expected_ingest="skipped-legacy",
+                    expected_ingest="ok",
                     procedure_number="9.001",
-                    purpose="Định dạng .xls cũ (qua soffice) -- spike_a báo skipped-legacy.",
+                    purpose="Định dạng .xls cũ (qua soffice) -- K1 chuyển sang .xlsx; loại phiếu đo đi đường hồ sơ.",
                     spec={"kind": "legacy_xls", "source_file": e01.file},
                 )
             )

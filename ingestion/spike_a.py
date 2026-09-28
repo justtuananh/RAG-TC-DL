@@ -12,8 +12,8 @@ for the page-routing heuristic). Requires the separate .venv-pdf environment
 (requirements-pdf.txt); raises MarkerNotConfigured with setup instructions
 if that environment isn't found.
 
-Legacy .doc/.xls are reported but skipped (they need LibreOffice conversion
-first — that is Spike B).
+Legacy .doc/.xls are converted with LibreOffice headless (ingestion.convert_legacy)
+into build/converted/, then extracted like .docx / .xlsx.
 
 Run:  python -m ingestion.spike_a [SRC_DIR] [OUT_DIR]
 """
@@ -24,8 +24,10 @@ import sys
 import zipfile
 from pathlib import Path
 
+from .convert_legacy import CONVERTED_DIR, convert_legacy
 from .extract_docx import extract_docx
 from .extract_pdf_marker import extract_pdf_marker
+from .extract_xlsx import extract_xlsx
 from .mtef import analyze
 from .mtef_to_latex import mtef_bin_to_latex
 
@@ -50,28 +52,50 @@ def _dump_asset(z: zipfile.ZipFile, part: str | None, dest: Path) -> int:
 
 
 def process_one(f: Path, out_dir: Path) -> dict:
-    """Extract one .docx -> writes out_dir/<stem>.md + assets, returns its report entry.
+    """Extract one source -> writes out_dir/<stem>.md (+ assets), returns its report entry.
 
     Entry shape matches what run() appends to report["files"]; totals across
     many entries are recomputed by totals_from_entries(), so a single upload
     can be extracted without re-processing the rest of the corpus.
+
+    .doc/.xls cũ được chuyển sang .docx/.xlsx bằng LibreOffice (ingestion.convert_legacy)
+    vào build/converted/ rồi đi tiếp đúng đường của định dạng mới; entry vẫn giữ
+    ``file`` là tên gốc và thêm ``converted_from``. Bảng tính đi bộ trích
+    ingestion.extract_xlsx; bản ghi biên bản không tới đây (đi đường hồ sơ).
     """
-    assets_root = out_dir / "assets"
     ext = f.suffix.lower()
     if ext == ".pdf":
         return _process_pdf(f, out_dir)
-    if ext != ".docx":
-        return {
-            "file": f.name, "status": "skipped-legacy",
-            "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)",
-        }
+    if ext == ".doc":
+        converted = convert_legacy(f, CONVERTED_DIR)
+        entry = _process_docx(converted, out_dir, file_name=f.name)
+        entry["converted_from"] = str(converted)
+        return entry
+    if ext == ".docx":
+        return _process_docx(f, out_dir)
+    if ext == ".xls":
+        converted = convert_legacy(f, CONVERTED_DIR)
+        entry = _process_xlsx(converted, out_dir, file_name=f.name, source_format="xls")
+        entry["converted_from"] = str(converted)
+        return entry
+    if ext == ".xlsx":
+        return _process_xlsx(f, out_dir)
+    return {
+        "file": f.name, "status": "skipped-legacy",
+        "note": "định dạng chưa được hỗ trợ",
+    }
 
-    res = extract_docx(str(f))
-    stem = _safe(f.stem)
+
+def _process_docx(source: Path, out_dir: Path, file_name: str | None = None) -> dict:
+    """Extract one .docx -> Markdown + assets; ``file_name`` giữ tên gốc khi là bản chuyển."""
+    name = file_name or source.name
+    res = extract_docx(str(source))
+    stem = _safe(Path(name).stem)
+    assets_root = out_dir / "assets"
 
     per_formula = []
     n_ole = n_omml = 0
-    with zipfile.ZipFile(f) as z:
+    with zipfile.ZipFile(source) as z:
         for fm in res.formulas:
             if fm.kind == "omml":
                 n_omml += 1
@@ -112,13 +136,38 @@ def process_one(f: Path, out_dir: Path) -> dict:
     (out_dir / f"{stem}.md").write_text(md, encoding="utf-8")
 
     return {
-        "file": f.name, "status": "ok",
+        "file": name, "status": "ok",
         "headings": res.n_headings, "tables": res.n_tables,
         "paragraphs": res.n_paragraphs,
         "media_parts": len(res.media), "embedded_ole": len(res.embeddings),
         "formulas_found": len(res.formulas),
         "formulas_ole": n_ole, "formulas_omml": n_omml,
         "formula_detail": per_formula,
+    }
+
+
+def _process_xlsx(
+    source: Path, out_dir: Path, file_name: str | None = None, source_format: str = "xlsx"
+) -> dict:
+    """Extract one bảng tính -> Markdown (mỗi sheet một mục, bảng pipe).
+
+    Không có công thức MathType/OMML nên các trường công thức để 0/[]; như vậy
+    totals_from_entries() tính tỉ lệ công thức là None/0, đúng và KHÔNG bị chốt
+    chặn B10 coi là hồi quy (bảng tính vốn không mang công thức của QTKĐ).
+    """
+    name = file_name or source.name
+    res = extract_xlsx(source)
+    stem = _safe(Path(name).stem)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    (out_dir / f"{stem}.md").write_text(res.markdown, encoding="utf-8")
+
+    return {
+        "file": name, "status": "ok", "source_format": source_format,
+        "headings": res.n_sheets, "tables": res.n_tables,
+        "paragraphs": res.n_paragraphs, "table_rows": res.n_rows,
+        "media_parts": 0, "embedded_ole": 0,
+        "formulas_found": 0, "formulas_ole": 0, "formulas_omml": 0,
+        "formula_detail": [],
     }
 
 
@@ -222,7 +271,7 @@ def main() -> None:
     t = rep["totals"]
     print("=== Spike A — extraction report ===")
     print(f"  docx processed       : {t['docx_processed']}")
-    print(f"  legacy skipped       : {t['legacy_skipped']}  (.doc/.xls -> Spike B)")
+    print(f"  legacy skipped       : {t['legacy_skipped']}  (định dạng chưa hỗ trợ)")
     print(f"  formulas found       : {t['formulas_found']}")
     print(f"   - OLE (MathType)    : {t['formulas_ole_mathtype']}"
           f"   ->LaTeX {t['ole_latex_converted']} ({t['ole_latex_rate']})")

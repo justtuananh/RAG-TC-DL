@@ -7,6 +7,7 @@ cách các test hiện có (``tests/unit/backend``) làm — không chạm ``TC_
 from __future__ import annotations
 
 import hashlib
+from pathlib import Path
 
 import pytest
 
@@ -16,6 +17,7 @@ from ingestion_jobs import UploadError, save_upload
 from tests.unit.knowledge_corpus.conftest import load_manifest
 
 _MANIFEST = load_manifest()
+_HAS_SOFFICE = Path("/usr/bin/soffice").exists()
 
 
 def _ids(group: str) -> list[str]:
@@ -41,22 +43,24 @@ def _isolate_ingestion_jobs(tmp_path, monkeypatch, session):
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
 
 
+@pytest.mark.skipif(not _HAS_SOFFICE, reason="không có soffice để chuyển .doc/.xls")
 @pytest.mark.parametrize("manifest_id", _ids("G"))
-def test_legacy_formats_skipped_by_spike_a(manifest_id, corpus_file_paths, tmp_path):
-    """G01/G02 (.doc/.xls): ``spike_a.process_one`` trả trạng thái ``skipped-legacy``."""
+def test_legacy_formats_converted_by_spike_a(manifest_id, corpus_file_paths, tmp_path):
+    """G01/G02 (.doc/.xls): spike_a chuyển bằng LibreOffice rồi trích như định dạng mới."""
     obj = _MANIFEST[manifest_id]
     file_path = corpus_file_paths[obj["file"]]
     result = spike_a.process_one(file_path, out_dir=tmp_path)
-    assert result.get("status") == "skipped-legacy"
+    assert result.get("status") == "ok"
+    assert result.get("converted_from")
 
 
 @pytest.mark.parametrize("manifest_id", _ids("G"))
-def test_legacy_formats_rejected_on_upload(manifest_id, corpus_file_paths):
-    """G01/G02 (.doc/.xls): ``save_upload`` từ chối (đuôi không được hỗ trợ)."""
+def test_legacy_formats_accepted_on_upload(manifest_id, corpus_file_paths):
+    """G01/G02 (.doc/.xls): upload nhận định dạng cũ (chuyển khi Xử lý)."""
     obj = _MANIFEST[manifest_id]
     file_path = corpus_file_paths[obj["file"]]
-    with pytest.raises(UploadError):
-        save_upload(file_path.name, file_path.read_bytes())
+    stem = save_upload(file_path.name, file_path.read_bytes())
+    assert stem
 
 
 def test_f01_duplicate_has_same_sha256_as_a01(corpus_file_paths):
@@ -90,11 +94,10 @@ def test_docx_pdf_with_ok_ingest_are_accepted(manifest_id, corpus_file_paths):
 
 
 @pytest.mark.parametrize("manifest_id", _xlsx_ids())
-def test_xlsx_rejected_on_upload(manifest_id, corpus_file_paths):
-    """.xlsx (phiếu đo, nhóm E) KHÔNG được nhận ở upload chung — chỉ .docx/.pdf được
-    hỗ trợ (``ingestion_jobs.SUPPORTED_EXTS``, input-contract §1). Đây là hành vi
-    hiện tại của hệ thống, không phải một mã K."""
+def test_xlsx_accepted_on_upload(manifest_id, corpus_file_paths):
+    """.xlsx (phiếu đo, nhóm E) nay được nhận ở upload chung (B1/B2 pha nạp hồ sơ
+    Excel); trước đây chỉ .docx/.pdf được hỗ trợ."""
     obj = _MANIFEST[manifest_id]
     file_path = corpus_file_paths[obj["file"]]
-    with pytest.raises(UploadError):
-        save_upload(file_path.name, file_path.read_bytes())
+    stem = save_upload(file_path.name, file_path.read_bytes())
+    assert stem

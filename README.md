@@ -96,7 +96,7 @@ cho cả hai mode; chỉ khác phần UI + vector store + tầng truy hồi.
 |---|---|---|
 | Docker + Docker Compose | bất kỳ | **Mode A** (toàn bộ stack) |
 | Python | 3.x + `.venv` (ingestion) · 3.10 cho kotaemon (Mode B, qua `uv`) | |
-| Ruby | **2.6** + gem `mathtype_to_mathml` | Bóc công thức MathType (ingestion — cả 2 mode) |
+| Ruby | **2.6** + gem `mathtype_to_mathml`, `pry` | Bóc công thức MathType (ingestion, cả 2 mode) |
 | Ollama | ≥ 0.24 (nếu chạy native, ví dụ macOS) | Chạy LLM Qwen2.5 |
 
 ### 3.2 Ingestion — bóc công thức, tạo `build/spike_a/` *(chung cho cả 2 mode)*
@@ -106,7 +106,8 @@ khi index ở Mode A.
 cd /Users/mac/Desktop/AI4TA/RAG_TC_DL
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt          # olefile, lxml, scikit-image, rank-bm25
-gem install mathtype_to_mathml           # cần Ruby 2.6 (macOS system Ruby)
+gem install mathtype_to_mathml pry       # cần Ruby 2.6 (macOS system Ruby); thiếu pry → LoadError khi chuyển MathType
+make test-ruby                           # kiểm tra gem trước khi xử lý tài liệu (tự skip nếu thiếu Ruby/gem)
 
 python -m ingestion.spike_a              # đọc TC_DL/ → ghi build/spike_a/*.md + extraction_report.json
 ```

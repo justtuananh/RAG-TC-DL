@@ -23,10 +23,14 @@ OUT_DIR = ROOT / "build" / "spike_a"
 
 
 def _safe(value: str) -> str:
-    """Match ingestion's stable stem sanitization without importing heavy readers."""
-    import re
+    """Sanitize a filename stem exactly like ``ingestion.spike_a._safe``.
 
-    return re.sub(r"[^A-Za-z0-9._-]+", "_", value).strip("._") or "document"
+    Bản sao này phải khớp TỪNG KÝ TỰ: chữ có dấu tiếng Việt (``isalnum()`` là
+    True) được GIỮ nguyên, chỉ ký tự khác mới thành ``_``. Lệch chuẩn hoá sẽ tạo
+    file_stem khác ingestion, khiến ``ingestion_jobs._find_source`` không tìm ra
+    tệp gốc và sinh dòng tài liệu trùng.
+    """
+    return "".join(c if c.isalnum() or c in "-._" else "_" for c in value)
 
 
 def _sha256(path: Path) -> str:
@@ -39,23 +43,36 @@ def _sha256(path: Path) -> str:
 
 def iter_sources():
     for path in sorted(SOURCE_DIR.glob("*")):
-        if path.suffix.lower() in {".docx", ".pdf", ".xlsx", ".xls"}:
+        if path.suffix.lower() in {".docx", ".doc", ".pdf", ".xlsx", ".xls"}:
             yield path
 
 
 def migrate(apply: bool) -> int:
     db = SessionLocal()
-    created = 0
+    changed = 0
     try:
         for path in iter_sources():
             stem = _safe(path.stem)
             digest = _sha256(path)
             existing = db.query(Document).filter(Document.file_stem == stem).one_or_none()
-            if existing and existing.sha256 == digest:
-                print(f"SKIP {path.name}: already imported")
-                continue
             classification = classify_document(path)
             md_exists = (OUT_DIR / f"{stem}.md").exists()
+
+            # Đã có dòng và nội dung không đổi: chỉ cập nhật lại doc_type khi phân
+            # loại mới khác (ví dụ .xls NAS trước đây xếp "khac"), KHÔNG xóa dòng.
+            if existing and existing.sha256 == digest:
+                if existing.doc_type.value == classification.doc_type:
+                    print(f"SKIP {path.name}: already imported")
+                    continue
+                existing.doc_type = DocumentType(classification.doc_type)
+                db.add(existing)
+                changed += 1
+                print(
+                    f"{'APPLY' if apply else 'PLAN'} {path.name} -> "
+                    f"{classification.doc_type} (cập nhật loại)"
+                )
+                continue
+
             row = existing or Document(id=stem, file_stem=stem)
             row.display_name = path.name
             row.ext = path.suffix[1:].upper()
@@ -65,7 +82,7 @@ def migrate(apply: bool) -> int:
             row.ingest_status = IngestStatus.READY if md_exists else IngestStatus.PENDING
             row.ingest_error = None
             db.add(row)
-            created += 1
+            changed += 1
             print(f"{'APPLY' if apply else 'PLAN'} {path.name} -> {classification.doc_type}")
         if apply:
             db.commit()
@@ -73,7 +90,7 @@ def migrate(apply: bool) -> int:
             db.rollback()
     finally:
         db.close()
-    return created
+    return changed
 
 
 if __name__ == "__main__":

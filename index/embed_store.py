@@ -20,6 +20,10 @@ import requests
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
+    FieldCondition,
+    Filter,
+    FilterSelector,
+    MatchValue,
     PointStruct,
     VectorParams,
 )
@@ -160,6 +164,21 @@ def upsert(client: QdrantClient, points: list[PointStruct]) -> None:
         client.upsert(collection_name=COLLECTION, points=batch)
 
 
+def delete_file_chunks(client: QdrantClient, file_stem: str) -> None:
+    """B11: xóa mọi điểm đã lưu của ``file_stem`` trước khi nhúng lại.
+
+    ``chunk_id`` ổn định nên upsert ghi đè được chunk trùng, nhưng chunk không
+    còn tồn tại ở bản mới (hoặc chunk hỏng của lần trích lỗi trước) vẫn nằm
+    lại. Xóa theo payload ``file_stem`` để kết quả đúng bằng tập chunk mới.
+    """
+    client.delete(
+        collection_name=COLLECTION,
+        points_selector=FilterSelector(
+            filter=Filter(must=[FieldCondition(key="file_stem", match=MatchValue(value=file_stem))])
+        ),
+    )
+
+
 def index_chunks(client: QdrantClient, chunks: list[Chunk]) -> int:
     """Embed + upsert one list of chunks (single file or full corpus). Returns point count."""
     vectors = embed_chunks_batched(chunks)
@@ -192,6 +211,10 @@ def index_chunks(client: QdrantClient, chunks: list[Chunk]) -> int:
                 "document_id": document_ids.get(chunk.file_stem),
             },
         ))
+    # B11: nhúng lại một file phải THAY THẾ, không cộng dồn: xóa điểm cũ ngay
+    # trước khi ghi tập mới (sau khi embed xong, tránh mất dữ liệu nếu embed lỗi).
+    for stem in {c.file_stem for c in chunks}:
+        delete_file_chunks(client, stem)
     upsert(client, points)
     return len(points)
 

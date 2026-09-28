@@ -52,3 +52,6 @@ frontend/.env.productiondocker-compose.override.yml
 logs/
 docker-compose.override.yml
 design/_ref/
+
+# Bản .docx/.xlsx chuyển từ .doc/.xls bằng LibreOffice (sinh lại được)
+build/converted/
