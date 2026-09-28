@@ -1,0 +1,66 @@
+{
+  "isolated": {
+    "passed": 174,
+    "total": 180,
+    "unsafe": 6,
+    "infrastructure": 0,
+    "groups": {
+      "boundary": {
+        "passed": 30,
+        "total": 30
+      },
+      "input": {
+        "passed": 30,
+        "total": 30
+      },
+      "selection": {
+        "passed": 30,
+        "total": 30
+      },
+      "source": {
+        "passed": 24,
+        "total": 30
+      },
+      "ui": {
+        "passed": 30,
+        "total": 30
+      },
+      "valid": {
+        "passed": 30,
+        "total": 30
+      }
+    }
+  },
+  "e2e": {
+    "passed": 174,
+    "total": 180,
+    "unsafe": 6,
+    "infrastructure": 0,
+    "groups": {
+      "boundary": {
+        "passed": 30,
+        "total": 30
+      },
+      "input": {
+        "passed": 30,
+        "total": 30
+      },
+      "selection": {
+        "passed": 30,
+        "total": 30
+      },
+      "source": {
+        "passed": 24,
+        "total": 30
+      },
+      "ui": {
+        "passed": 30,
+        "total": 30
+      },
+      "valid": {
+        "passed": 30,
+        "total": 30
+      }
+    }
+  }
+}

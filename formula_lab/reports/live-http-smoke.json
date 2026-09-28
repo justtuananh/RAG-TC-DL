@@ -1,0 +1,20 @@
+{
+  "transport": "real HTTP + Chromium; no intercepts",
+  "question": "Công thức sai số áp suất chỉnh đặt van an toàn là gì?",
+  "result": {
+    "status": "ok",
+    "value": "3000",
+    "unit": "Pa",
+    "normalized": {
+      "pm": "103000",
+      "pcd": "100000"
+    },
+    "expression": "pm-pcd",
+    "revision": "1",
+    "formula_id": "valve",
+    "request_id": "4",
+    "source": "QTKD 1.061 2021 ND V2.docx",
+    "source_hash": "e015e7615952b6aa5b9e48772536adce395efe5409d378dcd2c7412d69e838f5",
+    "strategy": "registry"
+  }
+}

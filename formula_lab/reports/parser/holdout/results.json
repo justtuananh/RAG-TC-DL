@@ -1,0 +1,6452 @@
+[
+  {
+    "id": "selection-11",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 6.008078344166279e-06
+    }
+  },
+  {
+    "id": "selection-12",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-13",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-14",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-15",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "selection-16",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 6.008078344166279e-06
+    }
+  },
+  {
+    "id": "selection-17",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "selection-18",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-19",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-20",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-11",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-12",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-13",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.880",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012.000",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-14",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-15",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "valid-16",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434617391",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "16.9999999999999999999999999980",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "valid-17",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-18",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-19",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.820",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018.000",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-20",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "input-11",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-12",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-13",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-14",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: vd"
+    }
+  },
+  {
+    "id": "input-15",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-16",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-17",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-18",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-19",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: pm"
+    }
+  },
+  {
+    "id": "input-20",
+    "group": "input",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "boundary-11",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-12",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-13",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-14",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-15",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: eta_t"
+    }
+  },
+  {
+    "id": "boundary-16",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-17",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-18",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-19",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-20",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "source-11",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "-gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "source-12",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0026125289732590318
+    }
+  },
+  {
+    "id": "source-13",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.5711993910372257e-05
+    }
+  },
+  {
+    "id": "source-14",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 6.502028554677963e-06
+    }
+  },
+  {
+    "id": "source-15",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0029509429587051272
+    }
+  },
+  {
+    "id": "source-16",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "-eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "source-17",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.002618280006572604
+    }
+  },
+  {
+    "id": "source-18",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.7598038539290428e-05
+    }
+  },
+  {
+    "id": "source-19",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 5.215057171881199e-06
+    }
+  },
+  {
+    "id": "source-20",
+    "group": "source",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0014979999978095293
+    }
+  },
+  {
+    "id": "ui-11",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "ui-12",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "ui-13",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "ui-14",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "ui-15",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "ui-16",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "ui-17",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "ui-18",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "ui-19",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "ui-20",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-11",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 6.008078344166279e-06
+    }
+  },
+  {
+    "id": "selection-12",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-13",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-14",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-15",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "selection-16",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 6.008078344166279e-06
+    }
+  },
+  {
+    "id": "selection-17",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "selection-18",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-19",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-20",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-11",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-12",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-13",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.880",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012.000",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-14",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-15",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "valid-16",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434617391",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "16.9999999999999999999999999980",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "valid-17",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-18",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-19",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.820",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018.000",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-20",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "input-11",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-12",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-13",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-14",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: vd"
+    }
+  },
+  {
+    "id": "input-15",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-16",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-17",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-18",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-19",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: pm"
+    }
+  },
+  {
+    "id": "input-20",
+    "group": "input",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "boundary-11",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-12",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-13",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-14",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-15",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: eta_t"
+    }
+  },
+  {
+    "id": "boundary-16",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-17",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-18",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-19",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-20",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "source-11",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "-gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "source-12",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0026125289732590318
+    }
+  },
+  {
+    "id": "source-13",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.5711993910372257e-05
+    }
+  },
+  {
+    "id": "source-14",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 6.502028554677963e-06
+    }
+  },
+  {
+    "id": "source-15",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0029509429587051272
+    }
+  },
+  {
+    "id": "source-16",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "-eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "source-17",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.002618280006572604
+    }
+  },
+  {
+    "id": "source-18",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.7598038539290428e-05
+    }
+  },
+  {
+    "id": "source-19",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 5.215057171881199e-06
+    }
+  },
+  {
+    "id": "source-20",
+    "group": "source",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0014979999978095293
+    }
+  },
+  {
+    "id": "ui-11",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-12",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-13",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-14",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-15",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-16",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-17",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-18",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-19",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-20",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 1,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "selection-11",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 2.9959483072161674e-06
+    }
+  },
+  {
+    "id": "selection-12",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-13",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-14",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-15",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "selection-16",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 2.9959483072161674e-06
+    }
+  },
+  {
+    "id": "selection-17",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "selection-18",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-19",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-20",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-11",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-12",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-13",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.880",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012.000",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-14",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-15",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "valid-16",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434617391",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "16.9999999999999999999999999980",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "valid-17",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-18",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-19",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.820",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018.000",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-20",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "input-11",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-12",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-13",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-14",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: vd"
+    }
+  },
+  {
+    "id": "input-15",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-16",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-17",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-18",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-19",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: pm"
+    }
+  },
+  {
+    "id": "input-20",
+    "group": "input",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "boundary-11",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-12",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-13",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-14",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-15",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: eta_t"
+    }
+  },
+  {
+    "id": "boundary-16",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-17",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-18",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-19",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-20",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "source-11",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "-gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "source-12",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0024895690148696303
+    }
+  },
+  {
+    "id": "source-13",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.523108221590519e-05
+    }
+  },
+  {
+    "id": "source-14",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 6.3229817897081375e-06
+    }
+  },
+  {
+    "id": "source-15",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0024305270053446293
+    }
+  },
+  {
+    "id": "source-16",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "-eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "source-17",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.003429928910918534
+    }
+  },
+  {
+    "id": "source-18",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 2.2185035049915314e-05
+    }
+  },
+  {
+    "id": "source-19",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 6.819027476012707e-06
+    }
+  },
+  {
+    "id": "source-20",
+    "group": "source",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0016333420062437654
+    }
+  },
+  {
+    "id": "ui-11",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "ui-12",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "ui-13",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "ui-14",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "ui-15",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "ui-16",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "ui-17",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "ui-18",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "ui-19",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "ui-20",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-11",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 2.9959483072161674e-06
+    }
+  },
+  {
+    "id": "selection-12",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-13",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-14",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-15",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "selection-16",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 2.9959483072161674e-06
+    }
+  },
+  {
+    "id": "selection-17",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "selection-18",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-19",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-20",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-11",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-12",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-13",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.880",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012.000",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-14",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-15",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "valid-16",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434617391",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "16.9999999999999999999999999980",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "valid-17",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-18",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-19",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.820",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018.000",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-20",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "input-11",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-12",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-13",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-14",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: vd"
+    }
+  },
+  {
+    "id": "input-15",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-16",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-17",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-18",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-19",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: pm"
+    }
+  },
+  {
+    "id": "input-20",
+    "group": "input",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "boundary-11",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-12",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-13",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-14",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-15",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: eta_t"
+    }
+  },
+  {
+    "id": "boundary-16",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-17",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-18",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-19",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-20",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "source-11",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "-gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "source-12",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0024895690148696303
+    }
+  },
+  {
+    "id": "source-13",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.523108221590519e-05
+    }
+  },
+  {
+    "id": "source-14",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 6.3229817897081375e-06
+    }
+  },
+  {
+    "id": "source-15",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0024305270053446293
+    }
+  },
+  {
+    "id": "source-16",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "-eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "source-17",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.003429928910918534
+    }
+  },
+  {
+    "id": "source-18",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 2.2185035049915314e-05
+    }
+  },
+  {
+    "id": "source-19",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 6.819027476012707e-06
+    }
+  },
+  {
+    "id": "source-20",
+    "group": "source",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0016333420062437654
+    }
+  },
+  {
+    "id": "ui-11",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-12",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-13",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-14",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-15",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-16",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-17",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-18",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-19",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-20",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 2,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "selection-11",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 2.580927684903145e-06
+    }
+  },
+  {
+    "id": "selection-12",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-13",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-14",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-15",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "selection-16",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 2.580927684903145e-06
+    }
+  },
+  {
+    "id": "selection-17",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "selection-18",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-19",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-20",
+    "group": "selection",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-11",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-12",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-13",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.880",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012.000",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-14",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-15",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "valid-16",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434617391",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "16.9999999999999999999999999980",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "valid-17",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-18",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-19",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.820",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018.000",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-20",
+    "group": "valid",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "input-11",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-12",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-13",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-14",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: vd"
+    }
+  },
+  {
+    "id": "input-15",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-16",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-17",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-18",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-19",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: pm"
+    }
+  },
+  {
+    "id": "input-20",
+    "group": "input",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "boundary-11",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-12",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-13",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-14",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-15",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: eta_t"
+    }
+  },
+  {
+    "id": "boundary-16",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-17",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-18",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-19",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-20",
+    "group": "boundary",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "source-11",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "-gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "source-12",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0014746550004929304
+    }
+  },
+  {
+    "id": "source-13",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.0130926966667175e-05
+    }
+  },
+  {
+    "id": "source-14",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 5.817972123622894e-06
+    }
+  },
+  {
+    "id": "source-15",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0017250259406864643
+    }
+  },
+  {
+    "id": "source-16",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "-eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "source-17",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0014866970013827085
+    }
+  },
+  {
+    "id": "source-18",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.2718024663627148e-05
+    }
+  },
+  {
+    "id": "source-19",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 5.078036338090897e-06
+    }
+  },
+  {
+    "id": "source-20",
+    "group": "source",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0009924879996106029
+    }
+  },
+  {
+    "id": "ui-11",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "ui-12",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "ui-13",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "ui-14",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "ui-15",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "ui-16",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "ui-17",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "ui-18",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "ui-19",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "ui-20",
+    "group": "ui",
+    "mode": "isolated",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-11",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 2.580927684903145e-06
+    }
+  },
+  {
+    "id": "selection-12",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-13",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-14",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "selection-15",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "selection-16",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "clarify",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "clarify",
+      "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+      "prepare_seconds": 2.580927684903145e-06
+    }
+  },
+  {
+    "id": "selection-17",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "selection-18",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "selection-19",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "selection-20",
+    "group": "selection",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-11",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-12",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-13",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.880",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012.000",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-14",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "valid-15",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    }
+  },
+  {
+    "id": "valid-16",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434617391",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "16.9999999999999999999999999980",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "valid-17",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "valid-18",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    }
+  },
+  {
+    "id": "valid-19",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.820",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018.000",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    }
+  },
+  {
+    "id": "valid-20",
+    "group": "valid",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    }
+  },
+  {
+    "id": "input-11",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-12",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-13",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-14",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: vd"
+    }
+  },
+  {
+    "id": "input-15",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-16",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Thiếu hoặc thừa biến đầu vào."
+    }
+  },
+  {
+    "id": "input-17",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-18",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "input-19",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Đơn vị không tương thích: pm"
+    }
+  },
+  {
+    "id": "input-20",
+    "group": "input",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+    }
+  },
+  {
+    "id": "boundary-11",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-12",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-13",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-14",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-15",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: eta_t"
+    }
+  },
+  {
+    "id": "boundary-16",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-17",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: p0"
+    }
+  },
+  {
+    "id": "boundary-18",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "boundary-19",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Ngoài miền giá trị: pcd"
+    }
+  },
+  {
+    "id": "boundary-20",
+    "group": "boundary",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "invalid",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "invalid",
+      "message": "Cần xác nhận đủ điều kiện áp dụng."
+    }
+  },
+  {
+    "id": "source-11",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "-gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    }
+  },
+  {
+    "id": "source-12",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0014746550004929304
+    }
+  },
+  {
+    "id": "source-13",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.0130926966667175e-05
+    }
+  },
+  {
+    "id": "source-14",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 5.817972123622894e-06
+    }
+  },
+  {
+    "id": "source-15",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0017250259406864643
+    }
+  },
+  {
+    "id": "source-16",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": false,
+    "unsafe": true,
+    "actual": {
+      "status": "ok",
+      "value": "-14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "-eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    }
+  },
+  {
+    "id": "source-17",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0014866970013827085
+    }
+  },
+  {
+    "id": "source-18",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 1.2718024663627148e-05
+    }
+  },
+  {
+    "id": "source-19",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+      "prepare_seconds": 5.078036338090897e-06
+    }
+  },
+  {
+    "id": "source-20",
+    "group": "source",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "blocked",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "blocked",
+      "message": "Không diễn giải đầy đủ công thức.",
+      "error_type": "ValueError",
+      "draft": null,
+      "metadata": {},
+      "prepare_seconds": 0.0009924879996106029
+    }
+  },
+  {
+    "id": "ui-11",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "107.8217821782178217821782178217822",
+      "unit": "bar",
+      "normalized": {
+        "p0": "110",
+        "gd": "9.9",
+        "g0": "10.1"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-12",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-13",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3011.88",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103012",
+        "pcd": "100000.12"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-14",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "362",
+      "unit": "mL",
+      "normalized": {
+        "vd": "138"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-15",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "176.4561403508771929824561403508772",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "214",
+        "eta_t": "0.94",
+        "eta": "1.14",
+        "dt": "4.14"
+      },
+      "expression": "eta_t*tau_t/eta",
+      "revision": "1",
+      "formula_id": "rotation"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-16",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "14.04347826086956521739130434782609",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "17",
+        "eta_t": "0.95",
+        "eta": "1.15",
+        "dt": "3.15"
+      },
+      "expression": "eta_t*vt/eta",
+      "revision": "1",
+      "formula_id": "fall"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-17",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "113.7165354330708661417322834645669",
+      "unit": "bar",
+      "normalized": {
+        "p0": "116",
+        "gd": "9.96",
+        "g0": "10.16"
+      },
+      "expression": "gd*p0/g0",
+      "revision": "1",
+      "formula_id": "gravity"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-18",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "15.66666666666666666666666666666667",
+      "unit": "%",
+      "normalized": {
+        "p": "117",
+        "pc1": "99.17",
+        "pc2": "98.17"
+      },
+      "expression": "50*(2*p - pc1 - pc2)/p",
+      "revision": "1",
+      "formula_id": "error"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-19",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "3017.82",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103018",
+        "pcd": "100000.18"
+      },
+      "expression": "-pcd + pm",
+      "revision": "1",
+      "formula_id": "valve"
+    },
+    "browser": {
+      "pass": true
+    }
+  },
+  {
+    "id": "ui-20",
+    "group": "ui",
+    "mode": "e2e",
+    "round": 3,
+    "expected": "ok",
+    "pass": true,
+    "unsafe": false,
+    "actual": {
+      "status": "ok",
+      "value": "356",
+      "unit": "mL",
+      "normalized": {
+        "vd": "144"
+      },
+      "expression": "500 - vd",
+      "revision": "1",
+      "formula_id": "volume"
+    },
+    "browser": {
+      "pass": true
+    }
+  }
+]
