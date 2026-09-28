@@ -42,6 +42,8 @@ def canonical_fingerprint(card):
     return hashlib.sha256(json.dumps({k:v for k,v in card.items() if k!='fingerprint'},sort_keys=True,ensure_ascii=False).encode()).hexdigest()
 
 def source_valid(card):
+    known=next((x for x in SOURCES if x['id']==card['id']),None)
+    if not known or any(card.get(k)!=known[k] for k in ('file','docx_sha256','revision')): return False
     p=ROOT/'TC_DL'/card['file']
     return p.exists() and hashlib.sha256(p.read_bytes()).hexdigest()==card['docx_sha256']
 
@@ -125,6 +127,6 @@ def parser(card):
     if card['id']=='error' and 'gia toc trong truong tai noi do' in context: conditions.append('pressure_corrected')
     den_symbols={str(x) for x in sympy.denom(sympy.together(final)).free_symbols}
     for v in variables:
-        if v['key'] in den_symbols or v['key']=='pcd': v['exclusive_min']=True
+        if v['key'] in den_symbols or v['key'] in ('pcd','p0','p'): v['exclusive_min']=True
     unit={'valve':'Pa','volume':'mL','rotation':'s','fall':'mm/min','gravity':'bar','error':'%'}[card['id']]
     return {'variables':variables,'expression':str(final),'unit':unit,'conditions':conditions}
