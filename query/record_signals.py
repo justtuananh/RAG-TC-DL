@@ -92,6 +92,10 @@ _GENERIC_ORG_WORDS = frozenset(
     "khu vực cơ khí năng lượng nhiệt điện áp suất nhiệt-áp thủy lực lọc hóa hoá dầu "
     "khí công nghiệp miền và của".split()
 )
+# Liệt kê thật sự (không gồm "bao nhiêu", vốn có mặt cả trong câu hỏi quy định).
+_ENUMERATE_RE = re.compile(
+    r"liệt\s+kê|danh\s+sách|(?:những|các)\s+(?:áp\s+kế|thiết\s+bị|biên\s+bản)", re.IGNORECASE
+)
 _HISTORY_INTENTS = frozenset({"device_history", "latest_record", "error_trend"})
 _LEDGER_TTL_SECONDS = 30.0
 
@@ -392,7 +396,10 @@ def disambiguate_records(
     # Không có định danh sổ cái: chỉ mở nhánh số liệu từ ``text`` khi câu hỏi nói rõ về
     # biên bản/hồ sơ ("áp kế"/"thiết bị" có mặt trong mọi câu hỏi quy định).
     is_data = str(payload.get("branch") or "") in ("data", "mixed")
-    if not (is_data or _RECORD_WORD_RE.search(question) or signals.summary_cue):
+    # Liệt kê thiết bị theo đơn vị phạm vi đo ("liệt kê các áp kế có phạm vi đo theo đơn vị
+    # MPa") là câu hỏi sổ cái dù không có chữ "biên bản".
+    unit_listing = bool(signals.range_unit and _ENUMERATE_RE.search(question))
+    if not (is_data or _RECORD_WORD_RE.search(question) or signals.summary_cue or unit_listing):
         return payload
 
     filters = _ledger_filters(question, signals)

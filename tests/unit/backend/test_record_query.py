@@ -342,6 +342,12 @@ def test_unit_filter_routes_to_summary(db):
     assert disambiguate_records(llm, question, db)["params"] == {"range_unit": "bar"}
 
 
+def test_listing_by_range_unit_opens_the_summary_even_when_llm_says_text(db):
+    routed = disambiguate_records(TEXT, "Liệt kê các áp kế có phạm vi đo theo đơn vị bar", db)
+    assert routed["intent"] == "records_summary"
+    assert routed["params"] == {"range_unit": "bar"}
+
+
 def test_number_equal_to_a_serial_in_a_regulation_question_stays_text(db):
     question = "Áp kế có phạm vi đo đến 1045 kgf/cm2 thì sai số cho phép là bao nhiêu?"
     assert disambiguate_records(TEXT, question, db) == TEXT
