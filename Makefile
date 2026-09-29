@@ -80,8 +80,8 @@ PY ?= .venv-dev/bin/python
 
 # Lint + format-check CHỈ code harness (không định dạng lại source hiện có).
 lint:
-	$(PY) -m ruff check tests scripts
-	$(PY) -m ruff format --check tests scripts
+	$(PY) -m ruff check tests scripts query eval
+	$(PY) -m ruff format --check tests scripts query eval
 
 # Tuỳ chọn: quét toàn repo tìm lỗi đúng/sai (pyflakes) — có thể lộ vài lỗi sẵn có.
 lint-all:
@@ -115,6 +115,8 @@ intent-eval:
 record-eval:
 	OLLAMA_MODEL=$${OLLAMA_MODEL:-qwen2.5:3b} OLLAMA_URL=$${OLLAMA_URL:-http://localhost:11434/api/chat} \
 		$(PY) -m eval.record_query_eval
+	OLLAMA_MODEL=$${OLLAMA_MODEL:-qwen2.5:3b} OLLAMA_URL=$${OLLAMA_URL:-http://localhost:11434/api/chat} \
+		$(PY) -m eval.record_query_eval --path eval/record_query_generated.jsonl
 
 # Unit test (mock toàn bộ I/O) — chạy mọi nơi, không cần Docker.
 test-unit:

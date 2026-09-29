@@ -9,7 +9,8 @@ này sửa lựa chọn đó bằng BẰNG CHỨNG KHỚP CHÍNH XÁC với sổ
   → ``record_lookup`` (kể cả khi LLM trả ``text``: một số hiệu khớp đúng sổ cái
   không thể là câu hỏi quy định chung);
 - tên kiểm định viên / người kiểm soát có trong sổ cái + "biên bản"
-  → ``records_summary`` lọc theo người;
+  → ``records_summary`` lọc theo người; tên đơn vị sử dụng có trong sổ cái (đủ tên,
+  hoặc phần đuôi riêng như "Đông Phương") + "biên bản"/liệt kê/đếm → lọc theo đơn vị;
 - từ cực trị ("thấp nhất", "lớn nhất") + trường so sánh được → ``records_summary``
   cực trị; "toàn bộ hồ sơ", "bao nhiêu biên bản", lọc đơn vị phạm vi đo
   → ``records_summary``. Các nhóm này chỉ mở nhánh số liệu khi LLM đã chọn nhánh
@@ -73,6 +74,24 @@ _LIST_CUE_RE = re.compile(
     r"các\s+(?:áp\s+kế|thiết\s+bị|biên\s+bản)",
     re.IGNORECASE,
 )
+# Kết luận là TIÊU CHÍ chọn ("biên bản nào không đạt", "có bao nhiêu biên bản không đạt").
+# Chỉ khi câu hỏi đếm NHIỀU thứ ("bao nhiêu biên bản, bao nhiêu thiết bị và bao nhiêu biên
+# bản không đạt") thì kết luận là một phép đếm cạnh tổng số, không lọc.
+_VERDICT_RE = re.compile(
+    r"(?:biên\s+bản|hồ\s+sơ|thiết\s+bị|áp\s+kế)\s+(?:nào\s+)?(?:bị\s+)?(?:kết\s+luận\s+)?"
+    r"(?:là\s+)?(không\s+)?đạt(?!\s+được)",
+    re.IGNORECASE,
+)
+_COUNT_BEFORE_RE = re.compile(r"(?:bao\s+nhiêu|mấy)\s*$", re.IGNORECASE)
+_COUNT_RE = re.compile(r"bao\s+nhiêu|mấy\s", re.IGNORECASE)
+_WORD_RE = re.compile(r"[\w\-]+", re.UNICODE)
+# Từ chung của tên đơn vị: một phần đuôi chỉ gồm các từ này ("đo lường", "trung tâm")
+# có mặt trong câu hỏi quy định nên không đủ để nhận ra một đơn vị cụ thể.
+_GENERIC_ORG_WORDS = frozenset(
+    "công ty cp tnhh nhà máy trung tâm viện phòng đo lường kiểm định kỹ thuật an toàn "
+    "khu vực cơ khí năng lượng nhiệt điện áp suất nhiệt-áp thủy lực lọc hóa hoá dầu "
+    "khí công nghiệp miền và của".split()
+)
 _HISTORY_INTENTS = frozenset({"device_history", "latest_record", "error_trend"})
 _LEDGER_TTL_SECONDS = 30.0
 
@@ -85,6 +104,7 @@ class LedgerIndex:
     cert_nos: frozenset[str] = frozenset()
     inspectors: dict[str, str] = field(default_factory=dict)
     reviewers: dict[str, str] = field(default_factory=dict)
+    owners: dict[str, str] = field(default_factory=dict)
 
     @property
     def empty(self) -> bool:
@@ -98,6 +118,8 @@ class RecordSignals:
     dates: tuple[date, ...] = ()
     inspector: str | None = None
     reviewer: str | None = None
+    owner_org: str | None = None
+    verdict: str | None = None
     range_unit: str | None = None
     nominal: float | None = None
     measure: str | None = None
@@ -126,7 +148,10 @@ def build_ledger_index(session: Any) -> LedgerIndex:
     """Đọc định danh từ ``v_record_detail``; thất bại DB → chỉ mục rỗng."""
     try:
         rows = session.execute(
-            text("SELECT serial_no, cert_no, inspector_name, reviewer_name FROM v_record_detail")
+            text(
+                "SELECT serial_no, cert_no, inspector_name, reviewer_name, owner_org "
+                "FROM v_record_detail"
+            )
         ).all()
     except SQLAlchemyError as exc:
         # Thiếu view/kết nối thì không có tín hiệu sổ cái; ghi log vì chỉ mục rỗng làm tắt
@@ -136,8 +161,9 @@ def build_ledger_index(session: Any) -> LedgerIndex:
     serials: dict[str, str] = {}
     inspectors: dict[str, str] = {}
     reviewers: dict[str, str] = {}
+    owners: dict[str, str] = {}
     cert_nos: set[str] = set()
-    for serial, cert_no, inspector, reviewer in rows:
+    for serial, cert_no, inspector, reviewer, owner in rows:
         if serial and str(serial).strip():
             serials[_fold(str(serial))] = str(serial).strip()
         if cert_no and str(cert_no).strip():
@@ -146,7 +172,9 @@ def build_ledger_index(session: Any) -> LedgerIndex:
             inspectors[_fold(str(inspector))] = str(inspector).strip()
         if reviewer and str(reviewer).strip():
             reviewers[_fold(str(reviewer))] = str(reviewer).strip()
-    return LedgerIndex(serials, frozenset(cert_nos), inspectors, reviewers)
+        if owner and str(owner).strip():
+            owners[_fold(str(owner))] = str(owner).strip()
+    return LedgerIndex(serials, frozenset(cert_nos), inspectors, reviewers, owners)
 
 
 def ledger_index(session: Any) -> LedgerIndex:
@@ -179,6 +207,43 @@ def _person(question: str, names: dict[str, str]) -> str | None:
     for key in sorted(names, key=len, reverse=True):
         if key and key in folded:
             return names[key]
+    return None
+
+
+def _has_phrase(folded: str, words: list[str]) -> bool:
+    phrase = r"\s+".join(re.escape(word) for word in words)
+    return re.search(rf"(?<![\w\-]){phrase}(?![\w\-])", folded) is not None
+
+
+def _owner(question: str, owners: dict[str, str]) -> str | None:
+    """Đơn vị sử dụng có trong sổ cái: đủ tên, hoặc phần đuôi riêng của đúng MỘT đơn vị.
+
+    Phần đuôi cần ít nhất hai từ và một từ không phải từ chung (``_GENERIC_ORG_WORDS``),
+    để "phòng đo lường" trong câu hỏi không bị hiểu thành một đơn vị cụ thể.
+    """
+    folded = _fold(question)
+    full = [name for key, name in owners.items() if key in folded]
+    if full:
+        return max(full, key=len)
+    matches: set[str] = set()
+    for key, name in owners.items():
+        words = _WORD_RE.findall(key)
+        for size in range(len(words) - 1, 1, -1):
+            tail = words[-size:]
+            if all(word in _GENERIC_ORG_WORDS for word in tail):
+                continue
+            if _has_phrase(folded, tail):
+                matches.add(name)
+                break
+    return matches.pop() if len(matches) == 1 else None
+
+
+def _verdict(question: str) -> str | None:
+    several_counts = len(_COUNT_RE.findall(question)) > 1
+    for match in _VERDICT_RE.finditer(question):
+        if several_counts and _COUNT_BEFORE_RE.search(question[: match.start()]):
+            continue
+        return "khong_dat" if match.group(1) else "dat"
     return None
 
 
@@ -220,6 +285,8 @@ def extract_signals(question: str, index: LedgerIndex, session: Any) -> RecordSi
         dates=_dates(text_value),
         inspector=_person(text_value, index.inspectors),
         reviewer=_person(text_value, index.reviewers),
+        owner_org=_owner(text_value, index.owners),
+        verdict=_verdict(text_value),
         range_unit=unit_match.group(1) if unit_match else None,
         nominal=_nominal(text_value),
         measure=measure,
@@ -284,14 +351,21 @@ def _comparable_field(signals: RecordSignals) -> str | None:
     return specific[0] if specific else None
 
 
-def _person_filter(question: str, signals: RecordSignals) -> dict[str, str]:
-    if not _RECORD_WORD_RE.search(question) or _INSPECTOR_CATALOG_RE.search(question):
-        return {}
-    if signals.inspector:
-        return {"inspector": signals.inspector}
-    if signals.reviewer:
-        return {"reviewer": signals.reviewer}
-    return {}
+def _ledger_filters(question: str, signals: RecordSignals) -> dict[str, str]:
+    """Bộ lọc người / đơn vị sử dụng lấy nguyên văn từ sổ cái (không từ LLM)."""
+    filters: dict[str, str] = {}
+    about_records = bool(_RECORD_WORD_RE.search(question))
+    if about_records and not _INSPECTOR_CATALOG_RE.search(question):
+        if signals.inspector:
+            filters["inspector"] = signals.inspector
+        elif signals.reviewer:
+            filters["reviewer"] = signals.reviewer
+    listing = about_records or signals.summary_cue or bool(_LIST_CUE_RE.search(question))
+    if signals.owner_org and listing:
+        filters["owner_org"] = signals.owner_org
+    if signals.verdict and about_records:
+        filters["verdict"] = signals.verdict
+    return filters
 
 
 def disambiguate_records(
@@ -321,17 +395,31 @@ def disambiguate_records(
     if not (is_data or _RECORD_WORD_RE.search(question) or signals.summary_cue):
         return payload
 
-    person = _person_filter(question, signals)
-    if person:
-        return _summary(payload, signals, question, **person)
+    filters = _ledger_filters(question, signals)
+    by_period = intent == "records_by_period" and (payload.get("params") or {}).get("date_from")
+    if by_period and set(filters) <= {"verdict"}:
+        # records_by_period lọc được khoảng ngày + kết luận: giữ lựa chọn LLM, chỉ bổ sung
+        # kết luận lấy từ câu hỏi khi LLM bỏ sót.
+        params = dict(payload.get("params") or {})
+        if filters.get("verdict") and not params.get("verdict"):
+            return {**payload, "params": {**params, "verdict": filters["verdict"]}}
+        return payload
     comparable = _comparable_field(signals)
     if signals.measure and comparable:
         scope = {"procedure_ids": list(signals.targets.procedures)} if signals.targets.steps else {}
         return _summary(
-            payload, signals, question, measure=signals.measure, field=comparable, **scope
+            payload,
+            signals,
+            question,
+            measure=signals.measure,
+            field=comparable,
+            **scope,
+            **filters,
         )
+    if filters:
+        return _summary(payload, signals, question, **filters)
     if signals.summary_cue or (signals.range_unit and _LIST_CUE_RE.search(question)):
-        if intent == "records_by_period" and (payload.get("params") or {}).get("date_from"):
+        if by_period:
             return payload
         return _summary(payload, signals, question)
     return payload

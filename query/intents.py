@@ -199,6 +199,8 @@ INTENT_CATALOG: dict[str, dict[str, Any]] = {
         ),
         "params": {
             "inspector": "họ tên kiểm định viên (có thể bỏ trống)",
+            "reviewer": "họ tên người kiểm soát (có thể bỏ trống)",
+            "owner_org": "tên đơn vị sử dụng, nguyên văn (có thể bỏ trống)",
             "range_unit": "đơn vị phạm vi đo, ví dụ 'bar' (có thể bỏ trống)",
             "measure": "'list', 'count', 'min' hoặc 'max'",
         },
@@ -465,11 +467,18 @@ _INTENT_ALIASES: dict[str, str] = {
 }
 
 
-def _resolve_intent_alias(intent: str, params: dict[str, Any]) -> str:
+_STANDARDS_CUE_RE = re.compile(r"phương\s+tiện\s+kiểm\s+định|bảng\s+2\b", re.IGNORECASE)
+
+
+def _resolve_intent_alias(intent: str, params: dict[str, Any], question: str) -> str:
     """Đưa tên intent gần đúng của model nhỏ về tên chuẩn; giữ nguyên nếu lạ."""
     if intent == "procedure_lookup":
         # Có số QTKĐ thì là thông số QTKĐ, ngược lại là danh mục quy trình.
         return "procedure_params" if params.get("procedure_number") else "procedure_catalog_lookup"
+    if intent in ("mixed", "data") and params.get("procedure_number"):
+        # Model nhỏ đôi khi điền tên nhánh vào ô intent; số QTKĐ (đã grounding) cho biết
+        # đây là tra QTKĐ, còn loại bảng suy theo quy tắc 8 của prompt.
+        return "standards_for" if _STANDARDS_CUE_RE.search(question) else "procedure_params"
     return _INTENT_ALIASES.get(intent, intent)
 
 
@@ -480,7 +489,7 @@ def sanitize_classification(payload: dict[str, Any] | None, question: str) -> di
     result = dict(payload)
     params = ground_params(normalize_param_keys(payload.get("params")), question)
     intent = str(result.get("intent") or "").strip().lower()
-    intent = _resolve_intent_alias(intent, params)
+    intent = _resolve_intent_alias(intent, params, question)
     result["intent"] = intent
     if intent == "records_by_period":
         dates = extract_date_range(question)

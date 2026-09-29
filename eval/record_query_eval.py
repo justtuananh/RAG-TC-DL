@@ -3,11 +3,15 @@
 Mỗi câu trong ``eval/record_query_set.jsonl`` đi ĐÚNG đường của ``/api/chat/stream``:
 bộ phân loại Ollama → ``decide`` → ``build_data_payload`` trên PostgreSQL. Một câu
 đạt khi intent đúng VÀ mọi giá trị trong ``must`` (nguyên văn biên bản, so sau khi
-bỏ khoảng trắng) có mặt trong bảng trả về. ``not_intents`` là intent câu hỏi KHÔNG
-được rơi vào (câu hỏi quy định không bị kéo sang tra biên bản).
+bỏ khoảng trắng) có mặt trong bảng trả về. ``must_not`` là giá trị KHÔNG được xuất
+hiện (câu lọc theo người / đơn vị mà trả cả sổ cái thì trượt, dù đủ ``must``).
+``not_intents`` là intent câu hỏi KHÔNG được rơi vào (câu hỏi quy định không bị kéo
+sang tra biên bản). ``intents`` (tuỳ chọn) liệt kê mọi intent trả lời đúng câu hỏi khi
+có hơn một cách.
 
 Bộ ``bo20`` là 20 câu hỏi trích xuất số liệu áp kế pít tông (``Bo_20_cau.xlsx``);
-bộ ``paraphrase`` là câu hỏi diễn đạt khác để chống khớp riêng bộ câu gốc. Cần
+bộ ``paraphrase`` là câu hỏi diễn đạt khác để chống khớp riêng bộ câu gốc; bộ ``gen``
+(``record_query_generated.jsonl``) do một LLM khác sinh, đáp án lấy nguyên văn sổ cái. Cần
 Postgres (20 biên bản trong ``TC_DL/`` đã nạp + duyệt) và Ollama.
 
 Usage:
@@ -60,7 +64,9 @@ def run_case(case: dict, classifier) -> dict:
             session.close()
     blob = normalize(text)
     missing = [value for value in case.get("must", []) if normalize(value) not in blob]
-    intent_ok = intent == case["intent"] if case.get("intent") else True
+    leaked = [value for value in case.get("must_not", []) if normalize(value) in blob]
+    accepted = case.get("intents") or ([case["intent"]] if case.get("intent") else [])
+    intent_ok = intent in accepted if accepted else True
     if intent in case.get("not_intents", []):
         intent_ok = False
     return {
@@ -68,7 +74,8 @@ def run_case(case: dict, classifier) -> dict:
         "intent": intent,
         "expected": case.get("intent"),
         "missing": missing,
-        "passed": intent_ok and not missing,
+        "leaked": leaked,
+        "passed": intent_ok and not missing and not leaked,
     }
 
 
@@ -94,11 +101,14 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"  {mark} {result['id']}: intent {result['intent']} "
                 f"(mong {result['expected']}), thiếu {result['missing']}"
+                + (f", thừa {result['leaked']}" if result["leaked"] else "")
             )
     rate = passed / len(results) if results else 0.0
     ok = rate >= PASS_RATE
     print(f"Tra cứu biên bản: {passed}/{len(results)} đạt ({rate:.3f})")
-    print(f"Cổng: ≥ {PASS_RATE:.2f} câu đạt (intent đúng + đủ số liệu) → {'ĐẠT' if ok else 'TRƯỢT'}")
+    print(
+        f"Cổng: ≥ {PASS_RATE:.2f} câu đạt (intent đúng + đủ số liệu) → {'ĐẠT' if ok else 'TRƯỢT'}"
+    )
     return 0 if ok else 1
 
 

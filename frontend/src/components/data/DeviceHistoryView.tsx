@@ -45,7 +45,7 @@ function TimelineItem({
             {tone.label}
           </span>
           <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>{record.mode_label ?? "—"}</span>
-          {record.cert_no && <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>GCN {record.cert_no}</span>}
+          {record.cert_no && <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>Biên bản {record.cert_no}</span>}
         </div>
         <div style={{ fontSize: "12px", color: COLOR.textSecondary, marginTop: 3 }}>
           {record.measurement_count ?? 0} điểm đo · hạn hiệu lực {formatDate(record.expires_at)}

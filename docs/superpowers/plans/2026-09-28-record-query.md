@@ -61,3 +61,13 @@ Còn mở:
 - Ngăn xuất xứ của tab chat đòi đăng nhập (`/api/data/provenance` cần token); đã kiểm xuất xứ ở backend, chưa bấm được trên giao diện khi chưa đăng nhập.
 - 20 biên bản chưa được đưa vào Qdrant; câu hỏi rơi về nhánh văn bản vẫn không tìm được nội dung biên bản.
 - `records_summary` đọc toàn bộ hồ sơ khớp bộ lọc vào Python rồi mới cắt 50 dòng; cần đẩy `COUNT`/`LIMIT` xuống SQL khi sổ cái lên hàng nghìn hồ sơ.
+
+## Nhật ký G1 - bộ câu hỏi sinh tự động (2026-09-29)
+
+- DeepSeek V4.1 Flash (opencode) sinh 60 câu mới vào `eval/record_query_generated.jsonl`, đáp án lấy nguyên văn từ view đã duyệt, chạy eval hai lần: 59/60 cả hai lần.
+- Lỗi được báo: lọc theo đơn vị sử dụng ("Các biên bản kiểm định cho Công ty TNHH Khí công nghiệp Đông Phương") bị LLM đưa sang `lab_standard_lookup`, rơi về text.
+- Kiểm chứng lại báo cáo tìm thêm: gen-40 "đạt" chỉ vì bảng liệt kê cả sổ cái (thước đo không kiểm "không thừa"); "biên bản nào không đạt" trả cả 20 biên bản; "liệt kê các biên bản không đạt" rơi về text; bảng `records_by_period` thiếu cột số biên bản.
+- Sửa: `disambiguate_records` nhận đơn vị sử dụng (đủ tên hoặc phần đuôi riêng, bỏ qua đuôi chỉ gồm từ chung) và kết luận làm tiêu chí chọn (trừ khi câu đếm nhiều thứ); giữ `records_by_period` có khoảng ngày và bổ sung kết luận LLM bỏ sót; prompt nêu `owner_org`, `reviewer`; eval có `must_not` và `intents`; nhãn `cert_no` thống nhất "Số biên bản" (đọc từ dòng "Số:" của mẫu biên bản).
+- Sau khi khởi động lại Ollama: LLM điền "mixed" vào ô intent (xác nhận xảy ra cả trên mã HEAD) và điền số QTKĐ "1.159" vào ô số biên bản; sửa tất định bằng luật suy intent theo quy tắc 8 và validator từ chối số QTKĐ ở `cert_no`.
+- Review độc lập: câu "Có bao nhiêu biên bản không đạt?" mất bộ lọc kết luận; đã sửa kèm test.
+- Kết quả: `record-eval` 40/40 + 60/60 (hai lần chạy), `intent_eval --live` 102/102, `make check` 1613 passed.

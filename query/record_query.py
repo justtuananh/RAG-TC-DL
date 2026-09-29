@@ -481,12 +481,20 @@ def summary_records(session: Session, params: RecordsSummaryParams) -> list[dict
         "inspector": ("inspector_name", params.inspector),
         "reviewer": ("reviewer_name", params.reviewer),
     }
+    # Kèm so nguyên văn: LOWER() của SQLite không hạ chữ hoa có dấu ("Đ"), còn bộ định
+    # tuyến truyền đúng nguyên văn sổ cái.
     for name, (column, value) in exact.items():
         if value:
-            conditions.append(f"LOWER(COALESCE(r.{column}, '')) = :{name}")
+            conditions.append(
+                f"(r.{column} = :{name}_raw OR LOWER(COALESCE(r.{column}, '')) = :{name})"
+            )
+            values[f"{name}_raw"] = value.strip()
             values[name] = value.strip().casefold()
     if params.owner_org:
-        conditions.append("LOWER(COALESCE(r.owner_org, '')) LIKE :owner_org")
+        conditions.append(
+            "(r.owner_org = :owner_org_raw OR LOWER(COALESCE(r.owner_org, '')) LIKE :owner_org)"
+        )
+        values["owner_org_raw"] = params.owner_org.strip()
         values["owner_org"] = f"%{params.owner_org.strip().casefold()}%"
     if params.verdict:
         conditions.append("r.verdict = :verdict")

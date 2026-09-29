@@ -135,7 +135,7 @@ export default function RecordDetailPanel({
           <dd style={ddStyle}>
             <ProvButton label={record.accuracy_text ?? "—"} cellRef={ref("accuracy_text")} onOpen={onOpenProvenance} />
           </dd>
-          <dt style={dtStyle}>Số giấy chứng nhận</dt>
+          <dt style={dtStyle}>Số biên bản</dt>
           <dd style={ddStyle}>{record.cert_no ?? "—"}</dd>
           <dt style={dtStyle}>Phòng đo</dt>
           <dd style={ddStyle}>{record.lab_name ?? "—"}</dd>

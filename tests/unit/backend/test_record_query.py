@@ -226,6 +226,101 @@ def test_inspector_name_from_ledger_routes_to_summary(db):
     assert routed["params"]["inspector"] == "Phạm Văn Hà"
 
 
+def test_owner_org_from_ledger_routes_to_summary(db):
+    question = (
+        "Các biên bản kiểm định cho Công ty TNHH Khí công nghiệp Đông Phương gồm những số nào?"
+    )
+    llm = {
+        "branch": "data",
+        "intent": "lab_standard_lookup",
+        "params": {"usage_ref": "Công ty TNHH Khí công nghiệp Đông Phương"},
+    }
+    routed = disambiguate_records(llm, question, db)
+    assert routed["intent"] == "records_summary"
+    assert routed["params"] == {"owner_org": "Công ty TNHH Khí công nghiệp Đông Phương"}
+
+
+def test_owner_org_count_question_replaces_a_made_up_unit(db):
+    question = "Nhà máy Nhiệt điện Sông Lam có bao nhiêu biên bản kiểm định?"
+    llm = {"branch": "data", "intent": "records_summary", "params": {"range_unit": "Sông Lam"}}
+    routed = disambiguate_records(llm, question, db)
+    assert routed["params"] == {"owner_org": "Nhà máy Nhiệt điện Sông Lam"}
+
+
+def test_distinctive_tail_of_an_owner_name_is_enough(db):
+    routed = disambiguate_records(TEXT, "Liệt kê các biên bản của Đông Phương", db)
+    assert routed["params"]["owner_org"] == "Công ty TNHH Khí công nghiệp Đông Phương"
+
+
+def test_generic_words_of_an_owner_name_do_not_filter(db):
+    question = "Toàn bộ hồ sơ có bao nhiêu biên bản của phòng đo lường?"
+    routed = disambiguate_records(TEXT, question, db)
+    assert routed["intent"] == "records_summary"
+    assert "owner_org" not in routed["params"]
+
+
+def test_owner_question_about_one_record_stays_a_lookup(db):
+    llm = {"branch": "data", "intent": "latest_record", "params": {"serial": "1045"}}
+    routed = disambiguate_records(llm, "Biên bản 011/2024 dùng cho đơn vị nào?", db)
+    assert routed["intent"] == "record_lookup"
+
+
+@pytest.mark.parametrize(
+    "question, verdict",
+    [
+        ("Liệt kê các biên bản không đạt", "khong_dat"),
+        (
+            "Trong toàn bộ hồ sơ, biên bản nào bị kết luận không đạt và đơn vị sử dụng là gì?",
+            "khong_dat",
+        ),
+        ("Những biên bản nào đạt trong năm 2024?", "dat"),
+    ],
+)
+def test_verdict_as_the_selection_filters_the_records(db, question, verdict):
+    routed = disambiguate_records(TEXT, question, db)
+    assert routed["intent"] == "records_summary"
+    assert routed["params"]["verdict"] == verdict
+
+
+def test_dated_verdict_question_keeps_records_by_period(db):
+    llm = {
+        "branch": "data",
+        "intent": "records_by_period",
+        "params": {"date_from": "2024-01-01", "date_to": "2025-12-31", "verdict": "khong_dat"},
+    }
+    question = "Các biên bản không đạt trong khoảng 2024 đến 2025"
+    assert disambiguate_records(llm, question, db) == llm
+
+
+@pytest.mark.parametrize(
+    "question", ["Có bao nhiêu biên bản không đạt?", "Hồ sơ có mấy biên bản không đạt?"]
+)
+def test_counting_only_the_failures_filters_the_verdict(db, question):
+    routed = disambiguate_records(TEXT, question, db)
+    assert routed["params"]["verdict"] == "khong_dat"
+
+
+def test_dated_period_question_gains_the_verdict_the_llm_left_out(db):
+    llm = {
+        "branch": "data",
+        "intent": "records_by_period",
+        "params": {"date_from": "2024-01-01", "date_to": "2024-12-31"},
+    }
+    routed = disambiguate_records(llm, "Trong năm 2024 có mấy biên bản không đạt?", db)
+    assert routed["intent"] == "records_by_period"
+    assert routed["params"]["verdict"] == "khong_dat"
+
+
+def test_counting_failures_next_to_totals_keeps_every_record(db):
+    question = (
+        "Toàn bộ hồ sơ có bao nhiêu biên bản, bao nhiêu thiết bị (theo số hiệu) và bao nhiêu "
+        "biên bản không đạt?"
+    )
+    routed = disambiguate_records(TEXT, question, db)
+    assert routed["intent"] == "records_summary"
+    assert "verdict" not in routed["params"]
+
+
 def test_inspector_card_question_stays_in_the_catalog(db):
     question = "Số thẻ của kiểm định viên Phạm Văn Hà trong hồ sơ là gì?"
     llm = {"branch": "data", "intent": "inspector_lookup", "params": {"name": "Phạm Văn Hà"}}
@@ -408,12 +503,30 @@ def test_inspector_filter(db):
     assert certs == {"005/2023", "013/2024"}
 
 
+def test_owner_filter_lists_only_that_owners_records(db):
+    payload = resolve_records_summary(
+        db, RecordsSummaryParams(owner_org="Công ty TNHH Khí công nghiệp Đông Phương")
+    )
+    certs = {row["cert_no"].text for row in _table(payload, "Danh sách biên bản").rows}
+    assert certs == {"015/2025", "020/2026"}
+
+
 # ── Tham số ───────────────────────────────────────────────────────────────────
 
 
 def test_lookup_needs_an_identifier():
     with pytest.raises(ValidationError):
         RecordLookupParams(fields=["pham_vi_do"])
+
+
+@pytest.mark.parametrize("number", ["1.159", "1.061:2021", "QTKĐ 1.190"])
+def test_procedure_number_is_not_a_certificate_number(number):
+    with pytest.raises(ValidationError):
+        RecordLookupParams(cert_no=number)
+
+
+def test_certificate_number_is_accepted():
+    assert RecordLookupParams(cert_no="011/2024").cert_no == "011/2024"
 
 
 def test_extreme_needs_a_field():

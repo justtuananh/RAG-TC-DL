@@ -153,7 +153,7 @@ def _document_label(record: dict[str, Any]) -> str:
 
 
 def _record_label(point: dict[str, Any]) -> str:
-    """Nhãn hồ sơ cho bảng diễn biến: số GCN, lùi về tên tài liệu rồi id nội bộ."""
+    """Nhãn hồ sơ cho bảng diễn biến: số biên bản, lùi về tên tài liệu rồi id nội bộ."""
     value = point.get("cert_no") or point.get("display_name") or point.get("record_id")
     return str(value) if value not in (None, "") else "—"
 
@@ -165,7 +165,7 @@ def _timeline_table(history: dict[str, Any]) -> DataTable:
         Column("verdict", "Kết luận"),
         Column("expires_at", "Hạn hiệu lực"),
         Column("measurement_count", "Số điểm đo"),
-        Column("cert_no", "Số GCN"),
+        Column("cert_no", "Số biên bản"),
         Column("file_stem", "Hồ sơ gốc"),
     ]
     rows: list[dict[str, Cell]] = []
@@ -295,7 +295,7 @@ def resolve_latest_record(session: Session, params: intents.LatestRecordParams) 
             Column("mode", "Chế độ"),
             Column("expires_at", "Hạn hiệu lực"),
             Column("measurement_count", "Số điểm đo"),
-            Column("cert_no", "Số GCN"),
+            Column("cert_no", "Số biên bản"),
             Column("file_stem", "Hồ sơ gốc"),
         ],
         rows=[
@@ -335,6 +335,7 @@ def resolve_records_by_period(
     )
     columns = [
         Column("calibrated_at", "Ngày kiểm định"),
+        Column("cert_no", "Số biên bản"),
         Column("serial_no", "Số hiệu"),
         Column("device_type_name", "Loại thiết bị"),
         Column("procedure_number", "QTKĐ"),
@@ -347,6 +348,7 @@ def resolve_records_by_period(
         rows.append(
             {
                 "calibrated_at": _date_cell(record, "calibrated_at"),
+                "cert_no": _text_cell(record, record.get("cert_no")),
                 "serial_no": _text_cell(record, record.get("serial_no")),
                 "device_type_name": _text_cell(record, record.get("device_type_name")),
                 "procedure_number": _text_cell(record, record.get("procedure_number")),

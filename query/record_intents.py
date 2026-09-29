@@ -13,6 +13,7 @@ LLM chỉ điền JSON; tham số qua pydantic rồi tới truy vấn tham số 
 from __future__ import annotations
 
 import datetime as dt
+import re
 from typing import Any, Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -33,6 +34,9 @@ def _keys(value: Any) -> list[str]:
     if isinstance(value, str):
         value = value.replace(";", ",").split(",")
     return [str(item).strip()[:_KEY_MAX] for item in value if str(item).strip()]
+
+
+_PROCEDURE_NUMBER_RE = re.compile(r"(?<![\d/])\d\.\d{3}(?![\d/])")
 
 
 class RecordLookupParams(BaseModel):
@@ -59,6 +63,14 @@ class RecordLookupParams(BaseModel):
     @classmethod
     def _list(cls, value: Any) -> list[str]:
         return _keys(value)
+
+    @field_validator("cert_no")
+    @classmethod
+    def _not_a_procedure(cls, value: str | None) -> str | None:
+        # Model nhỏ hay điền số QTKĐ ("1.159") vào ô số biên bản; đó là câu hỏi quy định.
+        if value and _PROCEDURE_NUMBER_RE.search(value):
+            raise ValueError("Số QTKĐ không phải số biên bản.")
+        return value
 
     @model_validator(mode="after")
     def _require_selector(self) -> RecordLookupParams:

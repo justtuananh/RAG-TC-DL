@@ -102,6 +102,25 @@ def test_verdict_and_date_are_normalized():
     assert request.params.date_from.isoformat() == "2024-02-01"
 
 
+@pytest.mark.parametrize(
+    "question, expected",
+    [
+        ("Phương tiện kiểm định theo quy trình 1.061 là gì, đối chiếu sổ cái?", "standards_for"),
+        ("Bảng 2 của QTKĐ 1.159 gồm những gì?", "standards_for"),
+        ("Thông số của QTKĐ 1.061 và các lần kiểm trong sổ cái?", "procedure_params"),
+    ],
+)
+def test_branch_name_in_the_intent_slot_is_repaired_from_the_question(question, expected):
+    number = re.search(r"\d\.\d{3}", question).group(0)
+    payload = {"branch": "mixed", "intent": "mixed", "params": {"procedure_number": number}}
+    assert intents.sanitize_classification(payload, question)["intent"] == expected
+
+
+def test_branch_name_without_a_procedure_stays_invalid():
+    payload = {"branch": "data", "intent": "data", "params": {}}
+    assert intents.sanitize_classification(payload, "Cho tôi xem dữ liệu")["intent"] == "data"
+
+
 # ── Quyết định định tuyến: mặc định rơi về text ───────────────────────────────
 
 
@@ -230,6 +249,7 @@ def test_records_by_period_filters_and_traces(data_db):
     )
     assert payload.tables[0].total == 1
     assert payload.tables[0].rows[0]["calibrated_at"].text == "15/01/2024"
+    assert [column.key for column in payload.tables[0].columns][:2] == ["calibrated_at", "cert_no"]
     assert router.untraceable_cells(payload) == []
 
 
