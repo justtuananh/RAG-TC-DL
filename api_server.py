@@ -20,6 +20,7 @@ Endpoints:
   POST   /api/documents/{id}/process — extract → chunk → embed (background thread)
   GET    /api/documents/{id}/markdown
   GET    /api/documents/{id}/file    — tệp gốc (.docx/.xlsx/.pdf) thô, dùng để hiển thị "tài liệu gốc"
+  GET    /api/documents/{id}/preview - bản xem trên trình duyệt (.doc/.xls → .docx/.xlsx đã chuyển)
   DELETE /api/documents/{id}
   PATCH  /api/documents/{id}         — {"name": str} display-name override
 
@@ -509,6 +510,22 @@ def document_file(file_stem: str):
     return FileResponse(
         path, media_type=media_type, filename=path.name, content_disposition_type="inline"
     )
+
+
+@app.get("/api/documents/{file_stem}/preview")
+def document_preview(file_stem: str):
+    """Bản xem được trên trình duyệt: .doc/.xls cũ trả bản .docx/.xlsx đã chuyển bằng
+    LibreOffice (giữ đúng định dạng gốc để render như .docx); định dạng khác trả tệp gốc."""
+    from ingestion.convert_legacy import ConvertLegacyError
+
+    try:
+        path = ingestion_jobs.get_preview_path(file_stem)
+    except ConvertLegacyError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
+    if path is None:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tệp gốc.")
+    media_type = _FILE_MEDIA_TYPES.get(path.suffix.lower(), "application/octet-stream")
+    return FileResponse(path, media_type=media_type, content_disposition_type="inline")
 
 
 @app.delete("/api/documents/{file_stem}", status_code=204)

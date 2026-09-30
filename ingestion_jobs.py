@@ -140,6 +140,21 @@ def get_source_path(file_stem: str) -> Path | None:
     return _find_source(file_stem)
 
 
+def get_preview_path(file_stem: str) -> Path | None:
+    """Bản xem được trên trình duyệt của tệp gốc: .doc/.xls cũ trả bản .docx/.xlsx
+    đã chuyển bằng LibreOffice (cache ``build/converted``, chuyển nếu chưa có); định
+    dạng khác trả chính tệp gốc. ``None`` nếu không có tệp gốc.
+
+    Ném ``convert_legacy.ConvertLegacyError`` khi không chuyển đổi được."""
+    from ingestion import convert_legacy
+
+    path = _find_source(file_stem)
+    if path is None or path.suffix.lower() not in convert_legacy.TARGET_EXT:
+        return path
+    cached = convert_legacy.cache_path(path)
+    return cached if cached.exists() else convert_legacy.convert_legacy(path)
+
+
 def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> str:
     """Validate + save an uploaded .docx/.doc/.pdf/.xlsx/.xls into TC_DL/. Returns its file_stem."""
     ext = Path(filename).suffix.lower()

@@ -48,9 +48,15 @@ def _source(
     field: str | None = None,
     quote: str | None = None,
     value_text: str | None = None,
+    row_quote: str | None = None,
+    row_part: int | None = None,
     extra: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
-    """Dựng nguồn nguyên văn kèm vị trí tô sáng, từ một extraction ĐÃ DUYỆT."""
+    """Dựng nguồn nguyên văn kèm vị trí tô sáng, từ một extraction ĐÃ DUYỆT.
+
+    ``row_quote`` là cả dòng số liệu chứa ô (ô số đo): dùng để định vị dòng trong tệp
+    Excel, vì riêng chuỗi giá trị ("2,3") có thể trùng nhiều ô khác; ``row_part`` là
+    vị trí ô nguồn trong dòng đó (``cell_part``)."""
     row = _extraction(session, extraction_id)
     source = build_source_view(
         file_stem=row["file_stem"],
@@ -59,6 +65,9 @@ def _source(
         char_start=row["char_start"],
         char_end=row["char_end"],
         chunk_id=row["chunk_id"],
+        value=value_text,
+        sheet_quote=row_quote,
+        sheet_value_part=row_part,
     )
     payload: dict[str, Any] = {
         "kind": kind,
@@ -166,6 +175,23 @@ def fact_provenance(session: Session, fact_id: int) -> dict[str, Any]:
     )
 
 
+def cell_part(cells: list[dict[str, Any]] | None, field: str | None) -> int | None:
+    """Vị trí (bỏ ô rỗng, như trích dẫn dòng) của ô sinh ra ``field`` trong ``cells``.
+
+    Cùng quy tắc của bộ đọc (``records.columns``): ô CÓ CHỮ đầu tiên thuộc cột mang vai
+    trò ``field`` là nguồn của trường. Không xác định được thì ``None``.
+    """
+    if not cells or not field:
+        return None
+    from records.columns import role_for_column
+
+    filled = [cell for cell in cells if str(cell.get("text") or "").strip()]
+    for index, cell in enumerate(filled):
+        if role_for_column(str(cell.get("column") or "")) == field:
+            return index
+    return None
+
+
 def measurement_provenance(
     session: Session, measurement_id: int, field: str | None = None
 ) -> dict[str, Any]:
@@ -192,6 +218,8 @@ def measurement_provenance(
         field=field,
         quote=cell,
         value_text=cell,
+        row_quote=point["quote"],
+        row_part=cell_part(point.get("cells"), field),
         extra={
             "measurement_id": measurement_id,
             "record_id": point["record_id"],
