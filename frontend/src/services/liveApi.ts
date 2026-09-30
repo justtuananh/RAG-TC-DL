@@ -117,6 +117,11 @@ export function documentFileUrl(fileStem: string): string {
   return `/api/documents/${encodeURIComponent(fileStem)}/file`;
 }
 
+/** Bản xem trên trình duyệt: .doc/.xls cũ được backend trả dưới dạng .docx/.xlsx đã chuyển. */
+export function documentPreviewUrl(fileStem: string): string {
+  return `/api/documents/${encodeURIComponent(fileStem)}/preview`;
+}
+
 export async function deleteDocument(fileStem: string): Promise<void> {
   const res = await authFetch(`/api/documents/${encodeURIComponent(fileStem)}`, { method: "DELETE" });
   if (!res.ok) {

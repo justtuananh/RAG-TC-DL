@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import type { DataCellRef, ProvenanceSource } from "../../types";
 import { COLOR } from "../../theme";
 import { IcAlert, IcExternal, IcFile, IcLink, IcSearch, IcX } from "../common/icons";
-import QuoteHighlight from "../knowledge/QuoteHighlight";
+import SourceExcerpt from "../common/SourceExcerpt";
 import { fetchProvenance } from "../../services/dataApi";
 
 // Ngăn kéo xuất xứ: mở đúng tài liệu/mục/chunk/trích dẫn sinh ra một ô số (P1).
-// Văn bản nguồn render bằng text node qua QuoteHighlight — không nhúng HTML.
+// Nguyên văn render đúng định dạng gốc qua SourceExcerpt (Markdown không HTML thô / lưới ô Excel).
 
 const FIELD_LABEL: Record<string, string> = {
   nominal: "Giá trị danh nghĩa",
@@ -155,36 +155,16 @@ export default function ProvenanceDrawer({
                 <IcSearch size={14} style={{ color: COLOR.accent }} />
                 <span style={{ fontWeight: 700, fontSize: "13px", color: COLOR.textPrimary }}>Đoạn nguyên văn</span>
               </div>
-              <div
-                style={{
-                  background: COLOR.accentSoft,
-                  border: `2px solid ${COLOR.accent}`,
-                  borderRadius: 8,
-                  padding: "14px 16px",
-                  fontFamily: "'Lora', Georgia, serif",
-                  fontSize: "13px",
-                  lineHeight: 1.65,
-                  color: COLOR.textPrimary,
-                  whiteSpace: "pre-wrap",
-                }}
-              >
-                {source.section_text ? (
-                  <QuoteHighlight
-                    text={source.section_text}
-                    quote={source.quote}
-                    start={source.quote_start}
-                    end={source.quote_end}
-                  />
-                ) : (
-                  source.quote ?? "—"
-                )}
-              </div>
-
-              {source.point_quote && source.point_quote !== source.quote && (
-                <div style={{ fontSize: "12px", color: COLOR.textSecondary }}>
-                  Dòng số liệu nguồn: <span style={{ color: COLOR.textPrimary }}>{source.point_quote}</span>
-                </div>
-              )}
+              {/* Mục văn bản: tô đúng trích dẫn; lưới ô / bảng trích dẫn: dựng cả dòng số liệu, tô ô giá trị. */}
+              <SourceExcerpt
+                fileStem={documentId}
+                sectionText={source.section_text}
+                quote={source.section_text ? source.quote : (source.point_quote ?? source.quote)}
+                quoteStart={source.quote_start}
+                quoteEnd={source.quote_end}
+                location={source.source_location}
+                value={source.value_text}
+              />
               <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "11.5px", color: COLOR.textMuted }}>
                 <IcFile size={12} /> Mọi ô số đều truy ngược được về nguyên văn (nguyên tắc P1).
               </div>

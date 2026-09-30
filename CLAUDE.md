@@ -119,6 +119,15 @@ answer + citations  ──►  UI (one of):
   Conversation history persists in `localStorage` (`src/store/persistence.ts`) and prior turns
   are replayed as short-term LLM memory (`toHistory` in `src/store/useAppStore.ts`).
   `src/services/mockEngine.ts` now retains only demo data + timing for the Documents/Guide tabs.
+  Document viewer (`components/docs/DocContentPane.tsx`) shows the ORIGINAL file in its own
+  scroll area: `.docx`/`.doc` via `docx-preview`, `.xlsx`/`.xls` via an Excel-like renderer in
+  `components/docs/xlsx/` (ExcelJS, lazy-loaded; merges, borders, fonts, VN number formats,
+  never silently truncates a number). Legacy `.doc`/`.xls` come from
+  `GET /api/documents/{id}/preview`, which serves the LibreOffice-converted copy
+  (`ingestion_jobs.get_preview_path`). The "Đoạn nguyên văn" (provenance drawer + review
+  queue) renders through `components/common/SourceExcerpt.tsx`: Markdown section with the
+  quote highlighted by source offset (no `rehype-raw`), or, for Excel records, the original
+  cell grid around the row located by `query/sheet_locate.py` (`source_location`).
   `frontend-legacy/` is the earlier plain-JS React prototype, kept for reference. Quick local
   run of `api_server.py` + Vite together: `./run.sh`. See `frontend/README.md`.
 - `latex.py` — shared `fix_latex` normalizer (strip backticks around `$…$`; `\[…\]`/`\(…\)` →

@@ -32,7 +32,7 @@ export default function DocViewerModal({ viewingDoc, onClose }: Props) {
         style={{
           width: "100%",
           maxWidth: 1080,
-          maxHeight: "90vh",
+          height: "90vh", // cao cố định: khung tài liệu (Word/Excel) cuộn bên trong
           background: COLOR.surface,
           borderRadius: 16,
           boxShadow: "0 24px 60px -12px rgba(0,0,0,.5)",

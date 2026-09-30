@@ -15,7 +15,11 @@ export const TIMING = {
 export const ZOOM = 0.88;
 
 export function extColor(ext: string): string {
-  return ext === "PDF" ? "#DC2626" : ext === "DOCX" ? "#2563EB" : ext === "XLSX" ? "#15803D" : "#64748B";
+  // .doc/.xls cũ cùng màu với bản mới của Word/Excel: người dùng nhận ra loại tệp theo ứng dụng.
+  if (ext === "PDF") return "#DC2626";
+  if (ext === "DOCX" || ext === "DOC") return "#2563EB";
+  if (ext === "XLSX" || ext === "XLS") return "#15803D";
+  return "#64748B";
 }
 
 /** Nội dung tài liệu chung (khi xem tệp không nằm trong 3 nguồn mẫu) */

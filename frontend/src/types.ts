@@ -127,7 +127,7 @@ export interface Conversation {
   activeCite: string;
 }
 
-export type DocExt = "PDF" | "DOCX" | "XLSX";
+export type DocExt = "PDF" | "DOCX" | "DOC" | "XLSX" | "XLS"; // khớp `ext` backend trả (.doc/.xls cũ vẫn là tài liệu nguồn)
 export type DocStatus = "ready" | "processing" | "pending" | "error";
 
 export interface DocItem {
@@ -165,7 +165,8 @@ export interface ViewingDoc {
   pages: number | null;
   blocks: DocBlock[];
   markdown?: string; // chế độ live: hiển thị parent_text markdown thay cho blocks
-  fileUrl?: string; // tệp gốc (.docx/.pdf) thô — ưu tiên hiển thị thay cho markdown khi có
+  fileUrl?: string; // tệp gốc thô (tải xuống, PDF) - ưu tiên hiển thị thay cho markdown khi có
+  previewUrl?: string; // bản xem trên trình duyệt: .doc/.xls cũ đã chuyển sang .docx/.xlsx
   // ── metadata thật cho panel "Thông tin tệp" — chỉ điền khi có dữ liệu ──
   ext?: DocExt;
   size?: string;
@@ -256,6 +257,15 @@ export interface CatalogSampleRow {
   recognition?: string | null;
 }
 
+/** Toạ độ ô nguồn trong tệp Excel (0-based, đúng chỉ số Excel) - backend `query/sheet_locate.py`. */
+export interface SourceLocation {
+  sheet: string;
+  sheet_index: number;
+  row: number;
+  cols: number[];
+  highlight_cols: number[];
+}
+
 /** Nguồn nguyên văn để tô sáng an toàn (văn bản thuần, không nhúng HTML). */
 export interface ExtractionSource {
   section_path: string | null;
@@ -266,6 +276,8 @@ export interface ExtractionSource {
   section_text: string | null;
   quote_start: number | null;
   quote_end: number | null;
+  /** nguồn là tệp Excel (không có mục văn bản): dòng/ô sinh ra trích dẫn */
+  source_location?: SourceLocation | null;
 }
 
 export interface ExtractionItem {
@@ -421,6 +433,7 @@ export interface ProvenanceSource {
   section_text: string | null;
   quote_start: number | null;
   quote_end: number | null;
+  source_location?: SourceLocation | null;
   record_id?: number;
   measurement_id?: number;
   fact_id?: number;

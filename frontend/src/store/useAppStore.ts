@@ -5,6 +5,7 @@ import { TIMING, ZOOM } from "../services/mockEngine";
 import {
   deleteDocument,
   documentFileUrl,
+  documentPreviewUrl,
   fetchDocumentMarkdown,
   fetchDocuments,
   fetchExamples,
@@ -524,8 +525,8 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         showToast("Tài liệu đang được xử lý — vui lòng đợi");
         return;
       }
-      // Hiện tệp gốc (.docx/.pdf) thô ngay; markdown chỉ tải nền làm phương án dự phòng
-      // (ext không phải PDF/DOCX, hoặc tệp gốc không mở được trong trình duyệt).
+      // Hiện tệp gốc ngay (.docx/.doc qua docx-preview, .xlsx/.xls qua trình xem Excel, .pdf);
+      // markdown chỉ tải nền làm phương án dự phòng (định dạng khác hoặc tệp gốc không mở được).
       set({
         viewingDoc: {
           name: d.name,
@@ -533,6 +534,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
           pages: null,
           blocks: [],
           fileUrl: documentFileUrl(d.id),
+          previewUrl: documentPreviewUrl(d.id),
           ext: d.ext,
           size: d.size,
           date: d.date,
@@ -552,7 +554,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       // Hiện tệp gốc (.docx/.pdf) thô — không chỉ đoạn parent_text của 1 trích dẫn;
       // markdown (parent_text) chỉ dùng khi chưa biết ext hoặc tệp gốc không mở được.
       set({
-        viewingDoc: { name: s.file_stem, code: s.file_stem, pages: null, blocks: [], markdown: s.parent_text, fileUrl: documentFileUrl(s.file_stem), ...meta },
+        viewingDoc: { name: s.file_stem, code: s.file_stem, pages: null, blocks: [], markdown: s.parent_text, fileUrl: documentFileUrl(s.file_stem), previewUrl: documentPreviewUrl(s.file_stem), ...meta },
       });
       fetchDocumentMarkdown(s.file_stem)
         .then((markdown) => set((st) => (st.viewingDoc ? { viewingDoc: { ...st.viewingDoc, markdown } } : {})))

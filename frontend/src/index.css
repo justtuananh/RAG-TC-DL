@@ -192,6 +192,36 @@
   font-size: 14px;
 }
 
+/* ── Trình xem Word gốc (docx-preview): nền bàn làm việc theo token, trang giấy nổi nhẹ ── */
+.docx-host .docx-wrapper {
+  background: transparent;
+  padding: 24px 24px 0;
+  /* trang rộng hơn khung: không đẩy mép trái ra ngoài vùng cuộn được */
+  align-items: safe center;
+}
+.docx-host .docx-wrapper > section.docx {
+  box-shadow:
+    0 0 0 1px #DEE3EA,
+    0 8px 24px -12px rgba(16, 24, 40, 0.28);
+  margin-bottom: 24px;
+}
+
+/* ── Đoạn nguyên văn: trích dẫn được tô sáng trong mục nguồn ── */
+.md-source {
+  font-size: 13px;
+}
+mark.src-hl {
+  background: #FFF3C4;
+  color: inherit;
+  border-bottom: 2px solid #F5CB5C;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+mark.src-hl .katex-display {
+  background: #FFF3C4;
+  border-color: #F5CB5C;
+}
+
 /* ── Responsive layout (mobile) ── */
 @media (max-width: 768px) {
   .layout-main {

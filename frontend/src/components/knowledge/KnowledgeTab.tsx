@@ -14,7 +14,8 @@ import {
   IcShield,
   IcX,
 } from "../common/icons";
-import QuoteHighlight from "./QuoteHighlight";
+import SourceExcerpt from "../common/SourceExcerpt";
+import { quotePreview } from "../common/quoteRows";
 import { recognitionLabel } from "../data/catalogFormat";
 import {
   approveExtraction,
@@ -569,51 +570,15 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                   <span style={{ fontWeight: 700, fontSize: "13.5px", color: COLOR.textPrimary }}>Nguyên văn mục</span>
                   <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>{detail.source?.section_path ?? detail.section_path ?? "—"}</span>
                 </div>
-                {detail.source?.section_text ? (
-                  <div
-                    style={{
-                      background: COLOR.accentSoft,
-                      border: `2px solid ${COLOR.accent}`,
-                      borderRadius: 8,
-                      padding: "14px 16px",
-                      position: "relative",
-                      maxHeight: 320,
-                      overflowY: "auto",
-                      fontFamily: "'Lora', Georgia, serif",
-                      fontSize: "13.5px",
-                      lineHeight: 1.65,
-                      color: COLOR.textPrimary,
-                    }}
-                  >
-                    <span
-                      style={{
-                        position: "absolute",
-                        top: -9,
-                        right: 12,
-                        background: COLOR.accent,
-                        color: COLOR.textOnDark,
-                        fontFamily: "'Be Vietnam Pro',sans-serif",
-                        fontSize: "9.5px",
-                        fontWeight: 700,
-                        letterSpacing: ".03em",
-                        padding: "2px 8px",
-                        borderRadius: 9999,
-                      }}
-                    >
-                      Đoạn trích nguồn
-                    </span>
-                    <QuoteHighlight
-                      text={detail.source.section_text}
-                      quote={detail.source.quote}
-                      start={detail.source.quote_start}
-                      end={detail.source.quote_end}
-                    />
-                  </div>
-                ) : (
-                  <div style={{ fontSize: "12.5px", color: COLOR.textSecondary }}>
-                    Chưa dựng được nguyên văn mục. Đoạn trích đã trích: “{detail.quote}”
-                  </div>
-                )}
+                <SourceExcerpt
+                  fileStem={detail.file_stem}
+                  sectionText={detail.source?.section_text}
+                  quote={detail.source?.quote ?? detail.quote}
+                  quoteStart={detail.source?.quote_start}
+                  quoteEnd={detail.source?.quote_end}
+                  location={detail.source?.source_location}
+                  maxHeight={320}
+                />
               </div>
 
               {/* lịch sử duyệt */}
@@ -813,7 +778,7 @@ function QueueRow({ item, active, onClick }: { item: ExtractionItem; active: boo
         </span>
       </div>
       <div style={{ fontSize: "11.5px", color: COLOR.textSecondary, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-        {item.quote}
+        {quotePreview(item.quote)}
       </div>
     </button>
   );

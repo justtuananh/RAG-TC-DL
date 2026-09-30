@@ -73,7 +73,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
   return (
     <main
       aria-label="Tài liệu"
-      style={{ flex: 1, minHeight: 0, overflowY: "auto", background: COLOR.bg }}
+      style={{ flex: 1, minHeight: 0, overflowY: state.viewingDoc ? "hidden" : "auto", background: COLOR.bg }}
       onDragOver={(e) => {
         e.preventDefault();
         setDragActive(true);
@@ -85,7 +85,15 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
         handleFiles(e.dataTransfer.files);
       }}
     >
-      <div style={{ maxWidth: 1800, margin: "0 auto", padding: "20px 24px 28px" }}>
+      {/* Khi xem tài liệu: khung cao đúng màn hình, chỉ vùng tài liệu bên trong cuộn. */}
+      <div
+        style={{
+          maxWidth: 1800,
+          margin: "0 auto",
+          padding: "20px 24px 28px",
+          ...(state.viewingDoc ? { height: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column" } : null),
+        }}
+      >
         <input
           ref={fileInputRef}
           type="file"

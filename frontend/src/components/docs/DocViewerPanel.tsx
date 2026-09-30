@@ -4,12 +4,23 @@ import DocContentPane from "./DocContentPane";
 import DocInfoPanel from "./DocInfoPanel";
 import { IcArrowRight, IcFile, IcFolder } from "../common/icons";
 
-/** Trang xem tài liệu — hiển thị NGAY TRONG khung Tài liệu (không phải hộp thoại nổi), giống ảnh mẫu. */
+/** Trang xem tài liệu - hiển thị NGAY TRONG khung Tài liệu (không phải hộp thoại nổi), cao đúng khung nhìn. */
 export default function DocViewerPanel({ viewingDoc, onBack }: { viewingDoc: ViewingDoc; onBack: () => void }) {
   return (
-    <div style={{ background: COLOR.surface, border: `1px solid ${COLOR.border}`, borderRadius: 14, overflow: "hidden" }}>
+    <div
+      style={{
+        flex: 1,
+        minHeight: 0,
+        display: "flex",
+        flexDirection: "column",
+        background: COLOR.surface,
+        border: `1px solid ${COLOR.border}`,
+        borderRadius: 14,
+        overflow: "hidden",
+      }}
+    >
       {/* header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "15px 18px", borderBottom: `1px solid ${COLOR.border}` }}>
+      <div style={{ flexShrink: 0, display: "flex", alignItems: "center", gap: 12, padding: "15px 18px", borderBottom: `1px solid ${COLOR.border}` }}>
         <button
           onClick={onBack}
           title="Quay lại danh sách tài liệu"
@@ -48,8 +59,8 @@ export default function DocViewerPanel({ viewingDoc, onBack }: { viewingDoc: Vie
         </div>
       </div>
 
-      {/* body */}
-      <div style={{ display: "flex", minHeight: "calc(100vh - 230px)" }}>
+      {/* body - khung tài liệu tự cuộn (thanh cuộn riêng), đầu trang + panel thông tin đứng yên */}
+      <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
         <DocContentPane viewingDoc={viewingDoc} />
         <DocInfoPanel viewingDoc={viewingDoc} />
       </div>
