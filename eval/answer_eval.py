@@ -22,6 +22,7 @@ import sys
 import time
 from collections import defaultdict
 from pathlib import Path
+from urllib.parse import urlsplit
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -42,7 +43,9 @@ def _services_up() -> bool:
 
 
 def _available_models() -> set[str]:
-    base = generation.OLLAMA_URL.split("/v1/")[0]
+    # Gốc server Ollama, dù OLLAMA_URL dạng OpenAI-compat (/v1/...) hay native (/api/chat).
+    parts = urlsplit(generation.OLLAMA_URL)
+    base = f"{parts.scheme}://{parts.netloc}"
     try:
         resp = requests.get(base + "/api/tags", timeout=10)
         resp.raise_for_status()
