@@ -28,13 +28,13 @@
   height: 9px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #DEE3EA;
+  background: #dee3ea;
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7C8896;
+  background: #7c8896;
   background-clip: padding-box;
 }
 
@@ -64,6 +64,14 @@
   margin: 7px 0;
   padding-left: 20px;
 }
+/* Tailwind preflight đặt list-style: none → không trả lại thì danh sách mất dấu
+   đầu dòng và các bước đánh số mất số thứ tự. */
+.md-answer ul {
+  list-style-type: disc;
+}
+.md-answer ol {
+  list-style-type: decimal;
+}
 .md-answer li {
   margin: 3px 0;
 }
@@ -72,15 +80,15 @@
   color: #101828;
 }
 .md-answer code {
-  background: #E9EFFF;
-  color: #173CAE;
+  background: #e9efff;
+  color: #173cae;
   padding: 1px 5px;
   border-radius: 6px;
   font-size: 0.92em;
 }
 .md-answer .katex-display {
   background: #fff;
-  border: 1px solid #DEE3EA;
+  border: 1px solid #dee3ea;
   border-radius: 8px;
   padding: 11px 15px;
   margin: 9px 0;
@@ -104,14 +112,14 @@
 .md-answer td,
 .md-doc th,
 .md-doc td {
-  border: 1px solid #DEE3EA;
+  border: 1px solid #dee3ea;
   padding: 7px 11px;
   text-align: left;
   vertical-align: top;
 }
 .md-answer th,
 .md-doc th {
-  background: #E8ECF2;
+  background: #e8ecf2;
   font-weight: 700;
   color: #475467;
   white-space: nowrap;
@@ -122,7 +130,7 @@
 }
 .md-answer tbody tr:nth-child(even),
 .md-doc tbody tr:nth-child(even) {
-  background: #F8FAFC;
+  background: #f8fafc;
 }
 /* Công thức trong ô bảng — không tách nền/viền như $$display$$ */
 .md-answer td .katex-display,
@@ -144,9 +152,9 @@
   padding: 0 5px;
   margin: 0 1px;
   vertical-align: -3px;
-  background: #E9EFFF;
-  border: 1px solid #C9D8FF;
-  color: #173CAE;
+  background: #e9efff;
+  border: 1px solid #c9d8ff;
+  color: #173cae;
   border-radius: 6px;
   font-size: 11.5px;
   font-weight: 700;
@@ -154,9 +162,9 @@
   cursor: pointer;
 }
 .cite-chip:hover {
-  background: #2454E0;
+  background: #2454e0;
   color: #fff;
-  border-color: #2454E0;
+  border-color: #2454e0;
 }
 
 /* ── Markdown "trang tài liệu" (serif Lora) ── */
@@ -174,8 +182,8 @@
   color: #101828;
 }
 .md-doc .katex-display {
-  background: #F1F4F9;
-  border: 1px solid #DEE3EA;
+  background: #f1f4f9;
+  border: 1px solid #dee3ea;
   border-radius: 8px;
   padding: 11px 15px;
   margin: 9px 0;
@@ -201,7 +209,7 @@
 }
 .docx-host .docx-wrapper > section.docx {
   box-shadow:
-    0 0 0 1px #DEE3EA,
+    0 0 0 1px #dee3ea,
     0 8px 24px -12px rgba(16, 24, 40, 0.28);
   margin-bottom: 24px;
 }
@@ -211,15 +219,15 @@
   font-size: 13px;
 }
 mark.src-hl {
-  background: #FFF3C4;
+  background: #fff3c4;
   color: inherit;
-  border-bottom: 2px solid #F5CB5C;
+  border-bottom: 2px solid #f5cb5c;
   border-radius: 3px;
   padding: 0 2px;
 }
 mark.src-hl .katex-display {
-  background: #FFF3C4;
-  border-color: #F5CB5C;
+  background: #fff3c4;
+  border-color: #f5cb5c;
 }
 
 /* ── Responsive layout (mobile) ── */
@@ -235,7 +243,7 @@ mark.src-hl .katex-display {
     height: 50vh;
     min-height: 260px;
     border-left: none !important;
-    border-top: 1px solid #DEE3EA;
+    border-top: 1px solid #dee3ea;
   }
   .layout-resize-handle {
     display: none !important;
