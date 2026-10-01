@@ -320,7 +320,8 @@ def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[s
         yield _sse({"type": "status", "text": "⏳ Đang tra cứu sổ cái hồ sơ đã duyệt…"})
         payload = query_router.payload_to_dict(data_payload) if data_payload else None
         if data_payload is not None and not data_payload.empty:
-            answer = "Kết quả tra cứu từ sổ cái hồ sơ đã duyệt:"
+            # Cực trị: câu trả lời tất định từ nguyên văn ô của biên bản thắng.
+            answer = data_payload.answer or "Kết quả tra cứu từ sổ cái hồ sơ đã duyệt:"
         else:
             answer = "Không tìm thấy hồ sơ đã duyệt phù hợp trong sổ cái."
         yield _sse({"type": "data", "data": payload})

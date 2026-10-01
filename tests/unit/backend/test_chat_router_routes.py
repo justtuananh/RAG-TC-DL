@@ -15,6 +15,7 @@ from fastapi.testclient import TestClient
 import api_server
 from db import get_db
 from query import intents, router
+from query.table_model import LEDGER_NOTE, Cell, Column, DataTable, make_payload
 
 
 @pytest.fixture
@@ -141,6 +142,48 @@ def test_data_branch_returns_traceable_table(client, monkeypatch):
     # Câu trả lời nhánh số liệu KHÔNG nhét số vào văn xuôi.
     assert not any(ch.isdigit() for ch in done["answer"])
     assert payload["citations"]
+
+
+def test_data_branch_answers_an_extreme_with_the_resolver_sentence(client, monkeypatch):
+    sentence = "Biên bản 020/2026 của áp kế píttông tiêu chuẩn: trung bình 154,6 s."
+    table = DataTable(
+        title="Bảng A.2 – Thời gian quay tự do: nhỏ nhất",
+        columns=[Column("cert_no", "Số biên bản")],
+        rows=[{"cert_no": Cell(text="020/2026")}],
+        total=1,
+    )
+    monkeypatch.setattr(
+        router,
+        "plan_route",
+        lambda *a, **k: _decision(
+            {
+                "branch": "data",
+                "intent": "records_summary",
+                "params": {"measure": "min", "field": "A.2"},
+                "confidence": 0.95,
+            }
+        ),
+    )
+    monkeypatch.setattr(
+        router,
+        "build_data_payload",
+        lambda *a, **k: make_payload(
+            intent="records_summary",
+            title="Tổng hợp sổ cái",
+            note=LEDGER_NOTE,
+            tables=[table],
+            citations=[],
+            answer=sentence,
+        ),
+    )
+    response = client.post(
+        "/api/chat/stream",
+        json={"message": "Biên bản nào có thời gian quay tự do trung bình thấp nhất"},
+    )
+    done = _events(response)[-1]
+    assert done["branch"] == "data"
+    assert done["answer"] == sentence
+    assert [t["title"] for t in done["data"]["tables"]] == [table.title]
 
 
 def test_mixed_branch_keeps_both_citation_blocks(client, monkeypatch):

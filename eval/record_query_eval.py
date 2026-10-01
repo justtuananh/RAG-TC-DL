@@ -3,8 +3,9 @@
 Mỗi câu trong ``eval/record_query_set.jsonl`` đi ĐÚNG đường của ``/api/chat/stream``:
 bộ phân loại Ollama → ``decide`` → ``build_data_payload`` trên PostgreSQL. Một câu
 đạt khi intent đúng VÀ mọi giá trị trong ``must`` (nguyên văn biên bản, so sau khi
-bỏ khoảng trắng) có mặt trong bảng trả về. ``must_not`` là giá trị KHÔNG được xuất
-hiện (câu lọc theo người / đơn vị mà trả cả sổ cái thì trượt, dù đủ ``must``).
+bỏ khoảng trắng) có mặt trong câu trả lời hoặc bảng trả về. ``must_not`` là giá trị
+(hay tiêu đề bảng) KHÔNG được xuất hiện (câu lọc theo người / đơn vị mà trả cả sổ cái
+thì trượt, dù đủ ``must``; câu cực trị kèm cả danh sách sổ cái cũng trượt).
 ``not_intents`` là intent câu hỏi KHÔNG được rơi vào (câu hỏi quy định không bị kéo
 sang tra biên bản). ``intents`` (tuỳ chọn) liệt kê mọi intent trả lời đúng câu hỏi khi
 có hơn một cách.
@@ -41,9 +42,10 @@ def normalize(value: str) -> str:
 
 
 def _payload_text(payload) -> str:
-    return " ".join(
-        cell.text for table in payload.tables for row in table.rows for cell in row.values()
-    )
+    """Câu trả lời + tiêu đề và ô của mọi bảng: ``must_not`` bắt được cả bảng thừa."""
+    cells = [cell.text for table in payload.tables for row in table.rows for cell in row.values()]
+    titles = [table.title for table in payload.tables]
+    return " ".join([payload.answer or "", *titles, *cells])
 
 
 def run_case(case: dict, classifier) -> dict:

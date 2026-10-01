@@ -102,6 +102,9 @@ answer + citations  ──►  UI (one of):
   con số kèm tham chiếu xuất xứ (P1) và trích dẫn sổ cái tách bạch với nguồn QTKĐ. Tích hợp ở
   `/api/chat/stream` (SSE event `data`, `done.branch`/`done.data`); câu trả lời nhánh số liệu
   không nhét số vào văn xuôi — frontend render bảng (`components/chat/DataResultTable.tsx`).
+  Ngoại lệ duy nhất: câu cực trị ("biên bản nào ... thấp nhất") trả MỘT câu tất định dựng từ
+  nguyên văn ô của biên bản thắng (`query/record_answer.py`, `DataPayload.answer`) + bảng chỉ
+  dòng thắng (đồng hạng thì đủ), không kèm danh sách cả sổ cái.
 - `query/record_*.py` — **tra cứu biên bản có cấu trúc** (Pha R). Hai intent `record_lookup`
   (một biên bản theo số hiệu / số biên bản / ngày: trường được hỏi, bảng kết quả, căn cứ kết
   luận không đạt) và `records_summary` (đếm / liệt kê / cực trị trên sổ cái, lọc theo người,

@@ -61,6 +61,8 @@ class DataPayload:
     tables: list[DataTable] = field(default_factory=list)
     citations: list[dict[str, Any]] = field(default_factory=list)
     empty: bool = False
+    # Câu trả lời tất định dựng từ nguyên văn ô (cực trị); None → câu dẫn mặc định.
+    answer: str | None = None
 
 
 # ── Định dạng hiển thị ────────────────────────────────────────────────────────
@@ -250,6 +252,7 @@ def make_payload(
     tables: list[DataTable],
     citations: list[dict[str, Any]],
     total: int | None = None,
+    answer: str | None = None,
 ) -> DataPayload:
     rows = sum(len(table.rows) for table in tables)
     empty = rows == 0
@@ -263,6 +266,7 @@ def make_payload(
         tables=tables,
         citations=citations,
         empty=empty,
+        answer=answer,
     )
 
 

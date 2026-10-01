@@ -20,6 +20,7 @@ from typing import Any
 from sqlalchemy import bindparam, text
 from sqlalchemy.orm import Session
 
+from query.record_answer import RankGroup, extreme_answer, field_sentence, point_sentence
 from query.record_fields import (
     IDENTITY_KEYS,
     VERDICT_KEY,
@@ -45,7 +46,6 @@ from query.table_model import (
 
 MAX_CARDS = 3
 MAX_LIST_ROWS = 50
-RANK_ROWS = 5
 _NOMINAL_TOLERANCE = 1e-9
 _MIN_REASON_OVERLAP = 3
 
@@ -624,7 +624,7 @@ def _rank_candidates(
 
 
 def _rank_row(
-    rank: int, record: dict, row: dict, is_point: bool, related: list[dict | None]
+    record: dict, row: dict, is_point: bool, related: list[dict | None]
 ) -> dict[str, Cell]:
     if is_point:
         value = _point_cell(row, row.get("measured_text"))
@@ -633,11 +633,21 @@ def _rank_row(
     else:
         value = _field_cell(record, row)
         detail = Cell(text=row.get("label") or "—")
-    cells = {"rank": Cell(text=str(rank)), **_identity_cells(record), "value": value}
+    cells = {**_identity_cells(record), "value": value}
     cells["detail"] = detail
     for index, related_row in enumerate(related):
         cells[f"related{index}"] = _field_cell(record, related_row)
     return cells
+
+
+def _winners(
+    candidates: list[tuple[float, dict, bool]], measure: str
+) -> list[tuple[float, dict, bool]]:
+    """Mọi dòng bằng giá trị cực trị (đồng hạng thì nêu đủ, không chọn bừa một dòng)."""
+    ordered = sorted(candidates, key=lambda item: item[0], reverse=measure == "max")
+    best = ordered[0][0]
+    tolerance = _NOMINAL_TOLERANCE * max(1.0, abs(best))
+    return [item for item in ordered if abs(item[0] - best) <= tolerance]
 
 
 def _rank_group(
@@ -647,34 +657,32 @@ def _rank_group(
     params: RecordsSummaryParams,
     catalog: FieldCatalog,
     procedure: str | None,
-) -> DataTable:
-    """Bảng xếp hạng cho các biên bản của MỘT QTKĐ (không so chéo quy trình)."""
+) -> RankGroup:
+    """Dòng thắng cực trị của các biên bản MỘT QTKĐ (không so chéo quy trình)."""
     field = params.field or ""
-    candidates = sorted(candidates, key=lambda item: item[0], reverse=params.measure == "max")
-    top = candidates[:RANK_ROWS]
+    top = _winners(candidates, params.measure)
     procedure_id = top[0][1].get("procedure_id")
-    related_keys = [] if _is_step(field, catalog) else catalog.related(field)
+    is_step = _is_step(field, catalog)
+    related_keys = [] if is_step else catalog.related(field)
     fields = _fields_by_record(session, [row["record_id"] for _, row, _ in top])
-    rows = [
-        _rank_row(
-            rank,
-            by_id[row["record_id"]],
-            row,
-            is_point,
-            [fields.get(row["record_id"], {}).get(key) for key in related_keys],
-        )
-        for rank, (_, row, is_point) in enumerate(top, start=1)
-    ]
-    if _is_step(field, catalog):
-        label = catalog.table_title(field, procedure_id)
-    else:
-        label = catalog.field_label(field)
+    label = catalog.table_title(field, procedure_id) if is_step else catalog.field_label(field)
     order = "nhỏ nhất" if params.measure == "min" else "lớn nhất"
+    rows, sentences = [], []
+    for _, row, is_point in top:
+        record = by_id[row["record_id"]]
+        related = [fields.get(row["record_id"], {}).get(key) for key in related_keys]
+        rows.append(_rank_row(record, row, is_point, related))
+        if is_point:
+            sentences.append(point_sentence(record, row, label))
+        else:
+            labels = [catalog.field_label(key) for key in related_keys]
+            sentences.append(
+                field_sentence(record, row, label, list(zip(labels, related, strict=True)))
+            )
     scope = f" · QTKĐ {procedure}" if procedure else ""
-    return DataTable(
-        title=f"{label}: {order} trước{scope}",
+    table = DataTable(
+        title=f"{label}: {order}{scope}",
         columns=[
-            Column("rank", "Hạng"),
             *_IDENTITY_COLUMNS,
             Column("value", "Giá trị ghi trong biên bản"),
             Column("detail", "Nguyên văn dòng / trường"),
@@ -684,30 +692,54 @@ def _rank_group(
             ),
         ],
         rows=rows,
-        total=len(candidates),
+        total=len(rows),
         note=(
-            "Sắp theo giá trị ghi trong biên bản (quy đổi về cùng đơn vị SI khi khác đơn vị); "
-            "hiển thị nguyên văn, không tính lại. Chỉ so biên bản cùng một QTKĐ."
+            f"Giá trị {order} trong {len(candidates)} giá trị ghi trong biên bản (quy đổi về "
+            "cùng đơn vị SI khi khác đơn vị); hiển thị nguyên văn, không tính lại. "
+            "Chỉ so biên bản cùng một QTKĐ."
         ),
+    )
+    return RankGroup(
+        table=table, procedure=procedure, label=label, order=order, sentences=sentences
     )
 
 
 def _rank_tables(
     session: Session, records: list[dict], params: RecordsSummaryParams, catalog: FieldCatalog
-) -> list[DataTable]:
-    """Một bảng xếp hạng cho mỗi QTKĐ: cùng mã bảng/nhãn ở hai QTKĐ không cùng đại lượng."""
+) -> list[RankGroup]:
+    """Một nhóm cực trị cho mỗi QTKĐ: cùng mã bảng/nhãn ở hai QTKĐ không cùng đại lượng."""
     candidates = _rank_candidates(session, records, params.field or "", catalog)
     by_id = {record["id"]: record for record in records}
     groups: dict[Any, list[tuple[float, dict, bool]]] = {}
     for item in candidates:
         procedure_id = by_id[item[1]["record_id"]].get("procedure_id")
         groups.setdefault(procedure_id, []).append(item)
-    tables = []
+    result = []
     for group in groups.values():
         record = by_id[group[0][1]["record_id"]]
         procedure = record.get("procedure_number") if len(groups) > 1 else None
-        tables.append(_rank_group(session, by_id, group, params, catalog, procedure))
-    return tables
+        result.append(_rank_group(session, by_id, group, params, catalog, procedure))
+    return result
+
+
+def _resolve_extreme(
+    session: Session, records: list[dict], params: RecordsSummaryParams
+) -> DataPayload:
+    """ "Biên bản nào ... thấp nhất": câu trả lời + bảng dòng thắng, không kèm cả sổ cái."""
+    groups = _rank_tables(session, records, params, field_catalog(session))
+    if not groups:
+        return empty_payload(
+            "records_summary", "Tổng hợp sổ cái", "Không có biên bản đã duyệt có giá trị này."
+        )
+    tables = [group.table for group in groups]
+    return make_payload(
+        intent="records_summary",
+        title="Tổng hợp sổ cái",
+        note=LEDGER_NOTE,
+        tables=tables,
+        citations=_citations_for_tables(session, tables),
+        answer=extreme_answer(groups),
+    )
 
 
 def resolve_records_summary(session: Session, params: RecordsSummaryParams) -> DataPayload:
@@ -717,12 +749,10 @@ def resolve_records_summary(session: Session, params: RecordsSummaryParams) -> D
         return empty_payload(
             "records_summary", "Tổng hợp sổ cái", "Không có biên bản đã duyệt khớp bộ lọc."
         )
-    catalog = field_catalog(session)
-    fields = _fields_by_record(session, [record["id"] for record in records])
-    tables: list[DataTable] = []
     if params.measure in ("min", "max"):
-        tables.extend(_rank_tables(session, records, params, catalog))
-    tables.append(_summary_table(records))
+        return _resolve_extreme(session, records, params)
+    fields = _fields_by_record(session, [record["id"] for record in records])
+    tables: list[DataTable] = [_summary_table(records)]
     if params.range_unit:
         tables.append(_device_table(records))
     tables.append(_list_table(records, fields))

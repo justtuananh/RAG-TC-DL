@@ -15,7 +15,15 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from db.models import Base, Document, DocumentType, Extraction, ExtractionStatus, Procedure
+from db.models import (
+    Base,
+    DeviceType,
+    Document,
+    DocumentType,
+    Extraction,
+    ExtractionStatus,
+    Procedure,
+)
 from db.views import create_all_approved_views
 from knowledge import seed_data
 from knowledge.extract import extract_appendix_and_store
@@ -24,6 +32,7 @@ from query.record_fields import detect_targets, field_catalog
 from query.record_intents import RecordLookupParams, RecordsSummaryParams
 from query.record_query import (
     _rank_tables,
+    extreme_answer,
     resolve_record_lookup,
     resolve_records_summary,
     summary_records,
@@ -82,7 +91,11 @@ def db():
     qtkd = _document(QTKD_STEM, DocumentType.QTKD, "a" * 64)
     session.add(qtkd)
     session.commit()
-    procedure = Procedure(number="1.159", year=2021, document_id=QTKD_STEM)
+    # Như sổ cái thật: thiết bị mang loại của QTKĐ (câu trả lời nêu "áp kế píttông...").
+    device_type = session.query(DeviceType).filter_by(name_vi="Áp kế píttông tiêu chuẩn").one()
+    procedure = Procedure(
+        number="1.159", year=2021, document_id=QTKD_STEM, device_type_id=device_type.id
+    )
     session.add(procedure)
     session.commit()
     extract_appendix_and_store(
@@ -469,6 +482,46 @@ def test_minimum_free_rotation_time_is_ranked_verbatim(db):
     assert untraceable_cells(payload) == []
 
 
+def test_extreme_answers_with_the_winning_record_only(db):
+    """Bo_20_cau câu 9: một câu trả lời, không kèm danh sách cả sổ cái."""
+    payload = resolve_records_summary(db, RecordsSummaryParams(measure="min", field="A.2"))
+    assert payload.answer == (
+        "Biên bản 020/2026 của áp kế píttông tiêu chuẩn CPB5800 số hiệu 1A0043219, "
+        "ngày 19/05/2026: trung bình 154,6 s (cùng chiều kim đồng hồ 157,3 s; "
+        "ngược chiều kim đồng hồ 151,9 s), thấp hơn mức cho phép ≥ 180 s nên không đạt."
+    )
+    assert [table.title for table in payload.tables] == [
+        "Bảng A.2 – Thời gian quay tự do: nhỏ nhất"
+    ]
+    assert [row["cert_no"].text for row in payload.tables[0].rows] == ["020/2026"]
+    assert payload.tables[0].total == 1
+    assert untraceable_cells(payload) == []
+
+
+def test_extreme_within_limit_does_not_claim_a_failure(db):
+    payload = resolve_records_summary(db, RecordsSummaryParams(measure="max", field="A.2"))
+    assert payload.answer is not None
+    assert payload.answer.endswith(", trong mức cho phép ≥ 180 s.")
+    assert "không đạt" not in payload.answer
+
+
+def test_extreme_answer_lists_procedures_separately(db):
+    params = RecordsSummaryParams(measure="min", field="A.2")
+    records = summary_records(db, params)
+    # Biên bản 020/2026 thuộc một QTKĐ giả lập khác dùng lại mã bảng A.2.
+    other = [
+        {**record, "procedure_id": 999, "procedure_number": "9.999"}
+        if record["cert_no"] == "020/2026"
+        else record
+        for record in records
+    ]
+    answer = extreme_answer(_rank_tables(db, other, params, field_catalog(db)))
+    lines = answer.splitlines()
+    assert lines[0] == "Mỗi QTKĐ so riêng, không so chéo quy trình:"
+    assert {line.split(":")[0] for line in lines[2:]} == {"- **QTKĐ 1.159**", "- **QTKĐ 9.999**"}
+    assert any(line.startswith("- **QTKĐ 9.999**: Biên bản 020/2026 ") for line in lines)
+
+
 def test_uncertainty_ranking_compares_across_units_and_shows_expanded_uncertainty(db):
     payload = resolve_records_summary(
         db, RecordsSummaryParams(measure="min", field="do_khong_dam_bao_do")
@@ -477,6 +530,8 @@ def test_uncertainty_ranking_compares_across_units_and_shows_expanded_uncertaint
     # 0,025 × 10-3 MPa (25 Pa) < 0,252 × 10-3 bar (25,2 Pa): so sau khi quy đổi SI.
     assert top["serial_no"].text == "1520"
     assert top["related0"].text == "0,050 × 10-3 (MPa) (với k = 2)"
+    assert "số hiệu 1520" in payload.answer
+    assert "0,050 × 10-3 (MPa) (với k = 2)" in payload.answer
 
 
 def test_ranking_never_compares_records_of_two_procedures(db):
@@ -487,10 +542,10 @@ def test_ranking_never_compares_records_of_two_procedures(db):
         {**record, "procedure_id": 999, "procedure_number": "9.999"} if index % 2 else record
         for index, record in enumerate(records)
     ]
-    tables = _rank_tables(db, other, params, field_catalog(db))
-    assert len(tables) == 2
-    assert all("QTKĐ" in table.title for table in tables)
-    for table in tables:
+    groups = _rank_tables(db, other, params, field_catalog(db))
+    assert len(groups) == 2
+    assert all("QTKĐ" in group.table.title for group in groups)
+    for table in (group.table for group in groups):
         certs = {row["cert_no"].text for row in table.rows}
         procedures = {r["procedure_id"] for r in other if r["cert_no"] in certs}
         assert len(procedures) == 1
