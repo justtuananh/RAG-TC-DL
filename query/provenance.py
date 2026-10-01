@@ -8,6 +8,7 @@ Bề mặt tra cứu trả về con số kèm *tham chiếu* (``extraction_id``/
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 from sqlalchemy import text
@@ -175,17 +176,25 @@ def fact_provenance(session: Session, fact_id: int) -> dict[str, Any]:
     )
 
 
-def cell_part(cells: list[dict[str, Any]] | None, field: str | None) -> int | None:
+def cell_part(cells: list[dict[str, Any]] | str | None, field: str | None) -> int | None:
     """Vị trí (bỏ ô rỗng, như trích dẫn dòng) của ô sinh ra ``field`` trong ``cells``.
 
     Cùng quy tắc của bộ đọc (``records.columns``): ô CÓ CHỮ đầu tiên thuộc cột mang vai
-    trò ``field`` là nguồn của trường. Không xác định được thì ``None``.
+    trò ``field`` là nguồn của trường. Không xác định được thì ``None``. ``cells`` đọc
+    qua view là list (Postgres) hoặc chuỗi JSON (SQLite).
     """
-    if not cells or not field:
+    if isinstance(cells, str):
+        try:
+            cells = json.loads(cells)
+        except ValueError:
+            return None
+    if not isinstance(cells, list) or not cells or not field:
         return None
     from records.columns import role_for_column
 
-    filled = [cell for cell in cells if str(cell.get("text") or "").strip()]
+    filled = [
+        cell for cell in cells if isinstance(cell, dict) and str(cell.get("text") or "").strip()
+    ]
     for index, cell in enumerate(filled):
         if role_for_column(str(cell.get("column") or "")) == field:
             return index
