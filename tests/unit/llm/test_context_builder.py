@@ -73,3 +73,42 @@ def test_context_and_citations_share_numbering():
     ctx, cites = generation.build_context_and_citations([_r("x"), _r("y"), _r("z")])
     assert "[1]" in ctx and "[2]" in ctx and "[3]" in ctx
     assert "**[3]**" in cites
+
+
+def test_long_parent_keeps_the_retrieved_child():
+    """Đoạn con được truy hồi nằm cuối mục dài vẫn phải có trong ngữ cảnh.
+
+    QTKĐ 1.071 mục 5.3 dài ~3 500 ký tự; câu "Sai số tương đối của H3000 không được vượt
+    quá ± 0,1 %." ở cuối mục bị cắt mất khi luôn lấy 2 400 ký tự đầu, model từ chối oan.
+    """
+    child = "Sai số tương đối của H3000 không được vượt quá ± 0,1 %."
+    parent = "C" * (generation.MAX_BLOCK_CHARS + 1000) + "\n" + child
+    ctx, _ = generation.build_context_and_citations([_r(child, parent_text=parent)])
+    assert child in ctx
+    block = ctx.split("---\n", 1)[1]
+    assert len(block) <= generation.MAX_BLOCK_CHARS + 3  # + "\n…\n"
+
+
+def test_long_parent_keeps_its_start_when_the_child_is_far_from_it():
+    """Đoạn con là dòng "trong đó" ở cuối mục: công thức ở đầu mục vẫn phải có.
+
+    QTKĐ 1.159 mục 6.3.1: công thức khối lượng quy đổi M ở ký tự 348, đoạn con được truy
+    hồi ("$A_{0s}$ là diện tích hiệu dụng…") ở ký tự 3 449.
+    """
+    formula = "$M = P A_{0} g_{0} / g$"
+    child = "$A_{0s}$ là diện tích hiệu dụng của píttông của áp kế píttông chuẩn, m2;"
+    parent = formula + "E" * (generation.MAX_BLOCK_CHARS + 1000) + child + "F" * 500
+    ctx, _ = generation.build_context_and_citations([_r(child, parent_text=parent)])
+    block = ctx.split("---\n", 1)[1]
+    assert block.startswith(formula)
+    assert child in block
+    assert "\n…\n" in block
+
+
+def test_long_parent_keeps_its_start_when_child_is_near_it():
+    child = "Đoạn đầu mục."
+    parent = child + "D" * (generation.MAX_BLOCK_CHARS + 1000)
+    ctx, _ = generation.build_context_and_citations([_r(child, parent_text=parent)])
+    block = ctx.split("---\n", 1)[1]
+    assert block.startswith(child)
+    assert block.endswith("…")

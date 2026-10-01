@@ -88,6 +88,32 @@ def filter_by_confidence(results: list[dict]) -> list[dict]:
 
 # ── Builder ngữ cảnh + trích dẫn ──────────────────────────────────────────────
 
+def _window(parent: str, child: str, budget: int) -> str:
+    """``budget`` ký tự của mục cha, luôn chứa đoạn con được truy hồi.
+
+    Mặc định lấy đầu mục. Đoạn con nằm ngoài phần đầu (mục dài, fact ở cuối) thì nửa
+    ngân sách giữ đầu mục, nửa còn lại là cửa sổ quanh đoạn con. Chỉ lấy quanh đoạn con
+    là mất công thức ở đầu mục khi đoạn con là dòng "trong đó: … là …" (đo 2026-10-01:
+    QTKĐ 1.159 mục 6.3.1, công thức M ở ký tự 348, đoạn con ở 3 449); chỉ lấy đầu mục là
+    mất fact ở cuối (QTKĐ 1.071 mục 5.3, "± 0,1 %" ở ký tự 3 458 / 3 513).
+    """
+    # Đoạn con thường là nguyên văn một khúc của mục cha; so 80 ký tự đầu chỉ khi không
+    # khớp trọn (phần đuôi khác khoảng trắng).
+    pos = parent.find(child) if child.strip() else -1
+    if pos < 0 and child.strip():
+        pos = parent.find(child[:80])
+    # Đoạn con bắt đầu trong nửa đầu (đoạn con dài) thì phần đầu mục đã chứa nó.
+    if pos < budget // 2 or pos + len(child) <= budget:
+        return parent[:budget] + "…"
+    head = parent[: budget // 2]
+    room = budget - len(head)
+    start = max(len(head), pos - max(0, room - len(child)) // 2)
+    start = min(start, len(parent) - room, pos)
+    end = start + room
+    tail = parent[start:end] + ("…" if end < len(parent) else "")
+    return head + ("\n…\n" if start > len(head) else "") + tail
+
+
 def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
     """Dựng (context_str cho system prompt, citations_md cho UI) từ kết quả retrieve.
 
@@ -114,7 +140,7 @@ def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
         ctx_text = pp["text"] if pp else child_text
         budget = min(MAX_BLOCK_CHARS, per_block + carried)  # không nguồn nào vượt cap
         if len(ctx_text) > budget:
-            ctx_text = ctx_text[:budget] + "…"
+            ctx_text = _window(ctx_text, child_text, budget)
             carried = 0
         else:
             carried = budget - len(ctx_text)
