@@ -114,7 +114,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
 
           <Markdown className="md-answer">{withCiteButtons(md)}</Markdown>
 
-          {/* Khối số liệu sổ cái (Sprint 9) — bảng giữ xuất xứ từng ô; văn xuôi chỉ có câu cực trị tất định */}
+          {/* Khối số liệu sổ cái (Sprint 9) — bảng giữ xuất xứ từng ô; câu trả lời phía trên ghép tất định từ chính các ô này */}
           {!message.streaming && message.data && (
             <div style={{ marginTop: 11 }}>
               <DataResultTable payload={message.data} onOpenProvenance={onOpenProvenance} onOpenDevice={onOpenDevice} />

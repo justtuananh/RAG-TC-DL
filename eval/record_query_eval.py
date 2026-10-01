@@ -3,9 +3,10 @@
 Mỗi câu trong ``eval/record_query_set.jsonl`` đi ĐÚNG đường của ``/api/chat/stream``:
 bộ phân loại Ollama → ``decide`` → ``build_data_payload`` trên PostgreSQL. Một câu
 đạt khi intent đúng VÀ mọi giá trị trong ``must`` (nguyên văn biên bản, so sau khi
-bỏ khoảng trắng) có mặt trong câu trả lời hoặc bảng trả về. ``must_not`` là giá trị
-(hay tiêu đề bảng) KHÔNG được xuất hiện (câu lọc theo người / đơn vị mà trả cả sổ cái
-thì trượt, dù đủ ``must``; câu cực trị kèm cả danh sách sổ cái cũng trượt).
+bỏ khoảng trắng, số khớp trọn) có mặt trong câu trả lời (bộ ``bo20``, đúng tiêu chí
+chấm của ``Bo_20_cau.xlsx``) hoặc trong câu trả lời + bảng (các bộ khác). ``must_not``
+là giá trị (hay tiêu đề bảng) KHÔNG được xuất hiện (câu lọc theo người / đơn vị mà trả
+cả sổ cái thì trượt, dù đủ ``must``; câu cực trị kèm cả danh sách sổ cái cũng trượt).
 ``not_intents`` là intent câu hỏi KHÔNG được rơi vào (câu hỏi quy định không bị kéo
 sang tra biên bản). ``intents`` (tuỳ chọn) liệt kê mọi intent trả lời đúng câu hỏi khi
 có hơn một cách.
@@ -33,12 +34,33 @@ PASS_RATE = 0.9
 _UNIT_FORMS = (("kgf/cm²", "kgf/cm2"), ("kg/cm²", "kgf/cm2"), ("kg/cm2", "kgf/cm2"), ("m²", "m2"))
 
 
-def normalize(value: str) -> str:
-    """So khớp bỏ khoảng trắng / hoa thường; đơn vị viết ² và cm2 coi như nhau."""
+# Bộ chấm theo câu trả lời: "câu trả lời phải chứa hoặc khớp đủ các giá trị này"
+# (Bo_20_cau.xlsx, sheet "Huong dan"); các bộ khác chấm trên câu trả lời + bảng.
+ANSWER_SETS = frozenset({"bo20"})
+
+
+def _fold(value: str) -> str:
     text = unicodedata.normalize("NFC", str(value)).casefold()
     for source, target in _UNIT_FORMS:
         text = text.replace(source, target)
-    return re.sub(r"\s+", "", text)
+    return re.sub(r"\s+", " ", text)
+
+
+def contains(text: str, value: str) -> bool:
+    """``value`` có trong ``text`` như một giá trị trọn, không phải mẩu của số khác.
+
+    Khoảng trắng tùy ý ("1 015,99" ≡ "1015,99"), nhưng số phải khớp trọn: "20" không
+    khớp "020/2026", "12" không khớp "1 200", "0,31" vẫn khớp "lượt 1 0,31".
+    """
+    needle = _fold(value).strip()
+    if not needle:
+        return True
+    pattern = r"\s?".join(re.escape(char) for char in needle if not char.isspace())
+    if needle[0].isdigit():
+        pattern = r"(?<![\d,.])" + pattern
+    if needle[-1].isdigit():
+        pattern += r"(?!\d)(?![,.]\d)"
+    return re.search(pattern, _fold(text)) is not None
 
 
 def _payload_text(payload) -> str:
@@ -55,18 +77,19 @@ def run_case(case: dict, classifier) -> dict:
 
     decision = intents.decide(classifier.classify(case["question"]))
     intent = decision.request.intent if decision.branch != "text" and decision.request else None
-    text = ""
+    text = answer = ""
     if intent is not None:
         session = SessionLocal()
         try:
-            text = _payload_text(router.build_data_payload(session, decision.request))
+            payload = router.build_data_payload(session, decision.request)
+            text, answer = _payload_text(payload), payload.answer or ""
         except Exception as exc:  # noqa: BLE001 - lỗi resolver là một câu trượt, không dừng eval
             text = f"LỖI: {exc}"
         finally:
             session.close()
-    blob = normalize(text)
-    missing = [value for value in case.get("must", []) if normalize(value) not in blob]
-    leaked = [value for value in case.get("must_not", []) if normalize(value) in blob]
+    graded = answer if case.get("set") in ANSWER_SETS else text
+    missing = [value for value in case.get("must", []) if not contains(graded, value)]
+    leaked = [value for value in case.get("must_not", []) if contains(text, value)]
     accepted = case.get("intents") or ([case["intent"]] if case.get("intent") else [])
     intent_ok = intent in accepted if accepted else True
     if intent in case.get("not_intents", []):

@@ -36,6 +36,7 @@ from query import records as records_query
 from query import units as units_query
 from query.catalog_router import CATALOG_RESOLVERS
 from query.device_ambiguity import DeviceProcedure, load_device_procedures
+from query.record_answer_summary import history_answer
 from query.record_fields import normalize_phrase
 from query.record_query import RECORD_RESOLVERS
 from query.table_model import (
@@ -299,6 +300,7 @@ def resolve_device_history(session: Session, params: intents.DeviceHistoryParams
         tables=tables,
         citations=_citations_for_tables(session, tables),
         total=history.get("record_count"),
+        answer=history_answer(history),
     )
 
 

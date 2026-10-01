@@ -51,6 +51,8 @@ VERDICT_KEY = "ket_luan"
 
 # Cách nói thường gặp → tiền tố khóa trường (khớp mọi khóa bắt đầu bằng tiền tố).
 _PHRASE_ALIASES: tuple[tuple[str, tuple[str, ...]], ...] = (
+    # Nhãn "Số" một từ quá chung để tự khớp; "số biên bản" thì đúng là trường đó.
+    ("số biên bản", ("so",)),
     ("dải đo", ("pham_vi_do",)),
     ("ccx", ("cap_chinh_xac",)),
     ("hãng", ("nuoc_hang_san_xuat", "hang_san_xuat", "nha_san_xuat", "noi_hang_san_xuat")),
@@ -325,22 +327,57 @@ def _ordered(keys: list[str]) -> tuple[str, ...]:
     return tuple(dict.fromkeys(keys))
 
 
+def _label_position(question_tokens: list[str], label: str) -> int:
+    """Vị trí nhãn trong câu hỏi: chỗ cả cụm nhãn bắt đầu, không thì chỗ từ đầu của nhãn.
+
+    "Kiểm định viên và người kiểm soát": cả hai nhãn có chữ "kiểm" ở đầu câu, nhưng cụm
+    "người kiểm soát" bắt đầu ở từ thứ năm.
+    """
+    needle = tokens(label)
+    size = len(needle)
+    for index in range(len(question_tokens) - size + 1):
+        if question_tokens[index : index + size] == needle:
+            return index
+    if needle and needle[0] in question_tokens:
+        return question_tokens.index(needle[0])
+    return len(question_tokens)
+
+
+def _by_position(found: list[tuple[int, str]]) -> list[str]:
+    """Khóa theo vị trí được nhắc trong câu hỏi ("kiểm định viên và người kiểm soát")."""
+    return [key for _, key in sorted(found, key=lambda item: item[0])]
+
+
 def detect_targets(question: str, catalog: FieldCatalog) -> Targets:
-    """Trường + bảng mà câu hỏi nhắc tới (tất định, không gọi LLM)."""
-    words = frozenset(tokens(question))
+    """Trường + bảng mà câu hỏi nhắc tới (tất định, không gọi LLM).
+
+    Trường xếp theo thứ tự câu hỏi nhắc tới (vị trí từ đầu tiên của nhãn/bí danh), để
+    bảng và câu trả lời nêu đúng thứ tự người hỏi.
+    """
+    question_tokens = tokens(question)
+    words = frozenset(question_tokens)
     # Đệm khoảng trắng để bí danh chỉ khớp trọn từ ("chuẩn" không khớp "tiêu chuẩn").
     phrase = f" {normalize_phrase(question)} "
-    keys: list[str] = []
+    found: list[tuple[int, str]] = []
     for entry in catalog.fields:
         # Nhãn một từ ("Số") quá chung để tự khớp; ký hiệu đi qua bảng bí danh.
         if len(entry.words) >= 2 and entry.words <= words:
-            keys.append(entry.key)
+            found.append((_label_position(question_tokens, entry.label), entry.key))
     for alias, prefixes in _PHRASE_ALIASES:
-        if f" {normalize_phrase(alias)} " in phrase and not _negated_alias(alias, phrase):
-            keys.extend(key for prefix in prefixes for key in catalog.keys_with_prefix(prefix))
+        needle = f" {normalize_phrase(alias)} "
+        if needle in phrase and not _negated_alias(alias, phrase):
+            position = phrase[: phrase.index(needle)].count(" ")
+            found.extend(
+                (position, key) for prefix in prefixes for key in catalog.keys_with_prefix(prefix)
+            )
     for pattern, prefixes in _SYMBOL_ALIASES:
-        if pattern.search(question or ""):
-            keys.extend(key for prefix in prefixes for key in catalog.keys_with_prefix(prefix))
+        match = pattern.search(question or "")
+        if match:
+            position = len(tokens((question or "")[: match.start()]))
+            found.extend(
+                (position, key) for prefix in prefixes for key in catalog.keys_with_prefix(prefix)
+            )
+    keys = _by_position(found)
     keys.extend(related for key in list(keys) for related in catalog.related(key))
     matched = [
         table

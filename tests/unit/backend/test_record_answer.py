@@ -61,7 +61,7 @@ def test_ascii_comparator_is_inclusive_at_the_boundary():
         ],
     }
     assert point_sentence(RECORD, point, "Tốc độ hạ").endswith(
-        ": trung bình 0,40 mm/min, trong mức cho phép <= 0,4 mm/min."
+        ": trung bình 0,40 mm/min, trong mức cho phép <= 0,4 mm/min nên đạt."
     )
 
 
@@ -103,7 +103,7 @@ def test_limit_on_the_error_uses_the_reader_flag_and_shows_the_error():
         ": khối lượng thực tế 84,46322 g, sai số 0,05 %, ngoài mức cho phép 0,0375 % nên không đạt."
     )
     assert point_sentence(RECORD, _weight(within_limit=1), "Bảng A.4").endswith(
-        ", sai số 0,05 %, trong mức cho phép 0,0375 %."
+        ", sai số 0,05 %, trong mức cho phép 0,0375 % nên đạt."
     )
 
 
@@ -122,7 +122,7 @@ def test_generic_measured_column_uses_the_row_label():
         ],
     }
     assert point_sentence(RECORD, point, "Bảng A.1") == (
-        f"{HEAD}: độ không vuông góc của đĩa cân với trục pít tông 2,3, trong mức cho phép < 5'."
+        f"{HEAD}: độ không vuông góc của đĩa cân với trục pít tông 2,3, trong mức cho phép < 5' nên đạt."
     )
 
 

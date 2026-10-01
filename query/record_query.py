@@ -1,26 +1,38 @@
 """Truy vấn biên bản có cấu trúc cho chat số liệu (Pha R, spec §8).
 
-Hai resolver cho ``record_lookup`` và ``records_summary``. Mọi câu SQL do người
-viết, tham số luôn được bind, chỉ đọc view đã duyệt (``v_record_detail``,
-``v_record_field``, ``v_measurement_detail``, ``v_unit``) — P3.
+Resolver ``record_lookup`` (một / vài biên bản cụ thể); ``records_summary`` ở
+``query.record_summary``. Mọi câu SQL do người viết, tham số luôn được bind, chỉ đọc
+view đã duyệt (``v_record_detail``, ``v_record_field``, ``v_measurement_detail``) — P3.
+
+Mỗi câu hỏi trả MỘT câu trả lời tất định ghép từ đúng các ô của bảng đi kèm
+(``query.record_answer_lookup``) + bảng của điều được hỏi.
 
 Bất biến:
 - P1: mỗi ô mang tham chiếu xuất xứ (``record`` + khóa trường, hoặc ``measurement``).
-- P2: giá trị luôn hiển thị NGUYÊN VĂN biên bản. Cực trị chỉ SẮP XẾP theo số đã
-  phân tích (quy đổi cùng SI khi đơn vị nhận diện được), không hiển thị số tính
-  ra. Đếm là đếm hồ sơ/thiết bị, không phải phép tính trên số liệu đo.
+- P2: giá trị luôn hiển thị NGUYÊN VĂN biên bản; không tính ra số mới.
 """
 
 from __future__ import annotations
 
-import json
-from datetime import date, datetime, time, timedelta
 from typing import Any
 
-from sqlalchemy import bindparam, text
 from sqlalchemy.orm import Session
 
-from query.record_answer import RankGroup, extreme_answer, field_sentence, point_sentence
+from query.answer_phrases import cert
+from query.record_answer import extreme_answer
+from query.record_answer_lookup import StepResult, identity_answer, lookup_answer, record_parts
+from query.record_cells import (
+    IDENTITY_COLUMNS,
+    VALUE_TOLERANCE,
+    field_cell,
+    fields_by_record,
+    find_records,
+    identity_cells,
+    load_points,
+    point_cell,
+    record_cell,
+    verdict_cell,
+)
 from query.record_fields import (
     IDENTITY_KEYS,
     VERDICT_KEY,
@@ -31,7 +43,7 @@ from query.record_fields import (
     load_cells,
 )
 from query.record_intents import RecordLookupParams, RecordsSummaryParams
-from query.records import VERDICT_LABELS
+from query.record_summary import _rank_tables, resolve_records_summary, summary_records
 from query.table_model import (
     LEDGER_NOTE,
     Cell,
@@ -39,166 +51,55 @@ from query.table_model import (
     DataPayload,
     DataTable,
     _citations_for_tables,
-    _date_text,
     empty_payload,
     make_payload,
 )
+from records.columns import role_for_column
+
+__all__ = [
+    "RECORD_RESOLVERS",
+    "_rank_tables",
+    "extreme_answer",
+    "resolve_record_lookup",
+    "resolve_records_summary",
+    "summary_records",
+]
 
 MAX_CARDS = 3
-MAX_LIST_ROWS = 50
-_NOMINAL_TOLERANCE = 1e-9
 _MIN_REASON_OVERLAP = 3
-
-_IDENTITY_COLUMNS: tuple[Column, ...] = (
-    Column("cert_no", "Số biên bản"),
-    Column("calibrated_at", "Ngày kiểm định"),
-    Column("serial_no", "Số hiệu"),
-    Column("model_code", "Ký hiệu"),
-)
 _FALLBACK_POINT_COLUMNS = ("Thông số", "Danh nghĩa", "Giá trị xác định", "Giá trị cho phép")
+# Trường định danh → tham số dùng nó làm BỘ CHỌN. Trường định danh câu hỏi nhắc tới mà
+# không phải bộ chọn ("… ngày 10/07/2024 có số biên bản là bao nhiêu?", "biên bản 011/2024
+# kiểm định ngày nào?") là điều được hỏi: trả định danh của biên bản, không cả phiếu.
+_IDENTITY_SELECTORS = {
+    "so": "cert_no",
+    "ngay_kiem_dinh": "calibrated_on",
+    "so_hieu": "serial",
+    "ky_hieu": "model_code",
+}
+_CERT_KEY = "so"
+_DEVICE_NAME_KEY = "ten_trang_bi_dl_tn"
 
 
-# ── Đọc view ──────────────────────────────────────────────────────────────────
-
-
-def _day_bounds(day: date) -> tuple[datetime, datetime]:
-    start = datetime.combine(day, time.min)
-    return start, start + timedelta(days=1)
-
-
-def _select_records(session: Session, conditions: list[str], params: dict[str, Any]) -> list[dict]:
-    where = f" WHERE {' AND '.join(conditions)}" if conditions else ""
-    statement = text(f"SELECT * FROM v_record_detail r{where} ORDER BY r.calibrated_at, r.id")
-    # Tham số danh sách (``IN :ids``) phải bind dạng expanding trên cả SQLite lẫn PostgreSQL.
-    expanding = [
-        bindparam(key, expanding=True) for key, value in params.items() if isinstance(value, list)
-    ]
-    if expanding:
-        statement = statement.bindparams(*expanding)
-    return [dict(row) for row in session.execute(statement, params).mappings()]
-
-
-def find_records(session: Session, params: RecordLookupParams) -> list[dict]:
-    """Biên bản đã duyệt khớp MỌI bộ lọc đã cho (số hiệu, số biên bản, ký hiệu, ngày)."""
-    conditions: list[str] = []
-    values: dict[str, Any] = {}
-    if params.serial:
-        conditions.append("LOWER(COALESCE(r.serial_no, '')) = :serial")
-        values["serial"] = params.serial.strip().casefold()
-    if params.cert_no:
-        conditions.append("COALESCE(r.cert_no, '') = :cert_no")
-        values["cert_no"] = params.cert_no.strip()
-    if params.model_code:
-        conditions.append("LOWER(COALESCE(r.model_code, '')) = :model_code")
-        values["model_code"] = params.model_code.strip().casefold()
-    if params.calibrated_on:
-        start, end = _day_bounds(params.calibrated_on)
-        conditions.append("r.calibrated_at >= :day_start AND r.calibrated_at < :day_end")
-        values.update(day_start=start, day_end=end)
-    return _select_records(session, conditions, values)
-
-
-def _fields_by_record(session: Session, record_ids: list[int]) -> dict[int, dict[str, dict]]:
-    if not record_ids:
-        return {}
-    statement = text(
-        "SELECT * FROM v_record_field WHERE record_id IN :ids ORDER BY record_id, ord"
-    ).bindparams(bindparam("ids", expanding=True))
-    result: dict[int, dict[str, dict]] = {}
-    for row in session.execute(statement, {"ids": record_ids}).mappings():
-        result.setdefault(int(row["record_id"]), {}).setdefault(row["field_key"], dict(row))
-    return result
-
-
-def _points(session: Session, record_ids: list[int], steps: list[str] | None = None) -> list[dict]:
-    if not record_ids:
-        return []
-    sql = "SELECT * FROM v_measurement_detail WHERE record_id IN :ids"
-    params: dict[str, Any] = {"ids": record_ids}
-    binds = [bindparam("ids", expanding=True)]
-    if steps:
-        sql += " AND step_code IN :steps"
-        params["steps"] = steps
-        binds.append(bindparam("steps", expanding=True))
-    sql += " ORDER BY record_id, step_code, ord, id"
-    return [dict(row) for row in session.execute(text(sql).bindparams(*binds), params).mappings()]
-
-
-# ── Ô bảng ────────────────────────────────────────────────────────────────────
-
-
-def _record_cell(record: dict, value: Any, field: str, *, numeric: bool = False) -> Cell:
-    empty = value in (None, "")
-    return Cell(
-        text="—" if empty else str(value),
-        numeric=numeric and not empty,
-        provenance=None if empty else {"kind": "record", "id": record["id"], "field": field},
-        device_id=record.get("device_id"),
-        record_id=record.get("id"),
-    )
-
-
-def _field_cell(record: dict, row: dict | None) -> Cell:
-    if row is None:
-        return Cell(text="—", record_id=record.get("id"), device_id=record.get("device_id"))
-    has_number = row.get("value_min") is not None or row.get("value_max") is not None
-    return _record_cell(record, row.get("value_text"), row["field_key"], numeric=has_number)
-
-
-def _identity_cells(record: dict) -> dict[str, Cell]:
-    return {
-        "cert_no": _record_cell(record, record.get("cert_no"), "so"),
-        "calibrated_at": _record_cell(
-            record, _date_text(record.get("calibrated_at")), "ngay_kiem_dinh"
-        ),
-        "serial_no": _record_cell(record, record.get("serial_no"), "so_hieu"),
-        "model_code": _record_cell(record, record.get("model_code"), "ky_hieu"),
-    }
-
-
-def _verdict_cell(record: dict, fields: dict[str, dict]) -> Cell:
-    """Kết luận nguyên văn biên bản; thiếu thì nhãn chuẩn hóa từ sổ cái."""
-    row = fields.get(VERDICT_KEY)
-    if row is not None:
-        return _field_cell(record, row)
-    label = VERDICT_LABELS.get(record.get("verdict"), record.get("verdict"))
-    return _record_cell(record, label, "verdict")
-
-
-def _point_cell(point: dict, value: str | None) -> Cell:
-    empty = value in (None, "")
-    return Cell(
-        text="—" if empty else str(value),
-        numeric=not empty and any(char.isdigit() for char in str(value)),
-        provenance=None if empty else {"kind": "measurement", "id": point["id"], "field": "row"},
-        device_id=point.get("device_id"),
-        record_id=point.get("record_id"),
-    )
-
-
-def _cert(record: dict) -> str:
-    return str(record.get("cert_no") or record["id"])
-
-
-# ── record_lookup ─────────────────────────────────────────────────────────────
+# ── Bảng trường đầu mục ───────────────────────────────────────────────────────
 
 
 def _fields_table(
     records: list[dict], fields: dict[int, dict[str, dict]], keys: list[str], catalog: FieldCatalog
 ) -> DataTable:
-    columns = [*_IDENTITY_COLUMNS]
+    columns = [*IDENTITY_COLUMNS]
     columns += [Column(key, catalog.field_label(key)) for key in keys if key != VERDICT_KEY]
     if VERDICT_KEY in keys:
         columns.append(Column(VERDICT_KEY, "Kết luận"))
     rows = []
     for record in records:
         own = fields.get(record["id"], {})
-        row = _identity_cells(record)
+        row = identity_cells(record)
         for key in keys:
             if key == VERDICT_KEY:
-                row[key] = _verdict_cell(record, own)
+                row[key] = verdict_cell(record, own)
             else:
-                row[key] = _field_cell(record, own.get(key))
+                row[key] = field_cell(record, own.get(key))
         rows.append(row)
     return DataTable(
         title="Thông tin biên bản",
@@ -209,16 +110,33 @@ def _fields_table(
     )
 
 
+def _identity_table(records: list[dict]) -> DataTable:
+    rows = [
+        {
+            **identity_cells(record),
+            "owner": record_cell(record, record.get("owner_org"), "don_vi_su_dung"),
+        }
+        for record in records
+    ]
+    return DataTable(
+        title="Thông tin biên bản",
+        columns=[*IDENTITY_COLUMNS, Column("owner", "Đơn vị sử dụng")],
+        rows=rows,
+        total=len(rows),
+        note="Giá trị nguyên văn biên bản đã duyệt; bấm vào ô để mở dòng nguồn.",
+    )
+
+
 def _record_cards(records: list[dict], fields: dict[int, dict[str, dict]]) -> list[DataTable]:
     tables = []
     for record in records[:MAX_CARDS]:
         rows = [
-            {"label": Cell(text=row["label"]), "value": _field_cell(record, row)}
+            {"label": Cell(text=row["label"]), "value": field_cell(record, row)}
             for row in fields.get(record["id"], {}).values()
         ]
         tables.append(
             DataTable(
-                title=f"Biên bản {_cert(record)} · số hiệu {record.get('serial_no') or '—'}",
+                title=f"Biên bản {cert(record)} · số hiệu {record.get('serial_no') or '—'}",
                 columns=[Column("label", "Trường"), Column("value", "Giá trị")],
                 rows=rows,
                 total=len(rows),
@@ -227,11 +145,21 @@ def _record_cards(records: list[dict], fields: dict[int, dict[str, dict]]) -> li
     return tables
 
 
+# ── Bảng kết quả ──────────────────────────────────────────────────────────────
+
+
 def _cell_map(point: dict) -> dict[str, str]:
     return {
         (str(cell.get("column") or "").strip() or "—"): cell.get("text")
         for cell in load_cells(point.get("cells"))
     }
+
+
+def _asked_columns(names: list[str], focus: frozenset[str]) -> frozenset[str]:
+    """Cột câu hỏi nhắc tới ("áp suất khí quyển"): mọi từ mang nghĩa của nhãn có trong câu."""
+    return frozenset(
+        name for name in names if len(label_words(name)) >= 2 and label_words(name) <= focus
+    )
 
 
 def _cell_columns(points: list[dict], focus: frozenset[str] = frozenset()) -> list[str]:
@@ -243,15 +171,11 @@ def _cell_columns(points: list[dict], focus: frozenset[str] = frozenset()) -> li
                 names.append(name)
     if not focus or len(names) < 2:
         return names
-
-    def asked(name: str) -> bool:
-        words = label_words(name)
-        return len(words) >= 2 and words <= focus
-
+    asked = _asked_columns(names, focus)
     # Cột STT và cột giá trị danh nghĩa giữ ở đầu để dòng vẫn đọc được là điểm đo nào.
     head = names[:1] + [name for name in names[1:] if "danh nghĩa" in name.casefold()]
     rest = [name for name in names if name not in head]
-    return head + [name for name in rest if asked(name)] + [n for n in rest if not asked(n)]
+    return head + [name for name in rest if name in asked] + [n for n in rest if n not in asked]
 
 
 def _step_rows(points: list[dict], names: list[str]) -> list[dict[str, Cell]]:
@@ -261,7 +185,7 @@ def _step_rows(points: list[dict], names: list[str]) -> list[dict[str, Cell]]:
         if cells:
             rows.append(
                 {
-                    f"c{index}": _point_cell(point, cells.get(name))
+                    f"c{index}": point_cell(point, cells.get(name))
                     for index, name in enumerate(names)
                 }
             )
@@ -269,9 +193,9 @@ def _step_rows(points: list[dict], names: list[str]) -> list[dict[str, Cell]]:
         rows.append(
             {
                 "c0": Cell(text=point.get("label") or "—"),
-                "c1": _point_cell(point, point.get("nominal_text")),
-                "c2": _point_cell(point, point.get("measured_text")),
-                "c3": _point_cell(point, point.get("limit_text")),
+                "c1": point_cell(point, point.get("nominal_text")),
+                "c2": point_cell(point, point.get("measured_text")),
+                "c3": point_cell(point, point.get("limit_text")),
             }
         )
     return rows
@@ -281,7 +205,7 @@ def _filter_nominal(points: list[dict], nominal: float | None) -> tuple[list[dic
     """Chỉ dòng có giá trị danh nghĩa bằng giá trị được hỏi; không dòng nào thì giữ cả bảng."""
     if nominal is None:
         return points, False
-    tolerance = _NOMINAL_TOLERANCE * max(1.0, abs(nominal))
+    tolerance = VALUE_TOLERANCE * max(1.0, abs(nominal))
     matched = [
         point
         for point in points
@@ -291,16 +215,17 @@ def _filter_nominal(points: list[dict], nominal: float | None) -> tuple[list[dic
     return (matched, True) if matched else (points, False)
 
 
-def _step_tables(
+def _step_results(
     session: Session,
     records: list[dict],
     steps: list[str],
     catalog: FieldCatalog,
     nominal: float | None,
     focus: frozenset[str] = frozenset(),
-) -> list[DataTable]:
-    points = _points(session, [record["id"] for record in records], steps)
-    tables = []
+) -> list[StepResult]:
+    """Dòng của từng bảng được hỏi trong từng biên bản, đúng thứ tự và cột sẽ hiển thị."""
+    points = load_points(session, [record["id"] for record in records], steps)
+    results = []
     for record in records:
         for step in steps:
             own = [p for p in points if p["record_id"] == record["id"] and p["step_code"] == step]
@@ -308,22 +233,96 @@ def _step_tables(
             if not own:
                 continue
             names = _cell_columns(own, focus) or list(_FALLBACK_POINT_COLUMNS)
-            note = "Nguyên văn từng ô của bảng trong biên bản."
-            if filtered:
-                note = "Chỉ dòng có giá trị danh nghĩa được hỏi. " + note
-            tables.append(
-                DataTable(
-                    title=(
-                        f"{catalog.table_title(step, record.get('procedure_id'))}"
-                        f" · biên bản {_cert(record)}"
-                    ),
-                    columns=[Column(f"c{index}", name) for index, name in enumerate(names)],
-                    rows=_step_rows(own, names),
-                    total=len(own),
-                    note=note,
+            results.append(
+                StepResult(
+                    record_id=record["id"],
+                    title=catalog.table_title(step, record.get("procedure_id")),
+                    points=tuple(own),
+                    names=tuple(names),
+                    asked=_asked_columns(names, focus),
+                    filtered=filtered,
                 )
             )
-    return tables
+    return results
+
+
+def _step_table(result: StepResult, record: dict) -> DataTable:
+    note = "Nguyên văn từng ô của bảng trong biên bản."
+    if result.filtered:
+        note = "Chỉ dòng có giá trị danh nghĩa được hỏi. " + note
+    names = list(result.names)
+    return DataTable(
+        title=f"{result.title} · biên bản {cert(record)}",
+        columns=[Column(f"c{index}", name) for index, name in enumerate(names)],
+        rows=_step_rows(list(result.points), names),
+        total=len(result.points),
+        note=note,
+    )
+
+
+def _covered_by_columns(
+    keys: list[str], results: list[StepResult], catalog: FieldCatalog
+) -> list[str]:
+    """Trường đầu mục mà cột được hỏi của dòng đã lọc đã trả lời.
+
+    "Tại điểm đo 2 500, nhiệt độ và độ ẩm môi trường là bao nhiêu" hỏi ô của DÒNG đó,
+    không phải điều kiện môi trường ghi ở đầu biên bản.
+    """
+    words = frozenset().union(
+        *(label_words(name) for result in results if result.filtered for name in result.asked)
+    )
+    return [
+        key
+        for key in keys
+        if key != VERDICT_KEY and words and label_words(catalog.field_label(key)) <= words
+    ]
+
+
+def _row_word(points: list[dict]) -> str:
+    """ "điểm" cho bảng theo điểm danh nghĩa (Bảng A.5), "dòng" cho bảng khác."""
+    for point in points:
+        for cell in load_cells(point.get("cells")):
+            if role_for_column(str(cell.get("column") or "")) == "nominal":
+                return "điểm"
+    return "dòng"
+
+
+def _across_records(
+    session: Session, records: list[dict], steps: list[str], catalog: FieldCatalog
+) -> str | None:
+    """ "Bảng A.5 … có 10 điểm ở cả 20 biên bản đã duyệt" (đếm dòng, không tính số liệu)."""
+    procedures = {record.get("procedure_id") for record in records}
+    everyone = [
+        record
+        for record in summary_records(session, RecordsSummaryParams())
+        if record.get("procedure_id") in procedures
+    ]
+    points = load_points(session, [record["id"] for record in everyone], steps)
+    sentences = []
+    for step in steps:
+        own = [point for point in points if point["step_code"] == step]
+        counts: dict[int, int] = {}
+        for point in own:
+            counts[point["record_id"]] = counts.get(point["record_id"], 0) + 1
+        if not counts:
+            continue
+        title = catalog.table_title(step, next(iter(procedures)))
+        word = _row_word(own)
+        by_size: dict[int, int] = {}
+        for size in counts.values():
+            by_size[size] = by_size.get(size, 0) + 1
+        if len(by_size) == 1:
+            size = next(iter(by_size))
+            sentences.append(f"{title} có {size} {word} ở cả {len(counts)} biên bản đã duyệt.")
+        else:
+            spread = "; ".join(
+                f"{size} {word} ở {count} biên bản" for size, count in sorted(by_size.items())
+            )
+            sentences.append(f"{title}: {spread}.")
+    return " ".join(sentences) or None
+
+
+# ── Căn cứ kết luận không đạt ────────────────────────────────────────────────
 
 
 def _reason_points(points: list[dict], reason: str, catalog: FieldCatalog) -> list[dict]:
@@ -334,54 +333,64 @@ def _reason_points(points: list[dict], reason: str, catalog: FieldCatalog) -> li
     for point in points:
         key = (point.get("procedure_id"), point.get("step_code") or "")
         title_words = titles.get(key, frozenset())
-        label_words = content_tokens(point.get("label"))
-        if (title_words and title_words <= words) or len(
-            label_words & words
-        ) >= _MIN_REASON_OVERLAP:
+        own_words = content_tokens(point.get("label"))
+        if (title_words and title_words <= words) or len(own_words & words) >= _MIN_REASON_OVERLAP:
             chosen.append(point)
     return chosen
 
 
-def _failure_basis(
+def _failure_points(
     session: Session, records: list[dict], fields: dict[int, dict[str, dict]], catalog: FieldCatalog
-) -> list[DataTable]:
+) -> dict[int, list[dict]]:
     failed = [record for record in records if record.get("verdict") == "khong_dat"]
-    points = _points(session, [record["id"] for record in failed])
-    tables = []
+    points = load_points(session, [record["id"] for record in failed])
+    result = {}
     for record in failed:
         reason = (fields.get(record["id"], {}).get(VERDICT_KEY) or {}).get("value_text") or ""
         own = [point for point in points if point["record_id"] == record["id"]]
         chosen = _reason_points(own, reason, catalog)
-        if not chosen:
-            continue
-        rows = [
-            {
-                "table": Cell(
-                    text=catalog.table_title(
-                        point.get("step_code") or "", point.get("procedure_id")
-                    )
-                ),
-                "label": Cell(text=point.get("label") or "—"),
-                "measured": _point_cell(point, point.get("measured_text")),
-                "limit": _point_cell(point, point.get("limit_text")),
-            }
-            for point in chosen
-        ]
-        tables.append(
-            DataTable(
-                title=f"Căn cứ kết luận không đạt · biên bản {_cert(record)}",
-                columns=[
-                    Column("table", "Bảng"),
-                    Column("label", "Thông số"),
-                    Column("measured", "Giá trị xác định"),
-                    Column("limit", "Giá trị cho phép"),
-                ],
-                rows=rows,
-                total=len(rows),
-                note="Dòng số liệu mà kết luận của biên bản nhắc tới; người đọc tự đối chiếu.",
-            )
-        )
-    return tables
+        if chosen:
+            result[record["id"]] = chosen
+    return result
+
+
+def _point_label(point: dict) -> str:
+    """Nhãn dòng; bảng không có cột nhãn (Bảng A.2) thì tên cột giá trị ("Giá trị trung bình, s")."""
+    if point.get("label"):
+        return str(point["label"])
+    for cell in load_cells(point.get("cells")):
+        if role_for_column(str(cell.get("column") or "")) == "measured":
+            return str(cell.get("column"))
+    return "—"
+
+
+def _failure_table(record: dict, chosen: list[dict], catalog: FieldCatalog) -> DataTable:
+    rows = [
+        {
+            "table": Cell(
+                text=catalog.table_title(point.get("step_code") or "", point.get("procedure_id"))
+            ),
+            "label": Cell(text=_point_label(point)),
+            "measured": point_cell(point, point.get("measured_text")),
+            "limit": point_cell(point, point.get("limit_text")),
+        }
+        for point in chosen
+    ]
+    return DataTable(
+        title=f"Căn cứ kết luận không đạt · biên bản {cert(record)}",
+        columns=[
+            Column("table", "Bảng"),
+            Column("label", "Thông số"),
+            Column("measured", "Giá trị xác định"),
+            Column("limit", "Giá trị cho phép"),
+        ],
+        rows=rows,
+        total=len(rows),
+        note="Dòng số liệu mà kết luận của biên bản nhắc tới; người đọc tự đối chiếu.",
+    )
+
+
+# ── record_lookup ─────────────────────────────────────────────────────────────
 
 
 def _no_match(session: Session, params: RecordLookupParams) -> DataPayload:
@@ -398,17 +407,45 @@ def _no_match(session: Session, params: RecordLookupParams) -> DataPayload:
             title,
             f"Không có biên bản đã duyệt của thiết bị số hiệu {params.serial}.",
         )
-    fields = _fields_by_record(session, [record["id"] for record in records])
+    fields = fields_by_record(session, [record["id"] for record in records])
     table = _fields_table(records, fields, [VERDICT_KEY], field_catalog(session))
     table.title = f"Biên bản đã duyệt của thiết bị số hiệu {params.serial}"
     table.note = "Không có biên bản khớp số biên bản/ngày được hỏi; đây là các biên bản hiện có."
+    certs = ", ".join(cert(record) for record in records)
     return make_payload(
         intent="record_lookup",
         title=title,
         note=LEDGER_NOTE,
         tables=[table],
         citations=_citations_for_tables(session, [table]),
+        answer=(
+            "Không có biên bản đã duyệt khớp số biên bản / ngày được hỏi của thiết bị số "
+            f"hiệu {params.serial}; các biên bản hiện có: {certs}."
+        ),
     )
+
+
+def _lookup_tables(
+    records: list[dict],
+    fields: dict[int, dict[str, dict]],
+    keys: list[str],
+    catalog: FieldCatalog,
+    results: list[StepResult],
+    failures: dict[int, list[dict]],
+    *,
+    identity: bool,
+) -> list[DataTable]:
+    by_id = {record["id"]: record for record in records}
+    tables: list[DataTable] = []
+    if keys:
+        tables.append(_fields_table(records, fields, keys, catalog))
+    elif identity:
+        tables.append(_identity_table(records))
+    elif not results:
+        tables.extend(_record_cards(records, fields))
+    tables.extend(_step_table(result, by_id[result.record_id]) for result in results)
+    tables.extend(_failure_table(by_id[rid], chosen, catalog) for rid, chosen in failures.items())
+    return tables or [_fields_table(records, fields, [VERDICT_KEY], catalog)]
 
 
 def resolve_record_lookup(session: Session, params: RecordLookupParams) -> DataPayload:
@@ -417,28 +454,48 @@ def resolve_record_lookup(session: Session, params: RecordLookupParams) -> DataP
     if not records:
         return _no_match(session, params)
     catalog = field_catalog(session)
-    fields = _fields_by_record(session, [record["id"] for record in records])
-    keys = [key for key in dict.fromkeys(params.fields) if key not in IDENTITY_KEYS]
-    tables: list[DataTable] = []
-    if keys:
-        tables.append(_fields_table(records, fields, keys, catalog))
-    elif not params.steps:
-        tables.extend(_record_cards(records, fields))
-    if params.steps:
-        tables.extend(
-            _step_tables(
-                session,
-                records,
-                list(params.steps),
+    fields = fields_by_record(session, [record["id"] for record in records])
+    steps = list(params.steps)
+    results = _step_results(
+        session, records, steps, catalog, params.nominal, frozenset(params.focus_words)
+    )
+    # "Tên trang bị ĐL-TN" là trường định danh nhưng không bao giờ là bộ chọn: hỏi tới thì
+    # trả như một trường thường.
+    keys = [
+        key
+        for key in dict.fromkeys(params.fields)
+        if key not in IDENTITY_KEYS or key == _DEVICE_NAME_KEY
+    ]
+    covered = _covered_by_columns(keys, results, catalog)
+    keys = [key for key in keys if key not in covered]
+    failures = _failure_points(session, records, fields, catalog) if VERDICT_KEY in keys else {}
+    asked_identity = [
+        key
+        for key in params.fields
+        if key in _IDENTITY_SELECTORS and not getattr(params, _IDENTITY_SELECTORS[key])
+    ]
+    identity = not keys and not steps and bool(asked_identity)
+    tables = _lookup_tables(records, fields, keys, catalog, results, failures, identity=identity)
+
+    if identity:
+        answer: str | None = identity_answer(records, cert_first=_CERT_KEY in asked_identity)
+    else:
+        parts = {
+            record["id"]: record_parts(
+                record,
+                fields.get(record["id"], {}),
+                keys,
                 catalog,
-                params.nominal,
-                frozenset(params.focus_words),
+                results,
+                failures.get(record["id"], []),
             )
-        )
-    if VERDICT_KEY in keys:
-        tables.extend(_failure_basis(session, records, fields, catalog))
-    if not tables:
-        tables.append(_fields_table(records, fields, [VERDICT_KEY], catalog))
+            for record in records
+        }
+        answer = lookup_answer(records, parts)
+    if params.across_records and steps:
+        overview = _across_records(session, records, steps, catalog)
+        if overview:
+            answer = f"{overview}\n\n{answer}" if answer else overview
     subject = params.cert_no or params.serial or params.model_code
     return make_payload(
         intent="record_lookup",
@@ -446,322 +503,7 @@ def resolve_record_lookup(session: Session, params: RecordLookupParams) -> DataP
         note=LEDGER_NOTE,
         tables=tables,
         citations=_citations_for_tables(session, tables),
-    )
-
-
-# ── records_summary ───────────────────────────────────────────────────────────
-
-
-def _aliases(value: Any) -> list[str]:
-    if isinstance(value, str):
-        try:
-            value = json.loads(value)
-        except ValueError:
-            return []
-    return [str(alias) for alias in value or []]
-
-
-def unit_code(session: Session, unit_text: str) -> str:
-    """Mã đơn vị chuẩn (``kG/cm2`` → ``kgf/cm2``) đọc từ ``v_unit``; lạ thì giữ nguyên."""
-    needle = unit_text.strip().casefold()
-    for row in session.execute(text("SELECT code, aliases FROM v_unit")).mappings():
-        names = {str(row["code"]).casefold(), *(a.casefold() for a in _aliases(row["aliases"]))}
-        if needle in names:
-            return str(row["code"])
-    return unit_text.strip()
-
-
-def summary_records(session: Session, params: RecordsSummaryParams) -> list[dict]:
-    """Biên bản đã duyệt khớp bộ lọc tổng hợp; không bộ lọc = toàn bộ sổ cái."""
-    conditions: list[str] = []
-    values: dict[str, Any] = {}
-    exact = {
-        "serial": ("serial_no", params.serial),
-        "model_code": ("model_code", params.model_code),
-        "inspector": ("inspector_name", params.inspector),
-        "reviewer": ("reviewer_name", params.reviewer),
-    }
-    # Kèm so nguyên văn: LOWER() của SQLite không hạ chữ hoa có dấu ("Đ"), còn bộ định
-    # tuyến truyền đúng nguyên văn sổ cái.
-    for name, (column, value) in exact.items():
-        if value:
-            conditions.append(
-                f"(r.{column} = :{name}_raw OR LOWER(COALESCE(r.{column}, '')) = :{name})"
-            )
-            values[f"{name}_raw"] = value.strip()
-            values[name] = value.strip().casefold()
-    if params.owner_org:
-        conditions.append(
-            "(r.owner_org = :owner_org_raw OR LOWER(COALESCE(r.owner_org, '')) LIKE :owner_org)"
-        )
-        values["owner_org_raw"] = params.owner_org.strip()
-        values["owner_org"] = f"%{params.owner_org.strip().casefold()}%"
-    if params.verdict:
-        conditions.append("r.verdict = :verdict")
-        values["verdict"] = params.verdict
-    if params.date_from:
-        conditions.append("r.calibrated_at >= :date_from")
-        values["date_from"] = _day_bounds(params.date_from)[0]
-    if params.date_to:
-        conditions.append("r.calibrated_at < :date_to")
-        values["date_to"] = _day_bounds(params.date_to)[1]
-    if params.procedure_ids:
-        conditions.append("r.procedure_id IN :procedure_ids")
-        values["procedure_ids"] = list(params.procedure_ids)
-    if params.range_unit:
-        conditions.append("LOWER(COALESCE(r.range_unit_code, '')) = :range_unit")
-        values["range_unit"] = unit_code(session, params.range_unit).casefold()
-    return _select_records(session, conditions, values)
-
-
-def _summary_table(records: list[dict]) -> DataTable:
-    devices = {record.get("device_id") for record in records if record.get("device_id") is not None}
-    failed = [record for record in records if record.get("verdict") == "khong_dat"]
-    row = {
-        "records": Cell(text=str(len(records))),
-        "devices": Cell(text=str(len(devices))),
-        "failed": Cell(text=str(len(failed))),
-        "failed_list": Cell(text=", ".join(_cert(record) for record in failed) or "—"),
-    }
-    return DataTable(
-        title="Tổng hợp",
-        columns=[
-            Column("records", "Số biên bản"),
-            Column("devices", "Số thiết bị (theo số hiệu)"),
-            Column("failed", "Số biên bản không đạt"),
-            Column("failed_list", "Biên bản không đạt"),
-        ],
-        rows=[row],
-        total=1,
-        note="Đếm hồ sơ đã duyệt khớp bộ lọc; không tính lại số liệu đo.",
-    )
-
-
-def _list_table(records: list[dict], fields: dict[int, dict[str, dict]]) -> DataTable:
-    rows = []
-    for record in records[:MAX_LIST_ROWS]:
-        row = _identity_cells(record)
-        row["range_text"] = _record_cell(
-            record, record.get("range_text"), "range_min", numeric=True
-        )
-        row["inspector"] = _record_cell(record, record.get("inspector_name"), "kiem_dinh_vien")
-        row["owner"] = _record_cell(record, record.get("owner_org"), "don_vi_su_dung")
-        row[VERDICT_KEY] = _verdict_cell(record, fields.get(record["id"], {}))
-        rows.append(row)
-    note = None
-    if len(records) > MAX_LIST_ROWS:
-        note = f"Hiện {MAX_LIST_ROWS}/{len(records)} biên bản."
-    return DataTable(
-        title="Danh sách biên bản",
-        columns=[
-            *_IDENTITY_COLUMNS,
-            Column("range_text", "Phạm vi đo"),
-            Column("inspector", "Kiểm định viên"),
-            Column("owner", "Đơn vị sử dụng"),
-            Column(VERDICT_KEY, "Kết luận"),
-        ],
-        rows=rows,
-        total=len(records),
-        note=note,
-    )
-
-
-def _device_table(records: list[dict]) -> DataTable:
-    by_device: dict[Any, list[dict]] = {}
-    for record in records:
-        by_device.setdefault(record.get("device_id"), []).append(record)
-    rows = []
-    for group in by_device.values():
-        latest = group[-1]
-        rows.append(
-            {
-                "serial_no": _record_cell(latest, latest.get("serial_no"), "so_hieu"),
-                "model_code": _record_cell(latest, latest.get("model_code"), "ky_hieu"),
-                "range_text": _record_cell(
-                    latest, latest.get("range_text"), "range_min", numeric=True
-                ),
-                "count": Cell(text=str(len(group))),
-            }
-        )
-    return DataTable(
-        title="Thiết bị",
-        columns=[
-            Column("serial_no", "Số hiệu"),
-            Column("model_code", "Ký hiệu"),
-            Column("range_text", "Phạm vi đo"),
-            Column("count", "Số biên bản"),
-        ],
-        rows=rows,
-        total=len(rows),
-    )
-
-
-def _is_step(field: str, catalog: FieldCatalog) -> bool:
-    return any(table.step_code == field for table in catalog.tables)
-
-
-def _rank_candidates(
-    session: Session, records: list[dict], field: str, catalog: FieldCatalog
-) -> list[tuple[float, dict, bool]]:
-    """``(giá trị sắp xếp, dòng gốc, là điểm đo)`` cho mọi hồ sơ có giá trị của ``field``."""
-    ids = [record["id"] for record in records]
-    if _is_step(field, catalog):
-        points = _points(session, ids, [field])
-        return [
-            (float(p["measured_value"]), p, True)
-            for p in points
-            if p.get("measured_value") is not None
-        ]
-    rows = [
-        own[field]
-        for own in _fields_by_record(session, ids).values()
-        if field in own and own[field].get("value_min") is not None
-    ]
-    # Có đơn vị nhận diện được thì chỉ so các giá trị đã quy đổi SI (không trộn đơn vị gốc).
-    if any(row.get("unit_id") is not None for row in rows):
-        rows = [row for row in rows if row.get("unit_id") is not None]
-    return [(float(row["value_min"]), row, False) for row in rows]
-
-
-def _rank_row(
-    record: dict, row: dict, is_point: bool, related: list[dict | None]
-) -> dict[str, Cell]:
-    if is_point:
-        value = _point_cell(row, row.get("measured_text"))
-        line = " | ".join(cell.get("text") or "" for cell in load_cells(row.get("cells")))
-        detail = _point_cell(row, line or row.get("quote"))
-    else:
-        value = _field_cell(record, row)
-        detail = Cell(text=row.get("label") or "—")
-    cells = {**_identity_cells(record), "value": value}
-    cells["detail"] = detail
-    for index, related_row in enumerate(related):
-        cells[f"related{index}"] = _field_cell(record, related_row)
-    return cells
-
-
-def _winners(
-    candidates: list[tuple[float, dict, bool]], measure: str
-) -> list[tuple[float, dict, bool]]:
-    """Mọi dòng bằng giá trị cực trị (đồng hạng thì nêu đủ, không chọn bừa một dòng)."""
-    ordered = sorted(candidates, key=lambda item: item[0], reverse=measure == "max")
-    best = ordered[0][0]
-    tolerance = _NOMINAL_TOLERANCE * max(1.0, abs(best))
-    return [item for item in ordered if abs(item[0] - best) <= tolerance]
-
-
-def _rank_group(
-    session: Session,
-    by_id: dict[int, dict],
-    candidates: list[tuple[float, dict, bool]],
-    params: RecordsSummaryParams,
-    catalog: FieldCatalog,
-    procedure: str | None,
-) -> RankGroup:
-    """Dòng thắng cực trị của các biên bản MỘT QTKĐ (không so chéo quy trình)."""
-    field = params.field or ""
-    top = _winners(candidates, params.measure)
-    procedure_id = top[0][1].get("procedure_id")
-    is_step = _is_step(field, catalog)
-    related_keys = [] if is_step else catalog.related(field)
-    fields = _fields_by_record(session, [row["record_id"] for _, row, _ in top])
-    label = catalog.table_title(field, procedure_id) if is_step else catalog.field_label(field)
-    order = "nhỏ nhất" if params.measure == "min" else "lớn nhất"
-    rows, sentences = [], []
-    for _, row, is_point in top:
-        record = by_id[row["record_id"]]
-        related = [fields.get(row["record_id"], {}).get(key) for key in related_keys]
-        rows.append(_rank_row(record, row, is_point, related))
-        if is_point:
-            sentences.append(point_sentence(record, row, label))
-        else:
-            labels = [catalog.field_label(key) for key in related_keys]
-            sentences.append(
-                field_sentence(record, row, label, list(zip(labels, related, strict=True)))
-            )
-    scope = f" · QTKĐ {procedure}" if procedure else ""
-    table = DataTable(
-        title=f"{label}: {order}{scope}",
-        columns=[
-            *_IDENTITY_COLUMNS,
-            Column("value", "Giá trị ghi trong biên bản"),
-            Column("detail", "Nguyên văn dòng / trường"),
-            *(
-                Column(f"related{index}", catalog.field_label(key))
-                for index, key in enumerate(related_keys)
-            ),
-        ],
-        rows=rows,
-        total=len(rows),
-        note=(
-            f"Giá trị {order} trong {len(candidates)} giá trị ghi trong biên bản (quy đổi về "
-            "cùng đơn vị SI khi khác đơn vị); hiển thị nguyên văn, không tính lại. "
-            "Chỉ so biên bản cùng một QTKĐ."
-        ),
-    )
-    return RankGroup(
-        table=table, procedure=procedure, label=label, order=order, sentences=sentences
-    )
-
-
-def _rank_tables(
-    session: Session, records: list[dict], params: RecordsSummaryParams, catalog: FieldCatalog
-) -> list[RankGroup]:
-    """Một nhóm cực trị cho mỗi QTKĐ: cùng mã bảng/nhãn ở hai QTKĐ không cùng đại lượng."""
-    candidates = _rank_candidates(session, records, params.field or "", catalog)
-    by_id = {record["id"]: record for record in records}
-    groups: dict[Any, list[tuple[float, dict, bool]]] = {}
-    for item in candidates:
-        procedure_id = by_id[item[1]["record_id"]].get("procedure_id")
-        groups.setdefault(procedure_id, []).append(item)
-    result = []
-    for group in groups.values():
-        record = by_id[group[0][1]["record_id"]]
-        procedure = record.get("procedure_number") if len(groups) > 1 else None
-        result.append(_rank_group(session, by_id, group, params, catalog, procedure))
-    return result
-
-
-def _resolve_extreme(
-    session: Session, records: list[dict], params: RecordsSummaryParams
-) -> DataPayload:
-    """ "Biên bản nào ... thấp nhất": câu trả lời + bảng dòng thắng, không kèm cả sổ cái."""
-    groups = _rank_tables(session, records, params, field_catalog(session))
-    if not groups:
-        return empty_payload(
-            "records_summary", "Tổng hợp sổ cái", "Không có biên bản đã duyệt có giá trị này."
-        )
-    tables = [group.table for group in groups]
-    return make_payload(
-        intent="records_summary",
-        title="Tổng hợp sổ cái",
-        note=LEDGER_NOTE,
-        tables=tables,
-        citations=_citations_for_tables(session, tables),
-        answer=extreme_answer(groups),
-    )
-
-
-def resolve_records_summary(session: Session, params: RecordsSummaryParams) -> DataPayload:
-    """Đếm / liệt kê / cực trị trên sổ cái đã duyệt."""
-    records = summary_records(session, params)
-    if not records:
-        return empty_payload(
-            "records_summary", "Tổng hợp sổ cái", "Không có biên bản đã duyệt khớp bộ lọc."
-        )
-    if params.measure in ("min", "max"):
-        return _resolve_extreme(session, records, params)
-    fields = _fields_by_record(session, [record["id"] for record in records])
-    tables: list[DataTable] = [_summary_table(records)]
-    if params.range_unit:
-        tables.append(_device_table(records))
-    tables.append(_list_table(records, fields))
-    return make_payload(
-        intent="records_summary",
-        title="Tổng hợp sổ cái",
-        note=LEDGER_NOTE,
-        tables=tables,
-        citations=_citations_for_tables(session, tables),
+        answer=answer,
     )
 
 

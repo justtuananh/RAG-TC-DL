@@ -139,8 +139,11 @@ def test_data_branch_returns_traceable_table(client, monkeypatch):
     done = events[-1]
     assert done["branch"] == "data"
     assert done["sources"] == []
-    # Câu trả lời nhánh số liệu KHÔNG nhét số vào văn xuôi.
-    assert not any(ch.isdigit() for ch in done["answer"])
+    # Câu trả lời tất định chỉ nêu giá trị có trong bảng (ngày, số biên bản) + số lần đếm.
+    cells = {cell["text"] for row in table["rows"] for cell in row.values()}
+    assert done["answer"].startswith(f"Thiết bị số hiệu SN-1 có {len(table['rows'])} lần")
+    for line in done["answer"].splitlines()[2:]:
+        assert line.removeprefix("- ").split(" ")[0] in cells, line
     assert payload["citations"]
 
 

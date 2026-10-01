@@ -213,8 +213,32 @@ def test_certificate_number_is_not_a_procedure_number(db):
     assert routed["params"]["cert_no"] == "011/2024"
 
 
-def test_history_question_keeps_device_history(db):
+def test_times_question_lists_the_devices_records(db):
+    """Bo_20_cau câu 6: "mấy lần, lần nào không đạt" là đếm + liệt kê biên bản của thiết bị."""
     question = "Áp kế pít tông số hiệu 1045 được kiểm định mấy lần và lần nào không đạt?"
+    llm = {"branch": "data", "intent": "device_history", "params": {"serial": "1045"}}
+    routed = disambiguate_records(llm, question, db)
+    assert routed["intent"] == "records_summary"
+    assert routed["params"] == {"serial": "1045"}
+
+
+def test_times_question_in_a_mixed_question_keeps_the_regulation_half(db):
+    question = (
+        "Phạm vi đo theo QTKĐ của áp kế pít tông là bao nhiêu và thiết bị số hiệu 1045 được "
+        "kiểm định mấy lần, lần nào không đạt?"
+    )
+    llm = {"branch": "mixed", "intent": "device_history", "params": {"serial": "1045"}}
+    assert disambiguate_records(llm, question, db) == llm
+
+
+def test_latest_time_question_is_not_a_count(db):
+    question = "Áp kế pít tông số hiệu 1045 được kiểm định lần nào gần đây nhất?"
+    llm = {"branch": "data", "intent": "latest_record", "params": {"serial": "1045"}}
+    assert disambiguate_records(llm, question, db) == llm
+
+
+def test_history_question_keeps_device_history(db):
+    question = "Lịch sử kiểm định của áp kế pít tông số hiệu 1045"
     llm = {"branch": "data", "intent": "device_history", "params": {"serial": "1045"}}
     assert disambiguate_records(llm, question, db) == llm
 
@@ -257,7 +281,7 @@ def test_owner_org_count_question_replaces_a_made_up_unit(db):
     question = "Nhà máy Nhiệt điện Sông Lam có bao nhiêu biên bản kiểm định?"
     llm = {"branch": "data", "intent": "records_summary", "params": {"range_unit": "Sông Lam"}}
     routed = disambiguate_records(llm, question, db)
-    assert routed["params"] == {"owner_org": "Nhà máy Nhiệt điện Sông Lam"}
+    assert routed["params"] == {"owner_org": "Nhà máy Nhiệt điện Sông Lam", "measure": "count"}
 
 
 def test_distinctive_tail_of_an_owner_name_is_enough(db):
@@ -352,13 +376,17 @@ def test_extreme_question_routes_to_summary_with_the_compared_field(db):
 def test_unit_filter_routes_to_summary(db):
     question = "Có bao nhiêu áp kế pít tông có phạm vi đo ghi theo đơn vị bar?"
     llm = {"branch": "data", "intent": "devices_by_range", "params": {"unit": "bar"}}
-    assert disambiguate_records(llm, question, db)["params"] == {"range_unit": "bar"}
+    assert disambiguate_records(llm, question, db)["params"] == {
+        "range_unit": "bar",
+        "measure": "count",
+        "subject": "devices",
+    }
 
 
 def test_listing_by_range_unit_opens_the_summary_even_when_llm_says_text(db):
     routed = disambiguate_records(TEXT, "Liệt kê các áp kế có phạm vi đo theo đơn vị bar", db)
     assert routed["intent"] == "records_summary"
-    assert routed["params"] == {"range_unit": "bar"}
+    assert routed["params"] == {"range_unit": "bar", "subject": "devices"}
 
 
 def test_number_equal_to_a_serial_in_a_regulation_question_stays_text(db):
@@ -468,10 +496,41 @@ def test_unknown_date_lists_the_devices_records(db):
 
 
 def test_summary_counts_records_devices_and_failures(db):
-    payload = resolve_records_summary(db, RecordsSummaryParams())
+    """Bo_20_cau câu 20: đếm toàn bộ hồ sơ, nêu rõ biên bản không đạt (không kèm cả sổ cái)."""
+    payload = resolve_records_summary(db, RecordsSummaryParams(measure="count"))
     row = _table(payload, "Tổng hợp").rows[0]
     assert (row["records"].text, row["devices"].text, row["failed"].text) == ("8", "5", "2")
     assert row["failed_list"].text == "010/2024, 020/2026"
+    assert [table.title for table in payload.tables] == ["Tổng hợp", "Biên bản không đạt"]
+    assert payload.answer == (
+        "Sổ cái có 8 biên bản đã duyệt của 5 thiết bị (theo số hiệu); 2 biên bản không đạt: "
+        "010/2024 (МП-60 SN 1045, độ kín: độ giảm áp sau 5 min vượt 30 kPa) và "
+        "020/2026 (CPB5800 SN 1A0043219, thời gian quay tự do dưới 180 s)."
+    )
+
+
+def test_listing_by_inspector_answers_with_each_record(db):
+    """Bo_20_cau câu 10: số biên bản + từng biên bản (số, ký hiệu, số hiệu)."""
+    payload = resolve_records_summary(db, RecordsSummaryParams(inspector="Phạm Văn Hà"))
+    assert payload.answer.splitlines() == [
+        "2 biên bản do kiểm định viên Phạm Văn Hà thực hiện:",
+        "",
+        "- 005/2023 (МП-60, SN 1045), ngày 20/06/2023: đạt",
+        "- 013/2024 (МП-2500, SN 0391), ngày 19/11/2024: đạt",
+    ]
+    assert [table.title for table in payload.tables] == ["Danh sách biên bản"]
+
+
+def test_one_device_listing_states_each_verdict(db):
+    """Bo_20_cau câu 6: mấy lần, lần nào không đạt (kèm lý do nguyên văn kết luận)."""
+    payload = resolve_records_summary(db, RecordsSummaryParams(serial="1045"))
+    assert payload.answer.splitlines() == [
+        "Áp kế píttông tiêu chuẩn МП-60 số hiệu 1045 có 3 biên bản đã duyệt:",
+        "",
+        "- 005/2023 ngày 20/06/2023: đạt",
+        "- 010/2024 ngày 25/06/2024: không đạt (độ kín: độ giảm áp sau 5 min vượt 30 kPa)",
+        "- 011/2024 ngày 10/07/2024: đạt",
+    ]
 
 
 def test_minimum_free_rotation_time_is_ranked_verbatim(db):
@@ -501,7 +560,7 @@ def test_extreme_answers_with_the_winning_record_only(db):
 def test_extreme_within_limit_does_not_claim_a_failure(db):
     payload = resolve_records_summary(db, RecordsSummaryParams(measure="max", field="A.2"))
     assert payload.answer is not None
-    assert payload.answer.endswith(", trong mức cho phép ≥ 180 s.")
+    assert payload.answer.endswith(", trong mức cho phép ≥ 180 s nên đạt.")
     assert "không đạt" not in payload.answer
 
 
@@ -552,10 +611,18 @@ def test_ranking_never_compares_records_of_two_procedures(db):
 
 
 def test_range_unit_filter_uses_the_device_range(db):
-    payload = resolve_records_summary(db, RecordsSummaryParams(range_unit="bar"))
+    """Bo_20_cau câu 11: đếm THIẾT BỊ theo đơn vị phạm vi đo, kèm ký hiệu và dải đo."""
+    payload = resolve_records_summary(db, RecordsSummaryParams(range_unit="bar", subject="devices"))
     devices = _table(payload, "Thiết bị")
     assert {row["serial_no"].text for row in devices.rows} == {"1A0043219", "T23-0512"}
     assert "(-1 đến 2) bar;" in _texts(payload)
+    assert [table.title for table in payload.tables] == ["Thiết bị"]
+    assert payload.answer.splitlines() == [
+        "2 thiết bị có phạm vi đo ghi theo đơn vị bar:",
+        "",
+        "- CPB5800 SN 1A0043219 (1 đến 1 200) bar",
+        "- T2300 SN T23-0512 (-1 đến 2) bar",
+    ]
 
 
 def test_inspector_filter(db):
@@ -593,3 +660,144 @@ def test_certificate_number_is_accepted():
 def test_extreme_needs_a_field():
     with pytest.raises(ValidationError):
         RecordsSummaryParams(measure="min")
+
+
+# ── Câu trả lời tất định cho Bo_20_cau ────────────────────────────────────────
+
+
+def test_counting_failures_beside_other_counts_is_not_a_filter(db):
+    """Câu 20: "bao nhiêu biên bản, … bao nhiêu biên bản không đạt? Nêu rõ biên bản không
+    đạt" đếm cả sổ cái; trước đây câu cuối lọc sổ cái còn 2 biên bản."""
+    question = (
+        "Toàn bộ hồ sơ có bao nhiêu biên bản, bao nhiêu thiết bị (theo số hiệu) và bao "
+        "nhiêu biên bản không đạt? Nêu rõ biên bản không đạt."
+    )
+    routed = disambiguate_records(TEXT, question, db)
+    assert routed["intent"] == "records_summary"
+    assert routed["params"] == {"measure": "count"}
+
+
+def test_filter_field_is_not_repeated_on_every_line(db):
+    """Câu 10: "kiểm định viên Phạm Văn Hà" là bộ lọc, không phải trường hỏi kèm."""
+    question = (
+        "Kiểm định viên Phạm Văn Hà đã thực hiện bao nhiêu biên bản áp kế pít tông và đó "
+        "là những biên bản nào?"
+    )
+    routed = disambiguate_records(TEXT, question, db)
+    assert routed["params"] == {"inspector": "Phạm Văn Hà"}
+
+
+def test_fields_follow_the_order_of_the_question(db):
+    """Câu 17: kiểm định viên trước người kiểm soát, đúng thứ tự câu hỏi."""
+    question = "Kiểm định viên và người kiểm soát của biên bản áp kế PG7601 số hiệu 1520 là ai?"
+    fields = detect_targets(question, field_catalog(db)).fields
+    assert fields.index("kiem_dinh_vien") < fields.index("nguoi_kiem_soat")
+
+
+def test_certificate_number_question_answers_with_the_number(db):
+    """Câu 1: chỉ hỏi số biên bản: trả số biên bản kèm định danh, không cả phiếu 21 trường."""
+    question = (
+        "Biên bản kiểm định áp kế pít tông МП-60, số hiệu 1045, ngày 10/07/2024 có số biên "
+        "bản là bao nhiêu?"
+    )
+    routed = disambiguate_records(TEXT, question, db)
+    payload = resolve_record_lookup(db, RecordLookupParams(**routed["params"]))
+    assert payload.answer == (
+        "Số biên bản là 011/2024 (áp kế píttông tiêu chuẩn МП-60 số hiệu 1045, ngày "
+        "10/07/2024; đơn vị sử dụng: Công ty CP Cơ khí Thủy lực Hải An)."
+    )
+    assert [(table.title, len(table.rows)) for table in payload.tables] == [
+        ("Thông tin biên bản", 1)
+    ]
+
+
+def test_failure_question_answers_with_the_reason_and_its_basis(db):
+    """Câu 7: kết luận nguyên văn + dòng số liệu mà kết luận viện dẫn."""
+    payload = resolve_record_lookup(
+        db, RecordLookupParams(serial="1045", calibrated_on="2024-06-25", fields=["ket_luan"])
+    )
+    assert payload.answer == (
+        "Biên bản 010/2024 của áp kế píttông tiêu chuẩn МП-60 số hiệu 1045, ngày 25/06/2024: "
+        "kết luận không đạt yêu cầu kỹ thuật đo lường (độ kín: độ giảm áp sau 5 min vượt "
+        "30 kPa); căn cứ: độ giảm áp suất sau 5 min tại 600 kPa 37,6 kPa, vượt mức cho "
+        "phép ≤ 30 kPa."
+    )
+
+
+def test_point_question_answers_the_row_not_the_header_conditions(db):
+    """Câu 15: nhiệt độ / độ ẩm TẠI điểm đo là ô của dòng đó, không phải điều kiện ở đầu
+    biên bản ("(20 ± 2) ºC")."""
+    question = (
+        "Tại điểm đo 2 500 kG/cm² của biên bản МП-2500 số hiệu 0391 (013/2024), áp suất khí "
+        "quyển, nhiệt độ và độ ẩm môi trường ghi nhận là bao nhiêu?"
+    )
+    routed = disambiguate_records(TEXT, question, db)
+    payload = resolve_record_lookup(db, RecordLookupParams(**routed["params"]))
+    assert [table.title.split(" · ")[0] for table in payload.tables] == [
+        "Bảng A.5 - Kết quả cân bằng áp suất"
+    ]
+    assert payload.answer.endswith(
+        ": kết quả cân bằng áp suất tại áp suất danh nghĩa 2500,0 kG/cm2: áp suất khí quyển "
+        "1015,99 hPa; độ ẩm môi trường 60,8 %RH; nhiệt độ môi trường 20,6 °C."
+    )
+
+
+def test_table_question_across_records_counts_rows_of_every_record(db):
+    """Câu 14: "các biên bản có bao nhiêu điểm" đếm dòng Bảng A.5 trên mọi biên bản; dải
+    điểm danh nghĩa của biên bản được hỏi là dòng đầu và dòng cuối (không tính bước)."""
+    question = (
+        "Bảng 3 “Kết quả cân bằng áp suất” của các biên bản có bao nhiêu điểm áp suất danh "
+        "nghĩa? Của biên bản 011/2024 là từ bao nhiêu đến bao nhiêu?"
+    )
+    routed = disambiguate_records(TEXT, question, db)
+    assert routed["params"]["across_records"] is True
+    payload = resolve_record_lookup(db, RecordLookupParams(**routed["params"]))
+    lines = payload.answer.splitlines()
+    assert lines[0] == "Bảng A.5 - Kết quả cân bằng áp suất có 10 điểm ở cả 8 biên bản đã duyệt."
+    assert lines[2].endswith(
+        ": kết quả cân bằng áp suất: 10 điểm, áp suất danh nghĩa từ 6,0 đến 60,0 kG/cm2."
+    )
+
+
+def test_same_value_in_every_record_is_stated_once(db):
+    """Câu 4: A0 giống nhau ở cả 3 biên bản của thiết bị 1045: nêu một lần."""
+    payload = resolve_record_lookup(
+        db, RecordLookupParams(serial="1045", fields=["dien_tich_hieu_dung_cua_pittong"])
+    )
+    assert payload.answer == (
+        "Áp kế píttông tiêu chuẩn МП-60 số hiệu 1045 có 3 biên bản đã duyệt (005/2023 ngày "
+        "20/06/2023; 010/2024 ngày 25/06/2024; 011/2024 ngày 10/07/2024), cùng ghi diện tích "
+        "hiệu dụng của píttông A0 = 0,99796 × 10-4 , m2."
+    )
+
+
+def test_identity_field_asked_without_being_a_selector_gets_a_direct_answer(db):
+    """ "Biên bản 011/2024 kiểm định ngày nào?" hỏi ngày (không phải bộ chọn): trả định danh
+    của biên bản, không phải cả phiếu 21 trường."""
+    payload = resolve_record_lookup(
+        db, RecordLookupParams(cert_no="011/2024", fields=["ngay_kiem_dinh"])
+    )
+    assert payload.answer == (
+        "Biên bản 011/2024 của áp kế píttông tiêu chuẩn МП-60 số hiệu 1045, ngày 10/07/2024 "
+        "(đơn vị sử dụng: Công ty CP Cơ khí Thủy lực Hải An)."
+    )
+    assert [(table.title, len(table.rows)) for table in payload.tables] == [
+        ("Thông tin biên bản", 1)
+    ]
+
+
+def test_record_without_asked_field_still_shows_the_card(db):
+    """ "Cho xem biên bản 011/2024": không hỏi trường nào → phiếu đầy đủ như trước."""
+    payload = resolve_record_lookup(db, RecordLookupParams(cert_no="011/2024"))
+    assert payload.tables[0].title.startswith("Biên bản 011/2024")
+
+
+def test_device_name_question_answers_the_field(db):
+    """ "Tên trang bị" là trường định danh không bao giờ là bộ chọn: trả như trường thường."""
+    payload = resolve_record_lookup(
+        db, RecordLookupParams(cert_no="011/2024", fields=["ten_trang_bi_dl_tn"])
+    )
+    assert payload.answer == (
+        "Biên bản 011/2024 của áp kế píttông tiêu chuẩn МП-60 số hiệu 1045, ngày 10/07/2024: "
+        "tên trang bị ĐL-TN Áp kế pít tông."
+    )

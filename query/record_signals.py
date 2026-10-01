@@ -96,6 +96,25 @@ _GENERIC_ORG_WORDS = frozenset(
 _ENUMERATE_RE = re.compile(
     r"liệt\s+kê|danh\s+sách|(?:những|các)\s+(?:áp\s+kế|thiết\s+bị|biên\s+bản)", re.IGNORECASE
 )
+# Đếm THIẾT BỊ ("có bao nhiêu áp kế", "những thiết bị nào") khác đếm biên bản.
+_DEVICE_COUNT_RE = re.compile(
+    r"(?:bao\s+nhiêu|mấy|những|các)\s+(?:áp\s+kế|thiết\s+bị)|(?:áp\s+kế|thiết\s+bị)\s+nào",
+    re.IGNORECASE,
+)
+_RECORD_COUNT_RE = re.compile(r"(?:bao\s+nhiêu|mấy|những|các)\s+biên\s+bản", re.IGNORECASE)
+# Số lần kiểm định của một thiết bị.
+_TIMES_RE = re.compile(r"mấy\s+lần|bao\s+nhiêu\s+lần|lần\s+nào|những\s+lần", re.IGNORECASE)
+# "lần nào gần đây nhất" hỏi lần kiểm định gần nhất (lịch sử), không phải đếm số lần.
+_LATEST_RE = re.compile(r"gần\s+(?:đây\s+)?nhất|mới\s+nhất|cuối\s+cùng|sau\s+cùng", re.IGNORECASE)
+# Bảng được hỏi trên mọi biên bản ("các biên bản có bao nhiêu điểm").
+_ACROSS_RECORDS_RE = re.compile(r"(?:các|mỗi|từng|tất\s+cả(?:\s+các)?)\s+biên\s+bản", re.IGNORECASE)
+# Tham số lọc của ``records_summary`` → tiền tố khóa trường mà nó lọc.
+_FILTER_FIELDS = {
+    "inspector": "kiem_dinh_vien",
+    "reviewer": "nguoi_kiem_soat",
+    "owner_org": "don_vi_su_dung",
+    "range_unit": "pham_vi_do",
+}
 _HISTORY_INTENTS = frozenset({"device_history", "latest_record", "error_trend"})
 _LEDGER_TTL_SECONDS = 30.0
 
@@ -128,6 +147,7 @@ class RecordSignals:
     nominal: float | None = None
     measure: str | None = None
     summary_cue: bool = False
+    across_records: bool = False
     targets: Targets = Targets()
     question_words: frozenset[str] = frozenset()
 
@@ -243,10 +263,14 @@ def _owner(question: str, owners: dict[str, str]) -> str | None:
 
 
 def _verdict(question: str) -> str | None:
-    several_counts = len(_COUNT_RE.findall(question)) > 1
-    for match in _VERDICT_RE.finditer(question):
-        if several_counts and _COUNT_BEFORE_RE.search(question[: match.start()]):
-            continue
+    matches = list(_VERDICT_RE.finditer(question))
+    if len(_COUNT_RE.findall(question)) > 1 and any(
+        _COUNT_BEFORE_RE.search(question[: match.start()]) for match in matches
+    ):
+        # "bao nhiêu biên bản, bao nhiêu thiết bị và bao nhiêu biên bản không đạt? Nêu rõ
+        # biên bản không đạt": kết luận là MỘT trong các phép đếm, không lọc sổ cái.
+        return None
+    for match in matches:
         return "khong_dat" if match.group(1) else "dat"
     return None
 
@@ -295,6 +319,7 @@ def extract_signals(question: str, index: LedgerIndex, session: Any) -> RecordSi
         nominal=_nominal(text_value),
         measure=measure,
         summary_cue=bool(_SUMMARY_RE.search(text_value)),
+        across_records=bool(_ACROSS_RECORDS_RE.search(text_value)),
         targets=detect_targets(text_value, field_catalog(session)),
         question_words=content_tokens(text_value),
     )
@@ -322,6 +347,7 @@ def _lookup(base: dict[str, Any], signals: RecordSignals) -> dict[str, Any]:
             "steps": list(signals.targets.steps),
             "nominal": signals.nominal,
             "focus_words": sorted(signals.question_words) if signals.targets.steps else [],
+            "across_records": bool(signals.targets.steps and signals.across_records),
         },
     )
 
@@ -331,7 +357,25 @@ def _summary(
 ) -> dict[str, Any]:
     from query.intents import extract_date_range
 
-    params = {"range_unit": signals.range_unit, **extract_date_range(question), **extra}
+    counting = _COUNT_RE.search(question) and not _ENUMERATE_RE.search(question)
+    about_devices = _DEVICE_COUNT_RE.search(question) and not _RECORD_COUNT_RE.search(question)
+    params = {
+        "range_unit": signals.range_unit,
+        # Chỉ ghi khi khác mặc định ("list" / "records"): đếm thì câu trả lời nêu số lượng
+        # thay vì kể cả danh sách; đếm thiết bị thì nhóm theo số hiệu.
+        "measure": "count" if counting else None,
+        "subject": "devices" if about_devices else None,
+        **extract_date_range(question),
+        **extra,
+    }
+    # Trường mà câu hỏi dùng làm BỘ LỌC ("kiểm định viên Phạm Văn Hà", "phạm vi đo ghi
+    # theo đơn vị bar") không phải trường hỏi kèm: mọi dòng đều cùng giá trị đó.
+    filters = tuple(prefix for name, prefix in _FILTER_FIELDS.items() if params.get(name))
+    params["fields"] = [
+        key
+        for key in signals.targets.specific_fields
+        if not any(key.startswith(prefix) for prefix in filters)
+    ]
     return _payload(base, "records_summary", params)
 
 
@@ -385,6 +429,19 @@ def disambiguate_records(
     signals = extract_signals(question, index, session)
     intent = str(payload.get("intent") or "").strip().lower()
 
+    counts_times = (
+        signals.serials
+        and not (signals.cert_nos or signals.dates)
+        and _TIMES_RE.search(question)
+        and not _LATEST_RE.search(question)
+        # Nhánh ``mixed`` (quy định QTKĐ + lịch sử thiết bị) giữ nguyên: đổi sang ``data``
+        # thì phần trả lời quy định bị bỏ.
+        and str(payload.get("branch") or "") != "mixed"
+    )
+    if counts_times:
+        # "Áp kế số hiệu 1045 được kiểm định mấy lần, lần nào không đạt": đếm + liệt kê biên
+        # bản của MỘT thiết bị (kết luận ở đây là điều được hỏi, không phải bộ lọc).
+        return _summary(payload, signals, question, serial=signals.serials[0], measure=None)
     if signals.serials or signals.cert_nos:
         if not _is_history_question(payload, intent, signals):
             return _lookup(payload, signals)

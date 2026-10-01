@@ -53,6 +53,8 @@ class RecordLookupParams(BaseModel):
     # Từ của câu hỏi: cột bảng mà câu hỏi nhắc tới ("áp suất khí quyển") được đưa lên
     # đầu bảng thay vì nằm khuất bên phải. Chỉ dùng để SẮP cột, không lọc dữ liệu.
     focus_words: list[str] = Field(default_factory=list, max_length=80)
+    # "các biên bản có bao nhiêu điểm": đếm dòng bảng được hỏi trên MỌI biên bản cùng QTKĐ.
+    across_records: bool = False
 
     @field_validator("calibrated_on", mode="before")
     @classmethod
@@ -96,6 +98,17 @@ class RecordsSummaryParams(BaseModel):
     # QTKĐ sở hữu bảng được so (lớp định tuyến điền từ danh mục, không từ LLM): mã bảng
     # như "A.2" lặp lại giữa các QTKĐ với nghĩa khác.
     procedure_ids: list[int] = Field(default_factory=list, max_length=50)
+    # Câu hỏi đếm/liệt kê THIẾT BỊ ("có bao nhiêu áp kế ...") hay biên bản; lớp định tuyến
+    # điền từ câu hỏi.
+    subject: Literal["records", "devices"] = "records"
+    # Trường câu hỏi hỏi kèm ("đơn vị sử dụng của các áp kế …"): nêu trong câu trả lời và
+    # thêm cột vào bảng. Khóa của danh mục trường, không bao giờ nối vào SQL.
+    fields: list[str] = Field(default_factory=list, max_length=24)
+
+    @field_validator("fields", mode="before")
+    @classmethod
+    def _field_keys(cls, value: Any) -> list[str]:
+        return _keys(value)
 
     @field_validator("date_from", "date_to", mode="before")
     @classmethod

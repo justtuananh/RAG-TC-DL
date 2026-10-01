@@ -100,11 +100,14 @@ answer + citations  ──►  UI (one of):
   lời riêng từng QTKĐ, `_find_procedure` không chọn bừa khi tên khớp nhiều QTKĐ.
   Nhánh số liệu chỉ đọc view đã duyệt (P3) qua `query/records.py` + `query/approved.py`, trả mỗi
   con số kèm tham chiếu xuất xứ (P1) và trích dẫn sổ cái tách bạch với nguồn QTKĐ. Tích hợp ở
-  `/api/chat/stream` (SSE event `data`, `done.branch`/`done.data`); câu trả lời nhánh số liệu
-  không nhét số vào văn xuôi — frontend render bảng (`components/chat/DataResultTable.tsx`).
-  Ngoại lệ duy nhất: câu cực trị ("biên bản nào ... thấp nhất") trả MỘT câu tất định dựng từ
-  nguyên văn ô của biên bản thắng (`query/record_answer.py`, `DataPayload.answer`) + bảng chỉ
-  dòng thắng (đồng hạng thì đủ), không kèm danh sách cả sổ cái.
+  `/api/chat/stream` (SSE event `data`, `done.branch`/`done.data`); bảng do frontend render
+  (`components/chat/DataResultTable.tsx`), ô số bấm được để mở nguồn.
+  Câu trả lời của intent sổ cái (`record_lookup`, `records_summary`, `device_history`) là MỘT
+  câu tất định (`DataPayload.answer` → `done.answer`), không qua LLM, ghép từ NGUYÊN VĂN đúng
+  các ô của bảng đi kèm (`query/answer_phrases.py` + `query/record_answer*.py`); chỉ thêm số
+  đếm và chữ đối chiếu mức cho phép ("nên không đạt" chỉ khi kết luận biên bản cũng vậy).
+  Bảng chỉ có điều được hỏi: cực trị → dòng thắng; đếm toàn sổ cái → tổng hợp + biên bản không
+  đạt; đếm/liệt kê có lọc → biên bản khớp; đếm thiết bị → bảng thiết bị.
 - `query/record_*.py` — **tra cứu biên bản có cấu trúc** (Pha R). Hai intent `record_lookup`
   (một biên bản theo số hiệu / số biên bản / ngày: trường được hỏi, bảng kết quả, căn cứ kết
   luận không đạt) và `records_summary` (đếm / liệt kê / cực trị trên sổ cái, lọc theo người,
@@ -112,7 +115,11 @@ answer + citations  ──►  UI (one of):
   `v_record_field`), nguyên văn từng ô ở `measurement_point.cells`; `v_record_detail` lấy phạm
   vi đo của CHÍNH thiết bị. `record_fields.py` dựng danh mục trường từ nhãn Phụ lục A đã duyệt
   + bí danh ký hiệu (A0, uCmax, U(p)); `record_signals.py` sửa lựa chọn của LLM bằng định danh
-  khớp đúng sổ cái (chạy sau `disambiguate_catalogs`). Cực trị chỉ so biên bản cùng một QTKĐ.
+  khớp đúng sổ cái (chạy sau `disambiguate_catalogs`), kể cả kiểu câu hỏi (`measure` đếm/liệt
+  kê, `subject` biên bản/thiết bị, `across_records`). Cực trị chỉ so biên bản cùng một QTKĐ.
+  `record_query.py` (tra biên bản) và `record_summary.py` (tổng hợp) đọc view qua
+  `record_cells.py`. Gate: `make record-eval` chấm bộ `bo20` trên CÂU TRẢ LỜI (đủ "số liệu
+  bắt buộc" của `Bo_20_cau.xlsx`, số khớp trọn), các bộ khác trên câu trả lời + bảng.
   Biên bản đã duyệt trước migration 012 được bổ sung bằng `python -m records.backfill`.
   Prompt phân loại ở `query/intent_prompt.py` (~4 000 token → bộ phân loại dùng `num_ctx` 8192).
 - `frontend/` — **React 18 + TypeScript + Vite + Tailwind** web UI (Docker nginx on **:3000**,

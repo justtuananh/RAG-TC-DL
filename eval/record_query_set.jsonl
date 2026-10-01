@@ -3,7 +3,7 @@
 {"id": "bo20-03", "set": "bo20", "question": "Phương tiện (chuẩn) dùng để kiểm định áp kế pít tông МП-60 số hiệu 1045 trong biên bản 011/2024 là gì?", "intent": "record_lookup", "must": ["PG7202", "QTKĐ 1.159 : 2021"]}
 {"id": "bo20-04", "set": "bo20", "question": "Diện tích hiệu dụng pít tông A0 của áp kế pít tông МП-60 số hiệu 1045 là bao nhiêu?", "intent": "record_lookup", "must": ["0,99796 × 10-4", "m2"]}
 {"id": "bo20-05", "set": "bo20", "question": "Độ không đảm bảo đo uCmax và độ không đảm bảo đo mở rộng U(p) của áp kế pít tông МП-2500 số hiệu 0391 là bao nhiêu?", "intent": "record_lookup", "must": ["787,500 × 10-3", "1 750,0", "1 575,000 × 10-3", "k = 2"]}
-{"id": "bo20-06", "set": "bo20", "question": "Áp kế pít tông số hiệu 1045 (МП-60) được kiểm định mấy lần trong hồ sơ và lần nào không đạt?", "intent": "device_history", "must": ["3", "005/2023", "20/06/2023", "010/2024", "25/06/2024", "011/2024", "10/07/2024"]}
+{"id": "bo20-06", "set": "bo20", "question": "Áp kế pít tông số hiệu 1045 (МП-60) được kiểm định mấy lần trong hồ sơ và lần nào không đạt?", "intent": "records_summary", "must": ["3", "005/2023", "20/06/2023", "010/2024", "25/06/2024", "011/2024", "10/07/2024"], "intents": ["records_summary", "device_history"]}
 {"id": "bo20-07", "set": "bo20", "question": "Vì sao biên bản kiểm định áp kế pít tông số hiệu 1045 ngày 25/06/2024 bị kết luận không đạt?", "intent": "record_lookup", "must": ["37,6", "≤ 30", "5 min", "600 kPa"]}
 {"id": "bo20-08", "set": "bo20", "question": "Thời gian quay tự do của áp kế pít tông 280 số hiệu B280-7702 (biên bản 002/2022) là bao nhiêu và có đạt không?", "intent": "record_lookup", "must": ["207,6", "198,7", "203,15", "≥ 180"]}
 {"id": "bo20-09", "set": "bo20", "question": "Biên bản nào có thời gian quay tự do trung bình thấp nhất trong toàn bộ 20 biên bản, giá trị là bao nhiêu?", "intent": "records_summary", "must": ["154,6", "157,3", "151,9", "020/2026", "19/05/2026"], "must_not": ["199,0", "001/2022"]}
@@ -23,7 +23,7 @@
 {"id": "para-03", "set": "paraphrase", "question": "Biên bản 016/2025 dùng chuẩn nào để kiểm?", "intent": "record_lookup", "must": ["PG7202"]}
 {"id": "para-04", "set": "paraphrase", "question": "A0 của thiết bị 58-3312 bằng bao nhiêu", "intent": "record_lookup", "must": ["0,97867 × 10-5"]}
 {"id": "para-05", "set": "paraphrase", "question": "Hệ số uCmax ghi trong biên bản 012/2024 là gì", "intent": "record_lookup", "must": ["138,600 × 10-3"]}
-{"id": "para-06", "set": "paraphrase", "question": "Thiết bị 6112 đã kiểm mấy lần rồi", "intent": "device_history", "must": ["004/2023", "009/2024", "014/2025"]}
+{"id": "para-06", "set": "paraphrase", "question": "Thiết bị 6112 đã kiểm mấy lần rồi", "intent": "records_summary", "must": ["004/2023", "009/2024", "014/2025"], "intents": ["records_summary", "device_history"]}
 {"id": "para-07", "set": "paraphrase", "question": "Lý do biên bản 020/2026 không đạt là gì", "intent": "record_lookup", "must": ["154,6", "≥ 180"]}
 {"id": "para-08", "set": "paraphrase", "question": "Kết quả quay tự do trong biên bản 007/2023 của áp kế B280-7702", "intent": "record_lookup", "must": ["≥ 180"]}
 {"id": "para-09", "set": "paraphrase", "question": "Áp kế nào có tốc độ hạ trung bình lớn nhất trong hồ sơ", "intent": "records_summary", "must": ["0,36"]}
