@@ -74,6 +74,8 @@ def test_preface_lists_every_type_with_its_procedure():
     preface = ambiguity_preface(ambiguity)
 
     assert "chưa nêu rõ loại" in preface
+    # Số QTKĐ trong kho tài liệu, không phải số kiểu thiết bị trong hồ sơ.
+    assert "Kho tài liệu có 2 QTKĐ riêng cho từng loại" in preface
     assert "Áp kế píttông kiểu H3000 (QTKĐ 1.071)" in preface
     assert "Áp kế píttông tiêu chuẩn (QTKĐ 1.159)" in preface
     assert "—" not in preface

@@ -142,8 +142,11 @@ def ambiguity_preface(ambiguity: DeviceAmbiguity) -> str:
     """
     labels = _join_vi([_option_label(option) for option in ambiguity.options])
     return (
-        f"Câu hỏi chưa nêu rõ loại **{ambiguity.phrase}** nào. Tài liệu QTKĐ hiện có "
-        f"{len(ambiguity.options)} loại: {labels}. Thông tin của từng loại:\n\n"
+        # Nói rõ là số QTKĐ trong kho tài liệu: hồ sơ có nhiều kiểu thiết bị (CPB5800,
+        # PG7601, …) nhưng cùng thuộc một QTKĐ.
+        f"Câu hỏi chưa nêu rõ loại **{ambiguity.phrase}** nào. Kho tài liệu có "
+        f"{len(ambiguity.options)} QTKĐ riêng cho từng loại: {labels}. "
+        "Thông tin của từng loại:\n\n"
     )
 
 
