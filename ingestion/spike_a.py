@@ -279,7 +279,7 @@ def main() -> None:
           f"   ->LaTeX {t['omml_latex_converted']} ({t['omml_latex_rate']})")
     print(f"  LaTeX total          : {t['formulas_latex_total']}"
           f"/{t['formulas_found']}  ({t['latex_rate_total']})")
-    print(f"  -> {OUT_DEFAULT}/extraction_report.json")
+    print(f"  -> {out}/extraction_report.json")
 
 
 if __name__ == "__main__":

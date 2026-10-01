@@ -215,6 +215,31 @@ def _is_body_masquerading_as_heading(text: str) -> bool:
     )
 
 
+# Font ký hiệu riêng: ký tự lưu trong XML khác glyph hiển thị. "Doluong" (font đo lường
+# của các QTKĐ 1.071 / 1.159 / 1.160) vẽ "Û" thành "≤": mọi chỗ dùng ("Độ ẩm tương đối:
+# Û 80 %", "0,1 < P Û 6", "ĐKĐBĐ … Û 1/3 sai số cho phép") đều là "không lớn hơn". Chữ
+# thường của font này hiển thị đúng như chữ, nên chỉ ánh xạ glyph đã kiểm chứng.
+_FONT_GLYPHS: dict[str, dict[str, str]] = {"doluong": {"Û": "≤"}}
+T_RPR = _q("w:rPr")
+T_RFONTS = _q("w:rFonts")
+W_ASCII = f"{{{NS['w']}}}ascii"
+W_HANSI = f"{{{NS['w']}}}hAnsi"
+
+
+def _font_text(t_node) -> str:
+    """Chữ của một ``w:t`` theo glyph hiển thị của font run chứa nó."""
+    text = t_node.text or ""
+    run = t_node.getparent()
+    fonts = run.find(f"{T_RPR}/{T_RFONTS}") if run is not None else None
+    if fonts is None or not text:
+        return text
+    font = (fonts.get(W_ASCII) or fonts.get(W_HANSI) or "").casefold()
+    glyphs = _FONT_GLYPHS.get(font)
+    if not glyphs:
+        return text
+    return "".join(glyphs.get(char, char) for char in text)
+
+
 def _inline(el, rels, formulas, section_path, *, in_table=False, counter=None):
     """Render the inline content of a paragraph/cell in document order.
 
@@ -245,7 +270,7 @@ def _inline(el, rels, formulas, section_path, *, in_table=False, counter=None):
             out.append(f" $ {latex} $ ")
             skip_until.append(node)  # don't let .iter() re-emit its m:t runs
         elif tag == T_T:
-            out.append(node.text or "")
+            out.append(_font_text(node))
         elif tag in (T_TAB,):
             out.append(" ")
         elif tag in (T_BR, T_CR):

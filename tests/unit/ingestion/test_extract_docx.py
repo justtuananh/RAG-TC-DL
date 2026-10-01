@@ -188,3 +188,17 @@ def test_table_md_keeps_paragraph_boundary_inside_cell():
     )
     first = _table_md(tbl, {}, [], [], [0]).split("\n")[0]
     assert first == "| Nguyễn Đăng Vinh / 1970 | 23 QTKĐ 1.039 : 2001 / QTKĐ 1.019 : 2014 |"
+
+
+def test_doluong_font_glyph_becomes_less_or_equal():
+    """Font đo lường "Doluong" vẽ ký tự "Û" thành "≤" (QTKĐ 1.071, 1.159, 1.160: "Độ ẩm
+    tương đối: ≤ 80 %", "0,1 < P ≤ 6"); đọc chữ thô thì văn bản ra "Û 80 %"."""
+    from ingestion.extract_docx import _inline
+
+    p = etree.fromstring(
+        f'<w:p xmlns:w="{W}"><w:r><w:t xml:space="preserve">Độ ẩm tương đối: </w:t></w:r>'
+        '<w:r><w:rPr><w:rFonts w:ascii="Doluong" w:hAnsi="Doluong"/></w:rPr><w:t>Û</w:t></w:r>'
+        "<w:r><w:t xml:space=\"preserve\"> 80 % Û</w:t></w:r></w:p>"
+    )
+    # "Û" ngoài font Doluong (chữ Việt / tên riêng) giữ nguyên.
+    assert _inline(p, {}, [], [], counter=[0]) == "Độ ẩm tương đối: ≤ 80 % Û"
