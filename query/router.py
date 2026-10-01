@@ -31,7 +31,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from query import approved as approved_query
-from query import intents
+from query import intents, procedure_scope
 from query import records as records_query
 from query import units as units_query
 from query.catalog_router import CATALOG_RESOLVERS
@@ -416,7 +416,25 @@ def resolve_procedure_params(
             "Thông số tham chiếu QTKĐ",
             "Không tìm thấy QTKĐ đã có dữ kiện được duyệt khớp yêu cầu.",
         )
-    facts = approved_query.list_approved_facts(session, procedure_id=procedure["id"], limit=200)
+    facts = [
+        fact
+        for fact in approved_query.list_approved_facts(
+            session, procedure_id=procedure["id"], limit=200
+        )
+        # Trường mẫu hồ sơ là khung biên bản (Phụ lục A), không phải thông số của QTKĐ.
+        if fact.get("fact_kind") != "appendix_field"
+    ]
+    asked = params.asked_kinds is not None
+    if asked:
+        facts = procedure_scope.select_facts(facts, params.asked_kinds, params.asked_labels) or []
+    if not facts:
+        # Không có dữ kiện đã duyệt cho điều được hỏi: bảng rỗng → nhánh văn bản trả lời
+        # từ chính văn bản QTKĐ.
+        return _empty_payload(
+            "procedure_params",
+            "Thông số tham chiếu QTKĐ",
+            "QTKĐ chưa có dữ kiện đã duyệt cho điều được hỏi.",
+        )
     units = units_query.unit_defs_by_id(session)
     columns = [
         Column("fact_kind", "Loại dữ kiện"),
@@ -456,6 +474,10 @@ def resolve_procedure_params(
         total=len(rows),
         note="Chỉ dữ kiện đã duyệt của QTKĐ này; giá trị nguyên văn kèm nguồn.",
     )
+    clauses = [
+        procedure_scope.fact_clause(fact, FACT_KIND_LABELS.get(fact.get("fact_kind"), ""))
+        for fact in facts
+    ]
     return _payload(
         intent="procedure_params",
         title=f"Thông số tham chiếu — QTKĐ {procedure.get('number') or ''}".strip(),
@@ -463,6 +485,7 @@ def resolve_procedure_params(
         tables=[table],
         citations=_citations_for_tables(session, [table]),
         total=len(rows),
+        answer=procedure_scope.facts_answer(procedure.get("number") or "", clauses, asked=asked),
     )
 
 

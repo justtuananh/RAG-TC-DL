@@ -545,3 +545,38 @@ def test_sanitize_classification_normalizes_period_dates():
     }
     out = intents.sanitize_classification(payload, "Hồ sơ kiểm định từ 2025 đến 2024")
     assert out["params"] == {"date_from": "2025-01-01", "date_to": "2024-12-31"}
+
+
+def test_procedure_params_answers_only_the_asked_fact(data_db):
+    session, _ = data_db
+    payload = router.build_data_payload(
+        session,
+        _request(
+            {
+                "intent": "procedure_params",
+                "params": {"procedure_number": "1.061", "asked_kinds": ["calibration_interval"]},
+            }
+        ),
+    )
+    assert payload.answer == "Theo QTKĐ 1.061: chu kỳ kiểm định 12 tháng."
+    assert [row["fact_kind"].text for row in payload.tables[0].rows] == ["Chu kỳ kiểm định"]
+    assert router.untraceable_cells(payload) == []
+
+
+def test_procedure_params_without_the_asked_fact_is_empty(data_db):
+    """Không có dữ kiện cho điều được hỏi: bảng rỗng để chat rơi về văn bản QTKĐ."""
+    session, _ = data_db
+    payload = router.build_data_payload(
+        session,
+        _request(
+            {
+                "intent": "procedure_params",
+                "params": {
+                    "procedure_number": "1.061",
+                    "asked_kinds": ["env_condition"],
+                    "asked_labels": ["nhiet do"],
+                },
+            }
+        ),
+    )
+    assert payload.empty

@@ -45,6 +45,7 @@ from query.intent_prompt import (
     SYSTEM_PROMPT,
     render_classifier_prompt,
 )
+from query.procedure_scope import scope_procedure_params
 from query.record_intents import (
     RECORD_INTENT_NAMES,
     RECORD_PARAM_ALIASES,
@@ -76,6 +77,15 @@ IntentName = Literal[
 
 Branch = Literal["text", "data", "mixed"]
 Verdict = Literal["dat", "khong_dat"]
+# Loại dữ kiện QTKĐ đã duyệt (``procedure_fact.fact_kind``) mà câu hỏi có thể nhắm tới.
+FactKind = Literal[
+    "working_range",
+    "accuracy_class",
+    "max_permissible_error",
+    "calibration_interval",
+    "env_condition",
+    "formula",
+]
 
 INTENT_NAMES: tuple[str, ...] = (
     "device_history",
@@ -532,6 +542,11 @@ class RecordsByPeriodParams(BaseModel):
 class ProcedureParamsParams(BaseModel):
     procedure_number: str | None = Field(default=None, max_length=64)
     device_type: str | None = Field(default=None, max_length=255)
+    # Loại dữ kiện câu hỏi nhắm tới (``query.procedure_scope``, tất định từ câu hỏi);
+    # None = câu hỏi chung, trả mọi dữ kiện đã duyệt.
+    asked_kinds: list[FactKind] | None = None
+    # Nhãn điều kiện môi trường được hỏi (không dấu: "nhiet do", "do am").
+    asked_labels: list[str] = Field(default_factory=list, max_length=8)
 
     @model_validator(mode="after")
     def _require_selector(self) -> ProcedureParamsParams:
@@ -835,7 +850,8 @@ class OllamaIntentClassifier:
             if parsed is not None:
                 sanitized = sanitize_classification(parsed, question)
                 corrected = disambiguate_catalogs(sanitized, question, session)
-                return disambiguate_records(corrected, question, session)
+                corrected = disambiguate_records(corrected, question, session)
+                return scope_procedure_params(corrected, question)
             return content
         finally:
             if session is not None:

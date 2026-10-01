@@ -108,6 +108,12 @@ answer + citations  ──►  UI (one of):
   đếm và chữ đối chiếu mức cho phép ("nên không đạt" chỉ khi kết luận biên bản cũng vậy).
   Bảng chỉ có điều được hỏi: cực trị → dòng thắng; đếm toàn sổ cái → tổng hợp + biên bản không
   đạt; đếm/liệt kê có lọc → biên bản khớp; đếm thiết bị → bảng thiết bị.
+  `procedure_params` (dữ kiện đã duyệt của một QTKĐ) chỉ trả lời khi câu hỏi hỏi đúng loại dữ
+  kiện (phạm vi đo, cấp chính xác, chu kỳ, nhiệt độ / độ ẩm…) VÀ mọi phần được hỏi đều có dữ
+  kiện (`query/procedure_scope.py`); câu hỏi quy định khác (sai số, độ chênh áp, tốc độ hạ,
+  công thức…) hoặc thiếu dữ kiện đi nhánh văn bản, vì model phân loại đưa mọi câu có số QTKĐ
+  vào intent này. Ngữ cảnh LLM của một mục dài lấy cửa sổ quanh đoạn con được truy hồi
+  (`generation._window`), không cắt mất fact ở cuối mục.
 - `query/record_*.py` — **tra cứu biên bản có cấu trúc** (Pha R). Hai intent `record_lookup`
   (một biên bản theo số hiệu / số biên bản / ngày: trường được hỏi, bảng kết quả, căn cứ kết
   luận không đạt) và `records_summary` (đếm / liệt kê / cực trị trên sổ cái, lọc theo người,
