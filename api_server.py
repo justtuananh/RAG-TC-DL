@@ -83,6 +83,7 @@ from query import export as data_export
 from query import catalogs as catalog_query
 from query import provenance as provenance_query
 from query import records as data_query
+from query import device_ambiguity
 from query import router as query_router
 from auth import (
     create_access_token,
@@ -264,10 +265,28 @@ def _build_sources_payload(results: list[dict]) -> list[dict]:
 # ── SSE generator ─────────────────────────────────────────────────────────────
 
 
+def _detect_device_ambiguity(
+    db: Session | None, question: str
+) -> device_ambiguity.DeviceAmbiguity | None:
+    """Câu hỏi nêu loại thiết bị chung chung (khớp nhiều QTKĐ)? None nếu không/không đọc được DB."""
+    if db is None:
+        return None
+    try:
+        catalog = device_ambiguity.load_device_procedures(db)
+    except Exception as e:  # noqa: BLE001 - thiếu danh mục thì trả lời như cũ
+        logger.warning("Không đọc được danh mục QTKĐ để kiểm tra câu hỏi mơ hồ: %s", e)
+        return None
+    return device_ambiguity.find_device_ambiguity(question, catalog)
+
+
 def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[str, None, None]:
     if is_calculation_request(req.message):
         yield _sse({"type": "done", "answer": REFUSAL_SENTENCE, "sources": []})
         return
+
+    # "Áp kế pít tông ..." khớp nhiều loại (kiểu H3000, tiêu chuẩn): không được trả lời
+    # bằng số liệu của một loại như câu trả lời chung.
+    ambiguity = _detect_device_ambiguity(db, req.message)
 
     # ── Sprint 9: định tuyến chat lai văn bản + số liệu ──────────────────────
     # Không chắc chắn → nhánh text (pipeline RAG hiện tại, không đổi). Nhánh số
@@ -276,7 +295,15 @@ def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[s
     data_payload = None
     if db is not None:
         decision = query_router.plan_route(req.message)
-        if decision.request is not None and decision.branch in ("data", "mixed"):
+        single_procedure = (
+            decision.request is not None
+            and decision.request.intent in query_router.SINGLE_PROCEDURE_INTENTS
+        )
+        if (
+            decision.request is not None
+            and decision.branch in ("data", "mixed")
+            and not (ambiguity is not None and single_procedure)
+        ):
             try:
                 data_payload = query_router.build_data_payload(db, decision.request)
                 branch = decision.branch
@@ -310,8 +337,13 @@ def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[s
 
     yield _sse({"type": "status", "text": "⏳ Đang nhúng câu hỏi (embedding)…"})
 
+    retrieval_query = (
+        device_ambiguity.scoped_retrieval_query(req.message, ambiguity)
+        if ambiguity is not None
+        else req.message
+    )
     try:
-        results = retrieve(req.message, top_k=50, top_n=5)
+        results = retrieve(retrieval_query, top_k=50, top_n=5)
     except Exception as e:
         yield _sse({"type": "error", "text": f"Lỗi tìm kiếm: {e}"})
         return
@@ -342,9 +374,15 @@ def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[s
 
     context_str, _ = build_context_and_citations(results)
     prior = _history_to_prior(req.history)
-    messages = build_messages(req.message, context_str, prior)
+    guidance = device_ambiguity.ambiguity_guidance(ambiguity) if ambiguity is not None else None
+    messages = build_messages(req.message, context_str, prior, guidance=guidance)
 
     yield _sse({"type": "status", "text": "💭 Đang tổng hợp câu trả lời…"})
+
+    preface = device_ambiguity.ambiguity_preface(ambiguity) if ambiguity is not None else ""
+    closing = device_ambiguity.ambiguity_closing(ambiguity) if ambiguity is not None else ""
+    if preface:
+        yield _sse({"type": "delta", "text": preface})
 
     partial = ""
     try:
@@ -354,8 +392,10 @@ def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[s
     except Exception as e:
         yield _sse({"type": "error", "text": f"Lỗi LLM: {e}"})
         return
+    if closing:
+        yield _sse({"type": "delta", "text": closing})
 
-    answer = fix_latex(enforce_refusal_stop(partial))
+    answer = preface + fix_latex(enforce_refusal_stop(partial)) + closing
     # Nhánh mixed: ghép thêm khối số liệu sổ cái, giữ trích dẫn QTKĐ tách bạch.
     mixed_payload = (
         query_router.payload_to_dict(data_payload)

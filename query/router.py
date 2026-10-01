@@ -35,6 +35,7 @@ from query import intents
 from query import records as records_query
 from query import units as units_query
 from query.catalog_router import CATALOG_RESOLVERS
+from query.device_ambiguity import DeviceProcedure, load_device_procedures
 from query.record_fields import normalize_phrase
 from query.record_query import RECORD_RESOLVERS
 from query.table_model import (
@@ -119,15 +120,40 @@ def _find_procedure(
         if row is not None:
             return dict(row)
     if device_type:
-        # So theo cụm từ đã chuẩn hóa: "áp kế pít tông" khớp "Áp kế píttông tiêu chuẩn".
-        needle = normalize_phrase(device_type)
-        if needle:
-            rows = session.execute(text("SELECT * FROM v_procedure")).mappings().all()
-            for row in rows:
-                haystack = normalize_phrase(row["device_type_name"])
-                if haystack and (needle in haystack or haystack in needle):
-                    return dict(row)
+        return _find_procedure_by_device_type(session, device_type)
     return None
+
+
+def _find_procedure_by_device_type(session: Session, device_type: str) -> dict[str, Any] | None:
+    """Loại thiết bị → đúng MỘT QTKĐ, hoặc None khi tên chung khớp nhiều QTKĐ.
+
+    So theo cụm từ đã chuẩn hóa (tên + alias trong ``device_type``): "h3000" khớp
+    "Áp kế píttông kiểu H3000". "áp kế pít tông" khớp cả kiểu H3000 lẫn tiêu chuẩn
+    nên KHÔNG chọn bừa một QTKĐ; caller trả bảng rỗng và chat rơi về nhánh văn bản,
+    nơi câu trả lời nêu rõ từng loại (``query.device_ambiguity``).
+    """
+    needle = normalize_phrase(device_type)
+    if not needle:
+        return None
+    candidates: list[tuple[DeviceProcedure, set[str]]] = []
+    for procedure in load_device_procedures(session):
+        phrases = {normalize_phrase(p) for p in (procedure.device_type, *procedure.aliases)}
+        phrases.discard("")
+        if any(needle in phrase or phrase in needle for phrase in phrases):
+            candidates.append((procedure, phrases))
+    exact = [procedure for procedure, phrases in candidates if needle in phrases]
+    chosen = exact or [procedure for procedure, _ in candidates]
+    if len(chosen) != 1:
+        return None
+    row = (
+        session.execute(
+            text("SELECT * FROM v_procedure WHERE number = :number"),
+            {"number": chosen[0].number},
+        )
+        .mappings()
+        .first()
+    )
+    return dict(row) if row is not None else None
 
 
 def _find_quantity(session: Session, name: str) -> dict[str, Any] | None:
@@ -585,6 +611,10 @@ _RESOLVERS: dict[str, Any] = {
     **CATALOG_RESOLVERS,
     **RECORD_RESOLVERS,
 }
+
+# Intent trả bảng của đúng MỘT QTKĐ. Câu hỏi nêu loại thiết bị chung chung (khớp nhiều
+# QTKĐ, không nêu số) không được đi các intent này: số QTKĐ bộ phân loại điền vào là bịa.
+SINGLE_PROCEDURE_INTENTS = frozenset({"procedure_params", "standards_for"})
 
 
 def build_data_payload(session: Session, request: Any) -> DataPayload:

@@ -137,10 +137,14 @@ def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
     return context_str, citations_md
 
 
-def build_messages(query: str, context_str: str, prior: list[list]) -> list[dict]:
+def build_messages(
+    query: str, context_str: str, prior: list[list], *, guidance: str | None = None
+) -> list[dict]:
     """Dựng list messages: system (ngữ cảnh) + tối đa HISTORY_TURNS lượt cũ + query.
 
     Cắt block citations khỏi câu trả lời assistant cũ trước khi đưa vào lịch sử.
+    ``guidance`` (chỉ dẫn riêng cho câu hỏi này, vd. câu hỏi nêu loại thiết bị chung
+    chung) được nối SAU câu hỏi: model nhỏ bám lượt user cuối chắc hơn system prompt.
     """
     msgs: list[dict] = [
         {"role": "system", "content": SYSTEM_TMPL.format(context=context_str)}
@@ -152,7 +156,8 @@ def build_messages(query: str, context_str: str, prior: list[list]) -> list[dict
         if bot_msg:
             clean = bot_msg.split("\n\n---\n\n")[0].strip()
             msgs.append({"role": "assistant", "content": clean})
-    msgs.append({"role": "user", "content": query})
+    content = f"{query}\n\n{guidance}" if guidance else query
+    msgs.append({"role": "user", "content": content})
     return msgs
 
 

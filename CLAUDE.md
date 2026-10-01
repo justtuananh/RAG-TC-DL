@@ -95,6 +95,9 @@ answer + citations  ──►  UI (one of):
   `records_by_period`, `procedure_params`, `devices_by_range`, `standards_for`, `error_trend`)
   với schema tham số pydantic; LLM chỉ chọn intent + điền tham số, **không có text-to-SQL**.
   `router.py` phân ba nhánh `text`/`data`/`mixed` và **mặc định rơi về `text`** khi không chắc.
+  `device_ambiguity.py`: câu hỏi chỉ nêu tên chung của nhiều loại thiết bị ("áp kế pít tông" →
+  kiểu H3000 / tiêu chuẩn) không được trả lời bằng một loại; nhánh text liệt kê từng loại và trả
+  lời riêng từng QTKĐ, `_find_procedure` không chọn bừa khi tên khớp nhiều QTKĐ.
   Nhánh số liệu chỉ đọc view đã duyệt (P3) qua `query/records.py` + `query/approved.py`, trả mỗi
   con số kèm tham chiếu xuất xứ (P1) và trích dẫn sổ cái tách bạch với nguồn QTKĐ. Tích hợp ở
   `/api/chat/stream` (SSE event `data`, `done.branch`/`done.data`); câu trả lời nhánh số liệu

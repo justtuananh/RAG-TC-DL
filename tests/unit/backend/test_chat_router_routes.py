@@ -222,3 +222,142 @@ def test_empty_data_result_falls_back_to_text(client, monkeypatch):
     done = _events(response)[-1]
     assert done["branch"] == "text"
     assert done["data"] is None
+
+
+# ── Câu hỏi nêu loại thiết bị chung chung (khớp nhiều QTKĐ) ───────────────────
+
+GENERIC_PISTON_QUESTION = "Áp kế pít tông có phạm vi đo và cấp chính xác là bao nhiêu?"
+
+
+@pytest.fixture
+def piston_procedures(data_factory):
+    """Thêm hai loại áp kế píttông, mỗi loại một QTKĐ, như kho thật (1.071 và 1.159)."""
+    from db.models import DeviceType, Procedure
+
+    factory, _ = data_factory
+    session = factory()
+    try:
+        h3000 = DeviceType(name_vi="Áp kế píttông kiểu H3000", aliases=["h3000"])
+        standard = DeviceType(name_vi="Áp kế píttông tiêu chuẩn", aliases=[])
+        session.add_all([h3000, standard])
+        session.flush()
+        session.add_all(
+            [
+                Procedure(number="1.071", year=2022, device_type_id=h3000.id),
+                Procedure(number="1.159", year=2021, device_type_id=standard.id),
+            ]
+        )
+        session.commit()
+    finally:
+        session.close()
+    return factory
+
+
+def _piston_hit(file_stem: str, text: str) -> dict:
+    return {
+        "payload": {
+            "file_stem": file_stem,
+            "section_path": "1 Phạm vi áp dụng",
+            "kind": "paragraph",
+            "text": text,
+        },
+        "parent_payload": None,
+        "rerank_score": 0.9,
+    }
+
+
+def test_generic_device_type_never_resolves_to_one_procedure(piston_procedures):
+    session = piston_procedures()
+    try:
+        assert router._find_procedure(session, device_type="áp kế pít tông") is None
+        # Nêu rõ loại thì vẫn phân giải đúng một QTKĐ.
+        assert router._find_procedure(session, device_type="H3000")["number"] == "1.071"
+        assert (
+            router._find_procedure(session, device_type="áp kế píttông tiêu chuẩn")["number"]
+            == "1.159"
+        )
+    finally:
+        session.close()
+
+
+def test_generic_device_question_answers_every_type(client, piston_procedures, monkeypatch):
+    captured: dict = {}
+
+    def fake_retrieve(message, *args, **kwargs):
+        captured["retrieve_query"] = message
+        return [
+            _piston_hit("QTKD_1.159_2021_ND_FINAL", "phạm vi đo (-0,1 đến 100) MPa"),
+            _piston_hit("QTKD_1.071_2022_FINAL", "phạm vi đo từ 10 bar đến 700 bar"),
+        ]
+
+    def fake_stream(messages):
+        captured["messages"] = messages
+        return iter(["- Áp kế píttông tiêu chuẩn: (-0,1 đến 100) MPa [1]"])
+
+    monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
+    monkeypatch.setattr(api_server, "retrieve", fake_retrieve)
+    monkeypatch.setattr(api_server, "stream_ollama", fake_stream)
+
+    response = client.post("/api/chat/stream", json={"message": GENERIC_PISTON_QUESTION})
+    events = _events(response)
+    done = events[-1]
+
+    # Truy hồi nêu đủ số QTKĐ của mọi loại → retriever chạy phễu riêng cho từng file.
+    assert "1.071" in captured["retrieve_query"] and "1.159" in captured["retrieve_query"]
+    # LLM được dặn trả lời riêng từng loại.
+    assert "KHÔNG chọn một loại" in captured["messages"][-1]["content"]
+    # Câu trả lời nói rõ câu hỏi chưa nêu loại và liệt kê đủ các loại.
+    assert done["branch"] == "text"
+    assert done["answer"].startswith("Câu hỏi chưa nêu rõ loại **áp kế píttông** nào.")
+    assert "Áp kế píttông kiểu H3000 (QTKĐ 1.071)" in done["answer"]
+    assert "Áp kế píttông tiêu chuẩn (QTKĐ 1.159)" in done["answer"]
+    assert "(-0,1 đến 100) MPa [1]" in done["answer"]
+    assert done["answer"].rstrip().endswith("cho đúng loại cần tra cứu.")
+    # Đoạn mở đầu cũng được stream để giao diện hiện ngay.
+    first_delta = next(event for event in events if event["type"] == "delta")
+    assert first_delta["text"].startswith("Câu hỏi chưa nêu rõ loại")
+
+
+def test_generic_device_question_skips_single_procedure_data_lookup(
+    client, piston_procedures, monkeypatch
+):
+    """Bộ phân loại có bịa số QTKĐ cho câu hỏi chung chung thì nhánh số liệu vẫn không
+    được trả bảng của một QTKĐ: câu hỏi không nêu số nào, nên số đó không đáng tin."""
+    monkeypatch.setattr(
+        router,
+        "plan_route",
+        lambda *a, **k: _decision(
+            {
+                "branch": "data",
+                "intent": "procedure_params",
+                "params": {"procedure_number": "1.061"},
+                "confidence": 0.9,
+            }
+        ),
+    )
+    monkeypatch.setattr(api_server, "retrieve", lambda *a, **k: [])
+
+    response = client.post("/api/chat/stream", json={"message": GENERIC_PISTON_QUESTION})
+    done = _events(response)[-1]
+
+    assert done["branch"] == "text"
+    assert done["data"] is None
+
+
+def test_specific_device_question_has_no_ambiguity_preface(client, piston_procedures, monkeypatch):
+    monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
+    monkeypatch.setattr(
+        api_server,
+        "retrieve",
+        lambda *a, **k: [_piston_hit("QTKD_1.071_2022_FINAL", "phạm vi đo từ 10 bar đến 700 bar")],
+    )
+    monkeypatch.setattr(
+        api_server, "stream_ollama", lambda messages: iter(["10 bar đến 700 bar [1]"])
+    )
+
+    response = client.post(
+        "/api/chat/stream", json={"message": "Áp kế píttông kiểu H3000 có phạm vi đo bao nhiêu?"}
+    )
+    done = _events(response)[-1]
+
+    assert done["answer"] == "10 bar đến 700 bar [1]"

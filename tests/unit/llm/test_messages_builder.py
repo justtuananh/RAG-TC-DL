@@ -23,6 +23,12 @@ def test_last_message_is_current_query():
     assert msgs[-1] == {"role": "user", "content": "câu hỏi cuối"}
 
 
+def test_guidance_follows_the_query_in_the_last_user_turn():
+    msgs = generation.build_messages("câu hỏi", "ctx", [], guidance="LƯU Ý: trả lời từng loại.")
+    assert msgs[-1] == {"role": "user", "content": "câu hỏi\n\nLƯU Ý: trả lời từng loại."}
+    assert "LƯU Ý" not in msgs[0]["content"]
+
+
 def test_history_limited_to_history_turns():
     prior = [[f"u{i}", f"b{i}"] for i in range(10)]
     msgs = generation.build_messages("q", "ctx", prior)
