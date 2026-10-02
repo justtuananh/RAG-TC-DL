@@ -50,14 +50,16 @@ NGỮ CẢNH:
 {context}"""
 
 
-from generation import (
+from llm.generator import stream_ollama as _stream_ollama
+from llm.guards import (
     REFUSAL_SENTENCE as _REFUSAL_SENTENCE,
-    build_context_and_citations as _build_context_and_citations,
-    build_messages as _build_messages,
     enforce_refusal_stop as _enforce_refusal_stop,
-    filter_by_confidence as _filter_by_confidence,
     is_calculation_request as _is_calculation_request,
-    stream_ollama as _stream_ollama,
+)
+from llm.prompt import build_messages as _build_messages
+from retrieval.context_builder import (
+    build_context_and_citations as _build_context_and_citations,
+    filter_by_confidence as _filter_by_confidence,
 )
 from core.latex import fix_latex
 

@@ -9,6 +9,7 @@ import pytest
 import requests
 from pydantic import ValidationError
 
+from core.settings_loader import load_settings
 from knowledge import llm_extract
 from knowledge.units import UnitDef
 
@@ -312,7 +313,14 @@ def test_ollama_client_posts_native_api_with_options(monkeypatch):
 
     monkeypatch.setattr(requests, "post", _post)
     client = llm_extract.OllamaClient(
-        llm_extract.OllamaConfig(url="http://ollama:11434/v1/chat/completions", model="qwen2.5:7b")
+        llm_extract.OllamaConfig(
+            url="http://ollama:11434/v1/chat/completions",
+            model="qwen2.5:7b",
+            timeout=120,
+            num_ctx=8192,
+            temperature=0.0,
+            keep_alive="10m",
+        )
     )
     out = client.chat("xin chào", system="hệ thống")
 
@@ -332,15 +340,17 @@ def test_ollama_client_safe_failure(monkeypatch):
     assert llm_extract.OllamaClient().chat("hi") is None
 
 
-def test_ollama_config_from_env_prefers_section6_keys():
-    config = llm_extract.OllamaConfig.from_env(
-        {
-            "OLLAMA_URL": "http://x:11434/v1/chat/completions",
-            "OLLAMA_MODEL": "small",
-            "SECTION6_OLLAMA_URL": "http://y:11434/api/chat",
-            "SECTION6_LLM_MODEL": "big",
-            "SECTION6_LLM_TIMEOUT": "7",
-        }
+def test_ollama_config_from_settings_prefers_section6_keys():
+    config = llm_extract.OllamaConfig.from_settings(
+        load_settings(
+            env={
+                "OLLAMA_URL": "http://x:11434/v1/chat/completions",
+                "OLLAMA_MODEL": "small",
+                "SECTION6_OLLAMA_URL": "http://y:11434/api/chat",
+                "SECTION6_LLM_MODEL": "big",
+                "SECTION6_LLM_TIMEOUT": "7",
+            }
+        )
     )
     assert config.url == "http://y:11434/api/chat"
     assert config.model == "big"
@@ -349,7 +359,8 @@ def test_ollama_config_from_env_prefers_section6_keys():
 
 @pytest.mark.parametrize(
     ("value", "expected"),
-    [("1", True), ("true", True), ("on", True), ("0", False), ("", False)],
+    [("1", True), ("true", True), ("on", True), ("0", False), ("false", False)],
 )
-def test_llm_extraction_enabled(value, expected):
-    assert llm_extract.llm_extraction_enabled({"SECTION6_LLM_ENABLED": value}) is expected
+def test_llm_extraction_enabled(value, expected, settings_override):
+    settings_override({"llm.extraction.enabled": value})
+    assert llm_extract.llm_extraction_enabled() is expected

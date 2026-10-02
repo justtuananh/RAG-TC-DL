@@ -155,9 +155,9 @@ services:
     environment:
       OLLAMA_HOST: "0.0.0.0"
       # Mặc định Ollama nạp model với ctx 4096 — NHỎ hơn num_ctx=8192 mà
-      # generation.py yêu cầu; endpoint /v1 (OpenAI-compat) lại BỎ QUA trường
+      # llm/generator.py yêu cầu; endpoint /v1 (OpenAI-compat) lại BỎ QUA trường
       # "options" nên prompt dài bị cắt từ ĐẦU (mất system prompt + nguồn [1][2]).
-      # generation.py nay gọi /api/chat (options được tôn trọng); env này là
+      # llm/generator.py nay gọi /api/chat (options được tôn trọng); env này là
       # lưới an toàn cho mọi client /v1 khác.
       OLLAMA_CONTEXT_LENGTH: "8192"
       # Buộc offload tất cả layers lên GPU (tránh Ollama tự partial-offload khi

@@ -1,11 +1,12 @@
-"""Regression cho generation.filter_by_confidence — cắt đuôi nguồn điểm thấp.
+"""Regression cho retrieval.context_builder.filter_by_confidence - cắt đuôi nguồn điểm thấp.
 
 Reranker trả điểm sigmoid [0,1]; câu hẹp có đuôi điểm ~0 (nhiễu) cần bị loại khỏi
-panel + ngữ cảnh LLM. Giữ nguồn top + nguồn ≥ max(ABS_FLOOR, REL_FLOOR×top).
+panel + ngữ cảnh LLM. Giữ nguồn top + nguồn ≥ max(abs_floor, rel_floor×top).
 Dữ liệu điểm lấy từ truy vấn thật (đo 2026-06-26).
 """
 
-from generation import SOURCE_ABS_FLOOR, SOURCE_REL_FLOOR, filter_by_confidence
+from core.settings_loader import get_settings
+from retrieval.context_builder import filter_by_confidence
 
 
 def _mk(scores):
@@ -52,5 +53,6 @@ def test_giu_nguyen_trat_tu_va_payload():
 
 
 def test_nguong_hop_le():
-    assert 0.0 < SOURCE_ABS_FLOOR < 1.0
-    assert 0.0 < SOURCE_REL_FLOOR < 1.0
+    ctx = get_settings().llm.context
+    assert 0.0 < ctx.source_abs_floor < 1.0
+    assert 0.0 < ctx.source_rel_floor < 1.0

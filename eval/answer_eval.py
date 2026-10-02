@@ -28,9 +28,13 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import requests  # noqa: E402
 
-import generation  # noqa: E402
+from core.settings_loader import get_settings  # noqa: E402
 from eval import scoring  # noqa: E402
 from eval._pipeline import production_retrieve  # noqa: E402
+from llm.generator import stream_ollama  # noqa: E402
+from llm.guards import REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request  # noqa: E402
+from llm.prompt import build_messages  # noqa: E402
+from retrieval.context_builder import build_context_and_citations  # noqa: E402
 
 # ── service / model helpers ───────────────────────────────────────────────────
 
@@ -44,7 +48,7 @@ def _services_up() -> bool:
 
 def _available_models() -> set[str]:
     # Gốc server Ollama, dù OLLAMA_URL dạng OpenAI-compat (/v1/...) hay native (/api/chat).
-    parts = urlsplit(generation.OLLAMA_URL)
+    parts = urlsplit(get_settings().services.ollama_url)
     base = f"{parts.scheme}://{parts.netloc}"
     try:
         resp = requests.get(base + "/api/tags", timeout=10)
@@ -64,11 +68,10 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
     trực tiếp cho người dùng nên không đi qua hàm này.
     """
     # Mirror app.py:bot_fn — yêu cầu tính toán bị chặn tất định TRƯỚC khi gọi LLM.
-    if generation.is_calculation_request(query):
-        return generation.REFUSAL_SENTENCE
-    context_str, _ = generation.build_context_and_citations(retrieved)
-    messages = generation.build_messages(query, context_str, [])
-    generation.OLLAMA_MODEL = model  # stream_ollama đọc biến module này
+    if is_calculation_request(query):
+        return REFUSAL_SENTENCE
+    context_str, _ = build_context_and_citations(retrieved)
+    messages = build_messages(query, context_str, [])
     err = ""
     for attempt in range(retries + 1):
         if attempt:
@@ -77,9 +80,9 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
             # cho RAM hạ nhiệt, không phải retry dồn dập (Q101 từng trượt 3×500/53s).
             time.sleep(12 * attempt)
         try:
-            out = "".join(generation.stream_ollama(messages))
+            out = "".join(stream_ollama(messages, model=model))
             if out.strip():
-                return generation.enforce_refusal_stop(out)
+                return enforce_refusal_stop(out)
             err = "rỗng"
         except Exception as e:  # noqa: BLE001 — gom mọi lỗi hạ tầng để retry
             err = str(e)[:90]
@@ -89,9 +92,8 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
 
 def _warmup(model: str) -> None:
     """Nạp model trước lô đo (tránh read-timeout giả ở câu đầu khi model nguội)."""
-    generation.OLLAMA_MODEL = model
     try:
-        for _ in generation.stream_ollama([{"role": "user", "content": "OK?"}]):
+        for _ in stream_ollama([{"role": "user", "content": "OK?"}], model=model):
             break  # chỉ cần token đầu — model đã nạp
     except Exception as e:  # noqa: BLE001
         print(f"  ⚠ warm-up {model}: {e}")

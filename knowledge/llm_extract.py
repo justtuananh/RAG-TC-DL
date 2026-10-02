@@ -8,7 +8,7 @@ Spec §7 (ràng buộc bộ trích xuất LLM ở §6) và §9 Sprint 5:
   hóa dấu cách (gồm NBSP U+00A0 và khoảng trắng hẹp không ngắt U+202F) trước khi so;
 - chấm điểm tin cậy dựa trên: khớp nguyên văn, đơn vị nhận diện được, giá trị nằm
   trong khoảng hợp lý so với phạm vi đo của chính QTKĐ đó;
-- gọi Ollama nội bộ qua HTTP, cấu hình bằng biến môi trường, **thất bại an toàn**
+- gọi Ollama nội bộ qua HTTP, cấu hình từ ``config/settings.yaml``, **thất bại an toàn**
   (trả rỗng thay vì ném ra ngoài, để không chặn ingestion).
 
 P1/P2: module chỉ ĐỌC nguyên văn và gắn xuất xứ; không bao giờ tính lại số liệu
@@ -23,17 +23,19 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import re
-from collections.abc import Iterable, Mapping
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from typing import Literal
 
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
+from core.schema import Settings
+from core.settings_loader import get_settings
 from knowledge import units as units_module
 from knowledge import vnnum
 from knowledge.rules.sections import Section, find_section, split_sections
+from llm.generator import native_chat_url
 
 logger = logging.getLogger(__name__)
 
@@ -43,10 +45,7 @@ SECTION_KEYWORD = "tiến hành"
 MAX_ERROR_KIND = "max_permissible_error"
 FORMULA_KIND = "formula"
 
-# ── Cấu hình Ollama (đọc tại thời điểm gọi để test đặt env được) ───────────────
-DEFAULT_OLLAMA_URL = "http://localhost:11434/v1/chat/completions"
-DEFAULT_MODEL = "qwen2.5:7b"
-_TRUTHY = {"1", "true", "yes", "on"}
+# ── Cấu hình Ollama (đọc từ settings tại thời điểm gọi) ───────────────────────
 
 
 # ── Schema pydantic: mọi số phải kèm quote ────────────────────────────────────
@@ -445,30 +444,27 @@ def build_section6_prompt(body: str, section_path: str) -> str:
 
 @dataclass(frozen=True)
 class OllamaConfig:
-    """Cấu hình client Ollama, đọc từ biến môi trường tại thời điểm gọi."""
+    """Cấu hình client Ollama, đọc từ settings tại thời điểm gọi."""
 
-    url: str = DEFAULT_OLLAMA_URL
-    model: str = DEFAULT_MODEL
-    timeout: int = 120
-    num_ctx: int = 8192
-    temperature: float = 0.0
-    keep_alive: str = "10m"
+    url: str
+    model: str
+    timeout: int
+    num_ctx: int
+    temperature: float
+    keep_alive: str
 
     @classmethod
-    def from_env(cls, env: Mapping[str, str] | None = None) -> OllamaConfig:
-        source = os.environ if env is None else env
+    def from_settings(cls, settings: Settings | None = None) -> OllamaConfig:
+        s = settings or get_settings()
+        cfg = s.llm.extraction
         return cls(
-            url=source.get("SECTION6_OLLAMA_URL") or source.get("OLLAMA_URL") or DEFAULT_OLLAMA_URL,
-            model=source.get("SECTION6_LLM_MODEL") or source.get("OLLAMA_MODEL") or DEFAULT_MODEL,
-            timeout=int(source.get("SECTION6_LLM_TIMEOUT", "120")),
-            num_ctx=int(source.get("SECTION6_LLM_NUM_CTX", "8192")),
-            temperature=float(source.get("SECTION6_LLM_TEMPERATURE", "0.0")),
+            url=s.llm_url("extraction"),
+            model=s.llm_model("extraction"),
+            timeout=int(cfg.timeout_s),
+            num_ctx=cfg.num_ctx,
+            temperature=cfg.temperature,
+            keep_alive=cfg.keep_alive,
         )
-
-
-def _native_chat_url(url: str) -> str:
-    """Map URL OpenAI-compat (.../v1/chat/completions) → Ollama native /api/chat."""
-    return url.replace("/v1/chat/completions", "/api/chat")
 
 
 class OllamaClient:
@@ -479,11 +475,11 @@ class OllamaClient:
     """
 
     def __init__(self, config: OllamaConfig | None = None) -> None:
-        self.config = config or OllamaConfig.from_env()
+        self.config = config or OllamaConfig.from_settings()
 
     @classmethod
-    def from_env(cls, env: Mapping[str, str] | None = None) -> OllamaClient:
-        return cls(OllamaConfig.from_env(env))
+    def from_settings(cls, settings: Settings | None = None) -> OllamaClient:
+        return cls(OllamaConfig.from_settings(settings))
 
     @property
     def model_name(self) -> str:
@@ -499,7 +495,7 @@ class OllamaClient:
         messages.append({"role": "user", "content": prompt})
         try:
             response = requests.post(
-                _native_chat_url(self.config.url),
+                native_chat_url(self.config.url),
                 json={
                     "model": self.config.model,
                     "messages": messages,
@@ -525,14 +521,13 @@ class OllamaClient:
 
 
 def default_client() -> OllamaClient:
-    """Client mặc định đọc cấu hình từ env (điểm chèn cho test/CLI)."""
-    return OllamaClient.from_env()
+    """Client mặc định đọc cấu hình từ settings (điểm chèn cho test/CLI)."""
+    return OllamaClient.from_settings()
 
 
-def llm_extraction_enabled(env: Mapping[str, str] | None = None) -> bool:
-    """Bật/tắt trích xuất §6 bằng LLM qua ``SECTION6_LLM_ENABLED`` (mặc định tắt)."""
-    source = os.environ if env is None else env
-    return source.get("SECTION6_LLM_ENABLED", "").strip().lower() in _TRUTHY
+def llm_extraction_enabled() -> bool:
+    """Bật/tắt trích xuất §6 bằng LLM qua ``llm.extraction.enabled`` (mặc định tắt)."""
+    return get_settings().llm.extraction.enabled
 
 
 # ── Trích xuất ────────────────────────────────────────────────────────────────

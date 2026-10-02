@@ -20,7 +20,6 @@ from __future__ import annotations
 import calendar
 import json
 import logging
-import os
 import re
 from dataclasses import dataclass
 from datetime import date, datetime
@@ -35,6 +34,9 @@ from pydantic import (
     model_validator,
 )
 
+from core.schema import Settings
+from core.settings_loader import get_settings
+from llm.generator import native_chat_url
 from query.catalog_intents import (
     CATALOG_INTENT_NAMES,
     CATALOG_PARAM_ALIASES,
@@ -742,10 +744,6 @@ def decide(raw: Any, *, min_confidence: float = 0.0) -> IntentDecision:
 
 # ── Bộ phân loại LLM (thất bại an toàn) ───────────────────────────────────────
 
-DEFAULT_OLLAMA_URL = "http://localhost:11434/v1/chat/completions"
-DEFAULT_MODEL = "qwen2.5:1.5b"
-_TRUTHY = {"1", "true", "yes", "on"}
-
 
 class IntentClassifier(Protocol):
     """Giao diện bộ phân loại: trả dict/JSON hoặc None (không phân loại được)."""
@@ -759,29 +757,27 @@ def build_classifier_prompt(question: str) -> str:
 
 @dataclass(frozen=True)
 class OllamaIntentConfig:
-    url: str = DEFAULT_OLLAMA_URL
-    model: str = DEFAULT_MODEL
-    timeout: int = 60
+    url: str
+    model: str
+    timeout: int
     # Prompt phân loại (danh mục + quy tắc + ví dụ) đã ~4 000 token: 4096 cắt mất câu hỏi.
-    # 8192 trùng ``generation.NUM_CTX`` nên Ollama không nạp lại model giữa hai lời gọi.
-    num_ctx: int = 8192
-    temperature: float = 0.0
-    keep_alive: str = "10m"
+    # 8192 trùng ``llm.chat.num_ctx`` nên Ollama không nạp lại model giữa hai lời gọi.
+    num_ctx: int
+    temperature: float
+    keep_alive: str
 
     @classmethod
-    def from_env(cls, env: dict[str, str] | None = None) -> OllamaIntentConfig:
-        source = os.environ if env is None else env
+    def from_settings(cls, settings: Settings | None = None) -> OllamaIntentConfig:
+        s = settings or get_settings()
+        cfg = s.llm.intent
         return cls(
-            url=source.get("INTENT_OLLAMA_URL") or source.get("OLLAMA_URL") or DEFAULT_OLLAMA_URL,
-            model=source.get("INTENT_LLM_MODEL") or source.get("OLLAMA_MODEL") or DEFAULT_MODEL,
-            timeout=int(source.get("INTENT_LLM_TIMEOUT", "60")),
-            num_ctx=int(source.get("INTENT_LLM_NUM_CTX", "8192")),
-            temperature=float(source.get("INTENT_LLM_TEMPERATURE", "0.0")),
+            url=s.llm_url("intent"),
+            model=s.llm_model("intent"),
+            timeout=int(cfg.timeout_s),
+            num_ctx=cfg.num_ctx,
+            temperature=cfg.temperature,
+            keep_alive=cfg.keep_alive,
         )
-
-
-def _native_chat_url(url: str) -> str:
-    return url.replace("/v1/chat/completions", "/api/chat")
 
 
 def _open_default_session() -> Any | None:
@@ -802,12 +798,12 @@ class OllamaIntentClassifier:
         config: OllamaIntentConfig | None = None,
         session_factory: Any | None = None,
     ) -> None:
-        self.config = config or OllamaIntentConfig.from_env()
+        self.config = config or OllamaIntentConfig.from_settings()
         self.session_factory = session_factory or _open_default_session
 
     @classmethod
-    def from_env(cls, env: dict[str, str] | None = None) -> OllamaIntentClassifier:
-        return cls(OllamaIntentConfig.from_env(env))
+    def from_settings(cls, settings: Settings | None = None) -> OllamaIntentClassifier:
+        return cls(OllamaIntentConfig.from_settings(settings))
 
     def classify(self, question: str) -> dict[str, Any] | str | None:
         session = None
@@ -822,7 +818,7 @@ class OllamaIntentClassifier:
 
             try:
                 response = requests.post(
-                    _native_chat_url(self.config.url),
+                    native_chat_url(self.config.url),
                     json={
                         "model": self.config.model,
                         "messages": [
@@ -863,10 +859,9 @@ class OllamaIntentClassifier:
 
 def default_classifier() -> IntentClassifier:
     """Bộ phân loại mặc định (điểm chèn cho test/CLI)."""
-    return OllamaIntentClassifier.from_env()
+    return OllamaIntentClassifier.from_settings()
 
 
-def intents_enabled(env: dict[str, str] | None = None) -> bool:
-    """Bật/tắt nhánh số liệu qua ``INTENT_ROUTER_ENABLED`` (mặc định bật)."""
-    source = os.environ if env is None else env
-    return source.get("INTENT_ROUTER_ENABLED", "true").strip().lower() in _TRUTHY
+def intents_enabled() -> bool:
+    """Bật/tắt nhánh số liệu qua ``llm.intent.enabled`` (mặc định bật)."""
+    return get_settings().llm.intent.enabled

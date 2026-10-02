@@ -68,17 +68,20 @@ def score(case: dict, blob: str) -> tuple[list[str], list[str]]:
 
 
 def run_text(case: dict) -> dict:
-    import generation
+    from llm.generator import stream_ollama
+    from llm.guards import REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request
+    from llm.prompt import build_messages
+    from retrieval.context_builder import build_context_and_citations, filter_by_confidence
     from retrieval.retriever import retrieve
 
     question = case["question"]
-    if generation.is_calculation_request(question):
-        answer = generation.REFUSAL_SENTENCE
+    if is_calculation_request(question):
+        answer = REFUSAL_SENTENCE
     else:
-        results = generation.filter_by_confidence(retrieve(question))
-        context, _ = generation.build_context_and_citations(results)
-        messages = generation.build_messages(question, context, [])
-        answer = generation.enforce_refusal_stop("".join(generation.stream_ollama(messages)))
+        results = filter_by_confidence(retrieve(question))
+        context, _ = build_context_and_citations(results)
+        messages = build_messages(question, context, [])
+        answer = enforce_refusal_stop("".join(stream_ollama(messages)))
     if is_regulation(case):
         return {"passed": True, "route": "text", "answer": answer[:400]}
     missing, leaked = score(case, answer)
@@ -140,9 +143,12 @@ SQL_SYSTEM = (
 def _ask_sql(question: str, schema: str) -> str:
     import requests
 
-    url = os.environ.get("OLLAMA_URL", "http://localhost:11434/api/chat")
+    from core.settings_loader import get_settings
+    from llm.generator import native_chat_url
+
+    url = native_chat_url(get_settings().llm_url("chat"))
     body = {
-        "model": os.environ.get("OLLAMA_MODEL", "qwen2.5:3b"),
+        "model": get_settings().llm_model("chat"),
         "messages": [
             {"role": "system", "content": SQL_SYSTEM + "\n\nLược đồ:\n" + schema},
             {"role": "user", "content": question},

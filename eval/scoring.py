@@ -18,7 +18,7 @@ import unicodedata
 
 # ── Hằng số ───────────────────────────────────────────────────────────────────
 
-# Câu từ chối chuẩn (phải khớp byte-for-byte với SYSTEM_TMPL trong generation.py).
+# Câu từ chối chuẩn (phải khớp byte-for-byte với SYSTEM_TMPL trong llm/prompt.py).
 REFUSAL_CORE = "không tìm thấy thông tin"
 
 _NBSP = "    "  # các loại space "dính"
