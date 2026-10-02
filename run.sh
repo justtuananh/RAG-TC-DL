@@ -25,14 +25,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 
 # ── Cấu hình (override qua env) ──────────────────────────────────────────────
-OLLAMA_MODEL="${OLLAMA_MODEL:-qwen2.5:3b}"
 API_PORT="${API_PORT:-8080}"
 FE_PORT="${FE_PORT:-5173}"
-export EMBED_URL="${EMBED_URL:-http://localhost:8010/v1/embeddings}"
-export RERANK_URL="${RERANK_URL:-http://localhost:8011/v1/rerank}"
-export QDRANT_URL="${QDRANT_URL:-http://localhost:6333}"
-export OLLAMA_URL="${OLLAMA_URL:-http://localhost:11434/api/chat}"
-export OLLAMA_MODEL API_PORT
+# URL service + model mặc định: config/settings.yaml (đọc sau khi chọn $PY, mục 2).
+export API_PORT
 
 FRONTEND_ONLY=0; USE_DOCKER=auto; DO_INDEX=0; FE_MODE=dev
 for a in "$@"; do case "$a" in
@@ -94,6 +90,10 @@ if [ -z "$PY" ]; then
   err "Cài: <venv>/bin/pip install -r requirements-dev.txt"; exit 1
 fi
 ok "Python API: $PY"
+# Một nguồn cấu hình: mặc định lấy từ config/settings.yaml, env đặt sẵn vẫn thắng.
+OLLAMA_MODEL="${OLLAMA_MODEL:-$("$PY" -m core.settings_loader get models.llm_chat)}"
+QDRANT_URL="${QDRANT_URL:-$("$PY" -m core.settings_loader get services.qdrant_url)}"
+export OLLAMA_MODEL
 
 # ── 3) Dịch vụ phụ thuộc: Postgres :5432 + Qdrant :6333 + embedding :8010 + reranker :8011 + Ollama :11434 (container) ─
 postgres_up() { docker compose exec -T postgres pg_isready -U "${POSTGRES_USER:-qtkd_user}" >/dev/null 2>&1; }

@@ -20,8 +20,9 @@ status:
 # ── Setup lần đầu ────────────────────────────────────────────────────────────
 
 # Tải LLM model vào Ollama (~940MB cho 1.5b, ~4.7GB cho 7b)
+# Model chat mặc định của config/settings.yaml (models.llm_chat).
 pull-model:
-	docker compose exec ollama ollama pull qwen2.5:1.5b
+	docker compose exec ollama ollama pull $$($(PY) -m core.settings_loader get models.llm_chat)
 
 pull-model-3b:
 	docker compose exec ollama ollama pull qwen2.5:3b

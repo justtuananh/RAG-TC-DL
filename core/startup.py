@@ -66,7 +66,11 @@ def _root(url: str) -> str:
 
 
 def check_services(settings: Settings) -> dict[str, bool]:
-    """Thử gọi từng service; trả trạng thái, cảnh báo service không phản hồi."""
+    """Thử gọi từng service; trả trạng thái, cảnh báo service không phản hồi.
+
+    Service embedding / reranker chạy model khác settings thì ghi lỗi (không chặn API:
+    model vẫn chạy được, nhưng sai so với cấu hình là lỗi vận hành phải thấy rõ).
+    """
     s = settings.services
     probes = {
         "embedding": _root(s.embedding_url) + "/health",
@@ -74,15 +78,32 @@ def check_services(settings: Settings) -> dict[str, bool]:
         "qdrant": _root(s.qdrant_url),
         "ollama": _root(s.ollama_url),
     }
+    expected_models = {
+        "embedding": settings.models.embedding.name,
+        "reranker": settings.models.reranker.name,
+    }
     status = {}
     for name, url in probes.items():
         try:
-            status[name] = requests.get(url, timeout=_PROBE_TIMEOUT_S).ok
+            resp = requests.get(url, timeout=_PROBE_TIMEOUT_S)
+            status[name] = resp.ok
         except (OSError, requests.RequestException):
             status[name] = False
         if not status[name]:
             logger.warning("Service %s chưa phản hồi ở %s", name, url)
+        elif name in expected_models:
+            _check_served_model(name, resp, expected_models[name])
     return status
+
+
+def _check_served_model(name: str, resp: requests.Response, expected: str) -> None:
+    try:
+        served = resp.json().get("model")
+    except ValueError:
+        served = None
+    # Image cũ chưa trả "model" ở /health: không đủ thông tin để kết luận lệch.
+    if served is not None and served != expected:
+        logger.error("Service %s chạy model %s, settings khai %s", name, served, expected)
 
 
 def check_vector_size(settings: Settings, probe: VectorSizeProbe) -> None:

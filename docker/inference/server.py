@@ -67,7 +67,8 @@ app = FastAPI(title="secai-inference", lifespan=lifespan)
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "mode": MODE}
+    model = RERANKER_MODEL if MODE == "reranker" else EMBEDDING_MODEL
+    return {"status": "ok", "mode": MODE, "model": model}
 
 
 # ── Embeddings ────────────────────────────────────────────────────────────────

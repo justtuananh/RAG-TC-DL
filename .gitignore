@@ -56,3 +56,7 @@ design/_ref/
 
 # Bản .docx/.xlsx chuyển từ .doc/.xls bằng LibreOffice (sinh lại được)
 build/converted/
+
+# Dữ liệu Qdrant bind-mount (docker-compose.yml)
+qdrant_storage/*
+!qdrant_storage/README.md

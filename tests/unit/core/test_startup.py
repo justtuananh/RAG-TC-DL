@@ -71,3 +71,35 @@ def test_vector_size_mismatch_is_fatal():
 
 def test_missing_collection_is_not_fatal():
     startup.check_vector_size(load_settings(env={}), probe=lambda name: None)
+
+
+def test_model_mismatch_is_logged(monkeypatch, caplog):
+    class _Resp:
+        ok = True
+
+        @staticmethod
+        def json():
+            return {"status": "ok", "model": "model-khac"}
+
+    monkeypatch.setattr(startup.requests, "get", lambda *args, **kwargs: _Resp())
+    startup.check_services(load_settings(env={}))
+    assert "model-khac" in caplog.text
+
+
+def test_matching_model_logs_no_error(monkeypatch, caplog):
+    settings = load_settings(env={})
+    names = {"8010": settings.models.embedding.name, "8011": settings.models.reranker.name}
+
+    class _Resp:
+        ok = True
+
+        def __init__(self, url):
+            self.url = url
+
+        def json(self):
+            port = next((p for p in names if p in self.url), None)
+            return {"status": "ok", "model": names[port]} if port else {}
+
+    monkeypatch.setattr(startup.requests, "get", lambda url, **kwargs: _Resp(url))
+    startup.check_services(settings)
+    assert "chạy model" not in caplog.text

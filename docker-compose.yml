@@ -59,7 +59,7 @@ services:
     ports:
       - "6333:6333"
     volumes:
-      - qdrant_storage:/qdrant/storage
+      - ./qdrant_storage:/qdrant/storage   # bind mount: xem qdrant_storage/README.md
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "bash -c 'echo > /dev/tcp/localhost/6333' 2>/dev/null || exit 1"]
@@ -195,7 +195,8 @@ services:
       RERANK_URL: http://reranker:8011/v1/rerank
       QDRANT_URL: http://qdrant:6333
       OLLAMA_URL: http://ollama:11434/api/chat
-      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-}   # rỗng: dùng models.llm_chat của config/settings.yaml
+      APP_ENV: ${APP_ENV:-development}
       POSTGRES_HOST: postgres
       POSTGRES_DB: ${POSTGRES_DB:-qtkd}
       POSTGRES_USER: ${POSTGRES_USER:-qtkd_user}
@@ -247,7 +248,6 @@ services:
 
 volumes:
   postgres_storage:   # PostgreSQL data persists across restarts
-  qdrant_storage:   # Qdrant data persists across restarts
   ollama_data:      # Downloaded LLM models persist across restarts
   hf_cache_embedding:  # BAAI/bge-m3 weights persist across restarts
   hf_cache_reranker:   # BAAI/bge-reranker-v2-m3 weights persist across restarts
