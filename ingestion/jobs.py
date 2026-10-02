@@ -10,8 +10,8 @@ bản: bước "Xử lý" gọi ``records.ingest`` để ghi bản ghi chờ duy
 """
 from __future__ import annotations
 
-import json
 import hashlib
+import json
 import logging
 import shutil
 import tempfile
@@ -19,26 +19,25 @@ import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 from qdrant_client.http.exceptions import ResponseHandlingException
 
-# Connection failures from the embedding service (requests -> OSError subclass)
-# and from Qdrant (its own ResponseHandlingException, NOT an OSError subclass)
-# both mean "Docker isn't running" — treat them the same way for the user.
-_CONNECTION_ERRORS = (OSError, ResponseHandlingException)
-
-from core.settings_loader import get_settings
-from ingestion.chunker import parse_file
-from vectorstore import qdrant, upsert
-from ingestion.spike_a import _safe, process_one, totals_from_entries
-from ingestion.classify import classify_document
+from core.settings_loader import REPO_ROOT, get_settings
 from db import SessionLocal
 from db.models import Document, DocumentType, IngestStatus
+from ingestion.chunker import parse_file
+from ingestion.classify import classify_document
+from ingestion.spike_a import _safe, process_one, totals_from_entries
+from vectorstore import qdrant, upsert
 
-# vectorstore.hybrid_index is imported lazily where used (see invalidate_bm25) —
+# vectorstore.hybrid_index is imported lazily where used (see invalidate_bm25) -
 # it requires rank_bm25, and retriever.py already avoids a hard module-level
 # dependency on that package for the same reason.
+
+# Connection failures from the embedding service (requests -> OSError subclass)
+# and from Qdrant (its own ResponseHandlingException, NOT an OSError subclass)
+# both mean "Docker isn't running" - treat them the same way for the user.
+_CONNECTION_ERRORS = (OSError, ResponseHandlingException)
 
 
 def _source_dir() -> Path:
@@ -77,8 +76,8 @@ class UploadError(ValueError):
 class Job:
     stage: str  # "queued" | "extracting" | "reading_record" | "chunking" | "embedding" | "ready" | "error"
     progress: int
-    error: Optional[str] = None
-    result: Optional[dict] = None  # StoreResult.as_dict() cho job hồ sơ
+    error: str | None = None
+    result: dict | None = None  # StoreResult.as_dict() cho job hồ sơ
 
 
 _jobs: dict[str, Job] = {}
@@ -108,7 +107,7 @@ def _human_size(n: int) -> str:
 
 
 def _invalidate_bm25() -> None:
-    """Best-effort — a stale BM25 cache is a search-quality issue, not a reason
+    """Best-effort - a stale BM25 cache is a search-quality issue, not a reason
     to fail an otherwise-successful embed or delete (also lets this work in
     environments where rank_bm25 isn't installed, same as retriever.py)."""
     try:
@@ -168,8 +167,11 @@ def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> s
         )
     if len(data) == 0:
         raise UploadError("Tệp rỗng.")
-    if len(data) > get_settings().ingestion.max_upload_bytes:
-        raise UploadError("Tệp vượt quá dung lượng cho phép (50 MB).")
+    max_bytes = get_settings().ingestion.max_upload_bytes
+    if len(data) > max_bytes:
+        raise UploadError(
+            f"Tệp vượt quá dung lượng cho phép ({max_bytes // (1024 * 1024)} MB)."
+        )
     digest = hashlib.sha256(data).hexdigest()
 
     _source_dir().mkdir(parents=True, exist_ok=True)
@@ -267,7 +269,11 @@ def _read_report() -> dict:
     path = _report_path()
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
-    return {"source": str(_source_dir()), "files": [], "totals": {}}
+    # Ghi tương đối gốc repo như spike_a ("TC_DL"): không lộ đường dẫn máy/container.
+    source = _source_dir()
+    if source.is_relative_to(REPO_ROOT):
+        source = source.relative_to(REPO_ROOT)
+    return {"source": str(source), "files": [], "totals": {}}
 
 
 def _merge_report_entry(entry: dict) -> None:
@@ -400,7 +406,7 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
 
         md_path = _out_dir() / f"{file_stem}.md"
         if not md_path.exists():
-            raise RuntimeError("Không trích xuất được nội dung — tệp có thể bị lỗi hoặc rỗng.")
+            raise RuntimeError("Không trích xuất được nội dung - tệp có thể bị lỗi hoặc rỗng.")
 
         _set_job(file_stem, "chunking")
         chunks = parse_file(md_path)
@@ -432,7 +438,7 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
         _set_job(file_stem, "ready", result=catalog_result)
         _set_db_status(file_stem, IngestStatus.READY, "; ".join(errors) if errors else None)
     except _CONNECTION_ERRORS as e:
-        _set_job(file_stem, "error", f"Không kết nối được dịch vụ embedding/Qdrant — kiểm tra Docker đã chạy chưa ({e}).")
+        _set_job(file_stem, "error", f"Không kết nối được dịch vụ embedding/Qdrant - kiểm tra Docker đã chạy chưa ({e}).")
         _set_db_status(file_stem, IngestStatus.ERROR, str(e))
     except Exception as e:  # noqa: BLE001 - surface any failure as a job error, never crash the worker thread
         _set_job(file_stem, "error", str(e))
@@ -446,7 +452,7 @@ def _run_extraction(file_stem: str, md_path: Path) -> None:
     ``knowledge.extract`` tự dựng từ đầu mục Markdown để giữ liên kết P1.
 
     Sprint 5: sau luật, tùy chọn chạy trích xuất §6 bằng LLM (``SECTION6_LLM_ENABLED``).
-    Bọc trong SAVEPOINT và thất bại an toàn — Ollama chưa lên/model chưa pull
+    Bọc trong SAVEPOINT và thất bại an toàn - Ollama chưa lên/model chưa pull
     không được làm hỏng phần luật đã ghi, và mọi dòng mới vẫn ``pending`` (P3).
     """
     from db.models import Procedure
@@ -564,7 +570,7 @@ def delete_document(file_stem: str) -> None:
     try:
         qdrant.delete_file_chunks(qdrant.get_client(), file_stem)
     except Exception:
-        pass  # best-effort — local files are already gone; index cleanup can be retried by re-uploading
+        pass  # best-effort - local files are already gone; index cleanup can be retried by re-uploading
 
     with _jobs_lock:
         _jobs.pop(file_stem, None)
