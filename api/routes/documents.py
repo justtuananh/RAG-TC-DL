@@ -110,7 +110,10 @@ def delete_document(
     db: Session = Depends(get_db),
 ):
     before = next((d for d in ingestion_jobs.list_documents() if d["id"] == file_stem), None)
-    ingestion_jobs.delete_document(file_stem)
+    try:
+        ingestion_jobs.delete_document(file_stem)
+    except ingestion_jobs.DocumentInUseError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
     if before is not None:
         record_audit(db, user, "delete", "document", file_stem, before=document_snapshot(before))
 

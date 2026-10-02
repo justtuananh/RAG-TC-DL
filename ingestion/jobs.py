@@ -21,10 +21,20 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from qdrant_client.http.exceptions import ResponseHandlingException
+from sqlalchemy import func, select
+from sqlalchemy.orm import Session
 
 from core.settings_loader import REPO_ROOT, get_settings
 from db import SessionLocal
-from db.models import Document, DocumentType, IngestStatus
+from db.models import (
+    Base,
+    Document,
+    DocumentType,
+    Extraction,
+    ExtractionStatus,
+    IngestStatus,
+    Procedure,
+)
 from ingestion.chunker import parse_file
 from ingestion.classify import classify_document
 from ingestion.spike_a import _safe, process_one, totals_from_entries
@@ -66,6 +76,27 @@ _STAGE_PROGRESS = {
 
 # Loại tài liệu đi đường ghi hồ sơ, không đi đường trích Markdown + nhúng Qdrant.
 _RECORD_DOC_TYPES = frozenset({DocumentType.HO_SO_KIEM_DINH, DocumentType.PHIEU_DO})
+
+
+class DocumentInUseError(RuntimeError):
+    """Tài liệu còn dữ liệu đã duyệt hoặc đang được tham chiếu: không được xoá (giữ P1)."""
+
+
+# Trích xuất chưa thành dữ liệu sổ cái: xoá cùng tài liệu được.
+_REMOVABLE_EXTRACTIONS = (ExtractionStatus.PENDING, ExtractionStatus.REJECTED)
+
+# Tên bảng → nhãn hiển thị trong thông báo chặn xoá (người dùng không thấy tên bảng).
+_REFERENCE_LABELS = {
+    "extraction": "trích xuất của tài liệu khác",
+    "procedure_fact": "dữ kiện QTKĐ",
+    "procedure_standard": "chuẩn của QTKĐ",
+    "term": "thuật ngữ",
+    "calibration_record": "biên bản kiểm định",
+    "lab_standard": "chuẩn của phòng thí nghiệm",
+    "inspector": "kiểm định viên",
+    "procedure_catalog": "danh mục QTKĐ",
+    "capability": "năng lực kiểm định",
+}
 
 
 class UploadError(ValueError):
@@ -549,6 +580,12 @@ def start_processing(file_stem: str) -> None:
 
 
 def delete_document(file_stem: str) -> None:
+    """Xoá một tài liệu: bước CSDL TRƯỚC, rồi mới tới tệp, Markdown, report và Qdrant.
+
+    Bước CSDL có thể từ chối (``DocumentInUseError``); làm nó trước nghĩa là khi bị chặn
+    thì chưa có gì không đảo ngược được bị xoá.
+    """
+    _delete_document_rows(file_stem)
     source_path = _find_source(file_stem)
     if source_path is not None:
         source_path.unlink()
@@ -576,14 +613,101 @@ def delete_document(file_stem: str) -> None:
         _jobs.pop(file_stem, None)
 
     _invalidate_bm25()
+
+
+def _delete_document_rows(file_stem: str) -> None:
+    """Xoá hàng ``document`` cùng mọi dữ liệu CHƯA duyệt của nó, trong một transaction.
+
+    Thuộc về tài liệu (xoá cùng): trích xuất chờ duyệt / bị từ chối, QTKĐ của nó, và mọi hàng
+    gắn vào các trích xuất đó (dữ kiện, chuẩn, thuật ngữ... tạo ngay khi xử lý; duyệt nằm ở
+    extraction nên chúng chưa là dữ liệu sổ cái).
+    Chặn khi còn trích xuất đã duyệt / đã thay thế, hoặc khi hàng nào KHÁC tham chiếu tới
+    những thứ trên: xoá sẽ làm mất xuất xứ của số liệu đã duyệt (P1).
+    Khoá ngoại được dò từ metadata nên bảng mới tự được tính.
+    """
     db = SessionLocal()
     try:
-        row = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
-        if row:
-            db.delete(row)
-            db.commit()
+        doc = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
+        if doc is None:
+            return
+        extractions = (
+            db.query(Extraction.id, Extraction.status)
+            .filter(Extraction.document_id == doc.id)
+            .all()
+        )
+        reviewed = {r.id for r in extractions if r.status not in _REMOVABLE_EXTRACTIONS}
+        owned = {
+            "document": {doc.id},
+            "extraction": {r.id for r in extractions if r.status in _REMOVABLE_EXTRACTIONS},
+            "procedure": {
+                row.id for row in db.query(Procedure.id).filter(Procedure.document_id == doc.id)
+            },
+        }
+        _add_rows_of_owned_extractions(db, owned)
+        # Trích xuất đã duyệt của chính tài liệu được báo riêng, không đếm lại là tham chiếu.
+        blockers = _foreign_references(db, owned, reported={"extraction": reviewed})
+        if reviewed:
+            blockers = {"trích xuất đã duyệt/đã thay thế": len(reviewed), **blockers}
+        if blockers:
+            detail = "; ".join(
+                f"{_REFERENCE_LABELS.get(name, name)}: {count}" for name, count in blockers.items()
+            )
+            raise DocumentInUseError(
+                f"Không xoá được: tài liệu còn dữ liệu đã duyệt hoặc đang được dùng ({detail})."
+            )
+        # Bảng phụ thuộc trước bảng được tham chiếu. NO ACTION kiểm ở cuối câu lệnh nên một
+        # DELETE cho cả nhóm hàng tự tham chiếu (extraction.supersedes_id) vẫn hợp lệ.
+        for table in reversed(Base.metadata.sorted_tables):
+            ids = owned.get(table.name)
+            if ids:
+                db.execute(table.delete().where(table.c.id.in_(ids)))
+        db.commit()
+    except Exception:
+        db.rollback()
+        raise
     finally:
         db.close()
+
+
+def _add_rows_of_owned_extractions(db: Session, owned: dict[str, set]) -> None:
+    """Thêm vào ``owned`` các hàng có khoá ngoại tới một trích xuất thuộc tài liệu."""
+    extraction_ids = owned["extraction"]
+    if not extraction_ids:
+        return
+    for table in Base.metadata.sorted_tables:
+        if table.name == "extraction" or "id" not in table.c:
+            continue
+        for fk in table.foreign_keys:
+            if fk.column.table.name != "extraction":
+                continue
+            query = select(table.c.id).where(fk.parent.in_(extraction_ids))
+            ids = set(db.execute(query).scalars())
+            if ids:
+                owned.setdefault(table.name, set()).update(ids)
+
+
+def _foreign_references(
+    db: Session, owned: dict[str, set], reported: dict[str, set]
+) -> dict[str, int]:
+    """Số hàng (theo bảng) có khoá ngoại trỏ tới một hàng thuộc tài liệu.
+
+    Không đếm chính các hàng thuộc tài liệu (``owned``) và các hàng đã được báo ở chỗ khác
+    (``reported``).
+    """
+    counts: dict[str, int] = {}
+    for table in Base.metadata.sorted_tables:
+        own_ids = owned.get(table.name, set()) | reported.get(table.name, set())
+        for fk in table.foreign_keys:
+            target_ids = owned.get(fk.column.table.name)
+            if not target_ids:
+                continue
+            query = select(func.count()).select_from(table).where(fk.parent.in_(target_ids))
+            if own_ids:
+                query = query.where(table.c.id.not_in(own_ids))
+            count = db.execute(query).scalar_one()
+            if count:
+                counts[table.name] = counts.get(table.name, 0) + count
+    return counts
 
 
 def rename_document(file_stem: str, name: str) -> dict:
