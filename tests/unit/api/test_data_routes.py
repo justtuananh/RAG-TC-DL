@@ -13,7 +13,7 @@ import zipfile
 import pytest
 from fastapi.testclient import TestClient
 
-import api_server
+from api.main import app
 from auth.security import create_access_token, hash_password
 from db import get_db
 from db.models import AppUser, UserRole
@@ -58,11 +58,11 @@ def client(data_factory, users, settings_override):
         finally:
             db.close()
 
-    api_server.app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_db] = override_get_db
     settings_override({"auth.enabled": True})
-    with TestClient(api_server.app) as test_client:
+    with TestClient(app) as test_client:
         yield test_client
-    api_server.app.dependency_overrides.clear()
+    app.dependency_overrides.clear()
 
 
 def _auth(users, role: str) -> dict:

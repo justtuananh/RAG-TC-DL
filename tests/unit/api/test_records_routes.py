@@ -14,7 +14,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-import api_server
+from api.main import app
 from auth.security import create_access_token, hash_password
 from db import get_db
 from db.models import (
@@ -157,16 +157,16 @@ def client(session_factory, users, monkeypatch, data_dir, settings_override):
         finally:
             db.close()
 
-    api_server.app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_db] = override_get_db
     settings_override({"auth.enabled": True})
     monkeypatch.setattr(
         ingestion_jobs,
         "get_source_path",
         lambda stem: data_dir / "record_bien_ban.docx" if stem == RECORD_STEM else None,
     )
-    with TestClient(api_server.app) as test_client:
+    with TestClient(app) as test_client:
         yield test_client
-    api_server.app.dependency_overrides.clear()
+    app.dependency_overrides.clear()
 
 
 def _auth(users, role: str) -> dict:

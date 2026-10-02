@@ -12,8 +12,9 @@ import json
 import pytest
 from fastapi.testclient import TestClient
 
-import api_server
+from api.main import app
 from db import get_db
+from llm.guards import REFUSAL_SENTENCE
 from query import intents, router
 from query.table_model import LEDGER_NOTE, Cell, Column, DataTable, make_payload
 
@@ -29,10 +30,10 @@ def client(data_factory):
         finally:
             db.close()
 
-    api_server.app.dependency_overrides[get_db] = override_get_db
-    with TestClient(api_server.app) as test_client:
+    app.dependency_overrides[get_db] = override_get_db
+    with TestClient(app) as test_client:
         yield test_client
-    api_server.app.dependency_overrides.clear()
+    app.dependency_overrides.clear()
 
 
 def _events(response) -> list[dict]:
@@ -60,15 +61,14 @@ def test_calculation_guard_still_first(client, monkeypatch):
     response = client.post("/api/chat/stream", json={"message": "tính giúp 2 + 3 = ?"})
     events = _events(response)
     assert events[0]["type"] == "done"
-    assert events[0]["answer"] == api_server.REFUSAL_SENTENCE
+    assert events[0]["answer"] == REFUSAL_SENTENCE
     assert called["route"] == 0
 
 
 def test_text_branch_unchanged(client, monkeypatch):
     monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
     monkeypatch.setattr(
-        api_server,
-        "retrieve",
+        "retrieval.retriever.retrieve",
         lambda *a, **k: [
             {
                 "payload": {
@@ -82,7 +82,9 @@ def test_text_branch_unchanged(client, monkeypatch):
             }
         ],
     )
-    monkeypatch.setattr(api_server, "stream_ollama", lambda messages: iter(["Sai số là 0,5 % [1]"]))
+    monkeypatch.setattr(
+        "llm.generator.stream_ollama", lambda messages: iter(["Sai số là 0,5 % [1]"])
+    )
     response = client.post("/api/chat/stream", json={"message": "Sai số cho phép là bao nhiêu?"})
     events = _events(response)
     types = [event["type"] for event in events]
@@ -108,7 +110,7 @@ def test_text_branch_uses_unchanged_retrieve_pipeline(client, monkeypatch):
         return []
 
     monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
-    monkeypatch.setattr(api_server, "retrieve", fake_retrieve)
+    monkeypatch.setattr("retrieval.retriever.retrieve", fake_retrieve)
     client.post("/api/chat/stream", json={"message": "Sai số cho phép là bao nhiêu?"})
     assert captured["kwargs"] == {}
 
@@ -207,8 +209,7 @@ def test_mixed_branch_keeps_both_citation_blocks(client, monkeypatch):
         ),
     )
     monkeypatch.setattr(
-        api_server,
-        "retrieve",
+        "retrieval.retriever.retrieve",
         lambda *a, **k: [
             {
                 "payload": {
@@ -222,7 +223,7 @@ def test_mixed_branch_keeps_both_citation_blocks(client, monkeypatch):
             }
         ],
     )
-    monkeypatch.setattr(api_server, "stream_ollama", lambda messages: iter(["Theo QTKĐ [1]"]))
+    monkeypatch.setattr("llm.generator.stream_ollama", lambda messages: iter(["Theo QTKĐ [1]"]))
     response = client.post(
         "/api/chat/stream", json={"message": "Phương tiện kiểm định QTKĐ 1.061?"}
     )
@@ -245,7 +246,7 @@ def test_data_lookup_failure_falls_back_to_text(client, monkeypatch):
             }
         ),
     )
-    monkeypatch.setattr(api_server, "retrieve", lambda *a, **k: [])
+    monkeypatch.setattr("retrieval.retriever.retrieve", lambda *a, **k: [])
     response = client.post("/api/chat/stream", json={"message": "Lịch sử KHÔNG-CÓ?"})
     done = _events(response)[-1]
     assert done["branch"] == "text"
@@ -267,7 +268,7 @@ def test_empty_data_result_falls_back_to_text(client, monkeypatch):
             }
         ),
     )
-    monkeypatch.setattr(api_server, "retrieve", lambda *a, **k: [])
+    monkeypatch.setattr("retrieval.retriever.retrieve", lambda *a, **k: [])
     response = client.post("/api/chat/stream", json={"message": "Chuẩn Fluke 7302 số 1274?"})
     done = _events(response)[-1]
     assert done["branch"] == "text"
@@ -345,8 +346,8 @@ def test_generic_device_question_answers_every_type(client, piston_procedures, m
         return iter(["- Áp kế píttông tiêu chuẩn: (-0,1 đến 100) MPa [1]"])
 
     monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
-    monkeypatch.setattr(api_server, "retrieve", fake_retrieve)
-    monkeypatch.setattr(api_server, "stream_ollama", fake_stream)
+    monkeypatch.setattr("retrieval.retriever.retrieve", fake_retrieve)
+    monkeypatch.setattr("llm.generator.stream_ollama", fake_stream)
 
     response = client.post("/api/chat/stream", json={"message": GENERIC_PISTON_QUESTION})
     events = _events(response)
@@ -385,7 +386,7 @@ def test_generic_device_question_skips_single_procedure_data_lookup(
             }
         ),
     )
-    monkeypatch.setattr(api_server, "retrieve", lambda *a, **k: [])
+    monkeypatch.setattr("retrieval.retriever.retrieve", lambda *a, **k: [])
 
     response = client.post("/api/chat/stream", json={"message": GENERIC_PISTON_QUESTION})
     done = _events(response)[-1]
@@ -397,12 +398,11 @@ def test_generic_device_question_skips_single_procedure_data_lookup(
 def test_specific_device_question_has_no_ambiguity_preface(client, piston_procedures, monkeypatch):
     monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
     monkeypatch.setattr(
-        api_server,
-        "retrieve",
+        "retrieval.retriever.retrieve",
         lambda *a, **k: [_piston_hit("QTKD_1.071_2022_FINAL", "phạm vi đo từ 10 bar đến 700 bar")],
     )
     monkeypatch.setattr(
-        api_server, "stream_ollama", lambda messages: iter(["10 bar đến 700 bar [1]"])
+        "llm.generator.stream_ollama", lambda messages: iter(["10 bar đến 700 bar [1]"])
     )
 
     response = client.post(

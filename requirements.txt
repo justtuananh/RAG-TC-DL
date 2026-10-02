@@ -22,7 +22,7 @@ psycopg2-binary>=2.9  # PostgreSQL adapter for Python
 bcrypt>=4.0           # Password hashing
 pyjwt>=2.8            # JWT token generation and validation
 alembic>=1.13         # Database migrations
-fastapi>=0.104        # Web framework (for api_server.py)
+fastapi>=0.104        # Web framework (for api.main)
 python-multipart>=0.0.6  # Form parsing for FastAPI
 
 # Cấu hình tập trung config/settings.yaml (core/settings_loader.py, core/schema.py)

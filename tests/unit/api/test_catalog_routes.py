@@ -14,7 +14,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-import api_server
+from api.main import app
 from auth.security import create_access_token, hash_password
 from catalogs.readers import read_catalog
 from catalogs.store import store_catalog_draft
@@ -157,11 +157,11 @@ def client(catalog_factory, settings_override):
         finally:
             db.close()
 
-    api_server.app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_db] = override_get_db
     settings_override({"auth.enabled": True})
-    with TestClient(api_server.app) as test_client:
+    with TestClient(app) as test_client:
         yield test_client
-    api_server.app.dependency_overrides.clear()
+    app.dependency_overrides.clear()
 
 
 def _headers(catalog_factory, role: str = "viewer") -> dict:

@@ -13,7 +13,7 @@
 #
 # ── Ports ──────────────────────────────────────────────────────────────────
 #   :3000  → React frontend  (http://localhost:3000)
-#   :8080  → FastAPI backend (api_server.py, SSE)
+#   :8080  → FastAPI backend (api.main, SSE)
 #   :8010  → Embedding API   (BAAI/bge-m3)
 #   :8011  → Reranker API    (BAAI/bge-reranker-v2-m3)
 #   :6333  → Qdrant          (vector database)
@@ -32,7 +32,7 @@
 
 services:
 
-  # ── PostgreSQL: Relational ledger. Port exposed to host so `api_server.py`
+  # ── PostgreSQL: Relational ledger. Port exposed to host so `api.main`
   #    can run natively (dev-local mode via run.sh) instead of in Docker. ─────
   postgres:
     image: postgres:16-alpine
@@ -202,7 +202,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qtkd_password}
       AUTH_ENABLED: ${AUTH_ENABLED:-true}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
-    command: ["uvicorn", "api_server:app", "--host", "0.0.0.0", "--port", "8080"]
+    command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
     depends_on:
       postgres:
         condition: service_healthy

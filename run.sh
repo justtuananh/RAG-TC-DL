@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ─────────────────────────────────────────────────────────────────────────────
-# run.sh — Bật BACKEND (api_server.py :8080) + FRONTEND (React :5173) cho QTKĐ RAG.
+# run.sh — Bật BACKEND (api.main :8080) + FRONTEND (React :5173) cho QTKĐ RAG.
 #
 # Tương đương run_all.bat (Windows) cho macOS/Linux, nhưng:
 #   • tự chọn venv CÓ fastapi (ưu tiên .venv-dev, fallback ../kotaemon/.venv rồi ./.venv)
@@ -84,7 +84,7 @@ if [ "$FRONTEND_ONLY" = 1 ]; then
   info "Ctrl-C để dừng."; wait; exit 0
 fi
 
-# ── 2) Chọn Python có fastapi (cho api_server.py) ────────────────────────────
+# ── 2) Chọn Python có fastapi (cho api.main) ────────────────────────────
 PY=""
 for cand in "$ROOT/.venv-dev/bin/python" "$ROOT/../kotaemon/.venv/bin/python" "$ROOT/.venv/bin/python"; do
   if [ -x "$cand" ] && "$cand" -c 'import fastapi, uvicorn' >/dev/null 2>&1; then PY="$cand"; break; fi
@@ -140,9 +140,9 @@ if [ "$DO_INDEX" = 1 ]; then
   fi
 fi
 
-# ── 6) Backend api_server.py :$API_PORT ──────────────────────────────────────
-info "Backend api_server.py :$API_PORT (model=$OLLAMA_MODEL)…"
-"$PY" "$ROOT/api_server.py" >"$API_LOG" 2>&1 & PIDS+=($!)
+# ── 6) Backend api.main :$API_PORT ──────────────────────────────────────
+info "Backend api.main :$API_PORT (model=$OLLAMA_MODEL)…"
+"$PY" -m api.main >"$API_LOG" 2>&1 & PIDS+=($!)
 for _ in $(seq 1 30); do up "http://localhost:$API_PORT/api/health" && break; sleep 1; done
 up "http://localhost:$API_PORT/api/health" && ok "API: http://localhost:$API_PORT/api/health" \
   || warn "API chưa phản hồi (xem $API_LOG)."

@@ -1,6 +1,6 @@
 """Chuẩn hoá LaTeX từ output LLM để KaTeX/markdown render được.
 
-Tách từ `app.py` + `api_server.py` (trước đây trùng y hệt) về 1 nguồn dùng chung.
+Gộp về 1 nguồn dùng chung cho mọi entrypoint (trước đây `app.py` và tầng API trùng nhau).
 """
 from __future__ import annotations
 

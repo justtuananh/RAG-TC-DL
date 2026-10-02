@@ -1,6 +1,6 @@
 """Glue upload -> extraction -> chunking -> embedding for one document at a time.
 
-Backs the /api/documents/* routes in api_server.py. Each ingestion job runs on
+Backs the /api/documents/* routes in api/routes/documents.py. Each ingestion job runs on
 a dedicated worker thread (not asyncio BackgroundTasks) so a slow Ruby/MTEF
 subprocess or embedding-service HTTP call never blocks the chat SSE event loop.
 

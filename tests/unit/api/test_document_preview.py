@@ -10,7 +10,7 @@ from __future__ import annotations
 import pytest
 from fastapi.testclient import TestClient
 
-import api_server
+from api.main import app
 from ingestion import convert_legacy
 from ingestion import jobs as ingestion_jobs
 
@@ -67,7 +67,7 @@ def test_preview_route_serves_converted_docx(corpus):
     legacy = source / "Bieu 4.doc"
     legacy.write_bytes(b"legacy doc")
     convert_legacy.cache_path(legacy).write_bytes(b"converted docx")
-    response = TestClient(api_server.app).get("/api/documents/Bieu_4/preview")
+    response = TestClient(app).get("/api/documents/Bieu_4/preview")
     assert response.status_code == 200
     assert response.content == b"converted docx"
     assert response.headers["content-type"].startswith(
@@ -76,7 +76,7 @@ def test_preview_route_serves_converted_docx(corpus):
 
 
 def test_preview_route_404_and_conversion_error(corpus, monkeypatch):
-    client = TestClient(api_server.app)
+    client = TestClient(app)
     assert client.get("/api/documents/khong_co/preview").status_code == 404
 
     source, _ = corpus

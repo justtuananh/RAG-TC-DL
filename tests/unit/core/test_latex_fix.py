@@ -1,4 +1,4 @@
-"""Regression cho latex.fix_latex (tách từ app.py + api_server.py về 1 nguồn).
+"""Regression cho latex.fix_latex (gộp về một nguồn dùng chung).
 
 Giữ nguyên hành vi chuẩn hoá LaTeX để KaTeX render: bỏ backtick, đổi \\[..\\]/\\(..\\),
 gộp \\\\ → \\. Khớp với frontend liveApi.fixLatex.
