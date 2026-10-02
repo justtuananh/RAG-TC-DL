@@ -1,11 +1,12 @@
-"""Reciprocal Rank Fusion — retrieval.retriever.rrf_fuse.
+"""Reciprocal Rank Fusion — retrieval.hybrid_retriever.rrf_fuse.
 
-score(d) = Σ 1/(k + rank_i(d)); k=60 mặc định. Hợp nhất theo payload.chunk_id.
+score(d) = Σ 1/(k + rank_i(d)); k lấy từ settings (mặc định 60). Hợp nhất theo
+payload.chunk_id.
 """
 
 import pytest
 
-from retrieval.retriever import rrf_fuse
+from retrieval.hybrid_retriever import rrf_fuse
 
 
 def _hit(cid):
@@ -46,3 +47,9 @@ def test_default_k_is_60():
 
 def test_empty_inputs():
     assert rrf_fuse([], []) == []
+
+
+def test_rrf_k_comes_from_settings(settings_override):
+    settings_override({"retrieval.rrf_k": 1})
+    fused = rrf_fuse([{"id": 1, "score": 1.0, "payload": {"chunk_id": "a"}}], [])
+    assert fused[0]["rrf_score"] == 1.0 / (1 + 0 + 1)  # 1/(k + rank + 1), rank từ 0

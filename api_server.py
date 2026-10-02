@@ -344,7 +344,7 @@ def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[s
         else req.message
     )
     try:
-        results = retrieve(retrieval_query, top_k=50, top_n=5)
+        results = retrieve(retrieval_query)
     except Exception as e:
         yield _sse({"type": "error", "text": f"Lỗi tìm kiếm: {e}"})
         return

@@ -197,7 +197,7 @@ def bot_fn(history: list):
     history[-1]["content"] = "*🔍 Đang tìm kiếm trong tài liệu QTKĐ (hybrid)…*"
     yield history, gr.update()
     try:
-        results = retrieve(query, top_k=20, top_n=5)
+        results = retrieve(query)
     except Exception as e:
         history[-1]["content"] = f"❌ Lỗi tìm kiếm: {e}"
         yield history, gr.update()

@@ -14,10 +14,10 @@ def test_embed_query_dim_1024(require_services):
 
 def test_rerank_endpoint_scores(require_services):
     require_services("reranker")
-    from retrieval.retriever import RERANK_URL
+    from core.settings_loader import get_settings
 
     r = requests.post(
-        RERANK_URL,
+        get_settings().services.rerank_url,
         json={
             "query": "sai số van an toàn",
             "documents": ["áp suất chỉnh đặt", "màu sơn"],

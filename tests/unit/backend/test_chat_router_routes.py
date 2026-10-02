@@ -95,7 +95,11 @@ def test_text_branch_unchanged(client, monkeypatch):
 
 
 def test_text_branch_uses_unchanged_retrieve_pipeline(client, monkeypatch):
-    """Nhánh text phải gọi đúng phễu retrieve của production (không hồi quy)."""
+    """Nhánh text phải gọi đúng phễu retrieve của production (không hồi quy).
+
+    Từ Task 7, độ rộng phễu lấy từ settings.retrieval nên API gọi retrieve() trần
+    (không truyền top_k/top_n); test khóa đúng lời gọi đó.
+    """
     captured: dict = {}
 
     def fake_retrieve(message, *args, **kwargs):
@@ -106,7 +110,7 @@ def test_text_branch_uses_unchanged_retrieve_pipeline(client, monkeypatch):
     monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
     monkeypatch.setattr(api_server, "retrieve", fake_retrieve)
     client.post("/api/chat/stream", json={"message": "Sai số cho phép là bao nhiêu?"})
-    assert captured["kwargs"] == {"top_k": 50, "top_n": 5}
+    assert captured["kwargs"] == {}
 
 
 def test_data_branch_returns_traceable_table(client, monkeypatch):

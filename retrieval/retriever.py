@@ -1,271 +1,49 @@
-"""QTKĐ retrieval pipeline: embed → dense search → rerank → parent fetch.
+"""Truy hồi lai đầy đủ: định tuyến → mở rộng truy vấn → dense + BM25 → RRF → lọc nhiễu
+→ rerank (cross-encoder trên section cha) → trả chunk con kèm section cha.
 
-Services (all local Docker, already running):
-  Embedding : POST http://localhost:8010/v1/embeddings  (bge-m3, 1024 dims)
-  Reranker  : POST http://localhost:8011/v1/rerank      (bge-reranker-v2-m3)
-  Qdrant    : http://localhost:6333                     collection: qtkd_rag
+Mỗi hit trả về có: payload (chunk con), rerank_score, rrf_score, parent_payload.
 """
+
 from __future__ import annotations
 
-import os
-import requests
-
+from core.settings_loader import get_settings
 from embedding import embedder
-from vectorstore import hybrid_index, qdrant
-
-RERANK_URL = os.getenv("RERANK_URL", "http://localhost:8011/v1/rerank")
-RERANK_TIMEOUT = 60
-
-# Funnel widths (Phase 3): search deeper, let reranker decide.
-TOP_K = 50          # candidates from dense + BM25 each
-RERANK_POOL = 60    # max candidates fed into reranker after RRF + noise filter
+from reranking import reranker
+from retrieval import hybrid_retriever as hybrid
+from retrieval import router
+from retrieval.query_expansion import expand_query
 
 
-_LEXICON: dict[str, str] = {
-    # Cầu nối từ vựng: trigger (substring, lowercase) → cụm đồng nghĩa nối thêm vào
-    # truy vấn embed + BM25 (reranker vẫn nhận query gốc). Nhắm khẩu ngữ/paraphrase
-    # và thuật ngữ song ngữ Việt–Anh trong các QTKĐ áp suất.
-    "điều kiện môi trường": "điều kiện kiểm định nhiệt độ độ ẩm áp suất khí quyển",
-    # Chiều ngược lại: hỏi bằng ĐÚNG tiêu đề mục 4.1/5.1 ("Điều kiện kiểm định") nhưng
-    # body mục đó chỉ là bullet đơn vị (Nhiệt độ/Độ ẩm/…) không lặp lại tiêu đề —
-    # Q18 dense=36/bm25=22 nên không lọt phễu top_k=20. Khung mục này có ở MỌI QTKĐ.
-    "điều kiện kiểm định": "điều kiện môi trường nhiệt độ độ ẩm áp suất khí quyển",
-    # Khẩu ngữ hỏi thẳng đại lượng môi trường (không nói "điều kiện") — kéo về mục
-    # 4.1/5.1; "môi trường"/"tương đối" trong trigger giữ cho câu hỏi HIỆU CHỈNH
-    # nhiệt độ ("nhiệt độ lệch", "hiệu chỉnh nhiệt độ") không bị kích nhầm.
-    "nhiệt độ môi trường": "điều kiện kiểm định nhiệt độ môi trường độ ẩm",
-    "độ ẩm tương đối": "điều kiện kiểm định độ ẩm tương đối nhiệt độ môi trường",
-    "sai số cho phép": "sai số giới hạn dung sai độ chính xác cấp chính xác",
-    "thời gian quay tự do": "thời gian quay tự do píttông kiểm tra kỹ thuật độ nhớt",
-    "độ chênh áp": "độ chênh áp blowdown chênh lệch áp suất đóng áp suất chỉnh đặt",
-    "áp suất chỉnh đặt": "áp suất chỉnh đặt set pressure áp suất mở van",
-    "thử thủy tĩnh": "thử thủy tĩnh kiểm tra độ kín chịu tải thời gian tối thiểu",
-    "kẹp chì": "kẹp chì niêm phong dấu niêm phong kiểm tra bên ngoài",
-    "thiết bị chuẩn": "phương tiện kiểm định thiết bị chuẩn áp kế chuẩn",
-    "số lần đo": "số lần đo số loạt đo số điểm đo chu trình kiểm định",
-    "chu kỳ kiểm định": "chu kỳ kiểm định định kỳ thời hạn tháng xử lý chung",
-    "diện tích hiệu dụng": "diện tích hiệu dụng píttông xác định đo lường",
-    "van xả áp": "van an toàn van xả áp suất safety valve",
-}
-
-
-def _expand_query(query: str) -> str:
-    """Append domain synonyms to bridge vocabulary gaps in embed + BM25.
-
-    Reranker still receives the original query — expanded text degrades
-    cross-encoder performance (arXiv 2311.09175).
-    """
-    q_lower = query.lower()
-    extras = [exp for trigger, exp in _LEXICON.items() if trigger in q_lower]
-    return (query + " " + " ".join(extras)) if extras else query
-
-
-# Văn bản đưa vào cross-encoder: service reranker cắt ở 512 token (~1500 ký tự) nên
-# CAP 1400 + breadcrumb vẫn lọt cửa sổ; BACK = phần ngữ cảnh phía trước child match.
-RERANK_DOC_CAP = 1400
-RERANK_DOC_BACK = 200
-
-
-def _rerank_doc(payload: dict, parent: dict | None) -> str:
-    """Dựng document cho cross-encoder từ một ứng viên (chỉ dùng lúc rerank,
-    KHÔNG lưu vào store — text trong payload/Qdrant giữ nguyên).
-
-    Hai cơ chế đo được trên bộ MISS (2026-06-11):
-    1. Tiền tố "file — breadcrumb": mục tiêu đề-đúng nhưng body không nhắc tên
-       thiết bị (4.1 Điều kiện kiểm định = bullet đơn vị) bị cross-encoder chấm
-       thua mục anh em giàu chữ có tên thiết bị → thêm cùng tiền tố cho MỌI ứng
-       viên thì tín hiệu tên file/thiết bị cân bằng (Q12: 8→2, Q18: 8→2, Q22: 5→3).
-    2. Cửa sổ neo theo CHILD: section dài (6.3.3 của 1.159 ≈ 7,6k ký tự) bị server
-       cắt ở 512 token TRƯỚC khi thấy nội dung trả lời — lấy cửa sổ quanh vị trí
-       child match thay vì đầu section (Q39: 9→1, Q48: 7→1; công thức của Q48 nằm
-       ở ký tự 1857, ngoài cửa sổ cũ).
-    """
-    text = parent["text"] if parent else payload["text"]
-    if len(text) > RERANK_DOC_CAP:
-        child = payload["text"]
-        idx = text.find(child[:80])
-        if idx < 0:
-            idx = 0
-        heading = text.split("\n", 1)[0]
-        start = max(0, idx - RERANK_DOC_BACK)
-        window = text[start : start + RERANK_DOC_CAP]
-        text = (heading + "\n…" + window) if start > 0 else window
-    return f"{payload['file_stem']} — {payload['section_path']}\n{text}"
-
-
-def rerank_hits(query: str, hits: list[dict], top_n: int = 5) -> list[dict]:
-    """Rerank on PARENT section text for richer context; attach parent_payload.
-
-    Deduplicates by parent_id (one child per section), fetches parent text,
-    scores with bge-reranker-v2-m3, returns top_n child hits ordered by
-    parent relevance.  Falls back to child text when parent is unavailable.
-    Documents are built by _rerank_doc (breadcrumb prefix + child-anchored window).
-    """
-    if not hits:
-        return []
-
-    # One representative child per parent (hits are pre-sorted by RRF score)
-    seen: dict = {}
-    for h in hits:
-        pid = h["payload"].get("parent_id")
-        if pid not in seen:
-            seen[pid] = h
-    unique_hits = list(seen.values())
-
-    # Fetch parent text for each unique section
-    parent_payloads: list[dict | None] = []
-    documents: list[str] = []
-    for h in unique_hits:
-        pid = h["payload"].get("parent_id")
-        parent = qdrant.fetch_parent(pid) if pid else None
-        parent_payloads.append(parent)
-        documents.append(_rerank_doc(h["payload"], parent))
-
-    try:
-        resp = requests.post(
-            RERANK_URL,
-            json={"query": query, "documents": documents, "top_n": len(documents)},
-            timeout=RERANK_TIMEOUT,
-        )
-        resp.raise_for_status()
-        results = resp.json()["results"]
-    except Exception as exc:
-        # Reranker unavailable — fall back to RRF ordering
-        import logging
-        logging.getLogger(__name__).warning("Reranker failed (%s), falling back to RRF order", exc)
-        out = []
-        for i, h in enumerate(unique_hits[:top_n]):
-            h2 = dict(h)
-            h2["rerank_score"] = h2.get("rrf_score", 0.0)
-            h2["parent_payload"] = parent_payloads[i]
-            out.append(h2)
-        return out
-
-    results.sort(key=lambda x: x["relevance_score"], reverse=True)
-
-    out = []
-    for r in results[:top_n]:
-        idx = r["index"]
-        h = dict(unique_hits[idx])
-        h["rerank_score"] = r["relevance_score"]
-        h["parent_payload"] = parent_payloads[idx]
-        out.append(h)
-    return out
-
-
-from retrieval.noise import (
-    NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS,
-    is_noise_path as _is_noise_path,
-)
-
-
-def _filter_noise(hits: list[dict]) -> list[dict]:
-    """Remove boilerplate form/template sections before reranking."""
-    return [
-        h for h in hits
-        if not _is_noise_path(h["payload"].get("section_path", ""))
-    ]
-
-
-def rrf_fuse(
-    dense_hits: list[dict],
-    bm25_hits: list[dict],
-    k: int = 60,
-) -> list[dict]:
-    """Reciprocal Rank Fusion of dense and BM25 lists.
-
-    Standard RRF: score(d) = Σ 1/(k + rank_i(d))  for each list i.
-    Returns unified list sorted by RRF score descending.
-    """
-    scores: dict[str, float] = {}
-    all_hits: dict[str, dict] = {}
-
-    for rank, h in enumerate(dense_hits):
-        cid = h["payload"]["chunk_id"]
-        all_hits[cid] = h
-        scores[cid] = scores.get(cid, 0.0) + 1.0 / (k + rank + 1)
-
-    for rank, h in enumerate(bm25_hits):
-        cid = h["payload"]["chunk_id"]
-        if cid not in all_hits:
-            all_hits[cid] = h
-        scores[cid] = scores.get(cid, 0.0) + 1.0 / (k + rank + 1)
-
-    sorted_ids = sorted(scores, key=scores.__getitem__, reverse=True)
-    fused: list[dict] = []
-    for cid in sorted_ids:
-        h = dict(all_hits[cid])
-        h["rrf_score"] = scores[cid]
-        fused.append(h)
-    return fused
-
-
-def _merge_per_file(reranked: list[dict], stems: frozenset[str], top_n: int) -> list[dict]:
-    """Ghép kết quả đã rerank cho câu hỏi đa-file: BẢO ĐẢM mỗi file có đại diện.
-
-    Cross-encoder chấm điểm theo độ khớp bề mặt nên file có cụm từ vựng trùng
-    câu hỏi nhiều hơn vẫn có thể chiếm hết top_n — quota tối thiểu mỗi file
-    (top_n // số file, ≥1) lấy theo thứ tự rerank trong file đó; phần dư bù bằng
-    thứ tự rerank toàn cục; cuối cùng sắp lại theo rerank_score để [n] ổn định.
-    """
-    by_file: dict[str, list[dict]] = {}
-    for h in reranked:
-        by_file.setdefault(h["payload"]["file_stem"], []).append(h)
-
-    quota = max(1, top_n // max(len(stems), 1))
-    chosen: list[dict] = []
-    chosen_ids: set[int] = set()
-    for s in sorted(stems):
-        for h in by_file.get(s, [])[:quota]:
-            chosen.append(h)
-            chosen_ids.add(id(h))
-    for h in reranked:
-        if len(chosen) >= top_n:
-            break
-        if id(h) not in chosen_ids:
-            chosen.append(h)
-            chosen_ids.add(id(h))
-    chosen.sort(key=lambda h: h.get("rerank_score", 0.0), reverse=True)
-    return chosen[:top_n]
-
-
-def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
-    """Full hybrid pipeline: route → expand → embed + BM25 → RRF → rerank → parent.
-
-    Returns list of top_n hit dicts, each with:
-      payload        : child chunk payload (text, section_path, file_stem, kind)
-      rerank_score   : float (from bge-reranker, scored on parent text)
-      rrf_score      : float (pre-rerank fusion score)
-      parent_payload : parent section payload (attached by rerank_hits)
-    """
-    from .router import route_files
-
-    expanded = _expand_query(query)
+def retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> list[dict]:
+    cfg = get_settings().retrieval
+    top_k = top_k or cfg.top_k
+    top_n = top_n or cfg.top_n
+    expanded = expand_query(query)
     vec = embedder.embed_query(expanded)
-    stems = route_files(query)
-
-    # Câu so sánh ≥2 thiết bị: chạy phễu RIÊNG cho từng file rồi rerank chung.
-    # Một phễu toàn-kho duy nhất bị cụm từ vựng áp đảo (3 file áp kế píttông)
-    # đè bẹp file thiểu số — đo Q115/Q116: top-5 không còn chunk 'van an toàn'
-    # nào → fact (20±5)/(65±15) vắng khỏi ngữ cảnh → model từ chối oan.
+    stems = router.route_files(query)
     if len(stems) >= 2:
-        fused: list[dict] = []
-        per_file_pool = max(top_n * 2, RERANK_POOL // len(stems))
-        for s in sorted(stems):
-            dh = qdrant.dense_search(vec, top_k=top_k, file_stem=s)
-            bh = hybrid_index.bm25_search(expanded, top_k=top_k, file_stem=s)
-            fused.extend(_filter_noise(rrf_fuse(dh, bh))[:per_file_pool])
-        reranked = rerank_hits(query, fused, top_n=len(fused))
-        return _merge_per_file(reranked, stems, top_n)
-
+        return _retrieve_per_file(query, vec, expanded, stems, top_k=top_k, top_n=top_n)
     file_stem = next(iter(stems)) if stems else None
-    dense_hits = qdrant.dense_search(vec, top_k=top_k, file_stem=file_stem)
-    bm25_hits = hybrid_index.bm25_search(expanded, top_k=top_k, file_stem=file_stem)
+    dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k, file_stem=file_stem)
+    # Định tuyến thu hẹp quá ít ứng viên: tìm lại toàn kho.
+    if file_stem and len(dense) + len(sparse) < cfg.min_routed_candidates:
+        dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k)
+    fused = hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse))[: cfg.rerank_pool]
+    return reranker.rerank_hits(query, fused, top_n=top_n)
 
-    # Safety fallback: if routing narrowed to too few candidates, retry full corpus
-    if file_stem and (len(dense_hits) + len(bm25_hits) < 6):
-        dense_hits = qdrant.dense_search(vec, top_k=top_k)
-        bm25_hits = hybrid_index.bm25_search(expanded, top_k=top_k)
 
-    fused = _filter_noise(rrf_fuse(dense_hits, bm25_hits))[:RERANK_POOL]
-    return rerank_hits(query, fused, top_n=top_n)
+def _retrieve_per_file(
+    query: str, vec: list[float], expanded: str, stems: frozenset[str], *, top_k: int, top_n: int
+) -> list[dict]:
+    """Câu so sánh ≥2 thiết bị: chạy phễu RIÊNG cho từng file rồi rerank chung.
+
+    Một phễu toàn kho bị cụm từ vựng áp đảo (3 file áp kế píttông) đè bẹp file thiểu
+    số; đo Q115/Q116: top-5 mất hết chunk 'van an toàn' → model từ chối oan.
+    """
+    pool = max(top_n * 2, get_settings().retrieval.rerank_pool // len(stems))
+    fused: list[dict] = []
+    for stem in sorted(stems):
+        dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k, file_stem=stem)
+        fused.extend(hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse))[:pool])
+    reranked = reranker.rerank_hits(query, fused, top_n=len(fused))
+    return hybrid.merge_per_file(reranked, stems, top_n)

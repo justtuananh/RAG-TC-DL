@@ -75,7 +75,7 @@ def run_text(case: dict) -> dict:
     if generation.is_calculation_request(question):
         answer = generation.REFUSAL_SENTENCE
     else:
-        results = generation.filter_by_confidence(retrieve(question, top_k=50, top_n=5))
+        results = generation.filter_by_confidence(retrieve(question))
         context, _ = generation.build_context_and_citations(results)
         messages = generation.build_messages(question, context, [])
         answer = generation.enforce_refusal_stop("".join(generation.stream_ollama(messages)))

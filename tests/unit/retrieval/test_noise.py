@@ -1,19 +1,25 @@
-"""Footgun đã được CLAUDE.md cảnh báo: _NOISE_PATH_MARKERS bị nhân bản ở 2 file.
+"""Guard boilerplate dùng chung: retrieval.noise là nguồn duy nhất.
 
-Nếu ai sửa list lọc boilerplate ở retriever.py mà quên hybrid_index.py (hoặc ngược
-lại), BM25 và dense sẽ lọc khác nhau. Test này fail ngay khi hai bản lệch.
+CLAUDE.md cảnh báo _NOISE_PATH_MARKERS từng bị nhân bản ở retriever.py + hybrid_index.py;
+nay cả hai import CÙNG một object từ retrieval.noise → không thể lệch.
 """
 
-from retrieval.retriever import _NOISE_PATH_MARKERS as RETRIEVER_MARKERS
-from retrieval.retriever import _is_noise_path as RETRIEVER_PREDICATE
-from vectorstore.hybrid_index import _NOISE_PATH_MARKERS as BM25_MARKERS
-from vectorstore.hybrid_index import _is_noise_path as BM25_PREDICATE
+from retrieval import noise
+from retrieval.hybrid_retriever import filter_noise
+from vectorstore import hybrid_index
 
 
-def test_noise_markers_in_sync():
-    assert RETRIEVER_MARKERS == BM25_MARKERS
+def test_predicate_is_shared_object():
+    # Cả hybrid_retriever lẫn hybrid_index dùng CÙNG hàm của retrieval.noise.
+    assert hybrid_index._is_noise_path is noise.is_noise_path
 
 
-def test_noise_predicate_is_shared_object():
-    # Cả hai consumer phải import CÙNG một hàm từ _constants — không bản sao tay.
-    assert RETRIEVER_PREDICATE is BM25_PREDICATE
+def test_markers_cover_known_boilerplate():
+    assert "Mẫu biên bản" in noise.NOISE_PATH_MARKERS
+    assert "(Quy định)" in noise.NOISE_PATH_MARKERS
+
+
+def test_filter_noise_matches_predicate():
+    hits = [{"payload": {"section_path": "Phụ lục B (Quy định)"}}]
+    assert filter_noise(hits) == []
+    assert noise.is_noise_path("Phụ lục B (Quy định)")

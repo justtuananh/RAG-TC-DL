@@ -1,7 +1,7 @@
 """Pipeline hybrid đầy đủ — retrieval.retriever.retrieve (mock toàn bộ I/O).
 
-Mock: embed_query, dense_search, bm25_search (import-trong-hàm → patch symbol GỐC),
-router.route, fetch_parent; stub HTTP rerank :8011. Không chạm mạng thật.
+Mock: embed_query, dense_search, bm25_search, router.route_files, fetch_parent;
+stub HTTP rerank :8011. Không chạm mạng thật.
 """
 
 import json
@@ -9,7 +9,8 @@ import json
 import responses
 
 import retrieval.retriever as R
-from retrieval.retriever import RERANK_URL
+from core.settings_loader import get_settings
+from reranking.reranker import rerank_hits
 
 
 def _child(cid, pid, section="6 Tiến hành > 6.1 X"):
@@ -54,7 +55,10 @@ def test_pipeline_dedups_by_parent_and_sorts(monkeypatch):
         },
     )
     responses.add_callback(
-        responses.POST, RERANK_URL, callback=_rerank_callback, content_type="application/json"
+        responses.POST,
+        get_settings().services.rerank_url,
+        callback=_rerank_callback,
+        content_type="application/json",
     )
 
     out = R.retrieve("câu hỏi", top_k=50, top_n=5)
@@ -91,7 +95,10 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
         lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"},
     )
     responses.add_callback(
-        responses.POST, RERANK_URL, callback=_rerank_callback, content_type="application/json"
+        responses.POST,
+        get_settings().services.rerank_url,
+        callback=_rerank_callback,
+        content_type="application/json",
     )
 
     R.retrieve("van an toàn 1.061", top_k=50, top_n=5)
@@ -103,7 +110,7 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
 
 def test_rerank_hits_empty_returns_empty():
     # Không gọi mạng (return sớm) — an toàn dưới network-guard.
-    assert R.rerank_hits("q", []) == []
+    assert rerank_hits("q", []) == []
 
 
 @responses.activate
@@ -133,7 +140,10 @@ def test_multi_file_query_runs_per_file_funnels(monkeypatch):
         lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"},
     )
     responses.add_callback(
-        responses.POST, RERANK_URL, callback=_rerank_callback, content_type="application/json"
+        responses.POST,
+        get_settings().services.rerank_url,
+        callback=_rerank_callback,
+        content_type="application/json",
     )
 
     out = R.retrieve("so sánh A và B", top_k=50, top_n=4)

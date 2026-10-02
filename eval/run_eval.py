@@ -20,15 +20,11 @@ from pathlib import Path
 # Allow running from project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from core.settings_loader import get_settings
 from embedding.embedder import embed_query
-from retrieval.retriever import (
-    RERANK_POOL,
-    TOP_K,
-    _expand_query,
-    _filter_noise,
-    rerank_hits,
-    rrf_fuse,
-)
+from reranking.reranker import rerank_hits
+from retrieval.hybrid_retriever import filter_noise, rrf_fuse
+from retrieval.query_expansion import expand_query
 from retrieval.router import route
 from vectorstore.hybrid_index import bm25_search
 from vectorstore.qdrant import dense_search
@@ -62,9 +58,9 @@ def _hit_rank(results: list[dict], expected_list: list[dict]) -> int | None:
 def run_hybrid(query: str, top_n: int = 10) -> list[dict]:
     """Hybrid pipeline = ĐÚNG đường production (qua production_retrieve) — chống drift.
 
-    Trước đây hàm này viết lại phễu với top_k=50; nay gọi thẳng retrieve() của app
-    (top_k=20) nên `make eval` đo đúng recall mà người dùng nhận. `_debug_miss` bên
-    dưới vẫn soi từng stage (cố ý nhân bản phễu CHỈ để chẩn đoán).
+    Gọi thẳng retrieve() của app (top_k từ settings.retrieval, đúng như API) nên
+    `make eval` đo đúng recall mà người dùng nhận. `_debug_miss` bên dưới vẫn soi
+    từng stage (cố ý nhân bản phễu CHỈ để chẩn đoán).
     """
     from eval._pipeline import production_retrieve
 
@@ -74,24 +70,25 @@ def run_hybrid(query: str, top_n: int = 10) -> list[dict]:
 def run_dense(query: str, top_n: int = 10) -> list[dict]:
     """Dense-only pipeline (no routing) for comparison."""
     vec = embed_query(query)
-    hits = dense_search(vec, top_k=TOP_K)
+    hits = dense_search(vec, top_k=get_settings().retrieval.top_k)
     return rerank_hits(query, hits, top_n=top_n)
 
 
 def _debug_miss(query: str, expected: list[dict]) -> None:
     """Print stage-by-stage rank of expected hit for failed queries."""
-    expanded = _expand_query(query)
+    cfg = get_settings().retrieval
+    expanded = expand_query(query)
     vec = embed_query(expanded)
     file_stem = route(query)
 
-    dense_hits = dense_search(vec, top_k=TOP_K, file_stem=file_stem)
-    bm25_hits = bm25_search(expanded, top_k=TOP_K, file_stem=file_stem)
-    if file_stem and (len(dense_hits) + len(bm25_hits) < 6):
-        dense_hits = dense_search(vec, top_k=TOP_K)
-        bm25_hits = bm25_search(expanded, top_k=TOP_K)
+    dense_hits = dense_search(vec, top_k=cfg.top_k, file_stem=file_stem)
+    bm25_hits = bm25_search(expanded, top_k=cfg.top_k, file_stem=file_stem)
+    if file_stem and (len(dense_hits) + len(bm25_hits) < cfg.min_routed_candidates):
+        dense_hits = dense_search(vec, top_k=cfg.top_k)
+        bm25_hits = bm25_search(expanded, top_k=cfg.top_k)
 
-    fused = _filter_noise(rrf_fuse(dense_hits, bm25_hits))
-    reranked = rerank_hits(query, fused[:RERANK_POOL], top_n=10)
+    fused = filter_noise(rrf_fuse(dense_hits, bm25_hits))
+    reranked = rerank_hits(query, fused[: cfg.rerank_pool], top_n=10)
 
     d_rank = _hit_rank(dense_hits, expected)
     b_rank = _hit_rank(bm25_hits, expected)
