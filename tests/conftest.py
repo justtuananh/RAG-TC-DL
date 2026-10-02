@@ -23,6 +23,10 @@ import pytest
 os.environ["QTKD_LOAD_DOTENV"] = "0"
 os.environ["QTKD_STARTUP_CHECKS"] = "false"
 
+import tempfile
+
+os.environ.setdefault("LOG_FILE", str(Path(tempfile.gettempdir()) / "qtkd-test.log"))
+
 _ROOT = Path(__file__).resolve().parent.parent
 _DATA = Path(__file__).resolve().parent / "data"
 

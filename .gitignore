@@ -38,6 +38,7 @@ build/pdf_test/
 
 # Performance logs (generated at runtime, can be large)
 logs/*.jsonl
+logs/*.log*
 QA.xlsx
 ~$QA.xlsx
 

@@ -1,0 +1,35 @@
+# Cấu hình logging (logging.config.dictConfig), nạp bởi core/logging_setup.py.
+# Hỗ trợ ${TÊN:-mặc_định} như settings.yaml.
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  console:
+    format: "%(asctime)s %(levelname)-7s %(name)s - %(message)s"
+    datefmt: "%H:%M:%S"
+  file:
+    format: "%(asctime)s %(levelname)s pid=%(process)d %(name)s - %(message)s"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    stream: ext://sys.stderr
+    formatter: console
+  file:
+    class: logging.handlers.RotatingFileHandler
+    filename: ${LOG_FILE:-logs/app.log}
+    maxBytes: 10485760
+    backupCount: 5
+    encoding: utf-8
+    formatter: file
+
+loggers:
+  httpx: {level: WARNING}
+  httpcore: {level: WARNING}
+  urllib3: {level: WARNING}
+  qdrant_client: {level: WARNING}
+  uvicorn.access: {level: "${LOG_LEVEL_ACCESS:-INFO}"}
+
+root:
+  level: "${LOG_LEVEL:-INFO}"
+  handlers: [console, file]
