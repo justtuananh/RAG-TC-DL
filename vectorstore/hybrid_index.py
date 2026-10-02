@@ -11,7 +11,7 @@ from rank_bm25 import BM25Okapi
 
 from core.settings_loader import get_settings
 from embedding.sparse_embedder import sparse_document_text, tokenize
-from retrieval._constants import (
+from retrieval.noise import (
     NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS,
     is_noise_path as _is_noise_path,
 )

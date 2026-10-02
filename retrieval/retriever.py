@@ -153,7 +153,7 @@ def rerank_hits(query: str, hits: list[dict], top_n: int = 5) -> list[dict]:
     return out
 
 
-from retrieval._constants import (
+from retrieval.noise import (
     NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS,
     is_noise_path as _is_noise_path,
 )
