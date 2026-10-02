@@ -94,12 +94,11 @@ A lower layer never imports a higher one;
   cross-encoder call. Boilerplate template sections ("Mẫu biên bản", "(Quy định)", …) are filtered
   out before reranking; `NOISE_PATH_MARKERS` now lives once in `vectorstore/noise.py`, and both
   `retrieval/hybrid_retriever.py` and `vectorstore/hybrid_index.py` import it.
-- `ui/gradio_app.py` - Gradio 4.x UI on **:7861** (original / alternative UI). Left = streaming chat
-  with **KaTeX vendored offline** under `ui/static/katex/` (inline `$...$`), right = source-document
-  viewer with the retrieved child passage `<mark>`-highlighted inside its parent section.
-  `llm/prompt.py` forces context-only answers, verbatim LaTeX (no recompute), Vietnamese, and `[n]`
-  citations; falls back to "không tìm thấy" when context lacks the answer.
-  Run with `python -m ui.gradio_app`.
+- `ui/gradio_app.py` - Gradio UI on **:7861** (original / alternative UI), run with `python -m ui.gradio_app`.
+  Left = streaming chat (Gradio's built-in KaTeX, inline `$...$` enabled via `LATEX_DELIMITERS`).
+  Right = source-document viewer with the retrieved child passage `<mark>`-highlighted inside its parent section.
+  Gradio does not expose KaTeX to custom HTML, so the viewer loads KaTeX auto-render from `ui/static/katex/` (vendored, offline) through `launch(head=...)`.
+  `llm/prompt.py` forces context-only answers, verbatim LaTeX (no recompute), Vietnamese, and `[n]` citations; it falls back to "không tìm thấy" when context lacks the answer.
 - `api/` - **FastAPI + SSE backend** for the React frontend, on **:8080** (run with `python -m api.main`,
   or `uvicorn api.main:app`). `api/main.py` builds the app, `api/routes/` holds the route modules,
   `api/services/chat_stream.py` is the SSE stream. Endpoints `GET /api/health`, `GET /api/examples`,
@@ -219,6 +218,11 @@ Inspect any effective value with the CLI:
 ```bash
 python -m core.settings_loader get retrieval.top_k
 ```
+
+`core/startup.py` runs once at every entrypoint (API lifespan, Gradio, CLI).
+With `APP_ENV=production` it refuses to start when `JWT_SECRET_KEY` is missing, is a placeholder the repo used to ship, or is shorter than 32 bytes, or when `POSTGRES_PASSWORD` is the dev default.
+In development a missing `JWT_SECRET_KEY` gives a random per-process key (tokens die on restart).
+It also warns about services that do not answer and logs an error when the embedding / reranker service runs a different model than settings.
 
 `config/logging.yaml` configures logging.
 The only code allowed to read `os.environ` is `core/settings_loader.py` and `core/logging_setup.py`.
