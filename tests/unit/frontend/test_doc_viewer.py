@@ -6,7 +6,7 @@ mock retrieve + _stream_ollama.
 
 import pytest
 
-import app
+from ui import gradio_app as app
 
 
 def _r(

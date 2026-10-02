@@ -9,8 +9,8 @@ import requests
 
 def test_end_to_end_answer(require_services):
     require_services()  # cả 4, gồm ollama
-    import app
     from retrieval.retriever import retrieve
+    from ui import gradio_app as app
 
     q = "Sai số cho phép của áp suất chỉnh đặt van an toàn là bao nhiêu?"
     results = retrieve(q, top_k=20, top_n=5)

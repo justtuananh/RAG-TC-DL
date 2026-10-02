@@ -1,36 +1,45 @@
-"""QTKĐ RAG Chatbot — Gradio 5.x, KaTeX formulas + doc viewer with passage highlight.
+"""QTKĐ RAG Chatbot - Gradio 5.x, KaTeX formulas + doc viewer with passage highlight.
 
 Run:
-  /path/to/kotaemon/.venv/bin/python app.py
+  python -m ui.gradio_app
 
 Layout:
   Left  (60%): chat + input + examples
   Right (40%): source document viewer with highlighted retrieved passages
 
-Services (all local Docker, already running):
-  Embedding : localhost:8010   (bge-m3, 1024 dims)
-  Reranker  : localhost:8011   (bge-reranker-v2-m3)
-  Qdrant    : localhost:6333   collection: qtkd_rag
-  Ollama    : localhost:11434  model: qwen2.5:1.5b
+Service/model: xem config/settings.yaml.
 """
+
 from __future__ import annotations
 
 import html as html_mod
-import sys
-from pathlib import Path
 
 import gradio as gr
 import markdown as _md
 
-sys.path.insert(0, str(Path(__file__).parent))
+from core.latex import fix_latex
+from llm.generator import stream_ollama as _stream_ollama
+from llm.guards import (
+    REFUSAL_SENTENCE as _REFUSAL_SENTENCE,
+)
+from llm.guards import (
+    enforce_refusal_stop as _enforce_refusal_stop,
+)
+from llm.guards import (
+    is_calculation_request as _is_calculation_request,
+)
+from llm.prompt import build_messages as _build_messages
+from retrieval.context_builder import (
+    build_context_and_citations as _build_context_and_citations,
+)
+from retrieval.context_builder import (
+    filter_by_confidence as _filter_by_confidence,
+)
 from retrieval.retriever import retrieve
 
 # ── Config ────────────────────────────────────────────────────────────────────
-OLLAMA_TIMEOUT = 120
-HISTORY_TURNS = 3
-MAX_CONTEXT_CHARS = 1800
 
-SYSTEM_TMPL = """Bạn là trợ lý tra cứu quy trình kiểm định đo lường (QTKĐ) của Cục Tiêu chuẩn Đo lường Chất lượng Việt Nam.
+SYSTEM_TMPL = r"""Bạn là trợ lý tra cứu quy trình kiểm định đo lường (QTKĐ) của Cục Tiêu chuẩn Đo lường Chất lượng Việt Nam.
 
 NHIỆM VỤ: Trả lời câu hỏi DỰA HOÀN TOÀN vào NGỮ CẢNH bên dưới. Không được bịa thêm thông tin ngoài ngữ cảnh.
 
@@ -45,20 +54,6 @@ QUY TẮC:
 
 NGỮ CẢNH:
 {context}"""
-
-
-from llm.generator import stream_ollama as _stream_ollama
-from llm.guards import (
-    REFUSAL_SENTENCE as _REFUSAL_SENTENCE,
-    enforce_refusal_stop as _enforce_refusal_stop,
-    is_calculation_request as _is_calculation_request,
-)
-from llm.prompt import build_messages as _build_messages
-from retrieval.context_builder import (
-    build_context_and_citations as _build_context_and_citations,
-    filter_by_confidence as _filter_by_confidence,
-)
-from core.latex import fix_latex
 
 
 # ── Markdown → HTML renderer (for doc viewer) ─────────────────────────────────
@@ -82,9 +77,7 @@ _PANEL_OPEN = (
 _PANEL_CLOSE = "</div></div>"
 
 _EMPTY_VIEWER = (
-    _PANEL_OPEN
-    + "<div class='doc-empty'>Kết quả tìm kiếm sẽ hiển thị ở đây.</div>"
-    + _PANEL_CLOSE
+    _PANEL_OPEN + "<div class='doc-empty'>Kết quả tìm kiếm sẽ hiển thị ở đây.</div>" + _PANEL_CLOSE
 )
 
 
@@ -133,9 +126,7 @@ def build_doc_viewer_html(results: list[dict]) -> str:
         file_html = html_mod.escape(file_stem)
         kind_icon = _KIND_ICON.get(kind, "·")
 
-        score_color = (
-            "#16a34a" if score > 0.3 else "#d97706" if score > 0.1 else "#6b7280"
-        )
+        score_color = "#16a34a" if score > 0.3 else "#d97706" if score > 0.1 else "#6b7280"
 
         cards.append(f"""<div class="doc-card">
   <div class="doc-card-hdr">
@@ -152,6 +143,7 @@ def build_doc_viewer_html(results: list[dict]) -> str:
 
 
 # ── Gradio event handlers ──────────────────────────────────────────────────────
+
 
 def _history_to_prior(history: list) -> list[list[str]]:
     """Convert Gradio-5 dict history → [[user, assistant], ...] cho build_messages."""
@@ -177,9 +169,13 @@ def bot_fn(history: list):
         return
 
     raw = history[-1]["content"]
-    query = raw if isinstance(raw, str) else " ".join(
-        p if isinstance(p, str) else (p.get("text", "") if isinstance(p, dict) else "")
-        for p in raw
+    query = (
+        raw
+        if isinstance(raw, str)
+        else " ".join(
+            p if isinstance(p, str) else (p.get("text", "") if isinstance(p, dict) else "")
+            for p in raw
+        )
     )
     prior = _history_to_prior(history[:-1])
 
@@ -343,10 +339,10 @@ mark.qtkd-hl {
 """
 
 LATEX_DELIMITERS = [
-    {"left": "$$",   "right": "$$",   "display": True},
-    {"left": "\\[",  "right": "\\]",  "display": True},
-    {"left": "$",    "right": "$",    "display": False},
-    {"left": "\\(",  "right": "\\)",  "display": False},
+    {"left": "$$", "right": "$$", "display": True},
+    {"left": "\\[", "right": "\\]", "display": True},
+    {"left": "$", "right": "$", "display": False},
+    {"left": "\\(", "right": "\\)", "display": False},
 ]
 
 # MutationObserver: re-run KaTeX auto-render whenever .qtkd-viewer content changes
@@ -384,9 +380,9 @@ EXAMPLES = [
 
 # ── UI ────────────────────────────────────────────────────────────────────────
 
+
 def build_ui() -> gr.Blocks:
     with gr.Blocks(title="QTKĐ Chatbot") as demo:
-
         gr.Markdown(
             "# 📐 QTKĐ Chatbot — Tra cứu Quy trình Kiểm định\n"
             "Hỏi bằng tiếng Việt · Kết quả kèm trích dẫn nguồn + công thức LaTeX\n\n"
@@ -414,9 +410,7 @@ def build_ui() -> gr.Blocks:
                         autofocus=True,
                     )
                     btn = gr.Button("Gửi ➤", variant="primary", scale=1, min_width=90)
-                clear_btn = gr.Button(
-                    "🗑 Xóa lịch sử", size="sm", variant="secondary"
-                )
+                clear_btn = gr.Button("🗑 Xóa lịch sử", size="sm", variant="secondary")
 
             # ── Right: document viewer (40%) ─────────────────────────────
             with gr.Column(scale=4):
@@ -426,13 +420,13 @@ def build_ui() -> gr.Blocks:
         gr.Examples(examples=EXAMPLES, inputs=txt, label="Câu hỏi mẫu")
 
         # ── Events ───────────────────────────────────────────────────────
-        txt.submit(
-            user_fn, [txt, chatbot], [txt, chatbot], queue=False
-        ).then(bot_fn, [chatbot], [chatbot, doc_viewer])
+        txt.submit(user_fn, [txt, chatbot], [txt, chatbot], queue=False).then(
+            bot_fn, [chatbot], [chatbot, doc_viewer]
+        )
 
-        btn.click(
-            user_fn, [txt, chatbot], [txt, chatbot], queue=False
-        ).then(bot_fn, [chatbot], [chatbot, doc_viewer])
+        btn.click(user_fn, [txt, chatbot], [txt, chatbot], queue=False).then(
+            bot_fn, [chatbot], [chatbot, doc_viewer]
+        )
 
         clear_btn.click(clear_all, outputs=[chatbot, doc_viewer], queue=False)
 
@@ -440,6 +434,9 @@ def build_ui() -> gr.Blocks:
 
 
 if __name__ == "__main__":
+    from core.startup import startup
+
+    startup()
     app = build_ui()
     app.queue()
     app.launch(

@@ -4,7 +4,7 @@ Gradio 4.x mặc định chỉ bật $$...$$ (block); app phải khai cả $...$
 chèn MutationObserver re-render KaTeX cho .qtkd-viewer.
 """
 
-import app
+from ui import gradio_app as app
 
 
 def test_latex_delimiters_enable_inline_and_block():

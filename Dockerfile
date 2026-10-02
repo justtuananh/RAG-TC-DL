@@ -28,4 +28,4 @@ EXPOSE 7861
 
 # Default: run the Gradio chat app
 # Override with: docker compose run --rm indexer python -m vectorstore.index --force
-CMD ["python", "app.py"]
+CMD ["python", "-m", "ui.gradio_app"]
