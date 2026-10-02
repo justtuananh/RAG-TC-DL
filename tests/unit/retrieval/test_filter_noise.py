@@ -1,7 +1,7 @@
 """Lọc section template/boilerplate trước rerank - retrieval.hybrid_retriever.filter_noise."""
 
 from retrieval.hybrid_retriever import filter_noise
-from retrieval.noise import NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS
+from vectorstore.noise import NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS
 
 
 def _h(section_path):

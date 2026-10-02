@@ -1,8 +1,9 @@
 """Nhận diện section boilerplate (mẫu biên bản, phụ lục quy định) - định nghĩa MỘT chỗ duy nhất.
 
 `NOISE_PATH_MARKERS` từng bị nhân bản ở retriever.py + hybrid_index.py; nếu một bản đổi
-mà bản kia quên thì dense và BM25 lọc khác nhau. retrieval.hybrid_retriever và
-vectorstore.hybrid_index cùng import từ đây (tests/unit/retrieval/test_noise.py giữ guard).
+mà bản kia quên thì dense và BM25 lọc khác nhau. Module nằm ở tầng vectorstore (dưới
+retrieval) để chỉ mục BM25 không phải import ngược lên retrieval; retrieval.hybrid_retriever
+và vectorstore.hybrid_index cùng import từ đây (tests/unit/vectorstore/test_noise.py giữ guard).
 """
 
 from __future__ import annotations

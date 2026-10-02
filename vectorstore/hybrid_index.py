@@ -3,25 +3,24 @@
 Built lazily on first call to bm25_search(). Tokenizer keeps technical
 codes/units intact (e.g. 1.061:2021, MPa, bar, DN50, 0.05%).
 """
-from __future__ import annotations
 
-from typing import Optional
+from __future__ import annotations
 
 from rank_bm25 import BM25Okapi
 
 from core.settings_loader import get_settings
 from embedding.sparse_embedder import sparse_document_text, tokenize
-from retrieval.noise import (
-    NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS,
+from vectorstore import qdrant
+from vectorstore.noise import (
     is_noise_path as _is_noise_path,
 )
-from vectorstore import qdrant
 
-_bm25: Optional[BM25Okapi] = None
-_chunks: Optional[list[dict]] = None   # child chunk payloads in corpus order
+_bm25: BM25Okapi | None = None
+_chunks: list[dict] | None = None  # child chunk payloads in corpus order
 
 
 # ── index build ───────────────────────────────────────────────────────────────
+
 
 def _is_noise(payload: dict) -> bool:
     return _is_noise_path(payload.get("section_path", ""))
@@ -50,6 +49,7 @@ def invalidate() -> None:
 
 # ── public API ────────────────────────────────────────────────────────────────
 
+
 def bm25_search(
     query: str,
     top_k: int | None = None,
@@ -75,11 +75,13 @@ def bm25_search(
         chunk = chunks[idx]
         if file_stem and chunk.get("file_stem") != file_stem:
             continue
-        hits.append({
-            "id": idx,
-            "bm25_score": float(scores[idx]),
-            "payload": chunk,
-        })
+        hits.append(
+            {
+                "id": idx,
+                "bm25_score": float(scores[idx]),
+                "payload": chunk,
+            }
+        )
         if len(hits) >= top_k:
             break
     return hits

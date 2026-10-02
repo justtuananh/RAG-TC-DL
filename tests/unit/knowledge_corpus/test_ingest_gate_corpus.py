@@ -1,7 +1,7 @@
 """T3: kiểm tra rào cản ingestion (định dạng cũ, trùng lặp, đuôi tệp được nhận).
 
 Cô lập ``paths.source_dir`` (settings) / ``SessionLocal`` (monkeypatch) theo đúng
-cách các test hiện có (``tests/unit/backend``) làm - không chạm ``TC_DL/`` thật.
+cách các test hiện có (``tests/unit/ingestion``) làm - không chạm ``TC_DL/`` thật.
 """
 
 from __future__ import annotations

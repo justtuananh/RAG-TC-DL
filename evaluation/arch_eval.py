@@ -14,7 +14,7 @@ Câu hỏi quy định (``not_intents``) đạt khi KHÔNG bị kéo sang tra bi
 ``sql`` đạt khi mô hình trả ``NO_SQL``. Kết quả từng câu ghi ra ``--out`` (JSON).
 
 Usage:
-  OLLAMA_MODEL=qwen2.5:3b python evaluation/arch_eval.py --mode text --out logs/arch/text.json
+  OLLAMA_MODEL=<model chat, xem config/settings.yaml> python evaluation/arch_eval.py --mode text --out logs/arch/text.json
   python evaluation/arch_eval.py --mode router --code-root /path/to/worktree --out ...
 """
 

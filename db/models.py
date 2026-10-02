@@ -234,7 +234,8 @@ class Extraction(Base):
     quote = Column(Text, nullable=False)
     char_start = Column(Integer, nullable=True)
     char_end = Column(Integer, nullable=True)
-    # `extractor` là "luật" sinh ra dòng (rule:bang2.v1, llm:qwen2.5:7b). Hàng đợi
+    # `extractor` là "luật" sinh ra dòng (rule:bang2.v1, llm:<model trích xuất>).
+    # Tên model trích xuất xem config/settings.yaml. Hàng đợi
     # duyệt Sprint 6 lọc và duyệt hàng loạt theo cột này nên nó được đánh index;
     # `confidence` cũng vậy vì mặc định sắp xếp tăng dần để gặp dòng khó trước.
     extractor = Column(String(128), nullable=False, index=True)

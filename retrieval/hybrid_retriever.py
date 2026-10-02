@@ -8,8 +8,8 @@ payload.chunk_id và sắp theo điểm RRF. filter_noise, rrf_fuse, merge_per_f
 from __future__ import annotations
 
 from core.settings_loader import get_settings
-from retrieval.noise import is_noise_path
 from vectorstore import hybrid_index, qdrant
+from vectorstore.noise import is_noise_path
 
 
 def filter_noise(hits: list[dict]) -> list[dict]:

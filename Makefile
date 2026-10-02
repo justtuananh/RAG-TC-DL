@@ -79,10 +79,13 @@ test-qdrant:
 # PY override được:  make check PY=/đường/dẫn/python
 PY ?= .venv-dev/bin/python
 
+# Các package nguồn + tests được lint/định dạng.
+LINT_PATHS = tests scripts query evaluation core api embedding vectorstore reranking retrieval llm scoring ui
+
 # Lint + format-check CHỈ code harness (không định dạng lại source hiện có).
 lint:
-	$(PY) -m ruff check tests scripts query evaluation
-	$(PY) -m ruff format --check tests scripts query evaluation
+	$(PY) -m ruff check $(LINT_PATHS)
+	$(PY) -m ruff format --check $(LINT_PATHS)
 
 # Tuỳ chọn: quét toàn repo tìm lỗi đúng/sai (pyflakes) — có thể lộ vài lỗi sẵn có.
 lint-all:
@@ -90,8 +93,8 @@ lint-all:
 
 # Tự sửa + định dạng code harness.
 fmt:
-	$(PY) -m ruff format tests scripts
-	$(PY) -m ruff check --fix tests scripts
+	$(PY) -m ruff format $(LINT_PATHS)
+	$(PY) -m ruff check --fix $(LINT_PATHS)
 
 # Guard độ trung thực công thức (rủi ro #1) — đọc artifact đã commit, không cần service.
 fidelity:

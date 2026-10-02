@@ -17,7 +17,7 @@ bộ ``paraphrase`` là câu hỏi diễn đạt khác để chống khớp riê
 Postgres (20 biên bản trong ``TC_DL/`` đã nạp + duyệt) và Ollama.
 
 Usage:
-  OLLAMA_MODEL=qwen2.5:3b python -m evaluation.record_query_eval [--set bo20] [-v]
+  OLLAMA_MODEL=<model chat, xem config/settings.yaml> python -m evaluation.record_query_eval [--set bo20] [-v]
 """
 
 from __future__ import annotations

@@ -1,12 +1,12 @@
 """Index QTKĐ Markdown chunks into Qdrant.
 
-Services used (all local Docker, already running):
-  - Embedding: POST http://localhost:8010/v1/embeddings  → 1024-dim vectors
-  - Qdrant:    http://localhost:6333                     → collection qtkd_rag
+Services used (all local Docker, already running); URL và tên collection lấy từ
+config/settings.yaml (services.embedding_url, services.qdrant_url, vectorstore.collection).
 
 Run:
   python -m vectorstore.index [--force] [--query "..."]
 """
+
 from __future__ import annotations
 
 import argparse
@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 # ── Main indexing logic ───────────────────────────────────────────────────────
+
 
 def index_directory(md_dir: Path | None = None, force: bool = False) -> dict:
     md_dir = md_dir or get_settings().paths.markdown_dir
@@ -69,16 +70,16 @@ def index_directory(md_dir: Path | None = None, force: bool = False) -> dict:
 
 # ── Smoke-test query ──────────────────────────────────────────────────────────
 
+
 def query(text: str, top_k: int = 5, parents_only: bool = False) -> None:
     client = qdrant.get_client()
     vec = embedder.embed_texts([text])[0]
 
     filt = None
     if parents_only:
-        from qdrant_client.models import Filter, FieldCondition, MatchValue
-        filt = Filter(must=[FieldCondition(
-            key="is_parent", match=MatchValue(value=True)
-        )])
+        from qdrant_client.models import FieldCondition, Filter, MatchValue
+
+        filt = Filter(must=[FieldCondition(key="is_parent", match=MatchValue(value=True))])
 
     result = client.query_points(
         collection_name=qdrant.collection_name(),
@@ -90,7 +91,7 @@ def query(text: str, top_k: int = 5, parents_only: bool = False) -> None:
     hits = result.points
 
     print(f"\nQuery: '{text}'")
-    print(f"{'─'*60}")
+    print(f"{'─' * 60}")
     for i, h in enumerate(hits, 1):
         p = h.payload
         snippet = p["text"][:120].replace("\n", " ")
@@ -102,6 +103,7 @@ def query(text: str, top_k: int = 5, parents_only: bool = False) -> None:
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
+
 
 def main() -> None:
     configure_logging()

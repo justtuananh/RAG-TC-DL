@@ -6,7 +6,7 @@ citation + refusal + ảo giác). So sánh nhiều model cạnh nhau để tách
 (1.5b vs 7b) khỏi lỗi-do-pipeline.
 
 Usage:
-  python -m evaluation.answer_eval [--model qwen2.5:1.5b,qwen2.5:7b]
+  python -m evaluation.answer_eval [--model <danh sách model, xem config/settings.yaml>]
                              [--answer-file evaluation/answer_set.jsonl]
                              [--category multi_section] [--limit N] [-v]
 
@@ -62,7 +62,7 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
     """Sinh câu trả lời cho model chỉ định, dùng cùng ngữ cảnh đã retrieve.
 
     Retry khi lỗi hạ tầng (Ollama 500 / read-timeout / trả rỗng): trên CPU,
-    qwen2.5:7b chạy lô dài hay trả 500 từng đợt - không retry thì 1/3 số câu bị
+    model lớn chạy lô dài hay trả 500 từng đợt - không retry thì 1/3 số câu bị
     chấm 0 oan và mọi metric thành nhiễu hạ tầng thay vì chất lượng model
     (lần đo 2026-06-11: 10/29 câu lỗi hạ tầng). Đường production (api, ui.gradio_app) stream
     trực tiếp cho người dùng nên không đi qua hàm này.
@@ -195,8 +195,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Eval chất lượng câu trả lời QTKĐ")
     parser.add_argument(
         "--model",
-        default="qwen2.5:1.5b,qwen2.5:7b",
-        help="Danh sách model (phân tách dấu phẩy) để so sánh.",
+        default=None,
+        help="Danh sách model (phân tách dấu phẩy) để so sánh; "
+        "mặc định là model chat trong config/settings.yaml.",
     )
     parser.add_argument("--answer-file", default="evaluation/answer_set.jsonl")
     parser.add_argument("--category", default=None, help="Chỉ chạy 1 category.")
@@ -228,7 +229,9 @@ def main() -> None:
         items = items[: args.limit]
     print(f"Loaded {len(items)} câu eval từ {eval_path}")
 
-    requested = [m.strip() for m in args.model.split(",") if m.strip()]
+    requested = [
+        m.strip() for m in (args.model or get_settings().models.llm_chat).split(",") if m.strip()
+    ]
     avail = _available_models()
     models = [m for m in requested if m in avail]
     skipped = [m for m in requested if m not in avail]

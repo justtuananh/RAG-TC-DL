@@ -160,7 +160,7 @@ def ambiguity_closing(ambiguity: DeviceAmbiguity) -> str:
 def ambiguity_guidance(ambiguity: DeviceAmbiguity) -> str:
     """Chỉ dẫn cho LLM: trả lời riêng từng loại theo mẫu, không chọn một loại làm câu chung.
 
-    Đưa MẪU từng dòng thay vì quy tắc dài: qwen2.5:3b chép nguyên câu "không tìm thấy"
+    Đưa MẪU từng dòng thay vì quy tắc dài: model chat chép nguyên câu "không tìm thấy"
     trong quy tắc vào mọi dòng khi chỉ dẫn được viết dạng văn xuôi (đo 2026-10-01).
     """
     template = "\n".join(
