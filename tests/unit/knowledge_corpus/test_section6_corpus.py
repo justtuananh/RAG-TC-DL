@@ -1,6 +1,6 @@
 """T6: kiểm tra trích xuất §6 bằng LLM (``knowledge.llm_extract``), client kịch bản.
 
-Dùng lại ``eval.extract_section6_eval.build_scripted_payload``/``ScriptedClient``
+Dùng lại ``evaluation.extract_section6_eval.build_scripted_payload``/``ScriptedClient``
 (không tái cài đặt logic chấm điểm). Client kịch bản chèn hai dòng bịa số theo
 mặc định — hàng rào xác minh (``knowledge.llm_extract.verify_fact``) phải loại
 cả hai, chứng minh hàng rào hoạt động chứ không phải gold "vừa khít tình cờ".
@@ -13,7 +13,7 @@ from collections import defaultdict
 
 import pytest
 
-from eval.extract_section6_eval import ScriptedClient, build_scripted_payload, golden_key
+from evaluation.extract_section6_eval import ScriptedClient, build_scripted_payload, golden_key
 from knowledge import llm_extract
 from tests.unit.knowledge_corpus.conftest import CORPUS_ROOT, load_manifest
 

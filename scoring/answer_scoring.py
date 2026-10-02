@@ -1,4 +1,4 @@
-"""Chấm chất lượng câu trả lời QTKĐ — TẤT ĐỊNH, thuần, KHÔNG network, KHÔNG LLM-judge.
+"""Chấm chất lượng câu trả lời QTKĐ - TẤT ĐỊNH, thuần, KHÔNG network, KHÔNG LLM-judge.
 
 Vì hệ chạy offline + domain đo lường (số liệu/công thức phải chính xác), ta chấm bằng
 "key-fact coverage": mỗi câu hỏi khai báo các fact bắt buộc (số, đơn vị, mã, công thức,
@@ -122,12 +122,12 @@ def fact_coverage(required_facts: list[dict], answer: str) -> tuple[float, list[
     return sum(flags) / len(flags), flags
 
 
-# ── Khớp nguồn (mirror eval.run_eval._matches) ────────────────────────────────
+# ── Khớp nguồn (mirror scoring.retrieval_metrics.matches) ─────────────────────
 
 
 def _source_retrieved(file_stem: str, section_path: str, src: dict) -> bool:
     """Section của hit có khớp 'source' của fact: cùng file_stem VÀ section_path là
-    chính nó hoặc con của nó (prefix). Giữ chung định nghĩa với run_eval._matches."""
+    chính nó hoặc con của nó (prefix). Giữ chung định nghĩa với scoring.retrieval_metrics.matches."""
     if file_stem != src.get("file_stem"):
         return False
     exp = src.get("section_path", "")
@@ -200,7 +200,7 @@ def is_refusal(answer: str) -> bool:
 
 def _grounded_as_table_cell(token_norm: str, raw_context: str) -> bool:
     """Số trong bảng Markdown đứng RIÊNG trong ô ('| 2 |'), đơn vị nằm ở TIÊU ĐỀ
-    cột ('…, min') — phép dán số-liền-đơn-vị không bao giờ khớp được. Gold tự bị
+    cột ('…, min') - phép dán số-liền-đơn-vị không bao giờ khớp được. Gold tự bị
     cờ ('2 phút' của Q113/Q121) ⇒ đây là lỗi thước đo. Chỉ chấp nhận khi phần số
     của claim xuất hiện như MỘT Ô BẢNG trọn vẹn (giữ precision với số trong văn
     xuôi)."""
@@ -217,7 +217,7 @@ def _grounded_as_table_cell(token_norm: str, raw_context: str) -> bool:
 def hallucination_flags(required_facts: list[dict], answer: str, retrieved: list[dict]) -> dict:
     """Heuristic thận trọng (ưu tiên precision): tách các 'claim đo lường' (số kèm
     đơn vị) trong answer; cái nào KHÔNG có trong toàn bộ ngữ cảnh đã retrieve → cờ
-    'số bịa' — lớp ảo giác nguy hiểm nhất cho bot tra cứu."""
+    'số bịa' - lớp ảo giác nguy hiểm nhất cho bot tra cứu."""
     context = " ".join(t for (_i, _fs, _sp, t) in _passages(retrieved))
     ctx_norm = normalize_number(context)
     # bỏ marker trích dẫn [1],[2] để khỏi bắt nhầm chỉ số nguồn là "số".

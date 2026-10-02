@@ -1,6 +1,6 @@
 """Eval tra cứu biên bản có cấu trúc trên sổ cái thật (Pha R).
 
-Mỗi câu trong ``eval/record_query_set.jsonl`` đi ĐÚNG đường của ``/api/chat/stream``:
+Mỗi câu trong ``evaluation/record_query_set.jsonl`` đi ĐÚNG đường của ``/api/chat/stream``:
 bộ phân loại Ollama → ``decide`` → ``build_data_payload`` trên PostgreSQL. Một câu
 đạt khi intent đúng VÀ mọi giá trị trong ``must`` (nguyên văn biên bản, so sau khi
 bỏ khoảng trắng, số khớp trọn) có mặt trong câu trả lời (bộ ``bo20``, đúng tiêu chí
@@ -17,7 +17,7 @@ bộ ``paraphrase`` là câu hỏi diễn đạt khác để chống khớp riê
 Postgres (20 biên bản trong ``TC_DL/`` đã nạp + duyệt) và Ollama.
 
 Usage:
-  OLLAMA_MODEL=qwen2.5:3b python -m eval.record_query_eval [--set bo20] [-v]
+  OLLAMA_MODEL=qwen2.5:3b python -m evaluation.record_query_eval [--set bo20] [-v]
 """
 
 from __future__ import annotations

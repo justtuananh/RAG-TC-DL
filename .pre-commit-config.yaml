@@ -1,7 +1,7 @@
 # Pre-commit cho harness QTKĐ.  Kích hoạt:  .venv-dev/bin/pre-commit install
 #
 # Ruff CHỈ chạy trên code harness (tests/, scripts/) — KHÔNG định dạng lại source
-# hiện có (app.py, retrieval/, index/, ingestion/, eval/). Các hook chung loại trừ
+# hiện có (app.py, retrieval/, index/, ingestion/, evaluation/). Các hook chung loại trừ
 # TC_DL/ và build/ vì repo cố tình track binary lớn ở đó.
 
 repos:

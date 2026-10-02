@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from eval.extract_eval import (
+from evaluation.extract_eval import (
     CATEGORIES,
     DEFAULT_GOLDEN,
     DEFAULT_MD_DIR,

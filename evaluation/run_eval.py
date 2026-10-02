@@ -1,7 +1,7 @@
-"""Spike E — Eval script: recall@k + nDCG@k + MRR for hybrid vs dense-only retrieval.
+"""Spike E - Eval script: recall@k + nDCG@k + MRR for hybrid vs dense-only retrieval.
 
 Usage:
-  python -m eval.run_eval [--mode hybrid|dense|both] [--top-k 5] [--eval-file eval/eval_set.jsonl]
+  python -m evaluation.run_eval [--mode hybrid|dense|both] [--top-k 5] [--eval-file evaluation/eval_set.jsonl]
 
 Requires: all Docker services running (embedding :8010, reranker :8011, qdrant :6333).
 """
@@ -26,43 +26,21 @@ from reranking.reranker import rerank_hits
 from retrieval.hybrid_retriever import filter_noise, rrf_fuse
 from retrieval.query_expansion import expand_query
 from retrieval.router import route
+from scoring.retrieval_metrics import compute_metrics, hit_rank
 from vectorstore.hybrid_index import bm25_search
 from vectorstore.qdrant import dense_search
-
-# ── match logic ───────────────────────────────────────────────────────────────
-
-
-def _matches(result_payload: dict, expected: dict) -> bool:
-    """A hit matches if file_stem equals AND section_path starts with expected."""
-    if result_payload.get("file_stem") != expected["file_stem"]:
-        return False
-    expected_path = expected["section_path"]
-    result_path = result_payload.get("section_path", "")
-    # Exact match OR result section is the expected section or a child of it
-    return result_path == expected_path or result_path.startswith(expected_path)
-
-
-def _hit_rank(results: list[dict], expected_list: list[dict]) -> int | None:
-    """Return 1-based rank of first matching result, or None if not found."""
-    for rank, r in enumerate(results, 1):
-        p = r["payload"]
-        for exp in expected_list:
-            if _matches(p, exp):
-                return rank
-    return None
-
 
 # ── retrieval pipelines ───────────────────────────────────────────────────────
 
 
 def run_hybrid(query: str, top_n: int = 10) -> list[dict]:
-    """Hybrid pipeline = ĐÚNG đường production (qua production_retrieve) — chống drift.
+    """Hybrid pipeline = ĐÚNG đường production (qua production_retrieve) - chống drift.
 
     Gọi thẳng retrieve() của app (top_k từ settings.retrieval, đúng như API) nên
     `make eval` đo đúng recall mà người dùng nhận. `_debug_miss` bên dưới vẫn soi
     từng stage (cố ý nhân bản phễu CHỈ để chẩn đoán).
     """
-    from eval._pipeline import production_retrieve
+    from evaluation.pipeline import production_retrieve
 
     return production_retrieve(query, top_n=top_n)
 
@@ -90,10 +68,10 @@ def _debug_miss(query: str, expected: list[dict]) -> None:
     fused = filter_noise(rrf_fuse(dense_hits, bm25_hits))
     reranked = rerank_hits(query, fused[: cfg.rerank_pool], top_n=10)
 
-    d_rank = _hit_rank(dense_hits, expected)
-    b_rank = _hit_rank(bm25_hits, expected)
-    f_rank = _hit_rank(fused, expected)
-    r_rank = _hit_rank(reranked, expected)
+    d_rank = hit_rank(dense_hits, expected)
+    b_rank = hit_rank(bm25_hits, expected)
+    f_rank = hit_rank(fused, expected)
+    r_rank = hit_rank(reranked, expected)
     exp = expected[0]
     router_label = file_stem if file_stem else "None"
     print(
@@ -103,33 +81,14 @@ def _debug_miss(query: str, expected: list[dict]) -> None:
     print(f"    expected: {exp['file_stem']} | {exp['section_path']}")
 
 
-# ── metrics ───────────────────────────────────────────────────────────────────
-
-
-def compute_metrics(ranks: list[int | None], ks: list[int]) -> dict:
-    n = len(ranks)
-    metrics: dict = {}
-    found_ranks = [r for r in ranks if r is not None]
-    for k in ks:
-        hits_k = [r for r in found_ranks if r <= k]
-        metrics[f"recall@{k}"] = len(hits_k) / n
-        metrics[f"ndcg@{k}"] = sum(1.0 / math.log2(r + 1) for r in hits_k) / n
-    metrics["MRR"] = sum(1 / r for r in found_ranks) / n
-    metrics["n"] = n
-    metrics["found"] = len(found_ranks)
-    metrics["miss"] = n - len(found_ranks)
-    metrics["mean_rank"] = sum(found_ranks) / len(found_ranks) if found_ranks else float("nan")
-    return metrics
-
-
 # ── main ──────────────────────────────────────────────────────────────────────
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Spike E — recall@k eval")
+    parser = argparse.ArgumentParser(description="Spike E - recall@k eval")
     parser.add_argument("--mode", choices=["hybrid", "dense", "both"], default="both")
     parser.add_argument("--top-k", type=int, default=5, help="k for recall@k (primary)")
-    parser.add_argument("--eval-file", default="eval/eval_set.jsonl")
+    parser.add_argument("--eval-file", default="evaluation/eval_set.jsonl")
     parser.add_argument("--verbose", "-v", action="store_true")
     parser.add_argument(
         "--debug-miss",
@@ -163,7 +122,7 @@ def main() -> None:
             t0 = time.time()
             try:
                 results = run_hybrid(q, top_n=10) if mode == "hybrid" else run_dense(q, top_n=10)
-                rank = _hit_rank(results, expected)
+                rank = hit_rank(results, expected)
                 all_ranks[mode].append(rank)
                 elapsed = time.time() - t0
                 status = f"rank={rank}" if rank else "MISS"
@@ -212,7 +171,7 @@ def main() -> None:
     # Per-file recall@5 breakdown (hybrid only)
     primary_k = args.top_k
     if "hybrid" in modes:
-        print(f"\n[PER-FILE recall@{primary_k} — hybrid]")
+        print(f"\n[PER-FILE recall@{primary_k} - hybrid]")
         by_file: dict[str, list] = defaultdict(list)
         for stem, rank in zip(all_file_stems, all_ranks["hybrid"], strict=True):
             by_file[stem].append(rank)

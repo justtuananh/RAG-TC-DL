@@ -443,7 +443,7 @@ def _normalize_question(text: str) -> str:
 
 def test_prompt_does_not_leak_golden_questions():
     """Không câu hỏi vàng nào (đã bỏ dấu câu, hạ chữ thường) được nhúng vào prompt."""
-    golden_path = Path(__file__).resolve().parents[3] / "eval" / "intent_golden.jsonl"
+    golden_path = Path(__file__).resolve().parents[3] / "evaluation" / "intent_golden.jsonl"
     prompt = _normalize_question(intents.build_classifier_prompt("câu thăm dò ngoài tập vàng"))
     for line in golden_path.read_text(encoding="utf-8").splitlines():
         line = line.strip()

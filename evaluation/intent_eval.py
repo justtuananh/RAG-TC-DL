@@ -12,7 +12,7 @@ vàng (``ScriptedClassifier``), có chủ đích chèn các tham số sai để 
 chế rơi về text. Độ chính xác của model thật đo bằng ``--live`` khi có Ollama.
 
 Usage:
-  python -m eval.intent_eval [--golden PATH] [--live] [--json]
+  python -m evaluation.intent_eval [--golden PATH] [--live] [--json]
 """
 
 from __future__ import annotations
@@ -49,7 +49,7 @@ from db.views import create_all_approved_views
 from query import intents, router
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_GOLDEN = ROOT / "eval" / "intent_golden.jsonl"
+DEFAULT_GOLDEN = ROOT / "evaluation" / "intent_golden.jsonl"
 
 
 class ScriptedClassifier:

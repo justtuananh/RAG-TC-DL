@@ -1,6 +1,6 @@
 """So sánh các phương án kiến trúc trên CÙNG một bộ câu hỏi biên bản (báo cáo đồ án, Chương 5).
 
-Ba chế độ, cùng tiêu chí chấm của ``eval/record_query_eval.py`` (mọi giá trị ``must``
+Ba chế độ, cùng tiêu chí chấm của ``evaluation/record_query_eval.py`` (mọi giá trị ``must``
 có mặt nguyên văn, không giá trị ``must_not`` nào lọt vào, so sau khi bỏ khoảng trắng):
 
 - ``text``: RAG văn bản thuần của Chương 2-4 (truy hồi lai → LLM sinh câu trả lời),
@@ -14,8 +14,8 @@ Câu hỏi quy định (``not_intents``) đạt khi KHÔNG bị kéo sang tra bi
 ``sql`` đạt khi mô hình trả ``NO_SQL``. Kết quả từng câu ghi ra ``--out`` (JSON).
 
 Usage:
-  OLLAMA_MODEL=qwen2.5:3b python eval/arch_eval.py --mode text --out logs/arch/text.json
-  python eval/arch_eval.py --mode router --code-root /path/to/worktree --out ...
+  OLLAMA_MODEL=qwen2.5:3b python evaluation/arch_eval.py --mode text --out logs/arch/text.json
+  python evaluation/arch_eval.py --mode router --code-root /path/to/worktree --out ...
 """
 
 from __future__ import annotations

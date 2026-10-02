@@ -1,13 +1,13 @@
-"""Spike E2 — Eval CHẤT LƯỢNG CÂU TRẢ LỜI (không chỉ retrieval).
+"""Spike E2 - Eval CHẤT LƯỢNG CÂU TRẢ LỜI (không chỉ retrieval).
 
 Chạy ĐÚNG đường production cho từng câu: production_retrieve → build_context →
-build_messages → stream_ollama, rồi chấm bằng eval.scoring (key-fact coverage +
+build_messages → stream_ollama, rồi chấm bằng scoring.answer_scoring (key-fact coverage +
 citation + refusal + ảo giác). So sánh nhiều model cạnh nhau để tách lỗi-do-model
 (1.5b vs 7b) khỏi lỗi-do-pipeline.
 
 Usage:
-  python -m eval.answer_eval [--model qwen2.5:1.5b,qwen2.5:7b]
-                             [--answer-file eval/answer_set.jsonl]
+  python -m evaluation.answer_eval [--model qwen2.5:1.5b,qwen2.5:7b]
+                             [--answer-file evaluation/answer_set.jsonl]
                              [--category multi_section] [--limit N] [-v]
 
 Requires: 4 service Docker (embedding :8010, reranker :8011, qdrant :6333, ollama :11434)
@@ -29,12 +29,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 import requests  # noqa: E402
 
 from core.settings_loader import get_settings  # noqa: E402
-from eval import scoring  # noqa: E402
-from eval._pipeline import production_retrieve  # noqa: E402
+from evaluation.pipeline import production_retrieve  # noqa: E402
 from llm.generator import stream_ollama  # noqa: E402
 from llm.guards import REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request  # noqa: E402
 from llm.prompt import build_messages  # noqa: E402
 from retrieval.context_builder import build_context_and_citations  # noqa: E402
+from scoring import answer_scoring  # noqa: E402
 
 # ── service / model helpers ───────────────────────────────────────────────────
 
@@ -62,12 +62,12 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
     """Sinh câu trả lời cho model chỉ định, dùng cùng ngữ cảnh đã retrieve.
 
     Retry khi lỗi hạ tầng (Ollama 500 / read-timeout / trả rỗng): trên CPU,
-    qwen2.5:7b chạy lô dài hay trả 500 từng đợt — không retry thì 1/3 số câu bị
+    qwen2.5:7b chạy lô dài hay trả 500 từng đợt - không retry thì 1/3 số câu bị
     chấm 0 oan và mọi metric thành nhiễu hạ tầng thay vì chất lượng model
     (lần đo 2026-06-11: 10/29 câu lỗi hạ tầng). Đường production (app.py) stream
     trực tiếp cho người dùng nên không đi qua hàm này.
     """
-    # Mirror app.py:bot_fn — yêu cầu tính toán bị chặn tất định TRƯỚC khi gọi LLM.
+    # Mirror app.py:bot_fn - yêu cầu tính toán bị chặn tất định TRƯỚC khi gọi LLM.
     if is_calculation_request(query):
         return REFUSAL_SENTENCE
     context_str, _ = build_context_and_citations(retrieved)
@@ -76,7 +76,7 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
     for attempt in range(retries + 1):
         if attempt:
             print(f"    ↻ retry {attempt}/{retries} (lỗi trước: {err})")
-            # Backoff dài dần: 500 đến từ OOM-kill lúc reload model — cần thời gian
+            # Backoff dài dần: 500 đến từ OOM-kill lúc reload model - cần thời gian
             # cho RAM hạ nhiệt, không phải retry dồn dập (Q101 từng trượt 3×500/53s).
             time.sleep(12 * attempt)
         try:
@@ -84,7 +84,7 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
             if out.strip():
                 return enforce_refusal_stop(out)
             err = "rỗng"
-        except Exception as e:  # noqa: BLE001 — gom mọi lỗi hạ tầng để retry
+        except Exception as e:  # noqa: BLE001 - gom mọi lỗi hạ tầng để retry
             err = str(e)[:90]
     print(f"    ✗ bỏ cuộc sau {retries} retry: {err}")
     return ""
@@ -94,7 +94,7 @@ def _warmup(model: str) -> None:
     """Nạp model trước lô đo (tránh read-timeout giả ở câu đầu khi model nguội)."""
     try:
         for _ in stream_ollama([{"role": "user", "content": "OK?"}], model=model):
-            break  # chỉ cần token đầu — model đã nạp
+            break  # chỉ cần token đầu - model đã nạp
     except Exception as e:  # noqa: BLE001
         print(f"  ⚠ warm-up {model}: {e}")
 
@@ -166,7 +166,7 @@ def _print_side_by_side(aggs: dict[str, dict]) -> None:
     models = list(aggs)
     if len(models) < 2:
         return
-    print(f"\n{'=' * 64}\n[SO SÁNH MODEL — overall]\n{'=' * 64}")
+    print(f"\n{'=' * 64}\n[SO SÁNH MODEL - overall]\n{'=' * 64}")
     metrics = [
         "coverage",
         "citation_strict",
@@ -198,7 +198,7 @@ def main() -> None:
         default="qwen2.5:1.5b,qwen2.5:7b",
         help="Danh sách model (phân tách dấu phẩy) để so sánh.",
     )
-    parser.add_argument("--answer-file", default="eval/answer_set.jsonl")
+    parser.add_argument("--answer-file", default="evaluation/answer_set.jsonl")
     parser.add_argument("--category", default=None, help="Chỉ chạy 1 category.")
     parser.add_argument("--limit", type=int, default=None, help="Giới hạn số câu (smoke).")
     parser.add_argument(
@@ -260,12 +260,12 @@ def main() -> None:
             except Exception as e:
                 print(f"  [{it['id']}] LỖI sinh: {e}")
                 ans = ""
-            rec = scoring.score_question(it, ans, retrieved)
+            rec = answer_scoring.score_question(it, ans, retrieved)
             rec["question"] = it["question"]
             rec["answer"] = ans
             records.append(rec)
             if args.verbose:
-                cov = "—" if rec["coverage"] is None else f"{rec['coverage']:.2f}"
+                cov = "-" if rec["coverage"] is None else f"{rec['coverage']:.2f}"
                 print(
                     f"  [{it['id']}] {it['category']:<13} cov={cov} "
                     f"refuse_ok={rec['refusal_correct']} halluc={rec['hallucination']['count']} "

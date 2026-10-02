@@ -14,7 +14,7 @@ from core.settings_loader import get_settings
 # trả lời" (mất uy tín) lẫn nhồi vào ngữ cảnh LLM (lost-in-the-middle). Cắt đuôi:
 # LUÔN giữ nguồn top; giữ nguồn sau nếu điểm ≥ CẢ ngưỡng tuyệt đối VÀ tương đối-theo-top.
 # Áp dụng SAU retrieve() (ở consumer) nên KHÔNG đụng thứ hạng/recall của retrieve() -
-# eval/run_eval đo recall@5 trên top-5 đầy đủ vẫn nguyên. Ngưỡng chọn để không rớt nguồn
+# evaluation/run_eval đo recall@5 trên top-5 đầy đủ vẫn nguyên. Ngưỡng chọn để không rớt nguồn
 # gold của eval_set (xem tests/unit/retrieval/test_source_filter.py + scripts kiểm tra).
 
 

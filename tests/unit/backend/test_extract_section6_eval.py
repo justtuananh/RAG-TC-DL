@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from eval.extract_section6_eval import (
+from evaluation.extract_section6_eval import (
     DEFAULT_GOLDEN,
     DEFAULT_MD_DIR,
     ScriptedClient,

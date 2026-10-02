@@ -6,7 +6,7 @@
 - reset_module_singletons: dọn các singleton lazy của retrieval/* giữa mỗi test.
 - require_services: skip test integration khi service chưa sẵn sàng.
 
-Các module nguồn (retrieval/ index/ app / eval.run_eval / scripts) import được nhờ
+Các module nguồn (retrieval/ index/ app / evaluation.run_eval / scripts) import được nhờ
 pythonpath=["."] khai trong pyproject.toml.
 """
 

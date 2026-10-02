@@ -52,16 +52,16 @@ clean-volumes:
 
 # Chạy eval retrieval (cần kotaemon/.venv — chạy trên host, không phải Docker)
 eval:
-	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m eval.run_eval --mode hybrid
+	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m evaluation.run_eval --mode hybrid
 
 # Eval CHẤT LƯỢNG CÂU TRẢ LỜI (coverage/citation/refusal/ảo giác) — so 1.5b vs 7b.
 # Cần 4 service + đã pull cả 2 model (make pull-model && make pull-model-7b).
 answer-eval:
-	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m eval.answer_eval --model qwen2.5:1.5b,qwen2.5:7b
+	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m evaluation.answer_eval --model qwen2.5:1.5b,qwen2.5:7b
 
 # Chỉ 1.5b (dev nhanh, không cần pull 7b).
 answer-eval-dev:
-	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m eval.answer_eval --model qwen2.5:1.5b
+	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m evaluation.answer_eval --model qwen2.5:1.5b
 
 # Smoke test embedding service
 test-embed:
@@ -80,8 +80,8 @@ PY ?= .venv-dev/bin/python
 
 # Lint + format-check CHỈ code harness (không định dạng lại source hiện có).
 lint:
-	$(PY) -m ruff check tests scripts query eval
-	$(PY) -m ruff format --check tests scripts query eval
+	$(PY) -m ruff check tests scripts query evaluation
+	$(PY) -m ruff format --check tests scripts query evaluation
 
 # Tuỳ chọn: quét toàn repo tìm lỗi đúng/sai (pyflakes) — có thể lộ vài lỗi sẵn có.
 lint-all:
@@ -98,25 +98,25 @@ fidelity:
 
 # Eval trích xuất bằng luật trên tập vàng (spec Sprint 4): precision ≥ 0,95, recall ≥ 0,80.
 extract-eval:
-	$(PY) -m eval.extract_eval
+	$(PY) -m evaluation.extract_eval
 
 # Eval trích xuất §6 bằng LLM (spec Sprint 5): precision ≥ 0,90 + 0 bịa số.
 # Mặc định chạy client kịch bản (tất định, không cần Ollama); --live để đo model thật.
 extract-section6-eval:
-	$(PY) -m eval.extract_section6_eval
+	$(PY) -m evaluation.extract_section6_eval
 
 # Eval định tuyến chat lai văn bản + số liệu (spec Sprint 9): intent ≥ 0,90,
 # 0 ô số không nguồn, câu hỏi văn bản không lạc nhánh số liệu.
 intent-eval:
-	$(PY) -m eval.intent_eval
+	$(PY) -m evaluation.intent_eval
 
 # Eval tra cứu biên bản trên sổ cái thật (Pha R): cần Postgres + Ollama (`make up`),
 # không nằm trong `check`. Bộ Bo_20_cau + câu diễn đạt khác, cổng ≥ 0,90.
 record-eval:
 	OLLAMA_MODEL=$${OLLAMA_MODEL:-qwen2.5:3b} OLLAMA_URL=$${OLLAMA_URL:-http://localhost:11434/api/chat} \
-		$(PY) -m eval.record_query_eval
+		$(PY) -m evaluation.record_query_eval
 	OLLAMA_MODEL=$${OLLAMA_MODEL:-qwen2.5:3b} OLLAMA_URL=$${OLLAMA_URL:-http://localhost:11434/api/chat} \
-		$(PY) -m eval.record_query_eval --path eval/record_query_generated.jsonl
+		$(PY) -m evaluation.record_query_eval --path evaluation/record_query_generated.jsonl
 
 # Unit test (mock toàn bộ I/O) — chạy mọi nơi, không cần Docker.
 test-unit:

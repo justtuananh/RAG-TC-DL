@@ -1,14 +1,14 @@
 """Eval trích xuất bằng luật trên tập vàng gán tay (spec §9 Sprint 4, §11).
 
 Chạy ``knowledge.rules`` trên toàn bộ QTKĐ trong ``build/spike_a/`` và đối chiếu
-với ``eval/extract_golden.jsonl`` — tập vàng đọc tay từ corpus hiện có. Tính độ
+với ``evaluation/extract_golden.jsonl`` - tập vàng đọc tay từ corpus hiện có. Tính độ
 chính xác và độ phủ RIÊNG TỪNG loại dữ kiện (spec: precision ≥ 0,95, recall ≥
 0,80; ưu tiên precision vì có người duyệt ở sau).
 
 Usage:
-  python -m eval.extract_eval [--golden PATH] [--md-dir PATH] [--json]
+  python -m evaluation.extract_eval [--golden PATH] [--md-dir PATH] [--json]
 
-Không cần DB, không cần service — chỉ đọc Markdown + luật thuần hàm.
+Không cần DB, không cần service - chỉ đọc Markdown + luật thuần hàm.
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from knowledge import vnnum
 from knowledge.rules import extract_all
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_GOLDEN = ROOT / "eval" / "extract_golden.jsonl"
+DEFAULT_GOLDEN = ROOT / "evaluation" / "extract_golden.jsonl"
 DEFAULT_MD_DIR = ROOT / "build" / "spike_a"
 
 CATEGORIES = (
@@ -153,7 +153,7 @@ def gate(report: dict, min_precision: float, min_recall: float) -> tuple[bool, l
 
 
 def _print_report(report: dict, min_precision: float, min_recall: float) -> None:
-    print("Trích xuất bằng luật — precision/recall theo loại dữ kiện")
+    print("Trích xuất bằng luật - precision/recall theo loại dữ kiện")
     print(f"{'loại':<22}{'vàng':>6}{'đoán':>6}{'TP':>5}{'FP':>5}{'FN':>5}{'P':>8}{'R':>8}")
     for category, metrics in report["categories"].items():
         print(

@@ -13,7 +13,7 @@ from collections import defaultdict
 
 import pytest
 
-from eval.extract_eval import golden_key, hit_key
+from evaluation.extract_eval import golden_key, hit_key
 from knowledge.extract import run_rules
 from tests.unit.knowledge_corpus.conftest import CORPUS_ROOT, load_manifest, xfail_for
 

@@ -7,7 +7,7 @@ số để chứng minh bộ xác minh loại chúng. Độ chính xác của mo
 ``--live`` khi có Ollama.
 
 Usage:
-  python -m eval.extract_section6_eval [--golden PATH] [--md-dir PATH] [--live] [--json]
+  python -m evaluation.extract_section6_eval [--golden PATH] [--md-dir PATH] [--live] [--json]
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ from pathlib import Path
 from knowledge import llm_extract, vnnum
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_GOLDEN = ROOT / "eval" / "extract_golden_section6.jsonl"
+DEFAULT_GOLDEN = ROOT / "evaluation" / "extract_golden_section6.jsonl"
 DEFAULT_MD_DIR = ROOT / "build" / "spike_a"
 
 
@@ -82,7 +82,7 @@ def build_scripted_payload(items: list[dict], *, inject_hallucinations: bool = T
         facts.append(
             {
                 "fact_kind": "max_permissible_error",
-                "label": "Bịa — quote không có trong tài liệu",
+                "label": "Bịa - quote không có trong tài liệu",
                 "rel_op": "<=",
                 "limit": {
                     "value": 42.0,
@@ -97,7 +97,7 @@ def build_scripted_payload(items: list[dict], *, inject_hallucinations: bool = T
             facts.append(
                 {
                     "fact_kind": "max_permissible_error",
-                    "label": "Bịa — quote thật nhưng sai con số",
+                    "label": "Bịa - quote thật nhưng sai con số",
                     "rel_op": real.get("rel_op") or "=",
                     "limit": {
                         "value": float(real["limit"]["value"]) + 1000,
@@ -204,7 +204,7 @@ def gate(report: dict, min_precision: float = 0.90) -> tuple[bool, list[str]]:
 
 def _print_report(report: dict, min_precision: float) -> None:
     mode = "Ollama thật" if report["live"] else "client kịch bản"
-    print(f"Trích xuất §6 bằng LLM ({mode}) — precision/recall theo loại dữ kiện")
+    print(f"Trích xuất §6 bằng LLM ({mode}) - precision/recall theo loại dữ kiện")
     print(f"{'loại':<22}{'vàng':>6}{'đoán':>6}{'TP':>5}{'FP':>5}{'FN':>5}{'P':>8}{'R':>8}")
     for category, metrics in report["categories"].items():
         print(

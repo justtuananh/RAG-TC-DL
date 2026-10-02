@@ -45,7 +45,7 @@ Việc dùng `knowledge.rules.phuluc_a` để dựng `MappingConfig` cho tự ki
 Chạy `.venv-dev/bin/python -m scripts.knowledge_corpus.build` (hai lần) + các lệnh `eval.*` dưới thư mục tạm `logs/opencode/phase2_tmp/` (không commit).
 
 1. **Tất định (sha256)**: build hai lần liên tiếp, so sha256 mọi `.docx`/`.xlsx` (45 file, không tính pdf/doc/xls do soffice sinh) - **giống hệt byte, ĐẠT**.
-2. **`eval.extract_eval` trên nhóm A** (12 file, golden lọc theo nhóm A):
+2. **`evaluation.extract_eval` trên nhóm A** (12 file, golden lọc theo nhóm A):
 
    | loại | trước (vòng 1, gold = auto extract_all) | sau (vòng 2, gold = spec) | P sau | R sau |
    |---|---|---|---|---|
@@ -60,7 +60,7 @@ Chạy `.venv-dev/bin/python -m scripts.knowledge_corpus.build` (hai lần) + c�
    Số dòng vàng tăng do R4 (đa dạng hoá: 2-4 thuật ngữ/QTKĐ thay vì 1, 3-5 chuẩn Bảng 2 thay vì 2, 3-6 bước Bảng 1 thay vì 3).
    Cổng precision ≥ 0.95, recall ≥ 0.80 → **ĐẠT** cho mọi loại.
    **Lần chạy đầu của gold spec-derived (trước khi sửa `_section_1`) cho `working_range` 0/12 đúng - KHÔNG bị bẻ để khớp**: điều tra cho thấy câu "...đến 1 400 bar." (chấm câu ngay sau đơn vị, không có từ nào theo sau) khiến lớp ký tự đơn vị của `phamvi.py` (`[\w%°/²³.]*`, có chứa `.`) nuốt luôn dấu chấm câu vào đơn vị ("bar."), lệch khỏi gold "...bar". Đây là lỗi TÀI LIỆU (câu văn không tự nhiên, không giống văn phong QTKĐ thật vốn luôn có mệnh đề sau đơn vị) chứ không phải lỗi code trên tài liệu hợp lệ, nên đã **sửa tài liệu** (`_section_1` nay luôn thêm mệnh đề + dấu phẩy sau `value_text`) chứ không sửa gold. Không có K-code mới.
-3. **`eval.extract_section6_eval` trên nhóm A**: `max_permissible_error` 14→16 dòng vàng (R4: thêm sai số vùng lưu lượng cao của 9.004, sai số khoảng cách của 9.008), 16/16/16 (P=1.000, R=1.000), `formula` 0 dòng, bịa số = 0. Cổng precision ≥ 0.90 → **ĐẠT**.
+3. **`evaluation.extract_section6_eval` trên nhóm A**: `max_permissible_error` 14→16 dòng vàng (R4: thêm sai số vùng lưu lượng cao của 9.004, sai số khoảng cách của 9.008), 16/16/16 (P=1.000, R=1.000), `formula` 0 dòng, bịa số = 0. Cổng precision ≥ 0.90 → **ĐẠT**.
 4. **Đọc D/E bằng `records.docx_reader`/`records.xlsx_reader`** với `MappingConfig` dựng từ nhãn/cột Phụ lục A thật của từng QTKĐ (`knowledge.rules.phuluc_a.extract`, chỉ dùng ở bước tự kiểm này), so với `records_golden.jsonl` (không đổi so với vòng 1 vì D/E không phụ thuộc trường đã sửa ở nhóm A):
    - 16/22 hồ sơ khớp tuyệt đối (mọi trường + mọi điểm đo).
    - 6/22 hồ sơ có sai khác, đúng như thiết kế để lộ K-code (xem bảng dưới) - tổng 18 điểm sai khác, tất cả đã ghi vào `manifest.jsonl` (`known_behaviors`).

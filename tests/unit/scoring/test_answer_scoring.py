@@ -1,11 +1,11 @@
-"""Chấm câu trả lời — eval.scoring (thuần, KHÔNG service).
+"""Chấm câu trả lời - scoring.answer_scoring (thuần, KHÔNG service).
 
 Khoá ngữ nghĩa chuẩn hoá tiếng Việt/đo lường + coverage/citation/refusal/ảo giác.
 """
 
 import pytest
 
-from eval.scoring import (
+from scoring.answer_scoring import (
     citation_correctness,
     fact_coverage,
     fact_present,

@@ -1,4 +1,4 @@
-"""Chạy guard độ trung thực công thức trong tầng unit/CI — scripts.check_fidelity.
+"""Chạy guard độ trung thực công thức trong tầng unit/CI - scripts.check_fidelity.
 
 Khẳng định artifact ĐÃ commit (build/spike_a) đạt mọi bất biến, và kiểm các hàm
 con (phát hiện brace lệch, '$' lạ, \\left/\\right không cân).

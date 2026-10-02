@@ -3,9 +3,9 @@
 KHÔNG import ``knowledge.rules`` ở đây. ``qtkd_doc.py`` chỉ ghép các chuỗi
 ``value_text`` có sẵn trong spec vào câu văn (không định dạng lại số liệu), nên
 mỗi hàm dưới đây chỉ cần đọc lại đúng những chuỗi đó và đóng gói theo schema
-``eval/extract_golden.jsonl`` / ``eval/extract_golden_section6.jsonl`` (xem
-``eval/extract_eval.py:golden_key`` để biết khoá đối chiếu chính xác). Nếu chạy
-``eval.extract_eval`` cho kết quả sai với gold này, đó là một hành vi cần xác
+``evaluation/extract_golden.jsonl`` / ``evaluation/extract_golden_section6.jsonl`` (xem
+``evaluation/extract_eval.py:golden_key`` để biết khoá đối chiếu chính xác). Nếu chạy
+``evaluation.extract_eval`` cho kết quả sai với gold này, đó là một hành vi cần xác
 minh (sửa tài liệu nếu tài liệu sai, hoặc ghi K-code mới nếu code sai) --
 KHÔNG được bẻ gold để khớp code.
 """

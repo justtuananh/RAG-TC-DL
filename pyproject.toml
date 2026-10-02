@@ -4,7 +4,7 @@
 # thành package cài được; nó giữ nguyên quy ước hai venv + requirements*.txt.
 #
 # Test interpreter là .venv-dev (xem requirements-dev.txt). pythonpath=["."] cho
-# phép import retrieval/ index/ ingestion/ app / eval.run_eval / scripts từ test
+# phép import retrieval/ index/ ingestion/ app / evaluation.run_eval / scripts từ test
 # mà không cần cài đặt repo.
 
 [tool.pytest.ini_options]
