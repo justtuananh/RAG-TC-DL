@@ -59,7 +59,7 @@ from generation import (
     is_calculation_request as _is_calculation_request,
     stream_ollama as _stream_ollama,
 )
-from latex import fix_latex
+from core.latex import fix_latex
 
 
 # ── Markdown → HTML renderer (for doc viewer) ─────────────────────────────────

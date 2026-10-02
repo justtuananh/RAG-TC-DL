@@ -76,7 +76,7 @@ from generation import (
     is_calculation_request,
     stream_ollama,
 )
-from latex import fix_latex
+from core.latex import fix_latex
 import ingestion_jobs
 import review.queue as review
 from query import export as data_export

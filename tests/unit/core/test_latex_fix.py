@@ -4,7 +4,7 @@ Giữ nguyên hành vi chuẩn hoá LaTeX để KaTeX render: bỏ backtick, đ�
 gộp \\\\ → \\. Khớp với frontend liveApi.fixLatex.
 """
 
-from latex import fix_latex
+from core.latex import fix_latex
 
 
 def test_giu_nguyen_text_thuong():

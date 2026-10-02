@@ -12,20 +12,9 @@ from __future__ import annotations
 
 import hashlib
 import re
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
-
-@dataclass
-class Chunk:
-    chunk_id: str        # sha256[:16] of (file+section+text)
-    parent_id: Optional[str]   # None for parent chunks
-    is_parent: bool
-    kind: str            # "section" | "paragraph" | "table" | "formula"
-    text: str            # actual content (with heading prefix for parents)
-    section_path: str    # e.g. "3 Các phép kiểm định > 3.1 Phép đo"
-    file_stem: str       # source .md file stem (= docx name)
+from core.schema import Chunk
 
 
 _HEADING_RE = re.compile(r"^(#{1,6})\s+(.+)$")
