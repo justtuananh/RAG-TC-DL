@@ -11,7 +11,8 @@ import argparse
 import os
 import re
 import sys
-from collections.abc import Mapping
+from collections.abc import Iterator, Mapping
+from contextlib import contextmanager
 from functools import lru_cache
 from pathlib import Path
 from typing import Any
@@ -107,6 +108,23 @@ def get_settings() -> Settings:
 def reset_settings() -> None:
     """Bỏ cache để lần gọi sau đọc lại file + môi trường."""
     _cached.cache_clear()
+
+
+@contextmanager
+def overridden(overrides: Mapping[str, Any]) -> Iterator[Settings]:
+    """Tạm đổi vài khóa cấu hình cho cả tiến trình (công cụ eval); khôi phục khi thoát.
+
+    Gán ``_override`` để mọi lời gọi ``get_settings()`` trong khối thấy giá trị mới,
+    kể cả khi thoát do exception. Khác fixture ``settings_override`` (theo từng test),
+    đây là context manager dùng được trong script chạy dài.
+    """
+    global _override
+    previous = _override
+    _override = with_overrides(get_settings(), overrides)
+    try:
+        yield _override
+    finally:
+        _override = previous
 
 
 def with_overrides(settings: Settings, overrides: Mapping[str, Any]) -> Settings:

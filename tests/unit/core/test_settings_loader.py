@@ -101,6 +101,21 @@ def test_settings_override_fixture_reaches_get_settings(settings_override):
     assert SL.get_settings().retrieval.top_n == 3
 
 
+def test_overridden_context_manager_applies_and_restores():
+    base = SL.load_settings(env={}).retrieval.top_k
+    with SL.overridden({"retrieval.top_k": 7}):
+        assert SL.get_settings().retrieval.top_k == 7
+    assert SL.get_settings().retrieval.top_k == base
+
+
+def test_overridden_restores_after_exception():
+    base = SL.load_settings(env={}).retrieval.top_k
+    with pytest.raises(RuntimeError):
+        with SL.overridden({"retrieval.top_k": 9}):
+            raise RuntimeError("bụi")
+    assert SL.get_settings().retrieval.top_k == base
+
+
 def test_cli_get_prints_value(capsys):
     assert SL.main(["get", "vectorstore.collection"]) == 0
     assert capsys.readouterr().out.strip() == "qtkd_rag"
