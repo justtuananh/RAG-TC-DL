@@ -1,4 +1,4 @@
-"""QTKĐ RAG Chatbot - Gradio 5.x, KaTeX formulas + doc viewer with passage highlight.
+"""QTKĐ RAG Chatbot - Gradio, KaTeX formulas + doc viewer with passage highlight.
 
 Run:
   python -m ui.gradio_app
@@ -13,6 +13,7 @@ Service/model: xem config/settings.yaml.
 from __future__ import annotations
 
 import html as html_mod
+from pathlib import Path
 
 import gradio as gr
 import markdown as _md
@@ -36,25 +37,6 @@ from retrieval.context_builder import (
     filter_by_confidence as _filter_by_confidence,
 )
 from retrieval.retriever import retrieve
-
-# ── Config ────────────────────────────────────────────────────────────────────
-
-SYSTEM_TMPL = r"""Bạn là trợ lý tra cứu quy trình kiểm định đo lường (QTKĐ) của Cục Tiêu chuẩn Đo lường Chất lượng Việt Nam.
-
-NHIỆM VỤ: Trả lời câu hỏi DỰA HOÀN TOÀN vào NGỮ CẢNH bên dưới. Không được bịa thêm thông tin ngoài ngữ cảnh.
-
-QUY TẮC:
-1. Dẫn nguồn rõ ràng bằng ký hiệu [1], [2], ... tương ứng với từng nguồn.
-2. Giữ nguyên công thức LaTeX từ nguồn — không viết lại, không tính toán.
-   - Công thức inline: dùng $...$ (ví dụ: $P_{cd}$)
-   - Công thức display (xuống dòng): dùng $$...$$ (ví dụ: $$\frac{\Delta P}{P} \times 100\%$$)
-   - KHÔNG dùng \[...\] hay dấu ngoặc vuông [ ] để bao công thức.
-3. Trả lời bằng tiếng Việt, ngắn gọn, chính xác.
-4. Nếu ngữ cảnh KHÔNG chứa thông tin cần thiết, trả lời: "Không tìm thấy thông tin này trong các tài liệu QTKĐ được cung cấp."
-
-NGỮ CẢNH:
-{context}"""
-
 
 # ── Markdown → HTML renderer (for doc viewer) ─────────────────────────────────
 
@@ -246,6 +228,12 @@ CSS = """
     border-radius: 0 4px 4px 0; margin: 4px 0; padding: 4px 10px;
     color: #475569; font-size: 0.9em;
 }
+/* Gradio tô chữ <p> theo theme: con của blockquote phải theo màu blockquote, không thì
+   chữ sáng của dark theme nằm trên nền sáng ở trên và không đọc được. */
+#qtkd-chat .prose blockquote * { color: inherit; }
+.dark #qtkd-chat .prose blockquote {
+    background: #1e293b; border-left-color: #64748b; color: #cbd5e1;
+}
 #qtkd-chat .prose code {
     background: #dbeafe; color: #1e40af; padding: 1px 5px;
     border-radius: 3px; font-weight: 500;
@@ -336,6 +324,21 @@ mark.qtkd-hl {
 .doc-body tr:nth-child(even) { background: #f8fafc; }
 .doc-body p { margin: 4px 0; }
 .doc-body ul, .doc-body ol { margin: 4px 0; padding-left: 18px; }
+/* Gradio tô <p>/<li> theo theme: con của panel theo màu panel (giống blockquote ở trên). */
+.doc-body * { color: inherit; }
+
+/* ── Dark theme: panel nguồn không giữ nền sáng (chữ sáng của Gradio sẽ chìm) ── */
+.dark .doc-panel-wrap { background: #111827; border-color: #374151; }
+.dark .qtkd-viewer { color-scheme: dark; }  /* thanh cuộn tối theo panel */
+.dark .doc-panel-hdr { background: #1f2937; color: #e5e7eb; border-bottom-color: #374151; }
+.dark .doc-card { background: #1f2937; border-color: #374151; }
+.dark .doc-body { color: #e5e7eb; }
+.dark .doc-section, .dark .doc-kind, .dark .doc-hl-sep { color: #9ca3af; }
+.dark .doc-num { color: #60a5fa; }
+.dark .doc-body th, .dark .doc-body td { border-color: #4b5563; }
+.dark .doc-body th { background: #374151; color: #f3f4f6; }
+.dark .doc-body tr:nth-child(even) { background: #182030; }
+.dark hr { border-color: #374151; }
 """
 
 LATEX_DELIMITERS = [
@@ -345,27 +348,54 @@ LATEX_DELIMITERS = [
     {"left": "\\(", "right": "\\)", "display": False},
 ]
 
-# MutationObserver: re-run KaTeX auto-render whenever .qtkd-viewer content changes
-_JS_KATEX_OBSERVER = """
-() => {
+# KaTeX auto-render cho panel nguồn, phục vụ từ máy (hệ chạy offline, không CDN). Gradio chỉ
+# đóng gói CSS + font KaTeX cho chatbot, không để lộ window.renderMathInElement. Bản 0.16.47
+# chép từ frontend/node_modules/katex (cùng bản React UI dùng); cập nhật thì chép lại cả hai.
+KATEX_DIR = Path(__file__).resolve().parent / "static" / "katex"
+
+
+def katex_head() -> str:
+    """Thẻ <script> nạp KaTeX, auto-render (cần window.katex có trước) rồi observer của panel."""
+    scripts = "".join(
+        f'<script defer src="/gradio_api/file={KATEX_DIR / name}"></script>'
+        for name in ("katex.min.js", "auto-render.min.js")
+    )
+    return scripts + _KATEX_OBSERVER_SCRIPT
+
+
+# Re-render KaTeX mỗi khi nội dung .qtkd-viewer đổi. Chạy từ <head> (không qua js= của
+# launch(): tham số đó thực thi chuỗi như code, một arrow function chỉ được định nghĩa
+# chứ không được gọi). Gradio chèn <head> SAU khi trang tải xong, nên không chờ
+# DOMContentLoaded nếu nó đã qua; KaTeX nạp bất đồng bộ nên mỗi lần chạy đều kiểm lại.
+_KATEX_OBSERVER_SCRIPT = """
+<script>
+(() => {
     function renderViewer() {
-        const el = document.querySelector('.qtkd-viewer');
+        const el = document.querySelector(".qtkd-viewer");
         if (el && window.renderMathInElement) {
             window.renderMathInElement(el, {
                 delimiters: [
-                    {left: '$$',  right: '$$',  display: true},
-                    {left: '\\\\[', right: '\\\\]', display: true},
-                    {left: '$',   right: '$',   display: false},
-                    {left: '\\\\(', right: '\\\\)', display: false}
+                    {left: "$$", right: "$$", display: true},
+                    {left: "\\\\[", right: "\\\\]", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\\\(", right: "\\\\)", display: false}
                 ],
                 throwOnError: false,
-                ignoredTags: ['script','noscript','style','textarea','code']
+                ignoredTags: ["script", "noscript", "style", "textarea", "code"]
             });
         }
     }
-    new MutationObserver(renderViewer)
-        .observe(document.body, {childList: true, subtree: true});
-}
+    function start() {
+        new MutationObserver(renderViewer).observe(document.body, {childList: true, subtree: true});
+        renderViewer();
+    }
+    if (document.readyState === "loading") {
+        window.addEventListener("DOMContentLoaded", start);
+    } else {
+        start();
+    }
+})();
+</script>
 """
 
 EXAMPLES = [
@@ -394,6 +424,7 @@ def build_ui() -> gr.Blocks:
             with gr.Column(scale=6):
                 chatbot = gr.Chatbot(
                     label="Chat",
+                    show_label=False,  # nhãn nổi đè lên dòng chat đầu tiên khi cuộn
                     elem_id="qtkd-chat",
                     height=480,
                     latex_delimiters=LATEX_DELIMITERS,
@@ -437,6 +468,7 @@ if __name__ == "__main__":
     from core.startup import startup
 
     startup()
+    gr.set_static_paths(paths=[KATEX_DIR])
     app = build_ui()
     app.queue()
     app.launch(
@@ -446,5 +478,5 @@ if __name__ == "__main__":
         show_error=True,
         theme=gr.themes.Soft(primary_hue="blue", secondary_hue="slate"),
         css=CSS,
-        js=_JS_KATEX_OBSERVER,
+        head=katex_head(),
     )
