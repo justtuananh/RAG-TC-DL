@@ -110,7 +110,10 @@ def pick_winner(rows: list[dict], baseline: dict) -> Decision:
         )
 
     ordered = sorted(cands, key=_rank_key)
-    by_key = {(r.alpha, r.k): r for r in cands}
+    # Láng giềng xét trên MỌI hàng của lưới, kể cả hàng bị loại ở cổng 1-2:
+    # một đỉnh nhọn giữa các láng giềng tệ vẫn là đỉnh nhọn.
+    by_key = {(r.alpha, r.k): r for r in rws}
+    all_ks = sorted({r.k for r in rws})
 
     def _lost_questions(winner: _Row, neigh: _Row) -> float:
         """Số câu recall@5 gộp mà láng giềng kém cấu hình thắng."""
@@ -122,11 +125,10 @@ def pick_winner(rows: list[dict], baseline: dict) -> Decision:
             a = round(r.alpha + da, 1)
             if 0.0 <= a <= 1.0 and (a, r.k) in by_key:
                 found.append(by_key[(a, r.k)])
-        ks = sorted({row.k for row in cands})
-        i = ks.index(r.k)
+        i = all_ks.index(r.k)
         for j in (i - 1, i + 1):
-            if 0 <= j < len(ks) and (r.alpha, ks[j]) in by_key:
-                found.append(by_key[(r.alpha, ks[j])])
+            if 0 <= j < len(all_ks) and (r.alpha, all_ks[j]) in by_key:
+                found.append(by_key[(r.alpha, all_ks[j])])
         return found
 
     challenger: _Row | None = None
@@ -183,6 +185,9 @@ class RerankDocCache:
         self._cache: dict[tuple[str, str], float] = {}
         self.service_calls = 0
         self.docs_sent = 0
+        # rerank_hits nuốt mọi exception và rơi về thứ tự RRF; đếm lỗi để lượt
+        # quét dừng hẳn thay vì ghi số đo sai.
+        self.failures = 0
 
     def __call__(self, query: str, documents: list[str]) -> list[float]:
         missing = [d for d in documents if (query, d) not in self._cache]
@@ -194,7 +199,11 @@ class RerankDocCache:
                 seen.add(d)
                 unique_missing.append(d)
         if unique_missing:
-            scores = self._real(query, unique_missing)
+            try:
+                scores = self._real(query, unique_missing)
+            except Exception:
+                self.failures += 1
+                raise
             self.service_calls += 1
             self.docs_sent += len(unique_missing)
             for d, s in zip(unique_missing, scores, strict=True):
@@ -223,7 +232,7 @@ def cached_io():
     embed_cache: dict[str, list[float]] = {}
     search_cache: dict[tuple, tuple] = {}
     parent_cache: dict[str, dict | None] = {}
-    recorded_hits: dict[int, list[dict]] = {}
+    recorded_hits: list[list[dict]] = []
     counters = {"rerank_hits": 0}
 
     real_embed = embedder.embed_query
@@ -251,7 +260,7 @@ def cached_io():
     score_cache = RerankDocCache(real_score)
 
     def recording_rerank_hits(query: str, hits: list[dict], top_n=None):
-        recorded_hits[id(hits)] = list(hits)
+        recorded_hits.append(list(hits))
         counters["rerank_hits"] += 1
         return real_rerank_hits(query, hits, top_n=top_n)
 
@@ -306,20 +315,25 @@ def run_config(alpha: float, k: int, items: list[dict], io) -> dict:
     pool_recalls: list[int] = []
     rrf_ranks: list[int | None] = []
     miss_ids: list = []
+    question_ranks: dict[str, int | None] = {}
     recorded = io["recorded_hits"]
-    recorded.clear()
+    score_cache = io["score_cache"]
 
     for item in items:
         q = item["question"]
         expected = item["expected"]
+        before = len(recorded)
         results = production_retrieve(q, top_n=10)
+        if score_cache.failures:
+            raise RuntimeError(
+                f"Service rerank lỗi ở alpha={alpha}, k={k}, câu {q[:60]!r}: "
+                "số đo sẽ sai (rerank_hits rơi về thứ tự RRF), dừng quét"
+            )
         rank = hit_rank(results, expected)
         ranks.append(rank)
 
-        # hits ghi lại ở lần rerank CUỐI (khớp với kết quả trả về).
-        hits = None
-        if recorded:
-            hits = recorded[max(recorded)]
+        # Pool của ĐÚNG câu này: lần rerank cuối trong lượt retrieve vừa rồi.
+        hits = recorded[-1] if len(recorded) > before else None
         if hits is not None:
             pool_recalls.append(1 if hit_rank(hits, expected) is not None else 0)
             rrf_ranks.append(hit_rank(dedupe_pool_by_parent(hits)[:5], expected))
@@ -327,11 +341,13 @@ def run_config(alpha: float, k: int, items: list[dict], io) -> dict:
             pool_recalls.append(0)
             rrf_ranks.append(None)
 
-        qid = item.get("id", f"ext-{len(ranks)}")
+        qid = str(item.get("id", f"ext-{len(ranks)}"))
+        question_ranks[qid] = rank
         if rank is None or rank > 5:
             miss_ids.append(qid)
     return {
         "ranks": ranks,
+        "question_ranks": question_ranks,
         "pool_recall": sum(pool_recalls) / len(pool_recalls) if pool_recalls else 0.0,
         "rrf_ranks": rrf_ranks,
         "miss_ids": miss_ids,
@@ -349,70 +365,64 @@ def run_grid(
     rows: list[dict] = []
     total = len(alphas) * len(ks)
     idx = 0
-    for k in ks:
-        for alpha in alphas:
-            idx += 1
-            print(f"[{idx:02d}/{total}] alpha={alpha} k={k} …", flush=True)
-            t0 = time.time()
-            with overridden(
-                {
-                    "retrieval.rrf_weight_dense": alpha,
-                    "retrieval.rrf_weight_bm25": round(1.0 - alpha, 10),
-                    "retrieval.rrf_k": k,
-                }
-            ):
-                with cached_io() as io:
-                    tune_r = run_config(alpha, k, tune, io)
-                    hold_r = run_config(alpha, k, holdout, io)
-                    calls = io["counters"]["rerank_hits"]
-                    svc_calls = io["score_cache"].service_calls
-                    docs_sent = io["score_cache"].docs_sent
-            combined_ranks = tune_r["ranks"] + hold_r["ranks"]
-            combined_rrf = tune_r["rrf_ranks"] + hold_r["rrf_ranks"]
-            tm = _metrics(tune_r["ranks"])
-            hm = _metrics(hold_r["ranks"])
-            cm = _metrics(combined_ranks)
-            cm_rrf = _metrics(combined_rrf)
-            pool = (tune_r["pool_recall"] * len(tune) + hold_r["pool_recall"] * len(holdout)) / (
-                len(tune) + len(holdout)
-            )
-            row = {
-                "alpha": alpha,
-                "k": k,
-                "tune_recall@1": tm["recall@1"],
-                "tune_recall@3": tm["recall@3"],
-                "tune_recall@5": tm["recall@5"],
-                "tune_recall@10": tm["recall@10"],
-                "tune_MRR": tm["MRR"],
-                "tune_ndcg@5": tm["ndcg@5"],
-                "holdout_recall@1": hm["recall@1"],
-                "holdout_recall@3": hm["recall@3"],
-                "holdout_recall@5": hm["recall@5"],
-                "holdout_recall@10": hm["recall@10"],
-                "holdout_MRR": hm["MRR"],
-                "holdout_ndcg@5": hm["ndcg@5"],
-                "combined_recall@1": cm["recall@1"],
-                "combined_recall@3": cm["recall@3"],
-                "combined_recall@5": cm["recall@5"],
-                "combined_recall@10": cm["recall@10"],
-                "combined_MRR": cm["MRR"],
-                "combined_ndcg@5": cm["ndcg@5"],
-                "combined_rrf_recall@5": cm_rrf["recall@5"],
-                "combined_pool_recall": pool,
-                "combined_n": len(combined_ranks),
-                "combined_miss_ids": tune_r["miss_ids"] + hold_r["miss_ids"],
-                "rerank_hits_calls": calls,
-                "service_score_calls": svc_calls,
-                "docs_sent": docs_sent,
-                "seconds": round(time.time() - t0, 2),
-            }
-            rows.append(row)
-            print(
-                f"    recall@5 gộp={cm['recall@5']:.3f} MRR={cm['MRR']:.3f} "
-                f"({row['seconds']}s; rerank_hits={calls}, score_calls={svc_calls})",
-                flush=True,
-            )
+    # Cache mở MỘT lần cho cả lưới: các khóa cache (truy vấn, phạm vi tìm, parent,
+    # cặp query/document) không phụ thuộc trọng số RRF nên dùng chung được.
+    with cached_io() as io:
+        for k in ks:
+            for alpha in alphas:
+                idx += 1
+                print(f"[{idx:02d}/{total}] alpha={alpha} k={k} …", flush=True)
+                rows.append(_run_one(alpha, k, tune, holdout, io))
     return rows
+
+
+def _run_one(alpha: float, k: int, tune: list[dict], holdout: list[dict], io) -> dict:
+    """Một cấu hình của lưới: chạy hai bộ câu hỏi, gộp số đo thành một hàng."""
+    t0 = time.time()
+    cache = io["score_cache"]
+    calls0, svc0, docs0 = io["counters"]["rerank_hits"], cache.service_calls, cache.docs_sent
+    with overridden(
+        {
+            "retrieval.rrf_weight_dense": alpha,
+            "retrieval.rrf_weight_bm25": round(1.0 - alpha, 10),
+            "retrieval.rrf_k": k,
+        }
+    ):
+        tune_r = run_config(alpha, k, tune, io)
+        hold_r = run_config(alpha, k, holdout, io)
+    calls = io["counters"]["rerank_hits"] - calls0
+    svc_calls = cache.service_calls - svc0
+    docs_sent = cache.docs_sent - docs0
+    combined_ranks = tune_r["ranks"] + hold_r["ranks"]
+    tm = _metrics(tune_r["ranks"])
+    hm = _metrics(hold_r["ranks"])
+    cm = _metrics(combined_ranks)
+    cm_rrf = _metrics(tune_r["rrf_ranks"] + hold_r["rrf_ranks"])
+    n_all = len(tune) + len(holdout)
+    pool = (tune_r["pool_recall"] * len(tune) + hold_r["pool_recall"] * len(holdout)) / n_all
+    row = {"alpha": alpha, "k": k}
+    for prefix, m in (("tune", tm), ("holdout", hm), ("combined", cm)):
+        for key in ("recall@1", "recall@3", "recall@5", "recall@10", "MRR", "ndcg@5"):
+            row[f"{prefix}_{key}"] = m[key]
+    row.update(
+        {
+            "combined_rrf_recall@5": cm_rrf["recall@5"],
+            "combined_pool_recall": pool,
+            "combined_n": len(combined_ranks),
+            "combined_miss_ids": tune_r["miss_ids"] + hold_r["miss_ids"],
+            "question_ranks": {**tune_r["question_ranks"], **hold_r["question_ranks"]},
+            "rerank_hits_calls": calls,
+            "service_score_calls": svc_calls,
+            "docs_sent": docs_sent,
+            "seconds": round(time.time() - t0, 2),
+        }
+    )
+    print(
+        f"    recall@5 gộp={cm['recall@5']:.3f} MRR={cm['MRR']:.3f} "
+        f"pool={pool:.3f} ({row['seconds']}s; score_calls={svc_calls}, docs={docs_sent})",
+        flush=True,
+    )
+    return row
 
 
 # ── đầu ra ───────────────────────────────────────────────────────────────────
@@ -423,7 +433,8 @@ def write_outputs(out_dir: Path, rows: list[dict], decision: Decision) -> None:
     import csv
 
     with (out_dir / "results.csv").open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        fields = [key for key in rows[0] if key != "question_ranks"]
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -439,6 +450,7 @@ def write_outputs(out_dir: Path, rows: list[dict], decision: Decision) -> None:
         ),
     )
 
+    ks = sorted({r["k"] for r in rows})
     lines = ["# Kết quả quét lưới RRF có trọng số", "", "## Top 10 cấu hình", ""]
     lines.append("| # | alpha | k | recall@5 gộp | MRR gộp | rrf_recall@5 | pool_recall |")
     lines.append("|---|-------|---|--------------|---------|--------------|-------------|")
@@ -451,13 +463,13 @@ def write_outputs(out_dir: Path, rows: list[dict], decision: Decision) -> None:
 
     for label, col in (("recall@5 gộp", "combined_recall@5"), ("MRR gộp", "combined_MRR")):
         lines += ["", f"## Lưới alpha x k - {label}", ""]
-        header = "| alpha \\\\ k | " + " | ".join(str(k) for k in DEFAULT_KS) + " |"
+        header = "| alpha \\\\ k | " + " | ".join(str(k) for k in ks) + " |"
         lines.append(header)
-        lines.append("|" + "---|" * (len(DEFAULT_KS) + 1))
+        lines.append("|" + "---|" * (len(ks) + 1))
         by = {(r["alpha"], r["k"]): r for r in rows}
         for a in sorted({r["alpha"] for r in rows}):
             cells = []
-            for k in DEFAULT_KS:
+            for k in ks:
                 r = by.get((a, k))
                 cells.append(f"{r[col]:.3f}" if r else "-")
             lines.append(f"| {a:.1f} | " + " | ".join(cells) + " |")
@@ -480,6 +492,7 @@ def write_outputs(out_dir: Path, rows: list[dict], decision: Decision) -> None:
                         "alpha": r["alpha"],
                         "k": r["k"],
                         "miss_ids": r["combined_miss_ids"],
+                        "ranks": r["question_ranks"],
                     },
                     ensure_ascii=False,
                 )

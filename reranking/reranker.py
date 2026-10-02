@@ -60,11 +60,10 @@ def score_documents(query: str, documents: list[str]) -> list[float]:
         timeout=settings.reranking.timeout_s,
     )
     resp.raise_for_status()
-    results = resp.json()["results"]
-    scores = [0.0] * len(documents)
-    for r in results:
-        scores[r["index"]] = r["relevance_score"]
-    return scores
+    by_index = {r["index"]: r["relevance_score"] for r in resp.json()["results"]}
+    if set(by_index) != set(range(len(documents))):
+        raise ValueError(f"Service rerank trả {len(by_index)} điểm cho {len(documents)} document")
+    return [by_index[i] for i in range(len(documents))]
 
 
 def rerank_hits(query: str, hits: list[dict], top_n: int | None = None) -> list[dict]:

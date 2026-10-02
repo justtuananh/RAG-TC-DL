@@ -3,11 +3,14 @@
 Không gọi service: các hàm thuần + cache dùng hàm service giả.
 """
 
+import pytest
+
 from evaluation.fusion_sweep import (
     RerankDocCache,
     cached_io,
     dedupe_pool_by_parent,
     pick_winner,
+    run_config,
 )
 
 
@@ -127,6 +130,19 @@ def test_pick_skips_plateau_neighbour_failure():
     assert d.change is False
 
 
+def test_pick_plateau_counts_neighbours_rejected_by_gate():
+    # Láng giềng alpha=0.3 bị loại ở cổng tune nhưng vẫn phải tính vào cao nguyên:
+    # alpha=0.4 là đỉnh nhọn (láng giềng kém 3 câu) → không đổi.
+    rows = [
+        _row(0.5, 60, comb5=0.90),
+        _row(0.4, 60, comb5=0.90 + 3 / 65),
+        _row(0.3, 60, tune5=0.80, comb5=0.90),
+    ]
+    d = pick_winner(rows, rows[0])
+    assert d.change is False
+    assert d.winner["alpha"] == 0.5
+
+
 # ── RerankDocCache ───────────────────────────────────────────────────────────
 
 
@@ -227,3 +243,83 @@ def test_cached_io_reduces_service_calls_across_configs(monkeypatch):
     # Bản gốc được khôi phục sau khi thoát context manager.
     assert reranker.score_documents is fake_score
     assert embedder.embed_query is fake_embed
+
+
+def test_score_cache_counts_failures_and_reraises():
+    def broken(query, documents):
+        raise RuntimeError("service chết")
+
+    cache = RerankDocCache(broken)
+    with pytest.raises(RuntimeError):
+        cache("q", ["a"])
+    assert cache.failures == 1
+
+
+# ── run_config: pool đúng câu, dừng khi reranker lỗi ─────────────────────────
+
+
+def _hit(cid, pid, file_stem="F", section="S"):
+    return {
+        "payload": {
+            "chunk_id": cid,
+            "parent_id": pid,
+            "file_stem": file_stem,
+            "section_path": section,
+        }
+    }
+
+
+def _io(score_fn=lambda q, docs: [1.0] * len(docs)):
+    return {
+        "recorded_hits": [],
+        "counters": {"rerank_hits": 0},
+        "score_cache": RerankDocCache(score_fn),
+    }
+
+
+def test_run_config_measures_pool_of_the_same_question(monkeypatch):
+    io = _io()
+    pools = {
+        "q1": [_hit("a", "p1", section="S1")],
+        "q2": [_hit("b", "p2", section="OTHER")],
+    }
+
+    def fake_retrieve(query, top_n=None):
+        io["recorded_hits"].append(pools[query])
+        return pools[query]
+
+    monkeypatch.setattr("evaluation.pipeline.production_retrieve", fake_retrieve)
+    items = [
+        {"id": 1, "question": "q1", "expected": [{"file_stem": "F", "section_path": "S1"}]},
+        {"id": 2, "question": "q2", "expected": [{"file_stem": "F", "section_path": "S2"}]},
+    ]
+
+    out = run_config(0.5, 60, items, io)
+
+    # q2 không được mượn pool của q1 (pool của q2 không chứa S2).
+    assert out["pool_recall"] == 0.5
+    assert out["rrf_ranks"] == [1, None]
+    assert out["question_ranks"] == {"1": 1, "2": None}
+    assert out["miss_ids"] == ["2"]
+
+
+def test_run_config_without_rerank_call_records_no_pool(monkeypatch):
+    io = _io()
+    io["recorded_hits"].append([_hit("a", "p1", section="S1")])  # pool của câu TRƯỚC
+    monkeypatch.setattr("evaluation.pipeline.production_retrieve", lambda q, top_n=None: [])
+    items = [{"id": 1, "question": "q", "expected": [{"file_stem": "F", "section_path": "S1"}]}]
+
+    out = run_config(0.5, 60, items, io)
+
+    assert out["pool_recall"] == 0.0
+    assert out["rrf_ranks"] == [None]
+
+
+def test_run_config_aborts_when_reranker_failed(monkeypatch):
+    io = _io()
+    io["score_cache"].failures = 1
+    monkeypatch.setattr("evaluation.pipeline.production_retrieve", lambda q, top_n=None: [])
+    items = [{"id": 1, "question": "q", "expected": [{"file_stem": "F", "section_path": "S"}]}]
+
+    with pytest.raises(RuntimeError, match="rerank"):
+        run_config(0.5, 60, items, io)
