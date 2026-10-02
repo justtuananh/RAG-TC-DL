@@ -52,7 +52,6 @@ from __future__ import annotations
 
 import json
 import logging
-import os
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -72,6 +71,7 @@ from llm.prompt import build_messages
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.retriever import retrieve
 from core.latex import fix_latex
+from core.settings_loader import get_settings
 from ingestion import jobs as ingestion_jobs
 import review.queue as review
 from query import export as data_export
@@ -416,7 +416,7 @@ def _chat_stream_gen(req: ChatRequest, db: Session | None = None) -> Generator[s
 
 @app.get("/api/health")
 def health():
-    return {"status": "ok", "model": os.getenv("OLLAMA_MODEL", "qwen2.5:1.5b")}
+    return {"status": "ok", "model": get_settings().llm_model("chat")}
 
 
 @app.get("/api/examples")
@@ -867,7 +867,7 @@ def data_records(
     return {
         "items": items,
         "total": total,
-        "limit": max(1, min(limit, data_query.LIST_LIMIT_MAX)),
+        "limit": max(1, min(limit, get_settings().query.list_limit_max)),
         "offset": max(0, offset),
         "sort": sort,
         "order": order,
@@ -963,7 +963,7 @@ def data_devices(
     return {
         "items": devices,
         "total": total,
-        "limit": max(1, min(limit, data_query.LIST_LIMIT_MAX)),
+        "limit": max(1, min(limit, get_settings().query.list_limit_max)),
         "offset": max(0, offset),
     }
 
@@ -1052,7 +1052,7 @@ def data_catalog(
     return {
         "items": items,
         "total": total,
-        "limit": max(1, min(limit, catalog_query.LIST_LIMIT_MAX)),
+        "limit": max(1, min(limit, get_settings().query.list_limit_max)),
         "offset": max(0, offset),
         "groups": groups,
     }
@@ -1061,5 +1061,5 @@ def data_catalog(
 if __name__ == "__main__":
     import uvicorn
 
-    port = int(os.getenv("API_PORT", "8080"))
+    port = get_settings().api.port
     uvicorn.run(app, host="0.0.0.0", port=port, log_level="info")

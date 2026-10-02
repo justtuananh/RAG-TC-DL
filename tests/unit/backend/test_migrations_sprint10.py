@@ -12,6 +12,7 @@ from pathlib import Path
 from alembic import command
 from sqlalchemy import create_engine, inspect, text
 
+from core import settings_loader
 from scripts.migrate import _config
 
 MIGRATION_PATH = (
@@ -69,6 +70,7 @@ def _scalar(url: str, sql: str) -> int:
 def test_error_unit_migration_up_then_down_on_sqlite(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint10_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _run(url, "upgrade", NEW_REVISION)
     assert _revision(url) == NEW_REVISION

@@ -4,11 +4,12 @@
 from __future__ import annotations
 
 import argparse
-import os
 from pathlib import Path
 
 from alembic import command
 from alembic.config import Config
+
+from db.config import get_database_url
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -16,9 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 def _config() -> Config:
     config = Config(str(ROOT / "alembic.ini"))
     config.set_main_option("script_location", str(ROOT / "db" / "migrations"))
-    database_url = os.getenv("DATABASE_URL")
-    if database_url:
-        config.set_main_option("sqlalchemy.url", database_url.replace("%", "%%"))
+    config.set_main_option("sqlalchemy.url", get_database_url().replace("%", "%%"))
     return config
 
 

@@ -102,9 +102,11 @@ def test_run_catalog_ignores_unsupported_format(session, monkeypatch):
     assert ingestion_jobs._run_catalog(STEM, Path("tai-lieu.pdf")) is None
 
 
-def test_markdown_job_runs_catalog_and_reports_result(session, monkeypatch, tmp_path):
+def test_markdown_job_runs_catalog_and_reports_result(
+    session, monkeypatch, tmp_path, settings_override
+):
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
-    monkeypatch.setattr(ingestion_jobs, "OUT_DIR", tmp_path)
+    settings_override({"paths.markdown_dir": str(tmp_path)})
     _add_document(session)
 
     def fake_process_one(source_path, out_dir):

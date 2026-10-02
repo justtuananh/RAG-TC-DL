@@ -8,6 +8,7 @@ from __future__ import annotations
 from alembic import command
 from sqlalchemy import create_engine, inspect, text
 
+from core import settings_loader
 from scripts.migrate import _config
 
 NEW_TABLES = {"quantity", "unit", "device_type", "procedure"}
@@ -45,6 +46,7 @@ def _count(url: str, table: str) -> int:
 def test_migration_up_down_up(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'qtkd_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _upgrade(url)
     tables = _table_names(url)
@@ -68,6 +70,7 @@ def test_migration_up_down_up(monkeypatch, tmp_path):
 def test_migration_downgrade_one_step_keeps_document(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'qtkd_mig_step.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _upgrade(url)
     _downgrade(url, "002_create_document")

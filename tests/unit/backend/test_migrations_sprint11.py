@@ -8,6 +8,7 @@ from __future__ import annotations
 from alembic import command
 from sqlalchemy import create_engine, inspect
 
+from core import settings_loader
 from scripts.migrate import _config
 
 NEW_VIEWS = {"v_lab_standard", "v_inspector", "v_procedure_catalog", "v_capability"}
@@ -36,6 +37,7 @@ def _inspect(url: str):
 def test_catalog_migration_up_then_down_on_sqlite(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint11_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _run(url, "upgrade", "head")
     views, tables = _inspect(url)
@@ -58,6 +60,7 @@ def test_catalog_migration_up_then_down_on_sqlite(monkeypatch, tmp_path):
 def test_catalog_migration_indexes_procedure_number(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint11_idx.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
     _run(url, "upgrade", "head")
     engine = create_engine(url)
     try:

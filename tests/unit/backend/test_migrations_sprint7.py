@@ -5,6 +5,7 @@ from __future__ import annotations
 from alembic import command
 from sqlalchemy import create_engine, inspect
 
+from core import settings_loader
 from scripts.migrate import _config
 
 NEW_TABLES = {"device", "calibration_record", "measurement_point"}
@@ -32,6 +33,7 @@ def _inspect(url: str):
 def test_records_migration_up_then_down(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint7_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _run(url, "upgrade", "head")
     tables, views = _inspect(url)

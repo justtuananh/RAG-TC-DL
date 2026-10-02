@@ -78,10 +78,10 @@ def _entry(file_name: str, n_found: int, n_converted: int) -> dict:
     }
 
 
-def _prepare(tmp_path, session, monkeypatch) -> Path:
+def _prepare(tmp_path, session, monkeypatch, settings_override) -> Path:
     out = tmp_path / "build_spike_a"
     out.mkdir()
-    monkeypatch.setattr(ingestion_jobs, "OUT_DIR", out)
+    settings_override({"paths.markdown_dir": str(out)})
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
     session.add(
         Document(
@@ -105,9 +105,9 @@ def _write_report(out: Path, entries: list[dict]) -> None:
     )
 
 
-def test_markdown_job_blocks_formula_regression(tmp_path, monkeypatch, session):
+def test_markdown_job_blocks_formula_regression(tmp_path, monkeypatch, session, settings_override):
     """Bản mới giảm tỉ lệ (100 % -> 10 %): giữ nguyên .md cũ, không nhúng, ERROR."""
-    out = _prepare(tmp_path, session, monkeypatch)
+    out = _prepare(tmp_path, session, monkeypatch, settings_override)
     verified = out / f"{STEM}.md"
     verified.write_text("$x$ bản đã kiểm chứng", encoding="utf-8")
     _write_report(out, [_entry(FILE, 10, 10)])
@@ -136,9 +136,11 @@ def test_markdown_job_blocks_formula_regression(tmp_path, monkeypatch, session):
     assert [e["file"] for e in report["files"]] == [FILE]
 
 
-def test_markdown_job_publishes_when_rate_not_worse(tmp_path, monkeypatch, session):
+def test_markdown_job_publishes_when_rate_not_worse(
+    tmp_path, monkeypatch, session, settings_override
+):
     """Bản mới bằng/tốt hơn: công bố .md mới, nhúng, report và tài liệu READY."""
-    out = _prepare(tmp_path, session, monkeypatch)
+    out = _prepare(tmp_path, session, monkeypatch, settings_override)
     (out / f"{STEM}.md").write_text("$x$ cũ", encoding="utf-8")
     _write_report(out, [_entry(FILE, 10, 5)])
 

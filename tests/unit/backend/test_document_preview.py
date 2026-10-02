@@ -18,12 +18,12 @@ pytestmark = pytest.mark.unit
 
 
 @pytest.fixture
-def corpus(tmp_path, monkeypatch):
+def corpus(tmp_path, monkeypatch, settings_override):
     source = tmp_path / "TC_DL"
     source.mkdir()
     converted = tmp_path / "converted"
     converted.mkdir()
-    monkeypatch.setattr(ingestion_jobs, "TC_DL_DIR", source)
+    settings_override({"paths.source_dir": str(source)})
     monkeypatch.setattr(convert_legacy, "CONVERTED_DIR", converted)
     return source, converted
 

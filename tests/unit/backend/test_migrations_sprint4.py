@@ -5,6 +5,7 @@ from __future__ import annotations
 from alembic import command
 from sqlalchemy import create_engine, inspect
 
+from core import settings_loader
 from scripts.migrate import _config
 
 NEW_TABLES = {"extraction", "procedure_fact", "procedure_standard", "term"}
@@ -35,6 +36,7 @@ def _names(url: str) -> tuple[set[str], set[str]]:
 def test_migration_up_down_up(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint4_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _upgrade(url)
     tables, views = _names(url)
@@ -57,6 +59,7 @@ def test_migration_up_down_up(monkeypatch, tmp_path):
 def test_downgrade_one_step_keeps_sprint3(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint4_step.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _upgrade(url)
     _downgrade(url, "003_create_measurement_framework")

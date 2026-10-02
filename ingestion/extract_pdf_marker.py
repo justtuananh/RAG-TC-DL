@@ -42,6 +42,8 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from core.settings_loader import get_settings
+
 from .pdf_math_scan import flags_to_runs, scan_pdf_pages
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
@@ -81,7 +83,7 @@ class PdfMarkerResult:
 
 
 def _marker_python(marker_python: str | None) -> str:
-    candidate = marker_python or os.environ.get("MARKER_PYTHON")
+    candidate = marker_python or get_settings().ingestion.marker_python
     if candidate:
         if not Path(candidate).exists():
             raise MarkerNotConfigured(f"MARKER_PYTHON points at a missing file: {candidate}")

@@ -1,34 +1,28 @@
-"""Database configuration from environment variables."""
-import os
+"""Database configuration from config/settings.yaml."""
 from sqlalchemy.engine import Engine
+
+from core.settings_loader import get_settings
 
 
 def get_database_url() -> str:
     """
-    Construct PostgreSQL connection URL from environment.
-    
-    Variables:
-      DATABASE_URL (optional): Full connection string, takes precedence
-      POSTGRES_HOST: hostname (default: localhost)
-      POSTGRES_PORT: port (default: 5432)
-      POSTGRES_DB: database name (default: qtkd)
-      POSTGRES_USER: user (default: qtkd_user)
-      POSTGRES_PASSWORD: password (default: qtkd_password)
+    Construct PostgreSQL connection URL from settings.
+
+    database.url (optional): Full connection string, takes precedence
+    Host/port/name/user/password otherwise come from the same settings block.
     """
-    # If DATABASE_URL is set, use it directly (e.g., for Heroku or testing)
-    if url := os.environ.get("DATABASE_URL"):
-        return url
+    database = get_settings().database
+    if database.url is not None:
+        return database.url.get_secret_value()
 
-    host = os.environ.get("POSTGRES_HOST", "localhost")
-    port = os.environ.get("POSTGRES_PORT", "5432")
-    db = os.environ.get("POSTGRES_DB", "qtkd")
-    user = os.environ.get("POSTGRES_USER", "qtkd_user")
-    password = os.environ.get("POSTGRES_PASSWORD", "qtkd_password")
-
-    return f"postgresql://{user}:{password}@{host}:{port}/{db}"
+    return (
+        f"postgresql://{database.user}:{database.password.get_secret_value()}"
+        f"@{database.host}:{database.port}/{database.name}"
+    )
 
 
 def init_db(engine: Engine) -> None:
     """Initialize database tables from metadata."""
     from .models import Base
+
     Base.metadata.create_all(bind=engine)

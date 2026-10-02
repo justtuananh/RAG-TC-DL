@@ -15,7 +15,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import api_server
-import auth.dependencies as auth_deps
 from auth.security import create_access_token, hash_password
 from db import get_db
 from db.models import AppUser, AuditLog, Base, UserRole
@@ -76,7 +75,7 @@ def users(session_factory):
 
 
 @pytest.fixture
-def client(session_factory, monkeypatch):
+def client(session_factory, settings_override):
     def override_get_db():
         db = session_factory()
         try:
@@ -86,7 +85,7 @@ def client(session_factory, monkeypatch):
 
     api_server.app.dependency_overrides[get_db] = override_get_db
     # Auth must be ON for the 401/403 matrix; never inherit a dev override.
-    monkeypatch.setattr(auth_deps, "AUTH_ENABLED", True)
+    settings_override({"auth.enabled": True})
     with TestClient(api_server.app) as test_client:
         yield test_client
     api_server.app.dependency_overrides.clear()
@@ -278,10 +277,10 @@ def test_logout_requires_token(client, users):
     assert client.post("/api/auth/logout").status_code == 401
 
 
-def test_dev_mode_without_auth_uses_mock_user(client, monkeypatch):
-    """AUTH_ENABLED=false must not 401 writes (local frontend workflow) and must
+def test_dev_mode_without_auth_uses_mock_user(client, monkeypatch, settings_override):
+    """auth.enabled=false must not 401 writes (local frontend workflow) and must
     not crash on the actor FK when no persisted admin exists."""
-    monkeypatch.setattr(auth_deps, "AUTH_ENABLED", False)
+    settings_override({"auth.enabled": False})
     monkeypatch.setattr(ingestion_jobs, "start_processing", lambda stem: None)
     resp = client.post("/api/documents/stem/process")
     assert resp.status_code == 200

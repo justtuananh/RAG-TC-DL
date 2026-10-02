@@ -1,7 +1,7 @@
 """T3: kiểm tra rào cản ingestion (định dạng cũ, trùng lặp, đuôi tệp được nhận).
 
-Cô lập ``ingestion_jobs.TC_DL_DIR``/``SessionLocal`` bằng monkeypatch theo đúng
-cách các test hiện có (``tests/unit/backend``) làm — không chạm ``TC_DL/`` thật.
+Cô lập ``paths.source_dir`` (settings) / ``SessionLocal`` (monkeypatch) theo đúng
+cách các test hiện có (``tests/unit/backend``) làm - không chạm ``TC_DL/`` thật.
 """
 
 from __future__ import annotations
@@ -37,9 +37,9 @@ def _xlsx_ids() -> list[str]:
 
 
 @pytest.fixture(autouse=True)
-def _isolate_ingestion_jobs(tmp_path, monkeypatch, session):
+def _isolate_ingestion_jobs(tmp_path, monkeypatch, session, settings_override):
     """Cô lập thư mục upload + DB của ``ingestion_jobs`` cho mọi test trong file này."""
-    monkeypatch.setattr(ingestion_jobs, "TC_DL_DIR", tmp_path / "tc_dl")
+    settings_override({"paths.source_dir": str(tmp_path / "tc_dl")})
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
 
 

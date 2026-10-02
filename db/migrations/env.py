@@ -1,5 +1,4 @@
 # Alembic migration environment configuration
-import os
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
@@ -18,7 +17,9 @@ target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode (don't need a live DB connection)."""
-    url = os.environ.get("DATABASE_URL") or config.get_main_option("sqlalchemy.url")
+    from db.config import get_database_url
+
+    url = get_database_url()
     context.configure(
         url=url,
         target_metadata=target_metadata,

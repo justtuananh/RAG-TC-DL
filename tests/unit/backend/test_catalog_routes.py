@@ -15,7 +15,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import api_server
-import auth.dependencies as auth_deps
 from auth.security import create_access_token, hash_password
 from catalogs.readers import read_catalog
 from catalogs.store import store_catalog_draft
@@ -150,7 +149,7 @@ def catalog_factory():
 
 
 @pytest.fixture
-def client(catalog_factory, monkeypatch):
+def client(catalog_factory, settings_override):
     def override_get_db():
         db = catalog_factory()
         try:
@@ -159,7 +158,7 @@ def client(catalog_factory, monkeypatch):
             db.close()
 
     api_server.app.dependency_overrides[get_db] = override_get_db
-    monkeypatch.setattr(auth_deps, "AUTH_ENABLED", True)
+    settings_override({"auth.enabled": True})
     with TestClient(api_server.app) as test_client:
         yield test_client
     api_server.app.dependency_overrides.clear()

@@ -28,6 +28,7 @@ from qdrant_client.http.exceptions import ResponseHandlingException
 # both mean "Docker isn't running" — treat them the same way for the user.
 _CONNECTION_ERRORS = (OSError, ResponseHandlingException)
 
+from core.settings_loader import get_settings
 from ingestion.chunker import parse_file
 from vectorstore import qdrant, upsert
 from ingestion.spike_a import _safe, process_one, totals_from_entries
@@ -39,15 +40,20 @@ from db.models import Document, DocumentType, IngestStatus
 # it requires rank_bm25, and retriever.py already avoids a hard module-level
 # dependency on that package for the same reason.
 
-TC_DL_DIR = Path("TC_DL")
-OUT_DIR = Path("build/spike_a")
+
+def _source_dir() -> Path:
+    """Thư mục tài liệu QTKĐ nguồn; đọc settings tại thời điểm gọi."""
+    return get_settings().paths.source_dir
+
+
+def _out_dir() -> Path:
+    """Thư mục Markdown + assets; đọc settings tại thời điểm gọi."""
+    return get_settings().paths.markdown_dir
 
 
 def _report_path() -> Path:
-    """``extraction_report.json`` theo OUT_DIR hiện hành (test thay OUT_DIR được)."""
-    return OUT_DIR / "extraction_report.json"
-
-MAX_UPLOAD_BYTES = 50 * 1024 * 1024
+    """``extraction_report.json`` theo thư mục Markdown hiện hành."""
+    return _out_dir() / "extraction_report.json"
 
 _PROCESSING_STAGES = {"queued", "extracting", "reading_record", "chunking", "embedding"}
 _STAGE_PROGRESS = {
@@ -123,10 +129,10 @@ def _find_source(file_stem: str) -> Path | None:
     its real filename may still carry spaces/original casing (pre-existing corpus
     files) while a freshly uploaded file is saved directly under its sanitized
     stem."""
-    if not TC_DL_DIR.exists():
+    if not _source_dir().exists():
         return None
     for ext in SUPPORTED_EXTS:
-        for f in TC_DL_DIR.glob(f"*{ext}"):
+        for f in _source_dir().glob(f"*{ext}"):
             if _safe(f.stem) == file_stem:
                 return f
     return None
@@ -162,11 +168,11 @@ def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> s
         )
     if len(data) == 0:
         raise UploadError("Tệp rỗng.")
-    if len(data) > MAX_UPLOAD_BYTES:
+    if len(data) > get_settings().ingestion.max_upload_bytes:
         raise UploadError("Tệp vượt quá dung lượng cho phép (50 MB).")
     digest = hashlib.sha256(data).hexdigest()
 
-    TC_DL_DIR.mkdir(parents=True, exist_ok=True)
+    _source_dir().mkdir(parents=True, exist_ok=True)
     db = SessionLocal()
     try:
         if db.query(Document).filter(Document.sha256 == digest).first() is not None:
@@ -176,11 +182,11 @@ def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> s
     stem = _safe(Path(filename).stem)
     candidate = stem
     n = 2
-    while (TC_DL_DIR / f"{candidate}{ext}").exists() or _find_source(candidate) is not None:
+    while (_source_dir() / f"{candidate}{ext}").exists() or _find_source(candidate) is not None:
         candidate = f"{stem}_{n}"
         n += 1
 
-    (TC_DL_DIR / f"{candidate}{ext}").write_bytes(data)
+    (_source_dir() / f"{candidate}{ext}").write_bytes(data)
     db = SessionLocal()
     try:
         classification = classify_document(filename)
@@ -200,7 +206,7 @@ def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> s
         db.commit()
     except Exception:
         db.rollback()
-        (TC_DL_DIR / f"{candidate}{ext}").unlink(missing_ok=True)
+        (_source_dir() / f"{candidate}{ext}").unlink(missing_ok=True)
         raise
     finally:
         db.close()
@@ -218,7 +224,7 @@ def _status_for(file_stem: str) -> tuple[str, int, str | None, dict | None]:
         if job.stage == "ready" and job.result is not None:
             return "ready", 100, None, job.result
         # job.stage == "ready" của tài liệu QTKĐ falls through to the file check below
-    if (OUT_DIR / f"{file_stem}.md").exists():
+    if (_out_dir() / f"{file_stem}.md").exists():
         return "ready", 100, None, None
     return "pending", 0, None, None
 
@@ -252,7 +258,7 @@ def list_documents() -> list[dict]:
 
 
 def get_markdown(file_stem: str) -> str | None:
-    p = OUT_DIR / f"{file_stem}.md"
+    p = _out_dir() / f"{file_stem}.md"
     return p.read_text(encoding="utf-8") if p.exists() else None
 
 
@@ -261,7 +267,7 @@ def _read_report() -> dict:
     path = _report_path()
     if path.exists():
         return json.loads(path.read_text(encoding="utf-8"))
-    return {"source": str(TC_DL_DIR), "files": [], "totals": {}}
+    return {"source": str(_source_dir()), "files": [], "totals": {}}
 
 
 def _merge_report_entry(entry: dict) -> None:
@@ -271,7 +277,7 @@ def _merge_report_entry(entry: dict) -> None:
     report["files"] = [e for e in report["files"] if e["file"] != entry["file"]]
     report["files"].append(entry)
     report["totals"] = totals_from_entries(report["files"])
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    _out_dir().mkdir(parents=True, exist_ok=True)
     _report_path().write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
 
@@ -313,9 +319,9 @@ def _regression_message(new_entry: dict, old_entry: dict) -> str | None:
 
 
 def _publish_extraction(tmp_dir: Path, file_stem: str) -> None:
-    """Chuyển .md + assets từ thư mục tạm sang OUT_DIR, thay bản cũ."""
-    OUT_DIR.mkdir(parents=True, exist_ok=True)
-    md_dst = OUT_DIR / f"{file_stem}.md"
+    """Chuyển .md + assets từ thư mục tạm sang _out_dir(), thay bản cũ."""
+    _out_dir().mkdir(parents=True, exist_ok=True)
+    md_dst = _out_dir() / f"{file_stem}.md"
     md_dst.unlink(missing_ok=True)
     tmp_md = tmp_dir / f"{file_stem}.md"
     if tmp_md.exists():
@@ -323,7 +329,7 @@ def _publish_extraction(tmp_dir: Path, file_stem: str) -> None:
 
     assets_src = tmp_dir / "assets" / file_stem
     if assets_src.exists():
-        assets_dst = OUT_DIR / "assets" / file_stem
+        assets_dst = _out_dir() / "assets" / file_stem
         if assets_dst.exists():
             shutil.rmtree(assets_dst)
         assets_dst.parent.mkdir(parents=True, exist_ok=True)
@@ -392,7 +398,7 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
         finally:
             shutil.rmtree(tmp_dir, ignore_errors=True)
 
-        md_path = OUT_DIR / f"{file_stem}.md"
+        md_path = _out_dir() / f"{file_stem}.md"
         if not md_path.exists():
             raise RuntimeError("Không trích xuất được nội dung — tệp có thể bị lỗi hoặc rỗng.")
 
@@ -541,11 +547,11 @@ def delete_document(file_stem: str) -> None:
     if source_path is not None:
         source_path.unlink()
 
-    md_path = OUT_DIR / f"{file_stem}.md"
+    md_path = _out_dir() / f"{file_stem}.md"
     if md_path.exists():
         md_path.unlink()
 
-    assets_dir = OUT_DIR / "assets" / file_stem
+    assets_dir = _out_dir() / "assets" / file_stem
     if assets_dir.exists():
         shutil.rmtree(assets_dir)
 

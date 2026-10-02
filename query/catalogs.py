@@ -19,9 +19,9 @@ from sqlalchemy.orm import Session
 
 from catalogs.labels import CATALOG_KINDS
 from catalogs.text import fold
+from core.settings_loader import get_settings
 from query.records import QueryError
 
-LIST_LIMIT_MAX = 200
 VIEWS: dict[str, str] = {kind: f"v_{kind}" for kind in CATALOG_KINDS}
 # Chỉ danh mục quy trình và lĩnh vực công nhận có cột nhóm để lọc.
 GROUP_COLUMNS: dict[str, str] = {
@@ -33,7 +33,6 @@ _ROW_EXCLUDE = {"search_text"}
 
 # Token số hiệu/ký hiệu chuẩn mẫu (có ít nhất một chữ số) để mở cổng tín hiệu.
 _CATALOG_TOKEN_RE = re.compile(r"[\w\-]+", re.UNICODE)
-_SIGNAL_TTL_SECONDS = 30.0
 # Cache ngắn hạn khoá theo engine để tránh lẫn giữa các CSDL in-memory trong test.
 _SIGNAL_CACHE: dict[str, tuple[float, frozenset[str], frozenset[str], frozenset[str]]] = {}
 _KHO_NUMBER_CACHE: dict[str, tuple[float, frozenset[str]]] = {}
@@ -65,7 +64,7 @@ def catalog_signal_terms(
     now = time.monotonic()
     if key is not None:
         cached = _SIGNAL_CACHE.get(key)
-        if cached is not None and now - cached[0] < _SIGNAL_TTL_SECONDS:
+        if cached is not None and now - cached[0] < get_settings().query.cache_ttl_s:
             return cached[1], cached[2], cached[3]
     try:
         standard_rows = session.execute(text("SELECT serial, model FROM v_lab_standard")).all()
@@ -105,7 +104,7 @@ def _kho_values(session: Session, sql: str, cache: dict) -> frozenset[str]:
     now = time.monotonic()
     if key is not None:
         cached = cache.get(key)
-        if cached is not None and now - cached[0] < _SIGNAL_TTL_SECONDS:
+        if cached is not None and now - cached[0] < get_settings().query.cache_ttl_s:
             return cached[1]
     try:
         rows = session.execute(text(sql)).all()
@@ -130,7 +129,7 @@ def kho_device_types(session: Session) -> frozenset[str]:
     now = time.monotonic()
     if key is not None:
         cached = _KHO_DEVICE_CACHE.get(key)
-        if cached is not None and now - cached[0] < _SIGNAL_TTL_SECONDS:
+        if cached is not None and now - cached[0] < get_settings().query.cache_ttl_s:
             return cached[1]
     try:
         rows = session.execute(text("SELECT name_vi FROM v_device_type")).all()
@@ -226,7 +225,7 @@ def list_catalog(
     where = _where(conditions)
 
     total = session.execute(text(f"SELECT COUNT(*) FROM {view}{where}"), params).scalar_one()
-    safe_limit = max(1, min(int(limit), LIST_LIMIT_MAX))
+    safe_limit = max(1, min(int(limit), get_settings().query.list_limit_max))
     safe_offset = max(0, int(offset))
     rows = (
         session.execute(

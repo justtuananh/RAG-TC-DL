@@ -37,6 +37,7 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
+from core.settings_loader import get_settings
 from knowledge import vnnum
 from query.record_fields import Targets, content_tokens, detect_targets, field_catalog
 
@@ -116,7 +117,6 @@ _FILTER_FIELDS = {
     "range_unit": "pham_vi_do",
 }
 _HISTORY_INTENTS = frozenset({"device_history", "latest_record", "error_trend"})
-_LEDGER_TTL_SECONDS = 30.0
 
 
 @dataclass(frozen=True)
@@ -208,7 +208,7 @@ def ledger_index(session: Any) -> LedgerIndex:
         return build_ledger_index(session)
     with _LEDGER_LOCK:
         cached = _LEDGER_CACHE.get(key)
-        if cached is not None and time.monotonic() - cached[0] < _LEDGER_TTL_SECONDS:
+        if cached is not None and time.monotonic() - cached[0] < get_settings().query.cache_ttl_s:
             return cached[1]
         index = build_ledger_index(session)
         _LEDGER_CACHE[key] = (time.monotonic(), index)

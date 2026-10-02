@@ -13,6 +13,7 @@ from pathlib import Path
 from alembic import command
 from sqlalchemy import create_engine, inspect, text
 
+from core import settings_loader
 from scripts.migrate import _config
 
 MIGRATION_PATH = (
@@ -91,6 +92,7 @@ def test_sync_sequences_sqlite_is_noop():
 def test_sequence_migration_up_then_down_on_sqlite(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'seq_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     # Nhắm đúng revision của migration 009 (head hiện tại đã là 010).
     _run(url, "upgrade", NEW_REVISION)

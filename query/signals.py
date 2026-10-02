@@ -15,6 +15,7 @@ import time
 from typing import Any
 
 from catalogs.text import fold
+from core.settings_loader import get_settings
 from query import catalogs as catalogs_query
 
 # Tín hiệu thô buộc phải gọi LLM phân loại. Cố ý KHÔNG khớp các từ chung như
@@ -82,7 +83,6 @@ _CATALOG_SIGNAL_RE = re.compile(
 # Cache ngắn hạn số hiệu có trong sổ cái đã duyệt, khoá theo engine để tránh lẫn
 # giữa các CSDL in-memory ("sqlite://") trong test.
 _LEDGER_SERIAL_CACHE: dict[str, tuple[float, frozenset[str]]] = {}
-_LEDGER_SERIAL_TTL_SECONDS = 30.0
 
 
 def _ledger_cache_key(session: Any) -> str | None:
@@ -104,7 +104,7 @@ def ledger_serials(session: Any) -> frozenset[str]:
     now = time.monotonic()
     if key is not None:
         cached = _LEDGER_SERIAL_CACHE.get(key)
-        if cached is not None and now - cached[0] < _LEDGER_SERIAL_TTL_SECONDS:
+        if cached is not None and now - cached[0] < get_settings().query.cache_ttl_s:
             return cached[1]
     try:
         from sqlalchemy import text

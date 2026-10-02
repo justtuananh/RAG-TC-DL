@@ -7,19 +7,20 @@ không retry. Script này (chỉ thư viện chuẩn) poll /health của 4 servi
 Chạy:
     python scripts/healthcheck.py [--timeout 120] [--require qdrant,embedding]
 
-Honor env override: EMBED_URL / RERANK_URL / QDRANT_URL / OLLAMA_URL.
+URL service lấy từ config/settings.yaml (services.*).
 Exit 0 nếu mọi service yêu cầu sẵn sàng; exit 1 nếu không.
 """
 
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 import time
 from urllib.error import URLError
 from urllib.parse import urlparse
 from urllib.request import urlopen
+
+from core.settings_loader import get_settings
 
 SERVICES = ("embedding", "reranker", "qdrant", "ollama")
 
@@ -30,15 +31,14 @@ def _base(url: str) -> str:
 
 
 def health_urls() -> dict[str, str]:
-    """URL liveness cho từng service (suy ra từ env URL của code, có default)."""
+    """URL liveness cho từng service (suy ra từ URL trong settings)."""
+    services = get_settings().services
     return {
-        "embedding": _base(os.getenv("EMBED_URL", "http://localhost:8010/v1/embeddings"))
-        + "/health",
-        "reranker": _base(os.getenv("RERANK_URL", "http://localhost:8011/v1/rerank")) + "/health",
+        "embedding": _base(services.embedding_url) + "/health",
+        "reranker": _base(services.rerank_url) + "/health",
         # Qdrant trả 200 ở root "/" (kèm version) — liveness đơn giản, ổn định.
-        "qdrant": _base(os.getenv("QDRANT_URL", "http://localhost:6333")),
-        "ollama": _base(os.getenv("OLLAMA_URL", "http://localhost:11434/v1/chat/completions"))
-        + "/api/tags",
+        "qdrant": _base(services.qdrant_url),
+        "ollama": _base(services.ollama_url) + "/api/tags",
     }
 
 

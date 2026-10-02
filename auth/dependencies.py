@@ -1,17 +1,14 @@
 """FastAPI dependency functions for authentication and authorization."""
-import os
 from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
 
+from core.settings_loader import get_settings
 from db import get_db
 from db.models import AppUser, UserRole
 from .security import decode_access_token
 
-
-# Global toggle for auth (dev/prod)
-AUTH_ENABLED = os.environ.get("AUTH_ENABLED", "true").lower() in ("true", "1", "yes")
 
 security = HTTPBearer(auto_error=False)
 
@@ -21,7 +18,7 @@ async def get_current_user(
     db: Session = Depends(get_db),
 ) -> AppUser:
     """Dependency to extract and validate the current user from JWT token."""
-    if not AUTH_ENABLED:
+    if not get_settings().auth.enabled:
         # In dev mode with auth disabled, return a mock admin user
         user = db.query(AppUser).filter(AppUser.role == UserRole.ADMIN).first()
         if user:

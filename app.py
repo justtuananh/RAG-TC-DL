@@ -16,7 +16,6 @@ Services (all local Docker, already running):
 from __future__ import annotations
 
 import html as html_mod
-import os
 import sys
 from pathlib import Path
 
@@ -27,8 +26,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 from retrieval.retriever import retrieve
 
 # ── Config ────────────────────────────────────────────────────────────────────
-OLLAMA_URL   = os.getenv("OLLAMA_URL",   "http://localhost:11434/v1/chat/completions")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:1.5b")
 OLLAMA_TIMEOUT = 120
 HISTORY_TURNS = 3
 MAX_CONTEXT_CHARS = 1800

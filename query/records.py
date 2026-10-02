@@ -20,6 +20,7 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from core.settings_loader import get_settings
 from query import units as units_query
 
 # Cột được phép sắp xếp — whitelist để không bao giờ nối tham số vào SQL.
@@ -34,8 +35,6 @@ RECORD_SORTS: dict[str, str] = {
 }
 DEFAULT_SORT = "calibrated_at"
 DEFAULT_ORDER = "desc"
-LIST_LIMIT_MAX = 200
-EXPORT_LIMIT_MAX = 20000
 
 VERDICT_LABELS: dict[str, str] = {"dat": "Đạt", "khong_dat": "Không đạt"}
 MODE_LABELS: dict[str, str] = {
@@ -383,7 +382,7 @@ def list_records(
     """Trang hồ sơ đã duyệt + tổng số dòng khớp bộ lọc (P3)."""
     return _query_records(
         session,
-        cap=LIST_LIMIT_MAX,
+        cap=get_settings().query.list_limit_max,
         device_type_id=device_type_id,
         quantity_id=quantity_id,
         procedure_id=procedure_id,
@@ -406,11 +405,14 @@ def list_records(
 def all_records(
     session: Session,
     *,
-    limit: int = EXPORT_LIMIT_MAX,
+    limit: int | None = None,
     **filters: Any,
 ) -> list[dict[str, Any]]:
     """Toàn bộ hồ sơ khớp bộ lọc cho xuất Excel (cùng ngữ nghĩa với bảng lọc)."""
-    rows, _ = _query_records(session, cap=EXPORT_LIMIT_MAX, limit=limit, offset=0, **filters)
+    cap = get_settings().query.export_limit_max
+    rows, _ = _query_records(
+        session, cap=cap, limit=cap if limit is None else limit, offset=0, **filters
+    )
     return rows
 
 
@@ -481,7 +483,7 @@ def list_devices(
         + ", ".join(_DEVICE_GROUP_COLS)
         + " ORDER BY r.serial_no IS NULL, r.serial_no, r.device_id LIMIT :limit OFFSET :offset"
     )
-    safe_limit = max(1, min(int(limit), LIST_LIMIT_MAX))
+    safe_limit = max(1, min(int(limit), get_settings().query.list_limit_max))
     rows = (
         session.execute(text(sql), {**params, "limit": safe_limit, "offset": max(0, int(offset))})
         .mappings()

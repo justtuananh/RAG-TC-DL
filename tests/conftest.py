@@ -15,6 +15,7 @@ from __future__ import annotations
 import importlib
 import os
 import socket
+import sys
 from pathlib import Path
 
 import pytest
@@ -107,8 +108,13 @@ def _fresh_settings():
     from core import settings_loader
 
     settings_loader.reset_settings()
+    security = sys.modules.get("auth.security")
+    if security is not None:
+        security.jwt_secret.cache_clear()
     yield
     settings_loader.reset_settings()
+    if security is not None:
+        security.jwt_secret.cache_clear()
 
 
 @pytest.fixture

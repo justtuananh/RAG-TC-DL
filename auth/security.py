@@ -1,16 +1,29 @@
 """Password hashing and JWT token management."""
-import os
+import logging
+import secrets
 from datetime import datetime, timedelta, timezone
+from functools import lru_cache
 from typing import Optional
+
 import jwt
 from bcrypt import hashpw, checkpw, gensalt
 from pydantic import BaseModel, Field
 
+from core.settings_loader import get_settings
 
-# JWT configuration
-JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "dev-secret-key-change-in-production")
-JWT_ALGORITHM = "HS256"
-JWT_EXPIRATION_HOURS = int(os.environ.get("JWT_EXPIRATION_HOURS", "24"))
+logger = logging.getLogger(__name__)
+
+
+@lru_cache(maxsize=1)
+def jwt_secret() -> str:
+    """Khóa ký JWT. Thiếu ở development: sinh khóa tạm (token mất hiệu lực khi khởi động lại)."""
+    configured = get_settings().auth.jwt_secret_key
+    if configured is not None:
+        return configured.get_secret_value()
+    logger.warning(
+        "JWT_SECRET_KEY chưa đặt: dùng khóa tạm cho tiến trình này (chỉ hợp lệ khi dev)"
+    )
+    return secrets.token_urlsafe(48)
 
 
 def hash_password(password: str) -> str:
@@ -25,6 +38,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 class TokenPayload(BaseModel):
     """JWT token payload."""
+
     user_id: int = Field(..., description="User ID")
     username: str = Field(..., description="Username")
     role: str = Field(..., description="User role")
@@ -33,21 +47,23 @@ class TokenPayload(BaseModel):
 
 def create_access_token(user_id: int, username: str, role: str) -> str:
     """Create a JWT access token."""
-    exp = datetime.now(timezone.utc) + timedelta(hours=JWT_EXPIRATION_HOURS)
+    auth = get_settings().auth
+    exp = datetime.now(timezone.utc) + timedelta(hours=auth.jwt_expiration_hours)
     payload = {
         "user_id": user_id,
         "username": username,
         "role": role,
         "exp": int(exp.timestamp()),
     }
-    token = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+    token = jwt.encode(payload, jwt_secret(), algorithm=auth.jwt_algorithm)
     return token
 
 
 def decode_access_token(token: str) -> Optional[TokenPayload]:
     """Decode and validate a JWT access token."""
+    auth = get_settings().auth
     try:
-        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
+        payload = jwt.decode(token, jwt_secret(), algorithms=[auth.jwt_algorithm])
         return TokenPayload(**payload)
     except (jwt.DecodeError, jwt.ExpiredSignatureError, ValueError):
         return None

@@ -30,6 +30,7 @@ from typing import Any
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from core.settings_loader import get_settings
 from query import approved as approved_query
 from query import intents, procedure_scope
 from query import records as records_query
@@ -62,8 +63,6 @@ from query.table_model import (
 )
 
 logger = logging.getLogger(__name__)
-
-TREND_POINT_CAP = 200
 
 __all__ = [
     "Cell",
@@ -233,7 +232,7 @@ def _trend_tables(history: dict[str, Any], *, step_code: str | None = None) -> l
         ):
             continue
         for point in series.get("points", []):
-            if count >= TREND_POINT_CAP:
+            if count >= get_settings().query.trend_point_cap:
                 break
             count += 1
             # Sai số/giới hạn dùng đơn vị riêng nếu có, nếu không theo đơn vị giá trị đo.

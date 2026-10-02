@@ -64,8 +64,8 @@ def _add_document(session, stem: str, doc_type: DocumentType, ext: str) -> None:
     session.commit()
 
 
-def test_find_source_locates_doc_and_xls(tmp_path, monkeypatch):
-    monkeypatch.setattr(ingestion_jobs, "TC_DL_DIR", tmp_path)
+def test_find_source_locates_doc_and_xls(tmp_path, monkeypatch, settings_override):
+    settings_override({"paths.source_dir": str(tmp_path)})
     doc = tmp_path / f"{DOC_STEM}.doc"
     xls = tmp_path / f"{XLS_STEM}.xls"
     doc.write_bytes(b"\xd0\xcf\x11\xe0")
@@ -74,8 +74,10 @@ def test_find_source_locates_doc_and_xls(tmp_path, monkeypatch):
     assert ingestion_jobs.get_source_path(XLS_STEM) == xls
 
 
-def test_save_upload_accepts_doc_and_updates_ledger(tmp_path, monkeypatch, session):
-    monkeypatch.setattr(ingestion_jobs, "TC_DL_DIR", tmp_path / "tc_dl")
+def test_save_upload_accepts_doc_and_updates_ledger(
+    tmp_path, monkeypatch, session, settings_override
+):
+    settings_override({"paths.source_dir": str(tmp_path / "tc_dl")})
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
 
     stem = ingestion_jobs.save_upload("4. Bieu 1 Kiem dinh NAS.doc", b"\xd0\xcf\x11\xe0")

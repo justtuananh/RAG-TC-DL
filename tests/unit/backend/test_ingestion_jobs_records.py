@@ -66,17 +66,17 @@ def _add_document(session, stem: str, doc_type: DocumentType, ext: str) -> None:
     session.commit()
 
 
-def test_find_source_locates_uploaded_xlsx(tmp_path, monkeypatch):
+def test_find_source_locates_uploaded_xlsx(tmp_path, monkeypatch, settings_override):
     """B2: ``get_source_path`` phải tìm được tệp .xlsx đã upload."""
-    monkeypatch.setattr(ingestion_jobs, "TC_DL_DIR", tmp_path)
+    settings_override({"paths.source_dir": str(tmp_path)})
     path = tmp_path / f"{RECORD_STEM}.xlsx"
     path.write_bytes(b"PK\x03\x04")
     assert ingestion_jobs.get_source_path(RECORD_STEM) == path
 
 
-def test_save_upload_accepts_xlsx(tmp_path, monkeypatch, session):
+def test_save_upload_accepts_xlsx(tmp_path, monkeypatch, session, settings_override):
     """B1: upload nhận .xlsx và xếp loại hồ sơ kiểm định."""
-    monkeypatch.setattr(ingestion_jobs, "TC_DL_DIR", tmp_path / "tc_dl")
+    settings_override({"paths.source_dir": str(tmp_path / "tc_dl")})
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
 
     stem = ingestion_jobs.save_upload("Biên bản kiểm định A.xlsx", b"PK\x03\x04noi-dung")

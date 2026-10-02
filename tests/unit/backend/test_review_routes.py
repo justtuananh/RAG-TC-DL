@@ -14,7 +14,6 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 import api_server
-import auth.dependencies as auth_deps
 from auth.security import create_access_token, hash_password
 from db import get_db
 from db.models import (
@@ -129,7 +128,7 @@ def users(session_factory):
 
 
 @pytest.fixture
-def client(session_factory, users, monkeypatch):
+def client(session_factory, users, monkeypatch, settings_override):
     def override_get_db():
         db = session_factory()
         try:
@@ -138,7 +137,7 @@ def client(session_factory, users, monkeypatch):
             db.close()
 
     api_server.app.dependency_overrides[get_db] = override_get_db
-    monkeypatch.setattr(auth_deps, "AUTH_ENABLED", True)
+    settings_override({"auth.enabled": True})
     # Nguồn nguyên văn đọc từ file; cố định nó để test tất định.
     monkeypatch.setattr(
         ingestion_jobs,

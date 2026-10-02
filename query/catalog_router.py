@@ -18,6 +18,7 @@ from typing import Any
 from sqlalchemy.orm import Session
 
 from catalogs.text import fold
+from core.settings_loader import get_settings
 from query import catalog_intents
 from query import catalogs as catalogs_query
 from query.table_model import (
@@ -34,7 +35,6 @@ CATALOG_NOTE = (
     "Đọc từ danh mục NAS đã duyệt (Biểu 1, 3, 4, 7) — chỉ bản đã duyệt (P3), "
     "mỗi ô bấm để mở dòng nguyên văn."
 )
-_ROW_LIMIT = 200
 _TOKEN_RE = re.compile(r"[\w\-]+", re.UNICODE)
 # Từ chung trong câu hỏi liệt kê chuẩn theo loại ("áp kế píttông chuẩn"): không
 # dùng để chấm điểm, nếu không chỉ các dòng có chữ "chuẩn" trong tên được giữ lại.
@@ -72,7 +72,9 @@ def _as_list(value: Any) -> list[Any]:
 
 def _catalog_items(session: Session, kind: str) -> list[dict[str, Any]]:
     """Đọc một danh mục đã duyệt và chuẩn hoá các cột JSON."""
-    items, _ = catalogs_query.list_catalog(session, kind, limit=_ROW_LIMIT)
+    items, _ = catalogs_query.list_catalog(
+        session, kind, limit=get_settings().query.catalog_row_limit
+    )
     columns = _JSON_COLUMNS.get(kind, ())
     for item in items:
         for column in columns:

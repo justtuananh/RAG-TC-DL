@@ -8,6 +8,7 @@ from __future__ import annotations
 from alembic import command
 from sqlalchemy import create_engine, inspect, text
 
+from core import settings_loader
 from scripts.migrate import _config
 
 NEW_REVISION = "012_record_fields"
@@ -43,6 +44,7 @@ def _state(url: str) -> tuple[set[str], set[str], set[str], set[str]]:
 def test_record_field_migration_up_then_down_on_sqlite(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint12_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _run(url, "upgrade", "head")
     views, tables, detail, points = _state(url)
@@ -68,6 +70,7 @@ def test_record_field_migration_up_then_down_on_sqlite(monkeypatch, tmp_path):
 def test_head_revision_is_record_field_migration(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint12_head.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
     _run(url, "upgrade", "head")
     engine = create_engine(url)
     try:

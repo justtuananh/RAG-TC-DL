@@ -14,7 +14,6 @@ import pytest
 from fastapi.testclient import TestClient
 
 import api_server
-import auth.dependencies as auth_deps
 from auth.security import create_access_token, hash_password
 from db import get_db
 from db.models import AppUser, UserRole
@@ -49,7 +48,7 @@ def users(data_factory):
 
 
 @pytest.fixture
-def client(data_factory, users, monkeypatch):
+def client(data_factory, users, settings_override):
     factory, _ = data_factory
 
     def override_get_db():
@@ -60,7 +59,7 @@ def client(data_factory, users, monkeypatch):
             db.close()
 
     api_server.app.dependency_overrides[get_db] = override_get_db
-    monkeypatch.setattr(auth_deps, "AUTH_ENABLED", True)
+    settings_override({"auth.enabled": True})
     with TestClient(api_server.app) as test_client:
         yield test_client
     api_server.app.dependency_overrides.clear()

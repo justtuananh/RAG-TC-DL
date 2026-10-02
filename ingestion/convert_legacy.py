@@ -12,21 +12,23 @@ cấu hình của nhau. Lỗi được báo bằng tiếng Việt, rõ nguyên n
 from __future__ import annotations
 
 import hashlib
-import os
 import shutil
 import subprocess
 import tempfile
 from pathlib import Path
 
-# ``SOFFICE_BIN`` cho phép chỉ định bản cài khác (Docker, macOS); không có thì tìm trong PATH.
-SOFFICE = os.environ.get("SOFFICE_BIN") or shutil.which("soffice") or "/usr/bin/soffice"
+from core.settings_loader import get_settings
+
 # Neo theo gốc repo để không phụ thuộc thư mục đang chạy tiến trình.
 CONVERTED_DIR = Path(__file__).resolve().parents[1] / "build" / "converted"
 
 # Đuôi cũ -> đuôi đích khi chuyển bằng LibreOffice.
 TARGET_EXT = {".doc": "docx", ".xls": "xlsx"}
 
-TIMEOUT_SECONDS = 120
+
+def _soffice_bin() -> str:
+    """Bản soffice: settings (ingestion.soffice_bin) -> PATH -> mặc định."""
+    return get_settings().ingestion.soffice_bin or shutil.which("soffice") or "/usr/bin/soffice"
 
 
 class ConvertLegacyError(RuntimeError):
@@ -53,8 +55,10 @@ def cache_path(path: str | Path, out_dir: str | Path | None = None) -> Path:
 
 def _run_soffice(src: Path, target: str, tmp: Path, profile: Path) -> Path:
     """Gọi soffice trong thư mục tạm với hồ sơ riêng; trả tệp kết quả (chưa kiểm tồn tại)."""
+    soffice = _soffice_bin()
+    timeout_s = get_settings().ingestion.convert_timeout_s
     command = [
-        SOFFICE,
+        soffice,
         "--headless",
         f"-env:UserInstallation=file://{profile}",
         "--convert-to",
@@ -64,14 +68,14 @@ def _run_soffice(src: Path, target: str, tmp: Path, profile: Path) -> Path:
         str(src),
     ]
     try:
-        subprocess.run(command, check=True, capture_output=True, timeout=TIMEOUT_SECONDS)
+        subprocess.run(command, check=True, capture_output=True, timeout=timeout_s)
     except FileNotFoundError as exc:
         raise ConvertLegacyError(
-            f"Không tìm thấy LibreOffice ({SOFFICE}) để chuyển đổi {src.name}."
+            f"Không tìm thấy LibreOffice ({soffice}) để chuyển đổi {src.name}."
         ) from exc
     except subprocess.TimeoutExpired as exc:
         raise ConvertLegacyError(
-            f"Chuyển đổi {src.name} quá thời gian ({TIMEOUT_SECONDS} giây)."
+            f"Chuyển đổi {src.name} quá thời gian ({timeout_s} giây)."
         ) from exc
     except subprocess.CalledProcessError as exc:
         detail = (exc.stderr or b"").decode("utf-8", "ignore").strip() or f"mã lỗi {exc.returncode}"
@@ -90,9 +94,10 @@ def convert_legacy(path: str | Path, out_dir: str | Path | None = None) -> Path:
     cached = cache_path(src, out_dir)
     if cached.exists():
         return cached
-    if not Path(SOFFICE).exists():
+    soffice = _soffice_bin()
+    if not Path(soffice).exists():
         raise ConvertLegacyError(
-            f"Không tìm thấy LibreOffice ({SOFFICE}) để chuyển đổi {src.name}."
+            f"Không tìm thấy LibreOffice ({soffice}) để chuyển đổi {src.name}."
         )
 
     target = TARGET_EXT[src.suffix.lower()]

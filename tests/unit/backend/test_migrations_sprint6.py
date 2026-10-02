@@ -5,6 +5,7 @@ from __future__ import annotations
 from alembic import command
 from sqlalchemy import create_engine, inspect
 
+from core import settings_loader
 from scripts.migrate import _config
 
 NEW_INDEXES = {"ix_extraction_extractor", "ix_extraction_confidence"}
@@ -30,6 +31,7 @@ def _index_names(url: str) -> set[str]:
 def test_review_indexes_up_then_down(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint6_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _run(url, "upgrade", "head")
     assert NEW_INDEXES <= _index_names(url)

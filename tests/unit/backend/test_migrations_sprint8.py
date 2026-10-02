@@ -5,6 +5,7 @@ from __future__ import annotations
 from alembic import command
 from sqlalchemy import create_engine, inspect
 
+from core import settings_loader
 from scripts.migrate import _config
 
 NEW_VIEWS = {"v_unit", "v_extraction", "v_record_detail", "v_measurement_detail"}
@@ -30,6 +31,7 @@ def _views(url: str) -> set[str]:
 def test_query_views_migration_up_then_down(monkeypatch, tmp_path):
     url = f"sqlite:///{tmp_path / 'sprint8_mig.db'}"
     monkeypatch.setenv("DATABASE_URL", url)
+    settings_loader.reset_settings()
 
     _run(url, "upgrade", "head")
     views = _views(url)

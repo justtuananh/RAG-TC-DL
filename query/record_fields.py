@@ -29,6 +29,8 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
+from core.settings_loader import get_settings
+
 logger = logging.getLogger(__name__)
 
 # Từ không mang nghĩa phân biệt trong nhãn / tiêu đề bảng.
@@ -84,7 +86,6 @@ RELATED_PREFIXES: dict[str, tuple[str, ...]] = {
     "phuong_tien_kiem_dinh": ("phuong_phap_kiem_dinh",),
     "do_khong_dam_bao_do": ("u_p",),
 }
-_CATALOG_TTL_SECONDS = 30.0
 # Tiêu đề bảng khớp khi câu hỏi chứa phần lớn từ của nó ("quay tự do" ↔ "Thời gian quay
 # tự do"); nhãn trường vẫn phải khớp trọn vì nhãn ngắn và dễ trùng nhau.
 _TITLE_MIN_WORDS = 3
@@ -303,7 +304,7 @@ def field_catalog(session: Session) -> FieldCatalog:
         return build_catalog(session)
     with _CATALOG_LOCK:
         cached = _CATALOG_CACHE.get(key)
-        if cached is not None and time.monotonic() - cached[0] < _CATALOG_TTL_SECONDS:
+        if cached is not None and time.monotonic() - cached[0] < get_settings().query.cache_ttl_s:
             return cached[1]
         catalog = build_catalog(session)
         _CATALOG_CACHE[key] = (time.monotonic(), catalog)

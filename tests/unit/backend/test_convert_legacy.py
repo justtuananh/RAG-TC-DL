@@ -18,7 +18,7 @@ from ingestion.convert_legacy import ConvertLegacyError, cache_path
 from ingestion.convert_legacy import convert_legacy as convert
 from scripts.knowledge_corpus import ooxml as ox
 
-HAS_SOFFICE = Path(convert_legacy.SOFFICE).exists()
+HAS_SOFFICE = Path(convert_legacy._soffice_bin()).exists()
 
 _BLOCKS = [
     {"t": "h", "text": "Danh muc NAS", "style": "heading1"},
@@ -34,7 +34,7 @@ def _soffice(src: Path, out_ext: str) -> Path:
     """Xuất ``src`` sang ``out_ext`` bằng soffice (dùng cho test, hồ sơ mặc định)."""
     subprocess.run(
         [
-            convert_legacy.SOFFICE,
+            convert_legacy._soffice_bin(),
             "--headless",
             "--convert-to",
             out_ext,
