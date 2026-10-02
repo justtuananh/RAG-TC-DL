@@ -116,11 +116,10 @@ intent-eval:
 
 # Eval tra cứu biên bản trên sổ cái thật (Pha R): cần Postgres + Ollama (`make up`),
 # không nằm trong `check`. Bộ Bo_20_cau + câu diễn đạt khác, cổng ≥ 0,90.
+# Model + URL Ollama: config/settings.yaml (OLLAMA_MODEL / OLLAMA_URL đặt sẵn vẫn thắng).
 record-eval:
-	OLLAMA_MODEL=$${OLLAMA_MODEL:-qwen2.5:3b} OLLAMA_URL=$${OLLAMA_URL:-http://localhost:11434/api/chat} \
-		$(PY) -m evaluation.record_query_eval
-	OLLAMA_MODEL=$${OLLAMA_MODEL:-qwen2.5:3b} OLLAMA_URL=$${OLLAMA_URL:-http://localhost:11434/api/chat} \
-		$(PY) -m evaluation.record_query_eval --path evaluation/record_query_generated.jsonl
+	$(PY) -m evaluation.record_query_eval
+	$(PY) -m evaluation.record_query_eval --path evaluation/record_query_generated.jsonl
 
 # Unit test (mock toàn bộ I/O) — chạy mọi nơi, không cần Docker.
 test-unit:
