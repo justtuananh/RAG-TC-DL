@@ -1,8 +1,8 @@
 # Harness QA/Test — RAG_TC_DL
 
-Harness phủ mọi tầng: **backend** (retrieval/index/inference), **LLM** (prompt/stream),
-**frontend** (Gradio handlers), **eval** (metric), **QA** (fidelity/đồng bộ hằng số).
-Tự chứa trong repo này — **không** phụ thuộc `../kotaemon`.
+Harness phủ mọi tầng: **api**, **retrieval**, **vectorstore**/**embedding**, **llm**,
+**ui** (Gradio handlers), **evaluation** (metric), **QA** (fidelity / kiến trúc / đồng bộ settings).
+Tự chứa trong repo này - **không** phụ thuộc `../kotaemon`.
 
 ## Chiến lược: mock-default + integration-opt-in
 
@@ -31,8 +31,8 @@ python3.11 -m venv .venv-dev
 make check       # CỔNG = lint + fidelity + test-unit (đúng những gì CI chạy)
 make test-unit   # chỉ unit (mock, nhanh ~2s)
 make fidelity    # guard độ trung thực công thức (đọc build/spike_a, không cần service)
-make lint        # ruff check + format-check trên tests/ + scripts/
-make fmt         # ruff tự sửa + định dạng tests/ + scripts/
+make lint        # ruff check + format-check trên LINT_PATHS (tests + mọi package nguồn)
+make fmt         # ruff tự sửa + định dạng LINT_PATHS
 make lint-all    # (tuỳ chọn) quét toàn repo lỗi pyflakes — có thể lộ lỗi sẵn có
 
 # Cần `make up` trước (Docker stack):
@@ -49,7 +49,7 @@ Integration test **tự skip** (không fail) khi service chưa lên.
 tầng cloud-feasible. Cố tình loại trừ integration/eval/ruby/model-thật (cần Docker/GPU/
 Ruby, dự án offline). Fidelity guard chạy được vì `build/spike_a/` đã commit.
 
-Pre-commit (tuỳ chọn): `.venv-dev/bin/pre-commit install` — ruff chỉ trên `tests/`+`scripts/`.
+Pre-commit (tuỳ chọn): `.venv-dev/bin/pre-commit install` - ruff chỉ trên `LINT_PATHS`.
 
 ## Lưu ý: hai pin tương thích phát hiện khi dựng harness
 

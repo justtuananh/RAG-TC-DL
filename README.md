@@ -7,7 +7,7 @@ file, mục/điều khoản). **Chỉ tra cứu — không tự tính toán.** K
 chạy local. Mục tiêu prod: 1 máy đơn **RTX 5060 8GB**, mở rộng từ vài file lên hàng nghìn QTKĐ.
 
 > **Hai cách triển khai (ngang nhau):**
-> - **Mode A — Docker (stack standalone):** một lệnh `make up` dựng `app.py` + Qdrant + dịch vụ
+> - **Mode A - Docker (stack standalone):** một lệnh `make up` dựng `ui/gradio_app.py` + Qdrant + dịch vụ
 >   embedding/reranker + Ollama. Đây là đường đã được **đo chất lượng** (eval recall@5 = **1.000**,
 >   55/55 — xem §5).
 > - **Mode B — kotaemon (UI tương tác):** chạy giao diện kotaemon trên host với Chroma + adapter
@@ -15,11 +15,11 @@ chạy local. Mục tiêu prod: 1 máy đơn **RTX 5060 8GB**, mở rộng từ 
 >
 > **Giao diện web React (mới).** Ngoài UI Gradio `:7861` của Mode A, repo còn có **frontend React +
 > TypeScript** (`frontend/`, nginx `:3000`, dev Vite `:5173`) nói chuyện với **FastAPI backend**
-> `api_server.py` (`:8080`, cùng pipeline truy hồi/sinh đáp với `app.py`). Bản `frontend/` (dựng 1:1
+> `python -m api.main` (`:8080`, cùng pipeline truy hồi/sinh đáp với `ui/gradio_app.py`). Bản `frontend/` (dựng 1:1
 > từ `design/kiemdinh.html`) nay **đã nối backend thật**: chat streaming SSE, render Markdown +
 > **bảng** (remark-gfm) + **công thức** `$LaTeX$` (KaTeX), trích dẫn `[n]` bấm được + panel nguồn,
 > **lưu lịch sử hội thoại** (localStorage) và **bộ nhớ ngắn hạn** cho LLM (gửi lại các lượt trước).
-> `frontend-legacy/` là bản React (JS thuần) đời trước, giữ để tham khảo. Chạy nhanh local (api_server
+> `frontend-legacy/` là bản React (JS thuần) đời trước, giữ để tham khảo. Chạy nhanh local (api
 > + Vite): `./run.sh`. Chi tiết: [`frontend/README.md`](frontend/README.md).
 
 **Mục lục**
@@ -60,11 +60,11 @@ ro lớn nhất của dự án — *độ chính xác công thức là mối qua
 
 | Lớp | Thành phần | Ghi chú |
 |---|---|---|
-| **Giao diện** | **Gradio** `app.py` `:7861` · **React** `frontend/` `:3000` (dev Vite `:5173`, + `api_server.py` FastAPI `:8080`) · **kotaemon** (Mode B) | React UI **đã nối backend thật** (SSE, bảng + công thức, lịch sử/bộ nhớ) — [`frontend/README.md`](frontend/README.md) |
-| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | `qwen2.5:1.5b` (dev) / `qwen2.5:7b` (prod), `:11434`; `generation.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
+| **Giao diện** | **Gradio** `ui/gradio_app.py` `:7861` · **React** `frontend/` `:3000` (dev Vite `:5173`, + `python -m api.main` FastAPI `:8080`) · **kotaemon** (Mode B) | React UI **đã nối backend thật** (SSE, bảng + công thức, lịch sử/bộ nhớ) - [`frontend/README.md`](frontend/README.md) |
+| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | model `models.llm_chat` trong `config/settings.yaml` (mặc định `qwen2.5:3b`), `:11434`; `llm/generator.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
 | **Embedding** | **bge-m3** (1024 chiều) qua **inference server tự viết** | `docker/inference/server.py` (FastAPI + sentence-transformers), `:8010`, `/v1/embeddings` |
 | **Reranker** | **bge-reranker-v2-m3** qua cùng server (CrossEncoder) | `:8011`, `/v1/rerank` (Cohere-style); env `RERANKER_MAX_LENGTH` (mặc định 1024) |
-| **Vector store** | **A: Qdrant** `:6333` (collection `qtkd_rag`) · **B: Chroma** (nhúng) | `VECTOR_SIZE = 1024` |
+| **Vector store** | **A: Qdrant** `:6333` (collection `qtkd_rag`) · **B: Chroma** (nhúng) | `1024` chiều (`models.embedding.vector_size` trong `config/settings.yaml`) |
 | **Trích xuất công thức** | Python `lxml` + `olefile`; **Ruby gem `mathtype_to_mathml`**; XSLT `vendor/xsltml/mml2tex.xsl` | OLE MathType → LaTeX |
 | **Hybrid retrieval** | **A:** `retrieval/` (router → lexicon → dense + BM25 → RRF k=60 → rerank trên parent → parent) · **B:** kotaemon built-in | |
 | **Adapter (Mode B)** | `kotaemon_ext/` | `QTKDDocxReader` (reader), `QTKDReranking` (reranker) |
@@ -76,7 +76,7 @@ cho cả hai mode; chỉ khác phần UI + vector store + tầng truy hồi.
 | | **Mode A — Docker (standalone)** | **Mode B — kotaemon (host)** |
 |---|---|---|
 | Khởi chạy | `make up` (1 lệnh) | `.venv/bin/python app.py` (trong `../kotaemon`) |
-| UI | `app.py` Gradio `:7861` | kotaemon Gradio `:7861` |
+| UI | `ui/gradio_app.py` Gradio `:7861` | kotaemon Gradio `:7861` |
 | Vector store | **Qdrant** `:6333` | **Chroma** (nhúng) |
 | Truy hồi | `retrieval/`: router → lexicon → dense + BM25 → RRF → rerank (parent) → parent | kotaemon hybrid + `QTKDReranking` |
 | Nạp tài liệu | `ingestion.spike_a` (host) → `build/spike_a/` → `indexer` | `QTKDDocxReader` chạy khi upload |
@@ -120,7 +120,7 @@ Toàn bộ stack gói trong `docker-compose.yml` + điều khiển qua `Makefile
 ```bash
 # 0) Đã chạy ingestion (§3.2) → có build/spike_a/   (compose mount thư mục này read-only)
 make up            # build images + start: qdrant, embedding, reranker, ollama, api, frontend  (~10–20' lần đầu: tải model)
-make pull-model    # tải qwen2.5:1.5b vào container ollama (~940MB); prod: make pull-model-7b
+make pull-model    # tải models.llm_chat (config/settings.yaml) vào container ollama; model 7b: make pull-model-7b
 make index         # indexer: vectorstore.index --force → nhúng build/spike_a/ vào Qdrant
 # → mở http://localhost:3000
 ```
@@ -128,11 +128,11 @@ make index         # indexer: vectorstore.index --force → nhúng build/spike_a
 **Các service (`docker-compose.yml`):**
 | Service | Image / build | Port | Ghi chú |
 |---|---|---|---|
-| `qdrant` | `qdrant/qdrant:v1.10.1` | 6333 | Vector DB, volume `qdrant_storage` |
+| `qdrant` | `qdrant/qdrant:v1.10.1` | 6333 | Vector DB, bind mount `./qdrant_storage/` |
 | `embedding` | build `docker/inference` (`MODE=embedding`, `BAAI/bge-m3`) | 8010 | `/v1/embeddings`, 1024-dim |
 | `reranker` | build `docker/inference` (`MODE=reranker`, `BAAI/bge-reranker-v2-m3`) | 8011 | `/v1/rerank` (Cohere-style) |
 | `ollama` | `ollama/ollama:latest` | 11434 | LLM, volume `ollama_data` |
-| `api` | build `.` → `uvicorn api_server:app` | 8080 | **FastAPI + SSE** cho React frontend (`/api/health`, `/api/examples`, `/api/chat/stream`); mount `build/spike_a` + `TC_DL` (writable, cho upload); đọc env `EMBED_URL/RERANK_URL/QDRANT_URL/OLLAMA_URL/OLLAMA_MODEL` |
+| `api` | build `.` → `python -m api.main` | 8080 | **FastAPI + SSE** cho React frontend (`/api/health`, `/api/examples`, `/api/chat/stream`); mount `build/spike_a` + `TC_DL` (writable, cho upload); cấu hình từ `config/settings.yaml` (env `EMBED_URL/RERANK_URL/QDRANT_URL/OLLAMA_URL/OLLAMA_MODEL` override) |
 | `frontend` | build `frontend/` → nginx | 3000 | Serve bản React build; proxy `/api` → `api:8080`. **Đã nối backend thật** (chat SSE, bảng/công thức, lịch sử + bộ nhớ ngắn hạn) |
 | `indexer` | reuse `qtkd-app:local` (profile `tools`) | — | Chạy 1 lần: `vectorstore.index --force` |
 
@@ -148,26 +148,28 @@ không có vấn đề tương thích).
 | `make up` / `make start` | Start (có / không rebuild) |
 | `make down` | Dừng toàn bộ |
 | `make logs` / `make status` | Xem log realtime / trạng thái container |
-| `make pull-model` / `make pull-model-7b` | Tải `qwen2.5:1.5b` / `qwen2.5:7b` |
+| `make pull-model` / `make pull-model-7b` | Tải `models.llm_chat` (settings) / `qwen2.5:7b` |
 | `make index` | Index `build/spike_a/` vào Qdrant |
 | `make rebuild` | Build lại images `--no-cache` rồi up |
 | `make clean-volumes` | ⚠ Xoá toàn bộ data (Qdrant + Ollama models) |
-| `make eval` | Chạy eval retrieval (trên host, dùng `kotaemon/.venv` — xem §5) |
+| `make eval` | Chạy eval retrieval (trên host, dùng `.venv-dev` - xem §5) |
 | `make test-embed` / `make test-qdrant` | Smoke-test service `:8010` / collection Qdrant |
 
-**Cấu hình `.env`** (sao chép từ `.env.example`): `OLLAMA_MODEL=qwen2.5:1.5b` (prod đổi `qwen2.5:7b`).
+**Cấu hình:** mọi tham số và tên model nằm ở `config/settings.yaml`.
+Biến trong `.env` (sao chép từ `.env.example`) override file đó theo mẫu `${TÊN:-mặc_định}`.
+Xem `python -m core.settings_loader get <khóa>` để biết giá trị hiệu dụng.
 
 **GPU / nền tảng:**
 - **macOS:** Docker không dùng được GPU Apple Silicon. Nên chạy **Ollama native** (`brew install
   ollama` + `ollama serve`), comment service `ollama` trong compose và đặt
   `OLLAMA_URL=http://host.docker.internal:11434/v1/chat/completions`.
-  > Đặt env dạng `/v1/...` cho tương thích; `generation.py` **tự map sang native `/api/chat`**
+  > Đặt env dạng `/v1/...` cho tương thích; `llm/generator.py` **tự map sang native `/api/chat`**
   > lúc gọi — vì endpoint OpenAI-compat `/v1` của Ollama **bỏ qua trường `options`** (num_ctx /
   > num_predict không có hiệu lực, prompt dài bị cắt từ đầu — đo 2026-06-11). Có unit-test ghim.
 - **Linux + RTX 5060 (Blackwell, sm_120):** cần **`nvidia-container-toolkit`**, bỏ comment khối
   `deploy.resources` của service `ollama`, và driver/toolkit **CUDA 12.8+**. Embedding & reranker
   chạy **CPU** là đủ (theo `docs/PLAN.md`), giữ VRAM cho LLM.
-- **Volumes bền:** `qdrant_storage`, `ollama_data` (giữ qua restart; `make clean-volumes` để xoá).
+- **Dữ liệu bền:** bind mount `./qdrant_storage/`, volume `ollama_data` (giữ qua restart; `make clean-volumes` để xoá).
 
 ### 3.4 Mode B — kotaemon (UI tương tác trên host)
 Giao diện kotaemon với Chroma + adapter `kotaemon_ext/`. Dùng chung service `:8010/:8011/:11434`
@@ -210,7 +212,7 @@ GRADIO_SERVER_PORT=7861 .venv/bin/python app.py     # → http://localhost:7861
 ### 3.5 Cơ sở dữ liệu & lưu trữ
 | Mode | Vị trí | Loại | Nội dung |
 |---|---|---|---|
-| A | Qdrant volume `qdrant_storage` | **Qdrant** | Collection `qtkd_rag` (cosine, 1024) |
+| A | Qdrant bind mount `./qdrant_storage/` | **Qdrant** | Collection `qtkd_rag` (cosine, 1024) |
 | B | `kotaemon/ktem_app_data/user_data/vectorstore/` | **Chroma** | Vector child chunks |
 | B | `kotaemon/ktem_app_data/user_data/docstore/` | **LanceDB** | Văn bản gốc chunks |
 | B | `kotaemon/ktem_app_data/user_data/sql.db` | **SQLite** | Mặc định model, danh sách file, hội thoại |
@@ -224,7 +226,7 @@ GRADIO_SERVER_PORT=7861 .venv/bin/python app.py     # → http://localhost:7861
 Cả hai mode dùng chung tầng **ingestion** (bóc công thức) và 3 dịch vụ (embedding `:8010`,
 reranker `:8011`, Ollama `:11434`); khác nhau ở vector store + tầng truy hồi.
 
-### Mode A — Docker (standalone, `app.py` + Qdrant)
+### Mode A - Docker (standalone, `ui/gradio_app.py` + Qdrant)
 ```mermaid
 flowchart TB
     D["TC_DL/*.docx"] -->|"ingestion.spike_a (host + Ruby gem)"| MD["build/spike_a/*.md<br/>+ extraction_report.json"]
@@ -236,7 +238,7 @@ flowchart TB
     QD -. "tìm child chunks" .-> RET
     RK["reranker :8011<br/>bge-reranker-v2-m3"] -. rerank .-> RET
     RET --> OL["Ollama :11434 · qwen2.5<br/>(native /api/chat)"]
-    OL --> APP["app.py · Gradio :7861<br/>trả lời + trích dẫn"]
+    OL --> APP["ui/gradio_app.py · Gradio :7861<br/>trả lời + trích dẫn"]
 ```
 
 ### Mode B — kotaemon (UI tương tác, Chroma)
@@ -317,29 +319,29 @@ kỳ vọng). Một câu tính là *hit* nếu kết quả khớp đúng file v�
 > coverage 0.725→**0.877**, citation_strict 0.806→**0.857**, ảo giác 0.069→**0.034**,
 > từ chối oan 4→**1** — chi tiết tại [`result_eval.md`](result_eval.md).
 > Lưu ý hạ tầng: endpoint OpenAI-compat `/v1` của Ollama **bỏ qua `options`** →
-> `generation.py` nay gọi native `/api/chat` (num_ctx/num_predict có hiệu lực thật).
+> `llm/generator.py` nay gọi native `/api/chat` (num_ctx/num_predict có hiệu lực thật).
 
 ### Chạy lại eval
 
-**Retrieval** (recall@k + nDCG + MRR — cần `:8010`/`:8011`/`:6333` + `kotaemon/.venv`):
+**Retrieval** (recall@k + nDCG + MRR - cần `:8010`/`:8011`/`:6333` + `.venv-dev`):
 ```bash
 make eval                                          # = run_eval --mode hybrid (55 câu)
-python -m eval.run_eval --mode both -v             # so sánh hybrid vs dense, in section_path mỗi hit
-python -m eval.run_eval --debug-miss               # mỗi câu trượt: rank từng tầng (dense/bm25/fused/rerank)
-python -m eval.run_eval --eval-file eval/eval_set_ext.jsonl   # bộ gold MỞ RỘNG 10 câu (chống overfit)
+python -m evaluation.run_eval --mode both -v       # so sánh hybrid vs dense, in section_path mỗi hit
+python -m evaluation.run_eval --debug-miss         # mỗi câu trượt: rank từng tầng (dense/bm25/fused/rerank)
+python -m evaluation.run_eval --eval-file evaluation/eval_set_ext.jsonl   # bộ gold MỞ RỘNG 10 câu (chống overfit)
 ```
 
 **Answer-quality** (coverage / citation / refusal / ảo giác — cần thêm Ollama `:11434` + model đã pull):
 ```bash
-make answer-eval                                   # so 1.5b vs 7b (29 câu khó, eval/answer_set.jsonl)
-make answer-eval-dev                               # chỉ 1.5b (nhanh)
-python -m eval.answer_eval --model qwen2.5:7b -v --dump /tmp/rec_{model}.jsonl   # chấm prod + dump từng câu
+make answer-eval                                   # so 2 model (29 câu khó, evaluation/answer_set.jsonl)
+make answer-eval-dev                               # chỉ model chat (nhanh)
+python -m evaluation.answer_eval --model qwen2.5:7b -v --dump /tmp/rec_{model}.jsonl   # chấm prod + dump từng câu
 ```
 > ⚠ Số answer-quality chỉ đáng tin trên **qwen2.5:7b** (1.5b không ghi `[n]` — model-bound) và
 > trên backend ổn định (GPU prod, hoặc Ollama native; 7b trong Docker-VM hay bị OOM-kill → 500).
 
-Yêu cầu: service `:8010`/`:8011`/`:6333` (+ `:11434` cho answer-eval) đang chạy + `kotaemon/.venv`
-trên host. `make check` (115+ unit test + guard công thức 351/351) là cổng CI không cần Docker.
+Yêu cầu: service `:8010`/`:8011`/`:6333` (+ `:11434` cho answer-eval) đang chạy + `.venv-dev`
+trên host. `make check` (1700+ unit test + guard công thức 351/351) là cổng CI không cần Docker.
 Lịch sử số liệu lưu ở [`result_eval.md`](result_eval.md).
 
 ---
@@ -362,7 +364,7 @@ Lịch sử số liệu lưu ở [`result_eval.md`](result_eval.md).
 - [xsltml (`mml2tex.xsl`)](https://sourceforge.net/projects/xsltml/) — XSLT MathML → LaTeX (vendored `vendor/xsltml/`)
 - [lxml](https://lxml.de/) — đọc `word/document.xml` · [olefile](https://github.com/decalage2/olefile) — đọc OLE `.bin` · [scikit-image](https://scikit-image.org/) — SSIM so ảnh công thức
 - [Gradio](https://www.gradio.app/) + [KaTeX](https://katex.org/) — UI web Gradio + render công thức
-- [React](https://react.dev/) + [Vite](https://vite.dev/) + [Tailwind CSS](https://tailwindcss.com/) + [lucide](https://lucide.dev/) — frontend web mới (`frontend/`); [FastAPI](https://fastapi.tiangolo.com/) cho `api_server.py`; font tự host qua [@fontsource](https://fontsource.org/) (Be Vietnam Pro + Lora)
+- [React](https://react.dev/) + [Vite](https://vite.dev/) + [Tailwind CSS](https://tailwindcss.com/) + [lucide](https://lucide.dev/) - frontend web mới (`frontend/`); [FastAPI](https://fastapi.tiangolo.com/) cho `api/` (`python -m api.main`); font tự host qua [@fontsource](https://fontsource.org/) (Be Vietnam Pro + Lora)
 
 **Tài liệu nội bộ**
 - [`docs/PLAN.md`](docs/PLAN.md) — thiết kế & kế hoạch đầy đủ · [`docs/spike_c_ui_setup.md`](docs/spike_c_ui_setup.md) — bake-off UI + setup

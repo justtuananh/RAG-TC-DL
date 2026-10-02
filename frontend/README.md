@@ -3,10 +3,10 @@
 Giao diện web của hệ thống RAG tra cứu QTKĐ. Đây là bản **dựng lại 1:1** từ mockup thiết kế
 `design/kiemdinh.html`, viết bằng **React 18 + TypeScript + Vite + Tailwind CSS**.
 
-> ⚠️ **Hiện trạng: MOCK-ONLY.** Mọi câu trả lời / tiến trình xử lý / tải tài liệu / kiểm tra LLM
-> đều được **mô phỏng bằng timer** (xem `src/services/mockEngine.ts`), KHÔNG gọi backend.
-> Backend RAG thật là `../api_server.py` (FastAPI + SSE); bản React **đã từng** nối backend nằm ở
-> `../frontend-legacy/`. Bước tiếp theo khi cần: nối UI mới này vào `api_server.py` (xem cuối file).
+> **Hiện trạng: đã nối backend thật.** Chat streaming (SSE), tài liệu và xác thực đi qua
+> `src/services/liveApi.ts` + `src/services/auth.ts` tới package `api/` (`python -m api.main`,
+> FastAPI + SSE). `src/services/mockEngine.ts` chỉ còn dữ liệu demo + timing cho tab
+> Tài liệu/Hướng dẫn. Bản React cũ nằm ở `../frontend-legacy/`.
 
 ## Chạy
 
@@ -47,7 +47,7 @@ src/
 
 ## Xác thực & phân quyền (Sprint 1)
 
-Backend `../api_server.py` đã có `/api/auth/*` và bọc route ghi bằng vai trò technician/admin.
+Backend package `api/` (`python -m api.main`) đã có `/api/auth/*` và bọc route ghi bằng vai trò technician/admin.
 Frontend nối vào đó:
 
 - `src/services/auth.ts` — lưu token JWT ở localStorage (`qtkd.auth.token`), giải mã payload để
@@ -87,14 +87,14 @@ proxy `/api` → `http://api:8080`). Trong `../docker-compose.yml`:
 | Service | Port (host) | Vai trò |
 |---|---|---|
 | `frontend` | **3000** → 80 | nginx serve bản build này; proxy `/api` sang `api` |
-| `api` | 8080 | `api_server.py` (FastAPI + SSE) — **backend RAG thật** |
+| `api` | 8080 | `python -m api.main` (package `api/`, FastAPI + SSE) - **backend RAG thật** |
 
-Dev: `vite.config.ts` proxy `/api` → `http://localhost:8080` (chạy `api_server.py` trên host nếu
+Dev: `vite.config.ts` proxy `/api` → `http://localhost:8080` (chạy `python -m api.main` trên host nếu
 muốn thử kèm backend).
 
-## Nối backend thật (bước sau)
+## Nối backend thật
 
-UI mới hiện đọc dữ liệu từ `mockEngine.ts`. Để dùng RAG thật, thay phần đó bằng gọi
-`api_server.py` (endpoint `GET /api/examples`, `POST /api/chat/stream` SSE) — tham khảo cách bản cũ
-làm tại `../frontend-legacy/src/utils/api.js` (`streamChat`). Ranh giới đã tách sẵn ở
-`services/mockEngine.ts` + actions trong `store/useAppStore.ts` nên không phải sửa component UI.
+UI gọi backend thật qua `src/services/liveApi.ts` (`streamChat` SSE, `fetchExamples`, `pingHealth`,
+tài liệu, xác thực) tới package `api/` (`python -m api.main`).
+`mockEngine.ts` chỉ giữ dữ liệu demo + timing cho tab Tài liệu/Hướng dẫn.
+Bản cũ tham khảo ở `../frontend-legacy/src/utils/api.js` (`streamChat`).
