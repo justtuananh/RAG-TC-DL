@@ -32,7 +32,8 @@
 
 services:
 
-  # ── PostgreSQL: Relational ledger (not exposed to host, internal only) ──────
+  # ── PostgreSQL: Relational ledger. Port exposed to host so `api_server.py`
+  #    can run natively (dev-local mode via run.sh) instead of in Docker. ─────
   postgres:
     image: postgres:16-alpine
     container_name: qtkd-postgres
@@ -40,6 +41,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB:-qtkd}
       POSTGRES_USER: ${POSTGRES_USER:-qtkd_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qtkd_password}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_storage:/var/lib/postgresql/data
     restart: unless-stopped
@@ -78,11 +81,15 @@ services:
       MODE: embedding
       EMBEDDING_MODEL: BAAI/bge-m3
       PORT: "8010"
+      # Model đã nằm sẵn trong image/volume. Không bật offline thì huggingface_hub
+      # vẫn gọi huggingface.co kiểm tra metadata lúc load; mất mạng là startup
+      # crash ("Cannot send a request, as the client has been closed") thay vì
+      # dùng cache → container crash-loop. Hệ thống chạy offline nên khoá hẳn.
+      HF_HUB_OFFLINE: "1"
       PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
     volumes:
       # Cache model bền vững qua các lần restart/recreate — tránh phải tải lại
-      # từ huggingface.co mỗi lần container khởi động (nguyên nhân gây crash
-      # khi mạng chập chờn). Sau khi cache đã có, có thể bật HF_HUB_OFFLINE=1.
+      # từ huggingface.co mỗi lần container khởi động.
       - hf_cache_embedding:/root/.cache/huggingface
     ports:
       - "8010:8010"
@@ -119,19 +126,14 @@ services:
       # quanh child match nên 1024 là dư an toàn.
       RERANKER_MAX_LENGTH: "1024"
       PORT: "8011"
-      PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
+      HF_HUB_OFFLINE: "1"  # xem giải thích ở service embedding
     volumes:
       - hf_cache_reranker:/root/.cache/huggingface
     ports:
       - "8011:8011"
     restart: unless-stopped
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    # CPU-only — nhường VRAM cho Ollama (embedding + Ollama đã đủ tải GPU 8GB;
+    # reranker chỉ chạy trên top-k ứng viên nhỏ mỗi câu hỏi, không phải bottleneck).
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8011/health')"]
       interval: 30s

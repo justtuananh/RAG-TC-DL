@@ -3,13 +3,13 @@
 # run.sh — Bật BACKEND (api_server.py :8080) + FRONTEND (React :5173) cho QTKĐ RAG.
 #
 # Tương đương run_all.bat (Windows) cho macOS/Linux, nhưng:
-#   • tự chọn venv CÓ fastapi (ưu tiên ../kotaemon/.venv, fallback ./.venv)
-#   • tự dựng dịch vụ phụ thuộc qua Docker nếu thiếu (qdrant/embedding/reranker)
-#   • đảm bảo Ollama đang chạy
+#   • tự chọn venv CÓ fastapi (ưu tiên .venv-dev, fallback ../kotaemon/.venv rồi ./.venv)
+#   • tự dựng dịch vụ phụ thuộc qua Docker nếu thiếu (postgres/qdrant/embedding/reranker/ollama)
+#   • tự chạy Alembic migrations (db upgrade head) sau khi Postgres sẵn sàng
+#   • tự kéo model Ollama (OLLAMA_MODEL) qua HTTP API nếu container đã lên nhưng thiếu model
 #   • dọn tiến trình con khi Ctrl-C
 #
-# Lưu ý: frontend hiện MOCK-ONLY (chưa gọi /api) — backend vẫn bật để test SSE
-# trực tiếp và sẵn sàng khi nối UI. Xem frontend/README.md.
+# frontend đã nối backend thật (chat SSE qua /api, xem frontend/README.md).
 #
 # Cách dùng:
 #   ./run.sh                 # bật full: (docker services nếu cần) + api + frontend dev
@@ -25,7 +25,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT"
 
 # ── Cấu hình (override qua env) ──────────────────────────────────────────────
-OLLAMA_MODEL="${OLLAMA_MODEL:-qwen2.5:1.5b}"
+OLLAMA_MODEL="${OLLAMA_MODEL:-qwen2.5:3b}"
 API_PORT="${API_PORT:-8080}"
 FE_PORT="${FE_PORT:-5173}"
 export EMBED_URL="${EMBED_URL:-http://localhost:8010/v1/embeddings}"
@@ -86,46 +86,49 @@ fi
 
 # ── 2) Chọn Python có fastapi (cho api_server.py) ────────────────────────────
 PY=""
-for cand in "$ROOT/../kotaemon/.venv/bin/python" "$ROOT/.venv/bin/python"; do
+for cand in "$ROOT/.venv-dev/bin/python" "$ROOT/../kotaemon/.venv/bin/python" "$ROOT/.venv/bin/python"; do
   if [ -x "$cand" ] && "$cand" -c 'import fastapi, uvicorn' >/dev/null 2>&1; then PY="$cand"; break; fi
 done
 if [ -z "$PY" ]; then
-  err "Không tìm thấy venv có fastapi+uvicorn (thử ../kotaemon/.venv hoặc ./.venv)."
-  err "Cài: <venv>/bin/pip install fastapi uvicorn"; exit 1
+  err "Không tìm thấy venv có fastapi+uvicorn (thử .venv-dev, ../kotaemon/.venv hoặc ./.venv)."
+  err "Cài: <venv>/bin/pip install -r requirements-dev.txt"; exit 1
 fi
 ok "Python API: $PY"
 
-# ── 3) Ollama ────────────────────────────────────────────────────────────────
-if ! up "http://localhost:11434/"; then
-  if command -v ollama >/dev/null 2>&1; then
-    info "Khởi động Ollama (ollama serve)…"; nohup ollama serve >"$LOGDIR/ollama.log" 2>&1 & PIDS+=($!)
-    for _ in $(seq 1 20); do up "http://localhost:11434/" && break; sleep 1; done
-  fi
-fi
-if up "http://localhost:11434/"; then
-  ok "Ollama :11434"
-  if command -v ollama >/dev/null 2>&1 && ! ollama list 2>/dev/null | grep -q "${OLLAMA_MODEL%%:*}"; then
-    warn "Model '$OLLAMA_MODEL' chưa có — kéo về (có thể lâu)…"; ollama pull "$OLLAMA_MODEL" || warn "pull lỗi (tiếp tục)"
-  fi
-else
-  warn "Ollama :11434 không phản hồi — câu trả lời LLM sẽ lỗi tới khi Ollama chạy."
-fi
-
-# ── 4) Dịch vụ phụ thuộc: Qdrant :6333 + embedding :8010 + reranker :8011 ─────
-services_up() { up "$QDRANT_URL/" && up "http://localhost:8010/" && up "http://localhost:8011/"; }
+# ── 3) Dịch vụ phụ thuộc: Postgres :5432 + Qdrant :6333 + embedding :8010 + reranker :8011 + Ollama :11434 (container) ─
+postgres_up() { docker compose exec -T postgres pg_isready -U "${POSTGRES_USER:-qtkd_user}" >/dev/null 2>&1; }
+ollama_up()   { up "http://localhost:11434/"; }
+services_up() { postgres_up && up "$QDRANT_URL/" && up "http://localhost:8010/" && up "http://localhost:8011/" && ollama_up; }
 if services_up; then
-  ok "Qdrant + embedding + reranker đã chạy."
+  ok "Postgres + Qdrant + embedding + reranker + Ollama đã chạy."
 else
   if [ "$USE_DOCKER" != no ] && command -v docker >/dev/null 2>&1 && docker info >/dev/null 2>&1; then
     info "Dựng dịch vụ phụ thuộc qua Docker (lần đầu BUILD + tải model ~2.8GB, có thể 10–20')…"
-    docker compose up -d --build qdrant embedding reranker || warn "docker compose lỗi"
+    docker compose up -d --build postgres qdrant embedding reranker ollama || warn "docker compose lỗi"
     info "Chờ services sẵn sàng…"
     for _ in $(seq 1 120); do services_up && break; sleep 3; done
     services_up && ok "Services sẵn sàng." || warn "Services chưa sẵn sàng (xem 'docker compose logs')."
   else
-    warn "Qdrant/embedding/reranker đang DOWN và không dựng được qua Docker"
-    warn "(docker không chạy hoặc --no-docker). API sẽ bật nhưng /api/chat/stream lỗi 'Lỗi tìm kiếm' tới khi có services."
+    warn "Postgres/Qdrant/embedding/reranker/Ollama đang DOWN và không dựng được qua Docker"
+    warn "(docker không chạy hoặc --no-docker). API sẽ bật nhưng /api/chat/stream và đăng nhập sẽ lỗi tới khi có services."
   fi
+fi
+
+# ── 3b) Kéo model Ollama (OLLAMA_MODEL) nếu container đã lên nhưng thiếu model ─
+if ollama_up; then
+  if ! curl -s --max-time 3 "http://localhost:11434/api/tags" | grep -q "\"name\":\"$OLLAMA_MODEL\""; then
+    info "Model '$OLLAMA_MODEL' chưa có trong container Ollama — kéo về (có thể lâu)…"
+    curl -s -X POST "http://localhost:11434/api/pull" -d "{\"name\":\"$OLLAMA_MODEL\"}" | tail -n 5 \
+      || warn "pull lỗi (tiếp tục)"
+  fi
+fi
+
+# ── 4) Migrate DB (idempotent — alembic chỉ áp các revision còn thiếu) ───────
+if postgres_up; then
+  info "Chạy Alembic migrations (db upgrade head)…"
+  "$PY" scripts/migrate.py upgrade head || warn "migrate lỗi (xem log ở trên)."
+else
+  warn "Bỏ qua migrate: Postgres chưa sẵn sàng."
 fi
 
 # ── 5) (tuỳ chọn) Re-index ───────────────────────────────────────────────────

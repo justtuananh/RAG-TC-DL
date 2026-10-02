@@ -45,13 +45,17 @@ async def lifespan(app: FastAPI):
                  torch.cuda.get_device_properties(0).total_memory / 1e9)
     else:
         log.warning("CUDA not available — running on CPU")
+    # fp16 trên GPU: giảm ~một nửa VRAM so với fp32 mặc định của sentence-transformers.
+    # Cần thiết để embedding + reranker + Ollama cùng vừa trên card 8GB (đo được fp32
+    # tốn ~4.9GB + ~2.75GB, gần hết VRAM, không còn chỗ cho LLM).
+    model_kwargs = {"torch_dtype": torch.float16} if device == "cuda" else None
     if MODE == "reranker":
-        log.info("Loading reranker: %s on %s (max_length=%d)", RERANKER_MODEL, device, RERANKER_MAX_LENGTH)
-        _reranker = CrossEncoder(RERANKER_MODEL, max_length=RERANKER_MAX_LENGTH, device=device)
+        log.info("Loading reranker: %s on %s (max_length=%d, fp16=%s)", RERANKER_MODEL, device, RERANKER_MAX_LENGTH, device == "cuda")
+        _reranker = CrossEncoder(RERANKER_MODEL, max_length=RERANKER_MAX_LENGTH, device=device, model_kwargs=model_kwargs)
         log.info("Reranker ready")
     else:
-        log.info("Loading embedding model: %s on %s", EMBEDDING_MODEL, device)
-        _embedder = SentenceTransformer(EMBEDDING_MODEL, device=device)
+        log.info("Loading embedding model: %s on %s (fp16=%s)", EMBEDDING_MODEL, device, device == "cuda")
+        _embedder = SentenceTransformer(EMBEDDING_MODEL, device=device, model_kwargs=model_kwargs)
         log.info("Embedding model ready (dim=%d)", _embedder.get_sentence_embedding_dimension())
     yield
 

@@ -12,8 +12,6 @@ RUN pip install --no-cache-dir \
     sentence-transformers \
     pydantic
 
-COPY server.py .
-
 # Download model vào image layer (cache khi build, không tải lại khi restart)
 ARG MODE=embedding
 ARG EMBEDDING_MODEL=BAAI/bge-large-en-v1.5
@@ -41,6 +39,10 @@ EOF
 
 # Xác nhận model thật sự đã nằm trong image layer (fail build sớm nếu chưa)
 RUN test -n "$(find /root/.cache/huggingface -iname '*.safetensors' -o -iname 'pytorch_model*.bin')"
+
+# COPY server.py SAU bước tải model: sửa code không invalidate layer download (~GB,
+# phút) phía trên — chỉ layer COPY này (giây) bị rebuild lại.
+COPY server.py .
 
 EXPOSE 8000
 CMD ["python", "server.py"]
