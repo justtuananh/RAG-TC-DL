@@ -27,6 +27,25 @@ def test_production_rejects_default_db_password():
         startup.validate_security(_prod(**{"database.password": "qtkd_password"}))
 
 
+@pytest.mark.parametrize(
+    "secret",
+    [
+        "change-me-in-production",  # mặc định cũ của docker-compose.yml
+        "dev-secret-key-please-change-in-production",  # mẫu cũ của .env.example
+        "dev-secret-key-change-in-production",  # mặc định cũ của auth/security.py
+    ],
+)
+def test_production_rejects_placeholder_jwt_secret(secret):
+    with pytest.raises(startup.StartupError, match="JWT_SECRET_KEY"):
+        startup.validate_security(_prod(**{"auth.jwt_secret_key": secret}))
+
+
+def test_production_rejects_short_jwt_secret():
+    # HS256 cần khóa >= 32 byte (RFC 7518 mục 3.2); khóa ngắn dò được bằng brute force.
+    with pytest.raises(startup.StartupError, match="32"):
+        startup.validate_security(_prod(**{"auth.jwt_secret_key": "k" * 31}))
+
+
 def test_production_with_real_secrets_passes():
     startup.validate_security(_prod())
 

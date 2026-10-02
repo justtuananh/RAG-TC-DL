@@ -201,7 +201,8 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-qtkd_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qtkd_password}
       AUTH_ENABLED: ${AUTH_ENABLED:-true}
-      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-change-me-in-production}
+      # Rỗng: dev sinh khóa tạm mỗi tiến trình; APP_ENV=production thì bắt buộc đặt (>= 32 byte).
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:-}
     command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
     depends_on:
       postgres:

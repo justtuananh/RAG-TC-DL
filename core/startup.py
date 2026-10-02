@@ -12,6 +12,7 @@ from collections.abc import Callable
 from urllib.parse import urlsplit
 
 import requests
+from pydantic import SecretStr
 
 from core.logging_setup import configure_logging
 from core.schema import Settings
@@ -21,6 +22,16 @@ logger = logging.getLogger(__name__)
 
 VectorSizeProbe = Callable[[str], int | None]
 _DEV_DB_PASSWORD = "qtkd_password"
+# Giá trị mẫu từng nằm trong repo (compose, .env.example, auth/security.py): ai cũng biết.
+_PLACEHOLDER_JWT_SECRETS = frozenset(
+    {
+        "change-me-in-production",
+        "dev-secret-key-please-change-in-production",
+        "dev-secret-key-change-in-production",
+    }
+)
+# HS256 cần khóa ít nhất 32 byte (RFC 7518 mục 3.2).
+_MIN_JWT_SECRET_BYTES = 32
 _PROBE_TIMEOUT_S = 2.0
 
 
@@ -29,13 +40,24 @@ class StartupError(RuntimeError):
 
 
 def validate_security(settings: Settings) -> None:
+    """Production: dừng nếu khóa JWT thiếu / là giá trị mẫu / quá ngắn, hoặc mật khẩu CSDL mặc định."""
     if settings.app.env != "production":
         return
-    if settings.auth.enabled and settings.auth.jwt_secret_key is None:
-        raise StartupError("production cần JWT_SECRET_KEY")
+    if settings.auth.enabled:
+        _validate_jwt_secret(settings.auth.jwt_secret_key)
     uses_default_password = settings.database.password.get_secret_value() == _DEV_DB_PASSWORD
     if settings.database.url is None and uses_default_password:
         raise StartupError("production không được dùng POSTGRES_PASSWORD mặc định")
+
+
+def _validate_jwt_secret(secret: SecretStr | None) -> None:
+    if secret is None:
+        raise StartupError("production cần JWT_SECRET_KEY")
+    value = secret.get_secret_value()
+    if value in _PLACEHOLDER_JWT_SECRETS:
+        raise StartupError("production không được dùng JWT_SECRET_KEY mẫu trong repo")
+    if len(value.encode("utf-8")) < _MIN_JWT_SECRET_BYTES:
+        raise StartupError(f"JWT_SECRET_KEY production cần ít nhất {_MIN_JWT_SECRET_BYTES} byte")
 
 
 def _root(url: str) -> str:
