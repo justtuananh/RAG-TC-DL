@@ -24,3 +24,7 @@ pyjwt>=2.8            # JWT token generation and validation
 alembic>=1.13         # Database migrations
 fastapi>=0.104        # Web framework (for api_server.py)
 python-multipart>=0.0.6  # Form parsing for FastAPI
+
+# Cấu hình tập trung config/settings.yaml (core/settings_loader.py, core/schema.py)
+pyyaml>=6.0        # đọc config/settings.yaml + logging.yaml (core/settings_loader.py)
+pydantic>=2.5      # schema cấu hình (core/schema.py)

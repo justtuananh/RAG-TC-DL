@@ -1,0 +1,123 @@
+# Cấu hình DUY NHẤT của backend QTKĐ RAG (đọc bởi core/settings_loader.py).
+#
+# ${TÊN:-mặc_định}: dùng biến môi trường TÊN nếu đặt và khác rỗng, không thì mặc_định.
+# ${TÊN}: bắt buộc đặt biến môi trường; thiếu là dừng ngay lúc khởi động.
+# Bí mật chỉ tham chiếu qua biến môi trường, không ghi giá trị thật vào file này.
+# Đường dẫn tương đối tính từ thư mục gốc repo.
+
+app:
+  env: ${APP_ENV:-development}            # development | production
+  startup_checks: ${QTKD_STARTUP_CHECKS:-true}
+
+paths:
+  source_dir: TC_DL                       # tài liệu QTKĐ gốc (chỉ đọc + tải lên)
+  markdown_dir: build/spike_a             # Markdown + assets + extraction_report.json
+
+services:
+  embedding_url: ${EMBED_URL:-http://localhost:8010/v1/embeddings}
+  rerank_url: ${RERANK_URL:-http://localhost:8011/v1/rerank}
+  qdrant_url: ${QDRANT_URL:-http://localhost:6333}
+  ollama_url: ${OLLAMA_URL:-http://localhost:11434/api/chat}   # native /api/chat, không dùng /v1
+
+models:
+  embedding:
+    name: BAAI/bge-m3                     # phải khớp docker-compose service embedding
+    vector_size: 1024                     # phải khớp chiều vector của collection
+  reranker:
+    name: BAAI/bge-reranker-v2-m3         # phải khớp docker-compose service reranker
+    max_length: 1024
+  llm_chat: ${OLLAMA_MODEL:-qwen2.5:3b}
+  llm_intent: ${INTENT_LLM_MODEL:-}       # rỗng = llm_chat
+  llm_extraction: ${SECTION6_LLM_MODEL:-} # rỗng = llm_chat
+
+embedding:
+  query_timeout_s: 120
+  batch_size: 8                           # chunk mỗi request lúc index
+  batch_timeout_s: 300
+
+vectorstore:
+  collection: qtkd_rag
+  upsert_batch: 64
+
+chunking:
+  synth_section_chars: 4000
+  max_table_rows: 15
+  table_group_rows: 8
+
+retrieval:
+  top_k: 50                               # ứng viên mỗi nhánh dense / BM25
+  top_n: 5                                # nguồn trả về sau rerank
+  rerank_pool: 60                         # trần ứng viên vào cross-encoder sau RRF + lọc nhiễu
+  rrf_k: 60
+  min_routed_candidates: 6                # ít hơn thì bỏ lọc theo file, tìm toàn kho
+
+reranking:
+  timeout_s: 60
+  doc_cap_chars: 1400
+  doc_back_chars: 200
+
+llm:
+  chat:
+    timeout_s: ${OLLAMA_TIMEOUT:-300}     # tới token đầu tiên; CPU nguội cần >120s
+    num_ctx: 8192                         # phải khớp OLLAMA_CONTEXT_LENGTH của container
+    max_new_tokens: 1024
+    temperature: 0.1
+    keep_alive: 30m
+    history_turns: 3
+  context:
+    chars_per_token: 3
+    prompt_reserve_tokens: 1200
+    max_block_chars: 2400
+    min_block_chars: 600
+    source_abs_floor: 0.08
+    source_rel_floor: 0.20
+  intent:
+    enabled: ${INTENT_ROUTER_ENABLED:-true}
+    url: ${INTENT_OLLAMA_URL:-}           # rỗng = services.ollama_url
+    timeout_s: ${INTENT_LLM_TIMEOUT:-60}
+    num_ctx: ${INTENT_LLM_NUM_CTX:-8192}
+    temperature: ${INTENT_LLM_TEMPERATURE:-0.0}
+    keep_alive: 10m
+  extraction:
+    enabled: ${SECTION6_LLM_ENABLED:-false}
+    url: ${SECTION6_OLLAMA_URL:-}
+    timeout_s: ${SECTION6_LLM_TIMEOUT:-120}
+    num_ctx: ${SECTION6_LLM_NUM_CTX:-8192}
+    temperature: ${SECTION6_LLM_TEMPERATURE:-0.0}
+    keep_alive: 10m
+
+ingestion:
+  soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH
+  convert_timeout_s: 120
+  max_upload_bytes: 52428800              # 50 MiB
+  marker_python: ${MARKER_PYTHON:-}
+
+database:
+  url: ${DATABASE_URL:-}                  # đặt thì thắng mọi trường bên dưới
+  host: ${POSTGRES_HOST:-localhost}
+  port: ${POSTGRES_PORT:-5432}
+  name: ${POSTGRES_DB:-qtkd}
+  user: ${POSTGRES_USER:-qtkd_user}
+  password: ${POSTGRES_PASSWORD:-qtkd_password}   # mặc định chỉ cho dev; production bị chặn
+
+auth:
+  enabled: ${AUTH_ENABLED:-true}
+  jwt_secret_key: ${JWT_SECRET_KEY:-}     # rỗng: dev sinh khóa tạm, production dừng
+  jwt_algorithm: HS256
+  jwt_expiration_hours: ${JWT_EXPIRATION_HOURS:-24}
+
+api:
+  host: ${API_HOST:-0.0.0.0}
+  port: ${API_PORT:-8080}
+  cors_origins:
+    - http://localhost:5173
+    - http://localhost:5174
+    - http://localhost:3000
+    - http://127.0.0.1:5173
+
+query:
+  list_limit_max: 200
+  export_limit_max: 20000
+  catalog_row_limit: 200
+  trend_point_cap: 200
+  cache_ttl_s: 30.0                       # cache danh mục / sổ cái / số hiệu

@@ -42,3 +42,7 @@ huggingface_hub>=0.23,<1.0
 # ra 1.18 và vỡ. Server đang chạy là 1.10.1 → ghim đúng để khớp cả API lẫn version.
 # (Đây là lỗi tiềm ẩn của requirements-app.txt — nên ghim luôn ở đó cho Docker.)
 qdrant-client==1.10.1
+
+# Cấu hình tập trung config/settings.yaml (core/settings_loader.py, core/schema.py)
+pyyaml>=6.0        # đọc config/settings.yaml + logging.yaml (core/settings_loader.py)
+pydantic>=2.5      # schema cấu hình (core/schema.py)

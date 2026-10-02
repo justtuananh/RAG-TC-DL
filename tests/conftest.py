@@ -13,10 +13,15 @@ pythonpath=["."] khai trong pyproject.toml.
 from __future__ import annotations
 
 import importlib
+import os
 import socket
 from pathlib import Path
 
 import pytest
+
+# Test không phụ thuộc .env của máy dev và không gọi service lúc khởi động.
+os.environ["QTKD_LOAD_DOTENV"] = "0"
+os.environ["QTKD_STARTUP_CHECKS"] = "false"
 
 _ROOT = Path(__file__).resolve().parent.parent
 _DATA = Path(__file__).resolve().parent / "data"
@@ -90,6 +95,29 @@ def reset_module_singletons(request):
     _reset()
     yield
     _reset()
+
+
+@pytest.fixture(autouse=True)
+def _fresh_settings():
+    """Mỗi test bắt đầu với settings đọc lại từ file + môi trường hiện tại."""
+    from core import settings_loader
+
+    settings_loader.reset_settings()
+    yield
+    settings_loader.reset_settings()
+
+
+@pytest.fixture
+def settings_override(monkeypatch):
+    """Đổi vài khóa cấu hình trong một test: settings_override({"retrieval.top_k": 5})."""
+    from core import settings_loader
+
+    def apply(overrides: dict):
+        new = settings_loader.with_overrides(settings_loader.get_settings(), overrides)
+        monkeypatch.setattr(settings_loader, "_override", new)
+        return new
+
+    return apply
 
 
 # ── Đường dẫn tiện dụng ───────────────────────────────────────────────────────
