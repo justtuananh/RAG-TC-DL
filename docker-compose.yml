@@ -242,7 +242,7 @@ services:
       embedding:
         condition: service_healthy
     profiles: ["tools"]
-    command: ["python", "-m", "index.embed_store"]
+    command: ["python", "-m", "vectorstore.index"]
 
 volumes:
   postgres_storage:   # PostgreSQL data persists across restarts

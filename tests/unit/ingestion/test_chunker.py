@@ -1,10 +1,10 @@
-"""Parent-document chunking — index.chunker.parse_file + _make_id.
+"""Parent-document chunking — ingestion.chunker.parse_file + _make_id.
 
 PARENT = mỗi heading section; CHILD = paragraph/table/formula trong section.
 chunk_id idempotent (sha256[:16] → uint64 point id của Qdrant).
 """
 
-from index.chunker import _make_id, parse_file
+from ingestion.chunker import _make_id, parse_file
 
 
 def test_parents_and_children_counts(data_dir):

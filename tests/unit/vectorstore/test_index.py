@@ -1,4 +1,4 @@
-"""Indexing — index.embed_store (mock embedding service + Qdrant client).
+"""Indexing — vectorstore.index (mock embedding service + Qdrant client).
 
 Kiểm: sort theo index, batch theo BATCH_SIZE, prefix QTKĐ, indexed_files, upsert batch.
 """
@@ -10,7 +10,7 @@ import responses
 from core.schema import Chunk
 from core.settings_loader import get_settings
 from embedding.batch_embed import _qtkd_prefix, embed_chunks_batched
-from index.embed_store import (
+from vectorstore.index import (
     UPSERT_BATCH,
     VECTOR_SIZE,
     index_chunks,

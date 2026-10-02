@@ -71,7 +71,7 @@ answer + citations  ──►  UI (one of):
   files already indexed (by `file_stem`) unless `--force`.
 
 ### Stage 3 — `retrieval/` + `app.py`
-- `bm25_index.py` — in-memory BM25 (`rank_bm25`) built lazily by scrolling child chunks out
+- `hybrid_index.py` — in-memory BM25 (`rank_bm25`) built lazily by scrolling child chunks out
   of Qdrant. Its tokenizer **deliberately keeps technical codes/units intact** (e.g.
   `1.061:2021`, `MPa`, `bar`) — dense embeddings blur these, so BM25 is required for symbol/code
   precision. The corpus text for each chunk includes `file_stem` + `section_path` so BM25 can
@@ -80,7 +80,7 @@ answer + citations  ──►  UI (one of):
   `bm25_search` → `rrf_fuse` (Reciprocal Rank Fusion, k=60) → noise filter → `rerank_hits`
   (cross-encoder) → `fetch_parent` (return the full section). Boilerplate template sections
   ("Mẫu biên bản", "(Quy định)", …) are filtered out before reranking — `_NOISE_PATH_MARKERS`
-  is duplicated in both `retriever.py` and `bm25_index.py`; keep them in sync.
+  is duplicated in both `retriever.py` and `hybrid_index.py`; keep them in sync.
 - `app.py` — Gradio 4.x UI on **:7861** (original / alternative UI). Left = streaming chat (KaTeX,
   inline `$...$` enabled via `LATEX_DELIMITERS`), right = source-document viewer with the retrieved
   child passage `<mark>`-highlighted inside its parent section. System prompt forces context-only
@@ -184,7 +184,7 @@ answer + citations  ──►  UI (one of):
 | frontend   | 3000 (Docker) / 5173 (Vite dev) | React UI (nginx, proxy `/api`→api:8080); **đã nối backend thật** (chat SSE + lịch sử/bộ nhớ) — xem `frontend/README.md` |
 
 Note: ports/models are **hardcoded** as module-level constants in `app.py`, `retriever.py`,
-`bm25_index.py`, `embed_store.py` — change them in all relevant files together. The PLAN doc
+`hybrid_index.py`, `embed_store.py` — change them in all relevant files together. The PLAN doc
 proposes BGE-M3 for embeddings, but the code currently runs bge-large-en-v1.5 at 1024 dims;
 trust the code. `VECTOR_SIZE = 1024` in `embed_store.py` must match the embedding service.
 
@@ -197,9 +197,9 @@ python -m ingestion.spike_a                      # reads TC_DL/, writes build/sp
 python -m ingestion.spike_a SRC_DIR OUT_DIR      # custom paths
 
 # Stage 2 — index into Qdrant (kotaemon/.venv; Docker services up)
-python -m index.embed_store                      # incremental; skips already-indexed files
-python -m index.embed_store --force              # re-index everything
-python -m index.embed_store --query "phạm vi van an toàn 1400 bar"   # smoke-test query
+python -m vectorstore.index                      # incremental; skips already-indexed files
+python -m vectorstore.index --force              # re-index everything
+python -m vectorstore.index --query "phạm vi van an toàn 1400 bar"   # smoke-test query
 
 # Stage 3 — run the chatbot UI (→ http://localhost:7861)
 /path/to/kotaemon/.venv/bin/python app.py

@@ -121,7 +121,7 @@ Toàn bộ stack gói trong `docker-compose.yml` + điều khiển qua `Makefile
 # 0) Đã chạy ingestion (§3.2) → có build/spike_a/   (compose mount thư mục này read-only)
 make up            # build images + start: qdrant, embedding, reranker, ollama, api, frontend  (~10–20' lần đầu: tải model)
 make pull-model    # tải qwen2.5:1.5b vào container ollama (~940MB); prod: make pull-model-7b
-make index         # indexer: index.embed_store --force → nhúng build/spike_a/ vào Qdrant
+make index         # indexer: vectorstore.index --force → nhúng build/spike_a/ vào Qdrant
 # → mở http://localhost:3000
 ```
 
@@ -134,7 +134,7 @@ make index         # indexer: index.embed_store --force → nhúng build/spike_a
 | `ollama` | `ollama/ollama:latest` | 11434 | LLM, volume `ollama_data` |
 | `api` | build `.` → `uvicorn api_server:app` | 8080 | **FastAPI + SSE** cho React frontend (`/api/health`, `/api/examples`, `/api/chat/stream`); mount `build/spike_a` + `TC_DL` (writable, cho upload); đọc env `EMBED_URL/RERANK_URL/QDRANT_URL/OLLAMA_URL/OLLAMA_MODEL` |
 | `frontend` | build `frontend/` → nginx | 3000 | Serve bản React build; proxy `/api` → `api:8080`. **Đã nối backend thật** (chat SSE, bảng/công thức, lịch sử + bộ nhớ ngắn hạn) |
-| `indexer` | reuse `qtkd-app:local` (profile `tools`) | — | Chạy 1 lần: `index.embed_store --force` |
+| `indexer` | reuse `qtkd-app:local` (profile `tools`) | — | Chạy 1 lần: `vectorstore.index --force` |
 
 **Inference server tự viết** — `docker/inference/server.py`: FastAPI + `sentence-transformers`
 (`SentenceTransformer` cho embedding, `CrossEncoder` cho reranker). Model được **tải sẵn vào
@@ -228,7 +228,7 @@ reranker `:8011`, Ollama `:11434`); khác nhau ở vector store + tầng truy h�
 ```mermaid
 flowchart TB
     D["TC_DL/*.docx"] -->|"ingestion.spike_a (host + Ruby gem)"| MD["build/spike_a/*.md<br/>+ extraction_report.json"]
-    MD -->|"make index → index.embed_store"| QD[("Qdrant qtkd_rag<br/>:6333")]
+    MD -->|"make index → vectorstore.index"| QD[("Qdrant qtkd_rag<br/>:6333")]
     EMB["embedding :8010 · bge-m3<br/>(custom FastAPI)"] -. embed .-> QD
     Q["Câu hỏi tiếng Việt"] --> GUARD{"yêu cầu tính toán?<br/>(is_calculation_request)"}
     GUARD -->|"có → từ chối tất định"| APP
@@ -247,7 +247,7 @@ flowchart TB
         direction TB
         U["Upload .docx<br/>(kotaemon UI)"] --> RD["QTKDDocxReader<br/>kotaemon_ext/reader.py"]
         RD --> SP["ingestion.spike_a.run<br/>OLE→MTEF→Ruby gem→MathML→LaTeX<br/>thay ⟦Fxxx⟧ = $LaTeX$"]
-        SP --> CH["index.chunker.parse_file<br/>parent (mục) + child (đoạn/bảng/công thức)"]
+        SP --> CH["ingestion.chunker.parse_file<br/>parent (mục) + child (đoạn/bảng/công thức)"]
         CH --> EM["Embed child chunks<br/>:8010 · bge-m3 · 1024d"]
         EM --> VS[("Chroma<br/>vectorstore")]
     end

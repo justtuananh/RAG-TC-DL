@@ -1,7 +1,7 @@
 """QTKDDocxReader — kotaemon reader adapter for QTKĐ .docx files.
 
 Wraps ingestion.spike_a (formula extraction: MathType OLE → MTEF → LaTeX) and
-index.chunker (parent-document chunking) so that every child chunk, including
+ingestion.chunker (parent-document chunking) so that every child chunk, including
 formula blocks with $LaTeX$, is returned as a kotaemon Document.
 
 Registered in flowsettings.py via:
@@ -29,7 +29,7 @@ class QTKDDocxReader(BaseReader):
     ) -> List[Document]:
         # Lazy imports so the reader only requires these when actually called
         from ingestion.spike_a import _safe, run as spike_run
-        from index.chunker import parse_file
+        from ingestion.chunker import parse_file
 
         file = Path(file)
         extra_info = extra_info or {}

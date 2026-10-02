@@ -289,7 +289,7 @@ def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
       rrf_score      : float (pre-rerank fusion score)
       parent_payload : parent section payload (attached by rerank_hits)
     """
-    from .bm25_index import bm25_search
+    from vectorstore.hybrid_index import bm25_search
     from .router import route_files
 
     expanded = _expand_query(query)

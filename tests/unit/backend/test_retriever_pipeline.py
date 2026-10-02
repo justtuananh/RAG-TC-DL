@@ -40,7 +40,7 @@ def test_pipeline_dedups_by_parent_and_sorts(monkeypatch):
     monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
     monkeypatch.setattr(R, "dense_search", lambda vec, top_k=50, file_stem=None: dense)
     monkeypatch.setattr(
-        "retrieval.bm25_index.bm25_search", lambda q, top_k=50, file_stem=None: bm25
+        "vectorstore.hybrid_index.bm25_search", lambda q, top_k=50, file_stem=None: bm25
     )
     monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset())
     monkeypatch.setattr(
@@ -81,7 +81,7 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
 
     monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
     monkeypatch.setattr(R, "dense_search", dense_search)
-    monkeypatch.setattr("retrieval.bm25_index.bm25_search", bm25_search)
+    monkeypatch.setattr("vectorstore.hybrid_index.bm25_search", bm25_search)
     monkeypatch.setattr(
         "retrieval.router.route_files", lambda q: frozenset({"QTKD_1.061_2021_ND_V2"})
     )
@@ -124,7 +124,7 @@ def test_multi_file_query_runs_per_file_funnels(monkeypatch):
 
     monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
     monkeypatch.setattr(R, "dense_search", dense_search)
-    monkeypatch.setattr("retrieval.bm25_index.bm25_search", bm25_search)
+    monkeypatch.setattr("vectorstore.hybrid_index.bm25_search", bm25_search)
     monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset({"FILE_A", "FILE_B"}))
     monkeypatch.setattr(
         R, "fetch_parent", lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"}

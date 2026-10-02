@@ -1,6 +1,6 @@
 """Hằng số dùng chung cho lớp retrieval — định nghĩa MỘT chỗ duy nhất.
 
-CLAUDE.md cảnh báo `_NOISE_PATH_MARKERS` từng bị nhân bản ở retriever.py + bm25_index.py;
+CLAUDE.md cảnh báo `_NOISE_PATH_MARKERS` từng bị nhân bản ở retriever.py + hybrid_index.py;
 nếu một bản đổi mà bản kia quên thì dense và BM25 lọc khác nhau. Để ở đây để cả hai
 import cùng một object → không thể lệch. (test_noise_markers_sync giữ guard.)
 """
@@ -27,7 +27,7 @@ _BARE_APPENDIX_RE = re.compile(r"^Phụ lục\s+\S+$")
 
 def is_noise_path(section_path: str) -> bool:
     """Một section_path là boilerplate nếu chứa marker mẫu/biểu mẫu HOẶC là nhãn
-    phụ lục trần. Cả retriever (dense) lẫn bm25_index dùng CHUNG hàm này."""
+    phụ lục trần. Cả retriever (dense) lẫn hybrid_index dùng CHUNG hàm này."""
     return any(m in section_path for m in NOISE_PATH_MARKERS) or bool(
         _BARE_APPENDIX_RE.match(section_path)
     )

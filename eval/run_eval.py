@@ -21,7 +21,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from embedding.embedder import embed_query
-from retrieval.bm25_index import bm25_search
 from retrieval.retriever import (
     RERANK_POOL,
     TOP_K,
@@ -32,6 +31,7 @@ from retrieval.retriever import (
     rrf_fuse,
 )
 from retrieval.router import route
+from vectorstore.hybrid_index import bm25_search
 
 # ── match logic ───────────────────────────────────────────────────────────────
 

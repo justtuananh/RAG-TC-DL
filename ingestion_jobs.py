@@ -30,14 +30,14 @@ from qdrant_client.models import FieldCondition, Filter, MatchValue
 # both mean "Docker isn't running" — treat them the same way for the user.
 _CONNECTION_ERRORS = (OSError, ResponseHandlingException)
 
-from index.chunker import parse_file
-from index.embed_store import COLLECTION, QDRANT_URL, ensure_collection, index_chunks
+from ingestion.chunker import parse_file
+from vectorstore.index import COLLECTION, QDRANT_URL, ensure_collection, index_chunks
 from ingestion.spike_a import _safe, process_one, totals_from_entries
 from ingestion.classify import classify_document
 from db import SessionLocal
 from db.models import Document, DocumentType, IngestStatus
 
-# retrieval.bm25_index is imported lazily where used (see invalidate_bm25) —
+# vectorstore.hybrid_index is imported lazily where used (see invalidate_bm25) —
 # it requires rank_bm25, and retriever.py already avoids a hard module-level
 # dependency on that package for the same reason.
 
@@ -108,7 +108,7 @@ def _invalidate_bm25() -> None:
     to fail an otherwise-successful embed or delete (also lets this work in
     environments where rank_bm25 isn't installed, same as retriever.py)."""
     try:
-        from retrieval.bm25_index import invalidate
+        from vectorstore.hybrid_index import invalidate
         invalidate()
     except Exception:
         pass

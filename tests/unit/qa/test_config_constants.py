@@ -7,10 +7,10 @@ VECTOR_SIZE phải khớp service embedding; COLLECTION phải thống nhất; k
 import inspect
 
 import generation
-import index.embed_store as ES
-import retrieval.bm25_index as BM
 import retrieval.retriever as RET
 import retrieval.router as RT
+import vectorstore.hybrid_index as BM
+import vectorstore.index as ES
 
 
 def test_vector_size_matches_embedding_service():

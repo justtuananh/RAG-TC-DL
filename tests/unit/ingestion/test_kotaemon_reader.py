@@ -10,7 +10,7 @@ pytest.importorskip("kotaemon.base")  # noqa: E402
 
 from pathlib import Path  # noqa: E402
 
-from index.chunker import Chunk  # noqa: E402
+from ingestion.chunker import Chunk  # noqa: E402
 from kotaemon_ext.reader import QTKDDocxReader  # noqa: E402
 
 
@@ -43,7 +43,7 @@ def test_maps_children_to_documents_drops_parents(monkeypatch, tmp_path):
         return {}
 
     monkeypatch.setattr("ingestion.spike_a.run", fake_spike_run)
-    monkeypatch.setattr("index.chunker.parse_file", lambda p: fake_chunks)
+    monkeypatch.setattr("ingestion.chunker.parse_file", lambda p: fake_chunks)
 
     docx = tmp_path / "doc.docx"
     docx.write_bytes(b"PK")

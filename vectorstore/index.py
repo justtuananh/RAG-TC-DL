@@ -5,7 +5,7 @@ Services used (all local Docker, already running):
   - Qdrant:    http://localhost:6333                     → collection qtkd_rag
 
 Run:
-  python -m index.embed_store [--md-dir build/spike_a] [--force]
+  python -m vectorstore.index [--md-dir build/spike_a] [--force]
 """
 from __future__ import annotations
 
@@ -28,7 +28,7 @@ from qdrant_client.models import (
 )
 
 from embedding import batch_embed, embedder
-from .chunker import Chunk, parse_directory
+from ingestion.chunker import Chunk, parse_directory
 
 # ── Config ────────────────────────────────────────────────────────────────────
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")

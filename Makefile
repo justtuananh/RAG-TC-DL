@@ -35,7 +35,7 @@ index:
 
 # Re-index toàn bộ (xóa và tạo lại từ đầu)
 reindex:
-	docker compose --profile tools run --rm indexer python -m index.embed_store --force
+	docker compose --profile tools run --rm indexer python -m vectorstore.index --force
 
 # ── Maintenance ───────────────────────────────────────────────────────────────
 

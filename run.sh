@@ -134,7 +134,7 @@ fi
 # ── 5) (tuỳ chọn) Re-index ───────────────────────────────────────────────────
 if [ "$DO_INDEX" = 1 ]; then
   if services_up; then
-    info "Re-index build/spike_a/ vào Qdrant…"; "$PY" -m index.embed_store --force || warn "index lỗi"
+    info "Re-index build/spike_a/ vào Qdrant…"; "$PY" -m vectorstore.index --force || warn "index lỗi"
   else
     warn "Bỏ qua --index: services chưa sẵn sàng."
   fi
