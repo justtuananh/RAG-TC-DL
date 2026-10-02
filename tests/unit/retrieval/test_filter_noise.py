@@ -1,4 +1,4 @@
-"""Lọc section template/boilerplate trước rerank — retrieval.hybrid_retriever.filter_noise."""
+"""Lọc section template/boilerplate trước rerank - retrieval.hybrid_retriever.filter_noise."""
 
 from retrieval.hybrid_retriever import filter_noise
 from retrieval.noise import NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS
@@ -36,7 +36,7 @@ def test_removes_bare_appendix_paths():
 
 def test_keeps_real_appendix_content():
     # Nội dung thật: tiêu đề riêng (1.160/1.190) hoặc mục lồng SÂU HƠN dưới phụ lục
-    # — không được chặn oan.
+    # - không được chặn oan.
     hits = [
         _h("Đánh giá độ không đảm bảo đo"),
         _h("Phụ lục D > D.1 Công thức tính"),

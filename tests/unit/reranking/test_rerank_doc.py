@@ -1,4 +1,4 @@
-"""build_rerank_doc — dựng document cho cross-encoder (tiền tố breadcrumb + cửa sổ neo child).
+"""build_rerank_doc - dựng document cho cross-encoder (tiền tố breadcrumb + cửa sổ neo child).
 
 Thuần CPU, không network: hàm chỉ thao tác chuỗi trên payload/parent đã có.
 """
@@ -35,7 +35,7 @@ def test_long_parent_windows_around_child():
     doc = build_rerank_doc(_payload(child), parent)
     assert child[:80] in doc  # nội dung child phải nằm trong cửa sổ
     assert doc.splitlines()[1] == heading  # heading giữ lại khi cửa sổ rời đầu mục
-    # tiền tố + heading + "…" + cửa sổ — không vượt quá CAP quá nhiều
+    # tiền tố + heading + "…" + cửa sổ - không vượt quá CAP quá nhiều
     assert len(doc) <= RERANK_DOC_CAP + len(heading) + 100
 
 

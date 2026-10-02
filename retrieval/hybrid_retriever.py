@@ -1,7 +1,8 @@
-"""Nửa hợp nhất của truy hồi lai: RRF, lọc nhiễu boilerplate, ghép kết quả đa-file.
+"""Phần lai của truy hồi: tìm dense + BM25, hợp nhất RRF, lọc nhiễu boilerplate,
+ghép kết quả đa-file.
 
-Nhận hit thô từ dense (Qdrant) và BM25, hợp nhất theo payload.chunk_id rồi trả về
-danh sách đã sắp theo điểm RRF. Không chạm mạng; chỉ đọc settings để lấy k/rrf_pool.
+search_both gọi Qdrant (dense) và chỉ mục BM25; rrf_fuse hợp nhất hai danh sách theo
+payload.chunk_id và sắp theo điểm RRF. filter_noise, rrf_fuse, merge_per_file thuần CPU.
 """
 
 from __future__ import annotations
@@ -54,7 +55,7 @@ def merge_per_file(reranked: list[dict], stems: frozenset[str], top_n: int) -> l
     """Ghép kết quả đã rerank cho câu hỏi đa-file: BẢO ĐẢM mỗi file có đại diện.
 
     Cross-encoder chấm điểm theo độ khớp bề mặt nên file có cụm từ vựng trùng
-    câu hỏi nhiều hơn vẫn có thể chiếm hết top_n — quota tối thiểu mỗi file
+    câu hỏi nhiều hơn vẫn có thể chiếm hết top_n - quota tối thiểu mỗi file
     (top_n // số file, ≥1) lấy theo thứ tự rerank trong file đó; phần dư bù bằng
     thứ tự rerank toàn cục; cuối cùng sắp lại theo rerank_score để [n] ổn định.
     """

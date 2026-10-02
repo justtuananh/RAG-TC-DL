@@ -1,6 +1,6 @@
 """Mở rộng truy vấn bằng cầu nối từ vựng cho cả embedding lẫn BM25.
 
-Reranker vẫn nhận truy vấn GỐC — chèn thêm đồng nghĩa làm hỏng cross-encoder
+Reranker vẫn nhận truy vấn GỐC - chèn thêm đồng nghĩa làm hỏng cross-encoder
 (arXiv 2311.09175).
 """
 
@@ -12,10 +12,10 @@ LEXICON: dict[str, str] = {
     # và thuật ngữ song ngữ Việt–Anh trong các QTKĐ áp suất.
     "điều kiện môi trường": "điều kiện kiểm định nhiệt độ độ ẩm áp suất khí quyển",
     # Chiều ngược lại: hỏi bằng ĐÚNG tiêu đề mục 4.1/5.1 ("Điều kiện kiểm định") nhưng
-    # body mục đó chỉ là bullet đơn vị (Nhiệt độ/Độ ẩm/…) không lặp lại tiêu đề —
+    # body mục đó chỉ là bullet đơn vị (Nhiệt độ/Độ ẩm/…) không lặp lại tiêu đề -
     # Q18 dense=36/bm25=22 nên không lọt phễu top_k=20. Khung mục này có ở MỌI QTKĐ.
     "điều kiện kiểm định": "điều kiện môi trường nhiệt độ độ ẩm áp suất khí quyển",
-    # Khẩu ngữ hỏi thẳng đại lượng môi trường (không nói "điều kiện") — kéo về mục
+    # Khẩu ngữ hỏi thẳng đại lượng môi trường (không nói "điều kiện") - kéo về mục
     # 4.1/5.1; "môi trường"/"tương đối" trong trigger giữ cho câu hỏi HIỆU CHỈNH
     # nhiệt độ ("nhiệt độ lệch", "hiệu chỉnh nhiệt độ") không bị kích nhầm.
     "nhiệt độ môi trường": "điều kiện kiểm định nhiệt độ môi trường độ ẩm",
@@ -37,7 +37,7 @@ LEXICON: dict[str, str] = {
 def expand_query(query: str) -> str:
     """Append domain synonyms to bridge vocabulary gaps in embed + BM25.
 
-    Reranker still receives the original query — expanded text degrades
+    Reranker still receives the original query - expanded text degrades
     cross-encoder performance (arXiv 2311.09175).
     """
     q_lower = query.lower()

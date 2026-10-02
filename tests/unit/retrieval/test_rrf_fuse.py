@@ -1,4 +1,4 @@
-"""Reciprocal Rank Fusion — retrieval.hybrid_retriever.rrf_fuse.
+"""Reciprocal Rank Fusion - retrieval.hybrid_retriever.rrf_fuse.
 
 score(d) = Σ 1/(k + rank_i(d)); k lấy từ settings (mặc định 60). Hợp nhất theo
 payload.chunk_id.

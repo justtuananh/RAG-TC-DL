@@ -53,8 +53,8 @@ retrieval:
 
 reranking:
   timeout_s: 60
-  doc_cap_chars: 1400
-  doc_back_chars: 200
+  doc_cap_chars: 1400                     # service rerank cắt ở 512 token (~1500 ký tự): 1400 + breadcrumb vẫn lọt
+  doc_back_chars: 200                     # ngữ cảnh lấy phía trước vị trí child trong section cha
 
 llm:
   chat:

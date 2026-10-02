@@ -1,4 +1,4 @@
-"""QTKĐ file-stem router — retrieval.router.route + _NUMBER_RE.
+"""QTKĐ file-stem router - retrieval.router.route + _NUMBER_RE.
 
 ĐÚNG 1 tín hiệu phân biệt (số QTKĐ hoặc alias thiết bị) → ghim file; 0 hoặc ≥2
 (câu so sánh nhiều thiết bị / số mâu thuẫn alias) → None = tìm toàn kho.

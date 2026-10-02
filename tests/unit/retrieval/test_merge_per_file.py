@@ -1,4 +1,4 @@
-"""merge_per_file — quota đại diện mỗi file cho câu hỏi so sánh đa-file."""
+"""merge_per_file - quota đại diện mỗi file cho câu hỏi so sánh đa-file."""
 
 from retrieval.hybrid_retriever import merge_per_file
 
@@ -8,7 +8,7 @@ def _h(file_stem, score):
 
 
 def test_minority_file_guaranteed_representation():
-    # File B chỉ có điểm thấp — một phễu thuần điểm sẽ loại sạch B khỏi top-5.
+    # File B chỉ có điểm thấp - một phễu thuần điểm sẽ loại sạch B khỏi top-5.
     reranked = [
         _h("A", 0.9),
         _h("A", 0.8),

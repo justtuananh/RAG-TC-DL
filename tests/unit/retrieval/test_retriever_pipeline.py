@@ -1,4 +1,4 @@
-"""Pipeline hybrid đầy đủ — retrieval.retriever.retrieve (mock toàn bộ I/O).
+"""Pipeline hybrid đầy đủ - retrieval.retriever.retrieve (mock toàn bộ I/O).
 
 Mock: embed_query, dense_search, bm25_search, router.route_files, fetch_parent;
 stub HTTP rerank :8011. Không chạm mạng thật.
@@ -109,7 +109,7 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
 
 
 def test_rerank_hits_empty_returns_empty():
-    # Không gọi mạng (return sớm) — an toàn dưới network-guard.
+    # Không gọi mạng (return sớm) - an toàn dưới network-guard.
     assert rerank_hits("q", []) == []
 
 

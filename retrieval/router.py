@@ -7,6 +7,7 @@ Number map is built lazily from Qdrant on first call (one-time scan, ~0.1s).
 Device aliases are read from the `device_type` + `procedure` tables (Sprint 3)
 with a hardcoded fallback, so retrieval never depends on Postgres being up.
 """
+
 from __future__ import annotations
 
 import re
