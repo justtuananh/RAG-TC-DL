@@ -181,8 +181,8 @@ print(json.dumps(rows, ensure_ascii=False, indent=1))
 ```
 
 ```bash
-.venv-dev/bin/python ~/.cache/qtkd-refactor/snapshot_retrieval.py 50 > ~/.cache/qtkd-refactor/retrieval_k50.json
-.venv-dev/bin/python ~/.cache/qtkd-refactor/snapshot_retrieval.py 20 > ~/.cache/qtkd-refactor/retrieval_k20.json
+PYTHONPATH=. .venv-dev/bin/python ~/.cache/qtkd-refactor/snapshot_retrieval.py 50 > ~/.cache/qtkd-refactor/retrieval_k50.json
+PYTHONPATH=. .venv-dev/bin/python ~/.cache/qtkd-refactor/snapshot_retrieval.py 20 > ~/.cache/qtkd-refactor/retrieval_k20.json
 .venv-dev/bin/python -m eval.run_eval --mode hybrid | tee ~/.cache/qtkd-refactor/run_eval_k20.txt
 ```
 Expected: hai file JSON có đủ số câu của `eval/eval_set.jsonl`; `run_eval` in recall@k + MRR. Nếu service chưa chạy: `docker compose up -d qdrant embedding reranker` trước.
@@ -1764,7 +1764,7 @@ Expected: PASS, xanh.
 
 Run (service đang chạy):
 ```bash
-.venv-dev/bin/python ~/.cache/qtkd-refactor/snapshot_retrieval.py 50 > ~/.cache/qtkd-refactor/retrieval_k50_after.json
+PYTHONPATH=. .venv-dev/bin/python ~/.cache/qtkd-refactor/snapshot_retrieval.py 50 > ~/.cache/qtkd-refactor/retrieval_k50_after.json
 diff ~/.cache/qtkd-refactor/retrieval_k50.json ~/.cache/qtkd-refactor/retrieval_k50_after.json && echo GIONG_HET
 ```
 Expected: `GIONG_HET`. Lệch dù chỉ một hit là lỗi chuyển code: so lại nhánh tương ứng, không chấp nhận "gần giống".
@@ -2802,7 +2802,7 @@ Chụp màn hình từng bước và soi lệch pixel (căn lề, chữ tràn, t
 - [ ] **Step 4: So số đo cuối**
 
 ```bash
-.venv-dev/bin/python ~/.cache/qtkd-refactor/snapshot_retrieval.py 50 > ~/.cache/qtkd-refactor/retrieval_k50_final.json
+PYTHONPATH=. .venv-dev/bin/python ~/.cache/qtkd-refactor/snapshot_retrieval.py 50 > ~/.cache/qtkd-refactor/retrieval_k50_final.json
 diff ~/.cache/qtkd-refactor/retrieval_k50.json ~/.cache/qtkd-refactor/retrieval_k50_final.json && echo GIONG_HET
 .venv-dev/bin/python -m evaluation.run_eval --mode hybrid
 make check
