@@ -21,22 +21,8 @@ RUN gem install mathtype_to_mathml pry
 COPY requirements.txt requirements-app.txt ./
 RUN pip install --no-cache-dir -r requirements.txt -r requirements-app.txt
 
-# Copy source (TC_DL/ and build/spike_a/ are mounted as volumes at runtime)
-COPY app.py .
-COPY api_server.py .
-COPY generation.py .
-COPY latex.py .
-COPY ingestion_jobs.py .
-COPY retrieval/ retrieval/
-COPY index/ index/
-COPY ingestion/ ingestion/
-COPY knowledge/ knowledge/
-COPY eval/ eval/
-COPY vendor/ vendor/
-COPY db/ db/
-COPY auth/ auth/
-COPY scripts/ scripts/
-COPY alembic.ini .
+# Toàn bộ code backend; .dockerignore loại TC_DL/, build/, frontend/, venv, dữ liệu Qdrant.
+COPY . .
 
 EXPOSE 7861
 

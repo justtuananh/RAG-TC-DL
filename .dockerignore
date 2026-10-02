@@ -30,3 +30,16 @@ build/
 docs/
 *.md
 !requirements*.txt
+
+# Code/dữ liệu không thuộc image backend
+frontend/
+frontend-legacy/
+design/
+qdrant_storage/
+logs/
+tests/
+.venv-dev/
+.venv-pdf/
+*.xlsx
+*.doc
+*.docx
