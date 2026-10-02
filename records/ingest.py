@@ -128,7 +128,7 @@ def ingest_file_stem(
     file_stem: str, *, procedure_id: int | None = None, supersede: bool = True
 ) -> StoreResult:
     """Điểm vào cho API/script: nạp hồ sơ theo ``file_stem`` trong sổ tài liệu."""
-    import ingestion_jobs
+    from ingestion import jobs as ingestion_jobs
     from db import SessionLocal
     from db.models import Procedure as ProcedureModel
 

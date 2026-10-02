@@ -72,7 +72,7 @@ from llm.prompt import build_messages
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.retriever import retrieve
 from core.latex import fix_latex
-import ingestion_jobs
+from ingestion import jobs as ingestion_jobs
 import review.queue as review
 from query import export as data_export
 from query import catalogs as catalog_query

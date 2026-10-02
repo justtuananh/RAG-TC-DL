@@ -14,8 +14,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-import ingestion_jobs
 from db.models import Base, Document, DocumentType
+from ingestion import jobs as ingestion_jobs
 from ingestion import spike_a
 from scripts.knowledge_corpus import ooxml as ox
 

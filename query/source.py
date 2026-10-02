@@ -49,7 +49,7 @@ def build_source_view(
     markdown: str | None = None
     if file_stem:
         try:
-            import ingestion_jobs
+            from ingestion import jobs as ingestion_jobs
 
             markdown = ingestion_jobs.get_markdown(file_stem)
         except Exception:  # noqa: BLE001 - nguồn chỉ để hiển thị, không chặn tra cứu
@@ -93,7 +93,7 @@ def _sheet_location(
     if not file_stem or not quote:
         return None
     try:
-        import ingestion_jobs
+        from ingestion import jobs as ingestion_jobs
         from query.sheet_locate import locate_in_file
 
         source = ingestion_jobs.get_source_path(file_stem)

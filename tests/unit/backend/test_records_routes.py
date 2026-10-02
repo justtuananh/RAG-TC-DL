@@ -16,7 +16,6 @@ from sqlalchemy.pool import StaticPool
 
 import api_server
 import auth.dependencies as auth_deps
-import ingestion_jobs
 from auth.security import create_access_token, hash_password
 from db import get_db
 from db.models import (
@@ -31,6 +30,7 @@ from db.models import (
     UserRole,
 )
 from db.views import create_all_approved_views
+from ingestion import jobs as ingestion_jobs
 
 PASSWORD = "correct-horse-battery"
 QTKD_STEM = "QTKD_1.061_2021_ND_V2"

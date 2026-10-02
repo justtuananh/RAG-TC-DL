@@ -16,10 +16,10 @@ from sqlalchemy.pool import StaticPool
 
 import api_server
 import auth.dependencies as auth_deps
-import ingestion_jobs
 from auth.security import create_access_token, hash_password
 from db import get_db
 from db.models import AppUser, AuditLog, Base, UserRole
+from ingestion import jobs as ingestion_jobs
 
 PASSWORD = "correct-horse-battery"
 

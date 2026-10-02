@@ -16,8 +16,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-import ingestion_jobs
 from db.models import Base, Document, DocumentType, IngestStatus
+from ingestion import jobs as ingestion_jobs
 from ingestion.spike_a import totals_from_entries
 
 STEM = "QTKD_1.159_2021_ND_FINAL"

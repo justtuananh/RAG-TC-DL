@@ -97,7 +97,7 @@ def test_locate_in_file_tolerates_non_spreadsheet(tmp_path):
 
 
 def test_source_view_of_spreadsheet_carries_location(monkeypatch):
-    import ingestion_jobs
+    from ingestion import jobs as ingestion_jobs
     from query.source import build_source_view
 
     monkeypatch.setattr(ingestion_jobs, "get_markdown", lambda stem: None)
@@ -112,7 +112,7 @@ def test_source_view_of_spreadsheet_carries_location(monkeypatch):
 
 
 def test_source_view_of_word_record_has_no_location(tmp_path, monkeypatch):
-    import ingestion_jobs
+    from ingestion import jobs as ingestion_jobs
     from query.source import build_source_view
 
     monkeypatch.setattr(ingestion_jobs, "get_markdown", lambda stem: None)
@@ -122,8 +122,8 @@ def test_source_view_of_word_record_has_no_location(tmp_path, monkeypatch):
 
 
 def test_row_quote_locates_the_right_row_for_a_bare_cell_value(monkeypatch):
-    import ingestion_jobs
     import query.sheet_locate as sheet_locate
+    from ingestion import jobs as ingestion_jobs
     from query.source import build_source_view
 
     sheets = [

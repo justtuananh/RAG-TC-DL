@@ -11,9 +11,9 @@ from pathlib import Path
 
 import pytest
 
-import ingestion_jobs
+from ingestion import jobs as ingestion_jobs
 from ingestion import spike_a
-from ingestion_jobs import UploadError, save_upload
+from ingestion.jobs import UploadError, save_upload
 from tests.unit.knowledge_corpus.conftest import load_manifest
 
 _MANIFEST = load_manifest()

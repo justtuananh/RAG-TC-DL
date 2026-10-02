@@ -116,7 +116,7 @@ def approved_records(db: Session) -> list[CalibrationRecord]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    import ingestion_jobs
+    from ingestion import jobs as ingestion_jobs
     from db import SessionLocal
 
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])

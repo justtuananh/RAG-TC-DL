@@ -257,7 +257,7 @@ def test_list_queue_extractor_filter_and_pagination(session):
 
 
 def test_get_extraction_returns_source_and_404(session, monkeypatch):
-    import ingestion_jobs
+    from ingestion import jobs as ingestion_jobs
 
     extraction_id = _add_fact(session, char_start=5, char_end=18, quote="đến 1 400 bar")
     monkeypatch.setattr(

@@ -199,7 +199,7 @@ def test_reload_removes_previously_approved_from_view(session, corpus_text):
 
 
 def test_run_extraction_from_ingestion(monkeypatch, factory, corpus_text, tmp_path):
-    import ingestion_jobs
+    from ingestion import jobs as ingestion_jobs
 
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", factory)
     db = factory()

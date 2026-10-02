@@ -228,7 +228,7 @@ def test_llm_unavailable_writes_nothing(session, corpus_text):
 def test_run_extraction_integration_with_llm_enabled(
     monkeypatch, factory, corpus_text, tmp_path, settings_override
 ):
-    import ingestion_jobs
+    from ingestion import jobs as ingestion_jobs
 
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", factory)
     settings_override({"llm.extraction.enabled": True})
@@ -275,7 +275,7 @@ def test_run_extraction_integration_with_llm_enabled(
 def test_run_extraction_skips_llm_when_disabled(
     monkeypatch, factory, corpus_text, tmp_path, settings_override
 ):
-    import ingestion_jobs
+    from ingestion import jobs as ingestion_jobs
 
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", factory)
     settings_override({"llm.extraction.enabled": False})

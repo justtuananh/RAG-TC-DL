@@ -11,8 +11,8 @@ import pytest
 from fastapi.testclient import TestClient
 
 import api_server
-import ingestion_jobs
 from ingestion import convert_legacy
+from ingestion import jobs as ingestion_jobs
 
 pytestmark = pytest.mark.unit
 
