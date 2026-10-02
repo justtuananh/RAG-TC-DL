@@ -43,3 +43,8 @@ tests/
 *.xlsx
 *.doc
 *.docx
+
+# Bí mật: biến môi trường do compose truyền vào lúc chạy, không bake vào image
+.env
+.env.*
+!.env.example

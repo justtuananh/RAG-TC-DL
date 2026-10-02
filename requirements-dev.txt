@@ -18,7 +18,7 @@ pre-commit>=3.5
 # Sprint 0+1 runtime deps: api_server.py + db/ + auth/ import các gói này. Docker
 # cài qua requirements.txt, nhưng CI (requirements-app + requirements-dev) và
 # .venv-dev cũng cần để collect test_auth / test_document_* / test api_server.
-sqlalchemy>=2.0       # ORM (db/models.py)
+sqlalchemy>=2.0,<2.1  # ORM (db/models.py); khớp requirements.txt (2.1 đổi driver postgresql mặc định)
 psycopg2-binary>=2.9  # PostgreSQL driver (db/config.py)
 bcrypt>=4.0           # password hashing (auth/security.py)
 pyjwt>=2.8            # JWT (auth/security.py)
