@@ -80,6 +80,22 @@ def test_with_overrides_unknown_key_raises():
         SL.with_overrides(SL.load_settings(env={}), {"retrieval.khong_co": 1})
 
 
+def test_with_overrides_rejects_both_rrf_weights_zero():
+    with pytest.raises(SL.SettingsError, match="rrf_weight"):
+        SL.with_overrides(
+            SL.load_settings(env={}),
+            {"retrieval.rrf_weight_dense": 0.0, "retrieval.rrf_weight_bm25": 0.0},
+        )
+
+
+def test_with_overrides_allows_one_rrf_weight_zero():
+    s = SL.with_overrides(
+        SL.load_settings(env={}),
+        {"retrieval.rrf_weight_dense": 0.0, "retrieval.rrf_weight_bm25": 1.0},
+    )
+    assert s.retrieval.rrf_weight_dense == 0.0
+
+
 def test_settings_override_fixture_reaches_get_settings(settings_override):
     settings_override({"retrieval.top_n": 3})
     assert SL.get_settings().retrieval.top_n == 3

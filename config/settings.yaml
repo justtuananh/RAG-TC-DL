@@ -49,6 +49,8 @@ retrieval:
   top_n: 5                                # nguồn trả về sau rerank
   rerank_pool: 60                         # trần ứng viên vào cross-encoder sau RRF + lọc nhiễu
   rrf_k: 60
+  rrf_weight_dense: 1.0                   # trọng số nhánh dense trong RRF; chỉ tỷ lệ dense/BM25 có tác dụng
+  rrf_weight_bm25: 1.0                    # trọng số nhánh BM25 trong RRF
   min_routed_candidates: 6                # ít hơn thì bỏ lọc theo file, tìm toàn kho
 
 reranking:

@@ -53,3 +53,40 @@ def test_rrf_k_comes_from_settings(settings_override):
     settings_override({"retrieval.rrf_k": 1})
     fused = rrf_fuse([{"id": 1, "score": 1.0, "payload": {"chunk_id": "a"}}], [])
     assert fused[0]["rrf_score"] == 1.0 / (1 + 0 + 1)  # 1/(k + rank + 1), rank từ 0
+
+
+def _score(fused, cid):
+    return next(h["rrf_score"] for h in fused if h["payload"]["chunk_id"] == cid)
+
+
+def test_weighted_score_uses_both_weights():
+    dense = [_hit("a"), _hit("b")]  # b ở rank 1 (index 1)
+    bm25 = [_hit("b"), _hit("c")]  # b ở rank 0 (index 0)
+    fused = rrf_fuse(dense, bm25, k=60, w_dense=2.0, w_bm25=1.0)
+    assert _score(fused, "b") == pytest.approx(2 / 62 + 1 / 61)
+
+
+def test_zero_bm25_weight_drops_bm25_only_hits_to_zero():
+    dense = [_hit("a")]
+    bm25 = [_hit("b")]
+    fused = rrf_fuse(dense, bm25, k=60, w_dense=1.0, w_bm25=0.0)
+    assert _score(fused, "b") == 0.0
+    # Mọi doc có mặt ở dense đứng trước doc chỉ có ở BM25 (điểm 0).
+    assert [h["payload"]["chunk_id"] for h in fused] == ["a", "b"]
+
+
+def test_weights_default_from_settings(settings_override):
+    settings_override({"retrieval.rrf_weight_dense": 3.0})
+    dense = [_hit("a"), _hit("b")]
+    bm25 = [_hit("b")]
+    fused = rrf_fuse(dense, bm25, k=60)
+    # w_dense = 3.0 từ settings, w_bm25 giữ mặc định 1.0.
+    assert _score(fused, "b") == pytest.approx(3 / 62 + 1 / 61)
+
+
+def test_explicit_weights_override_settings(settings_override):
+    settings_override({"retrieval.rrf_weight_dense": 3.0, "retrieval.rrf_weight_bm25": 3.0})
+    dense = [_hit("a")]
+    bm25 = [_hit("b")]
+    fused = rrf_fuse(dense, bm25, k=60, w_dense=1.0, w_bm25=0.0)
+    assert _score(fused, "b") == 0.0

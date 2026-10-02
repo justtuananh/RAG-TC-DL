@@ -21,26 +21,36 @@ def rrf_fuse(
     dense_hits: list[dict],
     bm25_hits: list[dict],
     k: int | None = None,
+    *,
+    w_dense: float | None = None,
+    w_bm25: float | None = None,
 ) -> list[dict]:
-    """Reciprocal Rank Fusion of dense and BM25 lists.
+    """Reciprocal Rank Fusion có trọng số cho dense và BM25.
 
-    Standard RRF: score(d) = Σ 1/(k + rank_i(d))  for each list i.
-    Returns unified list sorted by RRF score descending.
+    score(d) = w_dense / (k + rank_dense(d) + 1) + w_bm25 / (k + rank_bm25(d) + 1).
+    ``k`` và hai trọng số mặc định đọc từ settings LÚC GỌI; nhân cả hai trọng số với
+    cùng một hằng số không đổi thứ tự nên chỉ TỶ LỆ dense/BM25 có tác dụng.
+    Trả danh sách hợp nhất sắp theo điểm RRF giảm dần.
     """
-    k = k or get_settings().retrieval.rrf_k
+    cfg = get_settings().retrieval
+    k = k or cfg.rrf_k
+    if w_dense is None:
+        w_dense = cfg.rrf_weight_dense
+    if w_bm25 is None:
+        w_bm25 = cfg.rrf_weight_bm25
     scores: dict[str, float] = {}
     all_hits: dict[str, dict] = {}
 
     for rank, h in enumerate(dense_hits):
         cid = h["payload"]["chunk_id"]
         all_hits[cid] = h
-        scores[cid] = scores.get(cid, 0.0) + 1.0 / (k + rank + 1)
+        scores[cid] = scores.get(cid, 0.0) + w_dense / (k + rank + 1)
 
     for rank, h in enumerate(bm25_hits):
         cid = h["payload"]["chunk_id"]
         if cid not in all_hits:
             all_hits[cid] = h
-        scores[cid] = scores.get(cid, 0.0) + 1.0 / (k + rank + 1)
+        scores[cid] = scores.get(cid, 0.0) + w_bm25 / (k + rank + 1)
 
     sorted_ids = sorted(scores, key=scores.__getitem__, reverse=True)
     fused: list[dict] = []

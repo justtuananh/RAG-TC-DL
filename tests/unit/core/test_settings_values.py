@@ -8,6 +8,8 @@ def test_defaults_eval_depends_on():
     assert s.models.embedding.vector_size == 1024
     assert s.vectorstore.collection == "qtkd_rag"
     assert s.retrieval.rrf_k == 60
+    assert s.retrieval.rrf_weight_dense == 1.0
+    assert s.retrieval.rrf_weight_bm25 == 1.0
     assert s.retrieval.top_k == 50
     assert s.retrieval.rerank_pool == 60
     assert s.llm.chat.history_turns == 3

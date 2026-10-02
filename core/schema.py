@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, SecretStr
+from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, SecretStr, model_validator
 
 LlmRole = Literal["chat", "intent", "extraction"]
 
@@ -25,6 +25,7 @@ OptionalSecret = Annotated[SecretStr | None, BeforeValidator(_blank_to_none)]
 Positive = Annotated[int, Field(gt=0)]
 NonNegative = Annotated[int, Field(ge=0)]
 PositiveFloat = Annotated[float, Field(gt=0)]
+NonNegativeFloat = Annotated[float, Field(ge=0)]
 Temperature = Annotated[float, Field(ge=0)]
 
 
@@ -89,7 +90,16 @@ class RetrievalSettings(_Section):
     top_n: Positive
     rerank_pool: Positive
     rrf_k: Positive
+    rrf_weight_dense: NonNegativeFloat
+    rrf_weight_bm25: NonNegativeFloat
     min_routed_candidates: NonNegative
+
+    @model_validator(mode="after")
+    def _not_both_weights_zero(self) -> RetrievalSettings:
+        """Cả hai trọng số bằng 0 thì điểm RRF luôn 0, hoàn toàn mất thứ tự."""
+        if self.rrf_weight_dense == 0 and self.rrf_weight_bm25 == 0:
+            raise ValueError("rrf_weight_dense và rrf_weight_bm25 không được cùng bằng 0")
+        return self
 
 
 class RerankingSettings(_Section):
