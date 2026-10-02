@@ -24,7 +24,7 @@ _ASSIGNED_VALUE_RE = re.compile(r"=\s*\d")
 
 def is_calculation_request(query: str) -> bool:
     """True nếu câu hỏi là yêu cầu tính toán với số liệu cho sẵn (ngoài phạm vi
-    lookup-only). app.py chặn trước khi retrieve; answer_eval mirror cùng hàm."""
+    lookup-only). ui.gradio_app và api chặn trước khi retrieve; answer_eval mirror cùng hàm."""
     if _CALC_IMPERATIVE_RE.search(query):
         return True
     return bool(_CALC_WITH_VALUES_RE.search(query) and _ASSIGNED_VALUE_RE.search(query))

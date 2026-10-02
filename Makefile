@@ -50,18 +50,18 @@ clean-volumes:
 
 # ── Dev helpers ───────────────────────────────────────────────────────────────
 
-# Chạy eval retrieval (cần kotaemon/.venv — chạy trên host, không phải Docker)
+# Chạy eval retrieval (chạy trên host, cần 4 service Docker đang chạy)
 eval:
-	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m evaluation.run_eval --mode hybrid
+	$(PY) -m evaluation.run_eval --mode hybrid
 
 # Eval CHẤT LƯỢNG CÂU TRẢ LỜI (coverage/citation/refusal/ảo giác) — so 1.5b vs 7b.
 # Cần 4 service + đã pull cả 2 model (make pull-model && make pull-model-7b).
 answer-eval:
-	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m evaluation.answer_eval --model qwen2.5:1.5b,qwen2.5:7b
+	$(PY) -m evaluation.answer_eval --model qwen2.5:1.5b,qwen2.5:7b
 
 # Chỉ 1.5b (dev nhanh, không cần pull 7b).
 answer-eval-dev:
-	/Users/mac/Desktop/AI4TA/kotaemon/.venv/bin/python -m evaluation.answer_eval --model qwen2.5:1.5b
+	$(PY) -m evaluation.answer_eval --model qwen2.5:1.5b
 
 # Smoke test embedding service
 test-embed:

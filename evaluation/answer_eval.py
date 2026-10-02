@@ -64,10 +64,10 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
     Retry khi lỗi hạ tầng (Ollama 500 / read-timeout / trả rỗng): trên CPU,
     qwen2.5:7b chạy lô dài hay trả 500 từng đợt - không retry thì 1/3 số câu bị
     chấm 0 oan và mọi metric thành nhiễu hạ tầng thay vì chất lượng model
-    (lần đo 2026-06-11: 10/29 câu lỗi hạ tầng). Đường production (app.py) stream
+    (lần đo 2026-06-11: 10/29 câu lỗi hạ tầng). Đường production (api, ui.gradio_app) stream
     trực tiếp cho người dùng nên không đi qua hàm này.
     """
-    # Mirror app.py:bot_fn - yêu cầu tính toán bị chặn tất định TRƯỚC khi gọi LLM.
+    # Mirror ui.gradio_app.bot_fn - yêu cầu tính toán bị chặn tất định TRƯỚC khi gọi LLM.
     if is_calculation_request(query):
         return REFUSAL_SENTENCE
     context_str, _ = build_context_and_citations(retrieved)

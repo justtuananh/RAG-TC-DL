@@ -1,6 +1,6 @@
 """Chuẩn hoá LaTeX từ output LLM để KaTeX/markdown render được.
 
-Gộp về 1 nguồn dùng chung cho mọi entrypoint (trước đây `app.py` và tầng API trùng nhau).
+Gộp về 1 nguồn dùng chung cho mọi entrypoint (trước đây Gradio UI và tầng API trùng nhau).
 """
 from __future__ import annotations
 

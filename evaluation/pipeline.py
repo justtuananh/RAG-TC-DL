@@ -1,6 +1,6 @@
 """Phễu retrieve DUY NHẤT mà mọi eval dùng chung - chống drift eval↔production.
 
-`app.py:bot_fn` và tầng API (`api.main`) giờ gọi `retrieve(query)` không truyền top_k,
+`ui.gradio_app.bot_fn` và tầng API (`api.main`) giờ gọi `retrieve(query)` không truyền top_k,
 nên phễu lấy thẳng từ `settings.retrieval` (top_k=50 như API). Cả `run_eval.py`
 và `answer_eval.py` đều đi qua đây để đo đúng cái người dùng nhận.
 """
