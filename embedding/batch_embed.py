@@ -53,7 +53,7 @@ def embed_chunks_batched(chunks: Sequence[Chunk]) -> list[list[float]]:
     vector_size = get_settings().models.embedding.vector_size
     all_vectors: list[list[float]] = []
     for i in range(0, len(chunks), settings.batch_size):
-        batch = chunks[i: i + settings.batch_size]
+        batch = chunks[i : i + settings.batch_size]
         texts = [
             # Phase 2 prefix DISABLED (A/B test 2026-06-07): recall@5 identical (0.709) with/without;
             # prefix gives +1.8pp recall@10 (0.836 vs 0.818). To restore: re-enable line below + --force.

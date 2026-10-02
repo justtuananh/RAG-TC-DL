@@ -136,7 +136,9 @@ class LlmSettings(_Section):
     @property
     def total_context_chars(self) -> int:
         """Trần tổng ký tự ngữ cảnh: phần num_ctx còn lại sau prompt, quy ra ký tự."""
-        return (self.chat.num_ctx - self.context.prompt_reserve_tokens) * self.context.chars_per_token
+        return (
+            self.chat.num_ctx - self.context.prompt_reserve_tokens
+        ) * self.context.chars_per_token
 
 
 class IngestionSettings(_Section):
@@ -208,10 +210,10 @@ class Settings(_Section):
 class Chunk:
     """Một đơn vị index: section cha (ngữ cảnh) hoặc đoạn con (được nhúng + tìm)."""
 
-    chunk_id: str               # sha256[:16] của (file + section + text)
-    parent_id: str | None       # None với chunk cha
+    chunk_id: str  # sha256[:16] của (file + section + text)
+    parent_id: str | None  # None với chunk cha
     is_parent: bool
-    kind: str                   # "section" | "paragraph" | "table" | "formula"
-    text: str                   # nội dung (chunk cha có tiền tố heading)
-    section_path: str           # vd. "3 Các phép kiểm định > 3.1 Phép đo"
-    file_stem: str              # stem của file .md nguồn (= tên docx)
+    kind: str  # "section" | "paragraph" | "table" | "formula"
+    text: str  # nội dung (chunk cha có tiền tố heading)
+    section_path: str  # vd. "3 Các phép kiểm định > 3.1 Phép đo"
+    file_stem: str  # stem của file .md nguồn (= tên docx)

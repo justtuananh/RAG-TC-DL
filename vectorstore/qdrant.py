@@ -132,9 +132,7 @@ def fetch_parent(parent_id_hex: str) -> dict | None:
 def scroll_child_payloads() -> list[dict]:
     """Scroll every child chunk payload out of the collection (for the BM25 index)."""
     client = get_client()
-    child_filter = Filter(
-        must=[FieldCondition(key="is_parent", match=MatchValue(value=False))]
-    )
+    child_filter = Filter(must=[FieldCondition(key="is_parent", match=MatchValue(value=False))])
     payloads: list[dict] = []
     offset = None
     while True:

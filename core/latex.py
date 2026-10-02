@@ -2,6 +2,7 @@
 
 Gộp về 1 nguồn dùng chung cho mọi entrypoint (trước đây Gradio UI và tầng API trùng nhau).
 """
+
 from __future__ import annotations
 
 import re
@@ -9,9 +10,9 @@ import re
 _RE_DISPLAY = re.compile(r'\$\$(.*?)\$\$', re.DOTALL)
 _RE_INLINE = re.compile(r'(?<!\$)\$(?!\$)((?:[^$\n\\]|\\.)*)(?<!\$)\$(?!\$)')
 _RE_CODE_MATH = re.compile(r'`(\$.*?\$)`')
-_RE_BACKSLASH_DISP = re.compile(r'\\\[(.*?)\\\]', re.DOTALL)          # \[...\] display
-_RE_BACKSLASH_INLINE = re.compile(r'\\\((.*?)\\\)')                    # \(...\) inline
-_RE_BRACKET_DISP = re.compile(r'(?m)^\[$\n(.*?)\n^\]$', re.DOTALL)     # [ \n ... \n ] display
+_RE_BACKSLASH_DISP = re.compile(r'\\\[(.*?)\\\]', re.DOTALL)  # \[...\] display
+_RE_BACKSLASH_INLINE = re.compile(r'\\\((.*?)\\\)')  # \(...\) inline
+_RE_BRACKET_DISP = re.compile(r'(?m)^\[$\n(.*?)\n^\]$', re.DOTALL)  # [ \n ... \n ] display
 
 
 def fix_latex(text: str) -> str:

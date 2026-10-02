@@ -14,7 +14,7 @@ from vectorstore import qdrant
 def upsert_points(client: QdrantClient, points: list[PointStruct]) -> None:
     upsert_batch = get_settings().vectorstore.upsert_batch
     for i in range(0, len(points), upsert_batch):
-        batch = points[i: i + upsert_batch]
+        batch = points[i : i + upsert_batch]
         client.upsert(collection_name=qdrant.collection_name(), points=batch)
 
 
@@ -38,21 +38,23 @@ def index_chunks(client: QdrantClient, chunks: list[Chunk]) -> int:
         # Indexing legacy corpora remains possible before the document migration.
         document_ids = {}
     points = []
-    for chunk, vec in zip(chunks, vectors):
-        points.append(PointStruct(
-            id=int(chunk.chunk_id, 16),  # Qdrant needs uint64
-            vector=vec,
-            payload={
-                "chunk_id": chunk.chunk_id,
-                "parent_id": chunk.parent_id,
-                "is_parent": chunk.is_parent,
-                "kind": chunk.kind,
-                "text": chunk.text,
-                "section_path": chunk.section_path,
-                "file_stem": chunk.file_stem,
-                "document_id": document_ids.get(chunk.file_stem),
-            },
-        ))
+    for chunk, vec in zip(chunks, vectors, strict=False):
+        points.append(
+            PointStruct(
+                id=int(chunk.chunk_id, 16),  # Qdrant needs uint64
+                vector=vec,
+                payload={
+                    "chunk_id": chunk.chunk_id,
+                    "parent_id": chunk.parent_id,
+                    "is_parent": chunk.is_parent,
+                    "kind": chunk.kind,
+                    "text": chunk.text,
+                    "section_path": chunk.section_path,
+                    "file_stem": chunk.file_stem,
+                    "document_id": document_ids.get(chunk.file_stem),
+                },
+            )
+        )
     # B11: nhúng lại một file phải THAY THẾ, không cộng dồn: xóa điểm cũ ngay
     # trước khi ghi tập mới (sau khi embed xong, tránh mất dữ liệu nếu embed lỗi).
     for stem in {c.file_stem for c in chunks}:
