@@ -94,6 +94,9 @@ A lower layer never imports a higher one;
   cross-encoder call. Boilerplate template sections ("Mẫu biên bản", "(Quy định)", …) are filtered
   out before reranking; `NOISE_PATH_MARKERS` now lives once in `vectorstore/noise.py`, and both
   `retrieval/hybrid_retriever.py` and `vectorstore/hybrid_index.py` import it.
+  RRF weights each branch by `retrieval.rrf_weight_dense` / `rrf_weight_bm25` (only their ratio matters; default 1:1).
+  `python -m evaluation.fusion_sweep` grid-searches the ratio and `rrf_k` through the real `retrieve()`.
+  The 2026-10-02 sweep kept 1:1, see `docs/experiments/2026-10-02-weighted-rrf.md`.
 - `ui/gradio_app.py` - Gradio UI on **:7861** (original / alternative UI), run with `python -m ui.gradio_app`.
   Left = streaming chat (Gradio's built-in KaTeX, inline `$...$` enabled via `LATEX_DELIMITERS`).
   Right = source-document viewer with the retrieved child passage `<mark>`-highlighted inside its parent section.
