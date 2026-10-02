@@ -15,6 +15,7 @@ import re
 from pathlib import Path
 
 from core.schema import Chunk
+from core.settings_loader import get_settings
 
 
 _HEADING_RE = re.compile(r"^(#{1,6})\s+(.+)$")
@@ -25,13 +26,12 @@ _FORMULA_ONLY_RE = re.compile(r"^\s*\$[^$]+\$\s*$")
 # the parent (section) and its child chunks well inside any embedding
 # model's context, whether the source has real paragraph breaks or (as seen
 # with MarkItDown's PDF output on multi-column layouts) almost none at all.
-_SYNTH_SECTION_CHARS = 4000
+# Ngưỡng đọc từ settings.chunking.synth_section_chars.
 
 # Bảng dài (danh mục chuẩn, danh mục quy trình... hàng chục dòng) nếu để nguyên
 # một chunk thì một dòng cụ thể bị "loãng" trong embedding. Bảng vượt ngưỡng được
 # chia theo nhóm dòng; mỗi nhóm lặp lại tiêu đề cột và mang đề mục nhóm gần nhất.
-_MAX_TABLE_ROWS = 15
-_TABLE_GROUP_ROWS = 8
+# Ngưỡng đọc từ settings.chunking.max_table_rows / table_group_rows.
 _TABLE_SEPARATOR_RE = re.compile(r"^\|\s*:?-{3,}")
 _GROUP_HEADING_RE = re.compile(r"^\|\s*[IVXLC]+\s*\|")
 
@@ -56,8 +56,9 @@ def _split_table(text: str) -> list[str]:
     rows = text.split("\n")
     if len(rows) < 3 or not _TABLE_SEPARATOR_RE.match(rows[1]):
         return [text]
+    chunking = get_settings().chunking
     header, body = rows[:2], rows[2:]
-    if sum(not _GROUP_HEADING_RE.match(row) for row in body) <= _MAX_TABLE_ROWS:
+    if sum(not _GROUP_HEADING_RE.match(row) for row in body) <= chunking.max_table_rows:
         return [text]
     groups: list[list[str]] = []
     current: list[str] = []
@@ -68,7 +69,7 @@ def _split_table(text: str) -> list[str]:
             heading = row
             current.append(row)
             continue
-        if count == _TABLE_GROUP_ROWS:
+        if count == chunking.table_group_rows:
             groups.append(current)
             current = [heading] if heading else []
             count = 0
@@ -155,9 +156,10 @@ def _synthesize_sections(text: str, file_stem: str) -> str:
     unbounded blob into a bounded number of indexable sections."""
     windows: list[str] = []
     n = len(text)
+    synth_section_chars = get_settings().chunking.synth_section_chars
     start = 0
     while start < n:
-        end = min(start + _SYNTH_SECTION_CHARS, n)
+        end = min(start + synth_section_chars, n)
         if end < n:
             ws = text.rfind(" ", start, end)
             if ws > start:

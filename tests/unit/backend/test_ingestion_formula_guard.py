@@ -114,7 +114,7 @@ def test_markdown_job_blocks_formula_regression(tmp_path, monkeypatch, session):
     before = verified.read_bytes()
 
     embedded: list[object] = []
-    monkeypatch.setattr(ingestion_jobs, "index_chunks", lambda *a, **k: embedded.append(a))
+    monkeypatch.setattr("vectorstore.upsert.index_chunks", lambda *a, **k: embedded.append(a))
 
     def fake_process_one(source: Path, out_dir: Path) -> dict:
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -144,11 +144,10 @@ def test_markdown_job_publishes_when_rate_not_worse(tmp_path, monkeypatch, sessi
 
     embedded: list[object] = []
     monkeypatch.setattr(
-        ingestion_jobs, "index_chunks", lambda client, chunks: embedded.append(chunks)
+        "vectorstore.upsert.index_chunks", lambda client, chunks: embedded.append(chunks)
     )
     monkeypatch.setattr(ingestion_jobs, "parse_file", lambda p: ["c1", "c2"])
-    monkeypatch.setattr(ingestion_jobs, "QdrantClient", lambda *a, **k: object())
-    monkeypatch.setattr(ingestion_jobs, "ensure_collection", lambda client: None)
+    monkeypatch.setattr("vectorstore.qdrant.ensure_collection", lambda client: None)
     monkeypatch.setattr(ingestion_jobs, "_run_extraction", lambda stem, path: None)
 
     def fake_process_one(source: Path, out_dir: Path) -> dict:

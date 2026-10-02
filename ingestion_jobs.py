@@ -21,9 +21,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from qdrant_client import QdrantClient
 from qdrant_client.http.exceptions import ResponseHandlingException
-from qdrant_client.models import FieldCondition, Filter, MatchValue
 
 # Connection failures from the embedding service (requests -> OSError subclass)
 # and from Qdrant (its own ResponseHandlingException, NOT an OSError subclass)
@@ -31,7 +29,7 @@ from qdrant_client.models import FieldCondition, Filter, MatchValue
 _CONNECTION_ERRORS = (OSError, ResponseHandlingException)
 
 from ingestion.chunker import parse_file
-from vectorstore.index import COLLECTION, QDRANT_URL, ensure_collection, index_chunks
+from vectorstore import qdrant, upsert
 from ingestion.spike_a import _safe, process_one, totals_from_entries
 from ingestion.classify import classify_document
 from db import SessionLocal
@@ -402,9 +400,9 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
         chunks = parse_file(md_path)
 
         _set_job(file_stem, "embedding")
-        client = QdrantClient(url=QDRANT_URL)
-        ensure_collection(client)
-        index_chunks(client, chunks)
+        client = qdrant.get_client()
+        qdrant.ensure_collection(client)
+        upsert.index_chunks(client, chunks)
         _invalidate_bm25()
 
         # Sprint 4: sau khi nhúng, trích xuất tri thức cho QTKĐ (trạng thái pending).
@@ -558,11 +556,7 @@ def delete_document(file_stem: str) -> None:
         _report_path().write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
 
     try:
-        client = QdrantClient(url=QDRANT_URL)
-        client.delete(
-            collection_name=COLLECTION,
-            points_selector=Filter(must=[FieldCondition(key="file_stem", match=MatchValue(value=file_stem))]),
-        )
+        qdrant.delete_file_chunks(qdrant.get_client(), file_stem)
     except Exception:
         pass  # best-effort — local files are already gone; index cleanup can be retried by re-uploading
 

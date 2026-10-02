@@ -1,21 +1,21 @@
-"""BM25 in-memory index over QTKĐ child chunks, loaded from Qdrant.
+"""Nửa thưa của chỉ mục lai: BM25 trong bộ nhớ, dựng lười từ payload chunk con trong Qdrant.
 
 Built lazily on first call to bm25_search(). Tokenizer keeps technical
 codes/units intact (e.g. 1.061:2021, MPa, bar, DN50, 0.05%).
 """
 from __future__ import annotations
 
-import os
 from typing import Optional
 
 from rank_bm25 import BM25Okapi
-from qdrant_client import QdrantClient
-from qdrant_client.models import Filter, FieldCondition, MatchValue
 
+from core.settings_loader import get_settings
 from embedding.sparse_embedder import sparse_document_text, tokenize
-
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-COLLECTION = "qtkd_rag"
+from retrieval._constants import (
+    NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS,
+    is_noise_path as _is_noise_path,
+)
+from vectorstore import qdrant
 
 _bm25: Optional[BM25Okapi] = None
 _chunks: Optional[list[dict]] = None   # child chunk payloads in corpus order
@@ -23,43 +23,14 @@ _chunks: Optional[list[dict]] = None   # child chunk payloads in corpus order
 
 # ── index build ───────────────────────────────────────────────────────────────
 
-from retrieval._constants import (
-    NOISE_PATH_MARKERS as _NOISE_PATH_MARKERS,
-    is_noise_path as _is_noise_path,
-)
-
-
 def _is_noise(payload: dict) -> bool:
     return _is_noise_path(payload.get("section_path", ""))
-
-
-def _scroll_child_chunks() -> list[dict]:
-    client = QdrantClient(url=QDRANT_URL)
-    child_filter = Filter(
-        must=[FieldCondition(key="is_parent", match=MatchValue(value=False))]
-    )
-    payloads: list[dict] = []
-    offset = None
-    while True:
-        results, next_offset = client.scroll(
-            collection_name=COLLECTION,
-            scroll_filter=child_filter,
-            limit=256,
-            offset=offset,
-            with_payload=True,
-            with_vectors=False,
-        )
-        payloads.extend(r.payload for r in results)
-        if next_offset is None:
-            break
-        offset = next_offset
-    return payloads
 
 
 def _ensure_index() -> tuple[BM25Okapi, list[dict]]:
     global _bm25, _chunks
     if _bm25 is None:
-        raw = _scroll_child_chunks()
+        raw = qdrant.scroll_child_payloads()
         # Exclude boilerplate "Mẫu biên bản" / "(Quy định)" sections from BM25
         _chunks = [c for c in raw if not _is_noise(c)]
         corpus = [tokenize(sparse_document_text(c)) for c in _chunks]
@@ -81,7 +52,7 @@ def invalidate() -> None:
 
 def bm25_search(
     query: str,
-    top_k: int = 20,
+    top_k: int | None = None,
     file_stem: str | None = None,
 ) -> list[dict]:
     """Return top_k BM25 hits: {id, bm25_score, payload}.
@@ -89,6 +60,7 @@ def bm25_search(
     When file_stem is given, only chunks from that file are returned.
     Scans the full sorted list to find enough file-specific hits.
     """
+    top_k = top_k or get_settings().retrieval.top_k
     bm25, chunks = _ensure_index()
     tokens = tokenize(query)
     scores = bm25.get_scores(tokens)

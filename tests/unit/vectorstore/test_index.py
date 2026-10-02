@@ -10,13 +10,8 @@ import responses
 from core.schema import Chunk
 from core.settings_loader import get_settings
 from embedding.batch_embed import _qtkd_prefix, embed_chunks_batched
-from vectorstore.index import (
-    UPSERT_BATCH,
-    VECTOR_SIZE,
-    index_chunks,
-    indexed_files,
-    upsert,
-)
+from vectorstore import qdrant
+from vectorstore.upsert import index_chunks, upsert_points
 
 
 @responses.activate
@@ -50,7 +45,7 @@ def test_embed_chunks_batched_respects_batch_size(monkeypatch):
 
     def fake_embed(texts, *, timeout=None):
         seen_sizes.append(len(texts))
-        return [[0.0] * VECTOR_SIZE for _ in texts]
+        return [[0.0] * get_settings().models.embedding.vector_size for _ in texts]
 
     monkeypatch.setattr("embedding.embedder.embed_texts", fake_embed)
     chunks = [
@@ -80,7 +75,7 @@ def test_indexed_files_returns_unique_stems():
         def scroll(self, **kwargs):
             return ([_Pt("A"), _Pt("B"), _Pt("A")], None)
 
-    assert indexed_files(_Client()) == {"A", "B"}
+    assert qdrant.indexed_files(_Client()) == {"A", "B"}
 
 
 def test_indexed_files_swallows_errors():
@@ -88,7 +83,7 @@ def test_indexed_files_swallows_errors():
         def scroll(self, **kwargs):
             raise RuntimeError("qdrant down")
 
-    assert indexed_files(_Bad()) == set()
+    assert qdrant.indexed_files(_Bad()) == set()
 
 
 def test_upsert_batches_by_upsert_batch():
@@ -100,9 +95,9 @@ def test_upsert_batches_by_upsert_batch():
             self.calls += 1
 
     c = _Client()
-    upsert(c, list(range(130)))  # 64 + 64 + 2
+    upsert_points(c, list(range(130)))  # 64 + 64 + 2
     assert c.calls == 3
-    assert UPSERT_BATCH == 64
+    assert get_settings().vectorstore.upsert_batch == 64
 
 
 class _FakeQdrant:
@@ -139,7 +134,7 @@ def test_index_chunks_replaces_existing_points_for_file(monkeypatch):
     """B11: nhúng lại cùng file chỉ còn tập chunk mới, không cộng dồn chunk cũ."""
     monkeypatch.setattr(
         "embedding.batch_embed.embed_chunks_batched",
-        lambda chunks: [[0.0] * VECTOR_SIZE for _ in chunks],
+        lambda chunks: [[0.0] * get_settings().models.embedding.vector_size for _ in chunks],
     )
     client = _FakeQdrant()
 
@@ -160,7 +155,7 @@ def test_index_chunks_deletes_each_file_stem_once(monkeypatch):
     """Tập chunk nhiều file: xóa đúng từng file_stem trước khi ghi."""
     monkeypatch.setattr(
         "embedding.batch_embed.embed_chunks_batched",
-        lambda chunks: [[0.0] * VECTOR_SIZE for _ in chunks],
+        lambda chunks: [[0.0] * get_settings().models.embedding.vector_size for _ in chunks],
     )
     client = _FakeQdrant()
 

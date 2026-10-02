@@ -9,48 +9,16 @@ from __future__ import annotations
 
 import os
 import requests
-from qdrant_client import QdrantClient
-from qdrant_client.models import FieldCondition, Filter, MatchValue
 
 from embedding import embedder
+from vectorstore import hybrid_index, qdrant
 
 RERANK_URL = os.getenv("RERANK_URL", "http://localhost:8011/v1/rerank")
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-COLLECTION = "qtkd_rag"
 RERANK_TIMEOUT = 60
 
 # Funnel widths (Phase 3): search deeper, let reranker decide.
 TOP_K = 50          # candidates from dense + BM25 each
 RERANK_POOL = 60    # max candidates fed into reranker after RRF + noise filter
-
-_client: QdrantClient | None = None
-
-
-def _get_client() -> QdrantClient:
-    global _client
-    if _client is None:
-        _client = QdrantClient(url=QDRANT_URL)
-    return _client
-
-
-def dense_search(
-    vec: list[float],
-    top_k: int = TOP_K,
-    file_stem: str | None = None,
-) -> list[dict]:
-    """Search child chunks, optionally filtered to a specific file_stem."""
-    client = _get_client()
-    conditions = [FieldCondition(key="is_parent", match=MatchValue(value=False))]
-    if file_stem:
-        conditions.append(FieldCondition(key="file_stem", match=MatchValue(value=file_stem)))
-    result = client.query_points(
-        collection_name=COLLECTION,
-        query=vec,
-        query_filter=Filter(must=conditions),
-        limit=top_k,
-        with_payload=True,
-    )
-    return [{"id": h.id, "score": h.score, "payload": h.payload} for h in result.points]
 
 
 _LEXICON: dict[str, str] = {
@@ -149,7 +117,7 @@ def rerank_hits(query: str, hits: list[dict], top_n: int = 5) -> list[dict]:
     documents: list[str] = []
     for h in unique_hits:
         pid = h["payload"].get("parent_id")
-        parent = fetch_parent(pid) if pid else None
+        parent = qdrant.fetch_parent(pid) if pid else None
         parent_payloads.append(parent)
         documents.append(_rerank_doc(h["payload"], parent))
 
@@ -183,25 +151,6 @@ def rerank_hits(query: str, hits: list[dict], top_n: int = 5) -> list[dict]:
         h["parent_payload"] = parent_payloads[idx]
         out.append(h)
     return out
-
-
-def fetch_parent(parent_id_hex: str) -> dict | None:
-    """Fetch full parent section payload by its chunk_id (hex → uint64 point ID)."""
-    if not parent_id_hex:
-        return None
-    client = _get_client()
-    try:
-        point_id = int(parent_id_hex, 16)
-        results = client.retrieve(
-            collection_name=COLLECTION,
-            ids=[point_id],
-            with_payload=True,
-        )
-        if results:
-            return results[0].payload
-    except Exception:
-        pass
-    return None
 
 
 from retrieval._constants import (
@@ -289,7 +238,6 @@ def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
       rrf_score      : float (pre-rerank fusion score)
       parent_payload : parent section payload (attached by rerank_hits)
     """
-    from vectorstore.hybrid_index import bm25_search
     from .router import route_files
 
     expanded = _expand_query(query)
@@ -304,20 +252,20 @@ def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
         fused: list[dict] = []
         per_file_pool = max(top_n * 2, RERANK_POOL // len(stems))
         for s in sorted(stems):
-            dh = dense_search(vec, top_k=top_k, file_stem=s)
-            bh = bm25_search(expanded, top_k=top_k, file_stem=s)
+            dh = qdrant.dense_search(vec, top_k=top_k, file_stem=s)
+            bh = hybrid_index.bm25_search(expanded, top_k=top_k, file_stem=s)
             fused.extend(_filter_noise(rrf_fuse(dh, bh))[:per_file_pool])
         reranked = rerank_hits(query, fused, top_n=len(fused))
         return _merge_per_file(reranked, stems, top_n)
 
     file_stem = next(iter(stems)) if stems else None
-    dense_hits = dense_search(vec, top_k=top_k, file_stem=file_stem)
-    bm25_hits = bm25_search(expanded, top_k=top_k, file_stem=file_stem)
+    dense_hits = qdrant.dense_search(vec, top_k=top_k, file_stem=file_stem)
+    bm25_hits = hybrid_index.bm25_search(expanded, top_k=top_k, file_stem=file_stem)
 
     # Safety fallback: if routing narrowed to too few candidates, retry full corpus
     if file_stem and (len(dense_hits) + len(bm25_hits) < 6):
-        dense_hits = dense_search(vec, top_k=top_k)
-        bm25_hits = bm25_search(expanded, top_k=top_k)
+        dense_hits = qdrant.dense_search(vec, top_k=top_k)
+        bm25_hits = hybrid_index.bm25_search(expanded, top_k=top_k)
 
     fused = _filter_noise(rrf_fuse(dense_hits, bm25_hits))[:RERANK_POOL]
     return rerank_hits(query, fused, top_n=top_n)

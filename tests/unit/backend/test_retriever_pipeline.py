@@ -38,14 +38,15 @@ def test_pipeline_dedups_by_parent_and_sorts(monkeypatch):
     dense = [_child("c1", "p1"), _child("c2", "p2")]
     bm25 = [_child("c1", "p1"), _child("c3", "p2")]  # c3 cùng parent p2 với c2
     monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
-    monkeypatch.setattr(R, "dense_search", lambda vec, top_k=50, file_stem=None: dense)
+    monkeypatch.setattr(
+        "vectorstore.qdrant.dense_search", lambda vec, top_k=50, file_stem=None: dense
+    )
     monkeypatch.setattr(
         "vectorstore.hybrid_index.bm25_search", lambda q, top_k=50, file_stem=None: bm25
     )
     monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset())
     monkeypatch.setattr(
-        R,
-        "fetch_parent",
+        "vectorstore.qdrant.fetch_parent",
         lambda pid: {
             "text": f"parent-{pid}",
             "section_path": "6 Tiến hành",
@@ -80,13 +81,14 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
         return [] if file_stem else [_child("c9", "p9")]
 
     monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
-    monkeypatch.setattr(R, "dense_search", dense_search)
+    monkeypatch.setattr("vectorstore.qdrant.dense_search", dense_search)
     monkeypatch.setattr("vectorstore.hybrid_index.bm25_search", bm25_search)
     monkeypatch.setattr(
         "retrieval.router.route_files", lambda q: frozenset({"QTKD_1.061_2021_ND_V2"})
     )
     monkeypatch.setattr(
-        R, "fetch_parent", lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"}
+        "vectorstore.qdrant.fetch_parent",
+        lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"},
     )
     responses.add_callback(
         responses.POST, RERANK_URL, callback=_rerank_callback, content_type="application/json"
@@ -123,11 +125,12 @@ def test_multi_file_query_runs_per_file_funnels(monkeypatch):
         return []
 
     monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
-    monkeypatch.setattr(R, "dense_search", dense_search)
+    monkeypatch.setattr("vectorstore.qdrant.dense_search", dense_search)
     monkeypatch.setattr("vectorstore.hybrid_index.bm25_search", bm25_search)
     monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset({"FILE_A", "FILE_B"}))
     monkeypatch.setattr(
-        R, "fetch_parent", lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"}
+        "vectorstore.qdrant.fetch_parent",
+        lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"},
     )
     responses.add_callback(
         responses.POST, RERANK_URL, callback=_rerank_callback, content_type="application/json"

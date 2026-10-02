@@ -1,149 +1,41 @@
-"""Embed QTKĐ chunks and upsert into Qdrant collection `qtkd_rag`.
+"""Index QTKĐ Markdown chunks into Qdrant.
 
 Services used (all local Docker, already running):
   - Embedding: POST http://localhost:8010/v1/embeddings  → 1024-dim vectors
   - Qdrant:    http://localhost:6333                     → collection qtkd_rag
 
 Run:
-  python -m vectorstore.index [--md-dir build/spike_a] [--force]
+  python -m vectorstore.index [--force] [--query "..."]
 """
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
-import os
+import logging
 import sys
 import time
 from pathlib import Path
-from qdrant_client import QdrantClient
-from qdrant_client.models import (
-    Distance,
-    FieldCondition,
-    Filter,
-    FilterSelector,
-    MatchValue,
-    PointStruct,
-    VectorParams,
-)
 
-from embedding import batch_embed, embedder
+from core.logging_setup import configure_logging
+from core.settings_loader import get_settings
+from embedding import embedder
 from ingestion.chunker import Chunk, parse_directory
+from vectorstore import qdrant, upsert
 
-# ── Config ────────────────────────────────────────────────────────────────────
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-COLLECTION = "qtkd_rag"
-VECTOR_SIZE = 1024
-UPSERT_BATCH = 64        # points per Qdrant upsert call
-
-
-# ── Qdrant helpers ────────────────────────────────────────────────────────────
-
-def ensure_collection(client: QdrantClient) -> None:
-    """Create collection if it does not exist."""
-    existing = [c.name for c in client.get_collections().collections]
-    if COLLECTION not in existing:
-        client.create_collection(
-            collection_name=COLLECTION,
-            vectors_config=VectorParams(size=VECTOR_SIZE, distance=Distance.COSINE),
-        )
-        print(f"Created collection '{COLLECTION}' (cosine, {VECTOR_SIZE} dims)")
-    else:
-        info = client.get_collection(COLLECTION)
-        count = info.points_count
-        print(f"Collection '{COLLECTION}' exists ({count} points)")
-
-
-def _file_hash(file_stem: str) -> str:
-    return hashlib.sha256(file_stem.encode()).hexdigest()[:12]
-
-
-def indexed_files(client: QdrantClient) -> set[str]:
-    """Return set of file_stems already in the collection."""
-    # Scroll all points and collect unique file_stems (fast for small corpora)
-    try:
-        results, _ = client.scroll(
-            collection_name=COLLECTION,
-            limit=10000,
-            with_payload=["file_stem"],
-            with_vectors=False,
-        )
-        return {r.payload.get("file_stem", "") for r in results}
-    except Exception:
-        return set()
-
-
-def upsert(client: QdrantClient, points: list[PointStruct]) -> None:
-    for i in range(0, len(points), UPSERT_BATCH):
-        batch = points[i: i + UPSERT_BATCH]
-        client.upsert(collection_name=COLLECTION, points=batch)
-
-
-def delete_file_chunks(client: QdrantClient, file_stem: str) -> None:
-    """B11: xóa mọi điểm đã lưu của ``file_stem`` trước khi nhúng lại.
-
-    ``chunk_id`` ổn định nên upsert ghi đè được chunk trùng, nhưng chunk không
-    còn tồn tại ở bản mới (hoặc chunk hỏng của lần trích lỗi trước) vẫn nằm
-    lại. Xóa theo payload ``file_stem`` để kết quả đúng bằng tập chunk mới.
-    """
-    client.delete(
-        collection_name=COLLECTION,
-        points_selector=FilterSelector(
-            filter=Filter(must=[FieldCondition(key="file_stem", match=MatchValue(value=file_stem))])
-        ),
-    )
-
-
-def index_chunks(client: QdrantClient, chunks: list[Chunk]) -> int:
-    """Embed + upsert one list of chunks (single file or full corpus). Returns point count."""
-    vectors = batch_embed.embed_chunks_batched(chunks)
-    document_ids: dict[str, str] = {}
-    try:
-        from db import SessionLocal
-        from db.models import Document
-        db = SessionLocal()
-        document_ids = {
-            row.file_stem: row.id
-            for row in db.query(Document).filter(Document.file_stem.in_({c.file_stem for c in chunks})).all()
-        }
-        db.close()
-    except Exception:
-        # Indexing legacy corpora remains possible before the document migration.
-        document_ids = {}
-    points = []
-    for chunk, vec in zip(chunks, vectors):
-        points.append(PointStruct(
-            id=int(chunk.chunk_id, 16),  # Qdrant needs uint64
-            vector=vec,
-            payload={
-                "chunk_id": chunk.chunk_id,
-                "parent_id": chunk.parent_id,
-                "is_parent": chunk.is_parent,
-                "kind": chunk.kind,
-                "text": chunk.text,
-                "section_path": chunk.section_path,
-                "file_stem": chunk.file_stem,
-                "document_id": document_ids.get(chunk.file_stem),
-            },
-        ))
-    # B11: nhúng lại một file phải THAY THẾ, không cộng dồn: xóa điểm cũ ngay
-    # trước khi ghi tập mới (sau khi embed xong, tránh mất dữ liệu nếu embed lỗi).
-    for stem in {c.file_stem for c in chunks}:
-        delete_file_chunks(client, stem)
-    upsert(client, points)
-    return len(points)
+logger = logging.getLogger(__name__)
 
 
 # ── Main indexing logic ───────────────────────────────────────────────────────
 
-def index_directory(md_dir: Path, force: bool = False) -> dict:
-    client = QdrantClient(url=QDRANT_URL)
-    ensure_collection(client)
+def index_directory(md_dir: Path | None = None, force: bool = False) -> dict:
+    md_dir = md_dir or get_settings().paths.markdown_dir
+    client = qdrant.get_client()
+    qdrant.ensure_collection(client)
 
-    already = indexed_files(client) if not force else set()
+    already = qdrant.indexed_files(client) if not force else set()
 
     # Parse all files
-    print(f"\nParsing Markdown from {md_dir} …")
+    logger.info("Parsing Markdown from %s …", md_dir)
     all_chunks = parse_directory(md_dir)
 
     # Group by file
@@ -155,29 +47,30 @@ def index_directory(md_dir: Path, force: bool = False) -> dict:
 
     for file_stem, chunks in by_file.items():
         if file_stem in already and not force:
-            print(f"  SKIP (already indexed): {file_stem}")
+            logger.info("SKIP (already indexed): %s", file_stem)
             stats["files_skipped"] += 1
             continue
 
-        print(f"\nIndexing {file_stem} ({len(chunks)} chunks) …")
+        logger.info("Indexing %s (%d chunks) …", file_stem, len(chunks))
         t0 = time.time()
 
-        n_points = index_chunks(client, chunks)
+        n_points = upsert.index_chunks(client, chunks)
         elapsed = time.time() - t0
-        print(f"  ✓ {n_points} points in {elapsed:.1f}s")
+        logger.info("  %d points in %.1fs", n_points, elapsed)
         stats["files_indexed"] += 1
         stats["chunks_added"] += n_points
 
-    total = client.get_collection(COLLECTION).points_count
+    collection = qdrant.collection_name()
+    total = client.get_collection(collection).points_count
     stats["total_points"] = total
-    print(f"\nDone. Collection '{COLLECTION}' now has {total} points.")
+    logger.info("Done. Collection '%s' now has %d points.", collection, total)
     return stats
 
 
 # ── Smoke-test query ──────────────────────────────────────────────────────────
 
 def query(text: str, top_k: int = 5, parents_only: bool = False) -> None:
-    client = QdrantClient(url=QDRANT_URL)
+    client = qdrant.get_client()
     vec = embedder.embed_texts([text])[0]
 
     filt = None
@@ -188,7 +81,7 @@ def query(text: str, top_k: int = 5, parents_only: bool = False) -> None:
         )])
 
     result = client.query_points(
-        collection_name=COLLECTION,
+        collection_name=qdrant.collection_name(),
         query=vec,
         limit=top_k,
         query_filter=filt,
@@ -211,19 +104,20 @@ def query(text: str, top_k: int = 5, parents_only: bool = False) -> None:
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
 def main() -> None:
+    configure_logging()
     parser = argparse.ArgumentParser(description="Index QTKĐ Markdown into Qdrant")
-    parser.add_argument("--md-dir", default="build/spike_a", help="Directory with *.md files")
+    parser.add_argument("--md-dir", default=None, help="Directory with *.md files")
     parser.add_argument("--force", action="store_true", help="Re-index even if already present")
     parser.add_argument("--query", help="Run a smoke-test query after indexing")
     args = parser.parse_args()
 
-    md_dir = Path(args.md_dir)
+    md_dir = Path(args.md_dir) if args.md_dir else get_settings().paths.markdown_dir
     if not md_dir.exists():
         print(f"ERROR: {md_dir} does not exist", file=sys.stderr)
         sys.exit(1)
 
     stats = index_directory(md_dir, force=args.force)
-    print(json.dumps(stats, ensure_ascii=False, indent=2))
+    logger.info("Index xong: %s", json.dumps(stats, ensure_ascii=False))
 
     if args.query:
         query(args.query)

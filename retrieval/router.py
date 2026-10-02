@@ -9,12 +9,9 @@ with a hardcoded fallback, so retrieval never depends on Postgres being up.
 """
 from __future__ import annotations
 
-import os
 import re
-from qdrant_client import QdrantClient
 
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-COLLECTION = "qtkd_rag"
+from vectorstore import qdrant
 
 # X.YYY — exactly one digit, dot, exactly 3 digits, NOT followed by another digit.
 # Matches "1.061" / "1.160" but NOT "6.3", "0.05", "1400".
@@ -82,12 +79,12 @@ def _ensure_device_aliases() -> dict[str, tuple[str, ...]]:
 
 def _build_number_to_stem() -> dict[str, str]:
     """Scroll Qdrant for distinct file_stems, map QTKĐ number → full file_stem."""
-    client = QdrantClient(url=QDRANT_URL)
+    client = qdrant.get_client()
     stems: set[str] = set()
     offset = None
     while True:
         results, next_offset = client.scroll(
-            collection_name=COLLECTION,
+            collection_name=qdrant.collection_name(),
             limit=500,
             offset=offset,
             with_payload=["file_stem"],

@@ -1,24 +1,14 @@
 """Guard chống lệch hằng số rải rác khắp 4+ module (CLAUDE.md: phải đổi đồng bộ).
 
-VECTOR_SIZE phải khớp service embedding; COLLECTION phải thống nhất; k của RRF và
-độ rộng phễu là thứ eval phụ thuộc; hằng app khớp magic number trong test LLM.
+k của RRF và độ rộng phễu là thứ eval phụ thuộc; hằng app khớp magic number
+trong test LLM. VECTOR_SIZE/COLLECTION nay là cấu hình duy nhất ở
+tests/unit/core/test_settings_values.py.
 """
 
 import inspect
 
 import generation
 import retrieval.retriever as RET
-import retrieval.router as RT
-import vectorstore.hybrid_index as BM
-import vectorstore.index as ES
-
-
-def test_vector_size_matches_embedding_service():
-    assert ES.VECTOR_SIZE == 1024
-
-
-def test_collection_name_consistent_everywhere():
-    assert ES.COLLECTION == RET.COLLECTION == BM.COLLECTION == RT.COLLECTION == "qtkd_rag"
 
 
 def test_rrf_k_default_is_60():

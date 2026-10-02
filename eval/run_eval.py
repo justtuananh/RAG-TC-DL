@@ -26,12 +26,12 @@ from retrieval.retriever import (
     TOP_K,
     _expand_query,
     _filter_noise,
-    dense_search,
     rerank_hits,
     rrf_fuse,
 )
 from retrieval.router import route
 from vectorstore.hybrid_index import bm25_search
+from vectorstore.qdrant import dense_search
 
 # ── match logic ───────────────────────────────────────────────────────────────
 

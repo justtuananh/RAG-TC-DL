@@ -106,7 +106,7 @@ def test_record_job_ingests_without_markdown_or_embedding(session, monkeypatch):
 
     monkeypatch.setattr("records.ingest.ingest_file_stem", fake_ingest)
     monkeypatch.setattr(ingestion_jobs, "process_one", bomb)
-    monkeypatch.setattr(ingestion_jobs, "index_chunks", bomb)
+    monkeypatch.setattr("vectorstore.upsert.index_chunks", bomb)
 
     ingestion_jobs._run_job(RECORD_STEM, Path(RECORD_STEM + ".xlsx"))
 
