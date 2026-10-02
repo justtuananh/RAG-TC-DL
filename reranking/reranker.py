@@ -45,6 +45,28 @@ def build_rerank_doc(payload: dict, parent: dict | None) -> str:
     return f"{payload['file_stem']} — {payload['section_path']}\n{text}"
 
 
+def score_documents(query: str, documents: list[str]) -> list[float]:
+    """Gọi cross-encoder, trả điểm theo ĐÚNG thứ tự ``documents``.
+
+    Service có thể trả ``results`` lộn thứ tự nên sắp lại theo trường ``index``.
+    Tách riêng để công cụ quét cache theo từng cặp (query, document).
+    """
+    if not documents:
+        return []
+    settings = get_settings()
+    resp = requests.post(
+        settings.services.rerank_url,
+        json={"query": query, "documents": documents, "top_n": len(documents)},
+        timeout=settings.reranking.timeout_s,
+    )
+    resp.raise_for_status()
+    results = resp.json()["results"]
+    scores = [0.0] * len(documents)
+    for r in results:
+        scores[r["index"]] = r["relevance_score"]
+    return scores
+
+
 def rerank_hits(query: str, hits: list[dict], top_n: int | None = None) -> list[dict]:
     """Rerank on PARENT section text for richer context; attach parent_payload.
 
@@ -77,13 +99,7 @@ def rerank_hits(query: str, hits: list[dict], top_n: int | None = None) -> list[
         documents.append(build_rerank_doc(h["payload"], parent))
 
     try:
-        resp = requests.post(
-            settings.services.rerank_url,
-            json={"query": query, "documents": documents, "top_n": len(documents)},
-            timeout=settings.reranking.timeout_s,
-        )
-        resp.raise_for_status()
-        results = resp.json()["results"]
+        scores = score_documents(query, documents)
     except Exception as exc:
         # Reranker unavailable - fall back to RRF ordering
         logger.warning("Reranker failed (%s), falling back to RRF order", exc)
@@ -95,13 +111,12 @@ def rerank_hits(query: str, hits: list[dict], top_n: int | None = None) -> list[
             out.append(h2)
         return out
 
-    results.sort(key=lambda x: x["relevance_score"], reverse=True)
+    order = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
 
     out = []
-    for r in results[:top_n]:
-        idx = r["index"]
+    for idx in order[:top_n]:
         h = dict(unique_hits[idx])
-        h["rerank_score"] = r["relevance_score"]
+        h["rerank_score"] = scores[idx]
         h["parent_payload"] = parent_payloads[idx]
         out.append(h)
     return out
