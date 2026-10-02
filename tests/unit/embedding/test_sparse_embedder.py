@@ -1,11 +1,11 @@
-"""BM25 tokenizer — KHÓA value-prop: giữ nguyên mã/đơn vị kỹ thuật.
+"""Sparse embedder (BM25 tokenizer) — KHÓA value-prop: giữ nguyên mã/đơn vị kỹ thuật.
 
-retrieval.bm25_index.tokenize cố tình KHÔNG tách `.` `:` `%` `-` để mã QTKĐ
+embedding.sparse_embedder.tokenize cố tình KHÔNG tách `.` `:` `%` `-` để mã QTKĐ
 (1.061:2021), đơn vị (MPa, bar), kích cỡ (DN50) và phần trăm (0.05%) còn nguyên —
 dense embedding làm mờ những token này nên BM25 phải bắt chính xác.
 """
 
-from retrieval.bm25_index import _SPLIT_RE, tokenize
+from embedding.sparse_embedder import _SPLIT_RE, tokenize
 
 
 def test_keeps_technical_codes_and_units():

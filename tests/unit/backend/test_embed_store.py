@@ -7,16 +7,12 @@ import json
 
 import responses
 
-import index.embed_store as ES
-from index.chunker import Chunk
+from core.schema import Chunk
+from core.settings_loader import get_settings
+from embedding.batch_embed import _qtkd_prefix, embed_chunks_batched
 from index.embed_store import (
-    BATCH_SIZE,
-    EMBED_URL,
     UPSERT_BATCH,
     VECTOR_SIZE,
-    _qtkd_prefix,
-    embed_chunks_batched,
-    embed_texts,
     index_chunks,
     indexed_files,
     upsert,
@@ -24,14 +20,23 @@ from index.embed_store import (
 
 
 @responses.activate
-def test_embed_texts_sorts_by_index():
+def test_embed_texts_sorts_by_index(settings_override):
+    settings_override({"services.embedding_url": "http://emb.test/v1/embeddings"})
+
     def cb(req):
         texts = json.loads(req.body)["input"]
         # Trả về ĐẢO thứ tự để chứng minh embed_texts tự sort theo "index".
         data = [{"index": i, "embedding": [float(i)] * 4} for i in range(len(texts))][::-1]
         return (200, {}, json.dumps({"data": data}))
 
-    responses.add_callback(responses.POST, EMBED_URL, callback=cb, content_type="application/json")
+    responses.add_callback(
+        responses.POST,
+        "http://emb.test/v1/embeddings",
+        callback=cb,
+        content_type="application/json",
+    )
+    from embedding.embedder import embed_texts
+
     assert embed_texts(["a", "b", "c"]) == [[0.0] * 4, [1.0] * 4, [2.0] * 4]
 
 
@@ -43,11 +48,11 @@ def test_qtkd_prefix():
 def test_embed_chunks_batched_respects_batch_size(monkeypatch):
     seen_sizes = []
 
-    def fake_embed(texts):
+    def fake_embed(texts, *, timeout=None):
         seen_sizes.append(len(texts))
         return [[0.0] * VECTOR_SIZE for _ in texts]
 
-    monkeypatch.setattr(ES, "embed_texts", fake_embed)
+    monkeypatch.setattr("embedding.embedder.embed_texts", fake_embed)
     chunks = [
         Chunk(
             chunk_id=f"{i:016x}",
@@ -62,7 +67,8 @@ def test_embed_chunks_batched_respects_batch_size(monkeypatch):
     ]
     vecs = embed_chunks_batched(chunks)
     assert len(vecs) == 20
-    assert seen_sizes == [BATCH_SIZE, BATCH_SIZE, 20 - 2 * BATCH_SIZE]  # 8, 8, 4
+    batch_size = get_settings().embedding.batch_size
+    assert seen_sizes == [batch_size, batch_size, 20 - 2 * batch_size]  # 8, 8, 4
 
 
 def test_indexed_files_returns_unique_stems():
@@ -132,7 +138,8 @@ def _chunk(i: int, text: str, stem: str = "QTKD_X") -> Chunk:
 def test_index_chunks_replaces_existing_points_for_file(monkeypatch):
     """B11: nhúng lại cùng file chỉ còn tập chunk mới, không cộng dồn chunk cũ."""
     monkeypatch.setattr(
-        ES, "embed_chunks_batched", lambda chunks: [[0.0] * VECTOR_SIZE for _ in chunks]
+        "embedding.batch_embed.embed_chunks_batched",
+        lambda chunks: [[0.0] * VECTOR_SIZE for _ in chunks],
     )
     client = _FakeQdrant()
 
@@ -152,7 +159,8 @@ def test_index_chunks_replaces_existing_points_for_file(monkeypatch):
 def test_index_chunks_deletes_each_file_stem_once(monkeypatch):
     """Tập chunk nhiều file: xóa đúng từng file_stem trước khi ghi."""
     monkeypatch.setattr(
-        ES, "embed_chunks_batched", lambda chunks: [[0.0] * VECTOR_SIZE for _ in chunks]
+        "embedding.batch_embed.embed_chunks_batched",
+        lambda chunks: [[0.0] * VECTOR_SIZE for _ in chunks],
     )
     client = _FakeQdrant()
 

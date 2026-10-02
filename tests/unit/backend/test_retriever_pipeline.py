@@ -37,7 +37,7 @@ def _rerank_callback(req):
 def test_pipeline_dedups_by_parent_and_sorts(monkeypatch):
     dense = [_child("c1", "p1"), _child("c2", "p2")]
     bm25 = [_child("c1", "p1"), _child("c3", "p2")]  # c3 cùng parent p2 với c2
-    monkeypatch.setattr(R, "embed_query", lambda q: [0.0] * 1024)
+    monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
     monkeypatch.setattr(R, "dense_search", lambda vec, top_k=50, file_stem=None: dense)
     monkeypatch.setattr(
         "retrieval.bm25_index.bm25_search", lambda q, top_k=50, file_stem=None: bm25
@@ -79,7 +79,7 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
         calls["bm25"].append(file_stem)
         return [] if file_stem else [_child("c9", "p9")]
 
-    monkeypatch.setattr(R, "embed_query", lambda q: [0.0] * 1024)
+    monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
     monkeypatch.setattr(R, "dense_search", dense_search)
     monkeypatch.setattr("retrieval.bm25_index.bm25_search", bm25_search)
     monkeypatch.setattr(
@@ -122,7 +122,7 @@ def test_multi_file_query_runs_per_file_funnels(monkeypatch):
         calls["bm25"].append(file_stem)
         return []
 
-    monkeypatch.setattr(R, "embed_query", lambda q: [0.0] * 1024)
+    monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
     monkeypatch.setattr(R, "dense_search", dense_search)
     monkeypatch.setattr("retrieval.bm25_index.bm25_search", bm25_search)
     monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset({"FILE_A", "FILE_B"}))

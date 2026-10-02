@@ -20,6 +20,7 @@ from pathlib import Path
 # Allow running from project root
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from embedding.embedder import embed_query
 from retrieval.bm25_index import bm25_search
 from retrieval.retriever import (
     RERANK_POOL,
@@ -27,7 +28,6 @@ from retrieval.retriever import (
     _expand_query,
     _filter_noise,
     dense_search,
-    embed_query,
     rerank_hits,
     rrf_fuse,
 )

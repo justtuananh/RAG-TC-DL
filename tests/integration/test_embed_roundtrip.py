@@ -5,7 +5,7 @@ import requests
 
 def test_embed_query_dim_1024(require_services):
     require_services("embedding")
-    from retrieval.retriever import embed_query
+    from embedding.embedder import embed_query
 
     vec = embed_query("áp suất van an toàn")
     assert isinstance(vec, list)

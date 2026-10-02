@@ -6,29 +6,19 @@ codes/units intact (e.g. 1.061:2021, MPa, bar, DN50, 0.05%).
 from __future__ import annotations
 
 import os
-import re
 from typing import Optional
 
 from rank_bm25 import BM25Okapi
 from qdrant_client import QdrantClient
 from qdrant_client.models import Filter, FieldCondition, MatchValue
 
+from embedding.sparse_embedder import sparse_document_text, tokenize
+
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 COLLECTION = "qtkd_rag"
 
 _bm25: Optional[BM25Okapi] = None
 _chunks: Optional[list[dict]] = None   # child chunk payloads in corpus order
-
-
-# ── tokenizer ─────────────────────────────────────────────────────────────────
-
-_SPLIT_RE = re.compile(r'[\s,;!()\[\]{}<>"\'\\|]+')
-
-
-def tokenize(text: str) -> list[str]:
-    """Lowercase split preserving codes like 1.061:2021, MPa, bar, DN≤50."""
-    tokens = _SPLIT_RE.split(text.lower())
-    return [t for t in tokens if t]
 
 
 # ── index build ───────────────────────────────────────────────────────────────
@@ -41,16 +31,6 @@ from retrieval._constants import (
 
 def _is_noise(payload: dict) -> bool:
     return _is_noise_path(payload.get("section_path", ""))
-
-
-def _corpus_text(payload: dict) -> str:
-    """Include file_stem + section_path so BM25 can match QTKĐ numbers (e.g. 1.062, 1.063)."""
-    parts = [
-        payload.get("file_stem", ""),
-        payload.get("section_path", ""),
-        payload.get("text", ""),
-    ]
-    return " ".join(p for p in parts if p)
 
 
 def _scroll_child_chunks() -> list[dict]:
@@ -82,7 +62,7 @@ def _ensure_index() -> tuple[BM25Okapi, list[dict]]:
         raw = _scroll_child_chunks()
         # Exclude boilerplate "Mẫu biên bản" / "(Quy định)" sections from BM25
         _chunks = [c for c in raw if not _is_noise(c)]
-        corpus = [tokenize(_corpus_text(c)) for c in _chunks]
+        corpus = [tokenize(sparse_document_text(c)) for c in _chunks]
         _bm25 = BM25Okapi(corpus)
     return _bm25, _chunks
 

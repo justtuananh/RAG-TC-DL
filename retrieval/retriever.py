@@ -12,11 +12,11 @@ import requests
 from qdrant_client import QdrantClient
 from qdrant_client.models import FieldCondition, Filter, MatchValue
 
-EMBED_URL  = os.getenv("EMBED_URL",  "http://localhost:8010/v1/embeddings")
+from embedding import embedder
+
 RERANK_URL = os.getenv("RERANK_URL", "http://localhost:8011/v1/rerank")
 QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
 COLLECTION = "qtkd_rag"
-EMBED_TIMEOUT = 120
 RERANK_TIMEOUT = 60
 
 # Funnel widths (Phase 3): search deeper, let reranker decide.
@@ -31,18 +31,6 @@ def _get_client() -> QdrantClient:
     if _client is None:
         _client = QdrantClient(url=QDRANT_URL)
     return _client
-
-
-def embed_query(text: str) -> list[float]:
-    resp = requests.post(
-        EMBED_URL,
-        json={"input": [text], "model": "model"},
-        timeout=EMBED_TIMEOUT,
-    )
-    resp.raise_for_status()
-    data = resp.json()["data"]
-    data.sort(key=lambda x: x["index"])
-    return data[0]["embedding"]
 
 
 def dense_search(
@@ -305,7 +293,7 @@ def retrieve(query: str, top_k: int = TOP_K, top_n: int = 5) -> list[dict]:
     from .router import route_files
 
     expanded = _expand_query(query)
-    vec = embed_query(expanded)
+    vec = embedder.embed_query(expanded)
     stems = route_files(query)
 
     # Câu so sánh ≥2 thiết bị: chạy phễu RIÊNG cho từng file rồi rerank chung.
