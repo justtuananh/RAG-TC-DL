@@ -419,6 +419,24 @@ def test_ground_params_drops_invented_identifiers():
     assert intents.ground_params({"procedure_number": "1.061"}, "Bảng phương tiện?") == {}
 
 
+def test_ground_params_drops_identifiers_without_a_digit():
+    """Từ chung ("thiết bị") có trong câu hỏi nhưng không phải số hiệu/số QTKĐ."""
+    assert intents.ground_params({"serial": "thiết bị"}, "Lịch sử kiểm định của thiết bị?") == {}
+    assert intents.ground_params({"procedure_number": "quy trình"}, "Thông số quy trình?") == {}
+
+
+def test_procedure_params_device_name_under_keyword_becomes_device_type():
+    payload = {
+        "branch": "data",
+        "intent": "procedure_params",
+        "params": {"keyword": "van an toàn"},
+    }
+    out = intents.sanitize_classification(
+        payload, "Phạm vi đo và cấp chính xác của quy trình van an toàn?"
+    )
+    assert out["params"] == {"device_type": "van an toàn"}
+
+
 def test_ground_params_drops_verdict_without_cue():
     assert intents.ground_params(
         {"date_from": "2024-01-01", "date_to": "2024-12-31", "verdict": "dat_khoang"},
@@ -545,6 +563,43 @@ def test_sanitize_classification_normalizes_period_dates():
     }
     out = intents.sanitize_classification(payload, "Hồ sơ kiểm định từ 2025 đến 2024")
     assert out["params"] == {"date_from": "2025-01-01", "date_to": "2024-12-31"}
+
+
+def _range_payload(min_value, max_value):
+    return {
+        "branch": "data",
+        "intent": "devices_by_range",
+        "params": {"quantity": "áp suất", "min_value": min_value, "max_value": max_value},
+    }
+
+
+def test_sanitize_classification_keeps_the_question_range_order():
+    """Model 7b tự đảo khoảng ngược; thứ tự phải theo câu hỏi để pydantic từ chối."""
+    out = intents.sanitize_classification(
+        _range_payload(0, 100), "Thiết bị có phạm vi đo từ 100 đến 0 bar?"
+    )
+    assert (out["params"]["min_value"], out["params"]["max_value"]) == (100.0, 0.0)
+    assert intents.decide(out).branch == "text"
+
+
+@pytest.mark.parametrize(
+    ("question", "expected"),
+    [
+        ("Đồng hồ nào đo từ 0,6 tới 16 bar", (0.6, 16.0)),
+        ("Áp kế có dải đo từ 0 bar đến 250 bar", (0.0, 250.0)),
+    ],
+)
+def test_sanitize_classification_reads_range_with_units_and_decimal_comma(question, expected):
+    out = intents.sanitize_classification(_range_payload(expected[1], expected[0]), question)
+    assert (out["params"]["min_value"], out["params"]["max_value"]) == expected
+
+
+def test_sanitize_classification_leaves_range_the_question_does_not_state():
+    """Số trong câu hỏi khác cặp số của LLM: không đoán, giữ nguyên lựa chọn LLM."""
+    out = intents.sanitize_classification(
+        _range_payload(0, 250), "Thiết bị đo áp suất từ 10 đến 60 bar có mấy cái"
+    )
+    assert (out["params"]["min_value"], out["params"]["max_value"]) == (0, 250)
 
 
 def test_procedure_params_answers_only_the_asked_fact(data_db):

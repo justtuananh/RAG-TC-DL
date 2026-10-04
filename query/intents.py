@@ -407,7 +407,8 @@ def ground_params(params: dict[str, Any] | None, question: str) -> dict[str, Any
         if value is None:
             continue
         cleaned = _clean_identifier(str(value))
-        if _appears_in(cleaned, question):
+        # Số hiệu và số QTKĐ luôn có chữ số; từ chung như "thiết bị" thì không.
+        if any(char.isdigit() for char in cleaned) and _appears_in(cleaned, question):
             result[key] = cleaned
         else:
             result.pop(key, None)
@@ -466,6 +467,43 @@ def extract_date_range(question: str) -> dict[str, str]:
     return {}
 
 
+_NUMBER = r"(-?\d+(?:,\d+)?)"
+_VALUE_RANGE_RE = re.compile(
+    rf"từ\s+{_NUMBER}\s*(?:[^\W\d_][\w/°]*\s*)?(?:đến|tới)\s+{_NUMBER}",
+    re.IGNORECASE | re.UNICODE,
+)
+
+
+def extract_value_range(question: str) -> tuple[float, float] | None:
+    """Cặp 'từ A đến/tới B' của câu hỏi, đúng thứ tự; None nếu không có.
+
+    Dấu phẩy là dấu thập phân ("0,6"). Đơn vị đứng sau A ("từ 0 bar đến 250 bar")
+    được bỏ qua.
+    """
+    match = _VALUE_RANGE_RE.search(question or "")
+    if not match:
+        return None
+    first, second = (float(group.replace(",", ".")) for group in match.groups())
+    return first, second
+
+
+def _order_range_as_asked(params: dict[str, Any], question: str) -> dict[str, Any]:
+    """Giữ thứ tự min/max như câu hỏi khi LLM chỉ đảo hai số.
+
+    Model lớn hay "sửa" khoảng ngược ("từ 100 đến 0") thành khoảng hợp lệ; giữ đúng
+    thứ tự để pydantic từ chối và câu hỏi rơi về ``text``. Cặp số khác câu hỏi thì
+    giữ nguyên lựa chọn LLM (không đoán).
+    """
+    asked = extract_value_range(question)
+    try:
+        chosen = {float(params["min_value"]), float(params["max_value"])}
+    except (KeyError, TypeError, ValueError):
+        return params
+    if asked is None or set(asked) != chosen:
+        return params
+    return {**params, "min_value": asked[0], "max_value": asked[1]}
+
+
 _INTENT_ALIASES: dict[str, str] = {
     "lab_standard": "lab_standard_lookup",
     "standard_lookup": "lab_standard_lookup",
@@ -503,10 +541,16 @@ def sanitize_classification(payload: dict[str, Any] | None, question: str) -> di
     intent = str(result.get("intent") or "").strip().lower()
     intent = _resolve_intent_alias(intent, params, question)
     result["intent"] = intent
+    if intent == "procedure_params" and "keyword" in params:
+        # ``keyword`` là khoá của các intent danh mục; ở đây model muốn nói tên thiết bị.
+        keyword = params.pop("keyword")
+        params.setdefault("device_type", keyword)
     if intent == "records_by_period":
         dates = extract_date_range(question)
         if dates:
             params.update(dates)
+    if intent == "devices_by_range":
+        params = _order_range_as_asked(params, question)
     result["params"] = params
     return result
 

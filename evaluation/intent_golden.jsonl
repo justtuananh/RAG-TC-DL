@@ -32,7 +32,7 @@
 {"question": "Có bao nhiêu hồ sơ kiểm định trong năm 2025", "branch": "data", "intent": "records_by_period", "params": {"date_from": "2025-01-01", "date_to": "2025-12-31"}, "confidence": 0.92}
 {"question": "Xu hướng sai số quả cân của áp kế 6112", "branch": "data", "intent": "error_trend", "params": {"serial": "6112"}, "confidence": 0.92}
 {"question": "Lần gần đây nhất thiết bị 6112 được kiểm định là khi nào", "branch": "data", "intent": "latest_record", "params": {"serial": "6112"}, "confidence": 0.93}
-{"question": "Thiết bị 0391 đã kiểm mấy lần", "branch": "data", "intent": "device_history", "params": {"serial": "0391"}, "confidence": 0.92}
+{"question": "Thiết bị 0391 đã kiểm mấy lần", "branch": "data", "intent": "records_summary", "params": {"serial": "0391"}, "confidence": 0.92}
 {"question": "1A0043219 khi nào hết hạn kiểm định", "branch": "data", "intent": "latest_record", "params": {"serial": "1A0043219"}, "confidence": 0.92}
 {"question": "Lịch sử kiểm định của áp kế B280-7702", "branch": "data", "intent": "device_history", "params": {"serial": "B280-7702"}, "confidence": 0.93}
 {"question": "Hồ sơ kiểm định trong tháng 5/2026", "branch": "data", "intent": "records_by_period", "params": {"date_from": "2026-05-01", "date_to": "2026-05-31"}, "confidence": 0.92}
@@ -53,12 +53,12 @@
 {"question": "Sai số cho phép của áp kế píttông tiêu chuẩn là bao nhiêu?", "branch": "text"}
 {"question": "Thời gian quay tự do tối thiểu của quả cân píttông là bao lâu?", "branch": "text"}
 {"question": "Cách hiệu chỉnh áp suất khi nhiệt độ thay đổi?", "branch": "text"}
-{"question": "Áp kế 4471 kiểm mấy lần rồi", "branch": "data", "intent": "device_history", "params": {"serial": "4471"}, "confidence": 0.92}
+{"question": "Áp kế 4471 kiểm mấy lần rồi", "branch": "data", "intent": "records_summary", "params": {"serial": "4471"}, "confidence": 0.92}
 {"question": "Thiết bị 2218 lần kiểm mới nhất kết luận ra sao", "branch": "data", "intent": "latest_record", "params": {"serial": "2218"}, "confidence": 0.92}
 {"question": "Số hiệu B280-7702 sai số thay đổi thế nào qua các năm", "branch": "data", "intent": "error_trend", "params": {"serial": "B280-7702"}, "confidence": 0.92}
 {"question": "Áp kế 0391 lần kiểm mới nhất khi nào", "branch": "data", "intent": "latest_record", "params": {"serial": "0391"}, "confidence": 0.92}
 {"question": "1A0043219 lần gần nhất đạt hay không đạt", "branch": "data", "intent": "latest_record", "params": {"serial": "1A0043219"}, "confidence": 0.92}
-{"question": "Máy 58-3312 đã kiểm mấy lần rồi", "branch": "data", "intent": "device_history", "params": {"serial": "58-3312"}, "confidence": 0.92}
+{"question": "Máy 58-3312 đã kiểm mấy lần rồi", "branch": "data", "intent": "records_summary", "params": {"serial": "58-3312"}, "confidence": 0.92}
 {"question": "Phương tiện YS600-19087 lần kiểm mới nhất đạt không", "branch": "data", "intent": "latest_record", "params": {"serial": "YS600-19087"}, "confidence": 0.92}
 {"question": "Số hiệu T23-0512 diễn biến sai số qua các năm thế nào", "branch": "data", "intent": "error_trend", "params": {"serial": "T23-0512"}, "confidence": 0.92}
 {"question": "Các biên bản không đạt trong khoảng 2024 đến 2025", "branch": "data", "intent": "records_by_period", "params": {"date_from": "2024-01-01", "date_to": "2025-12-31", "verdict": "khong_dat"}, "confidence": 0.92}
