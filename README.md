@@ -61,7 +61,7 @@ ro lớn nhất của dự án — *độ chính xác công thức là mối qua
 | Lớp | Thành phần | Ghi chú |
 |---|---|---|
 | **Giao diện** | **Gradio** `ui/gradio_app.py` `:7861` · **React** `frontend/` `:3000` (dev Vite `:5173`, + `python -m api.main` FastAPI `:8080`) · **kotaemon** (Mode B) | React UI **đã nối backend thật** (SSE, bảng + công thức, lịch sử/bộ nhớ) - [`frontend/README.md`](frontend/README.md) |
-| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | model `models.llm_chat` trong `config/settings.yaml` (mặc định `qwen2.5:3b`), `:11434`; `llm/generator.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
+| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | model `models.llm_chat` trong `config/settings.yaml` (mặc định `qwen2.5:7b-instruct`, dùng cho cả sinh đáp án lẫn phân loại intent), `:11434`; `llm/generator.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
 | **Embedding** | **bge-m3** (1024 chiều) qua **inference server tự viết** | `docker/inference/server.py` (FastAPI + sentence-transformers), `:8010`, `/v1/embeddings` |
 | **Reranker** | **bge-reranker-v2-m3** qua cùng server (CrossEncoder) | `:8011`, `/v1/rerank` (Cohere-style); env `RERANKER_MAX_LENGTH` (mặc định 1024) |
 | **Vector store** | **A: Qdrant** `:6333` (collection `qtkd_rag`) · **B: Chroma** (nhúng) | `1024` chiều (`models.embedding.vector_size` trong `config/settings.yaml`) |
@@ -120,7 +120,7 @@ Toàn bộ stack gói trong `docker-compose.yml` + điều khiển qua `Makefile
 ```bash
 # 0) Đã chạy ingestion (§3.2) → có build/spike_a/   (compose mount thư mục này read-only)
 make up            # build images + start: qdrant, embedding, reranker, ollama, api, frontend  (~10–20' lần đầu: tải model)
-make pull-model    # tải models.llm_chat (config/settings.yaml) vào container ollama; model 7b: make pull-model-7b
+make pull-model    # tải models.llm_chat (config/settings.yaml, qwen2.5:7b-instruct) vào container ollama
 make index         # indexer: vectorstore.index --force → nhúng build/spike_a/ vào Qdrant
 # → mở http://localhost:3000
 ```
@@ -148,7 +148,7 @@ không có vấn đề tương thích).
 | `make up` / `make start` | Start (có / không rebuild) |
 | `make down` | Dừng toàn bộ |
 | `make logs` / `make status` | Xem log realtime / trạng thái container |
-| `make pull-model` / `make pull-model-7b` | Tải `models.llm_chat` (settings) / `qwen2.5:7b` |
+| `make pull-model` | Tải `models.llm_chat` (settings, `qwen2.5:7b-instruct`) |
 | `make index` | Index `build/spike_a/` vào Qdrant |
 | `make rebuild` | Build lại images `--no-cache` rồi up |
 | `make clean-volumes` | ⚠ Xoá toàn bộ data (Qdrant + Ollama models) |
@@ -333,8 +333,7 @@ python -m evaluation.run_eval --eval-file evaluation/eval_set_ext.jsonl   # bộ
 
 **Answer-quality** (coverage / citation / refusal / ảo giác — cần thêm Ollama `:11434` + model đã pull):
 ```bash
-make answer-eval                                   # so 2 model (29 câu khó, evaluation/answer_set.jsonl)
-make answer-eval-dev                               # chỉ model chat (nhanh)
+make answer-eval                                   # models.llm_chat (29 câu khó, evaluation/answer_set.jsonl)
 python -m evaluation.answer_eval --model qwen2.5:7b -v --dump /tmp/rec_{model}.jsonl   # chấm prod + dump từng câu
 ```
 > ⚠ Số answer-quality chỉ đáng tin trên **qwen2.5:7b** (1.5b không ghi `[n]` — model-bound) và

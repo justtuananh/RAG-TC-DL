@@ -26,7 +26,7 @@ models:
   reranker:
     name: BAAI/bge-reranker-v2-m3         # phải khớp docker-compose service reranker
     max_length: 1024
-  llm_chat: ${OLLAMA_MODEL:-qwen2.5:3b}
+  llm_chat: ${OLLAMA_MODEL:-qwen2.5:7b-instruct}
   llm_intent: ${INTENT_LLM_MODEL:-}       # rỗng = llm_chat
   llm_extraction: ${SECTION6_LLM_MODEL:-} # rỗng = llm_chat
 

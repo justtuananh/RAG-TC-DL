@@ -1,4 +1,4 @@
-.PHONY: up down logs pull-model index rebuild status eval answer-eval answer-eval-dev lint lint-all fmt fidelity test-unit check test-int smoke test test-ruby db-upgrade db-downgrade db-backup migrate-documents db-check seed-knowledge generate-procedures extract-eval extract-section6-eval extract-section6 extract-appendix records-fixtures seed-synthetic intent-eval record-eval knowledge-corpus
+.PHONY: up down logs pull-model index rebuild status eval answer-eval lint lint-all fmt fidelity test-unit check test-int smoke test test-ruby db-upgrade db-downgrade db-backup migrate-documents db-check seed-knowledge generate-procedures extract-eval extract-section6-eval extract-section6 extract-appendix records-fixtures seed-synthetic intent-eval record-eval knowledge-corpus
 
 # ── Khởi động ────────────────────────────────────────────────────────────────
 up:
@@ -19,16 +19,10 @@ status:
 
 # ── Setup lần đầu ────────────────────────────────────────────────────────────
 
-# Tải LLM model vào Ollama (~940MB cho 1.5b, ~4.7GB cho 7b)
+# Tải LLM model vào Ollama (~4.7GB cho qwen2.5:7b-instruct)
 # Model chat mặc định của config/settings.yaml (models.llm_chat).
 pull-model:
 	docker compose exec ollama ollama pull $$($(PY) -m core.settings_loader get models.llm_chat)
-
-pull-model-3b:
-	docker compose exec ollama ollama pull qwen2.5:3b
-
-pull-model-7b:
-	docker compose exec ollama ollama pull qwen2.5:7b
 
 # Index tất cả .md trong build/spike_a/ vào Qdrant — incremental (skip file đã có)
 index:
@@ -55,14 +49,10 @@ clean-volumes:
 eval:
 	$(PY) -m evaluation.run_eval --mode hybrid
 
-# Eval CHẤT LƯỢNG CÂU TRẢ LỜI (coverage/citation/refusal/ảo giác) — so 1.5b vs 7b.
-# Cần 4 service + đã pull cả 2 model (make pull-model && make pull-model-7b).
+# Eval CHẤT LƯỢNG CÂU TRẢ LỜI (coverage/citation/refusal/ảo giác) với models.llm_chat.
+# Cần 4 service + đã pull model (make pull-model). So model khác: --model a,b.
 answer-eval:
-	$(PY) -m evaluation.answer_eval --model qwen2.5:1.5b,qwen2.5:7b
-
-# Chỉ 1.5b (dev nhanh, không cần pull 7b).
-answer-eval-dev:
-	$(PY) -m evaluation.answer_eval --model qwen2.5:1.5b
+	$(PY) -m evaluation.answer_eval
 
 # Smoke test embedding service
 test-embed:

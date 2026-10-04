@@ -2,7 +2,7 @@
 #
 # ── Khởi động lần đầu ──────────────────────────────────────────────────────
 #   make up            → build images + start tất cả services (~10-20 phút, tải models)
-#   make pull-model    → tải LLM qwen2.5:1.5b vào Ollama (~940MB)
+#   make pull-model    → tải LLM qwen2.5:7b-instruct vào Ollama (~4.7GB)
 #   make index         → index build/spike_a/ vào Qdrant (chạy 1 lần)
 #
 # ── Sử dụng hằng ngày ──────────────────────────────────────────────────────
@@ -17,7 +17,7 @@
 #   :8010  → Embedding API   (BAAI/bge-m3)
 #   :8011  → Reranker API    (BAAI/bge-reranker-v2-m3)
 #   :6333  → Qdrant          (vector database)
-#   :11434 → Ollama          (LLM: qwen2.5:1.5b)
+#   :11434 → Ollama          (LLM: qwen2.5:7b-instruct)
 #
 # ── Lưu ý macOS ────────────────────────────────────────────────────────────
 #   Docker trên Mac không dùng được Apple Silicon GPU.
@@ -141,7 +141,7 @@ services:
       retries: 10
       start_period: 600s
 
-  # ── LLM: Ollama (qwen2.5:1.5b dev / qwen2.5:7b prod) ─────────────────────
+  # ── LLM: Ollama (qwen2.5:7b-instruct) ────────────────────────────────────
   ollama:
     image: ollama/ollama:latest
     container_name: qtkd-ollama
@@ -161,7 +161,7 @@ services:
       # lưới an toàn cho mọi client /v1 khác.
       OLLAMA_CONTEXT_LENGTH: "8192"
       # Buộc offload tất cả layers lên GPU (tránh Ollama tự partial-offload khi
-      # ước tính VRAM không đủ). qwen2.5:3b ~2GB fits trong ~3.5GB VRAM còn lại.
+      # ước tính VRAM không đủ). qwen2.5:7b-instruct ~4.7GB (ctx 8192) vừa trên 8GB.
       OLLAMA_NUM_GPU: "999"
       # Giữ model trên GPU mãi mãi — embedding/reranker sẽ tự nhả VRAM sau idle,
       # nhường lại cho Ollama thay vì Ollama unload rồi reload lại.

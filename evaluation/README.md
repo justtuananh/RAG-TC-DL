@@ -29,10 +29,9 @@ So **1.5b vs 7b** trên cùng câu hỏi để tách lỗi-do-model khỏi lỗi
 `multi_section`/`cross_file` ⇒ ngân sách ngữ cảnh/router.
 
 ```bash
-make answer-eval                                   # 1.5b + 7b, tất cả category
-make answer-eval-dev                               # chỉ 1.5b (nhanh)
+make answer-eval                                   # models.llm_chat, tất cả category
 python -m evaluation.answer_eval --category out_of_scope -v
-python -m evaluation.answer_eval --model qwen2.5:1.5b --limit 10 -v
+python -m evaluation.answer_eval --model qwen2.5:3b,qwen2.5:7b-instruct --limit 10 -v
 ```
 
 > ⚠ 7b trên máy CPU (~80s+/câu) rất chậm cho cả bộ; chạy đủ trên máy GPU prod

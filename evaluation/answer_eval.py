@@ -236,7 +236,7 @@ def main() -> None:
     models = [m for m in requested if m in avail]
     skipped = [m for m in requested if m not in avail]
     for m in skipped:
-        print(f"⚠ bỏ qua model chưa pull: {m}  (chạy `make pull-model` / `make pull-model-7b`)")
+        print(f"⚠ bỏ qua model chưa pull: {m}  (chạy `ollama pull <model>`; model mặc định: `make pull-model`)")
     if not models:
         print("❌ Không có model nào sẵn sàng.", file=sys.stderr)
         sys.exit(1)

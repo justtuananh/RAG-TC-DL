@@ -200,7 +200,7 @@ A lower layer never imports a higher one;
 | Embedding  | 8010  | OpenAI-compat `/v1/embeddings`, **1024-dim** (`BAAI/bge-m3`) |
 | Reranker   | 8011  | `/v1/rerank` (`BAAI/bge-reranker-v2-m3`)         |
 | Qdrant     | 6333  | collection `qtkd_rag` (cosine, 1024 dims), bind mount `./qdrant_storage/` |
-| Ollama     | 11434 | **native `/api/chat`** (`llm/generator.py` maps a `/v1` `OLLAMA_URL` to it); model `models.llm_chat` (default `qwen2.5:3b`). KHÔNG quay lại `/v1/chat/completions`: endpoint đó BỎ QUA `options` → num_ctx/num_predict không có hiệu lực (đo 2026-06-11). |
+| Ollama     | 11434 | **native `/api/chat`** (`llm/generator.py` maps a `/v1` `OLLAMA_URL` to it); model `models.llm_chat` (default `qwen2.5:7b-instruct`, also the intent classifier). KHÔNG quay lại `/v1/chat/completions`: endpoint đó BỎ QUA `options` → num_ctx/num_predict không có hiệu lực (đo 2026-06-11). |
 | api        | 8080  | `python -m api.main` (FastAPI+SSE) - backend cho React frontend; same pipeline as `ui/gradio_app.py` |
 | ui         | 7861  | `python -m ui.gradio_app` (Gradio, KaTeX vendored under `ui/static/katex/`) |
 | frontend   | 3000 (Docker) / 5173 (Vite dev) | React UI (nginx, proxy `/api`→api:8080); **đã nối backend thật** (chat SSE + lịch sử/bộ nhớ) - xem `frontend/README.md` |
