@@ -47,6 +47,7 @@ chunking:
 retrieval:
   top_k: 50                               # ứng viên mỗi nhánh dense / BM25
   top_n: 5                                # nguồn trả về sau rerank
+  top_n_per_file: 4                       # câu so sánh ≥2 QTKĐ: nguồn MỖI file (tổng = số file × giá trị này, không dưới top_n)
   rerank_pool: 60                         # trần ứng viên vào cross-encoder sau RRF + lọc nhiễu
   rrf_k: 60
   rrf_weight_dense: 1.0                   # trọng số nhánh dense trong RRF; chỉ tỷ lệ dense/BM25 có tác dụng

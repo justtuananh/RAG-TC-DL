@@ -151,3 +151,44 @@ def test_multi_file_query_runs_per_file_funnels(monkeypatch):
     assert sorted(c for c in calls["dense"] if c) == ["FILE_A", "FILE_B"]
     files = [h["payload"]["file_stem"] for h in out]
     assert set(files) == {"FILE_A", "FILE_B"}  # quota: cả 2 file đều có mặt
+
+
+@responses.activate
+def test_multi_file_query_gives_each_file_its_own_source_budget(monkeypatch):
+    """Câu so sánh 2 QTKĐ: mỗi file được ``top_n_per_file`` nguồn, không chia ``top_n``.
+
+    Đo Q115: top_n=5 chia 2 file chỉ còn 2-3 suất/file, mục 5.1 (nhiệt độ môi trường)
+    của 1.159 đứng thứ 4 trong file nên bị cắt và model gán giá trị của 1.061 cho 1.159.
+    """
+
+    def _c(cid, pid, stem):
+        h = _child(cid, pid)
+        h["payload"]["file_stem"] = stem
+        return h
+
+    def dense_search(vec, top_k=50, file_stem=None):
+        return [_c(f"{file_stem}-d{i}", f"{file_stem}-p{i}", file_stem) for i in range(6)]
+
+    monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
+    monkeypatch.setattr("vectorstore.qdrant.dense_search", dense_search)
+    monkeypatch.setattr(
+        "vectorstore.hybrid_index.bm25_search", lambda q, top_k=50, file_stem=None: []
+    )
+    monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset({"FILE_A", "FILE_B"}))
+    monkeypatch.setattr(
+        "vectorstore.qdrant.fetch_parent",
+        lambda pid: {"text": "p", "section_path": "s", "file_stem": "f"},
+    )
+    responses.add_callback(
+        responses.POST,
+        get_settings().services.rerank_url,
+        callback=_rerank_callback,
+        content_type="application/json",
+    )
+
+    out = R.retrieve("so sánh A và B", top_k=50, top_n=5)
+
+    per_file = get_settings().retrieval.top_n_per_file
+    files = [h["payload"]["file_stem"] for h in out]
+    assert files.count("FILE_A") == per_file
+    assert files.count("FILE_B") == per_file

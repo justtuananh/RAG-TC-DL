@@ -88,6 +88,7 @@ class ChunkingSettings(_Section):
 class RetrievalSettings(_Section):
     top_k: Positive
     top_n: Positive
+    top_n_per_file: Positive
     rerank_pool: Positive
     rrf_k: Positive
     rrf_weight_dense: NonNegativeFloat

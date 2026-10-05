@@ -39,8 +39,13 @@ def _retrieve_per_file(
 
     Một phễu toàn kho bị cụm từ vựng áp đảo (3 file áp kế píttông) đè bẹp file thiểu
     số; đo Q115/Q116: top-5 mất hết chunk 'van an toàn' → model từ chối oan.
+    Mỗi file được ``top_n_per_file`` nguồn thay vì chia ``top_n``: đo Q115, chia 5 nguồn
+    cho 2 file làm mất mục 5.1 của 1.159 (thứ 4 trong file) và model gán giá trị của
+    1.061 cho 1.159.
     """
-    pool = max(top_n * 2, get_settings().retrieval.rerank_pool // len(stems))
+    cfg = get_settings().retrieval
+    top_n = max(top_n, cfg.top_n_per_file * len(stems))
+    pool = max(top_n * 2, cfg.rerank_pool // len(stems))
     fused: list[dict] = []
     for stem in sorted(stems):
         dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k, file_stem=stem)
