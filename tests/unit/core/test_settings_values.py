@@ -17,9 +17,16 @@ def test_defaults_eval_depends_on():
 
 
 def test_context_budget_formula_and_bounds():
+    """Ngữ cảnh + prompt + câu trả lời phải vừa num_ctx: Ollama cắt prompt quá dài.
+
+    Đo 2026-10-05 (qwen2.5:7b): prompt không ngữ cảnh 450 token, ngữ cảnh QTKĐ 2,54
+    ký tự/token; công thức cũ (không trừ max_new_tokens, 3 ký tự/token) cho 20 976 ký tự,
+    đủ cả 5 mục của câu diện tích hiệu dụng thì prompt chạm đúng 8 191/8 192 token.
+    """
     llm = load_settings(env={}).llm
-    expected = (llm.chat.num_ctx - llm.context.prompt_reserve_tokens) * llm.context.chars_per_token
-    assert llm.total_context_chars == expected
+    tokens = llm.chat.num_ctx - llm.context.prompt_reserve_tokens - llm.chat.max_new_tokens
+    assert llm.total_context_chars == int(tokens * llm.context.chars_per_token)
+    assert llm.context.chars_per_token <= 2.54
     assert llm.total_context_chars > 1800
     assert llm.context.min_block_chars < llm.context.max_block_chars < llm.total_context_chars
 

@@ -119,10 +119,13 @@ class ChatLlmSettings(_Section):
 
 
 class ContextSettings(_Section):
-    chars_per_token: Positive
+    chars_per_token: PositiveFloat
     prompt_reserve_tokens: Positive
     max_block_chars: Positive
     min_block_chars: Positive
+    window_anchors: Positive
+    lead_in_tail_chars: Positive
+    formula_line_slack: Positive
     source_abs_floor: Annotated[float, Field(ge=0)]
     source_rel_floor: Annotated[float, Field(ge=0, le=1)]
 
@@ -146,10 +149,10 @@ class LlmSettings(_Section):
 
     @property
     def total_context_chars(self) -> int:
-        """Trần tổng ký tự ngữ cảnh: phần num_ctx còn lại sau prompt, quy ra ký tự."""
-        return (
-            self.chat.num_ctx - self.context.prompt_reserve_tokens
-        ) * self.context.chars_per_token
+        """Trần tổng ký tự ngữ cảnh: phần num_ctx còn lại sau prompt (hệ thống + câu hỏi +
+        lịch sử) VÀ câu trả lời, quy ra ký tự."""
+        tokens = self.chat.num_ctx - self.context.prompt_reserve_tokens - self.chat.max_new_tokens
+        return int(tokens * self.context.chars_per_token)
 
 
 class IngestionSettings(_Section):

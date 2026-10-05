@@ -53,6 +53,7 @@ A lower layer never imports a higher one;
 - `extract_docx.py` — walks `word/document.xml` **in document order**, preserving heading
   hierarchy and tables (as Markdown). At each formula it inserts a placeholder token
   `⟦Fxxx⟧` and records the OLE `.bin` + image asset. Only depends on `lxml`.
+  Headings come from Word heading styles; a direct `w:outlineLvl` counts only when the text starts with a section number of that depth (QTKĐ 1.159 "6.3.2").
 - `mtef.py` — parses the MathType "Equation Native" (MTEF) stream from the OLE via `olefile`
   to confirm a formula is recoverable.
 - `mtef_to_latex.py` — converts OLE `.bin` → LaTeX via **`mathtype_to_mathml` (a Ruby gem,
@@ -60,6 +61,7 @@ A lower layer never imports a higher one;
   table). Returns `None` on any failure. **Requires Ruby + the gem installed**; `_GEM_PATHS`
   is hardcoded for macOS system Ruby 2.6. `vendor/xsltml/mml2tex.xsl` is a vendored XSLT
   fallback for MathML→LaTeX.
+  `vendor/mathtype_to_mathml/patch.rb` patches the gem at runtime (square roots it drops, nested parentheses, dangling prescripts, read-only OLE); regression fixtures are in `tests/fixtures/mtef/` (`make test-ruby`).
 - `omml.py` — converts native Word OMML to LaTeX (present for completeness; corpus has none).
 - `spike_a.py` — the runner. For each `.docx`: extracts, dumps every formula's `.bin`+`.wmf`
   to `build/spike_a/assets/<file>/`, converts to LaTeX, replaces `⟦Fxxx⟧` placeholders with
@@ -131,8 +133,11 @@ A lower layer never imports a higher one;
   kiện (phạm vi đo, cấp chính xác, chu kỳ, nhiệt độ / độ ẩm…) VÀ mọi phần được hỏi đều có dữ
   kiện (`query/procedure_scope.py`); câu hỏi quy định khác (sai số, độ chênh áp, tốc độ hạ,
   công thức…) hoặc thiếu dữ kiện đi nhánh văn bản, vì model phân loại đưa mọi câu có số QTKĐ
-  vào intent này. Ngữ cảnh LLM của một mục dài lấy cửa sổ quanh đoạn con được truy hồi
-  (`retrieval.context_builder.window`), không cắt mất fact ở cuối mục.
+  vào intent này. Ngữ cảnh LLM của một mục dài lấy cửa sổ quanh các đoạn con khớp nhất của
+  mục (`retrieval.context_builder.window`, `llm.context.window_anchors`), cắt theo dòng để
+  không cắt dở công thức; câu dẫn kết thúc bằng ":" giữ cả phần nó dẫn vào. Ngân sách chia
+  kiểu water-filling trong `total_context_chars` (đã trừ câu trả lời, 2,5 ký tự/token đo
+  thật): ngữ cảnh vượt num_ctx thì Ollama cắt prompt.
 - `query/record_*.py` — **tra cứu biên bản có cấu trúc** (Pha R). Hai intent `record_lookup`
   (một biên bản theo số hiệu / số biên bản / ngày: trường được hỏi, bảng kết quả, căn cứ kết
   luận không đạt) và `records_summary` (đếm / liệt kê / cực trị trên sổ cái, lọc theo người,
