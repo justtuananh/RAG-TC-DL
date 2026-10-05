@@ -11,6 +11,9 @@
   3. LaTeX mỗi công thức cân đối về cấu trúc (KHÔNG tính lại / viết lại):
      dấu {} cân bằng, không có `$` lạ bên trong, \\left/\\right cân bằng.
   4. Không file .md nào còn sentinel "[công thức không đọc được]".
+  5. Không có lỗi đã gặp làm KaTeX không render hoặc là dấu hiệu mất nội dung: lệnh
+     chữ Hy Lạp dính chữ cái sau (`\\DeltaP`), ngoặc nhọn chưa escape làm delimiter
+     (`\\left{`), tử / mẫu số rỗng (`\\frac{U(t)}{}`, căn thức bị bỏ mất).
 
 Chạy:
     python scripts/check_fidelity.py [--build-dir build/spike_a]
@@ -40,6 +43,15 @@ _SPAN_RE = re.compile(r"\$[^$]+\$")
 # \left / \right như lệnh delimiter — KHÔNG tính \leftarrow, \rightarrow, ...
 _LEFT_RE = re.compile(r"\\left(?![a-zA-Z])")
 _RIGHT_RE = re.compile(r"\\right(?![a-zA-Z])")
+
+# Lệnh chữ Hy Lạp dính chữ cái đứng sau: "\\Delta" + "P" thành lệnh lạ "\\DeltaP".
+_GREEK = (
+    "alpha beta gamma delta epsilon varepsilon zeta eta theta vartheta iota kappa lambda "
+    "mu nu xi pi varpi rho varrho sigma varsigma tau upsilon phi varphi chi psi omega "
+    "Gamma Delta Theta Lambda Xi Pi Sigma Upsilon Phi Psi Omega"
+).split()
+_GLUED_RE = re.compile(r"\\(" + "|".join(sorted(_GREEK, key=len, reverse=True)) + r")[A-Za-z]")
+_BRACE_DELIM_RE = re.compile(r"\\(?:left|right)[{}]")
 
 # Các tỉ lệ phải bằng 1.0 (hoặc None nếu không có loại công thức đó).
 _RATE_KEYS = ("ole_mtef_rate", "ole_latex_rate", "omml_latex_rate", "latex_rate_total")
@@ -71,6 +83,37 @@ def _brace_problem(latex: str) -> str | None:
     return None
 
 
+def _group_end(latex: str, i: int) -> int | None:
+    """Vị trí ngay sau nhóm {...} bắt đầu tại ``latex[i]``; None nếu không phải nhóm."""
+    if i >= len(latex) or latex[i] != "{":
+        return None
+    depth = 0
+    while i < len(latex):
+        ch = latex[i]
+        if ch == "\\":
+            i += 2
+            continue
+        depth += {"{": 1, "}": -1}.get(ch, 0)
+        i += 1
+        if depth == 0:
+            return i
+    return None
+
+
+def _empty_frac_part(latex: str) -> bool:
+    """True nếu một ``\\frac`` có tử hoặc mẫu số rỗng."""
+    for m in re.finditer(r"\\frac(?![a-zA-Z])", latex):
+        start = m.end()
+        for _ in range(2):
+            end = _group_end(latex, start)
+            if end is None:
+                break
+            if not latex[start + 1 : end - 1].strip():
+                return True
+            start = end
+    return False
+
+
 def _latex_problem(latex: str) -> str | None:
     """Kiểm tra cấu trúc một chuỗi LaTeX (không tính lại). None nếu hợp lệ."""
     if "$" in latex:
@@ -82,6 +125,13 @@ def _latex_problem(latex: str) -> str | None:
     n_right = len(_RIGHT_RE.findall(latex))
     if n_left != n_right:
         return f"\\left ({n_left}) ≠ \\right ({n_right})"
+    glued = _GLUED_RE.search(latex)
+    if glued:
+        return f"lệnh dính chữ cái sau ('{glued.group(0)}…'), KaTeX không render được"
+    if _BRACE_DELIM_RE.search(latex):
+        return "ngoặc nhọn làm delimiter chưa escape (phải là \\left\\{ / \\right\\})"
+    if _empty_frac_part(latex):
+        return "\\frac có tử hoặc mẫu số rỗng (mất nội dung công thức)"
     return None
 
 

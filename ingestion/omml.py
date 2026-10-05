@@ -13,6 +13,10 @@ and proves the route works on the real documents.
 """
 from __future__ import annotations
 
+import unicodedata
+
+from .mtef_to_latex import join_latex, uni_to_latex
+
 M = "http://schemas.openxmlformats.org/officeDocument/2006/math"
 
 
@@ -36,9 +40,43 @@ _ACC = {"̂": r"\hat", "̃": r"\tilde", "̄": r"\bar",
         "̇": r"\dot", "⃗": r"\vec", "̆": r"\breve"}
 
 
+# Tên hàm Word ghi bằng chữ thường trong m:fName -> lệnh LaTeX (chữ đứng, đúng khoảng cách).
+_FUNC = {name: "\\" + name for name in (
+    "max", "min", "sin", "cos", "tan", "cot", "log", "ln", "exp", "lim", "sup", "inf",
+)}
+
+
+# Ký tự run mà KaTeX không có glyph: ``∆`` (U+2206 INCREMENT, khác ``Δ`` U+0394) hiện
+# sai font. Các ký hiệu khác (Greek, ×, ±...) KaTeX render được nên giữ NGUYÊN VĂN:
+# đổi sang lệnh LaTeX làm nhiễu văn bản mà cross-encoder chấm (đo 2026-10-05).
+_RUN_FIXES = {"∆": r"\Delta"}
+
+
+def _run_text(s: str) -> str:
+    """Chữ của một run, nguyên văn trừ ký tự KaTeX không hiển thị được: ``∆`` ->
+    ``\\Delta``; chữ cái ngoài ASCII không phải Hy Lạp (``đ``) -> ``\\text{...}`` vì
+    KaTeX không có chữ đó ở chế độ toán."""
+    out = []
+    for ch in s:
+        if ch in _RUN_FIXES:
+            out.append(_RUN_FIXES[ch])
+        elif ch.isalpha() and not ch.isascii() and not unicodedata.name(ch, "").startswith("GREEK"):
+            out.append(r"\text{" + ch + "}")
+        else:
+            out.append(ch)
+    return join_latex(out)
+
+
+def _delim(ch: str | None, default: str) -> str:
+    """Ký tự ngoặc của m:d cho \\left / \\right: ``{`` phải là ``\\{``, rỗng là ``.``."""
+    if ch is None:
+        return default
+    return uni_to_latex(ch) if ch else "."
+
+
 def _seq(el) -> str:
     """Convert the math children of an element in order."""
-    return "".join(_node(c) for c in el)
+    return join_latex(_node(c) for c in el)
 
 
 def _grp(el, name) -> str:
@@ -49,7 +87,7 @@ def _grp(el, name) -> str:
 def _node(el) -> str:  # noqa: C901 - a flat dispatch is clearest here
     tag = _ln(el)
     if tag == "t":              # run text
-        return el.text or ""
+        return _run_text(el.text or "")
     if tag in ("r", "e", "num", "den", "sup", "sub", "deg", "fName", "lim"):
         return _seq(el)
     if tag == "f":              # fraction
@@ -68,8 +106,8 @@ def _node(el) -> str:  # noqa: C901 - a flat dispatch is clearest here
         dpr = _child(el, "dPr")
         beg, end = "(", ")"
         if dpr is not None:
-            beg = _val(dpr, "begChr") or "("
-            end = _val(dpr, "endChr") or ")"
+            beg = _delim(_val(dpr, "begChr"), "(")
+            end = _delim(_val(dpr, "endChr"), ")")
         inner = "".join(_seq(c) for c in el if _ln(c) == "e")
         return rf"\left{beg} {inner} \right{end}"
     if tag == "nary":           # ∑ ∫ ∏ with limits
@@ -85,7 +123,8 @@ def _node(el) -> str:  # noqa: C901 - a flat dispatch is clearest here
             s += f"^{{{sup}}}"
         return f"{s}{{{body}}}" if body else s
     if tag == "func":           # named function (sin, lim, ...)
-        return f"{_grp(el,'fName')}{_grp(el,'e')}"
+        name = _grp(el, "fName")
+        return join_latex([_FUNC.get(name.strip(), name), _grp(el, "e")])
     if tag == "acc":            # accent
         accpr = _child(el, "accPr")
         chr_ = _val(accpr, "chr") if accpr is not None else "̂"

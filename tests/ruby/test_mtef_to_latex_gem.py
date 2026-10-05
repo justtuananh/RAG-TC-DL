@@ -33,3 +33,28 @@ def test_bin_converts_to_nonempty_latex(sample_bin):
 
 def test_missing_bin_returns_none_without_raising():
     assert mtef_bin_to_latex("/khong/ton/tai/F999.bin") is None
+
+
+# Công thức thật của QTKĐ 1.159 mà gem 0.0.7 chuyển sai; vendor/mathtype_to_mathml/patch.rb
+# vá khi chạy. Kỳ vọng đối chiếu với ảnh WMF gốc của từng công thức.
+_FIXTURES = _ROOT / "tests" / "fixtures" / "mtef"
+
+
+@pytest.mark.parametrize(
+    ("name", "expected"),
+    [
+        # Căn thức (tmROOT) từng bị bỏ: "\frac{U(t)}{}".
+        (
+            "qtkd1159_F076_sqrt",
+            r"u_{5}(p) = p \times (\alpha_{p,s} + \alpha_{c,s}) \times \frac{U(t)}{\sqrt{2}}",
+        ),
+        # Ngoặc lồng nhau từng ghép sai: "(U)(p)^{2}".
+        ("qtkd1159_F131_nested_paren", r"\delta = \frac{\sqrt{(\Delta p)^{2} + (U(p))^{2}}}{p}"),
+        # Chỉ số "đứng trước" ở cuối slot từng ra "A0t".
+        ("qtkd1159_F130_dangling_presub", r"\Delta p = \frac{M}{A_{0t}} \times (g_{s} - g)"),
+        # Chữ kiểu Text (đơn vị) từng bị bỏ: "\rho_{f},^{}".
+        ("qtkd1159_F168_text_unit", r"\rho_{f},\text{kg/}\text{m}^{\text{3}}"),
+    ],
+)
+def test_gem_patch_matches_the_source_image(sample_bin, name, expected):
+    assert mtef_bin_to_latex(str(_FIXTURES / f"{name}.bin")) == expected

@@ -65,3 +65,18 @@ def test_greek_command_is_separated_from_a_following_letter():
 def test_command_keeps_no_space_before_non_letters():
     assert mathml_to_latex(_w("<msub><mi>ρ</mi><mi>f</mi></msub>")) == r"\rho_{f}"
     assert mathml_to_latex(_w("<mi>α</mi><mn>2</mn>")) == r"\alpha2"
+
+
+def test_bare_text_nodes_become_text_runs():
+    """Gem xuất chữ kiểu Text (đơn vị, giá trị) thành nút văn bản trần, không có mtext."""
+    mathml = _w(
+        "<mrow><msub><mi>ρ</mi><mi>f</mi></msub><mo>,</mo>kg/<msup><mrow>m</mrow><mn>3</mn></msup></mrow>"
+    )
+    assert mathml_to_latex(mathml) == r"\rho_{f},\text{kg/}\text{m}^{3}"
+    assert mathml_to_latex(_w("<mrow><mi>x</mi>50%_a</mrow>")) == r"x\text{50\%\_a}"
+
+
+def test_empty_limits_and_scripts_are_dropped():
+    sum_ = "<munderover><mo>∑</mo><mrow/><mrow/></munderover><msub><mi>X</mi><mi>i</mi></msub>"
+    assert mathml_to_latex(_w(sum_)) == r"\sum X_{i}"
+    assert mathml_to_latex(_w("<msup><mi>a</mi><mrow/></msup>")) == "a"

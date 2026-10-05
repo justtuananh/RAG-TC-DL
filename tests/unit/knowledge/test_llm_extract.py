@@ -214,8 +214,8 @@ def _valid_payload() -> dict:
             {
                 "fact_kind": "formula",
                 "label": "Sai số",
-                "formula": "\\DeltaP_{cd} = P_{m} - P_{cd}",
-                "quote": "$\\DeltaP_{cd} = P_{m} - P_{cd}$",
+                "formula": "\\Delta P_{cd} = P_{m} - P_{cd}",
+                "quote": "$\\Delta P_{cd} = P_{m} - P_{cd}$",
             },
         ]
     }

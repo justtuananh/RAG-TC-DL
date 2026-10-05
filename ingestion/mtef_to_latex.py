@@ -56,8 +56,14 @@ else:
 _existing_gem_paths = [p for p in _GEM_PATHS if os.path.isdir(p)]
 _GEM_PATH_ENV = _GEM_PATH_SEP.join(_existing_gem_paths) if _existing_gem_paths else None
 
+# Bản vá gem khi chạy (căn thức tmROOT bị bỏ mất, ngoặc lồng nhau ghép sai khi gắn
+# chỉ số), nạp TRƯỚC khi tạo Converter; xem chú thích đầu file vá.
+_GEM_PATCH = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "vendor", "mathtype_to_mathml", "patch.rb"
+)
+
 _RUBY_SNIPPET = r"""
-require 'mathtype_to_mathml'
+load ARGV[1]
 puts MathTypeToMathML::Converter.new(ARGV[0]).convert
 """
 
@@ -69,7 +75,7 @@ def _bin_to_mathml(bin_path: str, timeout: int = 15) -> Optional[str]:
         env["GEM_PATH"] = _GEM_PATH_ENV
     try:
         result = subprocess.run(
-            ["ruby", "-e", _RUBY_SNIPPET, "--", bin_path],
+            ["ruby", "-e", _RUBY_SNIPPET, "--", bin_path, _GEM_PATCH],
             capture_output=True,
             text=True,
             timeout=timeout,
@@ -109,7 +115,7 @@ def _children(el):
 _RE_TRAILING_CONTROL_WORD = re.compile(r"\\[A-Za-z]+$")
 
 
-def _join(parts) -> str:
+def join_latex(parts) -> str:
     """Nối các mảnh LaTeX; chèn một dấu cách khi mảnh trước kết thúc bằng lệnh chữ
     (``\\Delta``) và mảnh sau bắt đầu bằng chữ cái, nếu không ``\\Delta`` + ``P``
     thành lệnh lạ ``\\DeltaP`` và KaTeX không render được công thức."""
@@ -121,8 +127,36 @@ def _join(parts) -> str:
     return out
 
 
+_TEXT_ESCAPES = {
+    "\\": r"\textbackslash{}", "{": r"\{", "}": r"\}", "$": r"\$", "&": r"\&",
+    "#": r"\#", "%": r"\%", "_": r"\_", "^": r"\^{}", "~": r"\~{}",
+}
+
+
+def _text_run(s: str | None) -> str:
+    """Nút văn bản trần trong MathML (gem xuất chữ kiểu Text của MathType như đơn vị
+    "kg/m", "Pa" hay giá trị "4,15E+02" KHÔNG bọc ``mtext``) thành ``\\text{...}``."""
+    if not s or not s.strip():
+        return ""
+    return r"\text{" + "".join(_TEXT_ESCAPES.get(ch, ch) for ch in s.strip()) + "}"
+
+
 def _seq(el) -> str:
-    return _join(_node(c) for c in _children(el))
+    parts = [_text_run(el.text)]
+    for c in _children(el):
+        parts += [_node(c), _text_run(c.tail)]
+    return join_latex(p for p in parts if p)
+
+
+def _scripts(base: str, sub: str = "", sup: str = "") -> str:
+    """Gắn chỉ số dưới / trên, bỏ chỉ số rỗng (tổng không cận ra ``\\sum``, không
+    ``\\sum_{}^{}``)."""
+    out = base
+    if sub.strip():
+        out += f"_{{{sub}}}"
+    if sup.strip():
+        out += f"^{{{sup}}}"
+    return out
 
 
 # Unicode → LaTeX command mapping (covers what the QTKĐ corpus produces)
@@ -138,7 +172,7 @@ _UNI_TO_LATEX: dict[str, str] = {
     "ψ": r"\psi", "ω": r"\omega",
     # Greek uppercase
     "Α": r"\Alpha", "Β": r"\Beta", "Γ": r"\Gamma",
-    "Δ": r"\Delta", "Ε": r"\Epsilon", "Ζ": r"\Zeta",
+    "Δ": r"\Delta", "∆": r"\Delta", "Ε": r"\Epsilon", "Ζ": r"\Zeta",
     "Η": r"\Eta", "Θ": r"\Theta", "Ι": r"\Iota",
     "Κ": r"\Kappa", "Λ": r"\Lambda", "Μ": r"\Mu",
     "Ν": r"\Nu", "Ξ": r"\Xi", "Π": r"\Pi",
@@ -189,9 +223,9 @@ _UNI_TO_LATEX: dict[str, str] = {
 }
 
 
-def _uni_to_latex(s: str) -> str:
+def uni_to_latex(s: str) -> str:
     """Replace each character that has a LaTeX mapping, pass rest through."""
-    return _join(_UNI_TO_LATEX.get(ch, ch) for ch in s)
+    return join_latex(_UNI_TO_LATEX.get(ch, ch) for ch in s)
 
 
 def _brace(s: str) -> str:
@@ -207,11 +241,11 @@ def _node(el) -> str:  # noqa: C901
 
     # --- leaf text nodes ---
     if tag in ("mi", "mn", "mtext"):
-        return _uni_to_latex(_text(el))
+        return uni_to_latex(_text(el))
 
     if tag == "mo":
         raw = _text(el)
-        mapped = _uni_to_latex(raw)
+        mapped = uni_to_latex(raw)
         # Add thin spaces around binary operators for readability
         if mapped in ("+", "-", r"\pm", r"\mp", r"\times", r"\div",
                       "=", r"\neq", r"\leq", r"\geq", "<", ">",
@@ -249,20 +283,20 @@ def _node(el) -> str:  # noqa: C901
         kids = _children(el)
         base = _node(kids[0]) if len(kids) > 0 else ""
         sub  = _node(kids[1]) if len(kids) > 1 else ""
-        return f"{base}_{{{sub}}}"
+        return _scripts(base, sub=sub)
 
     if tag == "msup":
         kids = _children(el)
         base = _node(kids[0]) if len(kids) > 0 else ""
         sup  = _node(kids[1]) if len(kids) > 1 else ""
-        return f"{base}^{{{sup}}}"
+        return _scripts(base, sup=sup)
 
     if tag == "msubsup":
         kids = _children(el)
         base = _node(kids[0]) if len(kids) > 0 else ""
         sub  = _node(kids[1]) if len(kids) > 1 else ""
         sup  = _node(kids[2]) if len(kids) > 2 else ""
-        return f"{base}_{{{sub}}}^{{{sup}}}"
+        return _scripts(base, sub, sup)
 
     # --- over / under (accents, limits) ---
     if tag == "mover":
@@ -295,7 +329,7 @@ def _node(el) -> str:  # noqa: C901
         base = _node(kids[0]) if len(kids) > 0 else ""
         under= _node(kids[1]) if len(kids) > 1 else ""
         over = _node(kids[2]) if len(kids) > 2 else ""
-        return f"{base}_{{{under}}}^{{{over}}}"
+        return _scripts(base, under, over)
 
     # --- mmultiscripts (pre-scripts) ---
     if tag == "mmultiscripts":
@@ -325,8 +359,8 @@ def _node(el) -> str:  # noqa: C901
 
     # --- fenced (parentheses, brackets) ---
     if tag == "mfenced":
-        open_c  = _uni_to_latex(el.get("open",  "("))
-        close_c = _uni_to_latex(el.get("close", ")"))
+        open_c  = uni_to_latex(el.get("open",  "("))
+        close_c = uni_to_latex(el.get("close", ")"))
         sep     = el.get("separators", ",")
         kids = _children(el)
         inner_parts = [_node(k) for k in kids]
