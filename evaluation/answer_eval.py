@@ -28,6 +28,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import requests  # noqa: E402
 
+from core.latex import fix_latex, restore_formulas  # noqa: E402
 from core.settings_loader import get_settings  # noqa: E402
 from evaluation.pipeline import production_retrieve  # noqa: E402
 from llm.generator import stream_ollama  # noqa: E402
@@ -82,7 +83,8 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
         try:
             out = "".join(stream_ollama(messages, model=model))
             if out.strip():
-                return enforce_refusal_stop(out)
+                # Như production (api.services.chat_stream): chuẩn hoá LaTeX + công thức nguyên văn.
+                return restore_formulas(fix_latex(enforce_refusal_stop(out)), context_str)
             err = "rỗng"
         except Exception as e:  # noqa: BLE001 - gom mọi lỗi hạ tầng để retry
             err = str(e)[:90]
@@ -236,7 +238,9 @@ def main() -> None:
     models = [m for m in requested if m in avail]
     skipped = [m for m in requested if m not in avail]
     for m in skipped:
-        print(f"⚠ bỏ qua model chưa pull: {m}  (chạy `ollama pull <model>`; model mặc định: `make pull-model`)")
+        print(
+            f"⚠ bỏ qua model chưa pull: {m}  (chạy `ollama pull <model>`; model mặc định: `make pull-model`)"
+        )
     if not models:
         print("❌ Không có model nào sẵn sàng.", file=sys.stderr)
         sys.exit(1)

@@ -411,3 +411,20 @@ def test_specific_device_question_has_no_ambiguity_preface(client, piston_proced
     done = _events(response)[-1]
 
     assert done["answer"] == "10 bar đến 700 bar [1]"
+
+
+def test_done_answer_shows_the_source_formula_verbatim(client, monkeypatch):
+    """7b thêm \\left( \\right) khi chép công thức; câu trả lời cuối phải là bản của nguồn."""
+    source = r"M = P \times A_{0} \times (1 + \frac{\rho_{a}}{\rho_{Mt}})"
+    monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
+    monkeypatch.setattr(
+        "retrieval.retriever.retrieve",
+        lambda *a, **k: [_piston_hit("QTKD_1.159_2021_ND_FINAL", f"Theo công thức: ${source}$")],
+    )
+    rewritten = r"\[ M = P \times A_{0} \times \left(1 + \frac{\rho_{a}}{\rho_{Mt}}\right) \] [1]"
+    monkeypatch.setattr("llm.generator.stream_ollama", lambda messages: iter([rewritten]))
+
+    response = client.post("/api/chat/stream", json={"message": "Công thức tính M của 1.159?"})
+    done = _events(response)[-1]
+
+    assert done["answer"] == f"$${source}$$ [1]"

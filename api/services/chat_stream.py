@@ -13,7 +13,7 @@ from collections.abc import Iterator
 from sqlalchemy.orm import Session
 
 from api.schemas import ChatMessage, ChatRequest
-from core.latex import fix_latex
+from core.latex import fix_latex, restore_formulas
 from llm import generator
 from llm.guards import REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request
 from llm.prompt import build_messages
@@ -196,7 +196,8 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if closing:
         yield _sse({"type": "delta", "text": closing})
 
-    answer = preface + fix_latex(enforce_refusal_stop(partial)) + closing
+    body = restore_formulas(fix_latex(enforce_refusal_stop(partial)), context_str)
+    answer = preface + body + closing
     # Nhánh mixed: ghép thêm khối số liệu sổ cái, giữ trích dẫn QTKĐ tách bạch.
     mixed_payload = (
         query_router.payload_to_dict(data_payload)

@@ -27,3 +27,48 @@ def fix_latex(text: str) -> str:
     text = _RE_DISPLAY.sub(lambda m: '$$' + m.group(1).replace('\\\\', '\\') + '$$', text)
     text = _RE_INLINE.sub(lambda m: '$' + m.group(1).replace('\\\\', '\\') + '$', text)
     return text
+
+
+_RE_MATH = re.compile(r'\$\$(.+?)\$\$|\$([^$\n]+?)\$', re.DOTALL)
+_RE_TAG = re.compile(r'\\tag\{[^}]*\}')
+# \left / \right, lệnh giãn cách (\, \; \: \! "\ ") và khoảng trắng: chỉ đổi hình thức.
+_RE_COSMETIC = re.compile(r'\\left(?![a-zA-Z])|\\right(?![a-zA-Z])|\\[,;:! ]|\s+')
+_RE_SINGLE_BRACE = re.compile(r'\{(\\[A-Za-z]+|[A-Za-z0-9])\}')
+
+
+def _math_spans(text: str) -> list[str]:
+    return [(m.group(1) or m.group(2)).strip() for m in _RE_MATH.finditer(text)]
+
+
+def _formula_key(latex: str) -> str:
+    """Khoá so khớp bỏ qua khác biệt hình thức: \\tag, \\left/\\right, giãn cách,
+    khoảng trắng, × với \\times, ngoặc nhọn quanh một ký hiệu ({2} = 2)."""
+    key = _RE_COSMETIC.sub('', _RE_TAG.sub('', latex).replace('×', '\\times'))
+    previous = None
+    while previous != key:
+        previous, key = key, _RE_SINGLE_BRACE.sub(r'\1', key)
+    return key
+
+
+def restore_formulas(answer: str, context: str) -> str:
+    """Thay mỗi công thức của câu trả lời bằng bản NGUYÊN VĂN trong ngữ cảnh khi hai
+    bản chỉ khác hình thức (model 7b thêm/bỏ \\left \\right, thêm \\tag, đổi ^{2} → ^2).
+
+    Chạy SAU ``fix_latex`` (cần dấu ``$``). Công thức không có trong nguồn, hoặc khớp
+    với hai công thức nguồn khác nhau, được giữ nguyên: không đoán.
+    """
+    sources: dict[str, set[str]] = {}
+    for span in _math_spans(context or ''):
+        sources.setdefault(_formula_key(span), set()).add(span)
+
+    def _sub(m: re.Match) -> str:
+        span = (m.group(1) or m.group(2)).strip()
+        found = sources.get(_formula_key(span), set())
+        if len(found) != 1:
+            return m.group(0)
+        source = next(iter(found))
+        if source == span:
+            return m.group(0)
+        return f'$${source}$$' if m.group(1) is not None else f'${source}$'
+
+    return _RE_MATH.sub(_sub, answer)

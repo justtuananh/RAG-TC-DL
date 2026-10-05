@@ -18,7 +18,7 @@ from pathlib import Path
 import gradio as gr
 import markdown as _md
 
-from core.latex import fix_latex
+from core.latex import fix_latex, restore_formulas
 from llm.generator import stream_ollama as _stream_ollama
 from llm.guards import (
     REFUSAL_SENTENCE as _REFUSAL_SENTENCE,
@@ -207,9 +207,9 @@ def bot_fn(history: list):
         yield history, gr.update()
         return
 
-    history[-1]["content"] = fix_latex(partial) + citations_md
-    # 4. Cắt phần "tính tiếp" sau câu từ chối chuẩn (nếu có) rồi gắn citations
-    partial = _enforce_refusal_stop(partial)
+    # 4. Cắt phần "tính tiếp" sau câu từ chối chuẩn (nếu có), chuẩn hoá LaTeX, đưa công
+    # thức về bản nguyên văn của nguồn, rồi gắn citations
+    partial = restore_formulas(fix_latex(_enforce_refusal_stop(partial)), context_str)
     history[-1]["content"] = partial + citations_md
     yield history, gr.update()
 
