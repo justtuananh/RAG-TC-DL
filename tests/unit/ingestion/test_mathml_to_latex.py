@@ -49,3 +49,19 @@ def test_malformed_returns_none_without_raising():
     assert mathml_to_latex("<math><mfrac>") is None
     assert mathml_to_latex("") is None
     assert mathml_to_latex("không phải xml") is None
+
+
+def test_greek_command_is_separated_from_a_following_letter():
+    """ΔP (QTKĐ 1.061 mục sai số áp suất chỉnh đặt) từng ra `\\DeltaP`: KaTeX báo lệnh lạ."""
+    assert mathml_to_latex(_w("<msub><mrow><mi>Δ</mi><mi>P</mi></mrow><mi>cd</mi></msub>")) == (
+        r"\Delta P_{cd}"
+    )
+    assert mathml_to_latex(_w("<mi>Δh</mi>")) == r"\Delta h"
+    assert mathml_to_latex(_w("<mo>+</mo><mi>γ</mi><msub><mi>C</mi><mi>s</mi></msub>")) == (
+        r"+ \gamma C_{s}"
+    )
+
+
+def test_command_keeps_no_space_before_non_letters():
+    assert mathml_to_latex(_w("<msub><mi>ρ</mi><mi>f</mi></msub>")) == r"\rho_{f}"
+    assert mathml_to_latex(_w("<mi>α</mi><mn>2</mn>")) == r"\alpha2"

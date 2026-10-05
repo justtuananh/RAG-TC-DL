@@ -21,6 +21,7 @@ All exceptions are caught; the function returns None on any failure.
 from __future__ import annotations
 
 import os
+import re
 import subprocess
 import sys
 from typing import Optional
@@ -105,8 +106,23 @@ def _children(el):
     return list(el)
 
 
+_RE_TRAILING_CONTROL_WORD = re.compile(r"\\[A-Za-z]+$")
+
+
+def _join(parts) -> str:
+    """Nối các mảnh LaTeX; chèn một dấu cách khi mảnh trước kết thúc bằng lệnh chữ
+    (``\\Delta``) và mảnh sau bắt đầu bằng chữ cái, nếu không ``\\Delta`` + ``P``
+    thành lệnh lạ ``\\DeltaP`` và KaTeX không render được công thức."""
+    out = ""
+    for part in parts:
+        if out and part[:1].isascii() and part[:1].isalpha() and _RE_TRAILING_CONTROL_WORD.search(out):
+            out += " "
+        out += part
+    return out
+
+
 def _seq(el) -> str:
-    return "".join(_node(c) for c in _children(el))
+    return _join(_node(c) for c in _children(el))
 
 
 # Unicode → LaTeX command mapping (covers what the QTKĐ corpus produces)
@@ -175,10 +191,7 @@ _UNI_TO_LATEX: dict[str, str] = {
 
 def _uni_to_latex(s: str) -> str:
     """Replace each character that has a LaTeX mapping, pass rest through."""
-    out = []
-    for ch in s:
-        out.append(_UNI_TO_LATEX.get(ch, ch))
-    return "".join(out)
+    return _join(_UNI_TO_LATEX.get(ch, ch) for ch in s)
 
 
 def _brace(s: str) -> str:
