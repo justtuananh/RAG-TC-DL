@@ -21,6 +21,7 @@ from query import device_ambiguity
 from query import router as query_router
 from retrieval import retriever
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
+from retrieval.quote import build_quote
 
 logger = logging.getLogger(__name__)
 
@@ -50,6 +51,7 @@ def _build_sources_payload(results: list[dict]) -> list[dict]:
         snippet = child_text[:220].replace("\n", " ")
         if len(child_text) > 220:
             snippet += "…"
+        parent_text = pp["text"] if pp else child_text
         out.append(
             {
                 "index": i,
@@ -58,8 +60,10 @@ def _build_sources_payload(results: list[dict]) -> list[dict]:
                 "kind": p.get("kind", "paragraph"),
                 "snippet": snippet,
                 "rerank_score": round(r.get("rerank_score", 0.0), 4),
-                "parent_text": pp["text"] if pp else child_text,
+                "parent_text": parent_text,
                 "child_text": child_text,
+                # Đoạn trích cho panel nguồn: các đoạn con khớp + công thức chúng nói tới.
+                "quote": build_quote(parent_text, r.get("anchor_texts") or [child_text]),
             }
         )
     return out

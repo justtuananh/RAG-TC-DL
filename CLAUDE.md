@@ -111,6 +111,7 @@ A lower layer never imports a higher one;
   `POST /api/chat/stream` (SSE). Reuses the SAME pipeline as `ui/gradio_app.py`
   (`retrieval.retriever` + `llm/`: `guards.is_calculation_request` → `retrieve` →
   `prompt.build_messages` → `generator.stream_ollama`).
+  Each SSE source carries `quote` (`retrieval/quote.py`): its matched children plus the formula each one refers to (a "trong đó" definition line brings the formula above it, a lead-in ending in ":" the formula after it), shown in the panel's "Đoạn trả lời" box.
 - `query/intents.py` + `query/router.py` — **chat lai văn bản + số liệu** (Sprint 9, spec §8).
   `intents.py` định nghĩa 7 intent tra cứu số liệu (`device_history`, `latest_record`,
   `records_by_period`, `procedure_params`, `devices_by_range`, `standards_for`, `error_trend`)

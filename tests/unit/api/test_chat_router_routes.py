@@ -96,6 +96,38 @@ def test_text_branch_unchanged(client, monkeypatch):
     assert done["sources"][0]["file_stem"] == "QTKD_1.061"
 
 
+def test_source_quote_carries_the_formula_a_definition_refers_to(client, monkeypatch):
+    """Đoạn con là dòng "trong đó: … là …" thì nguồn vẫn trích cả công thức (QTKĐ 1.159 6.3.2)."""
+    definition = "$A_{0s}$ là diện tích hiệu dụng của píttông chuẩn, m2;"
+    formula = "| $P_{s,i} = \\frac{F}{A_{0s}}$ |  |\n| --- | --- |"
+    parent = "\n\n".join(
+        ["Áp suất chuẩn được tính theo công thức sau:", formula, "trong đó:", definition]
+    )
+    monkeypatch.setattr(router, "plan_route", lambda *a, **k: intents.text_decision("test"))
+    monkeypatch.setattr(
+        "retrieval.retriever.retrieve",
+        lambda *a, **k: [
+            {
+                "payload": {
+                    "file_stem": "QTKD_1.159",
+                    "section_path": "6.3.2 Xác định diện tích hiệu dụng",
+                    "kind": "paragraph",
+                    "text": definition,
+                },
+                "anchor_texts": [definition],
+                "parent_payload": {"text": parent},
+                "rerank_score": 0.9,
+            }
+        ],
+    )
+    monkeypatch.setattr("llm.generator.stream_ollama", lambda messages: iter(["A0s [1]"]))
+    response = client.post("/api/chat/stream", json={"message": "Diện tích hiệu dụng?"})
+    source = _events(response)[-1]["sources"][0]
+    assert source["child_text"] == definition
+    assert formula in source["quote"]
+    assert source["quote"].endswith(definition)
+
+
 def test_text_branch_uses_unchanged_retrieve_pipeline(client, monkeypatch):
     """Nhánh text phải gọi đúng phễu retrieve của production (không hồi quy).
 

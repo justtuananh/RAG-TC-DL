@@ -23,7 +23,7 @@ export interface Message {
   data?: ChatDataPayload | null;
 }
 
-/** Nguồn trả về từ api_server.py (_build_sources_payload) */
+/** Nguồn trả về từ api/services/chat_stream.py (_build_sources_payload) */
 export interface BackendSource {
   index: number;
   file_stem: string;
@@ -33,6 +33,8 @@ export interface BackendSource {
   rerank_score: number;
   parent_text: string;
   child_text: string;
+  /** Đoạn trích có đủ công thức mà đoạn con nói tới; thiếu ở hội thoại lưu trước khi có trường này. */
+  quote?: string;
 }
 
 // ── Chat lai văn bản + số liệu (Sprint 9) ──

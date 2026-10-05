@@ -212,7 +212,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
               <span>{src.kind}</span>
             </div>
 
-            {/* đoạn trả lời (child_text) — tô sáng */}
+            {/* đoạn trả lời (quote: đoạn con + công thức nó nói tới) - tô sáng */}
             <div
               ref={hlRef}
               className="animate-hlGlow"
@@ -242,7 +242,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
               >
                 Đoạn trả lời
               </span>
-              <Markdown className="md-doc">{src.child_text}</Markdown>
+              <Markdown className="md-doc">{src.quote || src.child_text}</Markdown>
             </div>
 
             {/* ngữ cảnh đầy đủ (parent_text) */}
