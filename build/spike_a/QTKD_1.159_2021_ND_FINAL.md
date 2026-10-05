@@ -128,8 +128,8 @@ Bảng 2 - Danh mục phương tiện kiểm định
 
 | TT | Tên phương tiện kiểm định | Đặc trưng kỹ thuật đo lường |  |
 | --- | --- | --- | --- |
-|  |  | Phạm vi đo | Độ chính xác hoặc sai số cho phép hoặc độ không đảm bảo đo |
-| 1 | Áp kế píttông chuẩn | Phù hợp với áp kế cần kiểm định (sau đây viết tắt là AKKĐ) | - Trường hợp AKKĐ có độ chính xác < 0,01 %, độ không đảm bảo đo (sau đây viết tắt là ĐKĐBĐ) < 1/2 sai số cho phép của AKKĐ. - Trường hợp AKKĐ có độ chính xác từ 0,01 % đến 0,02 %, ĐKĐBĐ < 1/3 sai số cho phép của AKKĐ. - Trường hợp AKKĐ có độ chính xác > 0,02 %, ĐKĐBĐ < 1/4 sai số cho phép của AKKĐ. |
+|  |  | Phạm vi đo | Độ chính xác hoặc sai số cho phép / hoặc độ không đảm bảo đo |
+| 1 | Áp kế píttông chuẩn | Phù hợp với áp kế cần kiểm định (sau đây viết tắt là AKKĐ) | - Trường hợp AKKĐ có độ chính xác / < 0,01 %, độ không đảm bảo đo (sau đây viết tắt là ĐKĐBĐ) < 1/2 sai số cho phép của AKKĐ. / - Trường hợp AKKĐ có độ chính xác / từ 0,01 % đến 0,02 %, ĐKĐBĐ < / 1/3 sai số cho phép của AKKĐ. / - Trường hợp AKKĐ có độ chính xác / > 0,02 %, ĐKĐBĐ < 1/4 sai số cho / phép của AKKĐ. |
 | 2 | Áp kế | < 30 Pa abs. | Sai số cho phép: ± 5 % |
 | 3 | Nhiệt kế | (18 đến 28) oC | Sai số cho phép: ± 0,2 oC |
 | 4 | Ẩm kế | (20 đến 90) % RH | Sai số cho phép: ± 10 %RH |
@@ -157,7 +157,7 @@ Khi tiến hành kiểm định phải bảo đảm các điều kiện sau:
 
 Nhiệt độ môi trường: (23 ± 5) oC, nhiệt độ không được thay đổi quá 2 oC/h;
 
-Độ ẩm tương đối: Û 80 %;
+Độ ẩm tương đối: ≤ 80 %;
 
 - Phòng kiểm định phải thoáng khí, không có bụi, các chất ăn mòn, không bị đốt nóng từ một phía và không có rung động;
 
@@ -327,7 +327,7 @@ Bảng 3 - Giá trị nhỏ nhất cho phép của thời gian quay tự do củ
 Đơn vị: min
 
 
-| Giới hạn đo, MPa | Cấp chính xác hoặc độ chính xác (%) của AKKĐ |  |  |  |  |
+| Giới hạn đo, / MPa | Cấp chính xác hoặc độ chính xác (%) của AKKĐ |  |  |  |  |
 | --- | --- | --- | --- | --- | --- |
 |  | 0,01 | 0,02 | 0,05 | 0,1 | 0,2 |
 | Từ -0,1 đến 6 | 4 | 3 | 2 | 2 | 2 |
@@ -372,12 +372,12 @@ Bảng 4 - Tốc độ hạ cho phép của píttông
 Đơn vị: mm/min
 
 
-| Môi trường truyền áp suất | Giới hạn đo trên P, MPa | Cấp chính xác hoặc độ chính xác (%) của AKKĐ |  |  |  |  |
+| Môi trường truyền áp suất | Giới hạn đo trên P, / MPa | Cấp chính xác hoặc độ chính xác (%) của AKKĐ |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- |
 |  |  | 0,01 | 0,02 | 0,05 | 0,1 | 0,2 |
-| Khí | 0,001 5 < P Û 1 | 1 | 1 | 2 | 2 | - |
+| Khí | 0,001 5 < P ≤ 1 | 1 | 1 | 2 | 2 | - |
 |  | P > 1 | 2 | 2 | 3 | 3 | - |
-| Chất lỏng | 0,1 < P Û 6 | 0,4 | 0,4 | 1 | 2 | 3 |
+| Chất lỏng | 0,1 < P ≤ 6 | 0,4 | 0,4 | 1 | 2 | 3 |
 |  | P > 6 | 1,5 | 1,5 | 1,5 | 3 | 3 |
 
 
@@ -432,7 +432,7 @@ Giá trị trên không được lớn hơn giá trị cho phép quy định t�
 Bảng 5 – Sai số khối lượng tương đối cho phép của đĩa cân gốc, píttông và các quả cân
 
 
-| Cấp chính xác hoặc độ chính xác (%) của AKKĐ | Giá trị sai số khối lượng tương đối cho phép của đĩa cân gốc, píttông đo, các quả cân của AKKĐ |
+| Cấp chính xác hoặc / độ chính xác (%) của AKKĐ | Giá trị sai số khối lượng tương đối cho phép của / đĩa cân gốc, píttông đo, các quả cân của AKKĐ |
 | --- | --- |
 | 0,01 | 1,5 × 10-5 |
 | 0,02 | 1,5 × 10-5 |
@@ -441,7 +441,9 @@ Bảng 5 – Sai số khối lượng tương đối cho phép của đĩa cân 
 | 0,2 | 16 × 10-5 |
 
 
-6.3.2 Xác định diện tích hiệu dụng
+
+### 6.3.2 Xác định diện tích hiệu dụng
+
 
 6.3.2.1 Xác định điểm áp suất kiểm định
 
@@ -450,7 +452,7 @@ Việc kiểm định phải thực hiện ở các điểm đo phân bố trên
 Bảng 6 - Điểm áp suất kiểm định
 
 
-| Cấp chính xác hoặc độ chính xác (%) của AKKĐ | Số lượng điểm đo | Giá trị áp suất tính bằng (%) so với giới hạn đo trên của AKKĐ |
+| Cấp chính xác hoặc / độ chính xác (%) của AKKĐ | Số lượng điểm đo | Giá trị áp suất tính bằng (%) so với / giới hạn đo trên của AKKĐ |
 | --- | --- | --- |
 | 0,01 đến 0,05 | 10 | 10, 20, 30, 40, 50, 60, 70, 80, 90, 100 |
 | > 0,05 | 6 | 10, 20, 40, 60, 80, 100 |
@@ -467,13 +469,13 @@ Khi cân bằng áp suất, chênh lệch chiều cao giữa đáy của píttô
 - Áp suất chuẩn trong chế độ đo áp suất tương đối tại điểm kiểm tra thứ i ứng với điểm mốc cơ sở áp suất của áp kế píttông chuẩn được tính theo công thức sau:
 
 
-| $P_{s,i} = \frac{\sum_{}^{}M_{i,s}g(1 - \frac{\rho_{a}}{\rho_{Ms}}) + \gammaC_{s}}{A_{0s}(1 + \lambda_{s}P_{s,i})[1 + (\alpha_{p,s} + \alpha_{c,s})(t_{s} - t_{r})]} + (\rho_{f} - \rho_{a})gh$ |  |
+| $P_{s,i} = \frac{\sum M_{i,s}g(1 - \frac{\rho_{a}}{\rho_{Ms}}) + \gamma C_{s}}{A_{0s}(1 + \lambda_{s}P_{s,i})[1 + (\alpha_{p,s} + \alpha_{c,s})(t_{s} - t_{r})]} + (\rho_{f} - \rho_{a})gh$ |  |
 | --- | --- |
 
 
 trong đó:
 
-$\sum_{}^{}M_{i,s}$ là tổng khối lượng của píttông chuẩn, đĩa cân và các quả cân chuẩn trên áp kế píttông chuẩn tại điểm kiểm tra thứ i, kg;
+$\sum M_{i,s}$ là tổng khối lượng của píttông chuẩn, đĩa cân và các quả cân chuẩn trên áp kế píttông chuẩn tại điểm kiểm tra thứ i, kg;
 
 g là gia tốc trọng trường nơi đo, m/s2;
 
@@ -532,7 +534,7 @@ Vị trí đáy của píttông khi cân bằng là vị trí trùng với mốc
 Đối với áp suất dư:
 
 
-| $P_{m} = P_{s,i} \pm (\rho_{f} - \rho_{a})g\Deltah$ |  |
+| $P_{m} = P_{s,i} \pm (\rho_{f} - \rho_{a})g\Delta h$ |  |
 | --- | --- |
 
 
@@ -543,26 +545,26 @@ $p_{e}$ là giá trị áp suất chuẩn tại mốc cơ sở, Pa.
 Đối với áp suất tuyệt đối:
 
 
-| $P_{m} = P_{abs} \pm \rho_{f}g\Deltah$ |  |
+| $P_{m} = P_{abs} \pm \rho_{f}g\Delta h$ |  |
 | --- | --- |
 
 
 trong đó:
 
-$\Deltah$ là chiều cao chênh lệch mốc cơ sở giữa 2 áp kế píttông, Pa.
+$\Delta h$ là chiều cao chênh lệch mốc cơ sở giữa 2 áp kế píttông, Pa.
 
 Dấu “±” trong các công thức (6) và (7) được xác định như sau: lấy dấu “+” khi mốc cơ sở áp suất của áp kế cần kiểm định nằm cao hơn vị trí làm việc của áp kế chuẩn và ngược lại, lấy dấu “-” khi mốc cơ sở áp suất của áp kế cần kiểm định nằm thấp hơn vị trí làm việc của áp kế chuẩn.
 
 $A_{0t,i}$ là diện tích hiệu dụng của píttông của AKKĐ tại điểm kiểm tra thứ i được tính từ công thức sau:
 
 
-| $A_{0t,i}(1 + \lambda_{t}P_{s,i}) = \frac{\sum_{}^{}M_{t,i}g(1 - \frac{\rho_{a}}{\rho_{Mt}}) + \gammaC_{t}}{P_{s,i}[1 + (\alpha_{p,t} + \alpha_{c,t})(t_{t} - t_{r})]} + \frac{(\rho_{f} - \rho_{a})gh}{P_{s,i}}$ |  |
+| $A_{0t,i}(1 + \lambda_{t}P_{s,i}) = \frac{\sum M_{t,i}g(1 - \frac{\rho_{a}}{\rho_{Mt}}) + \gamma C_{t}}{P_{s,i}[1 + (\alpha_{p,t} + \alpha_{c,t})(t_{t} - t_{r})]} + \frac{(\rho_{f} - \rho_{a})gh}{P_{s,i}}$ |  |
 | --- | --- |
 
 
 trong đó:
 
-$\sum_{}^{}M_{t,i}$ là tổng khối lượng của píttông, đĩa cân và các quả cân trên AKKĐ tại điểm kiểm tra thứ i, kg;
+$\sum M_{t,i}$ là tổng khối lượng của píttông, đĩa cân và các quả cân trên AKKĐ tại điểm kiểm tra thứ i, kg;
 
 g là gia tốc trọng trường nơi đo, m/s2;
 
@@ -583,10 +585,10 @@ $t_{r}$ là nhiệt độ tiêu chuẩn: 23 oC.
 Đặt: $X_{i} = P_{s,i}$ và $Y_{i} = A_{0t,i}$ ta có:
 
 
-|  | $R = \frac{n\sum_{}^{}X_{i}Y_{i} - \sum_{}^{}X_{i}\sum_{}^{}Y_{i}}{}$ |  |
+|  | $R = \frac{n\sum X_{i}Y_{i} - \sum X_{i}\sum Y_{i}}{\sqrt{[n\sum X_{i}^{2} - (\sum X_{i})^{2}][n\sum Y_{i}^{2} - (\sum Y_{i})^{2}]}}$ |  |
 | --- | --- | --- |
-|  | $a = \frac{\sum_{}^{}X_{i}^{2}\sum_{}^{}Y_{i} - \sum_{}^{}X_{i}\sum_{}^{}Y_{i}^{2}}{n\sum_{}^{}X_{i}^{2} - (\sum_{}^{}X_{i})^{2}}$ |  |
-|  | $b = \frac{n\sum_{}^{}X_{i}\sum_{}^{}Y_{i} - \sum_{}^{}X_{i}\sum_{}^{}Y_{i}}{n\sum_{}^{}X_{i}^{2} - (\sum_{}^{}X_{i})^{2}}$ |  |
+|  | $a = \frac{\sum X_{i}^{2}\sum Y_{i} - \sum X_{i}\sum Y_{i}^{2}}{n\sum X_{i}^{2} - (\sum X_{i})^{2}}$ |  |
+|  | $b = \frac{n\sum X_{i}\sum Y_{i} - \sum X_{i}\sum Y_{i}}{n\sum X_{i}^{2} - (\sum X_{i})^{2}}$ |  |
 
 
 trong đó:
@@ -600,14 +602,14 @@ Trường hợp R < 0,8:
 Diện tích hiệu dụng píttông của AKKĐ và hệ số giãn nở áp suất λ xác định như sau:
 
 
-| $A_{0t} = \overline{A} = \frac{\sum_{i = 1}^{n}A_{0t,i}}{n}$ λ = 0 |  |
+| $A_{0t} = \overline{A} = \frac{\sum_{i = 1}^{n}A_{0t,i}}{n}$ / λ = 0 |  |
 | --- | --- |
 
 
 Trường hợp R $\geq$ 0,8:
 
 
-| $A_{0t} = a$ $\lambda = \frac{b}{A_{0t}}$ |  |
+| $A_{0t} = a$ / $\lambda = \frac{b}{A_{0t}}$ |  |
 | --- | --- |
 
 
@@ -624,7 +626,7 @@ Trường hợp R < 0,8:
 ĐKĐBĐ kiểu A của diện tích hiệu dụng được tính bằng:
 
 
-| $u_{A} =$ |  |
+| $u_{A} = \sqrt{\frac{\sum(A_{i} - \overline{A})^{2}}{n(n - 1)}}$ |  |
 | --- | --- |
 
 
@@ -642,35 +644,35 @@ Trường hợp R $\geq$ 0,8:
 Độ lệch chuẩn của Y là Sy:
 
 
-| $S_{y} =$ |  |
+| $S_{y} = \sqrt{\frac{\sum(Y_{i} - a - bX_{i})^{2}}{n - 2}}$ |  |
 | --- | --- |
 
 
 Độ lệch chuẩn của a là Sa:
 
 
-| $S_{a} = S_{y} \times$ |  |
+| $S_{a} = S_{y} \times \sqrt{\frac{\sum X_{i}^{2}}{n\sum X_{i}^{2} - (\sum X_{i})^{2}}}$ |  |
 | --- | --- |
 
 
 Độ lệch chuẩn của b là Sb:
 
 
-| $S_{b} = S_{y} \times$ |  |
+| $S_{b} = S_{y} \times \sqrt{\frac{n}{n\sum X_{i}^{2} - (\sum X_{i})^{2}}}$ |  |
 | --- | --- |
 
 
 Hệ tương quan r(a,b) được tính:
 
 
-| $r(a,b) = - \frac{\sum_{}^{}X_{i}}{}$ |  |
+| $r(a,b) = - \frac{\sum X_{i}}{\sqrt{n\sum X_{i}^{2}}}$ |  |
 | --- | --- |
 
 
 Độ không đảm bảo kiểu A của diện tích hiệu dụng được tính bằng:
 
 
-| $u_{A,i} =$ |  |
+| $u_{A,i} = \sqrt{S_{a}^{2} + X_{i}^{2}S_{b}^{2} + 2X_{i}S_{a}S_{b}r(a,b)}$ |  |
 | --- | --- |
 
 
@@ -720,14 +722,14 @@ $p_{0,s}$ là độ lệch áp suất của chuẩn tại điểm áp suất p =
 ĐKĐBĐ nhiệt độ píttông/xylanh $u_{5}(p)$ . Nhiệt độ píttông/xylanh đo trực tiếp với điều kiện nhiệt độ duy trì trong khoảng ± 1 oC và ĐKĐBĐ có thể được lấy bằng: U(t) = 2 oC.
 
 
-| $u_{5}(p) = p \times (\alpha_{p,s} + \alpha_{c,s}) \times \frac{U(t)}{}$ |  |
+| $u_{5}(p) = p \times (\alpha_{p,s} + \alpha_{c,s}) \times \frac{U(t)}{\sqrt{2}}$ |  |
 | --- | --- |
 
 
 ĐKĐBĐ hệ số dãn nở nhiệt $u_{6}(p)$ . ĐKĐBĐ của hệ số dãn nở nhiệt có thể lấy bằng 10 % và độ lệch so với nhiệt độ chuẩn là 2 oC.
 
 
-| $u_{6}(p) = p_{s} \times U(\alpha_{p,s} - \alpha_{c,s}) \times \frac{\Deltat}{2}$ |  |
+| $u_{6}(p) = p_{s} \times U(\alpha_{p,s} - \alpha_{c,s}) \times \frac{\Delta t}{2}$ |  |
 | --- | --- |
 
 
@@ -761,14 +763,14 @@ h0 là độ cao so với mực nước biển, m.
 - ĐKĐBĐ chênh lệch chiều cao cột môi chất truyền áp suất (chất lỏng) $u_{9}(p)$ , tối đa với: U(Δh) = 2 mm, k = 3:
 
 
-| $u_{9}(p) = \rho_{f} \times g \times \frac{U(\Deltah)}{k}$ |  |
+| $u_{9}(p) = \rho_{f} \times g \times \frac{U(\Delta h)}{k}$ |  |
 | --- | --- |
 
 
 - ĐKĐBĐ lực tác dụng theo phương thẳng đứng $u_{10}(p)$ . Lực tác dụng theo phương thẳng đứng: $F' = F \times cos\theta$ . Trong trường hợp khi $\theta < 0,5'$ , ĐKĐBĐ theo $\theta$ ước lượng bằng: $U(\theta) = 5,82 \times 10^{ - 4}rad$ và lấy theo phân bố hình chữ nhật.
 
 
-| $u_{10}(p) = p \times sin\theta_{s} \times \frac{U(\theta_{s})}{}$ |  |
+| $u_{10}(p) = p \times sin\theta_{s} \times \frac{U(\theta_{s})}{\sqrt{3}}$ |  |
 | --- | --- |
 
 
@@ -803,7 +805,7 @@ h0 là độ cao so với mực nước biển, m.
 ĐKĐBĐ tổng hợp giá trị áp suất chuẩn $u_{s}(p)$ :
 
 
-| $u_{s}(p) =$ |  |
+| $u_{s}(p) = \sqrt{\sum_{i = 1}^{14}u_{i}^{2}(p)}$ |  |
 | --- | --- |
 
 
@@ -833,14 +835,14 @@ h0 là độ cao so với mực nước biển, m.
 - ĐKĐBĐ nhiệt độ píttông/xy lanh $u_{18}(p)$ , $U(t) = 2^{\circ}C$ :
 
 
-| $u_{18}(p) = p \times (\alpha_{p,t} + \alpha_{c,t}) \times \frac{U(t)}{}$ |  |
+| $u_{18}(p) = p \times (\alpha_{p,t} + \alpha_{c,t}) \times \frac{U(t)}{\sqrt{2}}$ |  |
 | --- | --- |
 
 
 - ĐKĐBĐ hệ số dãn nở nhiệt $u_{19}(p)$ . ĐKĐBĐ hệ số dãn nở nhiệt có thể lấy bằng 10 % và độ lệch so với nhiệt độ chuẩn là 2 oC:
 
 
-| $u_{19}(p) = p \times U(\alpha_{p,t} + \alpha_{c,t}) \times \frac{\Deltat}{}$ |  |
+| $u_{19}(p) = p \times U(\alpha_{p,t} + \alpha_{c,t}) \times \frac{\Delta t}{\sqrt{2}}$ |  |
 | --- | --- |
 
 
@@ -861,7 +863,7 @@ h0 là độ cao so với mực nước biển, m.
 - ĐKĐBĐ lực tác dụng so với phương thẳng đứng $u_{22}(p)$ :
 
 
-| $u_{22}(p) = p \times sin\theta_{t} \times \frac{U(\theta_{t})}{}$ |  |
+| $u_{22}(p) = p \times sin\theta_{t} \times \frac{U(\theta_{t})}{\sqrt{3}}$ |  |
 | --- | --- |
 
 
@@ -889,14 +891,14 @@ h0 là độ cao so với mực nước biển, m.
 ĐKĐBĐ tổng hợp của lực tác dụng lên píttông của AKKĐ:
 
 
-| $u_{s}(p) =$ |  |
+| $u_{s}(p) = \sqrt{\sum_{i = 16}^{25}u_{i}^{2}(p)}$ |  |
 | --- | --- |
 
 
 6.3.3.2.3 ĐKĐBĐ tổng hợp:
 
 
-| $u_{c}(p) =$ |  |
+| $u_{c}(p) = \sqrt{u_{A}^{2}(p) + u_{s}^{2}(p) + u_{t}^{2}(p)}$ |  |
 | --- | --- |
 
 
@@ -910,7 +912,7 @@ h0 là độ cao so với mực nước biển, m.
 6.3.3.3 Sai số áp suất tính theo gia tốc trọng trường tại nơi đo (g) so với áp suất danh nghĩa (gs):
 
 
-| $\Deltap = \frac{M}{A0t} \times (g_{s} - g)$ |  |
+| $\Delta p = \frac{M}{A_{0t}} \times (g_{s} - g)$ |  |
 | --- | --- |
 
 
@@ -919,7 +921,7 @@ Nếu áp suất danh nghĩa trên quả cân được ghi khắc theo gia tốc
 6.3.3.4 Độ chính xác (sai số tương đối) của áp kế píttông tại nơi đo (g) được tính bằng công thức:
 
 
-| $\delta = \frac{}{p}$ |  |
+| $\delta = \frac{\sqrt{(\Delta p)^{2} + (U(p))^{2}}}{p}$ |  |
 | --- | --- |
 
 
@@ -955,7 +957,7 @@ Chu kỳ kiểm định của áp kế píttông là 02 năm.
 
 
 
-| ĐƠN VỊ(2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập – Tự do – Hạnh phúc(Địa danh), ngày.....tháng......năm......... |
+| ĐƠN VỊ / (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập – Tự do – Hạnh phúc / (Địa danh), ngày.....tháng......năm......... |
 | --- | --- |
 
 
@@ -994,7 +996,7 @@ KẾT QUẢ KIỂM ĐỊNH
 (Xem trang sau)
 
 
-| KIỂM ĐỊNH VIÊN(Chữ ký)Họ và tên | NGƯỜI KIỂM SOÁT(Chữ ký)Họ và tên |
+| KIỂM ĐỊNH VIÊN / (Chữ ký) / Họ và tên | NGƯỜI KIỂM SOÁT / (Chữ ký) / Họ và tên |
 | --- | --- |
 
 
@@ -1026,7 +1028,7 @@ Bảng A.1 – Phương của lực tác dụng và độ kín
 Bảng A.2 – Thời gian quay tự do
 
 
-| Nhiệt độ | Kết quả | Giá trịtrung bình | Giá trịchuyển đổi |  |
+| Nhiệt độ | Kết quả |  | Giá trị / trung bình | Giá trị / chuyển đổi |
 | --- | --- | --- | --- | --- |
 |  | Cùng chiều kim đồng hồ | Ngược chiều kim đồng hồ |  |  |
 |  |  |  |  |  |
@@ -1037,7 +1039,7 @@ Bảng A.2 – Thời gian quay tự do
 Bảng A.3 – Tốc độ hạ píttông
 
 
-| Nhiệt độ | Kết quả | Giá trịtrung bình | Giá trịchuyển đổi |  |  |
+| Nhiệt độ | Kết quả |  |  | Giá trị / trung bình | Giá trị / chuyển đổi |
 | --- | --- | --- | --- | --- | --- |
 |  | Lượt 1 | Lượt 2 | Lượt 3 |  |  |
 |  |  |  |  |  |  |
@@ -1052,9 +1054,9 @@ A.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, pí
 Bảng A.4 - Khối lượng đĩa cân gốc, píttông, các quả cân
 
 
-| TT | Tên, mã số | Khối lượng danh nghĩa, kg | Khối lượng thực tế, kg | Sai số khối lượngquả cân, kg | Sai số tương đối khối lượng đĩa cân gốc, píttông, các quả cân, % |  |
+| TT | Tên, / mã số | Khối lượng / danh nghĩa, kg | Khối lượng / thực tế, kg | Sai số khối lượng / quả cân, kg | Sai số tương đối khối lượng / đĩa cân gốc, píttông, các quả cân, % |  |
 | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  | Giá trị xác định | Giá trị cho phép |
+|  |  |  |  |  | Giá trị / xác định | Giá trị / cho phép |
 | 1 |  |  |  |  |  |  |
 | 2 |  |  |  |  |  |  |
 | 3 |  |  |  |  |  |  |
@@ -1071,7 +1073,7 @@ A.3.2 Xác định diện tích hiệu dụng
 Bảng A.5 - Kết quả cân bằng áp suất
 
 
-| TT | Áp suất danh nghĩa | Áp kế píttông chuẩn | Áp kế píttông cần kiểm định | Áp suất khí quyển, hPa | Độ ẩm môi trường, %RH | Nhiệt độ môi trường, oC |  |  |  |  |  |  |
+| TT | Áp suất danh nghĩa | Áp kế píttông chuẩn |  |  |  | Áp kế píttông cần kiểm định |  |  |  | Áp suất khí quyển, hPa | Độ ẩm môi trường, %RH | Nhiệt độ môi trường, oC |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  |  | Quả cân chuẩn | Số gam thêm vào | Tổng khối lượng | Nhiệt độ pít tông | Quả cân | Số gam thêm vào | Tổng khối lượng | Nhiệt độ pít tông |  |  |  |
 | 1 |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -1092,7 +1094,7 @@ A.3.3 Xác định độ chính xác
 
 U(p) = (với k = 2)
 
-$\Deltap = \frac{M}{A0t} \times (g_{s} - g) =$
+$\Delta p = \frac{M}{A_{0t}} \times (g_{s} - g) =$
 
 Độ chính xác: d =
 
@@ -1111,7 +1113,7 @@ A.4 Kết luận: Đạt yêu cầu kỹ thuật đo lường.
 
 
 
-| ĐƠN VỊ(2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập – Tự do – Hạnh phúc(Địa danh), ngày.....tháng......năm......... |
+| ĐƠN VỊ / (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập – Tự do – Hạnh phúc / (Địa danh), ngày.....tháng......năm......... |
 | --- | --- |
 
 
@@ -1150,7 +1152,7 @@ KẾT QUẢ KIỂM ĐỊNH
 (Xem trang sau)
 
 
-| NGƯỜI KIỂM SOÁT(Chữ ký)Họ và tên | KIỂM ĐỊNH VIÊN(Chữ ký)Họ và tên | THỦ TRƯỞNG ĐƠN VỊ(Chữ kýDấu hành chính)Cấp bậc Họ và tên |
+| NGƯỜI KIỂM SOÁT / (Chữ ký) / Họ và tên | KIỂM ĐỊNH VIÊN / (Chữ ký) / Họ và tên | THỦ TRƯỞNG ĐƠN VỊ / (Chữ ký / Dấu hành chính) / Cấp bậc Họ và tên |
 | --- | --- | --- |
 
 
@@ -1182,7 +1184,7 @@ Bảng B.1 – Phương của lực tác dụng và độ kín
 Bảng B.2 – Thời gian quay tự do
 
 
-| Nhiệt độ | Kết quả | Giá trịtrung bình | Giá trịchuyển đổi |  |
+| Nhiệt độ | Kết quả |  | Giá trị / trung bình | Giá trị / chuyển đổi |
 | --- | --- | --- | --- | --- |
 |  | Cùng chiều kim đồng hồ | Ngược chiều kim đồng hồ |  |  |
 |  |  |  |  |  |
@@ -1193,7 +1195,7 @@ Bảng B.2 – Thời gian quay tự do
 Bảng B.3 – Tốc độ hạ píttông
 
 
-| Nhiệt độ | Kết quả | Giá trịtrung bình | Giá trịchuyển đổi |  |  |
+| Nhiệt độ | Kết quả |  |  | Giá trị / trung bình | Giá trị / chuyển đổi |
 | --- | --- | --- | --- | --- | --- |
 |  | Lượt 1 | Lượt 2 | Lượt 3 |  |  |
 |  |  |  |  |  |  |
@@ -1208,9 +1210,9 @@ B.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, pí
 Bảng B.4 - Khối lượng đĩa cân gốc, píttông, các quả cân
 
 
-| TT | Tên, mã số | Khối lượng danh nghĩa, kg | Khối lượng thực tế, kg | Sai số khối lượngquả cân, kg | Sai số tương đối khối lượng đĩa cân gốc, píttông, các quả cân, % |  |
+| TT | Tên, / mã số | Khối lượng / danh nghĩa, kg | Khối lượng / thực tế, kg | Sai số khối lượng / quả cân, kg | Sai số tương đối khối lượng / đĩa cân gốc, píttông, các quả cân, % |  |
 | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  | Giá trị xác định | Giá trị cho phép |
+|  |  |  |  |  | Giá trị / xác định | Giá trị / cho phép |
 | 1 |  |  |  |  |  |  |
 | 2 |  |  |  |  |  |  |
 | 3 |  |  |  |  |  |  |
@@ -1227,7 +1229,7 @@ B.3.2 Xác định diện tích hiệu dụng
 Bảng B.5 - Kết quả cân bằng áp suất
 
 
-| TT | Áp suất danh nghĩa | Áp kế píttông chuẩn | Áp kế píttông cần kiểm định | Áp suất khí quyển, hPa | Độ ẩm môi trường, %RH | Nhiệt độ môi trường, oC |  |  |  |  |  |  |
+| TT | Áp suất danh nghĩa | Áp kế píttông chuẩn |  |  |  | Áp kế píttông cần kiểm định |  |  |  | Áp suất khí quyển, hPa | Độ ẩm môi trường, %RH | Nhiệt độ môi trường, oC |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  |  | Quả cân chuẩn | Số gam thêm vào | Tổng khối lượng | Nhiệt độ pít tông | Quả cân | Số gam thêm vào | Tổng khối lượng | Nhiệt độ pít tông |  |  |  |
 | 1 |  |  |  |  |  |  |  |  |  |  |  |  |
@@ -1248,7 +1250,7 @@ B.3.3 Xác định độ chính xác
 
 U(p) = (với k = 2)
 
-$\Deltap = \frac{M}{A0t} \times (g_{s} - g) =$
+$\Delta p = \frac{M}{A_{0t}} \times (g_{s} - g) =$
 
 Độ chính xác: d =
 
@@ -1267,13 +1269,13 @@ B.4 Kết luận: Không đạt yêu cầu kỹ thuật đo lường.
 
 
 
-| ĐƠN VỊ (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập - Tự do - Hạnh phúcĐịa danh, ngày …. tháng ….. năm … |  |
-| --- | --- | --- |
-| GIẤY CHỨNG NHẬN KIỂM ĐỊNHSố: ………Tên phương tiện ĐL-TN: Áp kế píttông Ký hiệu: Số hiệu:Nước (hãng) sản xuất: Năm sản xuất :Đơn vị sử dụng:Đặc tính đo lường: - Phạm vi đo:- Cấp chính xác:KẾT QUẢ KIỂM ĐỊNH |  |  |
-| THAM SỐ KIỂM ĐỊNHSai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân lớn nhấtDiện tích hiệu dụng A0Độ chính xácCông thức tính áp suất:M: Khối lượng các quả cân và đĩa cân gốc, kg;g: Gia tốc trọng trường tại nơi đo, m/s². | GIÁ TRỊ XÁC ĐỊNHP=(0,999 85×M×g)/A0 | GIÁ TRỊ CHO PHÉP |
-| Phương pháp kiểm định: QTKĐ 1.159 : 2021Kết luận: Đạt yêu cầu kỹ thuật đo lường.Hiệu lực đến:……………/…………… * |  |  |
-| Người kiểm soát(Chữ ký, họ tên) | Kiểm định viên(Chữ ký, họ tên) | THỦ TRƯỞNG ĐƠN VỊ(Ký tên, đóng dấu) |
-| (*)Với điều kiện tôn trọng các nguyên tắc sử dụng và bảo quản. | Tổng số trang:.... |  |
+| ĐƠN VỊ / (2 cấp) |  | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập - Tự do - Hạnh phúc / Địa danh, ngày …. tháng ….. năm … |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- |
+| GIẤY CHỨNG NHẬN KIỂM ĐỊNH / Số: ……… / Tên phương tiện ĐL-TN: Áp kế píttông / Ký hiệu: Số hiệu: / Nước (hãng) sản xuất: Năm sản xuất : / Đơn vị sử dụng: / Đặc tính đo lường: / - Phạm vi đo: / - Cấp chính xác: / KẾT QUẢ KIỂM ĐỊNH |  |  |  |  |  |  |
+| THAM SỐ KIỂM ĐỊNH / Sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân lớn nhất / Diện tích hiệu dụng A0 / Độ chính xác / Công thức tính áp suất: / M: Khối lượng các quả cân và đĩa cân gốc, kg; / g: Gia tốc trọng trường tại nơi đo, m/s². |  |  | GIÁ TRỊ XÁC ĐỊNH / P=(0,999 85×M×g)/A0 |  | GIÁ TRỊ CHO PHÉP |  |
+| Phương pháp kiểm định: QTKĐ 1.159 : 2021 / Kết luận: Đạt yêu cầu kỹ thuật đo lường. / Hiệu lực đến:……………/…………… * |  |  |  |  |  |  |
+| Người kiểm soát / (Chữ ký, họ tên) | Kiểm định viên / (Chữ ký, họ tên) |  |  | THỦ TRƯỞNG ĐƠN VỊ / (Ký tên, đóng dấu) |  |  |
+| (*)Với điều kiện tôn trọng các nguyên tắc sử dụng và bảo quản. |  |  |  |  |  | Tổng số trang:.... |
 
 
 
@@ -1339,9 +1341,9 @@ Phụ lục D (tiếp theo)
 Kết quả kiểm định
 
 
-| Áp suấtdanh nghĩa, bar | Chuẩn | Điều kiện môi trường | Đối tượng hiệu chuẩn |  |  |  |  |  |  |
+| Áp suất / danh nghĩa, bar | Chuẩn |  |  | Điều kiện môi trường |  |  | Đối tượng hiệu chuẩn |  |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  | Quả cân số | Số gamthêm, g | Nhiệt độPíttông, oC | Nhiệt độ, oC | Độ ẩm, %RH | Áp suất, hPa | Quả cân số | Số gamthêm,g | Nhiệt độpíttông, oC |
+|  | Quả cân số | Số gam / thêm, g | Nhiệt độ / Píttông, oC | Nhiệt độ, oC | Độ ẩm, %RH | Áp suất, hPa | Quả cân số | Số gam / thêm,g | Nhiệt độ / píttông, oC |
 | 5,0 | G.1.2.21.23.25 | 128,5 | 19 | 19,2 | 60 | 1009,8 | G.1 | 0 | 19 |
 | 10,0 | G.1.2.3.4.21.23.25 | 154 | 19 | 19,3 | 60 | 1009,7 | G.1.2 | 0 | 19 |
 | 15,0 | G.1.2.3.4.5.6.21.23.25 | 180 | 19 | 19,3 | 59 | 1009,6 | G.1.2.3 | 0 | 19 |
@@ -1357,7 +1359,7 @@ Kết quả kiểm định
 Tính diện tích hiệu dụng của áp kế píttông cần kiểm định At(p)
 
 
-| Áp suấtdanh nghĩa, bar | Ms, kg | Mt , kg | Fs, N | A0s(1+λP),m2 | P,Pa | Pchất lỏng ,Pa | Pt, Pa | Ft, N | At, m2 |
+| Áp suất / danh nghĩa, bar | Ms, / kg | Mt , / kg | Fs, / N | A0s(1+λP), / m2 | P, / Pa | Pchất lỏng , / Pa | Pt, / Pa | Ft, / N | At, / m2 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5,0 | 1,042860E+01 | 4,287040E+00 | 1,020550E+02 | 1,961400E-04 | 5,203190E+05 | -7,943660E+02 | 5,211130E+05 | 4,195360E+01 | 8,050770E-05 |
 | 10,0 | 2,045420E+01 | 8,403540E+00 | 2,001650E+02 | 1,961400E-04 | 1,020520E+06 | -7,943660E+02 | 1,021320E+06 | 8,223740E+01 | 8,052100E-05 |
@@ -1406,23 +1408,23 @@ Tính ĐKĐBĐ kiểu B
 1/ ĐKĐBĐ của chuẩn tại áp suất p = 5,2111×10+05 Pa
 
 
-| $u_{i}(p)$ | Đại lượng | Giá trị đại lượng | Hệ số độ nhạy | Giá trị hệ số | U (đại lượng) | $u_{i}(p),$ | $u_{i}^{2}(p),^{}$ |
+| $u_{i}(p)$ | Đại lượng | Giá trị / đại lượng | Hệ số độ nhạy | Giá trị / hệ số | U (đại lượng) | $u_{i}(p),\text{Pa}$ | $u_{i}^{2}(p),\text{P}\text{a}^{\text{2}}$ |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | $u_{1}(p)$ | P, Pa | 5,21E+05 | $p_{0,s} + \frac{u(p_{s})}{p_{s}} \times p$ | 4,06E-08 | 2,61E+01 | 1,06E-06 | 1,12E-12 |
 | $u_{2}(p)$ | A0s, m2 | 1,96E-04 | $\frac{p}{2A_{0,s}}$ | 1,33E+09 | 3,73E-09 | 4,96E+00 | 2,46E+01 |
-| $u_{3}(p)$ | $\lambda_{s},$ | 7,80E-14 | $\frac{p^{2}}{2}$ | -1,36E+11 | 7,80E-15 | -1,06E-03 | 1,12E-06 |
+| $u_{3}(p)$ | $\lambda_{s},\text{1/Pa}$ | 7,80E-14 | $\frac{p^{2}}{2}$ | -1,36E+11 | 7,80E-15 | -1,06E-03 | 1,12E-06 |
 | $u_{4}(p)$ | Ms, kg | 1,04E+01 | $\frac{p}{2M_{s}}$ | 2,51E+04 | 1,56E-05 | 3,91E-01 | 1,53E-01 |
-| $u_{5}(p)$ | $t_{s},^{\circ}C$ | -4,00E+00 | $\frac{p \times (\alpha_{p,s} + \alpha_{c,s})}{}$ | 3,35E+00 | 2,00E+00 | 6,71E+00 | 4,50E+01 |
-| $u_{6}(p)$ | $\begin{matrix} (\alpha_{ps} + \alpha_{cs}), \\ 1/^{\circ}C \end{matrix}$ | 9,10E-06 | $\frac{p \times \Deltat}{}$ | -1,04E+06 | 1,00E-07 | -1,04E-01 | 1,09E-02 |
+| $u_{5}(p)$ | $t_{s},^{\circ}C$ | -4,00E+00 | $\frac{p \times (\alpha_{p,s} + \alpha_{c,s})}{\sqrt{2}}$ | 3,35E+00 | 2,00E+00 | 6,71E+00 | 4,50E+01 |
+| $u_{6}(p)$ | $\begin{matrix} (\alpha_{ps} + \alpha_{cs}), \\ 1/^{\circ}C \end{matrix}$ | 9,10E-06 | $\frac{p \times \Delta t}{\sqrt{2}}$ | -1,04E+06 | 1,00E-07 | -1,04E-01 | 1,09E-02 |
 | $u_{7}(p)$ | g, m/s2 | 9,79E+00 | $\frac{p}{3g}$ | 1,70E+06 | 1,00E-05 | 1,70E+01 | 2,89E+02 |
-| $u_{8}(p)$ | $r_{a},^{}$ | 1,20E+00 | $\frac{p}{3(\rho_{Ms} - \rho_{a})}$ | 2,17E+01 | 6,00E-02 | 1,30E+00 | 1,70E+00 |
-| $u_{9}(p)$ | $\Deltah,$ | -8,90E-02 | $\frac{\rho_{f} \times g}{3}$ | 2,98E+03 | 2,00E-03 | 5,96E+00 | 3,55E+01 |
-| $u_{10}(p)$ | $\theta,^{\circ}$ | 5,00E-01 | $\frac{p \times sin\theta}{}$ | 4,36E+02 | 5,82E-04 | 2,54E-01 | 6,43E-02 |
-| $u_{11}(p)$ | $\rho_{Ms},^{}$ | 8,00E+03 | $\frac{p \times \rho_{a}}{2 \times \rho_{Ms}^{2}}$ | 4,89E-03 | 2,00E+01 | 9,77E-02 | 9,55E-03 |
-| $u_{12}(p)$ | $\rho_{f},^{}$ | 9,13E+02 | $\frac{p \times A_{0s} \times \Deltah}{2 \times M_{s}}$ | -4,37E-01 | 1,00E+01 | -4,37E+00 | 1,91E+01 |
-| $u_{13}(p)$ | $C_{s},$ | 4,96E-02 | $\frac{p \times \gamma}{2 \times g \times M_{s}}$ | 7,91E+01 | 1,00E-03 | 7,91E-02 | 6,26E-03 |
-| $u_{14}(p)$ | $\gamma,^{2}$ | 3,09E-02 | $\frac{p \times C_{s}}{2 \times g \times M_{s}}$ | 1,27E+02 | 1,00E-04 | 1,27E-02 | 1,61E-04 |
-| $\begin{matrix} \sum_{i = 1}^{14}u_{i}^{2} = ^{2} \\ U_{Bs} = \end{matrix}$ |  |  |  |  |  |  |  |
+| $u_{8}(p)$ | $r_{a},\text{kg/}\text{m}^{\text{3}}$ | 1,20E+00 | $\frac{p}{3(\rho_{Ms} - \rho_{a})}$ | 2,17E+01 | 6,00E-02 | 1,30E+00 | 1,70E+00 |
+| $u_{9}(p)$ | $\Delta h,\text{m}$ | -8,90E-02 | $\frac{\rho_{f} \times g}{3}$ | 2,98E+03 | 2,00E-03 | 5,96E+00 | 3,55E+01 |
+| $u_{10}(p)$ | $\theta,^{\circ}$ | 5,00E-01 | $\frac{p \times sin\theta}{\sqrt{3}}$ | 4,36E+02 | 5,82E-04 | 2,54E-01 | 6,43E-02 |
+| $u_{11}(p)$ | $\rho_{Ms},\text{kg/}\text{m}^{\text{3}}$ | 8,00E+03 | $\frac{p \times \rho_{a}}{2 \times \rho_{Ms}^{2}}$ | 4,89E-03 | 2,00E+01 | 9,77E-02 | 9,55E-03 |
+| $u_{12}(p)$ | $\rho_{f},\text{kg/}\text{m}^{\text{3}}$ | 9,13E+02 | $\frac{p \times A_{0s} \times \Delta h}{2 \times M_{s}}$ | -4,37E-01 | 1,00E+01 | -4,37E+00 | 1,91E+01 |
+| $u_{13}(p)$ | $C_{s},\text{m}$ | 4,96E-02 | $\frac{p \times \gamma}{2 \times g \times M_{s}}$ | 7,91E+01 | 1,00E-03 | 7,91E-02 | 6,26E-03 |
+| $u_{14}(p)$ | $\gamma,\text{N/}\text{m}^{2}$ | 3,09E-02 | $\frac{p \times C_{s}}{2 \times g \times M_{s}}$ | 1,27E+02 | 1,00E-04 | 1,27E-02 | 1,61E-04 |
+| $\begin{matrix} \sum_{i = 1}^{14}u_{i}^{2} = \text{4,15E+02,P}\text{a}^{2} \\ U_{Bs} = \text{2,04E+01,Pa} \end{matrix}$ |  |  |  |  |  |  |  |
 
 
 Phụ lục D (kết thúc)
@@ -1430,23 +1432,23 @@ Phụ lục D (kết thúc)
 2/ ĐKĐBĐ của lực tác dụng lên píttông của AKKĐ tại áp suất P = 5,2111×10+05 Pa
 
 
-| $u_{i}(p)$ | Đại lượng | Giá trị đại lượng | Hệ số độ nhạy | Giá trị hệ số | U (đại lượng) | $u_{i}(p),$ | $u_{i}^{2}(p),^{}$ |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| $u_{15}(p)$ | A0t, m2 | 8,05E-05 | $\frac{p}{2A_{0,t}}$ | 2,10E+01 | 2,91E-09 | 6,10E-08 | 3,72E-15 |
-| $u_{16}(p)$ | $\lambda_{t},$ | 4,51E-11 | $\frac{p^{2}}{2}$ | 1,36E+11 | 1,16E-11 | 1,57E+00 | 2,47E+00 |
-| $u_{17}(p)$ | Mt, kg | 4,29E+00 | $\frac{p}{2M_{t}}$ | 1,12E+06 | 1,56E-05 | 1,74E+01 | 3,04E+02 |
-| $u_{18}(p)$ | $t_{t},^{\circ}C$ | -4,00E+00 | $\frac{p \times (\alpha_{p,t} + \alpha_{c,t})}{}$ | 3,35E+00 | 2,00E+00 | 6,71E+00 | 4,50E+01 |
-| $u_{19}(p)$ | $\begin{matrix} (\alpha_{p,t} + \alpha_{c,t}), \\ 1/^{\circ}C \end{matrix}$ | 9,10E-06 | $\frac{p \times \Deltat}{}$ | -1,04E+06 | 1,00E-07 | -1,04E-01 | 1,09E-02 |
-| $u_{20}(p)$ | g, m/s2 | 9,79E+00 | $\frac{p}{3g}$ | 1,70E+06 | 1,00E-05 | 1,70E+01 | 2,89E+02 |
-| $u_{21}(p)$ | $r_{a},^{}$ | 1,20E+00 | $\frac{p}{3(\rho_{Mt} - \rho_{a})}$ | 2,17E+01 | 6,00E-02 | 1,30E+00 | 1,70E+00 |
-| $u_{22}(p)$ | $\theta,^{\circ}$ | 5,00E-01 | $\frac{p \times sin\theta}{}$ | 4,36E+02 | 5,82E-04 | 2,54E-01 | 6,43E-02 |
-| $u_{23}(p)$ | $\rho_{Mt},^{}$ | 8,00E+03 | $\frac{p \times \rho_{a}}{2 \times \rho_{Mt}^{2}}$ | 4,89E-03 | 2,00E+01 | 9,77E-02 | 9,55E-03 |
-| $u_{24}(p)$ | $C_{t},$ | 4,96E-02 | $\frac{p \times \gamma}{2 \times g \times M_{t}}$ | 1,92E+02 | 1,00E-03 | 1,92E-01 | 3,68E-02 |
-| $u_{25}(p)$ | $\gamma,^{2}$ | 3,09E-02 | $\frac{p \times C_{t}}{2 \times g \times M_{t}}$ | 3,08E+02 | 1,00E-04 | 3,08E-02 | 9,49E-04 |
-| $\begin{matrix} \sum_{i = 15}^{25}u_{i}^{2} = ^{2} \\ U_{Bt} = \end{matrix}$ |  |  |  |  |  |  |  |
-| Uc(p) = | 36,3 | Pa |  |  |  |  |  |
-| Uexp(p) = | 72,6 | Pa | (k = 2) |  |  |  |  |
-| Độ chính xác = | 0,0144 | % | (k = 2) |  |  |  |  |
+| $u_{i}(p)$ |  | Đại lượng | Giá trị / đại lượng |  | Hệ số độ nhạy |  |  | Giá trị / hệ số |  | U (đại lượng) | $u_{i}(p),\text{Pa}$ | $u_{i}^{2}(p),\text{P}\text{a}^{\text{2}}$ |  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| $u_{15}(p)$ |  | A0t, m2 | 8,05E-05 |  | $\frac{p}{2A_{0,t}}$ |  |  | 2,10E+01 |  | 2,91E-09 | 6,10E-08 | 3,72E-15 |  |
+| $u_{16}(p)$ |  | $\lambda_{t},\text{1/Pa}$ | 4,51E-11 |  | $\frac{p^{2}}{2}$ |  |  | 1,36E+11 |  | 1,16E-11 | 1,57E+00 | 2,47E+00 |  |
+| $u_{17}(p)$ |  | Mt, kg | 4,29E+00 |  | $\frac{p}{2M_{t}}$ |  |  | 1,12E+06 |  | 1,56E-05 | 1,74E+01 | 3,04E+02 |  |
+| $u_{18}(p)$ |  | $t_{t},^{\circ}C$ | -4,00E+00 |  | $\frac{p \times (\alpha_{p,t} + \alpha_{c,t})}{\sqrt{2}}$ |  |  | 3,35E+00 |  | 2,00E+00 | 6,71E+00 | 4,50E+01 |  |
+| $u_{19}(p)$ |  | $\begin{matrix} (\alpha_{p,t} + \alpha_{c,t}), \\ 1/^{\circ}C \end{matrix}$ | 9,10E-06 |  | $\frac{p \times \Delta t}{\sqrt{2}}$ |  |  | -1,04E+06 |  | 1,00E-07 | -1,04E-01 | 1,09E-02 |  |
+| $u_{20}(p)$ |  | g, m/s2 | 9,79E+00 |  | $\frac{p}{3g}$ |  |  | 1,70E+06 |  | 1,00E-05 | 1,70E+01 | 2,89E+02 |  |
+| $u_{21}(p)$ |  | $r_{a},\text{kg/}\text{m}^{\text{3}}$ | 1,20E+00 |  | $\frac{p}{3(\rho_{Mt} - \rho_{a})}$ |  |  | 2,17E+01 |  | 6,00E-02 | 1,30E+00 | 1,70E+00 |  |
+| $u_{22}(p)$ |  | $\theta,^{\circ}$ | 5,00E-01 |  | $\frac{p \times sin\theta}{\sqrt{3}}$ |  |  | 4,36E+02 |  | 5,82E-04 | 2,54E-01 | 6,43E-02 |  |
+| $u_{23}(p)$ |  | $\rho_{Mt},\text{kg/}\text{m}^{\text{3}}$ | 8,00E+03 |  | $\frac{p \times \rho_{a}}{2 \times \rho_{Mt}^{2}}$ |  |  | 4,89E-03 |  | 2,00E+01 | 9,77E-02 | 9,55E-03 |  |
+| $u_{24}(p)$ |  | $C_{t},\text{m}$ | 4,96E-02 |  | $\frac{p \times \gamma}{2 \times g \times M_{t}}$ |  |  | 1,92E+02 |  | 1,00E-03 | 1,92E-01 | 3,68E-02 |  |
+| $u_{25}(p)$ |  | $\gamma,\text{N/}\text{m}^{2}$ | 3,09E-02 |  | $\frac{p \times C_{t}}{2 \times g \times M_{t}}$ |  |  | 3,08E+02 |  | 1,00E-04 | 3,08E-02 | 9,49E-04 |  |
+| $\begin{matrix} \sum_{i = 15}^{25}u_{i}^{2} = \text{6,42E+02,P}\text{a}^{2} \\ U_{Bt} = \text{2,53E+01,Pa} \end{matrix}$ |  |  |  |  |  |  |  |  |  |  |  |  |  |
+| Uc(p) = |  |  | 36,3 |  | Pa |  |  |  |  |  |  |  |  |
+| Uexp(p) = |  |  | 72,6 |  | Pa | (k = 2) |  |  |  |  |  |  |  |
+| Độ chính xác = |  |  | 0,0144 |  | % | (k = 2) |  |  |  |  |  |  |  |
 
 
 Kết quả cuối cùng

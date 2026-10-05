@@ -111,7 +111,7 @@ Bảng 2 - Danh mục phương tiện kiểm định
 | TT | Tên phương tiện kiểm định | Đặc trưng kỹ thuật đo lường |  |
 | --- | --- | --- | --- |
 |  |  | Phạm vi đo | Sai số cho phép hoặc cấp chính xác |
-| 1 | Bộ áp kế chuẩn kiểu chỉ thị hiện số (AKC) | Có giới hạn đo trên từ 10 bar đến 700 bar | Sai số cho phép: Û ± 0,025 % toàn thang đo |
+| 1 | Bộ áp kế chuẩn kiểu chỉ thị hiện số (AKC) | Có giới hạn đo trên từ 10 bar đến 700 bar | Sai số cho phép: ≤ ± 0,025 % toàn thang đo |
 | 2 | Phương tiện xác định vị trí đáy của pít tông | Từ 0 mm đến 350 mm | Sai số cho phép: ± 0,5 mm |
 | 3 | Phương tiện đo độ hạ của pít tông | Từ 0 mm đến 50 mm | Sai số cho phép: ± 0,1 mm |
 | 4 | Đồng hồ bấm giây điện tử | Từ 0 h đến 24 h; Độ phân giải chỉ thị: 0,01 s | Sai số cho phép: ± 4,8 s/d |
@@ -144,7 +144,7 @@ Khi tiến hành kiểm định phải đảm bảo các điều kiện sau:
 
 Nhiệt độ môi trường: (23 ± 2) oC, nhiệt độ không được thay đổi quá 2 oC/h;
 
-Độ ẩm tương đối: Û 80 %;
+Độ ẩm tương đối: ≤ 80 %;
 
 - Phòng kiểm định phải thoáng khí, không có bụi, các chất ăn mòn, không bị đốt nóng từ một phía và không có rung động;
 
@@ -413,7 +413,7 @@ Sai số tương đối của H3000 không được vượt quá ± 0,1 %.
 
 
 
-| ĐƠN VỊ(2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập – Tự do – Hạnh phúc(Địa danh), ngày.....tháng......năm......... |
+| ĐƠN VỊ / (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập – Tự do – Hạnh phúc / (Địa danh), ngày.....tháng......năm......... |
 | --- | --- |
 
 
@@ -452,7 +452,7 @@ KẾT QUẢ KIỂM ĐỊNH
 (Xem trang sau)
 
 
-| KIỂM ĐỊNH VIÊN(Chữ ký)Họ và tên | NGƯỜI KIỂM SOÁT(Chữ ký)Họ và tên |
+| KIỂM ĐỊNH VIÊN / (Chữ ký) / Họ và tên | NGƯỜI KIỂM SOÁT / (Chữ ký) / Họ và tên |
 | --- | --- |
 
 
@@ -486,7 +486,7 @@ Bảng A.2 – Thời gian quay tự do
 
 | Nhiệt độ, °C | Kết quả, min |  |  |  |  |
 | --- | --- | --- | --- | --- | --- |
-|  | Cùng chiều kim đồng hồ | Ngược chiều kim đồng hồ | Giá trịtrung bình | Giá trịchuyển đổi | Giá trịcho phép |
+|  | Cùng chiều kim đồng hồ | Ngược chiều kim đồng hồ | Giá trị / trung bình | Giá trị / chuyển đổi | Giá trị / cho phép |
 |  |  |  |  |  | 3 |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
@@ -497,7 +497,7 @@ Bảng A.3 – Tốc độ hạ píttông
 
 | Nhiệt độ, °C | Kết quả, mm/min |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- |
-|  | Lượt 1 | Lượt 2 | Lượt 3 | Giá trịtrung bình | Giá trịchuyển đổi | Giá trịcho phép |
+|  | Lượt 1 | Lượt 2 | Lượt 3 | Giá trị / trung bình | Giá trị / chuyển đổi | Giá trị / cho phép |
 |  |  |  |  |  |  | 3 |
 |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |
@@ -514,7 +514,7 @@ Phụ lục A (kết thúc)
 Bảng A.4- Kết quả đo
 
 
-| Quả cân | Áp suất danh định, bar | Áp suất chuẩn, bar | Sai số tuyệt đối, bar | Sai số tương đối, % | Sai số cho phép, % |  |  |  |
+| Quả cân | Áp suất danh định, bar |  | Áp suất chuẩn, bar |  |  | Sai số tuyệt đối, bar | Sai số tương đối, % | Sai số cho phép, % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | P0 | P | Lần 1 | Lần 2 | Trung bình |  |  |  |
 | G | 10 |  |  |  |  |  |  | ± 0,1 |
@@ -553,7 +553,7 @@ Phụ lục B
 
 
 
-| ĐƠN VỊ(2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập – Tự do – Hạnh phúc(Địa danh), ngày.....tháng......năm......... |
+| ĐƠN VỊ / (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập – Tự do – Hạnh phúc / (Địa danh), ngày.....tháng......năm......... |
 | --- | --- |
 
 
@@ -592,7 +592,7 @@ KẾT QUẢ KIỂM ĐỊNH
 (Xem trang sau)
 
 
-| NGƯỜI KIỂM SOÁT(Chữ ký)Họ và tên | KIỂM ĐỊNH VIÊN(Chữ ký)Họ và tên | THỦ TRƯỞNG ĐƠN VỊ(Chữ kýDấu hành chính)Cấp bậc Họ và tên |
+| NGƯỜI KIỂM SOÁT / (Chữ ký) / Họ và tên | KIỂM ĐỊNH VIÊN / (Chữ ký) / Họ và tên | THỦ TRƯỞNG ĐƠN VỊ / (Chữ ký / Dấu hành chính) / Cấp bậc Họ và tên |
 | --- | --- | --- |
 
 
@@ -626,7 +626,7 @@ Bảng B.2 – Thời gian quay tự do
 
 | Nhiệt độ, °C | Kết quả, min |  |  |  |  |
 | --- | --- | --- | --- | --- | --- |
-|  | Cùng chiều kim đồng hồ | Ngược chiều kim đồng hồ | Giá trịtrung bình | Giá trịchuyển đổi | Giá trịcho phép |
+|  | Cùng chiều kim đồng hồ | Ngược chiều kim đồng hồ | Giá trị / trung bình | Giá trị / chuyển đổi | Giá trị / cho phép |
 |  |  |  |  |  | 3 |
 |  |  |  |  |  |  |
 |  |  |  |  |  |  |
@@ -637,7 +637,7 @@ Bảng B.3 – Tốc độ hạ píttông
 
 | Nhiệt độ, °C | Kết quả, mm/min |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- |
-|  | Lượt 1 | Lượt 2 | Lượt 3 | Giá trịtrung bình | Giá trịchuyển đổi | Giá trịcho phép |
+|  | Lượt 1 | Lượt 2 | Lượt 3 | Giá trị / trung bình | Giá trị / chuyển đổi | Giá trị / cho phép |
 |  |  |  |  |  |  | 3 |
 |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |
@@ -654,7 +654,7 @@ Phụ lục B (kết thúc)
 Bảng B.4- Kết quả đo
 
 
-| Quả cân | Áp suất danh định, bar | Áp suất chuẩn, bar | Sai số tuyệt đối, bar | Sai số tương đối, % | Sai số cho phép, % |  |  |  |
+| Quả cân | Áp suất danh định, bar |  | Áp suất chuẩn, bar |  |  | Sai số tuyệt đối, bar | Sai số tương đối, % | Sai số cho phép, % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | P0 | P | Lần 1 | Lần 2 | Trung bình |  |  |  |
 | G | 10 |  |  |  |  |  |  | ± 0,1 |
@@ -693,10 +693,10 @@ Phụ lục C
 
 
 
-| ĐƠN VỊ (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập - Tự do - Hạnh phúcĐịa danh, ngày …. tháng ….. năm … |  |
-| --- | --- | --- |
-| GIẤY CHỨNG NHẬN KIỂM ĐỊNHSố: ……… Tên phương tiện ĐL-TN: Áp kế pít tôngKý hiệu: H3000-SP-70/700 Số hiệu:Nước (hãng) sản xuất: Ấn Độ Năm sản xuất:Đơn vị sử dụng:Đặc tính đo lường: - Phạm vi đo: (10 đến 700) bar- Cấp chính xác: 0,1KẾT QUẢ KIỂM ĐỊNH |  |  |
-| THAM SỐ KIỂM ĐỊNH Sai số lớn nhất | GIÁ TRỊ XÁC ĐỊNH | GIÁ TRỊ CHO PHÉP |
-| Phương pháp kiểm định: QTKĐ 1.071 : 2022Kết luận: Đạt yêu cầu kỹ thuật đo lường.Hiệu lực đến:……………/…………… * |  |  |
-| Người kiểm soát(Chữ ký, họ tên) | Kiểm định viên(Chữ ký, họ tên) | THỦ TRƯỞNG ĐƠN VỊ(Ký tên, đóng dấu) |
-| (*)Với điều kiện tôn trọng các nguyên tắc sử dụng và bảo quản. | Tổng số trang:.... |  |
+| ĐƠN VỊ / (2 cấp) |  | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập - Tự do - Hạnh phúc / Địa danh, ngày …. tháng ….. năm … |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- |
+| GIẤY CHỨNG NHẬN KIỂM ĐỊNH / Số: ……… / Tên phương tiện ĐL-TN: Áp kế pít tông / Ký hiệu: H3000-SP-70/700 Số hiệu: / Nước (hãng) sản xuất: Ấn Độ Năm sản xuất: / Đơn vị sử dụng: / Đặc tính đo lường: / - Phạm vi đo: (10 đến 700) bar / - Cấp chính xác: 0,1 / KẾT QUẢ KIỂM ĐỊNH |  |  |  |  |  |  |
+| THAM SỐ KIỂM ĐỊNH / Sai số lớn nhất |  |  | GIÁ TRỊ XÁC ĐỊNH |  | GIÁ TRỊ CHO PHÉP |  |
+| Phương pháp kiểm định: QTKĐ 1.071 : 2022 / Kết luận: Đạt yêu cầu kỹ thuật đo lường. / Hiệu lực đến:……………/…………… * |  |  |  |  |  |  |
+| Người kiểm soát / (Chữ ký, họ tên) | Kiểm định viên / (Chữ ký, họ tên) |  |  | THỦ TRƯỞNG ĐƠN VỊ / (Ký tên, đóng dấu) |  |  |
+| (*)Với điều kiện tôn trọng các nguyên tắc sử dụng và bảo quản. |  |  |  |  |  | Tổng số trang:.... |

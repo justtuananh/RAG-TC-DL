@@ -108,8 +108,8 @@ Bảng 2 - Danh mục phương tiện kiểm định
 | TT | Tên phương tiện kiểm định | Đặc trưng kỹ thuật đo lường |  |
 | --- | --- | --- | --- |
 |  |  | Phạm vi đo | Độ chính xác hoặc sai số cho phép hoặc độ không đảm bảo đo |
-| 1 | Áp kế chuẩn, chân không kế chuẩn | Phù hợp với AKKĐ | - Trường hợp AKKĐ có độ chính xác 0,02 % thì độ không đảm bảo đo (sau đây viết tắt là ĐKĐBĐ) của giá trị áp suất chuẩn Û 1/3 sai số cho phép của AKKĐ;- Trường hợp AKKĐ có độ chính xác > 0,02 % thì ĐKĐBĐ của giá trị áp suất chuẩn Û 1/4 sai số cho phép của AKKĐ. |
-|  |  |  | ĐKĐBĐ của giá trị áp suất chuẩn Û 1/4 sai số cho phép của AKKĐ |
+| 1 | Áp kế chuẩn, chân không kế chuẩn | Phù hợp với AKKĐ | - Trường hợp AKKĐ có độ chính xác 0,02 % thì độ không đảm bảo đo (sau đây viết tắt là ĐKĐBĐ) của giá trị áp suất chuẩn ≤ 1/3 sai số cho phép của AKKĐ; / - Trường hợp AKKĐ có độ chính xác > 0,02 % thì ĐKĐBĐ của giá trị áp suất chuẩn ≤ 1/4 sai số cho phép của AKKĐ. |
+|  |  |  | ĐKĐBĐ của giá trị áp suất chuẩn ≤ 1/4 sai số cho phép của AKKĐ |
 | 2 | Áp kế đo áp suất tuyệt đối | < 30 Pa abs. | Độ chính xác: 5 % |
 | 3 | Nhiệt kế | (18 đến 28) oC | Sai số cho phép: ± 0,2 oC |
 | 4 | Ẩm kế | (20 đến 90) % RH | Sai số cho phép: ± 10 %RH |
@@ -177,7 +177,7 @@ Trước khi tiến hành kiểm định phải thực hiện các công việc 
 
 Chú ý: Nếu có chênh lệch chiều cao cột chất lỏng thì phải tính bù áp suất theo công thức:
 
-$ ∆P_{0}=ρ×g×h (1) $
+$ \Delta P_{0}=ρ×g×h (1) $
 
 trong đó:
 
@@ -296,9 +296,9 @@ Trong đó n là một số nguyên.
 Bảng 3 - Số loạt đo, số lượng điểm đo
 
 
-| Chu trình kiểm định | Độ chính xác của AKKĐ | Số lượng điểm đo tối thiểu | Số lần tăng giảm áp suất trước khi đo | Thời gian thay đổi giá trị đo + Thời gian chờ tối thiểu, s | Thời gian chờ ở điểm giới hạn đo trên, min | Số loạt đo |  |  |
+| Chu trình kiểm định | Độ chính xác của AKKĐ | Số lượng điểm đo tối thiểu | Số lần tăng giảm áp suất trước khi đo | Thời gian thay đổi giá trị đo + Thời gian chờ tối thiểu, / s | Thời gian chờ ở điểm giới hạn đo trên, min |  | Số loạt đo |  |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  | Chiều tăng | Chiều giảm |  |
+|  |  |  |  |  |  |  | Chiều tăng | Chiều giảm |
 |  |  |  |  |  | chỉ thị số | chỉ thị tương tự |  |  |
 | A | < 0,1 | 9 | 3 | > 30 | 2 | 5 | 3 | 3 |
 | B | 0,1 đến 1 | 9 | 2 | > 30 | 2 | 5 | 2 | 2 |
@@ -384,7 +384,7 @@ t là nhiệt độ môi trường không khí, oC.
 
 - Sai số của áp kế ΔP được xác định theo công thức sau:
 
-$ ∆P=\left| \frac{\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} \right|+U_{c} (4) $
+$ \Delta P=\left| \frac{\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} \right|+U_{c} (4) $
 
 trong đó:
 
@@ -421,7 +421,7 @@ Sai số của áp kế không được vượt quá sai số cơ bản cho phé
 
 
 
-| ĐƠN VỊ(2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập – Tự do – Hạnh phúc(Địa danh), ngày.....tháng......năm......... |
+| ĐƠN VỊ / (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập – Tự do – Hạnh phúc / (Địa danh), ngày.....tháng......năm......... |
 | --- | --- |
 
 
@@ -460,7 +460,7 @@ KẾT QUẢ KIỂM ĐỊNH
 (Xem trang sau)
 
 
-| KIỂM ĐỊNH VIÊN(Chữ ký)Họ và tên | NGƯỜI KIỂM SOÁT(Chữ ký)Họ và tên |
+| KIỂM ĐỊNH VIÊN / (Chữ ký) / Họ và tên | NGƯỜI KIỂM SOÁT / (Chữ ký) / Họ và tên |
 | --- | --- |
 
 
@@ -489,9 +489,9 @@ Bảng A.1- Kết quả đo
 
 | Giá trị áp suất chuẩn | Giá trị đọc trên áp kế cần kiểm định |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- |
-|  | Chu trình kiểm định A | Chu trình kiểm tra khi xác định độ tái lặp lại |  |  |  |  |
-|  | Chu trình kiểm định B | M4(chiều giảm) | M5(chiều tăng) | M6(chiều giảm) |  |  |
-|  | M1(chiều tăng) | M2(chiều giảm) | M3(chiều tăng) |  |  |  |
+|  | Chu trình kiểm định A |  |  |  | Chu trình kiểm tra khi xác định độ tái lặp lại |  |
+|  | Chu trình kiểm định B |  |  | M4 / (chiều giảm) | M5 / (chiều tăng) | M6 / (chiều giảm) |
+|  | M1 / (chiều tăng) | M2 / (chiều giảm) | M3 / (chiều tăng) |  |  |  |
 | Pa |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |
@@ -512,7 +512,7 @@ KẾT QUẢ KIỂM ĐỊNH
 Bảng A.2 – Kết quả loạt đo M1
 
 
-| Áp suất danh nghĩa | Số liệu của áp kế píttông chuẩn và điều kiện môi trường đối với loạt đo M1 | Giá trị áp suất chuẩn tính được | Giá trị đọc trên áp kế kiểm |  |  |  |  |  |
+| Áp suất danh nghĩa | Số liệu của áp kế píttông chuẩn và điều kiện môi trường đối với loạt đo M1 |  |  |  |  |  | Giá trị áp suất chuẩn tính được | Giá trị đọc trên áp kế kiểm |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Quả cân đặt trên áp kế píttông chuẩn | Số gam thêm | Nhiệt độ môi trường | Độ ẩm | Áp suất khí quyển | Nhiệt độ píttông xylanh |  |  |
 |  |  |  |  |  |  |  |  |  |
@@ -524,7 +524,7 @@ Bảng A.2 – Kết quả loạt đo M1
 Bảng A.3 – Kết quả loạt đo M.........
 
 
-| Áp suất danh nghĩa | Số liệu của áp kế píttông chuẩn và điều kiện môi trường đối với loạt đo M1 | Giá trị áp suất chuẩn tính được | Giá trị đọc trên áp kế kiểm |  |  |  |  |  |
+| Áp suất danh nghĩa | Số liệu của áp kế píttông chuẩn và điều kiện môi trường đối với loạt đo M1 |  |  |  |  |  | Giá trị áp suất chuẩn tính được | Giá trị đọc trên áp kế kiểm |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Quả cân đặt trên áp kế píttông chuẩn | Số gam thêm | Nhiệt độ môi trường | Độ ẩm | Áp suất khí quyển | Nhiệt độ píttông xylanh |  |  |
 |  |  |  |  |  |  |  |  |  |
@@ -548,7 +548,7 @@ A.4 Kết luận: Đạt yêu cầu kỹ thuật đo lường.
 
 
 
-| ĐƠN VỊ(2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập – Tự do – Hạnh phúc(Địa danh), ngày.....tháng......năm......... |
+| ĐƠN VỊ / (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập – Tự do – Hạnh phúc / (Địa danh), ngày.....tháng......năm......... |
 | --- | --- |
 
 
@@ -587,7 +587,7 @@ KẾT QUẢ KIỂM ĐỊNH
 (Xem trang sau)
 
 
-| NGƯỜI KIỂM SOÁT(Chữ ký)Họ và tên | KIỂM ĐỊNH VIÊN(Chữ ký)Họ và tên | THỦ TRƯỞNG ĐƠN VỊ(Chữ kýDấu hành chính)Cấp bậc Họ và tên |
+| NGƯỜI KIỂM SOÁT / (Chữ ký) / Họ và tên | KIỂM ĐỊNH VIÊN / (Chữ ký) / Họ và tên | THỦ TRƯỞNG ĐƠN VỊ / (Chữ ký / Dấu hành chính) / Cấp bậc Họ và tên |
 | --- | --- | --- |
 
 
@@ -616,9 +616,9 @@ Bảng B.1- Kết quả đo
 
 | Giá trị áp suất chuẩn | Giá trị đọc trên áp kế cần kiểm định |  |  |  |  |  |
 | --- | --- | --- | --- | --- | --- | --- |
-|  | Chu trình kiểm định A | Chu trình kiểm tra khi xác định độ tái lặp lại |  |  |  |  |
-|  | Chu trình kiểm định B | M4(chiều giảm) | M5(chiều tăng) | M6(chiều giảm) |  |  |
-|  | M1(chiều tăng) | M2(chiều giảm) | M3(chiều tăng) |  |  |  |
+|  | Chu trình kiểm định A |  |  |  | Chu trình kiểm tra khi xác định độ tái lặp lại |  |
+|  | Chu trình kiểm định B |  |  | M4 / (chiều giảm) | M5 / (chiều tăng) | M6 / (chiều giảm) |
+|  | M1 / (chiều tăng) | M2 / (chiều giảm) | M3 / (chiều tăng) |  |  |  |
 | Pa |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |
@@ -639,7 +639,7 @@ KẾT QUẢ KIỂM ĐỊNH
 Bảng B.2 – Kết quả loạt đo M1
 
 
-| Áp suất danh nghĩa | Số liệu của áp kế píttông chuẩn và điều kiện môi trường đối với loạt đo M1 | Giá trị áp suất chuẩn tính được | Giá trị đọc trên áp kế kiểm |  |  |  |  |  |
+| Áp suất danh nghĩa | Số liệu của áp kế píttông chuẩn và điều kiện môi trường đối với loạt đo M1 |  |  |  |  |  | Giá trị áp suất chuẩn tính được | Giá trị đọc trên áp kế kiểm |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Quả cân đặt trên áp kế píttông chuẩn | Số gam thêm | Nhiệt độ môi trường | Độ ẩm | Áp suất khí quyển | Nhiệt độ píttông xylanh |  |  |
 |  |  |  |  |  |  |  |  |  |
@@ -651,7 +651,7 @@ Bảng B.2 – Kết quả loạt đo M1
 Bảng B.3 – Kết quả loạt đo M.........
 
 
-| Áp suất danh nghĩa | Số liệu của áp kế píttông chuẩn và điều kiện môi trường đối với loạt đo M1 | Giá trị áp suất chuẩn tính được | Giá trị đọc trên áp kế kiểm |  |  |  |  |  |
+| Áp suất danh nghĩa | Số liệu của áp kế píttông chuẩn và điều kiện môi trường đối với loạt đo M1 |  |  |  |  |  | Giá trị áp suất chuẩn tính được | Giá trị đọc trên áp kế kiểm |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 |  | Quả cân đặt trên áp kế píttông chuẩn | Số gam thêm | Nhiệt độ môi trường | Độ ẩm | Áp suất khí quyển | Nhiệt độ píttông xylanh |  |  |
 |  |  |  |  |  |  |  |  |  |
@@ -673,13 +673,13 @@ Phụ lục C
 
 
 
-| ĐƠN VỊ (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập - Tự do - Hạnh phúcĐịa danh, ngày …. tháng ….. năm … |  |
-| --- | --- | --- |
-| GIẤY CHỨNG NHẬN KIỂM ĐỊNHSố: ……… Tên phương tiện ĐL-TN: Ký hiệu: Số hiệu:Nước (hãng) sản xuất: Năm sản xuất :Đơn vị sử dụng:Đặc tính đo lường: - Phạm vi đo:- Cấp chính xác:KẾT QUẢ KIỂM ĐỊNH |  |  |
-| THAM SỐ KIỂM ĐỊNH Sai số lớn nhất | GIÁ TRỊ XÁC ĐỊNH | GIÁ TRỊ CHO PHÉP |
-| Phương pháp kiểm định: QTKĐ 1.160 : 2021Kết luận: Đạt yêu cầu kỹ thuật đo lường.Hiệu lực đến:……………/…………… * |  |  |
-| Người kiểm soát(Chữ ký, họ tên) | Kiểm định viên(Chữ ký, họ tên) | THỦ TRƯỞNG ĐƠN VỊ(Ký tên, đóng dấu) |
-| (*)Với điều kiện tôn trọng các nguyên tắc sử dụng và bảo quản. | Tổng số trang:.... |  |
+| ĐƠN VỊ / (2 cấp) |  | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập - Tự do - Hạnh phúc / Địa danh, ngày …. tháng ….. năm … |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- |
+| GIẤY CHỨNG NHẬN KIỂM ĐỊNH / Số: ……… / Tên phương tiện ĐL-TN: / Ký hiệu: Số hiệu: / Nước (hãng) sản xuất: Năm sản xuất : / Đơn vị sử dụng: / Đặc tính đo lường: / - Phạm vi đo: / - Cấp chính xác: / KẾT QUẢ KIỂM ĐỊNH |  |  |  |  |  |  |
+| THAM SỐ KIỂM ĐỊNH / Sai số lớn nhất |  |  | GIÁ TRỊ XÁC ĐỊNH |  | GIÁ TRỊ CHO PHÉP |  |
+| Phương pháp kiểm định: QTKĐ 1.160 : 2021 / Kết luận: Đạt yêu cầu kỹ thuật đo lường. / Hiệu lực đến:……………/…………… * |  |  |  |  |  |  |
+| Người kiểm soát / (Chữ ký, họ tên) | Kiểm định viên / (Chữ ký, họ tên) |  |  | THỦ TRƯỞNG ĐƠN VỊ / (Ký tên, đóng dấu) |  |  |
+| (*)Với điều kiện tôn trọng các nguyên tắc sử dụng và bảo quản. |  |  |  |  |  | Tổng số trang:.... |
 
 
 
@@ -854,7 +854,7 @@ Nhiệt độ píttông/xylanh được đo trực tiếp với điều kiện n
 Độ không đảm bảo đo của hệ số dãn nở nhiệt của píttông/xylanh có thể lấy bằng 10 % và độ lệch so với nhiệt độ chuẩn là 2 oC, tính theo công thức:
 
 
-| $ u_{6}=p_{c}×\left( α_{p,c}+α_{c,c} \right)×\frac{∆}{2} $ |  |
+| $ u_{6}=p_{c}×\left( α_{p,c}+α_{c,c} \right)×\frac{\Delta}{2} $ |  |
 | --- | --- |
 
 
@@ -896,7 +896,7 @@ Giá trị của khối lượng riêng không khí ở điều kiện tiêu chu
 Độ không đảm bảo đo của chênh lệch chiều cao cột chất lỏng tối đa bằng Uh = 2 mm, tính theo công thức:
 
 
-| $ u_{9}=ρ_{f}×g×\frac{U_{∆h}}{k} $ |  |
+| $ u_{9}=ρ_{f}×g×\frac{U_{\Delta h}}{k} $ |  |
 | --- | --- |
 
 
@@ -947,7 +947,7 @@ D.2.3.2 Độ không đảm bảo đo do độ lệch “0”: uf0
 Độ lệch “0” cần được xác định với mỗi chu kỳ đo bao gồm cả chu trình đo khi tăng và giảm áp suất. Các giá trị độ lệch “0” được tính như sau:
 
 
-| $ f_{0}=max\left{ \left\| x_{2,0}-x_{1,0} \right\|,\left\| x_{4,0}-x_{3,0} \right\|,\left\| x_{6,0}-x_{5,0} \right\| \right} $ |  |
+| $ f_{0}=max\left\{ \left\| x_{2,0}-x_{1,0} \right\|,\left\| x_{4,0}-x_{3,0} \right\|,\left\| x_{6,0}-x_{5,0} \right\| \right\} $ |  |
 | --- | --- |
 
 
@@ -970,7 +970,7 @@ D.2.3.3 Độ không đảm bảo đo do độ lặp lại: ub’
 | $ b^{'}_{up,j}=\left\| \left( x_{3,j}-x_{3,0} \right)-\left( x_{1,j}-x_{1,0} \right) \right\| $ |  |
 | --- | --- |
 | $ b^{'}_{down,j}=\left\| \left( x_{4,j}-x_{4,0} \right)-\left( x_{2,j}-x_{2,0} \right) \right\| $ |  |
-| $ b^{'}_{mean,j}=max\left{ b^{'}_{up,j}-b^{'}_{down,j} \right} $ |  |
+| $ b^{'}_{mean,j}=max\left\{ b^{'}_{up,j}-b^{'}_{down,j} \right\} $ |  |
 
 
 Với j là số thứ tự của điểm đo.
@@ -990,7 +990,7 @@ D.2.3.4 Độ không đảm bảo đo do độ tái lặp lại: ub
 | $ b_{up,j}=\left\| \left( x_{5,j}-x_{5,0} \right)-\left( x_{1,j}-x_{1,0} \right) \right\| $ |  |
 | --- | --- |
 | $ b_{down,j}=\left\| \left( x_{6,j}-x_{6,0} \right)-\left( x_{2,j}-x_{2,0} \right) \right\| $ |  |
-| $ b_{mean,j}=max\left{ b_{up,j}-b_{down,j} \right} $ |  |
+| $ b_{mean,j}=max\left\{ b_{up,j}-b_{down,j} \right\} $ |  |
 
 
 Với j là số thứ tự của điểm đo.
@@ -1007,7 +1007,7 @@ D.2.3.5 Độ không đảm bảo đo do độ hồi sai: uh
 Độ không đảm bảo đo do độ hồi sai được xác định như sau:
 
 
-| $ h_{mean,j}=\frac{1}{n}\left{ \left\| \left( x_{2,j}-x_{1,0} \right)-\left( x_{1,j}-x_{1,0} \right) \right\|+\left\| \left( x_{4,j}-x_{3,0} \right)-\left( x_{3,j}-x_{3,0} \right) \right\|+\left\| \left( x_{6,j}-x_{5,0} \right)-\left( x_{5,j}-x_{5,0} \right) \right\| \right} $ |  |
+| $ h_{mean,j}=\frac{1}{n}\left\{ \left\| \left( x_{2,j}-x_{1,0} \right)-\left( x_{1,j}-x_{1,0} \right) \right\|+\left\| \left( x_{4,j}-x_{3,0} \right)-\left( x_{3,j}-x_{3,0} \right) \right\|+\left\| \left( x_{6,j}-x_{5,0} \right)-\left( x_{5,j}-x_{5,0} \right) \right\| \right\} $ |  |
 | --- | --- |
 
 

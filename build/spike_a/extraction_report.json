@@ -7,373 +7,67 @@
       "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
     },
     {
-      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
-      "status": "ok",
-      "headings": 26,
-      "tables": 52,
-      "paragraphs": 493,
-      "media_parts": 4,
-      "embedded_ole": 0,
-      "formulas_found": 50,
-      "formulas_ole": 0,
-      "formulas_omml": 50,
-      "formula_detail": [
-        {
-          "fid": "F001",
-          "kind": "omml",
-          "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt",
-          "in_table": false,
-          "latex": "∆P_{0}=ρ×g×h (1)"
-        },
-        {
-          "fid": "F002",
-          "kind": "omml",
-          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
-          "in_table": false,
-          "latex": "P_{c}=\\frac{\\sum{M_{c}×g×\\left( 1-\\frac{ρ_{a}}{ρ_{M,c}} \\right)+γ×C_{c}}}{A_{0,c}\\left( 1+λ_{c} \\right)\\left[ 1+\\left( α_{p,c}+α_{x,c} \\right)×\\left( t_{c}-t_{r} \\right) \\right]}+\\left( ρ_{f}-ρ_{a} \\right)×g×h+P_{vac} (2)"
-        },
-        {
-          "fid": "F003",
-          "kind": "omml",
-          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
-          "in_table": false,
-          "latex": "ρ_{a}=\\frac{3,484 4×P_{at}-H×\\left( 0,002 52×t-0,020 582 \\right)}{1 000×\\left( t+273,15 \\right)} (3)"
-        },
-        {
-          "fid": "F004",
-          "kind": "omml",
-          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
-          "in_table": false,
-          "latex": "ρ=\\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} (4)"
-        },
-        {
-          "fid": "F005",
-          "kind": "omml",
-          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
-          "in_table": false,
-          "latex": "∆P=\\left| ρ \\right|+U (5)"
-        },
-        {
-          "fid": "F006",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "Y=a+b×X"
-        },
-        {
-          "fid": "F007",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "\\hat{x}=\\frac{\\sum{x_{i}}}{n}"
-        },
-        {
-          "fid": "F008",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "\\hat{y}=\\frac{\\sum{y_{i}}}{n}"
-        },
-        {
-          "fid": "F009",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b=\\frac{\\sum{\\left( x_{i}-\\hat{x} \\right)\\left( y_{i}-\\hat{y} \\right)}}{\\sum{\\left( x_{i}-\\hat{x} \\right)^{2}}}"
-        },
-        {
-          "fid": "F010",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "a=\\hat{y}-b×\\hat{x}"
-        },
-        {
-          "fid": "F011",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{ai}=\\sqrt{S_{a}^{2}+x_{i}^{2}S_{b}^{2}+2x_{i}S_{a}S_{b}r\\left( a,b \\right)}"
-        },
-        {
-          "fid": "F012",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "S_{a}=S_{y}×\\sqrt{\\frac{\\sum{x_{i}^{2}}}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}} }"
-        },
-        {
-          "fid": "F013",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "S_{b}=S_{y}×\\sqrt{\\frac{n}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}}}"
-        },
-        {
-          "fid": "F014",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "S_{y}=\\sqrt{\\frac{\\sum{\\left( y_{i}-a-bx_{i} \\right)}}{n-2}}"
-        },
-        {
-          "fid": "F015",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "r\\left( a,b \\right)=-\\frac{\\sum{x_{i}}}{\\sqrt{n\\sum{x_{i}^{2}}}}"
-        },
-        {
-          "fid": "F016",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{ch1}=\\frac{U_{ch1}}{k}"
-        },
-        {
-          "fid": "F017",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{amb}=\\frac{U_{amb}}{k}"
-        },
-        {
-          "fid": "F018",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}"
-        },
-        {
-          "fid": "F019",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}"
-        },
-        {
-          "fid": "F020",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{1}=a+b×p"
-        },
-        {
-          "fid": "F021",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": false,
-          "latex": "U_{A_{0,c}}"
-        },
-        {
-          "fid": "F022",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}"
-        },
-        {
-          "fid": "F023",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": false,
-          "latex": "U_{λ_{c}}"
-        },
-        {
-          "fid": "F024",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}"
-        },
-        {
-          "fid": "F025",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": false,
-          "latex": "U_{M_{c}}"
-        },
-        {
-          "fid": "F026",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}"
-        },
-        {
-          "fid": "F027",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{5}=p×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{U_{t}}{\\sqrt{2}}"
-        },
-        {
-          "fid": "F028",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{6}=p_{c}×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{∆}{2}"
-        },
-        {
-          "fid": "F029",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{7}=\\frac{p_{c}}{g}×\\frac{U_{g}}{3}"
-        },
-        {
-          "fid": "F030",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{8}=\\frac{p}{\\left( ρ_{M_{c}}-ρ_{a} \\right)}×\\frac{U_{ρ_{a}}}{k}"
-        },
-        {
-          "fid": "F031",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{9}=ρ_{f}×g×\\frac{U_{∆h}}{k}"
-        },
-        {
-          "fid": "F032",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{10}=p×sinθ_{c}×\\frac{U_{θ_{c}}}{\\sqrt{3}}"
-        },
-        {
-          "fid": "F033",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}"
-        },
-        {
-          "fid": "F034",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{r}=\\frac{r}{\\sqrt{6}}"
-        },
-        {
-          "fid": "F035",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{r}=\\frac{r}{\\sqrt{3}}"
-        },
-        {
-          "fid": "F036",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "f_{0}=max\\left{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right}"
-        },
-        {
-          "fid": "F037",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{f0}=\\frac{f_{0}}{2\\sqrt{3}}"
-        },
-        {
-          "fid": "F038",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b^{'}_{up,j}=\\left| \\left( x_{3,j}-x_{3,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
-        },
-        {
-          "fid": "F039",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b^{'}_{down,j}=\\left| \\left( x_{4,j}-x_{4,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
-        },
-        {
-          "fid": "F040",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b^{'}_{mean,j}=max\\left{ b^{'}_{up,j}-b^{'}_{down,j} \\right}"
-        },
-        {
-          "fid": "F041",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{b^{'}}=\\frac{b^{'}_{mean,j}}{2\\sqrt{3}}"
-        },
-        {
-          "fid": "F042",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b_{up,j}=\\left| \\left( x_{5,j}-x_{5,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
-        },
-        {
-          "fid": "F043",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b_{down,j}=\\left| \\left( x_{6,j}-x_{6,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
-        },
-        {
-          "fid": "F044",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b_{mean,j}=max\\left{ b_{up,j}-b_{down,j} \\right}"
-        },
-        {
-          "fid": "F045",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{b}=\\frac{b_{mean,j}}{2\\sqrt{3}}"
-        },
-        {
-          "fid": "F046",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "h_{mean,j}=\\frac{1}{n}\\left{ \\left| \\left( x_{2,j}-x_{1,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|+\\left| \\left( x_{4,j}-x_{3,0} \\right)-\\left( x_{3,j}-x_{3,0} \\right) \\right|+\\left| \\left( x_{6,j}-x_{5,0} \\right)-\\left( x_{5,j}-x_{5,0} \\right) \\right| \\right}"
-        },
-        {
-          "fid": "F047",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{h}=\\frac{h_{mean,j}}{2\\sqrt{3}}"
-        },
-        {
-          "fid": "F048",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{bk}=\\sqrt{u_{r}^{2}+u_{f_{0}}^{2}+u_{b^{'}}^{2}+u_{b}^{2}+u_{h}^{2}}"
-        },
-        {
-          "fid": "F049",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{c}=\\sqrt{u_{a}^{2}+u_{c}^{2}+u_{bk}^{2}}"
-        },
-        {
-          "fid": "F050",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "U_{c}=k×u_{c}"
-        }
-      ]
-    },
-    {
       "file": "7. Biểu 4 Danh mục QT 2022 NAS.doc",
       "status": "skipped-legacy",
       "note": "needs LibreOffice .doc/.xls -> .docx (Spike B)"
+    },
+    {
+      "file": "4. Bieu 1 Kiem dinh-Hieu chuan 2022 NAS 12.2022.doc",
+      "status": "ok",
+      "headings": 0,
+      "tables": 1,
+      "paragraphs": 5,
+      "media_parts": 0,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": [],
+      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/8ef493bb49f0e01a015c900721603a5e6d8305d45a5819bf245a135689985a8e.docx"
+    },
+    {
+      "file": "6. Bieu 3 Danh muc chuan mau 2022 NAS.xls",
+      "status": "ok",
+      "source_format": "xls",
+      "headings": 1,
+      "tables": 1,
+      "paragraphs": 0,
+      "table_rows": 87,
+      "media_parts": 0,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": [],
+      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/982f3c1e2b7c65e2bdfbb418c7bf2b0e57fafff5af737a893b55b6c7f107ef08.xlsx"
+    },
+    {
+      "file": "7. Biểu 4 Danh mục QT 2022 NAS.doc",
+      "status": "ok",
+      "headings": 0,
+      "tables": 1,
+      "paragraphs": 5,
+      "media_parts": 0,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": [],
+      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/ccb1d7f6284996bcb8d9c2d183e7fda88d8832c20c6eeb68ac6dea038a16e0b5.docx"
+    },
+    {
+      "file": "10. Bieu 7 Danh sách KĐV (NAS).doc",
+      "status": "ok",
+      "headings": 0,
+      "tables": 1,
+      "paragraphs": 5,
+      "media_parts": 0,
+      "embedded_ole": 0,
+      "formulas_found": 0,
+      "formulas_ole": 0,
+      "formulas_omml": 0,
+      "formula_detail": [],
+      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/db767bb2a6dcbdbec7c56f01709e175a30e9cc7ba9ce693b02b220a7f5600f25.docx"
     },
     {
       "file": "QTKD 1.061 2021 ND V2.docx",
@@ -392,7 +86,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
           "in_table": true,
-          "latex": "\\DeltaP_{cd} = P_{m} - P_{cd}",
+          "latex": "\\Delta P_{cd} = P_{m} - P_{cd}",
           "ole": "word/embeddings/oleObject1.bin",
           "ole_bytes": 3584,
           "img": "word/media/image2.wmf",
@@ -409,7 +103,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
           "in_table": false,
-          "latex": "\\DeltaP_{cd}",
+          "latex": "\\Delta P_{cd}",
           "ole": "word/embeddings/oleObject2.bin",
           "ole_bytes": 3584,
           "img": "word/media/image3.wmf",
@@ -487,7 +181,7 @@
           "kind": "omml",
           "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật",
           "in_table": false,
-          "latex": "V_{pl}=500- V_{đ}"
+          "latex": "V_{pl}=500- V_{\\text{đ}}"
         },
         {
           "fid": "F002",
@@ -501,7 +195,7 @@
           "kind": "omml",
           "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật",
           "in_table": false,
-          "latex": "V_{đ}"
+          "latex": "V_{\\text{đ}}"
         }
       ]
     },
@@ -945,9 +639,730 @@
       ]
     },
     {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "status": "ok",
+      "headings": 25,
+      "tables": 51,
+      "paragraphs": 482,
+      "media_parts": 6,
+      "embedded_ole": 0,
+      "formulas_found": 49,
+      "formulas_ole": 0,
+      "formulas_omml": 49,
+      "formula_detail": [
+        {
+          "fid": "F001",
+          "kind": "omml",
+          "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt",
+          "in_table": false,
+          "latex": "\\Delta P_{0}=ρ×g×h (1)"
+        },
+        {
+          "fid": "F002",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+          "in_table": false,
+          "latex": "P_{c}=\\frac{\\sum{M_{c}×g×\\left( 1-\\frac{ρ_{a}}{ρ_{M,c}} \\right)+γ×C_{c}}}{A_{0,c}\\left( 1+λ_{c} \\right)\\left[ 1+\\left( α_{p,c}+α_{x,c} \\right)×\\left( t-t_{r} \\right) \\right]}+\\left( ρ_{f}-ρ_{a} \\right)×g×h+P_{vac} (2)"
+        },
+        {
+          "fid": "F003",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+          "in_table": false,
+          "latex": "ρ_{a}=\\frac{3,484 4×P_{at}-H×\\left( 0,002 52×t-0,020 582 \\right)}{1 000×\\left( t+273,15 \\right)} (3)"
+        },
+        {
+          "fid": "F004",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
+          "in_table": false,
+          "latex": "\\Delta P=\\left| \\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} \\right|+U_{c} (4)"
+        },
+        {
+          "fid": "F005",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "Y=a+b×X"
+        },
+        {
+          "fid": "F006",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "\\hat{x}=\\frac{\\sum{x_{i}}}{n}"
+        },
+        {
+          "fid": "F007",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "\\hat{y}=\\frac{\\sum{y_{i}}}{n}"
+        },
+        {
+          "fid": "F008",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b=\\frac{\\sum{\\left( x_{i}-\\hat{x} \\right)\\left( y_{i}-\\hat{y} \\right)}}{\\sum{\\left( x_{i}-\\hat{x} \\right)^{2}}}"
+        },
+        {
+          "fid": "F009",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "a=\\hat{y}-b×\\hat{x}"
+        },
+        {
+          "fid": "F010",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ai}=\\sqrt{S_{a}^{2}+x_{i}^{2}S_{b}^{2}+2x_{i}S_{a}S_{b}r\\left( a,b \\right)}"
+        },
+        {
+          "fid": "F011",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{a}=S_{y}×\\sqrt{\\frac{\\sum{x_{i}^{2}}}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}} }"
+        },
+        {
+          "fid": "F012",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{b}=S_{y}×\\sqrt{\\frac{n}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}}}"
+        },
+        {
+          "fid": "F013",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{y}=\\sqrt{\\frac{\\sum{\\left( y_{i}-a-bx_{i} \\right)}}{n-2}}"
+        },
+        {
+          "fid": "F014",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "r\\left( a,b \\right)=-\\frac{\\sum{x_{i}}}{\\sqrt{n\\sum{x_{i}^{2}}}}"
+        },
+        {
+          "fid": "F015",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ch1}=\\frac{U_{ch1}}{k}"
+        },
+        {
+          "fid": "F016",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{amb}=\\frac{U_{amb}}{k}"
+        },
+        {
+          "fid": "F017",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F018",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}"
+        },
+        {
+          "fid": "F019",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{1}=a+b×p"
+        },
+        {
+          "fid": "F020",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{A_{0,c}}"
+        },
+        {
+          "fid": "F021",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}"
+        },
+        {
+          "fid": "F022",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{λ_{c}}"
+        },
+        {
+          "fid": "F023",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}"
+        },
+        {
+          "fid": "F024",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{M_{c}}"
+        },
+        {
+          "fid": "F025",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}"
+        },
+        {
+          "fid": "F026",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{5}=p×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{U_{t}}{\\sqrt{2}}"
+        },
+        {
+          "fid": "F027",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{6}=p_{c}×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{\\Delta}{2}"
+        },
+        {
+          "fid": "F028",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{7}=\\frac{p_{c}}{g}×\\frac{U_{g}}{3}"
+        },
+        {
+          "fid": "F029",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{8}=\\frac{p}{\\left( ρ_{M_{c}}-ρ_{a} \\right)}×\\frac{U_{ρ_{a}}}{k}"
+        },
+        {
+          "fid": "F030",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{9}=ρ_{f}×g×\\frac{U_{\\Delta h}}{k}"
+        },
+        {
+          "fid": "F031",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{10}=p×sinθ_{c}×\\frac{U_{θ_{c}}}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F032",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}"
+        },
+        {
+          "fid": "F033",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{r}=\\frac{r}{\\sqrt{6}}"
+        },
+        {
+          "fid": "F034",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{r}=\\frac{r}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F035",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "f_{0}=max\\left\\{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right\\}"
+        },
+        {
+          "fid": "F036",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{f0}=\\frac{f_{0}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F037",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{up,j}=\\left| \\left( x_{3,j}-x_{3,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
+        },
+        {
+          "fid": "F038",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{down,j}=\\left| \\left( x_{4,j}-x_{4,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
+        },
+        {
+          "fid": "F039",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{mean,j}=max\\left\\{ b^{'}_{up,j}-b^{'}_{down,j} \\right\\}"
+        },
+        {
+          "fid": "F040",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{b^{'}}=\\frac{b^{'}_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F041",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{up,j}=\\left| \\left( x_{5,j}-x_{5,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
+        },
+        {
+          "fid": "F042",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{down,j}=\\left| \\left( x_{6,j}-x_{6,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
+        },
+        {
+          "fid": "F043",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{mean,j}=max\\left\\{ b_{up,j}-b_{down,j} \\right\\}"
+        },
+        {
+          "fid": "F044",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{b}=\\frac{b_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F045",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "h_{mean,j}=\\frac{1}{n}\\left\\{ \\left| \\left( x_{2,j}-x_{1,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|+\\left| \\left( x_{4,j}-x_{3,0} \\right)-\\left( x_{3,j}-x_{3,0} \\right) \\right|+\\left| \\left( x_{6,j}-x_{5,0} \\right)-\\left( x_{5,j}-x_{5,0} \\right) \\right| \\right\\}"
+        },
+        {
+          "fid": "F046",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{h}=\\frac{h_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F047",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{bk}=\\sqrt{u_{r}^{2}+u_{f_{0}}^{2}+u_{b^{'}}^{2}+u_{b}^{2}+u_{h}^{2}}"
+        },
+        {
+          "fid": "F048",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{c}=\\sqrt{u_{a}^{2}+u_{c}^{2}+u_{bk}^{2}}"
+        },
+        {
+          "fid": "F049",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "U_{c}=k×u_{c}"
+        }
+      ]
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "status": "ok",
+      "headings": 26,
+      "tables": 52,
+      "paragraphs": 493,
+      "media_parts": 4,
+      "embedded_ole": 0,
+      "formulas_found": 50,
+      "formulas_ole": 0,
+      "formulas_omml": 50,
+      "formula_detail": [
+        {
+          "fid": "F001",
+          "kind": "omml",
+          "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt",
+          "in_table": false,
+          "latex": "\\Delta P_{0}=ρ×g×h (1)"
+        },
+        {
+          "fid": "F002",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+          "in_table": false,
+          "latex": "P_{c}=\\frac{\\sum{M_{c}×g×\\left( 1-\\frac{ρ_{a}}{ρ_{M,c}} \\right)+γ×C_{c}}}{A_{0,c}\\left( 1+λ_{c} \\right)\\left[ 1+\\left( α_{p,c}+α_{x,c} \\right)×\\left( t_{c}-t_{r} \\right) \\right]}+\\left( ρ_{f}-ρ_{a} \\right)×g×h+P_{vac} (2)"
+        },
+        {
+          "fid": "F003",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+          "in_table": false,
+          "latex": "ρ_{a}=\\frac{3,484 4×P_{at}-H×\\left( 0,002 52×t-0,020 582 \\right)}{1 000×\\left( t+273,15 \\right)} (3)"
+        },
+        {
+          "fid": "F004",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+          "in_table": false,
+          "latex": "ρ=\\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} (4)"
+        },
+        {
+          "fid": "F005",
+          "kind": "omml",
+          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.2 Xác định sai số",
+          "in_table": false,
+          "latex": "\\Delta P=\\left| ρ \\right|+U (5)"
+        },
+        {
+          "fid": "F006",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "Y=a+b×X"
+        },
+        {
+          "fid": "F007",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "\\hat{x}=\\frac{\\sum{x_{i}}}{n}"
+        },
+        {
+          "fid": "F008",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "\\hat{y}=\\frac{\\sum{y_{i}}}{n}"
+        },
+        {
+          "fid": "F009",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b=\\frac{\\sum{\\left( x_{i}-\\hat{x} \\right)\\left( y_{i}-\\hat{y} \\right)}}{\\sum{\\left( x_{i}-\\hat{x} \\right)^{2}}}"
+        },
+        {
+          "fid": "F010",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "a=\\hat{y}-b×\\hat{x}"
+        },
+        {
+          "fid": "F011",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ai}=\\sqrt{S_{a}^{2}+x_{i}^{2}S_{b}^{2}+2x_{i}S_{a}S_{b}r\\left( a,b \\right)}"
+        },
+        {
+          "fid": "F012",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{a}=S_{y}×\\sqrt{\\frac{\\sum{x_{i}^{2}}}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}} }"
+        },
+        {
+          "fid": "F013",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{b}=S_{y}×\\sqrt{\\frac{n}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}}}"
+        },
+        {
+          "fid": "F014",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "S_{y}=\\sqrt{\\frac{\\sum{\\left( y_{i}-a-bx_{i} \\right)}}{n-2}}"
+        },
+        {
+          "fid": "F015",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "r\\left( a,b \\right)=-\\frac{\\sum{x_{i}}}{\\sqrt{n\\sum{x_{i}^{2}}}}"
+        },
+        {
+          "fid": "F016",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ch1}=\\frac{U_{ch1}}{k}"
+        },
+        {
+          "fid": "F017",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{amb}=\\frac{U_{amb}}{k}"
+        },
+        {
+          "fid": "F018",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F019",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}"
+        },
+        {
+          "fid": "F020",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{1}=a+b×p"
+        },
+        {
+          "fid": "F021",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{A_{0,c}}"
+        },
+        {
+          "fid": "F022",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}"
+        },
+        {
+          "fid": "F023",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{λ_{c}}"
+        },
+        {
+          "fid": "F024",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}"
+        },
+        {
+          "fid": "F025",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": false,
+          "latex": "U_{M_{c}}"
+        },
+        {
+          "fid": "F026",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}"
+        },
+        {
+          "fid": "F027",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{5}=p×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{U_{t}}{\\sqrt{2}}"
+        },
+        {
+          "fid": "F028",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{6}=p_{c}×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{\\Delta}{2}"
+        },
+        {
+          "fid": "F029",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{7}=\\frac{p_{c}}{g}×\\frac{U_{g}}{3}"
+        },
+        {
+          "fid": "F030",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{8}=\\frac{p}{\\left( ρ_{M_{c}}-ρ_{a} \\right)}×\\frac{U_{ρ_{a}}}{k}"
+        },
+        {
+          "fid": "F031",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{9}=ρ_{f}×g×\\frac{U_{\\Delta h}}{k}"
+        },
+        {
+          "fid": "F032",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{10}=p×sinθ_{c}×\\frac{U_{θ_{c}}}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F033",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}"
+        },
+        {
+          "fid": "F034",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{r}=\\frac{r}{\\sqrt{6}}"
+        },
+        {
+          "fid": "F035",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{r}=\\frac{r}{\\sqrt{3}}"
+        },
+        {
+          "fid": "F036",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "f_{0}=max\\left\\{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right\\}"
+        },
+        {
+          "fid": "F037",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{f0}=\\frac{f_{0}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F038",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{up,j}=\\left| \\left( x_{3,j}-x_{3,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
+        },
+        {
+          "fid": "F039",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{down,j}=\\left| \\left( x_{4,j}-x_{4,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
+        },
+        {
+          "fid": "F040",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b^{'}_{mean,j}=max\\left\\{ b^{'}_{up,j}-b^{'}_{down,j} \\right\\}"
+        },
+        {
+          "fid": "F041",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{b^{'}}=\\frac{b^{'}_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F042",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{up,j}=\\left| \\left( x_{5,j}-x_{5,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
+        },
+        {
+          "fid": "F043",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{down,j}=\\left| \\left( x_{6,j}-x_{6,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
+        },
+        {
+          "fid": "F044",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "b_{mean,j}=max\\left\\{ b_{up,j}-b_{down,j} \\right\\}"
+        },
+        {
+          "fid": "F045",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{b}=\\frac{b_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F046",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "h_{mean,j}=\\frac{1}{n}\\left\\{ \\left| \\left( x_{2,j}-x_{1,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|+\\left| \\left( x_{4,j}-x_{3,0} \\right)-\\left( x_{3,j}-x_{3,0} \\right) \\right|+\\left| \\left( x_{6,j}-x_{5,0} \\right)-\\left( x_{5,j}-x_{5,0} \\right) \\right| \\right\\}"
+        },
+        {
+          "fid": "F047",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{h}=\\frac{h_{mean,j}}{2\\sqrt{3}}"
+        },
+        {
+          "fid": "F048",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{bk}=\\sqrt{u_{r}^{2}+u_{f_{0}}^{2}+u_{b^{'}}^{2}+u_{b}^{2}+u_{h}^{2}}"
+        },
+        {
+          "fid": "F049",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "u_{c}=\\sqrt{u_{a}^{2}+u_{c}^{2}+u_{bk}^{2}}"
+        },
+        {
+          "fid": "F050",
+          "kind": "omml",
+          "section": "Đánh giá độ không đảm bảo đo",
+          "in_table": true,
+          "latex": "U_{c}=k×u_{c}"
+        }
+      ]
+    },
+    {
       "file": "QTKD 1.159 2021 ND FINAL.docx",
       "status": "ok",
-      "headings": 30,
+      "headings": 31,
       "tables": 81,
       "paragraphs": 492,
       "media_parts": 197,
@@ -1197,9 +1612,9 @@
         {
           "fid": "F015",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
-          "latex": "P_{s,i} = \\frac{\\sum_{}^{}M_{i,s}g(1 - \\frac{\\rho_{a}}{\\rho_{Ms}}) + \\gammaC_{s}}{A_{0s}(1 + \\lambda_{s}P_{s,i})[1 + (\\alpha_{p,s} + \\alpha_{c,s})(t_{s} - t_{r})]} + (\\rho_{f} - \\rho_{a})gh",
+          "latex": "P_{s,i} = \\frac{\\sum M_{i,s}g(1 - \\frac{\\rho_{a}}{\\rho_{Ms}}) + \\gamma C_{s}}{A_{0s}(1 + \\lambda_{s}P_{s,i})[1 + (\\alpha_{p,s} + \\alpha_{c,s})(t_{s} - t_{r})]} + (\\rho_{f} - \\rho_{a})gh",
           "ole": "word/embeddings/oleObject15.bin",
           "ole_bytes": 4096,
           "img": "word/media/image16.wmf",
@@ -1214,9 +1629,9 @@
         {
           "fid": "F016",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
-          "latex": "\\sum_{}^{}M_{i,s}",
+          "latex": "\\sum M_{i,s}",
           "ole": "word/embeddings/oleObject16.bin",
           "ole_bytes": 3584,
           "img": "word/media/image17.wmf",
@@ -1231,7 +1646,7 @@
         {
           "fid": "F017",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\rho_{a}",
           "ole": "word/embeddings/oleObject17.bin",
@@ -1248,7 +1663,7 @@
         {
           "fid": "F018",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\rho_{Ms}",
           "ole": "word/embeddings/oleObject18.bin",
@@ -1265,7 +1680,7 @@
         {
           "fid": "F019",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\gamma",
           "ole": "word/embeddings/oleObject19.bin",
@@ -1282,7 +1697,7 @@
         {
           "fid": "F020",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "C_{s}",
           "ole": "word/embeddings/oleObject20.bin",
@@ -1299,7 +1714,7 @@
         {
           "fid": "F021",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "A_{0s}",
           "ole": "word/embeddings/oleObject21.bin",
@@ -1316,7 +1731,7 @@
         {
           "fid": "F022",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\lambda_{s}",
           "ole": "word/embeddings/oleObject22.bin",
@@ -1333,7 +1748,7 @@
         {
           "fid": "F023",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\alpha_{p,s},\\alpha_{c,s}",
           "ole": "word/embeddings/oleObject23.bin",
@@ -1350,7 +1765,7 @@
         {
           "fid": "F024",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "t_{s}",
           "ole": "word/embeddings/oleObject24.bin",
@@ -1367,7 +1782,7 @@
         {
           "fid": "F025",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "t_{r}",
           "ole": "word/embeddings/oleObject25.bin",
@@ -1384,7 +1799,7 @@
         {
           "fid": "F026",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\rho_{f}",
           "ole": "word/embeddings/oleObject26.bin",
@@ -1401,7 +1816,7 @@
         {
           "fid": "F027",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
           "latex": "\\rho_{a} = \\frac{3,4848P_{a} - 0,009 \\times H \\times e^{0,061 \\times t}}{t + 273,15}",
           "ole": "word/embeddings/oleObject27.bin",
@@ -1418,7 +1833,7 @@
         {
           "fid": "F028",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "P_{a}",
           "ole": "word/embeddings/oleObject28.bin",
@@ -1435,7 +1850,7 @@
         {
           "fid": "F029",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "H",
           "ole": "word/embeddings/oleObject29.bin",
@@ -1452,7 +1867,7 @@
         {
           "fid": "F030",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "t",
           "ole": "word/embeddings/oleObject30.bin",
@@ -1469,7 +1884,7 @@
         {
           "fid": "F031",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
           "latex": "P_{abs} = P_{s,i} + \\mu",
           "ole": "word/embeddings/oleObject31.bin",
@@ -1486,7 +1901,7 @@
         {
           "fid": "F032",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "P_{abs}",
           "ole": "word/embeddings/oleObject32.bin",
@@ -1503,7 +1918,7 @@
         {
           "fid": "F033",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\mu",
           "ole": "word/embeddings/oleObject33.bin",
@@ -1520,9 +1935,9 @@
         {
           "fid": "F034",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
-          "latex": "P_{m} = P_{s,i} \\pm (\\rho_{f} - \\rho_{a})g\\Deltah",
+          "latex": "P_{m} = P_{s,i} \\pm (\\rho_{f} - \\rho_{a})g\\Delta h",
           "ole": "word/embeddings/oleObject34.bin",
           "ole_bytes": 3584,
           "img": "word/media/image34.wmf",
@@ -1537,7 +1952,7 @@
         {
           "fid": "F035",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "p_{e}",
           "ole": "word/embeddings/oleObject35.bin",
@@ -1554,9 +1969,9 @@
         {
           "fid": "F036",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
-          "latex": "P_{m} = P_{abs} \\pm \\rho_{f}g\\Deltah",
+          "latex": "P_{m} = P_{abs} \\pm \\rho_{f}g\\Delta h",
           "ole": "word/embeddings/oleObject36.bin",
           "ole_bytes": 3584,
           "img": "word/media/image36.wmf",
@@ -1571,9 +1986,9 @@
         {
           "fid": "F037",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
-          "latex": "\\Deltah",
+          "latex": "\\Delta h",
           "ole": "word/embeddings/oleObject37.bin",
           "ole_bytes": 3072,
           "img": "word/media/image37.wmf",
@@ -1588,7 +2003,7 @@
         {
           "fid": "F038",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "A_{0t,i}",
           "ole": "word/embeddings/oleObject38.bin",
@@ -1605,9 +2020,9 @@
         {
           "fid": "F039",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
-          "latex": "A_{0t,i}(1 + \\lambda_{t}P_{s,i}) = \\frac{\\sum_{}^{}M_{t,i}g(1 - \\frac{\\rho_{a}}{\\rho_{Mt}}) + \\gammaC_{t}}{P_{s,i}[1 + (\\alpha_{p,t} + \\alpha_{c,t})(t_{t} - t_{r})]} + \\frac{(\\rho_{f} - \\rho_{a})gh}{P_{s,i}}",
+          "latex": "A_{0t,i}(1 + \\lambda_{t}P_{s,i}) = \\frac{\\sum M_{t,i}g(1 - \\frac{\\rho_{a}}{\\rho_{Mt}}) + \\gamma C_{t}}{P_{s,i}[1 + (\\alpha_{p,t} + \\alpha_{c,t})(t_{t} - t_{r})]} + \\frac{(\\rho_{f} - \\rho_{a})gh}{P_{s,i}}",
           "ole": "word/embeddings/oleObject39.bin",
           "ole_bytes": 4096,
           "img": "word/media/image39.wmf",
@@ -1622,9 +2037,9 @@
         {
           "fid": "F040",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
-          "latex": "\\sum_{}^{}M_{t,i}",
+          "latex": "\\sum M_{t,i}",
           "ole": "word/embeddings/oleObject40.bin",
           "ole_bytes": 3584,
           "img": "word/media/image40.wmf",
@@ -1639,7 +2054,7 @@
         {
           "fid": "F041",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\rho_{Mt}",
           "ole": "word/embeddings/oleObject41.bin",
@@ -1656,7 +2071,7 @@
         {
           "fid": "F042",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "C_{t}",
           "ole": "word/embeddings/oleObject42.bin",
@@ -1673,7 +2088,7 @@
         {
           "fid": "F043",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\lambda_{t}",
           "ole": "word/embeddings/oleObject43.bin",
@@ -1690,7 +2105,7 @@
         {
           "fid": "F044",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\alpha_{p,t},\\alpha_{c,t}",
           "ole": "word/embeddings/oleObject44.bin",
@@ -1707,7 +2122,7 @@
         {
           "fid": "F045",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "t_{t}",
           "ole": "word/embeddings/oleObject45.bin",
@@ -1724,7 +2139,7 @@
         {
           "fid": "F046",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "t_{r}",
           "ole": "word/embeddings/oleObject46.bin",
@@ -1741,7 +2156,7 @@
         {
           "fid": "F047",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "X_{i} = P_{s,i}",
           "ole": "word/embeddings/oleObject47.bin",
@@ -1758,7 +2173,7 @@
         {
           "fid": "F048",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "Y_{i} = A_{0t,i}",
           "ole": "word/embeddings/oleObject48.bin",
@@ -1775,9 +2190,9 @@
         {
           "fid": "F049",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
-          "latex": "R = \\frac{n\\sum_{}^{}X_{i}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}}{}",
+          "latex": "R = \\frac{n\\sum X_{i}Y_{i} - \\sum X_{i}\\sum Y_{i}}{\\sqrt{[n\\sum X_{i}^{2} - (\\sum X_{i})^{2}][n\\sum Y_{i}^{2} - (\\sum Y_{i})^{2}]}}",
           "ole": "word/embeddings/oleObject49.bin",
           "ole_bytes": 3584,
           "img": "word/media/image47.wmf",
@@ -1792,9 +2207,9 @@
         {
           "fid": "F050",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
-          "latex": "a = \\frac{\\sum_{}^{}X_{i}^{2}\\sum_{}^{}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}^{2}}{n\\sum_{}^{}X_{i}^{2} - (\\sum_{}^{}X_{i})^{2}}",
+          "latex": "a = \\frac{\\sum X_{i}^{2}\\sum Y_{i} - \\sum X_{i}\\sum Y_{i}^{2}}{n\\sum X_{i}^{2} - (\\sum X_{i})^{2}}",
           "ole": "word/embeddings/oleObject50.bin",
           "ole_bytes": 3584,
           "img": "word/media/image48.wmf",
@@ -1809,9 +2224,9 @@
         {
           "fid": "F051",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
-          "latex": "b = \\frac{n\\sum_{}^{}X_{i}\\sum_{}^{}Y_{i} - \\sum_{}^{}X_{i}\\sum_{}^{}Y_{i}}{n\\sum_{}^{}X_{i}^{2} - (\\sum_{}^{}X_{i})^{2}}",
+          "latex": "b = \\frac{n\\sum X_{i}\\sum Y_{i} - \\sum X_{i}\\sum Y_{i}}{n\\sum X_{i}^{2} - (\\sum X_{i})^{2}}",
           "ole": "word/embeddings/oleObject51.bin",
           "ole_bytes": 3584,
           "img": "word/media/image49.wmf",
@@ -1826,7 +2241,7 @@
         {
           "fid": "F052",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
           "latex": "A_{0t} = \\overline{A} = \\frac{\\sum_{i = 1}^{n}A_{0t,i}}{n}",
           "ole": "word/embeddings/oleObject52.bin",
@@ -1843,7 +2258,7 @@
         {
           "fid": "F053",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": false,
           "latex": "\\geq",
           "ole": "word/embeddings/oleObject53.bin",
@@ -1860,7 +2275,7 @@
         {
           "fid": "F054",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
           "latex": "A_{0t} = a",
           "ole": "word/embeddings/oleObject54.bin",
@@ -1877,7 +2292,7 @@
         {
           "fid": "F055",
           "kind": "ole",
-          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.1 Xác định sai số khối lượng tương đối đĩa cân gốc, píttông, các quả cân",
+          "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.2 Xác định diện tích hiệu dụng",
           "in_table": true,
           "latex": "\\lambda = \\frac{b}{A_{0t}}",
           "ole": "word/embeddings/oleObject55.bin",
@@ -1896,7 +2311,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{A} =",
+          "latex": "u_{A} = \\sqrt{\\frac{\\sum(A_{i} - \\overline{A})^{2}}{n(n - 1)}}",
           "ole": "word/embeddings/oleObject56.bin",
           "ole_bytes": 3584,
           "img": "word/media/image54.wmf",
@@ -1947,7 +2362,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "S_{y} =",
+          "latex": "S_{y} = \\sqrt{\\frac{\\sum(Y_{i} - a - bX_{i})^{2}}{n - 2}}",
           "ole": "word/embeddings/oleObject59.bin",
           "ole_bytes": 3584,
           "img": "word/media/image56.wmf",
@@ -1964,7 +2379,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "S_{a} = S_{y} \\times",
+          "latex": "S_{a} = S_{y} \\times \\sqrt{\\frac{\\sum X_{i}^{2}}{n\\sum X_{i}^{2} - (\\sum X_{i})^{2}}}",
           "ole": "word/embeddings/oleObject60.bin",
           "ole_bytes": 3584,
           "img": "word/media/image57.wmf",
@@ -1981,7 +2396,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "S_{b} = S_{y} \\times",
+          "latex": "S_{b} = S_{y} \\times \\sqrt{\\frac{n}{n\\sum X_{i}^{2} - (\\sum X_{i})^{2}}}",
           "ole": "word/embeddings/oleObject61.bin",
           "ole_bytes": 3584,
           "img": "word/media/image58.wmf",
@@ -1998,7 +2413,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "r(a,b) = - \\frac{\\sum_{}^{}X_{i}}{}",
+          "latex": "r(a,b) = - \\frac{\\sum X_{i}}{\\sqrt{n\\sum X_{i}^{2}}}",
           "ole": "word/embeddings/oleObject62.bin",
           "ole_bytes": 3584,
           "img": "word/media/image59.wmf",
@@ -2015,7 +2430,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{A,i} =",
+          "latex": "u_{A,i} = \\sqrt{S_{a}^{2} + X_{i}^{2}S_{b}^{2} + 2X_{i}S_{a}S_{b}r(a,b)}",
           "ole": "word/embeddings/oleObject63.bin",
           "ole_bytes": 3584,
           "img": "word/media/image60.wmf",
@@ -2236,7 +2651,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{5}(p) = p \\times (\\alpha_{p,s} + \\alpha_{c,s}) \\times \\frac{U(t)}{}",
+          "latex": "u_{5}(p) = p \\times (\\alpha_{p,s} + \\alpha_{c,s}) \\times \\frac{U(t)}{\\sqrt{2}}",
           "ole": "word/embeddings/oleObject76.bin",
           "ole_bytes": 3584,
           "img": "word/media/image73.wmf",
@@ -2270,7 +2685,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{6}(p) = p_{s} \\times U(\\alpha_{p,s} - \\alpha_{c,s}) \\times \\frac{\\Deltat}{2}",
+          "latex": "u_{6}(p) = p_{s} \\times U(\\alpha_{p,s} - \\alpha_{c,s}) \\times \\frac{\\Delta t}{2}",
           "ole": "word/embeddings/oleObject78.bin",
           "ole_bytes": 3584,
           "img": "word/media/image75.wmf",
@@ -2423,7 +2838,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{9}(p) = \\rho_{f} \\times g \\times \\frac{U(\\Deltah)}{k}",
+          "latex": "u_{9}(p) = \\rho_{f} \\times g \\times \\frac{U(\\Delta h)}{k}",
           "ole": "word/embeddings/oleObject87.bin",
           "ole_bytes": 3584,
           "img": "word/media/image84.wmf",
@@ -2525,7 +2940,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{10}(p) = p \\times sin\\theta_{s} \\times \\frac{U(\\theta_{s})}{}",
+          "latex": "u_{10}(p) = p \\times sin\\theta_{s} \\times \\frac{U(\\theta_{s})}{\\sqrt{3}}",
           "ole": "word/embeddings/oleObject93.bin",
           "ole_bytes": 3584,
           "img": "word/media/image90.wmf",
@@ -2695,7 +3110,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{s}(p) =",
+          "latex": "u_{s}(p) = \\sqrt{\\sum_{i = 1}^{14}u_{i}^{2}(p)}",
           "ole": "word/embeddings/oleObject103.bin",
           "ole_bytes": 3584,
           "img": "word/media/image100.wmf",
@@ -2848,7 +3263,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{18}(p) = p \\times (\\alpha_{p,t} + \\alpha_{c,t}) \\times \\frac{U(t)}{}",
+          "latex": "u_{18}(p) = p \\times (\\alpha_{p,t} + \\alpha_{c,t}) \\times \\frac{U(t)}{\\sqrt{2}}",
           "ole": "word/embeddings/oleObject112.bin",
           "ole_bytes": 3584,
           "img": "word/media/image109.wmf",
@@ -2882,7 +3297,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{19}(p) = p \\times U(\\alpha_{p,t} + \\alpha_{c,t}) \\times \\frac{\\Deltat}{}",
+          "latex": "u_{19}(p) = p \\times U(\\alpha_{p,t} + \\alpha_{c,t}) \\times \\frac{\\Delta t}{\\sqrt{2}}",
           "ole": "word/embeddings/oleObject114.bin",
           "ole_bytes": 3584,
           "img": "word/media/image111.wmf",
@@ -2984,7 +3399,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{22}(p) = p \\times sin\\theta_{t} \\times \\frac{U(\\theta_{t})}{}",
+          "latex": "u_{22}(p) = p \\times sin\\theta_{t} \\times \\frac{U(\\theta_{t})}{\\sqrt{3}}",
           "ole": "word/embeddings/oleObject120.bin",
           "ole_bytes": 3584,
           "img": "word/media/image117.wmf",
@@ -3103,7 +3518,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{s}(p) =",
+          "latex": "u_{s}(p) = \\sqrt{\\sum_{i = 16}^{25}u_{i}^{2}(p)}",
           "ole": "word/embeddings/oleObject127.bin",
           "ole_bytes": 3584,
           "img": "word/media/image124.wmf",
@@ -3120,7 +3535,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "u_{c}(p) =",
+          "latex": "u_{c}(p) = \\sqrt{u_{A}^{2}(p) + u_{s}^{2}(p) + u_{t}^{2}(p)}",
           "ole": "word/embeddings/oleObject128.bin",
           "ole_bytes": 3584,
           "img": "word/media/image125.wmf",
@@ -3154,7 +3569,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g)",
+          "latex": "\\Delta p = \\frac{M}{A_{0t}} \\times (g_{s} - g)",
           "ole": "word/embeddings/oleObject130.bin",
           "ole_bytes": 3584,
           "img": "word/media/image127.wmf",
@@ -3171,7 +3586,7 @@
           "kind": "ole",
           "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường > 6.3.3 Xác định độ chính xác",
           "in_table": true,
-          "latex": "\\delta = \\frac{}{p}",
+          "latex": "\\delta = \\frac{\\sqrt{(\\Delta p)^{2} + (U(p))^{2}}}{p}",
           "ole": "word/embeddings/oleObject131.bin",
           "ole_bytes": 3584,
           "img": "word/media/image128.wmf",
@@ -3205,7 +3620,7 @@
           "kind": "ole",
           "section": "Mẫu biên bản kiểm định",
           "in_table": false,
-          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g) =",
+          "latex": "\\Delta p = \\frac{M}{A_{0t}} \\times (g_{s} - g) =",
           "ole": "word/embeddings/oleObject133.bin",
           "ole_bytes": 3584,
           "img": "word/media/image130.wmf",
@@ -3222,7 +3637,7 @@
           "kind": "ole",
           "section": "Mẫu biên bản kiểm định (không đạt)",
           "in_table": false,
-          "latex": "\\Deltap = \\frac{M}{A0t} \\times (g_{s} - g) =",
+          "latex": "\\Delta p = \\frac{M}{A_{0t}} \\times (g_{s} - g) =",
           "ole": "word/embeddings/oleObject134.bin",
           "ole_bytes": 3584,
           "img": "word/media/image130.wmf",
@@ -3256,7 +3671,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "u_{i}(p),",
+          "latex": "u_{i}(p),\\text{Pa}",
           "ole": "word/embeddings/oleObject136.bin",
           "ole_bytes": 3584,
           "img": "word/media/image132.wmf",
@@ -3273,7 +3688,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "u_{i}^{2}(p),^{}",
+          "latex": "u_{i}^{2}(p),\\text{P}\\text{a}^{\\text{2}}",
           "ole": "word/embeddings/oleObject137.bin",
           "ole_bytes": 3584,
           "img": "word/media/image133.wmf",
@@ -3375,7 +3790,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\lambda_{s},",
+          "latex": "\\lambda_{s},\\text{1/Pa}",
           "ole": "word/embeddings/oleObject143.bin",
           "ole_bytes": 3584,
           "img": "word/media/image139.wmf",
@@ -3477,7 +3892,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\frac{p \\times (\\alpha_{p,s} + \\alpha_{c,s})}{}",
+          "latex": "\\frac{p \\times (\\alpha_{p,s} + \\alpha_{c,s})}{\\sqrt{2}}",
           "ole": "word/embeddings/oleObject149.bin",
           "ole_bytes": 3584,
           "img": "word/media/image145.wmf",
@@ -3528,7 +3943,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\frac{p \\times \\Deltat}{}",
+          "latex": "\\frac{p \\times \\Delta t}{\\sqrt{2}}",
           "ole": "word/embeddings/oleObject152.bin",
           "ole_bytes": 3584,
           "img": "word/media/image148.wmf",
@@ -3596,7 +4011,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "r_{a},^{}",
+          "latex": "r_{a},\\text{kg/}\\text{m}^{\\text{3}}",
           "ole": "word/embeddings/oleObject156.bin",
           "ole_bytes": 3584,
           "img": "word/media/image152.wmf",
@@ -3647,7 +4062,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\Deltah,",
+          "latex": "\\Delta h,\\text{m}",
           "ole": "word/embeddings/oleObject159.bin",
           "ole_bytes": 3072,
           "img": "word/media/image155.wmf",
@@ -3715,7 +4130,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\frac{p \\times sin\\theta}{}",
+          "latex": "\\frac{p \\times sin\\theta}{\\sqrt{3}}",
           "ole": "word/embeddings/oleObject163.bin",
           "ole_bytes": 3584,
           "img": "word/media/image159.wmf",
@@ -3749,7 +4164,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\rho_{Ms},^{}",
+          "latex": "\\rho_{Ms},\\text{kg/}\\text{m}^{\\text{3}}",
           "ole": "word/embeddings/oleObject165.bin",
           "ole_bytes": 3584,
           "img": "word/media/image161.wmf",
@@ -3800,7 +4215,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\rho_{f},^{}",
+          "latex": "\\rho_{f},\\text{kg/}\\text{m}^{\\text{3}}",
           "ole": "word/embeddings/oleObject168.bin",
           "ole_bytes": 3584,
           "img": "word/media/image164.wmf",
@@ -3817,7 +4232,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\frac{p \\times A_{0s} \\times \\Deltah}{2 \\times M_{s}}",
+          "latex": "\\frac{p \\times A_{0s} \\times \\Delta h}{2 \\times M_{s}}",
           "ole": "word/embeddings/oleObject169.bin",
           "ole_bytes": 3584,
           "img": "word/media/image165.wmf",
@@ -3851,7 +4266,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "C_{s},",
+          "latex": "C_{s},\\text{m}",
           "ole": "word/embeddings/oleObject171.bin",
           "ole_bytes": 3072,
           "img": "word/media/image167.wmf",
@@ -3902,7 +4317,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\gamma,^{2}",
+          "latex": "\\gamma,\\text{N/}\\text{m}^{2}",
           "ole": "word/embeddings/oleObject174.bin",
           "ole_bytes": 3584,
           "img": "word/media/image170.wmf",
@@ -3936,7 +4351,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\begin{matrix} \\sum_{i = 1}^{14}u_{i}^{2} = ^{2} \\\\ U_{Bs} = \\end{matrix}",
+          "latex": "\\begin{matrix} \\sum_{i = 1}^{14}u_{i}^{2} = \\text{4,15E+02,P}\\text{a}^{2} \\\\ U_{Bs} = \\text{2,04E+01,Pa} \\end{matrix}",
           "ole": "word/embeddings/oleObject176.bin",
           "ole_bytes": 3584,
           "img": "word/media/image172.wmf",
@@ -3970,7 +4385,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "u_{i}(p),",
+          "latex": "u_{i}(p),\\text{Pa}",
           "ole": "word/embeddings/oleObject178.bin",
           "ole_bytes": 3584,
           "img": "word/media/image132.wmf",
@@ -3987,7 +4402,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "u_{i}^{2}(p),^{}",
+          "latex": "u_{i}^{2}(p),\\text{P}\\text{a}^{\\text{2}}",
           "ole": "word/embeddings/oleObject179.bin",
           "ole_bytes": 3584,
           "img": "word/media/image133.wmf",
@@ -4055,7 +4470,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\lambda_{t},",
+          "latex": "\\lambda_{t},\\text{1/Pa}",
           "ole": "word/embeddings/oleObject183.bin",
           "ole_bytes": 3584,
           "img": "word/media/image176.wmf",
@@ -4157,7 +4572,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\frac{p \\times (\\alpha_{p,t} + \\alpha_{c,t})}{}",
+          "latex": "\\frac{p \\times (\\alpha_{p,t} + \\alpha_{c,t})}{\\sqrt{2}}",
           "ole": "word/embeddings/oleObject189.bin",
           "ole_bytes": 3584,
           "img": "word/media/image181.wmf",
@@ -4208,7 +4623,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\frac{p \\times \\Deltat}{}",
+          "latex": "\\frac{p \\times \\Delta t}{\\sqrt{2}}",
           "ole": "word/embeddings/oleObject192.bin",
           "ole_bytes": 3584,
           "img": "word/media/image148.wmf",
@@ -4276,7 +4691,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "r_{a},^{}",
+          "latex": "r_{a},\\text{kg/}\\text{m}^{\\text{3}}",
           "ole": "word/embeddings/oleObject196.bin",
           "ole_bytes": 3584,
           "img": "word/media/image152.wmf",
@@ -4344,7 +4759,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\frac{p \\times sin\\theta}{}",
+          "latex": "\\frac{p \\times sin\\theta}{\\sqrt{3}}",
           "ole": "word/embeddings/oleObject200.bin",
           "ole_bytes": 3584,
           "img": "word/media/image159.wmf",
@@ -4378,7 +4793,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\rho_{Mt},^{}",
+          "latex": "\\rho_{Mt},\\text{kg/}\\text{m}^{\\text{3}}",
           "ole": "word/embeddings/oleObject202.bin",
           "ole_bytes": 3584,
           "img": "word/media/image189.wmf",
@@ -4429,7 +4844,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "C_{t},",
+          "latex": "C_{t},\\text{m}",
           "ole": "word/embeddings/oleObject205.bin",
           "ole_bytes": 3072,
           "img": "word/media/image192.wmf",
@@ -4480,7 +4895,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\gamma,^{2}",
+          "latex": "\\gamma,\\text{N/}\\text{m}^{2}",
           "ole": "word/embeddings/oleObject208.bin",
           "ole_bytes": 3584,
           "img": "word/media/image170.wmf",
@@ -4514,7 +4929,7 @@
           "kind": "ole",
           "section": "(Quy định)",
           "in_table": true,
-          "latex": "\\begin{matrix} \\sum_{i = 15}^{25}u_{i}^{2} = ^{2} \\\\ U_{Bt} = \\end{matrix}",
+          "latex": "\\begin{matrix} \\sum_{i = 15}^{25}u_{i}^{2} = \\text{6,42E+02,P}\\text{a}^{2} \\\\ U_{Bt} = \\text{2,53E+01,Pa} \\end{matrix}",
           "ole": "word/embeddings/oleObject210.bin",
           "ole_bytes": 3584,
           "img": "word/media/image196.wmf",
@@ -4527,421 +4942,6 @@
           }
         }
       ]
-    },
-    {
-      "file": "QTKD 1.160 2021 ND FINAL.docx",
-      "status": "ok",
-      "headings": 25,
-      "tables": 51,
-      "paragraphs": 482,
-      "media_parts": 6,
-      "embedded_ole": 0,
-      "formulas_found": 49,
-      "formulas_ole": 0,
-      "formulas_omml": 49,
-      "formula_detail": [
-        {
-          "fid": "F001",
-          "kind": "omml",
-          "section": "4 Điều kiện và chuẩn bị kiểm định > 4.2 Chuẩn bị kiểm định > 4.2.1 Yêu cầu lắp đặt",
-          "in_table": false,
-          "latex": "∆P_{0}=ρ×g×h (1)"
-        },
-        {
-          "fid": "F002",
-          "kind": "omml",
-          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
-          "in_table": false,
-          "latex": "P_{c}=\\frac{\\sum{M_{c}×g×\\left( 1-\\frac{ρ_{a}}{ρ_{M,c}} \\right)+γ×C_{c}}}{A_{0,c}\\left( 1+λ_{c} \\right)\\left[ 1+\\left( α_{p,c}+α_{x,c} \\right)×\\left( t-t_{r} \\right) \\right]}+\\left( ρ_{f}-ρ_{a} \\right)×g×h+P_{vac} (2)"
-        },
-        {
-          "fid": "F003",
-          "kind": "omml",
-          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
-          "in_table": false,
-          "latex": "ρ_{a}=\\frac{3,484 4×P_{at}-H×\\left( 0,002 52×t-0,020 582 \\right)}{1 000×\\left( t+273,15 \\right)} (3)"
-        },
-        {
-          "fid": "F004",
-          "kind": "omml",
-          "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường > 5.3.1 Xác định sai số",
-          "in_table": false,
-          "latex": "∆P=\\left| \\frac{\\sum_{i=1}^{n}{P_{k,i}}}{n}-P_{C} \\right|+U_{c} (4)"
-        },
-        {
-          "fid": "F005",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "Y=a+b×X"
-        },
-        {
-          "fid": "F006",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "\\hat{x}=\\frac{\\sum{x_{i}}}{n}"
-        },
-        {
-          "fid": "F007",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "\\hat{y}=\\frac{\\sum{y_{i}}}{n}"
-        },
-        {
-          "fid": "F008",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b=\\frac{\\sum{\\left( x_{i}-\\hat{x} \\right)\\left( y_{i}-\\hat{y} \\right)}}{\\sum{\\left( x_{i}-\\hat{x} \\right)^{2}}}"
-        },
-        {
-          "fid": "F009",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "a=\\hat{y}-b×\\hat{x}"
-        },
-        {
-          "fid": "F010",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{ai}=\\sqrt{S_{a}^{2}+x_{i}^{2}S_{b}^{2}+2x_{i}S_{a}S_{b}r\\left( a,b \\right)}"
-        },
-        {
-          "fid": "F011",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "S_{a}=S_{y}×\\sqrt{\\frac{\\sum{x_{i}^{2}}}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}} }"
-        },
-        {
-          "fid": "F012",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "S_{b}=S_{y}×\\sqrt{\\frac{n}{n\\sum{x_{i}^{2}-\\left( \\sum{x_{i}} \\right)^{2}}}}"
-        },
-        {
-          "fid": "F013",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "S_{y}=\\sqrt{\\frac{\\sum{\\left( y_{i}-a-bx_{i} \\right)}}{n-2}}"
-        },
-        {
-          "fid": "F014",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "r\\left( a,b \\right)=-\\frac{\\sum{x_{i}}}{\\sqrt{n\\sum{x_{i}^{2}}}}"
-        },
-        {
-          "fid": "F015",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{ch1}=\\frac{U_{ch1}}{k}"
-        },
-        {
-          "fid": "F016",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{amb}=\\frac{U_{amb}}{k}"
-        },
-        {
-          "fid": "F017",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{stability}=\\frac{driffvalue}{\\sqrt{3}}"
-        },
-        {
-          "fid": "F018",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{ch}=\\sqrt{u_{ch1}^{2}+u_{amb}^{2}+u_{stability}^{2}}"
-        },
-        {
-          "fid": "F019",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{1}=a+b×p"
-        },
-        {
-          "fid": "F020",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": false,
-          "latex": "U_{A_{0,c}}"
-        },
-        {
-          "fid": "F021",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{2}=\\frac{p}{A_{0,c}}×\\frac{U_{A_{0,c}}}{k}"
-        },
-        {
-          "fid": "F022",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": false,
-          "latex": "U_{λ_{c}}"
-        },
-        {
-          "fid": "F023",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{3}=-p^{2}×\\frac{U_{λ_{c}}}{k}"
-        },
-        {
-          "fid": "F024",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": false,
-          "latex": "U_{M_{c}}"
-        },
-        {
-          "fid": "F025",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{4}=\\frac{p}{M_{c}}×\\frac{U_{M_{c}}}{k}"
-        },
-        {
-          "fid": "F026",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{5}=p×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{U_{t}}{\\sqrt{2}}"
-        },
-        {
-          "fid": "F027",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{6}=p_{c}×\\left( α_{p,c}+α_{c,c} \\right)×\\frac{∆}{2}"
-        },
-        {
-          "fid": "F028",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{7}=\\frac{p_{c}}{g}×\\frac{U_{g}}{3}"
-        },
-        {
-          "fid": "F029",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{8}=\\frac{p}{\\left( ρ_{M_{c}}-ρ_{a} \\right)}×\\frac{U_{ρ_{a}}}{k}"
-        },
-        {
-          "fid": "F030",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{9}=ρ_{f}×g×\\frac{U_{∆h}}{k}"
-        },
-        {
-          "fid": "F031",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{10}=p×sinθ_{c}×\\frac{U_{θ_{c}}}{\\sqrt{3}}"
-        },
-        {
-          "fid": "F032",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{c}=\\sqrt{u_{1}^{2}+u_{2}^{2}+…+u_{10}^{2}}"
-        },
-        {
-          "fid": "F033",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{r}=\\frac{r}{\\sqrt{6}}"
-        },
-        {
-          "fid": "F034",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{r}=\\frac{r}{\\sqrt{3}}"
-        },
-        {
-          "fid": "F035",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "f_{0}=max\\left{ \\left| x_{2,0}-x_{1,0} \\right|,\\left| x_{4,0}-x_{3,0} \\right|,\\left| x_{6,0}-x_{5,0} \\right| \\right}"
-        },
-        {
-          "fid": "F036",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{f0}=\\frac{f_{0}}{2\\sqrt{3}}"
-        },
-        {
-          "fid": "F037",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b^{'}_{up,j}=\\left| \\left( x_{3,j}-x_{3,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
-        },
-        {
-          "fid": "F038",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b^{'}_{down,j}=\\left| \\left( x_{4,j}-x_{4,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
-        },
-        {
-          "fid": "F039",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b^{'}_{mean,j}=max\\left{ b^{'}_{up,j}-b^{'}_{down,j} \\right}"
-        },
-        {
-          "fid": "F040",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{b^{'}}=\\frac{b^{'}_{mean,j}}{2\\sqrt{3}}"
-        },
-        {
-          "fid": "F041",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b_{up,j}=\\left| \\left( x_{5,j}-x_{5,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|"
-        },
-        {
-          "fid": "F042",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b_{down,j}=\\left| \\left( x_{6,j}-x_{6,0} \\right)-\\left( x_{2,j}-x_{2,0} \\right) \\right|"
-        },
-        {
-          "fid": "F043",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "b_{mean,j}=max\\left{ b_{up,j}-b_{down,j} \\right}"
-        },
-        {
-          "fid": "F044",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{b}=\\frac{b_{mean,j}}{2\\sqrt{3}}"
-        },
-        {
-          "fid": "F045",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "h_{mean,j}=\\frac{1}{n}\\left{ \\left| \\left( x_{2,j}-x_{1,0} \\right)-\\left( x_{1,j}-x_{1,0} \\right) \\right|+\\left| \\left( x_{4,j}-x_{3,0} \\right)-\\left( x_{3,j}-x_{3,0} \\right) \\right|+\\left| \\left( x_{6,j}-x_{5,0} \\right)-\\left( x_{5,j}-x_{5,0} \\right) \\right| \\right}"
-        },
-        {
-          "fid": "F046",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{h}=\\frac{h_{mean,j}}{2\\sqrt{3}}"
-        },
-        {
-          "fid": "F047",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{bk}=\\sqrt{u_{r}^{2}+u_{f_{0}}^{2}+u_{b^{'}}^{2}+u_{b}^{2}+u_{h}^{2}}"
-        },
-        {
-          "fid": "F048",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "u_{c}=\\sqrt{u_{a}^{2}+u_{c}^{2}+u_{bk}^{2}}"
-        },
-        {
-          "fid": "F049",
-          "kind": "omml",
-          "section": "Đánh giá độ không đảm bảo đo",
-          "in_table": true,
-          "latex": "U_{c}=k×u_{c}"
-        }
-      ]
-    },
-    {
-      "file": "4. Bieu 1 Kiem dinh-Hieu chuan 2022 NAS 12.2022.doc",
-      "status": "ok",
-      "headings": 0,
-      "tables": 1,
-      "paragraphs": 5,
-      "media_parts": 0,
-      "embedded_ole": 0,
-      "formulas_found": 0,
-      "formulas_ole": 0,
-      "formulas_omml": 0,
-      "formula_detail": [],
-      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/8ef493bb49f0e01a015c900721603a5e6d8305d45a5819bf245a135689985a8e.docx"
-    },
-    {
-      "file": "6. Bieu 3 Danh muc chuan mau 2022 NAS.xls",
-      "status": "ok",
-      "source_format": "xls",
-      "headings": 1,
-      "tables": 1,
-      "paragraphs": 0,
-      "table_rows": 87,
-      "media_parts": 0,
-      "embedded_ole": 0,
-      "formulas_found": 0,
-      "formulas_ole": 0,
-      "formulas_omml": 0,
-      "formula_detail": [],
-      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/982f3c1e2b7c65e2bdfbb418c7bf2b0e57fafff5af737a893b55b6c7f107ef08.xlsx"
-    },
-    {
-      "file": "7. Biểu 4 Danh mục QT 2022 NAS.doc",
-      "status": "ok",
-      "headings": 0,
-      "tables": 1,
-      "paragraphs": 5,
-      "media_parts": 0,
-      "embedded_ole": 0,
-      "formulas_found": 0,
-      "formulas_ole": 0,
-      "formulas_omml": 0,
-      "formula_detail": [],
-      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/ccb1d7f6284996bcb8d9c2d183e7fda88d8832c20c6eeb68ac6dea038a16e0b5.docx"
-    },
-    {
-      "file": "10. Bieu 7 Danh sách KĐV (NAS).doc",
-      "status": "ok",
-      "headings": 0,
-      "tables": 1,
-      "paragraphs": 5,
-      "media_parts": 0,
-      "embedded_ole": 0,
-      "formulas_found": 0,
-      "formulas_ole": 0,
-      "formulas_omml": 0,
-      "formula_detail": [],
-      "converted_from": "/home/hii/orca/workspaces/RAG-TC-DL/hraesvelg/build/converted/db767bb2a6dcbdbec7c56f01709e175a30e9cc7ba9ce693b02b220a7f5600f25.docx"
     }
   ],
   "totals": {

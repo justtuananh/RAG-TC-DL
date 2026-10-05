@@ -84,7 +84,7 @@ Bảng 1 - Các phép kiểm định
 |  |  |  | Ban đầu | Định kỳ | Sau sửa chữa |
 | 1 | Kiểm tra bên ngoài | 5.1 | + | + | + |
 | 2 | Kiểm tra kỹ thuật | 5.2 | + |  | + |
-| 3 | Kiểm tra đo lườngXác định độ tụt áp | 5.3 | + | + | + |
+| 3 | Kiểm tra đo lường / Xác định độ tụt áp | 5.3 | + | + | + |
 
 
 
@@ -170,13 +170,13 @@ Tiến hành kiểm tra dung tích làm việc của bình phân ly theo thứ t
 
 - Xác định định dung tích làm việc của bình phân ly theo công thức sau:
 
-$ V_{pl}=500- V_{đ} $ [1]
+$ V_{pl}=500- V_{\text{đ}} $ [1]
 
 Trong đó:
 
 $ V_{pl} $ - dung tích làm việc của bình phân ly, mL;
 
-$ V_{đ} $ - thể tích của lượng nước còn lại trong ống đong, ml.
+$ V_{\text{đ}} $ - thể tích của lượng nước còn lại trong ống đong, ml.
 
 - Dung tích làm việc của bình phân ly phải đạt yêu cầu theo công bố của nhà sản xuất.
 
@@ -229,7 +229,7 @@ Nếu sau khi kiểm định Tên PTĐ không đạt một trong các chỉ tiê
 MẪU BIÊN BẢN KIỂM ĐỊNH
 
 
-| TRUNG TÂM ĐO LƯỜNGPHÒNG ĐO LƯỜNGNHIỆT - ÁP SUẤT | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập - Tự do - Hạnh phúcĐịa danh, ngày.....tháng......năm......... |
+| TRUNG TÂM ĐO LƯỜNG / PHÒNG ĐO LƯỜNG / NHIỆT - ÁP SUẤT | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập - Tự do - Hạnh phúc / Địa danh, ngày.....tháng......năm......... |
 | --- | --- |
 
 
@@ -266,7 +266,7 @@ KẾT QUẢ KIỂM ĐỊNH
 (Xem trang sau)
 
 
-| NGƯỜI KIỂM ĐỊNHCấp bậc Nguyễn Văn A | NGƯỜI SOÁT LẠICấp bậc Nguyễn Văn B |
+| NGƯỜI KIỂM ĐỊNH / Cấp bậc Nguyễn Văn A | NGƯỜI SOÁT LẠI / Cấp bậc Nguyễn Văn B |
 | --- | --- |
 
 
@@ -311,10 +311,10 @@ Kết luận: Đạt yêu cầu kỹ thuật đo lường.
 MẪU GIẤY CHỨNG NHẬN KIỂM ĐỊNH
 
 
-| ĐƠN VỊ (2 cấp) | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAMĐộc lập - Tự do - Hạnh phúcĐịa danh, ngày …. tháng ….. năm … |  |
-| --- | --- | --- |
-| GIẤY CHỨNG NHẬN KIỂM ĐỊNHSố: ……… Tên phương tiện ĐL-TN: Bình phân ly Ký hiệu: Số hiệu:Nước (hãng) sản xuất: Năm sản xuất :Đơn vị sử dụng:Đặc tính đo lường: - Phạm vi làm việc:- Môi chất làm việc:KẾT QUẢ KIỂM ĐỊNH |  |  |
-| THAM SỐ KIỂM ĐỊNH Độ tụt áp ở áp suất ... bar sau 5 min | GIÁ TRỊ XÁC ĐỊNH… bar | GIÁ TRỊ CHO PHÉP… bar |
-| Phương pháp kiểm định: QTKĐ 1.063 : 2021Kết luận: Đạt yêu cầu kỹ thuật đo lường.Hiệu lực đến:……………/…………… * |  |  |
-| Người kiểm soát(Chữ ký, họ tên) | Kiểm định viên(Chữ ký, họ tên) | THỦ TRƯỞNG ĐƠN VỊ(Ký tên, đóng dấu) |
-| (*)Với điều kiện tôn trọng các nguyên tắc sử dụng và bảo quản. | Tổng số trang:.... |  |
+| ĐƠN VỊ / (2 cấp) |  | CỘNG HOÀ XÃ HỘI CHỦ NGHĨA VIỆT NAM / Độc lập - Tự do - Hạnh phúc / Địa danh, ngày …. tháng ….. năm … |  |  |  |  |
+| --- | --- | --- | --- | --- | --- | --- |
+| GIẤY CHỨNG NHẬN KIỂM ĐỊNH / Số: ……… / Tên phương tiện ĐL-TN: Bình phân ly / Ký hiệu: Số hiệu: / Nước (hãng) sản xuất: Năm sản xuất : / Đơn vị sử dụng: / Đặc tính đo lường: / - Phạm vi làm việc: / - Môi chất làm việc: / KẾT QUẢ KIỂM ĐỊNH |  |  |  |  |  |  |
+| THAM SỐ KIỂM ĐỊNH / Độ tụt áp ở áp suất ... bar sau 5 min |  |  | GIÁ TRỊ XÁC ĐỊNH / … bar |  | GIÁ TRỊ CHO PHÉP / … bar |  |
+| Phương pháp kiểm định: QTKĐ 1.063 : 2021 / Kết luận: Đạt yêu cầu kỹ thuật đo lường. / Hiệu lực đến:……………/…………… * |  |  |  |  |  |  |
+| Người kiểm soát / (Chữ ký, họ tên) | Kiểm định viên / (Chữ ký, họ tên) |  |  | THỦ TRƯỞNG ĐƠN VỊ / (Ký tên, đóng dấu) |  |  |
+| (*)Với điều kiện tôn trọng các nguyên tắc sử dụng và bảo quản. |  |  |  |  |  | Tổng số trang:.... |
