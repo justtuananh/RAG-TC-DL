@@ -202,3 +202,24 @@ def test_doluong_font_glyph_becomes_less_or_equal():
     )
     # "Û" ngoài font Doluong (chữ Việt / tên riêng) giữ nguyên.
     assert _inline(p, {}, [], [], counter=[0]) == "Độ ẩm tương đối: ≤ 80 % Û"
+
+
+def _p_outline(level: int, text: str, style: str = "ColorfulList-Accent11"):
+    return etree.fromstring(
+        f'<w:p xmlns:w="{W}"><w:pPr><w:pStyle w:val="{style}"/><w:outlineLvl w:val="{level}"/>'
+        f"</w:pPr><w:r><w:t>{text}</w:t></w:r></w:p>"
+    )
+
+
+def test_numbered_paragraph_with_direct_outline_level_is_a_heading():
+    """QTKĐ 1.159: "6.3.2 Xác định diện tích hiệu dụng" dùng style danh sách + outlineLvl 2
+    (Word đưa vào mục lục như Heading 3). Bỏ qua nó thì cả mục 6.3.2 (công thức diện tích
+    hiệu dụng (10)) bị gộp vào 6.3.1 và không truy hồi được."""
+    assert _heading_level(_p_outline(2, "6.3.2 Xác định diện tích hiệu dụng"), {}) == 3
+
+
+def test_direct_outline_level_without_matching_section_number_is_not_a_heading():
+    """Khóa bug QTKD_1.071: dòng gạch đầu dòng / chữ thường có outlineLvl vẫn là body."""
+    assert _heading_level(_p_outline(2, "- Kiểm tra độ kín của hệ thống"), {}) is None
+    assert _heading_level(_p_outline(2, "Áp kế píttông chuẩn"), {}) is None
+    assert _heading_level(_p_outline(2, "6.3 Kiểm tra đo lường"), {}) is None  # sai độ sâu

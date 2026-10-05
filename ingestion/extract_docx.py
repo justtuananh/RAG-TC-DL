@@ -168,26 +168,49 @@ def _heading_level(
     p,
     styles: dict[str, tuple[str | None, str | None]] | None = None,
 ) -> int | None:
-    """Return 1..9 if the paragraph is a heading style, else None.
+    """Return 1..9 if the paragraph is a heading, else None.
 
-    Only trusts explicit Word heading styles. K13 bổ sung: phân giải ``styleId``
+    Trusts explicit Word heading styles. K13 bổ sung: phân giải ``styleId``
     qua ``word/styles.xml`` (``w:name="heading N"`` hoặc chuỗi ``w:basedOn`` tới
-    một style heading), loại trừ style TOC. The outlineLvl attribute is
-    intentionally NOT used as a fallback because it is also set on list-item
-    paragraphs in some QTKD files, causing body text to be misclassified as
-    headings (QTKD_1.071 bug: 3 bullet lines emitted as ### headings, making
-    sections 5.2.1 and 5.2.5 appear empty).
+    một style heading), loại trừ style TOC. The outlineLvl attribute alone is NOT
+    trusted because it is also set on list-item paragraphs in some QTKD files,
+    causing body text to be misclassified as headings (QTKD_1.071 bug: 3 bullet
+    lines emitted as ### headings, making sections 5.2.1 and 5.2.5 appear empty).
+    See ``_numbered_outline_level`` for the one case where it is.
     """
     ppr = p.find(_q("w:pPr"))
     if ppr is None:
         return None
     pstyle = ppr.find(_q("w:pStyle"))
-    if pstyle is None:
+    style_id = (pstyle.get(_q("w:val")) or "").strip() if pstyle is not None else ""
+    level = _style_heading_level(style_id, styles or {}) if style_id else None
+    if level is None and not _TOC_PREFIX_RE.match(style_id):
+        level = _numbered_outline_level(p, ppr)
+    return level
+
+
+_SECTION_NUMBER_RE = re.compile(r"^(\d+(?:\.\d+)*)\.?\s+\S")
+
+
+def _numbered_outline_level(p, ppr) -> int | None:
+    """Heading gán bằng ``w:outlineLvl`` trực tiếp trên đoạn (style không phải heading).
+
+    QTKĐ 1.159: "6.3.2 Xác định diện tích hiệu dụng" dùng style danh sách kèm
+    outlineLvl 2, Word đưa nó vào mục lục như Heading 3. Chỉ tin khi chữ của đoạn mở
+    đầu bằng số mục có ĐÚNG độ sâu đó (outlineLvl N <-> "a.b.c" có N + 1 thành phần),
+    nên dòng gạch đầu dòng / chữ thường mang outlineLvl (bug QTKD_1.071) vẫn là body.
+    """
+    outline = ppr.find(_q("w:outlineLvl"))
+    try:
+        level = int(outline.get(_q("w:val"))) + 1 if outline is not None else None
+    except (TypeError, ValueError):
         return None
-    style_id = (pstyle.get(_q("w:val")) or "").strip()
-    if not style_id:
+    if level is None or not 1 <= level <= 9:
         return None
-    return _style_heading_level(style_id, styles or {})
+    m = _SECTION_NUMBER_RE.match("".join(p.itertext()).strip())
+    if m is None or len(m.group(1).split(".")) != level:
+        return None
+    return level
 
 
 _CAPTION_RE = re.compile(r"(?:Hình|Bảng)\s+\d")
