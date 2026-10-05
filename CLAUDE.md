@@ -97,6 +97,7 @@ A lower layer never imports a higher one;
   RRF weights each branch by `retrieval.rrf_weight_dense` / `rrf_weight_bm25` (only their ratio matters; default 1:1).
   `python -m evaluation.fusion_sweep` grid-searches the ratio and `rrf_k` through the real `retrieve()`.
   The 2026-10-02 sweep kept 1:1, see `docs/experiments/2026-10-02-weighted-rrf.md`.
+  A question routed to N ≥ 2 files gets `max(top_n, retrieval.top_n_per_file × N)` sources, so each file keeps its own budget.
 - `ui/gradio_app.py` - Gradio UI on **:7861** (original / alternative UI), run with `python -m ui.gradio_app`.
   Left = streaming chat (Gradio's built-in KaTeX, inline `$...$` enabled via `LATEX_DELIMITERS`).
   Right = source-document viewer with the retrieved child passage `<mark>`-highlighted inside its parent section.
@@ -171,6 +172,7 @@ A lower layer never imports a higher one;
   `$$…$$`/`$…$`; collapse `\\` → `\`) imported by **both** `ui/gradio_app.py` and the `api/`
   package (was duplicated); mirrored in the frontend as `liveApi.fixLatex`.
   Regression: `tests/unit/core/test_latex_fix.py`.
+  `core.latex.restore_formulas(answer, context)` runs after `fix_latex` in the api, Gradio and `answer_eval`: it puts back the context's verbatim LaTeX when the model only changed a formula's form (qwen2.5:7b adds or drops `\left \right`, adds `\tag`), see `docs/experiments/2026-10-05-7b-answer-fixes.md`.
 - `evaluation/run_eval.py` - Spike E regression harness. Computes recall@k + MRR for hybrid vs
   dense-only against `evaluation/eval_set.jsonl` (question → expected file_stem + section_path).
   Run this after any retrieval change. Pass goal is recall@5 ≥ 0.85.
