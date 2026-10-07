@@ -208,9 +208,12 @@ Ngoài ra, hai khúc liền nhau [0, 1 521) và [1 522, 2 723) vẫn bị chèn 
 | | Cách cũ | Cách mới |
 |---|---|---|
 | Độ phủ fact trong câu trả lời | 0,957 | 0,969 |
-| Câu 133 (cách tính diện tích hiệu dụng, QTKĐ 1.159) | 0,67 | 1,0 |
 | Ngữ cảnh dài nhất (trần 14 920) | 15 780 | 14 892 |
 | Đoạn con hạng RRF 0-9 của mục được chọn bị cắt (92 câu) | 7/685, ở 6 câu | 0/685 |
+
+Chênh lệch độ phủ chỉ đến từ câu 133 (cách tính diện tích hiệu dụng, QTKĐ 1.159), và đó là dao động của model, không phải nhờ thay đổi.
+Hỏi lại câu này 3 lần qua `/api/chat/stream` trên mỗi bản (2026-10-08), cả 6 câu trả lời đều có công thức $A_{0t,i}$ khớp nguyên văn nguồn, có "23 oC" và "xylanh".
+Lợi ích đo được chắc chắn của cách mới là ngữ cảnh không còn vượt trần và không còn đoạn con hạng cao nào bị cắt.
 
 ## Nhận xét rút ra từ ví dụ
 
