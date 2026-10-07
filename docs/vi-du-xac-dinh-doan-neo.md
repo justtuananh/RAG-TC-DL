@@ -127,17 +127,24 @@ Cả 5 nguồn đều vượt ngưỡng nên được giữ.
 Trần tổng: (`num_ctx` 8 192 − `prompt_reserve_tokens` 1 200 − `max_new_tokens` 1 024) × 2,5 = 14 920 ký tự.
 Đầu mục "[n] Nguồn: …" của 5 nguồn và 4 dấu ngăn cách chiếm 602 ký tự, nên phần nội dung còn 14 318 ký tự.
 
-`_block_budgets` xét nguồn theo thứ hạng rerank.
-Mỗi nguồn xếp dưới được giữ chỗ min(độ dài, `min_block_chars` = 600).
-Nguồn đang xét nhận min(giới hạn, phần còn lại − chỗ giữ cho các nguồn sau), trong đó giới hạn là độ dài của nó, và với nguồn không phải top thì thêm trần `max_block_chars` = 4 000.
+`_block_budgets` chia 14 318 ký tự cho từng nguồn, lần lượt từ nguồn [1] xuống nguồn [5].
+Mỗi nguồn được xét theo ba bước:
 
-| Nguồn | Độ dài | Giới hạn | Còn lại − chỗ giữ phía sau | Ngân sách |
-|---|---|---|---|---|
-| [1] 6.3.2 | 5 623 | 5 623 (top, không trần) | 14 318 − 2 400 = 11 918 | 5 623 (vào trọn) |
-| [2] 6.3.1 | 1 452 | 1 452 | 8 695 − 1 800 = 6 895 | 1 452 (vào trọn) |
-| [3] 6.3.3 | 8 074 | 4 000 (trần) | 7 243 − 1 200 = 6 043 | 4 000 (phải cắt) |
-| [4] 3 Các phép kiểm định | 1 008 | 1 008 | 3 243 − 600 = 2 643 | 1 008 (vào trọn) |
-| [5] 5.2 | 3 692 | 3 692 | 2 235 | 2 235 (phải cắt) |
+1. **Giữ chỗ cho các nguồn phía sau:** mỗi nguồn chưa được xét cần ít nhất `min_block_chars` = 600 ký tự, nên phải chừa lại 600 × (số nguồn phía sau).
+2. **Tối đa được lấy** = phần còn lại − phần giữ chỗ.
+3. **Ngân sách** = số nhỏ nhất trong ba số: độ dài của nguồn (không cần hơn), trần `max_block_chars` = 4 000 (riêng nguồn [1] không có trần), và tối đa được lấy.
+
+Phần còn lại sau mỗi nguồn = phần còn lại trước nó − ngân sách nó vừa nhận, và là phần còn lại trước nguồn kế tiếp.
+
+| Nguồn | Còn lại trước khi xét | Giữ chỗ cho nguồn phía sau | Tối đa được lấy | Độ dài | Trần | Ngân sách = min(độ dài, trần, tối đa) | Còn lại sau khi xét |
+|---|---|---|---|---|---|---|---|
+| [1] 6.3.2 | 14 318 | 4 × 600 = 2 400 | 11 918 | 5 623 | không | **5 623** (vào trọn) | 8 695 |
+| [2] 6.3.1 | 8 695 | 3 × 600 = 1 800 | 6 895 | 1 452 | 4 000 | **1 452** (vào trọn) | 7 243 |
+| [3] 6.3.3 | 7 243 | 2 × 600 = 1 200 | 6 043 | 8 074 | 4 000 | **4 000** (bị trần, phải cắt) | 3 243 |
+| [4] 3 Các phép kiểm định | 3 243 | 1 × 600 = 600 | 2 643 | 1 008 | 4 000 | **1 008** (vào trọn) | 2 235 |
+| [5] 5.2 | 2 235 | 0 | 2 235 | 3 692 | 4 000 | **2 235** (hết chỗ, phải cắt) | 0 |
+
+Tổng ngân sách 5 623 + 1 452 + 4 000 + 1 008 + 2 235 = 14 318, dùng hết phần nội dung.
 
 Mục 6.3.2 chứa câu trả lời nên giờ vào trọn, kể cả công thức kết luận $A_{0t}$ ở cuối mục.
 Chỉ [3] và [5] dài hơn ngân sách nên phải cắt bằng `window()`.
