@@ -123,8 +123,7 @@ class ContextSettings(_Section):
     prompt_reserve_tokens: Positive
     max_block_chars: Positive
     min_block_chars: Positive
-    window_anchors: Positive
-    lead_in_tail_chars: Positive
+    quote_anchors: Positive
     formula_line_slack: Positive
     source_abs_floor: Annotated[float, Field(ge=0)]
     source_rel_floor: Annotated[float, Field(ge=0, le=1)]

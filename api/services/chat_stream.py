@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 
 from api.schemas import ChatMessage, ChatRequest
 from core.latex import fix_latex, restore_formulas
+from core.settings_loader import get_settings
 from llm import generator
 from llm.guards import REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request
 from llm.prompt import build_messages
@@ -43,6 +44,7 @@ def _history_to_prior(history: list[ChatMessage]) -> list[list[str]]:
 
 
 def _build_sources_payload(results: list[dict]) -> list[dict]:
+    quote_anchors = get_settings().llm.context.quote_anchors
     out = []
     for i, r in enumerate(results, 1):
         p = r["payload"]
@@ -62,8 +64,10 @@ def _build_sources_payload(results: list[dict]) -> list[dict]:
                 "rerank_score": round(r.get("rerank_score", 0.0), 4),
                 "parent_text": parent_text,
                 "child_text": child_text,
-                # Đoạn trích cho panel nguồn: các đoạn con khớp + công thức chúng nói tới.
-                "quote": build_quote(parent_text, r.get("anchor_texts") or [child_text]),
+                # Đoạn trích cho panel nguồn: các đoạn con khớp nhất + công thức chúng nói tới.
+                "quote": build_quote(
+                    parent_text, (r.get("anchor_texts") or [child_text])[:quote_anchors]
+                ),
             }
         )
     return out

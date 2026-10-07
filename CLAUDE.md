@@ -134,11 +134,15 @@ A lower layer never imports a higher one;
   kiện (phạm vi đo, cấp chính xác, chu kỳ, nhiệt độ / độ ẩm…) VÀ mọi phần được hỏi đều có dữ
   kiện (`query/procedure_scope.py`); câu hỏi quy định khác (sai số, độ chênh áp, tốc độ hạ,
   công thức…) hoặc thiếu dữ kiện đi nhánh văn bản, vì model phân loại đưa mọi câu có số QTKĐ
-  vào intent này. Ngữ cảnh LLM của một mục dài lấy cửa sổ quanh các đoạn con khớp nhất của
-  mục (`retrieval.context_builder.window`, `llm.context.window_anchors`), cắt theo dòng để
-  không cắt dở công thức; câu dẫn kết thúc bằng ":" giữ cả phần nó dẫn vào. Ngân sách chia
-  kiểu water-filling trong `total_context_chars` (đã trừ câu trả lời, 2,5 ký tự/token đo
-  thật): ngữ cảnh vượt num_ctx thì Ollama cắt prompt.
+  vào intent này. Ngữ cảnh LLM của một mục dài (`retrieval.context_builder.window`) dựng từ
+  khối trọn quanh MỌI đoạn con khớp của mục trong pool rerank (`anchor_texts`, theo thứ hạng
+  RRF): mỗi đoạn neo kéo công thức nó nói tới và danh sách "trong đó" của công thức (mô hình
+  khối của `retrieval/quote.py`), lần lượt tới hết ngân sách, phần dư mở rộng quanh các đoạn
+  neo; không dành chỗ cố định cho đầu mục. Panel nguồn chỉ trích `llm.context.quote_anchors`
+  đoạn khớp nhất. Ngân sách chia theo thứ hạng nguồn trong `total_context_chars` (đã trừ câu
+  trả lời, 2,5 ký tự/token đo thật): nguồn trên lấy trước, nguồn dưới giữ chỗ
+  `min_block_chars`, trần `max_block_chars` không áp cho nguồn top. Ngữ cảnh vượt num_ctx thì
+  Ollama cắt prompt.
 - `query/record_*.py` — **tra cứu biên bản có cấu trúc** (Pha R). Hai intent `record_lookup`
   (một biên bản theo số hiệu / số biên bản / ngày: trường được hỏi, bảng kết quả, căn cứ kết
   luận không đạt) và `records_summary` (đếm / liệt kê / cực trị trên sổ cái, lọc theo người,

@@ -80,10 +80,9 @@ def rerank_hits(query: str, hits: list[dict], top_n: int | None = None) -> list[
     if not hits:
         return []
 
-    # One representative child per parent (hits are pre-sorted by RRF score). The next
-    # matched children of the same section become extra context anchors (anchor_texts):
-    # a long section's answer can sit next to its second-best child (QTKĐ 1.159 6.3.2).
-    max_anchors = settings.llm.context.window_anchors
+    # One representative child per parent (hits are pre-sorted by RRF score). Every matched
+    # child of the same section becomes a context anchor (anchor_texts, in RRF order): a long
+    # section's answer can sit next to its third-best child (QTKĐ 1.159 6.3.2, 2026-10-07).
     seen: dict = {}
     anchors: dict = {}
     for h in hits:
@@ -91,8 +90,7 @@ def rerank_hits(query: str, hits: list[dict], top_n: int | None = None) -> list[
         if pid not in seen:
             seen[pid] = h
             anchors[pid] = []
-        if len(anchors[pid]) < max_anchors:
-            anchors[pid].append(h["payload"]["text"])
+        anchors[pid].append(h["payload"]["text"])
     unique_hits = [{**h, "anchor_texts": anchors[pid]} for pid, h in seen.items()]
 
     # Fetch parent text for each unique section

@@ -192,3 +192,26 @@ def test_multi_file_query_gives_each_file_its_own_source_budget(monkeypatch):
     files = [h["payload"]["file_stem"] for h in out]
     assert files.count("FILE_A") == per_file
     assert files.count("FILE_B") == per_file
+
+
+@responses.activate
+def test_rerank_hits_keeps_every_matched_child_of_a_section_as_anchor(monkeypatch):
+    """Mọi đoạn con khớp của một mục trong pool thành đoạn neo, theo thứ hạng RRF.
+
+    QTKĐ 1.159 mục 6.3.2: đoạn khớp thứ ba dẫn vào công thức kết luận $A_{0t}$; giữ 2 đoạn
+    neo thì công thức đó bị cắt khỏi ngữ cảnh (đo 2026-10-07).
+    """
+    hits = [_child("c1", "p1"), _child("c2", "p1"), _child("c4", "p2"), _child("c3", "p1")]
+    monkeypatch.setattr(
+        "vectorstore.qdrant.fetch_parent",
+        lambda pid: {"text": f"parent-{pid}", "section_path": "s", "file_stem": "f"},
+    )
+    responses.add_callback(
+        responses.POST,
+        get_settings().services.rerank_url,
+        callback=_rerank_callback,
+        content_type="application/json",
+    )
+    out = rerank_hits("q", hits, top_n=5)
+    assert out[0]["anchor_texts"] == ["child-c1", "child-c2", "child-c3"]
+    assert out[1]["anchor_texts"] == ["child-c4"]

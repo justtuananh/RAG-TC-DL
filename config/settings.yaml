@@ -70,11 +70,10 @@ llm:
   context:
     chars_per_token: 2.5                  # đo qwen2.5:7b 2026-10-05: ngữ cảnh QTKĐ 2,54 ký tự/token (LaTeX tốn token)
     prompt_reserve_tokens: 1200           # prompt hệ thống (~450 token) + câu hỏi + lịch sử; câu trả lời trừ riêng
-    max_block_chars: 4000                 # trần mỗi nguồn; tổng ngữ cảnh vẫn ≤ total_context_chars
-    min_block_chars: 600
-    window_anchors: 2                     # mục dài: cửa sổ neo quanh tối đa N đoạn con khớp nhất của mục
-    lead_in_tail_chars: 700               # đoạn neo kết thúc bằng ":" (câu dẫn): giữ ít nhất N ký tự phía sau nó
-    formula_line_slack: 400               # cửa sổ được vượt ngân sách tới N ký tự để không cắt giữa dòng công thức
+    max_block_chars: 4000                 # trần mỗi nguồn trừ nguồn top; tổng ngữ cảnh vẫn ≤ total_context_chars
+    min_block_chars: 600                  # chỗ giữ cho mỗi nguồn xếp dưới khi nguồn trên lấy ngân sách trước
+    quote_anchors: 2                      # panel nguồn: trích N đoạn con khớp nhất của mục (ngữ cảnh LLM dùng mọi đoạn khớp)
+    formula_line_slack: 400               # khối dài hơn ngân sách bị cắt theo dòng: được vượt tới N ký tự để không cắt giữa dòng công thức
     source_abs_floor: 0.08
     source_rel_floor: 0.20
   intent:

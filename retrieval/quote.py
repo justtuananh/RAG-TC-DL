@@ -5,6 +5,9 @@ hoặc câu dẫn ("… được tính từ công thức sau:"); công thức l�
 nên ít khi lọt top. Chỉ hiện đoạn con thì nguồn trích không có công thức dù câu trả lời có
 (QTKĐ 1.159 mục 6.3.2, đo 2026-10-05). ``build_quote`` mở rộng từng đoạn con thành khúc
 nguyên văn của mục cha có đủ công thức nó nói tới; không viết lại chữ nào.
+
+Mô hình khối (``section_blocks``, ``locate_anchor``, ``expand_anchor``, ``definitions_after``)
+dùng chung với cửa sổ ngữ cảnh LLM (``retrieval.context_builder.window``).
 """
 
 from __future__ import annotations
@@ -16,7 +19,8 @@ _TRONG_DO = re.compile(r"^trong đó\b", re.IGNORECASE)
 _GAP = "…"
 
 
-def _blocks(parent: str) -> list[tuple[int, int]]:
+def section_blocks(parent: str) -> list[tuple[int, int]]:
+    """Vị trí [đầu, cuối) của các khối Markdown (các dòng liền nhau) trong mục."""
     return [(m.start(), m.end()) for m in _BLOCK.finditer(parent)]
 
 
@@ -66,7 +70,19 @@ def _definition_context(texts: list[str], i: int) -> list[int]:
     return []
 
 
-def _expand(texts: list[str], first: int, last: int) -> set[int]:
+def definitions_after(texts: list[str], i: int) -> list[int]:
+    """Danh sách "trong đó" ngay sau khối công thức ``i``: dòng "trong đó" và các dòng định nghĩa."""
+    k = i + 1
+    if not (_is_formula(texts[i]) and k < len(texts) and _TRONG_DO.match(texts[k])):
+        return []
+    k += 1
+    while k < len(texts) and _is_definition(texts[k]) and not _is_formula(texts[k]):
+        k += 1
+    return list(range(i + 1, k))
+
+
+def expand_anchor(texts: list[str], first: int, last: int) -> set[int]:
+    """Khối ``first``..``last`` của một đoạn con cùng công thức nó nói tới."""
     keep = set(range(first, last + 1))
     head, tail = texts[first], texts[last]
     if _is_formula(head):
@@ -78,7 +94,8 @@ def _expand(texts: list[str], first: int, last: int) -> set[int]:
     return keep
 
 
-def _locate(parent: str, spans: list[tuple[int, int]], anchor: str) -> tuple[int, int] | None:
+def locate_anchor(parent: str, spans: list[tuple[int, int]], anchor: str) -> tuple[int, int] | None:
+    """Chỉ số khối đầu và cuối chứa đoạn con ``anchor``; None nếu không tìm thấy trong mục."""
     text = anchor.strip()
     pos = parent.find(text)
     if pos < 0:
@@ -102,16 +119,16 @@ def build_quote(parent: str, anchors: list[str]) -> str:
     """
     if not anchors:
         return ""
-    spans = _blocks(parent)
+    spans = section_blocks(parent)
     texts = [parent[a:b] for a, b in spans]
     keep: set[int] = set()
     missing: list[str] = []
     for anchor in anchors:
-        found = _locate(parent, spans, anchor)
+        found = locate_anchor(parent, spans, anchor)
         if found is None:
             missing.append(anchor.strip())
         else:
-            keep |= _expand(texts, *found)
+            keep |= expand_anchor(texts, *found)
     parts: list[str] = []
     prev = None
     for n in sorted(keep):
