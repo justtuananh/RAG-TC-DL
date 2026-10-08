@@ -37,6 +37,33 @@ export interface Tone {
   bg: string;
 }
 
+/** Ngưỡng cảnh báo "Sắp hết hạn": còn tối đa 60 ngày. */
+export const EXPIRY_WARNING_DAYS = 60;
+
+export type ExpiryState = "valid" | "warning" | "expired" | "unknown";
+
+export interface ExpiryStatus extends Tone {
+  state: ExpiryState;
+  /** Số ngày còn lại (âm khi đã hết hạn); null khi không có ngày hạn. */
+  days: number | null;
+}
+
+/**
+ * Trạng thái hiệu lực của một hồ sơ theo ngày hết hiệu lực:
+ * "Hết hạn" khi đã qua, "Sắp hết hạn" khi còn tối đa `EXPIRY_WARNING_DAYS` ngày, còn lại "Còn hạn".
+ * Ngày rỗng hoặc không hợp lệ trả "Không rõ hạn".
+ */
+export function expiryStatus(expiresAt: string | null | undefined, now: Date = new Date()): ExpiryStatus {
+  if (!expiresAt) return { state: "unknown", label: "Không rõ hạn", days: null, fg: COLOR.textSecondary, bg: COLOR.neutralBg };
+  const expiry = new Date(expiresAt);
+  if (Number.isNaN(expiry.getTime())) return { state: "unknown", label: "Không rõ hạn", days: null, fg: COLOR.textSecondary, bg: COLOR.neutralBg };
+  const msPerDay = 24 * 60 * 60 * 1000;
+  const days = Math.ceil((expiry.getTime() - now.getTime()) / msPerDay);
+  if (days < 0) return { state: "expired", label: "Hết hạn", days, fg: COLOR.danger, bg: COLOR.dangerBg };
+  if (days <= EXPIRY_WARNING_DAYS) return { state: "warning", label: "Sắp hết hạn", days, fg: COLOR.warning, bg: COLOR.warningBg };
+  return { state: "valid", label: "Còn hạn", days, fg: COLOR.success, bg: COLOR.successBg };
+}
+
 export function verdictTone(verdict: string | null | undefined, label?: string | null): Tone {
   if (verdict === "dat") {
     return { label: label ?? "Đạt", fg: COLOR.textOnDark, bg: COLOR.success };

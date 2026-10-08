@@ -2,6 +2,7 @@ import type { DataCellRef, TrendSeries } from "../../types";
 import { COLOR } from "../../theme";
 import { IcChart } from "../common/icons";
 import { formatDate, formatNumber, withinLimitTone } from "./format";
+import { PROV_CELL_CLASS } from "./tableStyles";
 
 // Biểu đồ diễn biến sai số theo mốc đo + bảng số liệu truy cập được bằng bàn phím.
 // SVG chỉ mang tính thị giác (role="img"); dữ liệu và nút xuất xứ nằm trong bảng
@@ -145,9 +146,9 @@ export default function ErrorTrendChart({
                       <td style={tdStyle}>
                         <button
                           type="button"
+                          className={PROV_CELL_CLASS}
                           onClick={() => onOpenProvenance(pointRef(point.point_id))}
                           aria-label={`Mở nguồn sai số ${formatNumber(point.error_value)} ngày ${formatDate(point.calibrated_at)}`}
-                          style={provButton}
                         >
                           Nguồn
                         </button>
@@ -166,13 +167,3 @@ export default function ErrorTrendChart({
 
 const thStyle: React.CSSProperties = { textAlign: "left", color: COLOR.textSecondary, borderBottom: `1px solid ${COLOR.border}`, padding: "5px 8px", fontWeight: 700 };
 const tdStyle: React.CSSProperties = { padding: "5px 8px", borderBottom: `1px solid ${COLOR.surfaceAlt}`, color: COLOR.textPrimary };
-const provButton: React.CSSProperties = {
-  border: `1px solid ${COLOR.accentSoftBorder}`,
-  background: COLOR.accentSoft,
-  color: COLOR.accentDark,
-  borderRadius: 7,
-  padding: "2px 9px",
-  fontSize: "11.5px",
-  fontWeight: 700,
-  cursor: "pointer",
-};

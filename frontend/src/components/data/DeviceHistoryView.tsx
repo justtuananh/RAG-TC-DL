@@ -3,6 +3,7 @@ import { COLOR } from "../../theme";
 import { IcArrowLeft, IcExternal, IcLink } from "../common/icons";
 import ErrorTrendChart from "./ErrorTrendChart";
 import { formatDate, verdictTone } from "./format";
+import { PROV_CELL_CLASS } from "./tableStyles";
 
 // Trang thiết bị: định danh, dòng thời gian kiểm định, biểu đồ diễn biến sai số.
 
@@ -21,16 +22,15 @@ function TimelineItem({
         {dateRef ? (
           <button
             type="button"
-            className="prov-cell"
+            className={PROV_CELL_CLASS}
             data-prov-kind={dateRef.kind}
             data-prov-id={dateRef.id}
             data-prov-field={dateRef.field}
             aria-label={`Xem nguồn ngày kiểm định ${formatDate(record.calibrated_at)}`}
             onClick={() => onOpenProvenance(dateRef)}
-            style={linkButton}
           >
             {formatDate(record.calibrated_at)}
-            <IcLink size={10} style={{ opacity: 0.7 }} />
+            <IcLink size={10} />
           </button>
         ) : (
           <span style={{ fontSize: "12px", color: COLOR.textPrimary }}>{formatDate(record.calibrated_at)}</span>
@@ -147,5 +147,4 @@ const cardStyle: React.CSSProperties = { background: COLOR.surface, border: `1px
 const dtStyle: React.CSSProperties = { fontWeight: 700, color: COLOR.textSecondary };
 const ddStyle: React.CSSProperties = { margin: 0, color: COLOR.textPrimary };
 const backButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 6, height: 32, padding: "0 12px", borderRadius: 9, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, fontWeight: 700, fontSize: "12.5px", cursor: "pointer" };
-const linkButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 4, border: "none", background: "transparent", padding: 0, color: COLOR.accentDark, fontSize: "12.5px", fontWeight: 700, cursor: "pointer", fontVariantNumeric: "tabular-nums" };
 const fileLink: React.CSSProperties = { flexShrink: 0, alignSelf: "center", display: "inline-flex", alignItems: "center", gap: 5, fontSize: "12px", color: COLOR.accentDark, fontWeight: 600, textDecoration: "none" };

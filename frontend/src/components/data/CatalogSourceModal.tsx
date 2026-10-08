@@ -46,7 +46,7 @@ const overlayStyle: React.CSSProperties = {
   position: "fixed",
   inset: 0,
   zIndex: 60,
-  background: "rgba(16,24,40,.45)",
+  background: COLOR.overlayMedium,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",

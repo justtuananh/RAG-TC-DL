@@ -1,21 +1,10 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import type { DataRecordRow, FilterOptions } from "../../types";
+import type { DataRecordRow } from "../../types";
 import RecordsTable from "./RecordsTable";
 
 // Kiểm accessibility của bảng dữ liệu: vai trò, aria, và các nút xuất xứ phải là
 // <button> (điều hướng được bằng bàn phím) chứ không phải <span> bấm chuột.
-
-const OPTIONS: FilterOptions = {
-  device_types: [{ value: 1, label: "Van an toàn" }],
-  quantities: [{ value: 1, label: "Áp suất" }],
-  procedures: [{ value: 1, label: "1.061" }],
-  verdicts: [
-    { value: "dat", label: "Đạt" },
-    { value: "khong_dat", label: "Không đạt" },
-  ],
-  sorts: ["calibrated_at"],
-};
 
 function makeRow(overrides: Partial<DataRecordRow> = {}): DataRecordRow {
   return {
@@ -76,18 +65,16 @@ function render(rows: DataRecordRow[] = [makeRow()], extra: Partial<Parameters<t
   return renderToStaticMarkup(
     <RecordsTable
       rows={rows}
-      options={OPTIONS}
-      filters={{ sort: "calibrated_at", order: "desc" }}
       sort="calibrated_at"
       order="desc"
       loading={false}
       error={null}
       selectedId={null}
-      onFilterChange={() => {}}
       onSort={() => {}}
       onOpenRecord={() => {}}
       onOpenDevice={() => {}}
       onOpenProvenance={() => {}}
+      onReset={() => {}}
       {...extra}
     />,
   );
@@ -101,29 +88,21 @@ describe("RecordsTable — accessibility", () => {
     expect(html).toContain("mỗi ô số bấm để mở đoạn nguyên văn nguồn");
   });
 
+  it("tám cột đọc nhanh, không còn nhiệt độ/độ ẩm/số điểm đo", () => {
+    const html = render();
+    for (const heading of ["Số hiệu", "Thiết bị", "Ngày kiểm định", "Hiệu lực", "Phạm vi đo", "CCX", "Kết luận"]) {
+      expect(html).toContain(heading);
+    }
+    expect(html).not.toContain("Nhiệt độ");
+    expect(html).not.toContain("Độ ẩm");
+    expect(html).not.toContain("Số điểm đo");
+    expect(html).toContain("Xem lịch sử thiết bị SN-1");
+  });
+
   it("cột sắp xếp dùng aria-sort và nút sắp xếp có nhãn", () => {
     const html = render();
     expect(html).toContain('aria-sort="descending"');
     expect(html).toContain("Sắp xếp theo Ngày kiểm định");
-  });
-
-  it("mọi ô lọc ở đầu cột đều có aria-label", () => {
-    const html = render();
-    for (const label of [
-      "Lọc theo số hiệu, model, QTKĐ",
-      "Lọc theo loại thiết bị",
-      "Lọc theo đại lượng",
-      "Lọc theo QTKĐ",
-      "Lọc từ ngày kiểm định",
-      "Lọc đến ngày kiểm định",
-      "Phạm vi đo nhỏ nhất",
-      "Phạm vi đo lớn nhất",
-      "Đơn vị phạm vi đo",
-      "Lọc theo cấp chính xác",
-      "Lọc theo kết luận",
-    ]) {
-      expect(html).toContain(`aria-label="${label}"`);
-    }
   });
 
   it("mỗi ô số là một <button> xuất xứ điều hướng được bằng bàn phím", () => {
@@ -132,13 +111,7 @@ describe("RecordsTable — accessibility", () => {
     expect(html).toContain('data-prov-kind="fact"');
     expect(html).toContain('data-prov-id="12"');
     expect(html).toContain('aria-label="Xem nguồn:');
-    // Nút, không phải span: có type="button".
     expect(html).toContain('type="button"');
-  });
-
-  it("số hiệu thiết bị mở trang thiết bị bằng nút có nhãn", () => {
-    const html = render();
-    expect(html).toContain("Xem lịch sử thiết bị SN-1");
   });
 
   it("mở chi tiết hồ sơ bằng nút bàn phím, không chỉ click hàng", () => {
@@ -156,22 +129,30 @@ describe("RecordsTable — accessibility", () => {
         range_unit_code: "MPa",
       }),
     ]);
-    // 1500 Pa và 5e8 Pa đổi về MPa là 0,0015 và 500 (formatNumber dùng dấu chấm).
     expect(html).toContain("0.0015 – 500 MPa");
-    // Không còn lộ giá trị SI thô ghép với nhãn MPa.
     expect(html).not.toContain("500000000 MPa");
   });
 
-  it("ô lọc Đại lượng/QTKĐ đủ rộng cho nhãn mặc định", () => {
-    const html = render();
-    expect(html).toContain("Mọi đại lượng");
-    expect(html).toContain("Mọi QTKĐ");
-    expect(html).toContain("min-width:128px");
+  it("hiệu lực có nhãn trạng thái hạn", () => {
+    const html = render([makeRow({ expires_at: "2020-01-01T00:00:00" })]);
+    expect(html).toContain("Hết hạn");
   });
 
-  it("trạng thái rỗng có thông báo thay vì bảng trống", () => {
+  it("trạng thái rỗng có thông báo và nút xoá lọc", () => {
     const html = render([]);
-    expect(html).toContain("Không có hồ sơ đã duyệt khớp bộ lọc.");
+    expect(html).toContain("Không có hồ sơ khớp bộ lọc");
+    expect(html).toContain("Xoá lọc");
+  });
+
+  it("trạng thái đang tải có 8 dòng skeleton", () => {
+    const html = render([], { loading: true });
+    expect((html.match(/aria-hidden="true"/g) ?? []).length).toBe(8);
+  });
+
+  it("dòng Không đạt có vạch trái màu cảnh báo", () => {
+    const html = render([makeRow({ verdict: "khong_dat", verdict_label: "Không đạt" })]);
+    expect(html).toContain("Không đạt");
+    expect(html).toContain("inset 3px 0 0");
   });
 
   it("lỗi hiển thị trong role=alert", () => {

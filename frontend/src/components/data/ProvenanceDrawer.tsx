@@ -67,10 +67,13 @@ export default function ProvenanceDrawer({
     if (!cellRef) return;
     closeRef.current?.focus();
     const handler = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
+      if (event.key !== "Escape") return;
+      // Ngăn nằm trên panel chi tiết: chỉ đóng ngăn, đánh dấu để panel không đóng theo.
+      event.preventDefault();
+      onClose();
     };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    window.addEventListener("keydown", handler, true);
+    return () => window.removeEventListener("keydown", handler, true);
   }, [cellRef, onClose]);
 
   if (!cellRef) return null;
@@ -79,7 +82,7 @@ export default function ProvenanceDrawer({
 
   return (
     <div
-      style={{ position: "fixed", inset: 0, zIndex: 70, display: "flex", justifyContent: "flex-end", background: "rgba(16,24,40,.35)" }}
+      style={{ position: "fixed", inset: 0, zIndex: 70, display: "flex", justifyContent: "flex-end", background: COLOR.overlaySoft }}
       onClick={onClose}
     >
       <aside
@@ -91,7 +94,7 @@ export default function ProvenanceDrawer({
           maxWidth: "100%",
           background: COLOR.surface,
           borderLeft: `1px solid ${COLOR.border}`,
-          boxShadow: "0 10px 28px rgba(16,24,40,.18)",
+          boxShadow: `0 10px 28px ${COLOR.shadowPageSoft}`,
           display: "flex",
           flexDirection: "column",
           minHeight: 0,

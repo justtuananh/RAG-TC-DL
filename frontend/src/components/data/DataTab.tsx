@@ -15,14 +15,16 @@ import {
 import { COLOR } from "../../theme";
 import { IcDownload, IcLock, IcRefresh, IcTable } from "../common/icons";
 import RecordsTable from "./RecordsTable";
+import RecordFilterBar from "./RecordFilterBar";
 import RecordDetailPanel from "./RecordDetailPanel";
 import DeviceHistoryView from "./DeviceHistoryView";
 import ProvenanceDrawer from "./ProvenanceDrawer";
 import CatalogsView from "./CatalogsView";
 import { CATALOG_KINDS, CATALOG_TAB_LABELS } from "./catalogFormat";
 
-// Tab "Dữ liệu": bảng dày + lọc ở đầu cột + xuất xứ từng ô số + trang thiết bị.
-// Chỉ đọc dữ liệu ĐÃ DUYỆT từ `/api/data/*` (P3). Cần đăng nhập (mọi vai trò đọc).
+// Tab "Dữ liệu": thanh chọn loại dữ liệu dạng tab, thanh lọc riêng, bảng hồ sơ đọc nhanh
+// và panel chi tiết chỉ hiện khi đã chọn. Chỉ đọc dữ liệu ĐÃ DUYỆT từ `/api/data/*` (P3);
+// mỗi ô số bấm được để mở nguồn (P1). Cần đăng nhập (mọi vai trò đọc).
 
 const PAGE_SIZE = 25;
 
@@ -30,6 +32,13 @@ const DEFAULT_FILTERS: RecordFilters = {
   sort: "calibrated_at",
   order: "desc",
 };
+
+type Dataset = "records" | CatalogKind;
+
+const DATASET_TABS: { key: Dataset; label: string }[] = [
+  { key: "records", label: "Hồ sơ kiểm định" },
+  ...CATALOG_KINDS.map((kind) => ({ key: kind as Dataset, label: CATALOG_TAB_LABELS[kind] })),
+];
 
 export default function DataTab({ state, actions }: { state: AppState; actions: Actions }) {
   const user = state.auth.user;
@@ -47,7 +56,7 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
   const [detailLoading, setDetailLoading] = useState(false);
 
   const [view, setView] = useState<"table" | "device">("table");
-  const [dataset, setDataset] = useState<"records" | CatalogKind>("records");
+  const [dataset, setDataset] = useState<Dataset>("records");
   const [catalogCounts, setCatalogCounts] = useState<Partial<Record<CatalogKind, number>>>({});
   const [deviceHistory, setDeviceHistory] = useState<DeviceHistory | null>(null);
   const [deviceLoading, setDeviceLoading] = useState(false);
@@ -136,6 +145,23 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
     setOffset(0);
   };
 
+  const selectDataset = (key: Dataset) => {
+    setDataset(key);
+    setSelectedId(null);
+    setOffset(0);
+  };
+
+  const onTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next = -1;
+    if (e.key === "ArrowRight") next = (index + 1) % DATASET_TABS.length;
+    else if (e.key === "ArrowLeft") next = (index - 1 + DATASET_TABS.length) % DATASET_TABS.length;
+    if (next < 0) return;
+    e.preventDefault();
+    selectDataset(DATASET_TABS[next].key);
+    const tabs = e.currentTarget.parentElement?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+    tabs?.[next]?.focus();
+  };
+
   const openDevice = useCallback(async (record: DataRecordRow) => {
     if (record.device_id == null) return;
     setView("device");
@@ -217,33 +243,54 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
 
   const pageStart = total === 0 ? 0 : offset + 1;
   const pageEnd = Math.min(offset + PAGE_SIZE, total);
+  const page = total === 0 ? 1 : Math.floor(offset / PAGE_SIZE) + 1;
+  const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
   return (
     <main aria-label="Dữ liệu" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", background: COLOR.bg }}>
-      <div style={{ flexShrink: 0, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", padding: "11px 20px", background: COLOR.surface, borderBottom: `1px solid ${COLOR.border}` }}>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 700, fontSize: "14.5px", color: COLOR.textPrimary }}>
+      <div style={headerStyle}>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 700, fontSize: "14.5px", color: COLOR.textPrimary, flexShrink: 0 }}>
           <IcTable size={16} style={{ color: COLOR.accent }} /> Dữ liệu
         </span>
-        <select
-          value={dataset}
-          onChange={(e) => setDataset(e.target.value as "records" | CatalogKind)}
-          aria-label="Chọn loại dữ liệu tra cứu"
-          style={datasetSelect}
-        >
-          <option value="records">Hồ sơ kiểm định</option>
-          {CATALOG_KINDS.map((kind) => (
-            <option key={kind} value={kind}>
-              {CATALOG_TAB_LABELS[kind]}
-              {catalogCounts[kind] !== undefined ? ` (${catalogCounts[kind]})` : ""}
-            </option>
-          ))}
-        </select>
+
+        <div role="tablist" aria-label="Loại dữ liệu tra cứu" style={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+          {DATASET_TABS.map((tab, index) => {
+            const active = dataset === tab.key;
+            const count = tab.key === "records" ? undefined : catalogCounts[tab.key as CatalogKind];
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                tabIndex={active ? 0 : -1}
+                onClick={() => selectDataset(tab.key)}
+                onKeyDown={(e) => onTabKeyDown(e, index)}
+                style={{
+                  height: 34,
+                  padding: "0 12px",
+                  border: "none",
+                  borderBottom: `2px solid ${active ? COLOR.accent : "transparent"}`,
+                  background: "transparent",
+                  color: active ? COLOR.accentDark : COLOR.textSecondary,
+                  fontWeight: active ? 700 : 600,
+                  fontSize: "13px",
+                  fontFamily: "inherit",
+                  cursor: "pointer",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {tab.label}
+                {count !== undefined ? ` (${count})` : ""}
+              </button>
+            );
+          })}
+        </div>
+
+        <div style={{ flex: 1 }} />
+
         {dataset === "records" && (
           <>
-            <span className="tabular-nums" style={{ fontSize: "11.5px", fontWeight: 700, background: COLOR.accentSoft, color: COLOR.accentDark, padding: "3px 10px", borderRadius: 9999 }}>
-              {total} hồ sơ đã duyệt
-            </span>
-            <div style={{ flex: 1 }} />
             <button type="button" onClick={resetFilters} style={ghostButton}>
               <IcRefresh size={14} /> Xoá lọc
             </button>
@@ -258,31 +305,34 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
         <CatalogsView kind={dataset} />
       ) : (
         <>
+          <RecordFilterBar filters={filters} options={options} total={total} onChange={patchFilters} />
+
           <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
             <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column" }}>
               <RecordsTable
                 rows={rows}
-                options={options}
-                filters={filters}
                 sort={filters.sort ?? "calibrated_at"}
                 order={(filters.order as "asc" | "desc") ?? "desc"}
                 loading={loading}
                 error={error}
                 selectedId={selectedId}
-                onFilterChange={patchFilters}
                 onSort={onSort}
                 onOpenRecord={(row) => setSelectedId(row.id)}
                 onOpenDevice={(row) => void openDevice(row)}
                 onOpenProvenance={setProvenanceRef}
+                onReset={resetFilters}
               />
               <nav aria-label="Phân trang" style={pagerStyle}>
                 <span style={{ fontSize: "12px", color: COLOR.textSecondary }} className="tabular-nums">
-                  {pageStart}–{pageEnd} / {total}
+                  Hiển thị {pageStart}–{pageEnd} trong {total} hồ sơ
                 </span>
-                <div style={{ display: "flex", gap: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <button type="button" onClick={() => setOffset((value) => Math.max(0, value - PAGE_SIZE))} disabled={offset === 0 || loading} style={ghostButton}>
                     Trang trước
                   </button>
+                  <span className="tabular-nums" style={{ fontSize: "12px", color: COLOR.textSecondary, minWidth: 78, textAlign: "center" }}>
+                    Trang {page} / {pageCount}
+                  </span>
                   <button type="button" onClick={() => setOffset((value) => value + PAGE_SIZE)} disabled={pageEnd >= total || loading} style={ghostButton}>
                     Trang sau
                   </button>
@@ -290,13 +340,15 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
               </nav>
             </div>
 
-            <RecordDetailPanel
-              record={detail}
-              loading={detailLoading}
-              onClose={() => setSelectedId(null)}
-              onOpenProvenance={setProvenanceRef}
-              onOpenDevice={(row) => void openDevice(row)}
-            />
+            {selectedId != null && (
+              <RecordDetailPanel
+                record={detail}
+                loading={detailLoading}
+                onClose={() => setSelectedId(null)}
+                onOpenProvenance={setProvenanceRef}
+                onOpenDevice={(row) => void openDevice(row)}
+              />
+            )}
           </div>
 
           <ProvenanceDrawer cellRef={provenanceRef} onClose={() => setProvenanceRef(null)} />
@@ -310,5 +362,5 @@ const centered: React.CSSProperties = { flex: 1, minHeight: 0, display: "flex", 
 const noticeCard: React.CSSProperties = { maxWidth: 420, padding: "28px 26px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, background: COLOR.surface, border: `1px solid ${COLOR.border}`, borderRadius: 13 };
 const primaryButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 7, height: 38, padding: "0 16px", marginTop: 4, borderRadius: 9, border: "none", background: COLOR.accent, color: COLOR.textOnDark, fontWeight: 700, fontSize: "13px", cursor: "pointer" };
 const ghostButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 6, height: 34, padding: "0 12px", borderRadius: 9, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, fontWeight: 600, fontSize: "12.5px", cursor: "pointer" };
-const datasetSelect: React.CSSProperties = { height: 34, maxWidth: 260, padding: "0 10px", borderRadius: 9, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, fontSize: "12.5px", fontFamily: "inherit", cursor: "pointer" };
-const pagerStyle: React.CSSProperties = { flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "8px 16px", borderTop: `1px solid ${COLOR.border}`, background: COLOR.surface };
+const headerStyle: React.CSSProperties = { flexShrink: 0, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", padding: "8px 16px", background: COLOR.surface, borderBottom: `1px solid ${COLOR.border}` };
+const pagerStyle: React.CSSProperties = { flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap", padding: "8px 16px", borderTop: `1px solid ${COLOR.border}`, background: COLOR.surface };

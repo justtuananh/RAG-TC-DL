@@ -1,60 +1,55 @@
-import type { DataCellRef, DataRecordRow, FilterOptions } from "../../types";
-import type { RecordFilters } from "../../services/dataApi";
+import type { DataCellRef, DataRecordRow } from "../../types";
 import { COLOR } from "../../theme";
-import { IcAlert, IcChevronDown, IcChevronUp, IcLink } from "../common/icons";
-import { formatDate, formatNumber, formatRange, verdictTone } from "./format";
+import { IcAlert, IcChevronDown, IcChevronUp, IcSearch } from "../common/icons";
+import RecordRow from "./RecordRow";
+import { DATA_TABLE_CLASS, alertStyle, emptyCellStyle, headRowStyle, tableStyle, tdStyle, thStyle } from "./tableStyles";
 
-// Bảng dày cho tab Dữ liệu. Thuần trình bày (nhận rows + callback) để test được
-// bằng renderToStaticMarkup: kiểm vai trò, aria, nút xuất xứ và điều hướng bàn phím.
+// Bảng hồ sơ kiểm định: 8 cột đọc nhanh "thiết bị nào, kiểm khi nào, còn hạn không, đạt hay không".
+// Bộ lọc đã tách sang RecordFilterBar. Mỗi ô số vẫn là nút mở đúng đoạn nguyên văn (P1).
 //
-// Mỗi ô số là một <button> mở đúng đoạn nguyên văn sinh ra nó (P1). Bảng dùng
-// <caption>, <th scope>, aria-sort và aria-label cho mọi điều khiển.
+// Dùng table-layout: fixed để không cuộn ngang ở 1366 px; cột "Thiết bị" tự rút gọn ellipsis.
 
 export interface RecordsTableProps {
   rows: DataRecordRow[];
-  options: FilterOptions | null;
-  filters: RecordFilters;
   sort: string;
   order: "asc" | "desc";
   loading: boolean;
   error?: string | null;
   selectedId: number | null;
-  onFilterChange: (patch: Partial<RecordFilters>) => void;
   onSort: (column: string) => void;
   onOpenRecord: (row: DataRecordRow) => void;
   onOpenDevice: (row: DataRecordRow) => void;
   onOpenProvenance: (ref: DataCellRef) => void;
-}
-
-function cellRefFor(row: DataRecordRow, field: string): DataCellRef | null {
-  return row.provenance.find((cell) => cell.field === field) ?? null;
+  /** Xoá mọi bộ lọc (dùng ở trạng thái rỗng). */
+  onReset: () => void;
 }
 
 const SORT_LABEL: Record<string, string> = {
   calibrated_at: "Ngày kiểm định",
   serial_no: "Số hiệu",
   verdict: "Kết luận",
-  procedure_number: "QTKĐ",
+  expires_at: "Hiệu lực",
   device_type_name: "Loại thiết bị",
 };
 
-function SortHeader({
-  label,
-  column,
-  sort,
-  order,
-  onSort,
-}: {
-  label: string;
-  column?: string;
-  sort: string;
-  order: "asc" | "desc";
-  onSort: (column: string) => void;
-}) {
+const COLUMNS: { label: string; sort?: string; align?: "right" }[] = [
+  { label: "Số hiệu", sort: "serial_no" },
+  { label: "Thiết bị", sort: "device_type_name" },
+  { label: "Ngày kiểm định", sort: "calibrated_at" },
+  { label: "Hiệu lực", sort: "expires_at" },
+  { label: "Phạm vi đo", align: "right" },
+  { label: "CCX", align: "right" },
+  { label: "Kết luận", sort: "verdict" },
+  { label: "Chi tiết" },
+];
+
+const COL_WIDTHS = ["13%", "18%", "12%", "14%", "13%", "10%", "12%", "8%"];
+
+function SortHeader({ label, column, sort, order, onSort }: { label: string; column?: string; sort: string; order: "asc" | "desc"; onSort: (column: string) => void }) {
   const active = column !== undefined && sort === column;
   const ariaSort = active ? (order === "asc" ? "ascending" : "descending") : "none";
   return (
-    <th scope="col" aria-sort={ariaSort} style={thStyle}>
+    <th scope="col" aria-sort={ariaSort} style={headerCellStyle}>
       {column ? (
         <button
           type="button"
@@ -72,30 +67,31 @@ function SortHeader({
   );
 }
 
-function ProvCell({ row, field, text, onOpenProvenance }: { row: DataRecordRow; field: string; text: string; onOpenProvenance: (ref: DataCellRef) => void }) {
-  const ref = cellRefFor(row, field);
-  if (!ref) return <span style={numericStyle}>{text}</span>;
+function SkeletonRow() {
   return (
-    <button
-      type="button"
-      className="prov-cell"
-      data-prov-kind={ref.kind}
-      data-prov-id={ref.id}
-      data-prov-field={field}
-      title="Xem đoạn nguyên văn sinh ra số này"
-      aria-label={`Xem nguồn: ${text}`}
-      onClick={() => onOpenProvenance(ref)}
-      style={provButton}
-    >
-      {text}
-      <IcLink size={10} style={{ opacity: 0.7 }} />
-    </button>
+    <tr aria-hidden>
+      {COL_WIDTHS.map((_width, i) => (
+        <td key={i} style={tdStyle}>
+          <span style={{ display: "block", height: 10, borderRadius: 9999, background: COLOR.surfaceMuted, width: i === 1 ? "80%" : "60%" }} />
+        </td>
+      ))}
+    </tr>
   );
 }
 
 export default function RecordsTable(props: RecordsTableProps) {
-  const { rows, options, filters, sort, order, loading, error, selectedId, onFilterChange, onSort, onOpenRecord, onOpenDevice, onOpenProvenance } = props;
-  const verdictChoices = options?.verdicts ?? [];
+  const { rows, sort, order, loading, error, selectedId, onSort, onOpenRecord, onOpenDevice, onOpenProvenance, onReset } = props;
+  const showSkeleton = loading && rows.length === 0;
+
+  // Bàn phím: mũi tên lên/xuống chuyển dòng đang chọn khi tiêu điểm nằm trong bảng.
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+    if (rows.length === 0) return;
+    e.preventDefault();
+    const current = rows.findIndex((row) => row.id === selectedId);
+    const next = current < 0 ? 0 : e.key === "ArrowDown" ? Math.min(rows.length - 1, current + 1) : Math.max(0, current - 1);
+    onOpenRecord(rows[next]);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: 0, flex: 1 }}>
@@ -104,280 +100,47 @@ export default function RecordsTable(props: RecordsTableProps) {
           <IcAlert size={14} /> {error}
         </div>
       )}
-      <div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
-        <table role="table" style={{ width: "100%", borderCollapse: "collapse", fontSize: "12.5px" }}>
+      <div style={{ flex: 1, minHeight: 0, overflow: "auto" }} onKeyDown={onKeyDown}>
+        <table role="table" className={DATA_TABLE_CLASS} style={{ ...tableStyle, tableLayout: "fixed" }}>
           <caption style={captionStyle}>Bảng hồ sơ kiểm định đã duyệt — mỗi ô số bấm để mở đoạn nguyên văn nguồn.</caption>
-          <thead style={{ position: "sticky", top: 0, zIndex: 2, background: COLOR.surfaceAlt }}>
+          <colgroup>
+            {COL_WIDTHS.map((width, i) => (
+              <col key={i} style={{ width }} />
+            ))}
+          </colgroup>
+          <thead style={headRowStyle}>
             <tr>
-              <SortHeader label="Số hiệu" column="serial_no" sort={sort} order={order} onSort={onSort} />
-              <SortHeader label="Loại thiết bị" column="device_type_name" sort={sort} order={order} onSort={onSort} />
-              <th scope="col" style={thStyle}>
-                Đại lượng
-              </th>
-              <SortHeader label="QTKĐ" column="procedure_number" sort={sort} order={order} onSort={onSort} />
-              <SortHeader label="Ngày kiểm định" column="calibrated_at" sort={sort} order={order} onSort={onSort} />
-              <SortHeader label="Hết hiệu lực" column="expires_at" sort={sort} order={order} onSort={onSort} />
-              <th scope="col" style={thStyle}>
-                Phạm vi đo
-              </th>
-              <th scope="col" style={thStyle}>
-                Cấp chính xác
-              </th>
-              <th scope="col" style={thStyle}>
-                Nhiệt độ
-              </th>
-              <th scope="col" style={thStyle}>
-                Độ ẩm
-              </th>
-              <th scope="col" style={thStyle}>
-                Số điểm đo
-              </th>
-              <SortHeader label="Kết luận" column="verdict" sort={sort} order={order} onSort={onSort} />
-              <th scope="col" style={thStyle}>
-                Chi tiết
-              </th>
-            </tr>
-            <tr>
-              <th scope="col" style={filterThStyle}>
-                <input
-                  type="search"
-                  value={filters.search ?? ""}
-                  onChange={(e) => onFilterChange({ search: e.target.value })}
-                  placeholder="Tìm số hiệu…"
-                  aria-label="Lọc theo số hiệu, model, QTKĐ"
-                  style={filterInput}
-                />
-              </th>
-              <th scope="col" style={filterThStyle}>
-                <select
-                  value={filters.device_type_id ?? ""}
-                  onChange={(e) => onFilterChange({ device_type_id: e.target.value ? Number(e.target.value) : undefined })}
-                  aria-label="Lọc theo loại thiết bị"
-                  style={filterInput}
-                >
-                  <option value="">Mọi loại</option>
-                  {(options?.device_types ?? []).map((choice) => (
-                    <option key={choice.value} value={choice.value}>
-                      {choice.label}
-                    </option>
-                  ))}
-                </select>
-              </th>
-              <th scope="col" style={filterThStyle}>
-                <select
-                  value={filters.quantity_id ?? ""}
-                  onChange={(e) => onFilterChange({ quantity_id: e.target.value ? Number(e.target.value) : undefined })}
-                  aria-label="Lọc theo đại lượng"
-                  style={filterSelectWide}
-                >
-                  <option value="">Mọi đại lượng</option>
-                  {(options?.quantities ?? []).map((choice) => (
-                    <option key={choice.value} value={choice.value}>
-                      {choice.label}
-                    </option>
-                  ))}
-                </select>
-              </th>
-              <th scope="col" style={filterThStyle}>
-                <select
-                  value={filters.procedure_id ?? ""}
-                  onChange={(e) => onFilterChange({ procedure_id: e.target.value ? Number(e.target.value) : undefined })}
-                  aria-label="Lọc theo QTKĐ"
-                  style={filterSelectWide}
-                >
-                  <option value="">Mọi QTKĐ</option>
-                  {(options?.procedures ?? []).map((choice) => (
-                    <option key={choice.value} value={choice.value}>
-                      {choice.label}
-                    </option>
-                  ))}
-                </select>
-              </th>
-              <th scope="col" style={filterThStyle}>
-                <div style={{ display: "flex", gap: 3 }}>
-                  <input
-                    type="date"
-                    value={filters.date_from ?? ""}
-                    onChange={(e) => onFilterChange({ date_from: e.target.value || undefined })}
-                    aria-label="Lọc từ ngày kiểm định"
-                    style={filterInput}
-                  />
-                  <input
-                    type="date"
-                    value={filters.date_to ?? ""}
-                    onChange={(e) => onFilterChange({ date_to: e.target.value || undefined })}
-                    aria-label="Lọc đến ngày kiểm định"
-                    style={filterInput}
-                  />
-                </div>
-              </th>
-              <th scope="col" style={filterThStyle} />
-              <th scope="col" style={filterThStyle}>
-                <div style={{ display: "flex", gap: 3 }}>
-                  <input
-                    type="number"
-                    value={filters.range_min ?? ""}
-                    onChange={(e) => onFilterChange({ range_min: e.target.value === "" ? undefined : Number(e.target.value) })}
-                    placeholder="Min"
-                    aria-label="Phạm vi đo nhỏ nhất"
-                    style={filterInput}
-                  />
-                  <input
-                    type="number"
-                    value={filters.range_max ?? ""}
-                    onChange={(e) => onFilterChange({ range_max: e.target.value === "" ? undefined : Number(e.target.value) })}
-                    placeholder="Max"
-                    aria-label="Phạm vi đo lớn nhất"
-                    style={filterInput}
-                  />
-                  <input
-                    type="text"
-                    value={filters.range_unit ?? ""}
-                    onChange={(e) => onFilterChange({ range_unit: e.target.value || undefined })}
-                    placeholder="ĐV"
-                    aria-label="Đơn vị phạm vi đo"
-                    style={{ ...filterInput, minWidth: 44 }}
-                  />
-                </div>
-              </th>
-              <th scope="col" style={filterThStyle}>
-                <input
-                  type="text"
-                  value={filters.accuracy ?? ""}
-                  onChange={(e) => onFilterChange({ accuracy: e.target.value || undefined })}
-                  placeholder="Cấp chính xác…"
-                  aria-label="Lọc theo cấp chính xác"
-                  style={filterInput}
-                />
-              </th>
-              <th scope="col" style={filterThStyle} />
-              <th scope="col" style={filterThStyle} />
-              <th scope="col" style={filterThStyle} />
-              <th scope="col" style={filterThStyle}>
-                <select
-                  value={filters.verdict ?? ""}
-                  onChange={(e) => onFilterChange({ verdict: e.target.value || undefined })}
-                  aria-label="Lọc theo kết luận"
-                  style={filterInput}
-                >
-                  <option value="">Mọi kết luận</option>
-                  {verdictChoices.map((choice) => (
-                    <option key={choice.value} value={choice.value}>
-                      {choice.label}
-                    </option>
-                  ))}
-                </select>
-              </th>
-              <th scope="col" style={filterThStyle} />
+              {COLUMNS.map((col, i) => (
+                <SortHeader key={i} label={col.label} column={col.sort} sort={sort} order={order} onSort={onSort} />
+              ))}
             </tr>
           </thead>
           <tbody>
-            {loading && rows.length === 0 ? (
-              <tr>
-                <td colSpan={13} style={emptyTd}>
-                  Đang tải dữ liệu…
-                </td>
-              </tr>
+            {showSkeleton ? (
+              Array.from({ length: 8 }, (_, i) => <SkeletonRow key={i} />)
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={13} style={emptyTd}>
-                  Không có hồ sơ đã duyệt khớp bộ lọc.
+                <td colSpan={COLUMNS.length} style={emptyCellStyle}>
+                  <div style={emptyBoxStyle}>
+                    <IcSearch size={22} style={{ color: COLOR.borderStrong }} />
+                    <div style={{ fontWeight: 600, color: COLOR.textPrimary }}>Không có hồ sơ khớp bộ lọc</div>
+                    <button type="button" onClick={onReset} style={resetButton}>
+                      Xoá lọc
+                    </button>
+                  </div>
                 </td>
               </tr>
             ) : (
-              rows.map((row) => {
-                const active = row.id === selectedId;
-                const tone = verdictTone(row.verdict, row.verdict_label);
-                return (
-                  <tr
-                    key={row.id}
-                    aria-selected={active}
-                    onClick={() => onOpenRecord(row)}
-                    style={{ background: active ? COLOR.accentSoft : "transparent", cursor: "pointer" }}
-                  >
-                    <td style={tdStyle}>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenDevice(row);
-                        }}
-                        aria-label={`Xem lịch sử thiết bị ${row.serial_no ?? "(không số hiệu)"}`}
-                        style={deviceButton}
-                      >
-                        {row.serial_no ?? "(không số hiệu)"}
-                      </button>
-                    </td>
-                    <td style={tdStyle}>{row.device_type_name ?? "—"}</td>
-                    <td style={tdStyle}>{row.quantity_name ?? "—"}</td>
-                    <td style={tdStyle}>{row.procedure_number ?? "—"}</td>
-                    <td style={tdStyle}>
-                      <ProvCell row={row} field="calibrated_at" text={formatDate(row.calibrated_at)} onOpenProvenance={onOpenProvenance} />
-                    </td>
-                    <td style={tdStyle}>
-                      {row.expires_at ? (
-                        <ProvCell row={row} field="expires_at" text={formatDate(row.expires_at)} onOpenProvenance={onOpenProvenance} />
-                      ) : (
-                        <span style={numericStyle}>—</span>
-                      )}
-                    </td>
-                    <td style={tdStyle}>
-                      <ProvCell
-                        row={row}
-                        field="range_min"
-                        text={formatRange(row.range_min_display, row.range_max_display, row.range_unit_code)}
-                        onOpenProvenance={onOpenProvenance}
-                      />
-                    </td>
-                    <td style={tdStyle}>
-                      {row.accuracy_text ? (
-                        <ProvCell row={row} field="accuracy_text" text={row.accuracy_text} onOpenProvenance={onOpenProvenance} />
-                      ) : (
-                        <span style={numericStyle}>—</span>
-                      )}
-                    </td>
-                    <td style={tdStyle}>
-                      {row.env_temp_c !== null && row.env_temp_c !== undefined ? (
-                        <ProvCell row={row} field="env_temp_c" text={formatNumber(row.env_temp_c, 1)} onOpenProvenance={onOpenProvenance} />
-                      ) : (
-                        <span style={numericStyle}>—</span>
-                      )}
-                    </td>
-                    <td style={tdStyle}>
-                      {row.env_humidity_pct !== null && row.env_humidity_pct !== undefined ? (
-                        <ProvCell row={row} field="env_humidity_pct" text={formatNumber(row.env_humidity_pct, 1)} onOpenProvenance={onOpenProvenance} />
-                      ) : (
-                        <span style={numericStyle}>—</span>
-                      )}
-                    </td>
-                    <td style={{ ...tdStyle, textAlign: "right" }}>
-                      {row.measurement_count !== null && row.measurement_count !== undefined ? (
-                        <ProvCell row={row} field="measurement_count" text={formatNumber(row.measurement_count, 0)} onOpenProvenance={onOpenProvenance} />
-                      ) : (
-                        <span style={numericStyle}>—</span>
-                      )}
-                    </td>
-                    <td style={tdStyle}>
-                      <span style={{ fontSize: "11px", fontWeight: 700, color: tone.fg, background: tone.bg, padding: "2px 8px", borderRadius: 9999 }}>
-                        {tone.label}
-                      </span>
-                    </td>
-                    <td style={tdStyle}>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onOpenRecord(row);
-                        }}
-                        aria-label={`Xem chi tiết hồ sơ ${row.serial_no ?? row.id}`}
-                        style={detailButton}
-                      >
-                        Xem
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })
+              rows.map((row) => (
+                <RecordRow
+                  key={row.id}
+                  row={row}
+                  selected={row.id === selectedId}
+                  onOpenRecord={onOpenRecord}
+                  onOpenDevice={onOpenDevice}
+                  onOpenProvenance={onOpenProvenance}
+                />
+              ))
             )}
           </tbody>
         </table>
@@ -386,72 +149,11 @@ export default function RecordsTable(props: RecordsTableProps) {
   );
 }
 
-const thStyle: React.CSSProperties = {
-  textAlign: "left",
-  padding: "7px 9px",
-  borderBottom: `1px solid ${COLOR.border}`,
-  color: COLOR.textSecondary,
-  fontWeight: 700,
-  whiteSpace: "nowrap",
-};
-const filterThStyle: React.CSSProperties = {
-  padding: "4px 6px",
-  borderBottom: `1px solid ${COLOR.border}`,
-  background: COLOR.surfaceAlt,
-  verticalAlign: "top",
-};
-const filterInput: React.CSSProperties = {
-  width: "100%",
-  minWidth: 60,
-  height: 26,
-  padding: "0 6px",
-  borderRadius: 6,
-  border: `1px solid ${COLOR.border}`,
-  background: COLOR.surface,
-  color: COLOR.textPrimary,
-  fontSize: "11.5px",
-  fontFamily: "inherit",
-};
-// Ô chọn "Đại lượng"/"QTKĐ": đủ rộng để hiện trọn nhãn mặc định "Mọi đại lượng"/"Mọi QTKĐ".
-const filterSelectWide: React.CSSProperties = { ...filterInput, minWidth: 128 };
-const tdStyle: React.CSSProperties = { padding: "7px 9px", borderBottom: `1px solid ${COLOR.surfaceAlt}`, color: COLOR.textPrimary, whiteSpace: "nowrap" };
-const numericStyle: React.CSSProperties = { fontVariantNumeric: "tabular-nums", color: COLOR.textPrimary };
-const provButton: React.CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 4,
-  border: `1px solid ${COLOR.accentSoftBorder}`,
-  background: COLOR.accentSoft,
-  color: COLOR.accentDark,
-  borderRadius: 7,
-  padding: "1px 7px",
-  fontSize: "11.5px",
-  fontWeight: 700,
-  cursor: "pointer",
-  fontVariantNumeric: "tabular-nums",
-};
-const deviceButton: React.CSSProperties = {
-  border: "none",
-  background: "transparent",
-  padding: 0,
-  color: COLOR.accentDark,
-  fontWeight: 700,
-  fontSize: "12.5px",
-  cursor: "pointer",
-  textDecoration: "underline dotted",
-};
-const detailButton: React.CSSProperties = {
-  height: 24,
-  padding: "0 9px",
-  borderRadius: 7,
-  border: `1px solid ${COLOR.border}`,
-  background: COLOR.surface,
-  color: COLOR.textSecondary,
-  fontSize: "11.5px",
-  fontWeight: 700,
-  cursor: "pointer",
-};
+// Cột chia theo % (table-layout: fixed): khi panel chi tiết mở, tiêu đề dài phải xuống dòng
+// thay vì tràn đè sang cột bên cạnh.
+const headerCellStyle: React.CSSProperties = { ...thStyle, whiteSpace: "normal", lineHeight: 1.3, verticalAlign: "bottom" };
 const sortButton: React.CSSProperties = {
+  textAlign: "left",
   display: "inline-flex",
   alignItems: "center",
   gap: 4,
@@ -460,20 +162,20 @@ const sortButton: React.CSSProperties = {
   padding: 0,
   color: "inherit",
   fontWeight: 700,
-  fontSize: "12.5px",
+  fontSize: "12px",
   cursor: "pointer",
   fontFamily: "inherit",
 };
-const captionStyle: React.CSSProperties = { textAlign: "left", padding: "6px 9px", color: COLOR.textSecondary, fontSize: "11.5px" };
-const alertStyle: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: 8,
-  padding: "8px 14px",
-  background: COLOR.dangerBg,
-  color: COLOR.danger,
-  borderBottom: `1px solid ${COLOR.dangerBorder}`,
-  fontSize: "12.5px",
+const captionStyle: React.CSSProperties = { textAlign: "left", padding: "6px 10px", color: COLOR.textSecondary, fontSize: "11.5px" };
+const emptyBoxStyle: React.CSSProperties = { display: "flex", flexDirection: "column", alignItems: "center", gap: 8 };
+const resetButton: React.CSSProperties = {
+  height: 30,
+  padding: "0 12px",
+  borderRadius: 8,
+  border: `1px solid ${COLOR.border}`,
+  background: COLOR.surface,
+  color: COLOR.textSecondary,
   fontWeight: 600,
+  fontSize: "12px",
+  cursor: "pointer",
 };
-const emptyTd: React.CSSProperties = { padding: "30px 12px", textAlign: "center", color: COLOR.textSecondary, fontSize: "13px" };

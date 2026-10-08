@@ -1,7 +1,8 @@
 import type { CatalogGroup, CatalogKind, CatalogRow } from "../../types";
 import { COLOR } from "../../theme";
-import { IcAlert, IcLink } from "../common/icons";
+import { IcAlert, IcLink, IcSearch } from "../common/icons";
 import { CATALOG_TABLE_TITLES, formatCatalogDate, formatNextDue, isInherited, isOverdue, joinList, recognitionLabel } from "./catalogFormat";
+import { DATA_TABLE_CLASS, alertStyle, emptyCellStyle, headRowStyle, numericStyle, tableStyle, tdStyle as sharedTdStyle, thStyle } from "./tableStyles";
 
 // Bảng danh mục NAS (Pha D1). Thuần trình bày để test bằng renderToStaticMarkup:
 // nhận rows + bộ lọc, phát callback; mỗi dòng có nút mở nguồn nguyên văn (P1).
@@ -69,7 +70,6 @@ function SourceCell({ row, onOpenSource }: { row: CatalogRow; onOpenSource: (row
         title={`Xem nguồn: ${row.display_name ?? row.file_stem ?? ""}`}
         aria-label={`Xem nguồn dòng ${row.ord ?? row.id}`}
         onClick={() => onOpenSource(row)}
-        style={sourceButton}
       >
         Nguồn
         <IcLink size={10} style={{ opacity: 0.7 }} />
@@ -190,14 +190,17 @@ export default function CatalogTable(props: CatalogTableProps) {
   return (
     <div style={{ display: "flex", flexDirection: "column", minHeight: 0, flex: 1 }}>
       <div style={toolbarStyle}>
-        <input
-          type="search"
-          value={q}
-          onChange={(event) => onSearch(event.target.value)}
-          placeholder="Tìm không dấu theo tên, ký hiệu, số hiệu, mã…"
-          aria-label="Tìm trong danh mục"
-          style={searchInput}
-        />
+        <div style={searchWrap}>
+          <IcSearch size={15} style={{ color: COLOR.textMuted, flexShrink: 0 }} />
+          <input
+            type="search"
+            value={q}
+            onChange={(event) => onSearch(event.target.value)}
+            placeholder="Tìm không dấu theo tên, ký hiệu, số hiệu, mã…"
+            aria-label="Tìm trong danh mục"
+            style={searchInput}
+          />
+        </div>
         {showGroup && (
           <select value={group} onChange={(event) => onGroup(event.target.value)} aria-label="Lọc theo nhóm lĩnh vực" style={groupSelect}>
             <option value="">Mọi nhóm lĩnh vực</option>
@@ -219,11 +222,11 @@ export default function CatalogTable(props: CatalogTableProps) {
       )}
 
       <div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
-        <table role="table" style={{ width: "100%", borderCollapse: "collapse", fontSize: "12.5px" }}>
+        <table role="table" className={DATA_TABLE_CLASS} style={tableStyle}>
           <caption style={visuallyHidden}>
             {CATALOG_TABLE_TITLES[kind]}. Hạn KĐ/HC kế tiếp là giá trị ước tính từ chu kỳ và lần KĐ/HC gần nhất. Mỗi dòng có nút mở nguồn nguyên văn.
           </caption>
-          <thead style={{ position: "sticky", top: 0, zIndex: 2, background: COLOR.surfaceAlt }}>
+          <thead style={headRowStyle}>
             <tr>
               {headers.map((label) => (
                 <th key={label} scope="col" style={thStyle}>
@@ -235,13 +238,13 @@ export default function CatalogTable(props: CatalogTableProps) {
           <tbody>
             {loading && rows.length === 0 ? (
               <tr>
-                <td colSpan={headers.length} style={emptyTd}>
+                <td colSpan={headers.length} style={emptyCellStyle}>
                   Đang tải danh mục…
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={headers.length} style={emptyTd}>
+                <td colSpan={headers.length} style={emptyCellStyle}>
                   Không có dòng đã duyệt khớp bộ lọc.
                 </td>
               </tr>
@@ -269,14 +272,26 @@ const toolbarStyle: React.CSSProperties = {
   borderBottom: `1px solid ${COLOR.border}`,
   background: COLOR.surface,
 };
-const searchInput: React.CSSProperties = {
+const searchWrap: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 8,
   width: 380,
+  minWidth: 280,
   maxWidth: "100%",
   height: 32,
   padding: "0 10px",
   borderRadius: 8,
   border: `1px solid ${COLOR.border}`,
   background: COLOR.surface,
+};
+const searchInput: React.CSSProperties = {
+  flex: 1,
+  minWidth: 0,
+  height: "100%",
+  border: "none",
+  outline: "none",
+  background: "transparent",
   color: COLOR.textPrimary,
   fontSize: "12.5px",
   fontFamily: "inherit",
@@ -291,21 +306,8 @@ const groupSelect: React.CSSProperties = {
   fontSize: "12.5px",
   fontFamily: "inherit",
 };
-const thStyle: React.CSSProperties = {
-  textAlign: "left",
-  padding: "7px 9px",
-  borderBottom: `1px solid ${COLOR.border}`,
-  color: COLOR.textSecondary,
-  fontWeight: 700,
-  whiteSpace: "nowrap",
-};
-const tdStyle: React.CSSProperties = {
-  padding: "7px 9px",
-  borderBottom: `1px solid ${COLOR.surfaceAlt}`,
-  color: COLOR.textPrimary,
-  whiteSpace: "nowrap",
-};
-const numericStyle: React.CSSProperties = { fontVariantNumeric: "tabular-nums", color: COLOR.textPrimary };
+// Ô/sọc bảng dùng style chung; bảng danh mục cần chữ một dòng và chiều cao tự nhiên.
+const tdStyle: React.CSSProperties = { ...sharedTdStyle, height: "auto", whiteSpace: "nowrap" };
 const inheritedStyle: React.CSSProperties = { marginLeft: 3, fontSize: "9.5px", fontWeight: 700, color: COLOR.accentDark, cursor: "help" };
 const overdueBadge: React.CSSProperties = {
   marginLeft: 6,
@@ -326,32 +328,7 @@ const linkBadge: React.CSSProperties = {
   padding: "1px 7px",
   borderRadius: 9999,
 };
-const sourceButton: React.CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 4,
-  border: `1px solid ${COLOR.accentSoftBorder}`,
-  background: COLOR.accentSoft,
-  color: COLOR.accentDark,
-  borderRadius: 7,
-  padding: "1px 7px",
-  fontSize: "11.5px",
-  fontWeight: 700,
-  cursor: "pointer",
-};
 const captionStyle: React.CSSProperties = { fontSize: "11.5px", color: COLOR.textMuted };
-const alertStyle: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: 8,
-  padding: "8px 14px",
-  background: COLOR.dangerBg,
-  color: COLOR.danger,
-  borderBottom: `1px solid ${COLOR.dangerBorder}`,
-  fontSize: "12.5px",
-  fontWeight: 600,
-};
-const emptyTd: React.CSSProperties = { padding: "30px 12px", textAlign: "center", color: COLOR.textSecondary, fontSize: "13px" };
 const visuallyHidden: React.CSSProperties = {
   position: "absolute",
   width: 1,

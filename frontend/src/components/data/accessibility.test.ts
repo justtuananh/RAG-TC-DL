@@ -18,6 +18,13 @@ const NORMAL_TEXT: Array<[string, string, string]> = [
   ["Badge Không đạt", COLOR.textOnDark, COLOR.danger],
   ["Badge cảnh báo", COLOR.textOnDark, COLOR.warning],
   ["Chữ lỗi trên nền lỗi", COLOR.textOnDark, COLOR.danger],
+  ["Nhãn Còn hạn", COLOR.success, COLOR.successBg],
+  ["Nhãn Sắp hết hạn", COLOR.warning, COLOR.warningBg],
+  ["Nhãn Hết hạn", COLOR.danger, COLOR.dangerBg],
+  ["Mục sidebar đang chọn", COLOR.textOnDark, COLOR.accent],
+  ["Chữ phụ trên nền app", COLOR.textSecondary, COLOR.bg],
+  ["Nhãn sidebar nổi trên nền tối", COLOR.accentOnDark, COLOR.sidebarBg],
+  ["Chữ trên sidebar (nền tối)", COLOR.textOnDark, COLOR.sidebarBg],
 ];
 
 describe("Tương phản bảng màu tab Dữ liệu đạt WCAG AA", () => {

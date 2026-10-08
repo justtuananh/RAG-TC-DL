@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CatalogGroup, CatalogKind, CatalogRow } from "../../types";
 import { COLOR } from "../../theme";
-import { IcRefresh, IcTable } from "../common/icons";
+import { IcRefresh } from "../common/icons";
 import { fetchCatalogRows } from "../../services/dataApi";
-import { CATALOG_TAB_LABELS } from "./catalogFormat";
 import CatalogTable from "./CatalogTable";
 import CatalogSourceModal from "./CatalogSourceModal";
 
@@ -64,9 +63,6 @@ export default function CatalogsView({ kind }: { kind: CatalogKind }) {
   return (
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", background: COLOR.bg }}>
       <div style={barStyle}>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 7, fontWeight: 700, fontSize: "14px", color: COLOR.textPrimary }}>
-          <IcTable size={15} style={{ color: COLOR.accent }} /> {CATALOG_TAB_LABELS[kind]}
-        </span>
         <span className="tabular-nums" style={countBadge}>
           {total} dòng đã duyệt
         </span>
