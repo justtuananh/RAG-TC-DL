@@ -195,6 +195,19 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.pendingDeviceId, user]);
 
+  // Mở bảng hồ sơ đã lọc theo một QTKĐ khi được yêu cầu từ trang Hồ sơ QTKĐ.
+  useEffect(() => {
+    const procedureId = state.pendingRecordProcedureId;
+    if (procedureId == null || !user) return;
+    actions.clearPendingRecordProcedure();
+    setView("table");
+    setDataset("records");
+    setSelectedId(null);
+    setFilters({ ...DEFAULT_FILTERS, procedure_id: procedureId });
+    setOffset(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.pendingRecordProcedureId, user]);
+
   const doExport = async () => {
     if (exporting) return;
     setExporting(true);

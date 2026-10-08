@@ -161,7 +161,8 @@ def _split_step(label: str, section_ref: str | None) -> list[tuple[str, str | No
         names = [part.strip() for part in label.split(_PART_SEPARATOR)]
         if len(refs) == len(names) and all(_SECTION_REF_RE.match(ref) for ref in refs):
             return [(_BULLET_RE.sub("", name), ref) for name, ref in zip(names, refs, strict=True)]
-    return [(label, section_ref)]
+    # Gạch đầu dòng chỉ là dấu liệt kê của ô nguồn; cấp lùi đã thể hiện bằng số mục.
+    return [(_BULLET_RE.sub("", label), section_ref)]
 
 
 def _depth(section_ref: str | None) -> int:

@@ -23,6 +23,13 @@ const FIELD_LABEL: Record<string, string> = {
   measurement_count: "Số điểm đo",
   working_range: "Phạm vi đo",
   accuracy_class: "Cấp chính xác",
+  max_permissible_error: "Sai số cho phép lớn nhất",
+  calibration_interval: "Chu kỳ kiểm định",
+  env_condition: "Điều kiện môi trường",
+  inspection_step: "Phép kiểm định",
+  formula: "Công thức",
+  standard: "Phương tiện kiểm định",
+  term: "Thuật ngữ",
 };
 
 function fieldLabel(field: string | null | undefined): string {

@@ -221,6 +221,22 @@ def test_profile_step_kept_whole_when_parts_do_not_line_up(db):
     assert steps[-1]["section_ref"] == "6.4"
 
 
+def test_profile_step_drops_list_bullet_of_its_own_row(db):
+    session, ids = db
+    _add_fact(
+        session,
+        ids["procedure_id"],
+        "inspection_step",
+        "- Kiểm tra độ kín của hệ thống tạo môi trường áp suất",
+        "6.2.2",
+        condition=ALL_MODES,
+    )
+    session.commit()
+    step = profile.procedure_profile(session, ids["procedure_id"])["steps"][-1]
+    assert step["label"] == "Kiểm tra độ kín của hệ thống tạo môi trường áp suất"
+    assert step["depth"] == 1
+
+
 def test_profile_step_without_modes(db):
     session, ids = db
     _add_fact(session, ids["procedure_id"], "inspection_step", "Kiểm tra phụ", None)

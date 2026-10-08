@@ -2,18 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { AppState, AuditEntry, CatalogSampleRow, ExtractionData, ExtractionItem, ExtractionKind } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import { COLOR } from "../../theme";
-import {
-  IcAlert,
-  IcCheck,
-  IcClock,
-  IcFile,
-  IcFolder,
-  IcLock,
-  IcRefresh,
-  IcSearch,
-  IcShield,
-  IcX,
-} from "../common/icons";
+import { IcAlert, IcCheck, IcClock, IcFile, IcFolder, IcLock, IcRefresh, IcSearch, IcShield, IcX } from "../common/icons";
 import SourceExcerpt from "../common/SourceExcerpt";
 import { quotePreview } from "../common/quoteRows";
 import { recognitionLabel } from "../data/catalogFormat";
@@ -29,7 +18,7 @@ import {
 } from "../../services/reviewApi";
 import { AuthError } from "../../services/auth";
 
-// ── Tab "Tri thức": hàng đợi duyệt (Sprint 6) ─────────────────────────────────
+// ── Tab "Duyệt tri thức": hàng đợi duyệt (Sprint 6) ─────────────────────────────────
 // Bố cục: danh sách chờ duyệt bên trái, giá trị đã trích bên phải, nguyên văn mục
 // (đoạn trích tô sáng) ở dưới. Phím tắt: A duyệt, R từ chối, J/K (↑/↓) di chuyển.
 // Chỉ approver/admin dùng được; các vai trò khác thấy thông báo quyền.
@@ -164,7 +153,14 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
   const [draft, setDraft] = useState<Record<string, string>>({});
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const [docFilter, setDocFilter] = useState("");
+  // Mở từ trang Hồ sơ QTKĐ: lọc sẵn theo tài liệu của quy trình đó.
+  const [docFilter, setDocFilter] = useState(() => state.pendingReviewDocumentId ?? "");
+  useEffect(() => {
+    if (state.pendingReviewDocumentId == null) return;
+    setDocFilter(state.pendingReviewDocumentId);
+    actions.clearPendingReviewDocument();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.pendingReviewDocumentId]);
   const [kindFilter, setKindFilter] = useState("");
   const [confFilter, setConfFilter] = useState("");
 
@@ -205,10 +201,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
     let cancelled = false;
     (async () => {
       try {
-        const [item, entries] = await Promise.all([
-          fetchExtraction(selectedId),
-          fetchExtractionAudit(selectedId),
-        ]);
+        const [item, entries] = await Promise.all([fetchExtraction(selectedId), fetchExtractionAudit(selectedId)]);
         if (cancelled) return;
         setDetail(item);
         setDraft(draftFrom(item));
@@ -278,10 +271,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
       setError("Chưa sửa giá trị nào để duyệt.");
       return;
     }
-    await run(
-      () => editApproveExtraction(detail.id, edits as Partial<ExtractionData>),
-      "Đã sửa giá trị và duyệt.",
-    );
+    await run(() => editApproveExtraction(detail.id, edits as Partial<ExtractionData>), "Đã sửa giá trị và duyệt.");
   };
 
   const confirmReject = async () => {
@@ -312,10 +302,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
     const handler = (event: KeyboardEvent) => {
       if (!keyRef.current.canReview || rejectOpen) return;
       const target = event.target as HTMLElement | null;
-      if (
-        target &&
-        (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT" || target.isContentEditable)
-      ) {
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT" || target.isContentEditable)) {
         return;
       }
       if (event.metaKey || event.ctrlKey || event.altKey) return;
@@ -338,10 +325,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
     return () => window.removeEventListener("keydown", handler);
   }, [rejectOpen]);
 
-  const documents = useMemo(
-    () => [...state.documents].sort((a, b) => a.name.localeCompare(b.name)),
-    [state.documents],
-  );
+  const documents = useMemo(() => [...state.documents].sort((a, b) => a.name.localeCompare(b.name)), [state.documents]);
 
   // ── Chưa đăng nhập / thiếu quyền ──
   // Chưa biết phiên (đang gọi /api/auth/me) — giữ trống để không nháy màn "Cần đăng nhập".
@@ -376,7 +360,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
   const currentFields = fieldsFor(detail?.kind ?? null);
 
   return (
-    <main aria-label="Tri thức" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", background: COLOR.bg }}>
+    <main aria-label="Duyệt tri thức" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", background: COLOR.bg }}>
       {/* thanh lọc */}
       <div
         style={{
@@ -459,7 +443,18 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
 
       <div style={{ flex: 1, minHeight: 0, display: "flex", overflow: "hidden" }}>
         {/* danh sách chờ duyệt */}
-        <aside style={{ width: 360, flexShrink: 0, overflowY: "auto", borderRight: `1px solid ${COLOR.border}`, padding: 12, display: "flex", flexDirection: "column", gap: 8 }}>
+        <aside
+          style={{
+            width: 360,
+            flexShrink: 0,
+            overflowY: "auto",
+            borderRight: `1px solid ${COLOR.border}`,
+            padding: 12,
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
           {loading && items.length === 0 ? (
             <div style={emptyStyle}>Đang tải hàng đợi…</div>
           ) : items.length === 0 ? (
@@ -469,14 +464,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
               <div style={{ fontSize: "12.5px", color: COLOR.textSecondary, marginTop: 4 }}>Mọi dữ kiện đã được xử lý.</div>
             </div>
           ) : (
-            items.map((item) => (
-              <QueueRow
-                key={item.id}
-                item={item}
-                active={item.id === selectedId}
-                onClick={() => setSelectedId(item.id)}
-              />
-            ))
+            items.map((item) => <QueueRow key={item.id} item={item} active={item.id === selectedId} onClick={() => setSelectedId(item.id)} />)
           )}
         </aside>
 
@@ -517,11 +505,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                             style={inputStyle}
                           />
                         ) : (
-                          <input
-                            value={draft[field.key] ?? ""}
-                            onChange={(e) => setDraft((d) => ({ ...d, [field.key]: e.target.value }))}
-                            style={inputStyle}
-                          />
+                          <input value={draft[field.key] ?? ""} onChange={(e) => setDraft((d) => ({ ...d, [field.key]: e.target.value }))} style={inputStyle} />
                         )}
                         {field.si && (
                           <span style={{ fontSize: "11.5px", color: COLOR.textMuted, minHeight: 16 }}>
@@ -617,8 +601,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                           {ACTION_LABEL[entry.action] ?? entry.action}
                         </span>
                         <span style={{ minWidth: 0 }}>
-                          <span style={{ fontWeight: 600, color: COLOR.textPrimary }}>{entry.actor_username ?? "hệ thống"}</span>{" "}
-                          · {formatTime(entry.at)}
+                          <span style={{ fontWeight: 600, color: COLOR.textPrimary }}>{entry.actor_username ?? "hệ thống"}</span> · {formatTime(entry.at)}
                           {describeChange(entry) && <div style={{ color: COLOR.textSecondary }}>{describeChange(entry)}</div>}
                         </span>
                       </li>
@@ -637,14 +620,21 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
           role="dialog"
           aria-modal="true"
           aria-label="Lý do từ chối"
-          style={{ position: "fixed", inset: 0, zIndex: 60, background: COLOR.overlayMedium, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 60,
+            background: COLOR.overlayMedium,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: 20,
+          }}
           onClick={() => setRejectOpen(false)}
         >
           <div style={{ ...panelStyle, width: 460, maxWidth: "100%", padding: 20 }} onClick={(e) => e.stopPropagation()}>
             <div style={{ fontWeight: 700, fontSize: "15px", color: COLOR.textPrimary, marginBottom: 6 }}>Từ chối dòng đã chọn</div>
-            <div style={{ fontSize: "12.5px", color: COLOR.textSecondary, marginBottom: 10 }}>
-              Lý do là bắt buộc và được lưu vào lịch sử duyệt.
-            </div>
+            <div style={{ fontSize: "12.5px", color: COLOR.textSecondary, marginBottom: 10 }}>Lý do là bắt buộc và được lưu vào lịch sử duyệt.</div>
             <textarea
               autoFocus
               value={rejectReason}
@@ -657,11 +647,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
               <button className={`${buttonBase} border border-line bg-white text-secondary`} onClick={() => setRejectOpen(false)}>
                 Hủy
               </button>
-              <button
-                className={`${buttonBase} border-none bg-error text-white hover:brightness-110`}
-                onClick={() => void confirmReject()}
-                disabled={busy}
-              >
+              <button className={`${buttonBase} border-none bg-error text-white hover:brightness-110`} onClick={() => void confirmReject()} disabled={busy}>
                 Xác nhận từ chối
               </button>
             </div>
@@ -726,7 +712,11 @@ function CatalogSummary({ data }: { data: ExtractionData | null }) {
           <thead style={{ background: COLOR.surfaceAlt }}>
             <tr>
               {columns.map((column) => (
-                <th key={column.key} scope="col" style={{ textAlign: "left", padding: "6px 9px", color: COLOR.textSecondary, fontWeight: 700, whiteSpace: "nowrap" }}>
+                <th
+                  key={column.key}
+                  scope="col"
+                  style={{ textAlign: "left", padding: "6px 9px", color: COLOR.textSecondary, fontWeight: 700, whiteSpace: "nowrap" }}
+                >
                   {column.label}
                 </th>
               ))}
@@ -755,11 +745,7 @@ function CatalogSummary({ data }: { data: ExtractionData | null }) {
 function QueueRow({ item, active, onClick }: { item: ExtractionItem; active: boolean; onClick: () => void }) {
   const label =
     item.data?.catalog_label ??
-    (item.data?.fact_kind
-      ? (FACT_KIND_LABEL[item.data.fact_kind] ?? item.data.fact_kind)
-      : item.kind
-        ? KIND_LABEL[item.kind]
-        : "—");
+    (item.data?.fact_kind ? (FACT_KIND_LABEL[item.data.fact_kind] ?? item.data.fact_kind) : item.kind ? KIND_LABEL[item.kind] : "—");
   return (
     <button
       onClick={onClick}
@@ -778,7 +764,9 @@ function QueueRow({ item, active, onClick }: { item: ExtractionItem; active: boo
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-        <span style={{ fontWeight: 700, fontSize: "12.5px", color: COLOR.textPrimary, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }}>
+        <span
+          style={{ fontWeight: 700, fontSize: "12.5px", color: COLOR.textPrimary, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flex: 1 }}
+        >
           {item.file_stem}
         </span>
         <ConfidenceBadge score={item.confidence} />
@@ -789,7 +777,9 @@ function QueueRow({ item, active, onClick }: { item: ExtractionItem; active: boo
           {item.section_path ?? "—"}
         </span>
       </div>
-      <div style={{ fontSize: "11.5px", color: COLOR.textSecondary, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+      <div
+        style={{ fontSize: "11.5px", color: COLOR.textSecondary, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}
+      >
         {quotePreview(item.quote)}
       </div>
     </button>
@@ -811,8 +801,19 @@ function ConfidenceBadge({ score }: { score: number }) {
 
 function CenteredNotice({ icon, title, body, action }: { icon: React.ReactNode; title: string; body: string; action?: React.ReactNode }) {
   return (
-    <main aria-label="Tri thức" style={{ flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center", background: COLOR.bg }}>
-      <div style={{ ...panelStyle, maxWidth: 420, padding: "28px 26px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+    <main aria-label="Duyệt tri thức" style={{ flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center", background: COLOR.bg }}>
+      <div
+        style={{
+          ...panelStyle,
+          maxWidth: 420,
+          padding: "28px 26px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 8,
+        }}
+      >
         {icon}
         <div style={{ fontWeight: 700, fontSize: "15px", color: COLOR.textPrimary }}>{title}</div>
         <div style={{ fontSize: "13px", color: COLOR.textSecondary, lineHeight: 1.55 }}>{body}</div>

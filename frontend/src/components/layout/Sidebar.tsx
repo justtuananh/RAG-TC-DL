@@ -3,7 +3,22 @@ import type { AppState, Conversation, ConvGroup, Tab } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import { groupOf } from "../../store/persistence";
 import { COLOR, SHADOW } from "../../theme";
-import { IcBrand, IcChevronLeft, IcChevronRight, IcDatabase, IcFile, IcHelp, IcMessage, IcPencil, IcPin, IcPlus, IcSearch, IcShield, IcTrash } from "../common/icons";
+import {
+  IcBook,
+  IcBrand,
+  IcChevronLeft,
+  IcChevronRight,
+  IcDatabase,
+  IcFile,
+  IcHelp,
+  IcMessage,
+  IcPencil,
+  IcPin,
+  IcPlus,
+  IcSearch,
+  IcShield,
+  IcTrash,
+} from "../common/icons";
 
 const NAV_KEY = "nav_collapsed";
 
@@ -18,7 +33,8 @@ function loadCollapsed(): boolean {
 const NAV_ITEMS: { tab: Tab; label: string; icon: (size: number) => React.ReactNode }[] = [
   { tab: "chat", label: "Trò chuyện", icon: (s) => <IcMessage size={s} /> },
   { tab: "docs", label: "Tài liệu", icon: (s) => <IcFile size={s} /> },
-  { tab: "knowledge", label: "Tri thức", icon: (s) => <IcShield size={s} /> },
+  { tab: "procedures", label: "Tri thức QTKĐ", icon: (s) => <IcBook size={s} /> },
+  { tab: "knowledge", label: "Duyệt tri thức", icon: (s) => <IcShield size={s} /> },
   { tab: "data", label: "Dữ liệu", icon: (s) => <IcDatabase size={s} /> },
   { tab: "guide", label: "Hướng dẫn", icon: (s) => <IcHelp size={s} /> },
 ];
@@ -148,7 +164,9 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
                 if (!active) e.currentTarget.style.background = "transparent";
               }}
             >
-              {active && <span aria-hidden style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, borderRadius: 9999, background: COLOR.accentOnDark }} />}
+              {active && (
+                <span aria-hidden style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, borderRadius: 9999, background: COLOR.accentOnDark }} />
+              )}
               <span style={{ flexShrink: 0, display: "flex", color: active ? COLOR.accentOnDark : "inherit" }}>{it.icon(17)}</span>
               {!collapsed && <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{it.label}</span>}
             </button>

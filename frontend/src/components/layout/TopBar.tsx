@@ -19,7 +19,8 @@ interface Props {
 const TAB_LABEL: Record<Tab, string> = {
   chat: "Trò chuyện",
   docs: "Tài liệu",
-  knowledge: "Tri thức",
+  procedures: "Tri thức QTKĐ",
+  knowledge: "Duyệt tri thức",
   data: "Dữ liệu",
   guide: "Hướng dẫn",
 };

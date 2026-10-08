@@ -73,6 +73,8 @@ function makeInitialState(): AppState {
     liveSources: [],
     streaming: false,
     pendingDeviceId: null,
+    pendingRecordProcedureId: null,
+    pendingReviewDocumentId: null,
     auth: {
       user: null,
       enabled: true,
@@ -122,6 +124,11 @@ export interface Actions {
   // ── Chat lai (Sprint 9): mở trang thiết bị từ bảng kết quả số liệu ──
   openDevice: (deviceId: number) => void;
   clearPendingDevice: () => void;
+  // ── Hồ sơ QTKĐ: mở tab Dữ liệu lọc theo QTKĐ ──
+  openProcedureRecords: (procedureId: number) => void;
+  clearPendingRecordProcedure: () => void;
+  openReview: (documentId: string | null) => void;
+  clearPendingReviewDocument: () => void;
   openLlmConfig: () => void;
   closeLlmConfig: () => void;
   setLlm: (field: keyof AppState["llm"], v: string) => void;
@@ -605,6 +612,10 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     // ── Chat lai (Sprint 9) ──
     openDevice: (deviceId) => set({ tab: "data", pendingDeviceId: deviceId }),
     clearPendingDevice: () => set({ pendingDeviceId: null }),
+    openProcedureRecords: (procedureId) => set({ tab: "data", pendingRecordProcedureId: procedureId }),
+    clearPendingRecordProcedure: () => set({ pendingRecordProcedureId: null }),
+    openReview: (documentId) => set({ tab: "knowledge", pendingReviewDocumentId: documentId }),
+    clearPendingReviewDocument: () => set({ pendingReviewDocumentId: null }),
     setLlm: (field, v) => set((s) => ({ llm: { ...s.llm, [field]: v } })),
     testLlm: () => {
       const l = stateRef.current.llm;

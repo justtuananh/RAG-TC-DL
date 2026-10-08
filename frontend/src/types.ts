@@ -1,6 +1,6 @@
 // ── Kiểu dữ liệu dùng chung — port 1:1 từ mockup `design/kiemdinh.html` ──
 
-export type Tab = "chat" | "docs" | "knowledge" | "data" | "guide";
+export type Tab = "chat" | "docs" | "procedures" | "knowledge" | "data" | "guide";
 
 export interface CiteChip {
   n: string; // "[1]"
@@ -661,4 +661,118 @@ export interface AppState {
   streaming: boolean; // đang nhận câu trả lời từ backend
   // ── Chat lai (Sprint 9): mở trang thiết bị trong tab Dữ liệu từ bảng kết quả ──
   pendingDeviceId: number | null;
+  // ── Hồ sơ QTKĐ: mở bảng hồ sơ kiểm định đã lọc theo một QTKĐ ──
+  pendingRecordProcedureId: number | null;
+  // ── Hồ sơ QTKĐ: mở hàng đợi duyệt đã lọc theo tài liệu của QTKĐ ──
+  pendingReviewDocumentId: string | null;
+}
+
+// ── Hồ sơ QTKĐ: tri thức ĐÃ DUYỆT của từng quy trình (/api/knowledge/procedures*) ──
+
+export interface ProcedureCounts {
+  facts: number;
+  standards: number;
+  terms: number;
+  records: number;
+}
+
+export interface ProcedureSummary {
+  id: number;
+  number: string;
+  year: number | null;
+  title: string | null;
+  edition: string | null;
+  device_type_name: string | null;
+  quantity_name: string | null;
+  has_document: boolean;
+  counts: ProcedureCounts;
+}
+
+export interface ProcedurePage {
+  items: ProcedureSummary[];
+  total: number;
+  limit: number;
+  offset: number;
+}
+
+/** Một dữ kiện đã duyệt; `value_text` là nguyên văn, mở nguồn bằng `id` (kind "fact"). */
+export interface ProcedureFact {
+  id: number;
+  extraction_id: number;
+  fact_kind: string;
+  label: string | null;
+  rel_op: string | null;
+  value_min: number | null;
+  value_max: number | null;
+  value_text: string | null;
+  condition_text: string | null;
+  unit_code: string | null;
+  section_path: string | null;
+}
+
+export type InspectionMode = "ban_dau" | "dinh_ky" | "sau_sua_chua";
+
+export interface ProcedureStep {
+  fact_id: number;
+  label: string;
+  section_ref: string | null;
+  depth: number;
+  modes: Record<InspectionMode, boolean>;
+}
+
+export interface ProcedureStandard {
+  id: number;
+  extraction_id: number;
+  ord: number | null;
+  name_vi: string;
+  range_text: string | null;
+  accuracy_text: string | null;
+  note: string | null;
+}
+
+export interface ProcedureTerm {
+  id: number;
+  extraction_id: number;
+  term_vi: string;
+  term_en: string | null;
+  definition: string | null;
+}
+
+export interface ProcedureRecentRecord {
+  id: number;
+  device_id: number | null;
+  serial_no: string | null;
+  device_type_name: string | null;
+  calibrated_at: string | null;
+  verdict: string | null;
+  mode: string | null;
+  cert_no: string | null;
+}
+
+export interface ProcedureProfile {
+  procedure: {
+    id: number;
+    number: string;
+    year: number | null;
+    title: string | null;
+    edition: string | null;
+    device_type_id: number | null;
+    device_type_name: string | null;
+    quantity_name: string | null;
+  };
+  document: { id: string; file_stem: string | null; display_name: string | null } | null;
+  parameters: { kind: string; label: string; items: ProcedureFact[] }[];
+  conditions: ProcedureFact[];
+  modes: { key: InspectionMode; label: string }[];
+  steps: ProcedureStep[];
+  formulas: ProcedureFact[];
+  standards: ProcedureStandard[];
+  terms: ProcedureTerm[];
+  records: {
+    total: number;
+    devices: number;
+    latest_at: string | null;
+    verdicts: { dat: number; khong_dat: number };
+    recent: ProcedureRecentRecord[];
+  };
 }

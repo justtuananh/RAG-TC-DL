@@ -20,6 +20,16 @@ function offsetTopIn(el: HTMLElement, container: HTMLElement) {
 export default function ChatColumn({ state, actions }: { state: AppState; actions: Actions }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLElement | null>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+
+  // Mở tab với câu hỏi điền sẵn (nút "Hỏi trợ lý" của Hồ sơ QTKĐ, bản nháp dở): đặt con
+  // trỏ ở cuối để gõ tiếp ngay. Chỉ chạy khi gắn khung, không giành focus khi đang gõ.
+  useEffect(() => {
+    const el = inputRef.current;
+    if (!el || !el.value) return;
+    el.focus();
+    el.setSelectionRange(el.value.length, el.value.length);
+  }, []);
   // Ngăn kéo xuất xứ cho các ô số trong bảng kết quả chat (Sprint 9, P1).
   const [provenanceRef, setProvenanceRef] = useState<DataCellRef | null>(null);
 
@@ -107,6 +117,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
       <div style={{ flexShrink: 0, borderTop: `1px solid ${COLOR.border}`, padding: "12px 18px 14px" }}>
         <div style={{ display: "flex", gap: 9, alignItems: "flex-end" }}>
           <textarea
+            ref={inputRef}
             value={state.input}
             onChange={(e) => actions.setInput(e.target.value)}
             onInput={(e) => {
