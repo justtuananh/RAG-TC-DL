@@ -74,7 +74,7 @@ def test_dieukien_k02_condition_comma_still_splits():
 
 
 def test_dieukien_tolerance_expands_to_bounds():
-    """"(23 ± 5) oC" là khoảng 18-28 oC: min/max là hai biên, không phải giá trị giữa."""
+    """Điều kiện "(23 ± 5) oC" là khoảng 18-28 oC: min/max là hai biên, không phải giá trị giữa."""
     md = (
         "# 4.1 Điều kiện kiểm định\n"
         "Nhiệt độ môi trường: (23 ± 5) oC;\n"

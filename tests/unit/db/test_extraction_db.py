@@ -120,7 +120,9 @@ def test_values_normalised_to_si_and_text_preserved(session, corpus_text):
         f for f in facts if f.fact_kind == "env_condition" and f.label == "Nhiệt độ môi trường"
     )
     assert temperature.value_text == "(20 ± 5) oC"
-    assert temperature.value_min == pytest.approx(293.15)
+    # (20 ± 5) oC → khoảng 15-25 oC theo kelvin.
+    assert temperature.value_min == pytest.approx(288.15)
+    assert temperature.value_max == pytest.approx(298.15)
 
 
 def test_unknown_unit_leaves_numbers_blank_and_lowers_confidence(session, corpus_text):
