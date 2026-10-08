@@ -18,6 +18,7 @@ import {
   type HistoryTurn,
 } from "../services/liveApi";
 import { loadConversations, saveConversations } from "./persistence";
+import { scopeQuestion } from "./scopeQuestion";
 import {
   AuthError,
   canWrite,
@@ -270,6 +271,10 @@ export function useAppStore(): { state: AppState; actions: Actions } {
             loginError: null,
             loginNotice: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để tiếp tục.",
           },
+          // Lối tắt đang chờ thuộc phiên vừa hết hạn (như khi đăng xuất).
+          pendingDeviceId: null,
+          pendingRecordProcedureId: null,
+          pendingReviewDocumentId: null,
         }));
       }),
     [],
@@ -409,9 +414,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     setInput: (v) => set({ input: v }),
     composeAbout: (prefix) =>
       set((s) => {
-        const draft = s.input.trim();
-        const input = !draft ? prefix : draft.startsWith(prefix.trim()) ? s.input : `${prefix}${draft}`;
-        return { tab: "chat", input, composerFocus: true };
+        return { tab: "chat", input: scopeQuestion(prefix, s.input), composerFocus: true };
       }),
     consumeComposerFocus: () => set({ composerFocus: false }),
     send,

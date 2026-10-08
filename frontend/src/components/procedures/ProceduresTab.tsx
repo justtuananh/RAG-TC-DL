@@ -35,6 +35,7 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
   const [listLoading, setListLoading] = useState(false);
   const [listError, setListError] = useState<string | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [loadMoreError, setLoadMoreError] = useState<string | null>(null);
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [profile, setProfile] = useState<ProcedureProfile | null>(null);
@@ -52,8 +53,11 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
   useEffect(() => {
     if (!user) return;
     const seq = ++listSeq.current;
+    // Đang chờ debounce cũng tính là đang tải: "Tải thêm" bị khoá cho tới khi trang 1 của
+    // từ khoá mới về, tránh nối trang của từ khoá mới vào danh sách cũ.
+    setListLoading(true);
+    setLoadMoreError(null);
     const timer = setTimeout(() => {
-      setListLoading(true);
       setListError(null);
       fetchProcedures({ q: query, limit: PAGE_SIZE })
         .then((page) => {
@@ -75,6 +79,7 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
   const loadMore = useCallback(() => {
     const seq = listSeq.current;
     setLoadingMore(true);
+    setLoadMoreError(null);
     fetchProcedures({ q: query, limit: PAGE_SIZE, offset: items.length })
       .then((page) => {
         if (seq !== listSeq.current) return; // từ khoá đã đổi: trang này thuộc kết quả cũ
@@ -85,7 +90,8 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
         setTotal(page.total);
       })
       .catch((e) => {
-        if (seq === listSeq.current) setListError(e instanceof Error ? e.message : "Không tải được danh sách QTKĐ.");
+        // Lỗi trang kế chỉ báo tại nút: phần danh sách đã tải vẫn giữ nguyên.
+        if (seq === listSeq.current) setLoadMoreError(e instanceof Error ? e.message : "Không tải thêm được.");
       })
       .finally(() => setLoadingMore(false));
   }, [query, items.length]);
@@ -185,6 +191,7 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
           query={query}
           loading={listLoading}
           loadingMore={loadingMore}
+          loadMoreError={loadMoreError}
           onLoadMore={loadMore}
           error={listError}
           selectedId={selectedId}

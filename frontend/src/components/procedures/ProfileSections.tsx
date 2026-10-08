@@ -247,7 +247,7 @@ export function TermsSection({ terms, onOpen }: { terms: ProcedureTerm[]; onOpen
         <dl style={{ margin: 0, display: "flex", flexDirection: "column" }}>
           {terms.map((term, index) => (
             <div key={term.id} style={{ display: "flex", gap: 14, padding: "12px 0", borderTop: index === 0 ? "none" : `1px solid ${COLOR.border}` }}>
-              <dt style={{ width: 220, flexShrink: 0, display: "flex", flexDirection: "column", gap: 2 }}>
+              <dt style={{ width: "clamp(140px, 28%, 220px)", flexShrink: 0, display: "flex", flexDirection: "column", gap: 2 }}>
                 <span style={{ fontSize: "13.5px", fontWeight: 700, color: COLOR.textPrimary }}>{term.term_vi}</span>
                 {term.term_en && <span style={{ fontSize: "12px", fontStyle: "italic", color: COLOR.textMuted }}>{term.term_en}</span>}
               </dt>

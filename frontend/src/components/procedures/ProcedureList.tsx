@@ -13,6 +13,7 @@ interface Props {
   query: string;
   loading: boolean;
   loadingMore: boolean;
+  loadMoreError: string | null;
   error: string | null;
   selectedId: number | null;
   onQuery: (value: string) => void;
@@ -77,13 +78,13 @@ const Row = memo(function Row({ item, active, onSelect }: { item: ProcedureSumma
   );
 });
 
-export default function ProcedureList({ items, total, query, loading, loadingMore, error, selectedId, onQuery, onSelect, onLoadMore }: Props) {
+export default function ProcedureList({ items, total, query, loading, loadingMore, loadMoreError, error, selectedId, onQuery, onSelect, onLoadMore }: Props) {
   const hasMore = items.length < total;
   return (
     <nav
       aria-label="Danh sách QTKĐ"
       style={{
-        width: 300,
+        width: "clamp(240px, 24vw, 300px)",
         flexShrink: 0,
         display: "flex",
         flexDirection: "column",
@@ -132,7 +133,7 @@ export default function ProcedureList({ items, total, query, loading, loadingMor
             type="button"
             className="profile-chip"
             onClick={onLoadMore}
-            disabled={loadingMore}
+            disabled={loadingMore || loading}
             style={{
               width: "100%",
               height: 34,
@@ -144,11 +145,16 @@ export default function ProcedureList({ items, total, query, loading, loadingMor
               fontSize: "12.5px",
               fontWeight: 600,
               fontFamily: "inherit",
-              cursor: loadingMore ? "progress" : "pointer",
+              cursor: loadingMore || loading ? "progress" : "pointer",
             }}
           >
             {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - items.length})`}
           </button>
+        )}
+        {loadMoreError && (
+          <p role="alert" style={{ margin: "6px 4px 0", fontSize: "12px", color: COLOR.danger }}>
+            {loadMoreError}
+          </p>
         )}
       </div>
     </nav>
