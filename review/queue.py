@@ -37,6 +37,7 @@ from db.models import (
     ProcedureFact,
     ProcedureStandard,
     Term,
+    Unit,
 )
 from catalogs.labels import kind_from_extractor, label_for
 
@@ -252,6 +253,25 @@ def build_source_view(file_stem: str | None, extraction: Extraction) -> dict:
     )
 
 
+def _unit_view(db: Session, kind: str | None, row: Any) -> dict | None:
+    """Đơn vị gốc + đơn vị SI của dữ kiện, chỉ để hiển thị.
+
+    ``value_min``/``value_max`` lưu theo SI (23 oC → 296.15 K), nên người duyệt cần
+    biết đơn vị SI để đọc hai ô đó và hệ số để đổi ngược về đơn vị gốc.
+    """
+    if kind != "fact" or row is None or row.unit_id is None:
+        return None
+    unit = db.get(Unit, row.unit_id)
+    if unit is None:
+        return None
+    return {
+        "code": unit.code,
+        "si_code": unit.quantity.si_unit_code if unit.quantity is not None else None,
+        "factor_to_si": unit.factor_to_si,
+        "offset_to_si": unit.offset_to_si,
+    }
+
+
 def serialize(db: Session, extraction: Extraction, *, with_source: bool = False) -> dict:
     """Chuyển một extraction + dòng dữ kiện thành dict cho API/UI."""
     kind, row = _data_row(db, extraction)
@@ -283,6 +303,7 @@ def serialize(db: Session, extraction: Extraction, *, with_source: bool = False)
             if kind == "catalog"
             else _data_snapshot(kind, row)
         ),
+        "unit": _unit_view(db, kind, row),
     }
     if with_source:
         item["source"] = build_source_view(file_stem, extraction)

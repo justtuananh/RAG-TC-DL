@@ -24,7 +24,9 @@ from db.models import (
     Procedure,
     ProcedureFact,
     ProcedureStandard,
+    Quantity,
     Term,
+    Unit,
     UserRole,
 )
 from db.views import create_approved_views
@@ -254,6 +256,44 @@ def test_list_queue_extractor_filter_and_pagination(session):
 
     page, _ = review.list_queue(session, extractor="rule:phamvi.v1", limit=1, offset=0)
     assert len(page) == 1 and page[0]["confidence"] == pytest.approx(0.4)
+
+
+def test_fact_unit_carries_original_and_si_codes(session):
+    """Người duyệt thấy hai ô SI kèm đơn vị: "(23 ± 5) oC" lưu 291.15-301.15 K."""
+    session.add(Quantity(id=2, code="temperature", name_vi="Nhiệt độ", si_unit_code="K"))
+    session.add(
+        Unit(
+            id=13,
+            code="°C",
+            name_vi="độ Celsius",
+            quantity_id=2,
+            factor_to_si=1.0,
+            offset_to_si=273.15,
+        )
+    )
+    extraction_id = _add_fact(
+        session,
+        fact_kind="env_condition",
+        value_text="(23 ± 5) oC",
+        value_min=291.15,
+        value_max=301.15,
+    )
+    session.query(ProcedureFact).filter_by(extraction_id=extraction_id).update({"unit_id": 13})
+    session.commit()
+
+    item = review.get_extraction(session, extraction_id)
+
+    assert item["unit"] == {
+        "code": "°C",
+        "si_code": "K",
+        "factor_to_si": 1.0,
+        "offset_to_si": 273.15,
+    }
+
+
+def test_fact_without_unit_has_no_unit(session):
+    extraction_id = _add_fact(session)
+    assert review.get_extraction(session, extraction_id)["unit"] is None
 
 
 def test_get_extraction_returns_source_and_404(session, monkeypatch):

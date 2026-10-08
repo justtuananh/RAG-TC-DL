@@ -17,6 +17,7 @@ import {
 import SourceExcerpt from "../common/SourceExcerpt";
 import { quotePreview } from "../common/quoteRows";
 import { recognitionLabel } from "../data/catalogFormat";
+import { originalUnitHint, siFieldLabel } from "./siUnit";
 import {
   approveExtraction,
   bulkApproveExtractions,
@@ -55,12 +56,14 @@ interface FieldDef {
   label: string;
   numeric?: boolean;
   multiline?: boolean;
+  /** Giá trị lưu theo SI: nhãn kèm đơn vị SI, dưới ô hiện giá trị theo đơn vị gốc. */
+  si?: boolean;
 }
 
 const FACT_FIELDS: FieldDef[] = [
   { key: "value_text", label: "Giá trị (nguyên văn)", multiline: true },
-  { key: "value_min", label: "Giá trị nhỏ nhất (SI)", numeric: true },
-  { key: "value_max", label: "Giá trị lớn nhất (SI)", numeric: true },
+  { key: "value_min", label: "Giá trị nhỏ nhất", numeric: true, si: true },
+  { key: "value_max", label: "Giá trị lớn nhất", numeric: true, si: true },
   { key: "condition_text", label: "Điều kiện kèm theo", multiline: true },
   { key: "label", label: "Nhãn" },
 ];
@@ -503,7 +506,9 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                   <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 10 }}>
                     {currentFields.map((field) => (
                       <label key={field.key} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        <span style={{ fontSize: "11px", fontWeight: 700, color: COLOR.textSecondary }}>{field.label}</span>
+                        <span style={{ fontSize: "11px", fontWeight: 700, color: COLOR.textSecondary }}>
+                          {field.si ? siFieldLabel(field.label, detail.unit) : field.label}
+                        </span>
                         {field.multiline ? (
                           <textarea
                             value={draft[field.key] ?? ""}
@@ -517,6 +522,11 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                             onChange={(e) => setDraft((d) => ({ ...d, [field.key]: e.target.value }))}
                             style={inputStyle}
                           />
+                        )}
+                        {field.si && (
+                          <span style={{ fontSize: "11.5px", color: COLOR.textMuted, minHeight: 16 }}>
+                            {originalUnitHint(draft[field.key] ?? "", detail.unit)}
+                          </span>
                         )}
                       </label>
                     ))}

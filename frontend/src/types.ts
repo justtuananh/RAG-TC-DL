@@ -303,7 +303,16 @@ export interface ExtractionItem {
   created_at: string | null;
   kind: ExtractionKind | null;
   data: ExtractionData | null;
+  /** Đơn vị gốc + đơn vị SI của dữ kiện (chỉ hiển thị); null khi không có đơn vị. */
+  unit?: ExtractionUnit | null;
   source?: ExtractionSource;
+}
+
+export interface ExtractionUnit {
+  code: string;
+  si_code: string | null;
+  factor_to_si: number;
+  offset_to_si: number;
 }
 
 export interface AuditEntry {
