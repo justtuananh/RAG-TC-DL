@@ -230,5 +230,17 @@
   [
    "GET"
   ]
+ ],
+ [
+  "/api/knowledge/procedures",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/knowledge/procedures/{procedure_id}",
+  [
+   "GET"
+  ]
  ]
 ]

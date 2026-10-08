@@ -365,6 +365,21 @@ _REFERENCE_VIEW_SQL: dict[str, str] = {
     ),
 }
 
+# ``v_procedure`` HIỆN HÀNH (migration 013): thêm tên tài liệu gốc để trang Hồ sơ
+# QTKĐ mở được tài liệu mà không chạm bảng ``document`` từ tầng ``query/``.
+_PROCEDURE_DOCUMENT_SQL: str = (
+    "CREATE VIEW v_procedure AS "
+    "SELECT p.id AS id, p.number AS number, p.year AS year, p.title AS title, "
+    "p.edition AS edition, p.document_id AS document_id, "
+    "doc.file_stem AS document_file_stem, doc.display_name AS document_name, "
+    "p.device_type_id AS device_type_id, dt.name_vi AS device_type_name, "
+    "dt.quantity_id AS quantity_id, q.name_vi AS quantity_name, q.code AS quantity_code "
+    "FROM procedure p "
+    "LEFT JOIN document doc ON doc.id = p.document_id "
+    "LEFT JOIN device_type dt ON dt.id = p.device_type_id "
+    "LEFT JOIN quantity q ON q.id = dt.quantity_id"
+)
+
 CREATE_VIEW_STATEMENTS: tuple[str, ...] = tuple(_VIEW_SQL[name] for name in APPROVED_VIEWS)
 DROP_VIEW_STATEMENTS: tuple[str, ...] = tuple(
     f"DROP VIEW IF EXISTS {name}" for name in APPROVED_VIEWS
@@ -512,6 +527,17 @@ def recreate_record_detail_views(connection, *, with_record_fields: bool = True)
         connection.execute(text(_MEASUREMENT_DETAIL_SQL))
 
 
+def recreate_procedure_view(connection, *, with_document: bool = True) -> None:
+    """Tạo lại ``v_procedure`` (migration 013/test).
+
+    ``with_document=True`` dùng định nghĩa hiện hành có tên tài liệu gốc; ``False``
+    khôi phục định nghĩa Sprint 9 khi downgrade.
+    """
+    connection.execute(text("DROP VIEW IF EXISTS v_procedure"))
+    sql = _PROCEDURE_DOCUMENT_SQL if with_document else _REFERENCE_VIEW_SQL["v_procedure"]
+    connection.execute(text(sql))
+
+
 def create_all_approved_views(connection) -> None:
     """Tạo toàn bộ view đã duyệt (tri thức + dữ liệu đo + tra cứu + tham chiếu)."""
     create_approved_views(connection)
@@ -524,6 +550,8 @@ def create_all_approved_views(connection) -> None:
     # Pha R: trường đầu mục + phạm vi đo của thiết bị + nguyên văn từng ô.
     create_field_views(connection)
     recreate_record_detail_views(connection)
+    # Migration 013: QTKĐ kèm tên tài liệu gốc.
+    recreate_procedure_view(connection)
 
 
 # `FROM`/`JOIN`/`INSERT INTO`/`UPDATE`/`DELETE FROM` theo sau là tên bảng gốc.

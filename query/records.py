@@ -65,7 +65,7 @@ class NotFoundError(QueryError):
     """Không tìm thấy bản ghi đã duyệt."""
 
 
-def _iso(value: Any) -> str | None:
+def iso_datetime(value: Any) -> str | None:
     """Chuẩn hóa ngày giờ về ISO cho JSON (SQLite trả chuỗi, Postgres trả datetime)."""
     if value is None:
         return None
@@ -252,7 +252,7 @@ def serialize_record(
     """
     record = _row_to_dict(row)
     for key in ("calibrated_at", "expires_at", "created_at"):
-        record[key] = _iso(record.get(key))
+        record[key] = iso_datetime(record.get(key))
     record["verdict_label"] = VERDICT_LABELS.get(record.get("verdict"), record.get("verdict"))
     record["mode_label"] = MODE_LABELS.get(record.get("mode"), record.get("mode"))
     record["within_limit"] = None  # cấp hồ sơ không có cờ này
@@ -284,7 +284,7 @@ def serialize_measurement(row: Any) -> dict[str, Any]:
     # Sprint M: đơn vị riêng của sai số; view cũ chưa có cột thì để trống, không lỗi.
     point.setdefault("error_unit_id", None)
     point.setdefault("error_unit_code", None)
-    point["calibrated_at"] = _iso(point.get("calibrated_at"))
+    point["calibrated_at"] = iso_datetime(point.get("calibrated_at"))
     point["within_limit"] = (
         None if point.get("within_limit") is None else bool(point["within_limit"])
     )
@@ -492,7 +492,7 @@ def list_devices(
     devices = []
     for row in rows:
         device = _row_to_dict(row)
-        device["last_calibrated_at"] = _iso(device.get("last_calibrated_at"))
+        device["last_calibrated_at"] = iso_datetime(device.get("last_calibrated_at"))
         devices.append(device)
     return devices, int(total)
 
@@ -537,7 +537,7 @@ def _build_trend(points: list[Any]) -> list[dict[str, Any]]:
             {
                 "record_id": row["record_id"],
                 "point_id": row["id"],
-                "calibrated_at": _iso(row["calibrated_at"]),
+                "calibrated_at": iso_datetime(row["calibrated_at"]),
                 "verdict": row["verdict"],
                 "verdict_label": VERDICT_LABELS.get(row["verdict"], row["verdict"]),
                 "cert_no": row["cert_no"],

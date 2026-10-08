@@ -20,6 +20,7 @@ Endpoints:
   Sprint 6 - hàng đợi duyệt (vai trò approver/admin): /api/extractions*
   Sprint 7 - nạp và đọc hồ sơ kiểm định: /api/records*
   Sprint 8 - tra cứu dữ liệu và danh mục NAS: /api/data/*
+  Hồ sơ QTKĐ - tri thức đã duyệt của từng quy trình: /api/knowledge/procedures*
 """
 
 from __future__ import annotations
@@ -30,12 +31,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import auth, chat, data, documents, extractions, records, system
+from api.routes import auth, chat, data, documents, extractions, knowledge, records, system
 from core.settings_loader import get_settings
 from core.startup import startup
 from vectorstore import qdrant
 
-_ROUTERS = (system, auth, chat, documents, extractions, records, data)
+_ROUTERS = (system, auth, chat, documents, extractions, records, data, knowledge)
 
 
 @asynccontextmanager
