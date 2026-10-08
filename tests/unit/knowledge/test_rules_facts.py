@@ -73,6 +73,27 @@ def test_dieukien_k02_condition_comma_still_splits():
     assert hits[0].condition_text == "không thay đổi quá 1 °C"
 
 
+def test_dieukien_tolerance_expands_to_bounds():
+    """"(23 ± 5) oC" là khoảng 18-28 oC: min/max là hai biên, không phải giá trị giữa."""
+    md = (
+        "# 4.1 Điều kiện kiểm định\n"
+        "Nhiệt độ môi trường: (23 ± 5) oC;\n"
+        "Áp suất khí quyển: (1000 ± 40) mbar;\n"
+    )
+    by_label = {hit.label: hit for hit in extract_dieukien(md)}
+    temperature = by_label["Nhiệt độ môi trường"]
+    assert temperature.rel_op == "±"
+    assert (temperature.value_min, temperature.value_max) == (18.0, 28.0)
+    pressure = by_label["Áp suất khí quyển"]
+    assert (pressure.value_min, pressure.value_max) == (960.0, 1040.0)
+
+
+def test_dieukien_decimal_tolerance_bounds():
+    md = "# 5.1 Điều kiện kiểm định\n- Nhiệt độ môi trường: (20,5 ± 2) °C;\n"
+    hit = extract_dieukien(md)[0]
+    assert (hit.value_min, hit.value_max) == (18.5, 22.5)
+
+
 def test_phuluc_a_k12_inner_heading_does_not_cut_section():
     """K12: heading con "(Quy định)" bên trong Phụ lục A không kết thúc mục."""
     md = "# Phụ lục A\n## (Quy định)\nMẪU BIÊN BẢN KIỂM ĐỊNH\nSố hiệu:\nNgày kiểm định:\n"

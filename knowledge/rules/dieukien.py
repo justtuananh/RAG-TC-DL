@@ -55,7 +55,12 @@ def _split_condition_text(expression: str) -> tuple[str, str | None]:
 
 
 def _parse_condition(expr: str) -> tuple[str | None, float | None, float | None, str | None]:
-    """(rel_op, value_min, value_max, unit) từ biểu thức điều kiện."""
+    """(rel_op, value_min, value_max, unit) từ biểu thức điều kiện.
+
+    Điều kiện "(23 ± 5) oC" là khoảng cho phép 18-28 oC: ``value_min``/``value_max``
+    giữ hai biên (giá trị giữa ∓ sai số), còn ``parse_quantity`` chỉ trả giá trị giữa
+    kèm ``plus``/``minus`` riêng. ``rel_op`` vẫn là ``±`` để giữ dạng nguyên văn.
+    """
     normalized = vnnum.normalize_spaces(expr)
     if _LE_RE.search(normalized):
         match = _LE_NUM_RE.search(normalized)
@@ -65,6 +70,10 @@ def _parse_condition(expr: str) -> tuple[str | None, float | None, float | None,
     parsed = vnnum.parse_quantity(expr)
     if parsed is None:
         return (None, None, None, None)
+    if parsed.rel_op == "±" and parsed.value_min is not None:
+        low = parsed.value_min - (parsed.minus or 0.0)
+        high = parsed.value_max + (parsed.plus or 0.0)
+        return ("±", low, high, parsed.unit)
     return (parsed.rel_op, parsed.value_min, parsed.value_max, parsed.unit)
 
 
