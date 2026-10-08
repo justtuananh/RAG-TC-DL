@@ -1,7 +1,7 @@
 import type { ProcedureProfile } from "../../types";
 import { COLOR } from "../../theme";
 import { IcFile, IcInfo, IcMessage, IcShield } from "../common/icons";
-import { knowledgeTotal, procedureCode } from "./profileFormat";
+import { PROFILE_SCROLL_ATTR, knowledgeTotal, procedureCode } from "./profileFormat";
 import { ConditionsSection, FormulasSection, ParametersSection, StandardsSection, TermsSection, type OpenProvenance } from "./ProfileSections";
 import RecordsSummary from "./RecordsSummary";
 import StepsMatrix from "./StepsMatrix";
@@ -18,10 +18,17 @@ export interface ProfileActions {
   onOpenReview: () => void;
 }
 
+/** Ngữ cảnh duyệt của người xem: quyền duyệt và số dòng của tài liệu đang chờ duyệt. */
+export interface ReviewInfo {
+  canReview: boolean;
+  /** null khi chưa đếm xong hoặc không đếm được. */
+  pending: number | null;
+  loading: boolean;
+}
+
 interface Props extends ProfileActions {
   profile: ProcedureProfile;
-  /** Số dòng tri thức của tài liệu này đang chờ duyệt; null khi người xem không có quyền duyệt. */
-  pendingCount: number | null;
+  review: ReviewInfo;
 }
 
 const actionButton: React.CSSProperties = {
@@ -104,8 +111,6 @@ function Header({ profile, onOpenDocument, onAsk }: { profile: ProcedureProfile;
   );
 }
 
-/** Đánh dấu vùng cuộn của hồ sơ; mục lục chỉ cuộn vùng này. */
-export const PROFILE_SCROLL_ATTR = "data-profile-scroll";
 const SECTION_GAP_PX = 16;
 
 /**
@@ -117,7 +122,8 @@ function scrollToSection(id: string) {
   const scroller = target?.closest<HTMLElement>(`[${PROFILE_SCROLL_ATTR}]`);
   if (!target || !scroller) return;
   const offset = target.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
-  scroller.scrollTo({ top: scroller.scrollTop + offset - SECTION_GAP_PX, behavior: "smooth" });
+  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  scroller.scrollTo({ top: scroller.scrollTop + offset - SECTION_GAP_PX, behavior: reduceMotion ? "auto" : "smooth" });
 }
 
 function SectionNav({ profile }: { profile: ProcedureProfile }) {
@@ -167,9 +173,15 @@ function SectionNav({ profile }: { profile: ProcedureProfile }) {
   );
 }
 
-function NoKnowledgeNotice({ pendingCount, onOpenReview }: { pendingCount: number | null; onOpenReview: () => void }) {
-  const canReview = pendingCount !== null;
-  const hasPending = canReview && pendingCount > 0;
+function reviewHint(review: ReviewInfo): string {
+  if (!review.canReview) return " Hãy liên hệ người duyệt để công bố tri thức của quy trình này.";
+  if (review.loading || review.pending === null) return "";
+  if (review.pending === 0) return " Tài liệu này không còn dòng nào chờ duyệt; hãy kiểm tra lại bước nạp tài liệu.";
+  return ` Tài liệu này đang có ${review.pending} dòng chờ duyệt.`;
+}
+
+function NoKnowledgeNotice({ review, onOpenReview }: { review: ReviewInfo; onOpenReview: () => void }) {
+  const hasPending = review.canReview && (review.pending ?? 0) > 0;
   return (
     <div
       role="status"
@@ -189,8 +201,7 @@ function NoKnowledgeNotice({ pendingCount, onOpenReview }: { pendingCount: numbe
         <span style={{ fontSize: "13px", color: COLOR.textSecondary, lineHeight: 1.55 }}>
           Hệ thống tự trích thông số, các phép kiểm định, phương tiện và thuật ngữ khi nạp tài liệu, nhưng chỉ hiển thị ở đây sau khi người duyệt đối chiếu từng
           dòng với nguyên văn.
-          {hasPending && ` Tài liệu này đang có ${pendingCount} dòng chờ duyệt.`}
-          {!canReview && " Hãy liên hệ người duyệt để công bố tri thức của quy trình này."}
+          {reviewHint(review)}
         </span>
       </div>
       {hasPending && (
@@ -207,16 +218,7 @@ function NoKnowledgeNotice({ pendingCount, onOpenReview }: { pendingCount: numbe
   );
 }
 
-export default function ProcedureProfileView({
-  profile,
-  pendingCount,
-  onOpenProvenance,
-  onOpenDocument,
-  onAsk,
-  onOpenDevice,
-  onOpenRecords,
-  onOpenReview,
-}: Props) {
+export default function ProcedureProfileView({ profile, review, onOpenProvenance, onOpenDocument, onAsk, onOpenDevice, onOpenRecords, onOpenReview }: Props) {
   const hasKnowledge = knowledgeTotal(profile) > 0;
   return (
     <article
@@ -224,7 +226,7 @@ export default function ProcedureProfileView({
       style={{ maxWidth: 1080, margin: "0 auto", padding: "24px 28px 40px", display: "flex", flexDirection: "column", gap: 16 }}
     >
       <Header profile={profile} onOpenDocument={onOpenDocument} onAsk={onAsk} />
-      {hasKnowledge ? <SectionNav profile={profile} /> : <NoKnowledgeNotice pendingCount={pendingCount} onOpenReview={onOpenReview} />}
+      {hasKnowledge ? <SectionNav profile={profile} /> : <NoKnowledgeNotice review={review} onOpenReview={onOpenReview} />}
       {hasKnowledge && (
         <>
           <ParametersSection parameters={profile.parameters} onOpen={onOpenProvenance} />

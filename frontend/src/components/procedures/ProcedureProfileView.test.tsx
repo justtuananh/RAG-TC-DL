@@ -1,7 +1,7 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import type { ProcedureFact, ProcedureProfile } from "../../types";
-import ProcedureProfileView from "./ProcedureProfileView";
+import ProcedureProfileView, { type ReviewInfo } from "./ProcedureProfileView";
 
 // Trang Hồ sơ QTKĐ: đủ khối khi có tri thức, thông báo rõ khi chưa duyệt gì, và mọi giá
 // trị nguyên văn đều là nút mở nguồn.
@@ -69,8 +69,10 @@ function makeProfile(overrides: Partial<ProcedureProfile> = {}): ProcedureProfil
 const noop = () => {};
 const handlers = { onOpenProvenance: noop, onOpenDocument: noop, onAsk: noop, onOpenDevice: noop, onOpenRecords: noop, onOpenReview: noop };
 
-function render(profile: ProcedureProfile, pendingCount: number | null = null): string {
-  return renderToStaticMarkup(<ProcedureProfileView profile={profile} pendingCount={pendingCount} {...handlers} />);
+const VIEWER: ReviewInfo = { canReview: false, pending: null, loading: false };
+
+function render(profile: ProcedureProfile, review: ReviewInfo = VIEWER): string {
+  return renderToStaticMarkup(<ProcedureProfileView profile={profile} review={review} {...handlers} />);
 }
 
 describe("ProcedureProfileView", () => {
@@ -95,8 +97,12 @@ describe("ProcedureProfileView", () => {
     const html = render(makeProfile());
     expect(html).toContain("Xác định độ chênh áp");
     expect(html).toContain("padding-left:32px");
-    expect(html.match(/Xem nguyên văn: Kiểm tra đo lường/g)).toHaveLength(1);
-    expect(html).not.toContain("Xem nguyên văn: Xác định độ chênh áp");
+    // Mọi dòng mở được nguồn, kể cả dòng con bóc từ ô gộp (cùng dữ kiện gốc).
+    expect(html).toContain("Xem nguyên văn: Xác định độ chênh áp");
+    expect(html.match(/data-prov-id/g)?.length ?? 0).toBeGreaterThan(0);
+    // Ô có dấu tích có chữ cho trình đọc màn hình; icon chỉ trang trí.
+    expect(html).toContain("Áp dụng khi kiểm định định kỳ");
+    expect(html).toMatch(/<svg[^>]*aria-hidden="true"/);
   });
 
   it("thuật ngữ hiện cả tên tiếng Anh và định nghĩa", () => {
@@ -113,15 +119,20 @@ describe("ProcedureProfileView", () => {
       standards: [],
       terms: [],
     });
-    const html = render(empty, 38);
+    const html = render(empty, { canReview: true, pending: 38, loading: false });
     expect(html).toContain("Chưa có tri thức nào của QTKĐ này được duyệt");
     expect(html).toContain("đang có 38 dòng chờ duyệt");
     expect(html).toContain("Mở hàng đợi duyệt");
     expect(html).not.toContain("Thông số kỹ thuật");
     // Người xem thường: không có nút duyệt, được hướng dẫn liên hệ người duyệt.
-    const viewer = render(empty, null);
+    const viewer = render(empty, VIEWER);
     expect(viewer).not.toContain("Mở hàng đợi duyệt");
     expect(viewer).toContain("liên hệ người duyệt");
+    // Người duyệt trong lúc đang đếm: không bảo "liên hệ người duyệt", chưa hiện nút.
+    const counting = render(empty, { canReview: true, pending: null, loading: true });
+    expect(counting).not.toContain("liên hệ người duyệt");
+    expect(counting).not.toContain("Mở hàng đợi duyệt");
+    expect(render(empty, { canReview: true, pending: 0, loading: false })).toContain("không còn dòng nào chờ duyệt");
   });
 
   it("tóm tắt biên bản theo quy trình", () => {

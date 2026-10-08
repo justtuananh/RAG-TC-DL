@@ -146,7 +146,7 @@ describe("RecordsTable — accessibility", () => {
 
   it("trạng thái đang tải có 8 dòng skeleton", () => {
     const html = render([], { loading: true });
-    expect((html.match(/aria-hidden="true"/g) ?? []).length).toBe(8);
+    expect((html.match(/<tr aria-hidden="true"/g) ?? []).length).toBe(8);
   });
 
   it("dòng Không đạt có vạch trái màu cảnh báo", () => {

@@ -53,3 +53,6 @@ export function cellLines(value: string | null | undefined): string[] {
         .filter(Boolean)
     : [];
 }
+
+/** Đánh dấu vùng cuộn của hồ sơ; mục lục chỉ cuộn vùng này. */
+export const PROFILE_SCROLL_ATTR = "data-profile-scroll";

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { ProcedureProfile } from "../../types";
+import type { InspectionMode, ProcedureProfile } from "../../types";
 import { COLOR, SHADOW } from "../../theme";
 import { IcCheck } from "../common/icons";
 import { tableStyle, thStyle } from "../data/tableStyles";
@@ -22,7 +22,7 @@ function ModeFilterControl({
 }) {
   return (
     <div
-      role="radiogroup"
+      role="group"
       aria-label="Lọc theo chế độ kiểm định"
       style={{ display: "inline-flex", padding: 3, borderRadius: 10, background: COLOR.surfaceMuted, gap: 2 }}
     >
@@ -32,8 +32,7 @@ function ModeFilterControl({
           <button
             key={option.key}
             type="button"
-            role="radio"
-            aria-checked={active}
+            aria-pressed={active}
             onClick={() => onChange(option.key)}
             style={{
               height: 28,
@@ -88,10 +87,9 @@ export default function StepsMatrix({ profile, onOpen }: { profile: ProcedurePro
             </thead>
             <tbody>
               {steps.map((step, index) => {
-                // Dòng con bóc từ cùng một ô gộp dùng chung một nguồn: chỉ hiện nút ở dòng đầu.
-                const sameSourceAsPrevious = index > 0 && steps[index - 1].fact_id === step.fact_id;
+                const applies = (key: InspectionMode) => step.modes[key];
                 return (
-                  <tr key={`${step.fact_id}-${step.section_ref ?? ""}-${step.label}`}>
+                  <tr key={`${step.fact_id}-${index}`}>
                     <td style={{ ...cell, color: COLOR.textSecondary }} className="tabular-nums">
                       {step.section_ref ?? ""}
                     </td>
@@ -100,22 +98,17 @@ export default function StepsMatrix({ profile, onOpen }: { profile: ProcedurePro
                     </td>
                     {profile.modes.map((column) => (
                       <td key={column.key} style={{ ...cell, textAlign: "center", background: column.key === mode ? COLOR.accentSoft : undefined }}>
-                        {step.modes[column.key] ? (
-                          <IcCheck
-                            size={16}
-                            strokeWidth={2.4}
-                            style={{ color: COLOR.accent, display: "inline-block", verticalAlign: "middle" }}
-                            aria-label={`Áp dụng khi kiểm định ${column.label.toLowerCase()}`}
-                          />
-                        ) : (
-                          <span className="sr-only">Không áp dụng khi kiểm định {column.label.toLowerCase()}</span>
+                        <span className="sr-only">
+                          {applies(column.key) ? "Áp dụng" : "Không áp dụng"} khi kiểm định {column.label.toLowerCase()}
+                        </span>
+                        {applies(column.key) && (
+                          <IcCheck size={16} strokeWidth={2.4} style={{ color: COLOR.accent, display: "inline-block", verticalAlign: "middle" }} />
                         )}
                       </td>
                     ))}
                     <td style={{ ...cell, textAlign: "right" }}>
-                      {!sameSourceAsPrevious && (
-                        <SourceButton cellRef={{ kind: "fact", id: step.fact_id, field: "inspection_step" }} label={step.label} onOpen={onOpen} />
-                      )}
+                      {/* Dòng con bóc từ một ô gộp mở cùng đoạn nguồn với dòng cha. */}
+                      <SourceButton cellRef={{ kind: "fact", id: step.fact_id, field: "inspection_step" }} label={step.label} onOpen={onOpen} />
                     </td>
                   </tr>
                 );

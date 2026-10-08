@@ -75,6 +75,7 @@ function makeInitialState(): AppState {
     pendingDeviceId: null,
     pendingRecordProcedureId: null,
     pendingReviewDocumentId: null,
+    composerFocus: false,
     auth: {
       user: null,
       enabled: true,
@@ -90,6 +91,9 @@ function makeInitialState(): AppState {
 export interface Actions {
   go: (tab: AppState["tab"]) => void;
   setInput: (v: string) => void;
+  /** Mở Trò chuyện với câu hỏi mở đầu bằng `prefix`, giữ bản nháp đang soạn, focus ô nhập. */
+  composeAbout: (prefix: string) => void;
+  consumeComposerFocus: () => void;
   send: (text?: string) => void;
   regenerate: () => void;
   copyAnswer: (text: string) => void;
@@ -403,6 +407,13 @@ export function useAppStore(): { state: AppState; actions: Actions } {
   const actions: Actions = {
     go: (tab) => set({ tab }),
     setInput: (v) => set({ input: v }),
+    composeAbout: (prefix) =>
+      set((s) => {
+        const draft = s.input.trim();
+        const input = !draft ? prefix : draft.startsWith(prefix.trim()) ? s.input : `${prefix}${draft}`;
+        return { tab: "chat", input, composerFocus: true };
+      }),
+    consumeComposerFocus: () => set({ composerFocus: false }),
     send,
     regenerate: () => {
       const msgs = stateRef.current.messages;
@@ -668,7 +679,13 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     logout: () => {
       pendingWriteRef.current = null;
       void apiLogout(); // best-effort: token client luôn bị xoá trong service
-      set((s) => ({ auth: { ...s.auth, user: null, loginOpen: false, loginNotice: null, loginError: null } }));
+      // Lối tắt đang chờ (mở hồ sơ, lọc hàng đợi) thuộc phiên cũ: bỏ để không áp nhầm phiên sau.
+      set((s) => ({
+        auth: { ...s.auth, user: null, loginOpen: false, loginNotice: null, loginError: null },
+        pendingDeviceId: null,
+        pendingRecordProcedureId: null,
+        pendingReviewDocumentId: null,
+      }));
       showToast("Đã đăng xuất");
     },
   };

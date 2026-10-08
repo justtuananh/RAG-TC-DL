@@ -7,13 +7,14 @@ import { COLOR } from "../../theme";
 import { IcBook, IcLock } from "../common/icons";
 import ProvenanceDrawer from "../data/ProvenanceDrawer";
 import ProcedureList from "./ProcedureList";
-import ProcedureProfileView, { PROFILE_SCROLL_ATTR } from "./ProcedureProfileView";
-import { procedureCode } from "./profileFormat";
+import ProcedureProfileView, { type ReviewInfo } from "./ProcedureProfileView";
+import { PROFILE_SCROLL_ATTR, procedureCode } from "./profileFormat";
 
 // Tab "Tri thức QTKĐ": mỗi quy trình kiểm định là một hồ sơ có cấu trúc, ghép từ tri thức
 // ĐÃ DUYỆT (P3). Mọi giá trị mở được nguyên văn (P1). Cần đăng nhập (mọi vai trò đọc).
 
-const LIST_LIMIT = 200;
+// Trang danh sách; "Tải thêm" nối trang kế (kho có thể tới hàng nghìn QTKĐ).
+const PAGE_SIZE = 50;
 const SEARCH_DEBOUNCE_MS = 220;
 
 function documentItem(state: AppState, document: NonNullable<ProcedureProfile["document"]>): DocItem {
@@ -33,30 +34,33 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
   const [total, setTotal] = useState(0);
   const [listLoading, setListLoading] = useState(false);
   const [listError, setListError] = useState<string | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [profile, setProfile] = useState<ProcedureProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
   const [profileError, setProfileError] = useState<string | null>(null);
   const [pendingCount, setPendingCount] = useState<number | null>(null);
+  const [pendingLoading, setPendingLoading] = useState(false);
   const [provenanceRef, setProvenanceRef] = useState<DataCellRef | null>(null);
 
   const listSeq = useRef(0);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  // Danh sách QTKĐ: tìm kiếm debounce nhẹ; giữ lựa chọn nếu vẫn còn trong kết quả.
+  // Danh sách QTKĐ: tìm kiếm debounce nhẹ. Chỉ tự chọn QTKĐ đầu tiên khi chưa chọn gì:
+  // gõ tìm kiếm không được đổi hồ sơ người dùng đang đọc.
   useEffect(() => {
     if (!user) return;
     const seq = ++listSeq.current;
     const timer = setTimeout(() => {
       setListLoading(true);
       setListError(null);
-      fetchProcedures({ q: query, limit: LIST_LIMIT })
+      fetchProcedures({ q: query, limit: PAGE_SIZE })
         .then((page) => {
           if (seq !== listSeq.current) return;
           setItems(page.items);
           setTotal(page.total);
-          setSelectedId((prev) => (prev != null && page.items.some((item) => item.id === prev) ? prev : (page.items[0]?.id ?? null)));
+          setSelectedId((prev) => prev ?? page.items[0]?.id ?? null);
         })
         .catch((e) => {
           if (seq === listSeq.current) setListError(e instanceof Error ? e.message : "Không tải được danh sách QTKĐ.");
@@ -68,10 +72,30 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
     return () => clearTimeout(timer);
   }, [user, query]);
 
+  const loadMore = useCallback(() => {
+    const seq = listSeq.current;
+    setLoadingMore(true);
+    fetchProcedures({ q: query, limit: PAGE_SIZE, offset: items.length })
+      .then((page) => {
+        if (seq !== listSeq.current) return; // từ khoá đã đổi: trang này thuộc kết quả cũ
+        setItems((prev) => {
+          const known = new Set(prev.map((item) => item.id));
+          return [...prev, ...page.items.filter((item) => !known.has(item.id))];
+        });
+        setTotal(page.total);
+      })
+      .catch((e) => {
+        if (seq === listSeq.current) setListError(e instanceof Error ? e.message : "Không tải được danh sách QTKĐ.");
+      })
+      .finally(() => setLoadingMore(false));
+  }, [query, items.length]);
+
   // Hồ sơ của QTKĐ đang chọn.
   useEffect(() => {
     if (selectedId == null) {
       setProfile(null);
+      setProfileLoading(false);
+      setProfileError(null);
       return;
     }
     let cancelled = false;
@@ -98,14 +122,19 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
   const documentId = profile?.document?.id ?? null;
   useEffect(() => {
     setPendingCount(null);
+    setPendingLoading(false);
     if (!canReview || !documentId) return;
     let cancelled = false;
+    setPendingLoading(true);
     fetchExtractionQueue({ document_id: documentId, limit: 1 })
       .then((page) => {
         if (!cancelled) setPendingCount(page.total);
       })
       .catch(() => {
         if (!cancelled) setPendingCount(null);
+      })
+      .finally(() => {
+        if (!cancelled) setPendingLoading(false);
       });
     return () => {
       cancelled = true;
@@ -117,10 +146,10 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
   }, [actions, profile, state]);
 
   const ask = useCallback(() => {
-    if (!profile) return;
-    actions.go("chat");
-    actions.setInput(`Theo ${procedureCode(profile.procedure)}, `);
+    if (profile) actions.composeAbout(`Theo ${procedureCode(profile.procedure)}, `);
   }, [actions, profile]);
+
+  const review: ReviewInfo = { canReview, pending: pendingCount, loading: pendingLoading };
 
   // Chưa biết phiên (đang gọi /api/auth/me): giữ trống để không nháy màn "Cần đăng nhập".
   if (!user && !state.auth.restoreDone) return <main aria-label="Tri thức QTKĐ" style={centered} />;
@@ -155,6 +184,8 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
           total={total}
           query={query}
           loading={listLoading}
+          loadingMore={loadingMore}
+          onLoadMore={loadMore}
           error={listError}
           selectedId={selectedId}
           onQuery={setQuery}
@@ -168,8 +199,9 @@ export default function ProceduresTab({ state, actions }: { state: AppState; act
           ) : profile ? (
             <div style={{ opacity: profileLoading ? 0.6 : 1, transition: "opacity .15s ease" }}>
               <ProcedureProfileView
+                key={profile.procedure.id}
                 profile={profile}
-                pendingCount={pendingCount}
+                review={review}
                 onOpenProvenance={setProvenanceRef}
                 onOpenDocument={openDocument}
                 onAsk={ask}

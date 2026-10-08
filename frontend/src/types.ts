@@ -665,6 +665,8 @@ export interface AppState {
   pendingRecordProcedureId: number | null;
   // ── Hồ sơ QTKĐ: mở hàng đợi duyệt đã lọc theo tài liệu của QTKĐ ──
   pendingReviewDocumentId: string | null;
+  // Ô soạn câu hỏi cần nhận focus khi tab Trò chuyện hiện ra (nút "Hỏi trợ lý").
+  composerFocus: boolean;
 }
 
 // ── Hồ sơ QTKĐ: tri thức ĐÃ DUYỆT của từng quy trình (/api/knowledge/procedures*) ──

@@ -388,6 +388,8 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
 
         <select value={docFilter} onChange={(e) => setDocFilter(e.target.value)} style={selectStyle} aria-label="Lọc theo tài liệu">
           <option value="">Tất cả tài liệu</option>
+          {/* Bộ lọc đặt từ trang khác (Hồ sơ QTKĐ) có thể chưa nằm trong danh sách đã tải: vẫn hiện để thấy và bỏ được. */}
+          {docFilter && !documents.some((doc) => doc.id === docFilter) && <option value={docFilter}>{docFilter}</option>}
           {documents.map((doc) => (
             <option key={doc.id} value={doc.id}>
               {doc.name}

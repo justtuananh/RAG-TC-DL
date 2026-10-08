@@ -17,19 +17,31 @@ function offsetTopIn(el: HTMLElement, container: HTMLElement) {
   return y;
 }
 
+const COMPOSER_MIN_PX = 46;
+const COMPOSER_MAX_PX = 130;
+
+/** Ô nhập cao theo nội dung, trong khoảng [46, 130] px. */
+function autoGrow(el: HTMLTextAreaElement) {
+  el.style.height = `${COMPOSER_MIN_PX}px`;
+  el.style.height = `${Math.min(el.scrollHeight, COMPOSER_MAX_PX)}px`;
+}
+
 export default function ChatColumn({ state, actions }: { state: AppState; actions: Actions }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLElement | null>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Mở tab với câu hỏi điền sẵn (nút "Hỏi trợ lý" của Hồ sơ QTKĐ, bản nháp dở): đặt con
-  // trỏ ở cuối để gõ tiếp ngay. Chỉ chạy khi gắn khung, không giành focus khi đang gõ.
+  // Câu hỏi soạn sẵn từ nơi khác (nút "Hỏi trợ lý" của Hồ sơ QTKĐ): giãn ô theo nội dung,
+  // focus và đặt con trỏ ở cuối để gõ tiếp. Chỉ khi được yêu cầu, không giành focus khi đổi tab.
   useEffect(() => {
     const el = inputRef.current;
-    if (!el || !el.value) return;
+    if (!state.composerFocus || !el) return;
+    actions.consumeComposerFocus();
+    autoGrow(el);
     el.focus();
     el.setSelectionRange(el.value.length, el.value.length);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.composerFocus]);
   // Ngăn kéo xuất xứ cho các ô số trong bảng kết quả chat (Sprint 9, P1).
   const [provenanceRef, setProvenanceRef] = useState<DataCellRef | null>(null);
 
@@ -120,11 +132,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
             ref={inputRef}
             value={state.input}
             onChange={(e) => actions.setInput(e.target.value)}
-            onInput={(e) => {
-              const el = e.currentTarget;
-              el.style.height = "46px";
-              el.style.height = `${Math.min(el.scrollHeight, 130)}px`;
-            }}
+            onInput={(e) => autoGrow(e.currentTarget)}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();

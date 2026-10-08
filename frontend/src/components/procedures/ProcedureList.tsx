@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { ProcedureSummary } from "../../types";
 import { COLOR } from "../../theme";
 import { IcSearch } from "../common/icons";
@@ -11,17 +12,20 @@ interface Props {
   total: number;
   query: string;
   loading: boolean;
+  loadingMore: boolean;
   error: string | null;
   selectedId: number | null;
   onQuery: (value: string) => void;
   onSelect: (id: number) => void;
+  onLoadMore: () => void;
 }
 
 function knowledgeCount(item: ProcedureSummary): number {
   return item.counts.facts + item.counts.standards + item.counts.terms;
 }
 
-function Row({ item, active, onSelect }: { item: ProcedureSummary; active: boolean; onSelect: (id: number) => void }) {
+// memo: đổi trạng thái hồ sơ bên phải không vẽ lại cả danh sách (onSelect ổn định).
+const Row = memo(function Row({ item, active, onSelect }: { item: ProcedureSummary; active: boolean; onSelect: (id: number) => void }) {
   const knowledge = knowledgeCount(item);
   return (
     <li>
@@ -71,9 +75,10 @@ function Row({ item, active, onSelect }: { item: ProcedureSummary; active: boole
       </button>
     </li>
   );
-}
+});
 
-export default function ProcedureList({ items, total, query, loading, error, selectedId, onQuery, onSelect }: Props) {
+export default function ProcedureList({ items, total, query, loading, loadingMore, error, selectedId, onQuery, onSelect, onLoadMore }: Props) {
+  const hasMore = items.length < total;
   return (
     <nav
       aria-label="Danh sách QTKĐ"
@@ -103,7 +108,7 @@ export default function ProcedureList({ items, total, query, loading, error, sel
           />
         </label>
         <span className="tabular-nums" style={{ fontSize: "11.5px", color: COLOR.textMuted }}>
-          {loading ? "Đang tải…" : `${total} quy trình`}
+          {loading ? "Đang tải…" : hasMore ? `Hiển thị ${items.length} / ${total} quy trình` : `${total} quy trình`}
         </span>
       </div>
       <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: "0 8px 12px" }}>
@@ -121,6 +126,29 @@ export default function ProcedureList({ items, total, query, loading, error, sel
               <Row key={item.id} item={item} active={item.id === selectedId} onSelect={onSelect} />
             ))}
           </ul>
+        )}
+        {hasMore && !error && (
+          <button
+            type="button"
+            className="profile-chip"
+            onClick={onLoadMore}
+            disabled={loadingMore}
+            style={{
+              width: "100%",
+              height: 34,
+              marginTop: 8,
+              border: `1px solid ${COLOR.border}`,
+              borderRadius: 10,
+              background: COLOR.surface,
+              color: COLOR.textSecondary,
+              fontSize: "12.5px",
+              fontWeight: 600,
+              fontFamily: "inherit",
+              cursor: loadingMore ? "progress" : "pointer",
+            }}
+          >
+            {loadingMore ? "Đang tải…" : `Tải thêm (còn ${total - items.length})`}
+          </button>
         )}
       </div>
     </nav>

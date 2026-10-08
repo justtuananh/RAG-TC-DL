@@ -23,6 +23,9 @@ function Svg({ size = 16, strokeWidth = 2, fill = "none", className, style, chil
       strokeLinejoin="round"
       className={className}
       style={style}
+      // Icon chỉ để trang trí: nghĩa nằm ở chữ / aria-label của phần tử chứa nó.
+      aria-hidden="true"
+      focusable="false"
     >
       {children}
     </svg>
