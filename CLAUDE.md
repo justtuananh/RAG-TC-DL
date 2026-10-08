@@ -178,6 +178,12 @@ A lower layer never imports a higher one;
   cell grid around the row located by `query/sheet_locate.py` (`source_location`).
   `frontend-legacy/` is the earlier plain-JS React prototype, kept for reference. Quick local
   run of the api + Vite together: `./run.sh`. See `frontend/README.md`.
+- **Hồ sơ QTKĐ** (tab "Tri thức QTKĐ", `frontend/src/components/procedures/`) is where the extracted knowledge becomes visible.
+  `query/procedure_profile.py` assembles one procedure from the approved views only: parameters, test conditions, the Bảng 1 step matrix (merged "A / - B" cells split back into their source rows, modes from `condition_text`), Bảng 2 standards, formulas, terms, and a ledger summary.
+  It is served by `GET /api/knowledge/procedures` (accent-insensitive search; counts are computed for the current page only) and `GET /api/knowledge/procedures/{id}` (`api/routes/knowledge.py`).
+  Every value opens its source through `/api/data/provenance`: facts by `fact_id`, standards and terms by `extraction_id`.
+  Migration 013 adds `document_file_stem` / `document_name` to `v_procedure`.
+  Nothing appears on the page until a reviewer approves it in the "Duyệt tri thức" tab (the review queue, formerly "Tri thức").
 - `core/latex.py` - shared `fix_latex` normalizer (strip backticks around `$…$`; `\[…\]`/`\(…\)` →
   `$$…$$`/`$…$`; collapse `\\` → `\`) imported by **both** `ui/gradio_app.py` and the `api/`
   package (was duplicated); mirrored in the frontend as `liveApi.fixLatex`.
