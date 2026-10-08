@@ -85,6 +85,7 @@ export default function RecordRow({
               onOpenDevice(row);
             }}
             aria-label={`Xem lịch sử thiết bị ${row.serial_no ?? "(không số hiệu)"}`}
+            className="serial-link"
             style={serialButton}
           >
             {row.serial_no ?? "(không số hiệu)"}
@@ -99,13 +100,7 @@ export default function RecordRow({
             {row.device_type_name ?? "—"}
           </span>
           <span style={sublineStyle}>
-            {row.quantity_name ?? "—"}
-            {row.procedure_number ? (
-              <>
-                {" · "}
-                <span style={qtdkChip}>QTKĐ {row.procedure_number}</span>
-              </>
-            ) : null}
+            {[row.quantity_name, row.procedure_number ? `QTKĐ ${row.procedure_number}` : null].filter(Boolean).join(" · ") || "—"}
           </span>
         </div>
       </td>
@@ -169,42 +164,38 @@ const serialButton: React.CSSProperties = {
   background: "transparent",
   padding: 0,
   textAlign: "left",
-  color: COLOR.accentDark,
-  fontWeight: 700,
-  fontSize: "12.5px",
+  color: COLOR.textPrimary,
+  fontWeight: 600,
+  fontSize: "13.5px",
   cursor: "pointer",
-  textDecoration: "underline dotted",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
 const ellipsisStrong: React.CSSProperties = {
-  fontWeight: 600,
-  fontSize: "12.5px",
+  fontWeight: 500,
+  fontSize: "13.5px",
   whiteSpace: "nowrap",
   overflow: "hidden",
   textOverflow: "ellipsis",
 };
-const qtdkChip: React.CSSProperties = {
-  display: "inline-block",
-  background: COLOR.neutralBg,
-  color: COLOR.textSecondary,
-  border: `1px solid ${COLOR.neutralBorder}`,
+const verdictBadge: React.CSSProperties = { fontSize: "12px", fontWeight: 600, padding: "3px 10px", borderRadius: 9999, whiteSpace: "nowrap" };
+// Luôn nằm dưới ngày hết hiệu lực (không lúc cùng dòng lúc xuống dòng theo bề rộng cột).
+const statusBadge: React.CSSProperties = {
+  alignSelf: "flex-start",
+  fontSize: "11.5px",
+  fontWeight: 600,
+  padding: "1px 8px",
   borderRadius: 9999,
-  padding: "0 6px",
-  fontSize: "10.5px",
-  fontWeight: 700,
-  verticalAlign: "baseline",
+  whiteSpace: "nowrap",
 };
-const verdictBadge: React.CSSProperties = { fontSize: "11px", fontWeight: 700, padding: "2px 8px", borderRadius: 9999, whiteSpace: "nowrap" };
-const statusBadge: React.CSSProperties = { alignSelf: "flex-start", fontSize: "10.5px", fontWeight: 700, padding: "1px 7px", borderRadius: 9999, whiteSpace: "nowrap" };
 const detailButton: React.CSSProperties = {
-  width: 26,
-  height: 26,
-  borderRadius: 7,
-  border: `1px solid ${COLOR.border}`,
-  background: COLOR.surface,
-  color: COLOR.textSecondary,
+  width: 28,
+  height: 28,
+  borderRadius: 8,
+  border: "none",
+  background: "transparent",
+  color: COLOR.textMuted,
   cursor: "pointer",
   display: "inline-flex",
   alignItems: "center",

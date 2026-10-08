@@ -2,12 +2,7 @@ import type { CatalogKind, CatalogRow } from "../../types";
 
 // Nhãn và định dạng hiển thị cho bảng danh mục NAS (Pha D1).
 
-export const CATALOG_KINDS: CatalogKind[] = [
-  "lab_standard",
-  "inspector",
-  "procedure_catalog",
-  "capability",
-];
+export const CATALOG_KINDS: CatalogKind[] = ["lab_standard", "inspector", "procedure_catalog", "capability"];
 
 export const CATALOG_TAB_LABELS: Record<CatalogKind, string> = {
   lab_standard: "Chuẩn mẫu",

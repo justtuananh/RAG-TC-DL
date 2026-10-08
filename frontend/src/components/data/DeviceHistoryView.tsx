@@ -7,13 +7,7 @@ import { PROV_CELL_CLASS } from "./tableStyles";
 
 // Trang thiết bị: định danh, dòng thời gian kiểm định, biểu đồ diễn biến sai số.
 
-function TimelineItem({
-  record,
-  onOpenProvenance,
-}: {
-  record: DeviceHistoryRecord;
-  onOpenProvenance: (ref: DataCellRef) => void;
-}) {
+function TimelineItem({ record, onOpenProvenance }: { record: DeviceHistoryRecord; onOpenProvenance: (ref: DataCellRef) => void }) {
   const tone = verdictTone(record.verdict, record.verdict_label);
   const dateRef = record.provenance.find((cell) => cell.field === "calibrated_at") ?? null;
   return (
@@ -38,12 +32,8 @@ function TimelineItem({
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-          <span style={{ fontWeight: 700, fontSize: "13px", color: COLOR.textPrimary }}>
-            QTKĐ {record.procedure_number ?? "—"}
-          </span>
-          <span style={{ fontSize: "11px", fontWeight: 700, color: tone.fg, background: tone.bg, padding: "2px 8px", borderRadius: 9999 }}>
-            {tone.label}
-          </span>
+          <span style={{ fontWeight: 700, fontSize: "13px", color: COLOR.textPrimary }}>QTKĐ {record.procedure_number ?? "—"}</span>
+          <span style={{ fontSize: "11px", fontWeight: 700, color: tone.fg, background: tone.bg, padding: "2px 8px", borderRadius: 9999 }}>{tone.label}</span>
           <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>{record.mode_label ?? "—"}</span>
           {record.cert_no && <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>Biên bản {record.cert_no}</span>}
         </div>
@@ -83,7 +73,9 @@ export default function DeviceHistoryView({
   const device = history?.device;
   return (
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 20px", borderBottom: `1px solid ${COLOR.border}`, background: COLOR.surface }}>
+      <div
+        style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 20px", borderBottom: `1px solid ${COLOR.border}`, background: COLOR.surface }}
+      >
         <button type="button" onClick={onBack} aria-label="Quay lại bảng dữ liệu" style={backButton}>
           <IcArrowLeft size={15} /> Quay lại bảng
         </button>
@@ -95,7 +87,9 @@ export default function DeviceHistoryView({
       <div style={{ flex: 1, minHeight: 0, overflowY: "auto", padding: 20 }}>
         {loading && <div style={{ fontSize: "13px", color: COLOR.textSecondary }}>Đang tải lịch sử thiết bị…</div>}
         {error && (
-          <div role="alert" style={{ fontSize: "13px", color: COLOR.danger }}>{error}</div>
+          <div role="alert" style={{ fontSize: "13px", color: COLOR.danger }}>
+            {error}
+          </div>
         )}
         {history && device && (
           <div style={{ maxWidth: 1000, margin: "0 auto", display: "flex", flexDirection: "column", gap: 16 }}>
@@ -146,5 +140,28 @@ export default function DeviceHistoryView({
 const cardStyle: React.CSSProperties = { background: COLOR.surface, border: `1px solid ${COLOR.border}`, borderRadius: 13, padding: "16px 18px" };
 const dtStyle: React.CSSProperties = { fontWeight: 700, color: COLOR.textSecondary };
 const ddStyle: React.CSSProperties = { margin: 0, color: COLOR.textPrimary };
-const backButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 6, height: 32, padding: "0 12px", borderRadius: 9, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, fontWeight: 700, fontSize: "12.5px", cursor: "pointer" };
-const fileLink: React.CSSProperties = { flexShrink: 0, alignSelf: "center", display: "inline-flex", alignItems: "center", gap: 5, fontSize: "12px", color: COLOR.accentDark, fontWeight: 600, textDecoration: "none" };
+const backButton: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 6,
+  height: 32,
+  padding: "0 12px",
+  borderRadius: 9,
+  border: `1px solid ${COLOR.border}`,
+  background: COLOR.surface,
+  color: COLOR.textSecondary,
+  fontWeight: 700,
+  fontSize: "12.5px",
+  cursor: "pointer",
+};
+const fileLink: React.CSSProperties = {
+  flexShrink: 0,
+  alignSelf: "center",
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 5,
+  fontSize: "12px",
+  color: COLOR.accentDark,
+  fontWeight: 600,
+  textDecoration: "none",
+};

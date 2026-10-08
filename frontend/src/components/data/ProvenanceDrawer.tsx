@@ -30,13 +30,7 @@ function fieldLabel(field: string | null | undefined): string {
   return FIELD_LABEL[field] ?? field;
 }
 
-export default function ProvenanceDrawer({
-  cellRef,
-  onClose,
-}: {
-  cellRef: DataCellRef | null;
-  onClose: () => void;
-}) {
+export default function ProvenanceDrawer({ cellRef, onClose }: { cellRef: DataCellRef | null; onClose: () => void }) {
   const [source, setSource] = useState<ProvenanceSource | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -81,10 +75,7 @@ export default function ProvenanceDrawer({
   const documentId = source?.file_stem ?? source?.document_id ?? null;
 
   return (
-    <div
-      style={{ position: "fixed", inset: 0, zIndex: 70, display: "flex", justifyContent: "flex-end", background: COLOR.overlaySoft }}
-      onClick={onClose}
-    >
+    <div style={{ position: "fixed", inset: 0, zIndex: 70, display: "flex", justifyContent: "flex-end", background: COLOR.overlaySoft }} onClick={onClose}>
       <aside
         role="dialog"
         aria-modal="true"
@@ -107,13 +98,7 @@ export default function ProvenanceDrawer({
           <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>{fieldLabel(cellRef.field)}</span>
           <div style={{ flex: 1 }} />
           {documentId && (
-            <a
-              href={`/api/documents/${encodeURIComponent(documentId)}/file`}
-              target="_blank"
-              rel="noreferrer"
-              title="Mở tài liệu gốc"
-              style={linkButton}
-            >
+            <a href={`/api/documents/${encodeURIComponent(documentId)}/file`} target="_blank" rel="noreferrer" title="Mở tài liệu gốc" style={linkButton}>
               <IcExternal size={13} /> Tài liệu gốc
             </a>
           )}
@@ -135,9 +120,7 @@ export default function ProvenanceDrawer({
               <dl style={{ display: "grid", gridTemplateColumns: "130px 1fr", gap: "6px 12px", margin: 0, fontSize: "12.5px" }}>
                 <dt style={dtStyle}>Giá trị nguyên văn</dt>
                 <dd style={ddStyle}>
-                  <code style={{ background: COLOR.surfaceAlt, padding: "1px 6px", borderRadius: 5 }}>
-                    {source.value_text ?? source.quote ?? "—"}
-                  </code>
+                  <code style={{ background: COLOR.surfaceAlt, padding: "1px 6px", borderRadius: 5 }}>{source.value_text ?? source.quote ?? "—"}</code>
                 </dd>
                 <dt style={dtStyle}>Tài liệu</dt>
                 <dd style={ddStyle}>{source.display_name ?? source.file_stem ?? source.document_id ?? "—"}</dd>

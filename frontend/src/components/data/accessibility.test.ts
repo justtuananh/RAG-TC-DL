@@ -14,7 +14,7 @@ const NORMAL_TEXT: Array<[string, string, string]> = [
   ["Liên kết/nút xuất xứ trên nền trắng", COLOR.accentDark, COLOR.surface],
   ["Nút xuất xứ trên nền chip", COLOR.accentDark, COLOR.accentSoft],
   ["Nút chính (chữ trắng trên accent)", COLOR.textOnDark, COLOR.accent],
-  ["Badge Đạt", COLOR.textOnDark, COLOR.success],
+  ["Badge Đạt (nền nhạt)", COLOR.success, COLOR.successBg],
   ["Badge Không đạt", COLOR.textOnDark, COLOR.danger],
   ["Badge cảnh báo", COLOR.textOnDark, COLOR.warning],
   ["Chữ lỗi trên nền lỗi", COLOR.textOnDark, COLOR.danger],

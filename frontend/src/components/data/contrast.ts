@@ -9,7 +9,13 @@ export interface Rgb {
 
 export function parseHex(hex: string): Rgb {
   const clean = hex.replace("#", "").trim();
-  const full = clean.length === 3 ? clean.split("").map((c) => c + c).join("") : clean;
+  const full =
+    clean.length === 3
+      ? clean
+          .split("")
+          .map((c) => c + c)
+          .join("")
+      : clean;
   if (!/^[0-9a-fA-F]{6}$/.test(full)) throw new Error(`Màu hex không hợp lệ: ${hex}`);
   return {
     r: parseInt(full.slice(0, 2), 16),

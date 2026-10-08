@@ -66,7 +66,8 @@ export function expiryStatus(expiresAt: string | null | undefined, now: Date = n
 
 export function verdictTone(verdict: string | null | undefined, label?: string | null): Tone {
   if (verdict === "dat") {
-    return { label: label ?? "Đạt", fg: COLOR.textOnDark, bg: COLOR.success };
+    // "Đạt" là trường hợp thường gặp: nền nhạt. "Không đạt" mới cần nổi bật: nền đặc.
+    return { label: label ?? "Đạt", fg: COLOR.success, bg: COLOR.successBg };
   }
   if (verdict === "khong_dat") {
     return { label: label ?? "Không đạt", fg: COLOR.textOnDark, bg: COLOR.danger };
@@ -75,7 +76,7 @@ export function verdictTone(verdict: string | null | undefined, label?: string |
 }
 
 export function withinLimitTone(within: boolean | null | undefined): Tone {
-  if (within === true) return { label: "Trong giới hạn", fg: COLOR.textOnDark, bg: COLOR.success };
+  if (within === true) return { label: "Trong giới hạn", fg: COLOR.success, bg: COLOR.successBg };
   if (within === false) return { label: "Vượt giới hạn", fg: COLOR.textOnDark, bg: COLOR.danger };
   return { label: "Chưa đủ dữ liệu", fg: COLOR.textSecondary, bg: COLOR.neutralBg };
 }

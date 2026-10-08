@@ -9,7 +9,7 @@ import { DATA_TABLE_CLASS, tableStyle, tdStyle, thStyle } from "./tableStyles";
 // Thông tin nhóm thành các khối (Thời hạn / Đặc tính đo / Điều kiện môi trường / Điểm đo).
 // Mỗi ô số là nút mở xuất xứ (P1).
 
-const PANEL_WIDTH = 440;
+const PANEL_WIDTH = 400;
 
 function ProvButton({ label, cellRef, onOpen }: { label: string; cellRef: DataCellRef | null; onOpen: (ref: DataCellRef) => void }) {
   if (!cellRef) return <span style={mono}>{label}</span>;
@@ -253,8 +253,23 @@ const panelStyle: React.CSSProperties = {
   minHeight: 0,
 };
 const headerStyle: React.CSSProperties = { display: "flex", alignItems: "flex-start", gap: 8, padding: "13px 16px", borderBottom: `1px solid ${COLOR.border}` };
-const bodyStyle: React.CSSProperties = { flex: 1, minHeight: 0, overflowY: "auto", padding: "14px 16px 18px", display: "flex", flexDirection: "column", gap: 16 };
-const sectionTitle: React.CSSProperties = { margin: "0 0 4px", fontSize: "11px", fontWeight: 700, letterSpacing: ".04em", textTransform: "uppercase", color: COLOR.textMuted };
+const bodyStyle: React.CSSProperties = {
+  flex: 1,
+  minHeight: 0,
+  overflowY: "auto",
+  padding: "14px 16px 18px",
+  display: "flex",
+  flexDirection: "column",
+  gap: 16,
+};
+const sectionTitle: React.CSSProperties = {
+  margin: "0 0 4px",
+  fontSize: "11px",
+  fontWeight: 700,
+  letterSpacing: ".04em",
+  textTransform: "uppercase",
+  color: COLOR.textMuted,
+};
 const infoRow: React.CSSProperties = { display: "grid", gridTemplateColumns: "120px 1fr", gap: 8, padding: "4px 0", alignItems: "baseline" };
 const infoLabel: React.CSSProperties = { fontSize: "12px", fontWeight: 700, color: COLOR.textSecondary };
 const infoValue: React.CSSProperties = { fontSize: "12.5px", color: COLOR.textPrimary, wordBreak: "break-word" };

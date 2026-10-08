@@ -2,7 +2,17 @@ import type { CatalogGroup, CatalogKind, CatalogRow } from "../../types";
 import { COLOR } from "../../theme";
 import { IcAlert, IcLink, IcSearch } from "../common/icons";
 import { CATALOG_TABLE_TITLES, formatCatalogDate, formatNextDue, isInherited, isOverdue, joinList, recognitionLabel } from "./catalogFormat";
-import { DATA_TABLE_CLASS, alertStyle, emptyCellStyle, headRowStyle, numericStyle, tableStyle, tdStyle as sharedTdStyle, thStyle } from "./tableStyles";
+import {
+  DATA_TABLE_CLASS,
+  alertStyle,
+  emptyCellStyle,
+  headRowStyle,
+  numericStyle,
+  tableStyle,
+  tdStyle as sharedTdStyle,
+  thStyle,
+  visuallyHidden,
+} from "./tableStyles";
 
 // Bảng danh mục NAS (Pha D1). Thuần trình bày để test bằng renderToStaticMarkup:
 // nhận rows + bộ lọc, phát callback; mỗi dòng có nút mở nguồn nguyên văn (P1).
@@ -329,17 +339,6 @@ const linkBadge: React.CSSProperties = {
   borderRadius: 9999,
 };
 const captionStyle: React.CSSProperties = { fontSize: "11.5px", color: COLOR.textMuted };
-const visuallyHidden: React.CSSProperties = {
-  position: "absolute",
-  width: 1,
-  height: 1,
-  padding: 0,
-  margin: -1,
-  overflow: "hidden",
-  clip: "rect(0 0 0 0)",
-  whiteSpace: "nowrap",
-  border: 0,
-};
 
 // Cột chữ dài (đặc tính, lĩnh vực, tên quy trình, tham số): đủ rộng để dòng không
 // bị kéo quá cao; cột tên chuẩn giới hạn để nhường chỗ cho cột đặc tính.

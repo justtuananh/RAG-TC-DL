@@ -29,7 +29,7 @@
   --c-highlight: #fff3c4;
   --c-highlight-border: #e9c75a;
   --c-highlight-strong: #f2c230;
-  --c-shadow: rgba(15,26,20, 0.28);
+  --c-shadow: rgba(15, 26, 20, 0.28);
 }
 
 @layer base {
@@ -253,14 +253,16 @@ mark.src-hl .katex-display {
 }
 
 /* ── Bảng dữ liệu dùng chung (RecordsTable, CatalogTable, bảng điểm đo) ── */
-.data-table tbody tr:nth-child(even) {
+.data-table tbody tr:hover {
   background: var(--c-surface-alt);
 }
-.data-table tbody tr:hover {
-  background: var(--c-accent-soft);
+.serial-link:hover,
+.serial-link:focus-visible {
+  color: var(--c-accent-dark);
+  text-decoration: underline;
 }
 
-/* Ô số bấm mở nguồn: số thường gạch chân chấm, icon liên kết hiện khi hover/focus */
+/* Ô số bấm mở nguồn: lúc nghỉ là số thường; nền, gạch chân và icon liên kết hiện khi hover/focus */
 .prov-cell {
   display: inline-flex;
   /* Trong ô xếp dọc (flex column) không giãn hết chiều ngang: gạch chân chỉ dưới con số. */
@@ -269,8 +271,7 @@ mark.src-hl .katex-display {
   gap: 4px;
   padding: 1px 2px;
   border: none;
-  border-bottom: 1px dotted var(--c-border-strong);
-  border-radius: 3px;
+  border-radius: 4px;
   background: transparent;
   color: var(--c-text);
   font: inherit;
@@ -286,6 +287,7 @@ mark.src-hl .katex-display {
 .prov-cell:focus-visible {
   color: var(--c-accent-dark);
   background: var(--c-accent-soft);
+  text-decoration: underline;
 }
 .prov-cell:hover svg,
 .prov-cell:focus-visible svg {

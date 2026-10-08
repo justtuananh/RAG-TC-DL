@@ -2,7 +2,7 @@ import type { DataCellRef, DataRecordRow } from "../../types";
 import { COLOR } from "../../theme";
 import { IcAlert, IcChevronDown, IcChevronUp, IcSearch } from "../common/icons";
 import RecordRow from "./RecordRow";
-import { DATA_TABLE_CLASS, alertStyle, emptyCellStyle, headRowStyle, tableStyle, tdStyle, thStyle } from "./tableStyles";
+import { DATA_TABLE_CLASS, alertStyle, emptyCellStyle, headRowStyle, tableStyle, tdStyle, thStyle, visuallyHidden } from "./tableStyles";
 
 // Bảng hồ sơ kiểm định: 8 cột đọc nhanh "thiết bị nào, kiểm khi nào, còn hạn không, đạt hay không".
 // Bộ lọc đã tách sang RecordFilterBar. Mỗi ô số vẫn là nút mở đúng đoạn nguyên văn (P1).
@@ -32,7 +32,7 @@ const SORT_LABEL: Record<string, string> = {
   device_type_name: "Loại thiết bị",
 };
 
-const COLUMNS: { label: string; sort?: string; align?: "right" }[] = [
+const COLUMNS: { label: string; sort?: string; align?: "right"; hidden?: boolean }[] = [
   { label: "Số hiệu", sort: "serial_no" },
   { label: "Thiết bị", sort: "device_type_name" },
   { label: "Ngày kiểm định", sort: "calibrated_at" },
@@ -40,12 +40,27 @@ const COLUMNS: { label: string; sort?: string; align?: "right" }[] = [
   { label: "Phạm vi đo", align: "right" },
   { label: "CCX", align: "right" },
   { label: "Kết luận", sort: "verdict" },
-  { label: "Chi tiết" },
+  // Cột nút mũi tên: tiêu đề chỉ cho trình đọc màn hình, không chiếm chỗ hiển thị.
+  { label: "Chi tiết", hidden: true },
 ];
 
-const COL_WIDTHS = ["13%", "18%", "12%", "14%", "13%", "10%", "12%", "8%"];
+const COL_WIDTHS = ["14%", "21%", "13%", "14%", "15%", "9%", "14%", "44px"];
 
-function SortHeader({ label, column, sort, order, onSort }: { label: string; column?: string; sort: string; order: "asc" | "desc"; onSort: (column: string) => void }) {
+function SortHeader({
+  label,
+  hidden,
+  column,
+  sort,
+  order,
+  onSort,
+}: {
+  label: string;
+  hidden?: boolean;
+  column?: string;
+  sort: string;
+  order: "asc" | "desc";
+  onSort: (column: string) => void;
+}) {
   const active = column !== undefined && sort === column;
   const ariaSort = active ? (order === "asc" ? "ascending" : "descending") : "none";
   return (
@@ -60,6 +75,8 @@ function SortHeader({ label, column, sort, order, onSort }: { label: string; col
           {label}
           {active && (order === "asc" ? <IcChevronUp size={11} /> : <IcChevronDown size={11} />)}
         </button>
+      ) : hidden ? (
+        <span style={visuallyHidden}>{label}</span>
       ) : (
         label
       )}
@@ -102,7 +119,7 @@ export default function RecordsTable(props: RecordsTableProps) {
       )}
       <div style={{ flex: 1, minHeight: 0, overflow: "auto" }} onKeyDown={onKeyDown}>
         <table role="table" className={DATA_TABLE_CLASS} style={{ ...tableStyle, tableLayout: "fixed" }}>
-          <caption style={captionStyle}>Bảng hồ sơ kiểm định đã duyệt — mỗi ô số bấm để mở đoạn nguyên văn nguồn.</caption>
+          <caption style={captionStyle}>Hồ sơ kiểm định đã duyệt. Bấm vào một con số để xem đoạn nguyên văn sinh ra nó.</caption>
           <colgroup>
             {COL_WIDTHS.map((width, i) => (
               <col key={i} style={{ width }} />
@@ -111,7 +128,7 @@ export default function RecordsTable(props: RecordsTableProps) {
           <thead style={headRowStyle}>
             <tr>
               {COLUMNS.map((col, i) => (
-                <SortHeader key={i} label={col.label} column={col.sort} sort={sort} order={order} onSort={onSort} />
+                <SortHeader key={i} label={col.label} hidden={col.hidden} column={col.sort} sort={sort} order={order} onSort={onSort} />
               ))}
             </tr>
           </thead>
@@ -166,7 +183,7 @@ const sortButton: React.CSSProperties = {
   cursor: "pointer",
   fontFamily: "inherit",
 };
-const captionStyle: React.CSSProperties = { textAlign: "left", padding: "6px 10px", color: COLOR.textSecondary, fontSize: "11.5px" };
+const captionStyle: React.CSSProperties = { textAlign: "left", padding: "10px 12px 4px", color: COLOR.textMuted, fontSize: "12px" };
 const emptyBoxStyle: React.CSSProperties = { display: "flex", flexDirection: "column", alignItems: "center", gap: 8 };
 const resetButton: React.CSSProperties = {
   height: 30,

@@ -35,11 +35,7 @@ function Chart({ series }: { series: TrendSeries }) {
   const xOf = (index: number) => PAD_X + index * stepX;
 
   const coordinates = series.points
-    .map((point, index) =>
-      point.error_value === null || point.error_value === undefined
-        ? null
-        : `${xOf(index)},${yOf(point.error_value)}`,
-    )
+    .map((point, index) => (point.error_value === null || point.error_value === undefined ? null : `${xOf(index)},${yOf(point.error_value)}`))
     .filter((value): value is string => value !== null)
     .join(" ");
 
@@ -51,14 +47,7 @@ function Chart({ series }: { series: TrendSeries }) {
     .join(", ")}.`;
 
   return (
-    <svg
-      role="img"
-      aria-label={description}
-      viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
-      width="100%"
-      height={HEIGHT}
-      style={{ display: "block" }}
-    >
+    <svg role="img" aria-label={description} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} width="100%" height={HEIGHT} style={{ display: "block" }}>
       <title>Diễn biến sai số theo mốc đo</title>
       <desc>{description}</desc>
       <line x1={PAD_X} y1={yOf(0)} x2={WIDTH - PAD_X} y2={yOf(0)} stroke={COLOR.borderStrong} strokeWidth={1} />
@@ -86,13 +75,7 @@ function Chart({ series }: { series: TrendSeries }) {
   );
 }
 
-export default function ErrorTrendChart({
-  series,
-  onOpenProvenance,
-}: {
-  series: TrendSeries[];
-  onOpenProvenance: (ref: DataCellRef) => void;
-}) {
+export default function ErrorTrendChart({ series, onOpenProvenance }: { series: TrendSeries[]; onOpenProvenance: (ref: DataCellRef) => void }) {
   if (series.length === 0) {
     return <div style={{ fontSize: "12.5px", color: COLOR.textSecondary }}>Chưa có điểm đo để dựng diễn biến sai số.</div>;
   }
@@ -102,10 +85,10 @@ export default function ErrorTrendChart({
         <section key={item.key} style={{ border: `1px solid ${COLOR.border}`, borderRadius: 12, padding: "12px 14px", background: COLOR.surface }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
             <IcChart size={15} style={{ color: COLOR.accent }} />
-            <span style={{ fontWeight: 700, fontSize: "13px", color: COLOR.textPrimary }}>
-              Mốc {item.step_code ?? item.label ?? item.key}
-            </span>
-            {(item.error_unit_code ?? item.unit_code) && <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>đơn vị {item.error_unit_code ?? item.unit_code}</span>}
+            <span style={{ fontWeight: 700, fontSize: "13px", color: COLOR.textPrimary }}>Mốc {item.step_code ?? item.label ?? item.key}</span>
+            {(item.error_unit_code ?? item.unit_code) && (
+              <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>đơn vị {item.error_unit_code ?? item.unit_code}</span>
+            )}
           </div>
           <Chart series={item} />
           <details style={{ marginTop: 8 }}>
@@ -135,9 +118,7 @@ export default function ErrorTrendChart({
                         {formatNumber(point.error_value)}
                         {(point.error_unit_code ?? point.unit_code) ? ` ${point.error_unit_code ?? point.unit_code}` : ""}
                       </td>
-                      <td style={{ ...tdStyle, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>
-                        {formatNumber(point.limit_value)}
-                      </td>
+                      <td style={{ ...tdStyle, textAlign: "right", fontVariantNumeric: "tabular-nums" }}>{formatNumber(point.limit_value)}</td>
                       <td style={tdStyle}>
                         <span style={{ fontSize: "11px", fontWeight: 700, color: tone.fg, background: tone.bg, padding: "2px 8px", borderRadius: 9999 }}>
                           {tone.label}
@@ -165,5 +146,11 @@ export default function ErrorTrendChart({
   );
 }
 
-const thStyle: React.CSSProperties = { textAlign: "left", color: COLOR.textSecondary, borderBottom: `1px solid ${COLOR.border}`, padding: "5px 8px", fontWeight: 700 };
+const thStyle: React.CSSProperties = {
+  textAlign: "left",
+  color: COLOR.textSecondary,
+  borderBottom: `1px solid ${COLOR.border}`,
+  padding: "5px 8px",
+  fontWeight: 700,
+};
 const tdStyle: React.CSSProperties = { padding: "5px 8px", borderBottom: `1px solid ${COLOR.surfaceAlt}`, color: COLOR.textPrimary };

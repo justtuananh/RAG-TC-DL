@@ -93,7 +93,9 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
 
   useEffect(() => {
     if (!user) return;
-    fetchFilterOptions().then(setOptions).catch(() => setOptions(null));
+    fetchFilterOptions()
+      .then(setOptions)
+      .catch(() => setOptions(null));
   }, [user]);
 
   useEffect(() => {
@@ -327,7 +329,12 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
                   Hiển thị {pageStart}–{pageEnd} trong {total} hồ sơ
                 </span>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <button type="button" onClick={() => setOffset((value) => Math.max(0, value - PAGE_SIZE))} disabled={offset === 0 || loading} style={ghostButton}>
+                  <button
+                    type="button"
+                    onClick={() => setOffset((value) => Math.max(0, value - PAGE_SIZE))}
+                    disabled={offset === 0 || loading}
+                    style={ghostButton}
+                  >
                     Trang trước
                   </button>
                   <span className="tabular-nums" style={{ fontSize: "12px", color: COLOR.textSecondary, minWidth: 78, textAlign: "center" }}>
@@ -359,8 +366,65 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
 }
 
 const centered: React.CSSProperties = { flex: 1, minHeight: 0, display: "flex", alignItems: "center", justifyContent: "center", background: COLOR.bg };
-const noticeCard: React.CSSProperties = { maxWidth: 420, padding: "28px 26px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 8, background: COLOR.surface, border: `1px solid ${COLOR.border}`, borderRadius: 13 };
-const primaryButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 7, height: 38, padding: "0 16px", marginTop: 4, borderRadius: 9, border: "none", background: COLOR.accent, color: COLOR.textOnDark, fontWeight: 700, fontSize: "13px", cursor: "pointer" };
-const ghostButton: React.CSSProperties = { display: "inline-flex", alignItems: "center", gap: 6, height: 34, padding: "0 12px", borderRadius: 9, border: `1px solid ${COLOR.border}`, background: COLOR.surface, color: COLOR.textSecondary, fontWeight: 600, fontSize: "12.5px", cursor: "pointer" };
-const headerStyle: React.CSSProperties = { flexShrink: 0, display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap", padding: "8px 16px", background: COLOR.surface, borderBottom: `1px solid ${COLOR.border}` };
-const pagerStyle: React.CSSProperties = { flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, flexWrap: "wrap", padding: "8px 16px", borderTop: `1px solid ${COLOR.border}`, background: COLOR.surface };
+const noticeCard: React.CSSProperties = {
+  maxWidth: 420,
+  padding: "28px 26px",
+  textAlign: "center",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: 8,
+  background: COLOR.surface,
+  border: `1px solid ${COLOR.border}`,
+  borderRadius: 13,
+};
+const primaryButton: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 7,
+  height: 38,
+  padding: "0 16px",
+  marginTop: 4,
+  borderRadius: 9,
+  border: "none",
+  background: COLOR.accent,
+  color: COLOR.textOnDark,
+  fontWeight: 700,
+  fontSize: "13px",
+  cursor: "pointer",
+};
+const ghostButton: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 6,
+  height: 34,
+  padding: "0 12px",
+  borderRadius: 9,
+  border: `1px solid ${COLOR.border}`,
+  background: COLOR.surface,
+  color: COLOR.textSecondary,
+  fontWeight: 600,
+  fontSize: "12.5px",
+  cursor: "pointer",
+};
+const headerStyle: React.CSSProperties = {
+  flexShrink: 0,
+  display: "flex",
+  alignItems: "center",
+  gap: 12,
+  flexWrap: "wrap",
+  padding: "8px 16px",
+  background: COLOR.surface,
+  borderBottom: `1px solid ${COLOR.border}`,
+};
+const pagerStyle: React.CSSProperties = {
+  flexShrink: 0,
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 10,
+  flexWrap: "wrap",
+  padding: "8px 16px",
+  borderTop: `1px solid ${COLOR.border}`,
+  background: COLOR.surface,
+};

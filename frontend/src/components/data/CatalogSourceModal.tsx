@@ -5,37 +5,21 @@ import { IcFile, IcX } from "../common/icons";
 // Hộp xem nguồn nguyên văn của một dòng danh mục NAS (P1): tên tài liệu + quote
 // cả dòng nguồn. Thuần trình bày; đóng khi bấm nền hoặc nút X.
 
-export default function CatalogSourceModal({
-  row,
-  onClose,
-}: {
-  row: CatalogRow | null;
-  onClose: () => void;
-}) {
+export default function CatalogSourceModal({ row, onClose }: { row: CatalogRow | null; onClose: () => void }) {
   if (!row) return null;
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Nguồn nguyên văn dòng danh mục"
-      style={overlayStyle}
-      onClick={onClose}
-    >
+    <div role="dialog" aria-modal="true" aria-label="Nguồn nguyên văn dòng danh mục" style={overlayStyle} onClick={onClose}>
       <div style={panelStyle} onClick={(event) => event.stopPropagation()}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
           <IcFile size={15} style={{ color: COLOR.accent }} />
-          <span style={{ fontWeight: 700, fontSize: "14px", color: COLOR.textPrimary }}>
-            {row.display_name ?? row.file_stem ?? row.document_id}
-          </span>
+          <span style={{ fontWeight: 700, fontSize: "14px", color: COLOR.textPrimary }}>{row.display_name ?? row.file_stem ?? row.document_id}</span>
           <span style={badgeStyle}>extraction #{row.extraction_id}</span>
           <div style={{ flex: 1 }} />
           <button type="button" onClick={onClose} aria-label="Đóng nguồn" style={closeButton}>
             <IcX size={16} />
           </button>
         </div>
-        <div style={{ fontSize: "11.5px", color: COLOR.textMuted, marginBottom: 8 }}>
-          Nguyên văn dòng nguồn (P1) — đối chiếu trước khi tin dữ liệu.
-        </div>
+        <div style={{ fontSize: "11.5px", color: COLOR.textMuted, marginBottom: 8 }}>Nguyên văn dòng nguồn (P1) — đối chiếu trước khi tin dữ liệu.</div>
         <pre style={quoteStyle}>{row.quote}</pre>
       </div>
     </div>

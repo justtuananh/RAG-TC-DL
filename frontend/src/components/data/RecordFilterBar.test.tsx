@@ -81,7 +81,15 @@ describe("RecordFilterBar", () => {
 
   it("giữ nguyên aria-label của mọi ô lọc", () => {
     const html = render({ device_type_id: 1 });
-    for (const label of ["Lọc theo loại thiết bị", "Lọc theo đại lượng", "Lọc theo QTKĐ", "Phạm vi đo nhỏ nhất", "Phạm vi đo lớn nhất", "Đơn vị phạm vi đo", "Lọc theo cấp chính xác"]) {
+    for (const label of [
+      "Lọc theo loại thiết bị",
+      "Lọc theo đại lượng",
+      "Lọc theo QTKĐ",
+      "Phạm vi đo nhỏ nhất",
+      "Phạm vi đo lớn nhất",
+      "Đơn vị phạm vi đo",
+      "Lọc theo cấp chính xác",
+    ]) {
       expect(html).toContain(`aria-label="${label}"`);
     }
   });

@@ -85,7 +85,7 @@ describe("RecordsTable — accessibility", () => {
     const html = render();
     expect(html).toContain('role="table"');
     expect(html).toContain("<caption");
-    expect(html).toContain("mỗi ô số bấm để mở đoạn nguyên văn nguồn");
+    expect(html).toContain("Bấm vào một con số để xem đoạn nguyên văn sinh ra nó");
   });
 
   it("tám cột đọc nhanh, không còn nhiệt độ/độ ẩm/số điểm đo", () => {
