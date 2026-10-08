@@ -57,7 +57,8 @@ function makeInitialState(): AppState {
     toast: null,
     docSearch: "",
     docStatusFilter: "all",
-    docPageSize: 5,
+    // 10 dòng vừa một màn 768 px; 5 dòng để trống nửa màn hình mà vẫn phải lật 7 trang.
+    docPageSize: 10,
     docPage: 1,
     viewingDoc: null,
     confirmDelete: null,
@@ -317,7 +318,16 @@ export function useAppStore(): { state: AppState; actions: Actions } {
             const next = [...s.messages];
             for (let i = next.length - 1; i >= 0; i--) {
               if (next[i].role === "bot") {
-                next[i] = { ...next[i], markdown: md, streaming: false, summary: summaryOf(srcs), citeChips: chipsOf(srcs), sources: srcs, branch: ev.branch ?? "text", data };
+                next[i] = {
+                  ...next[i],
+                  markdown: md,
+                  streaming: false,
+                  summary: summaryOf(srcs),
+                  citeChips: chipsOf(srcs),
+                  sources: srcs,
+                  branch: ev.branch ?? "text",
+                  data,
+                };
                 break;
               }
             }
@@ -552,7 +562,16 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       // Hiện tệp gốc (.docx/.pdf) thô — không chỉ đoạn parent_text của 1 trích dẫn;
       // markdown (parent_text) chỉ dùng khi chưa biết ext hoặc tệp gốc không mở được.
       set({
-        viewingDoc: { name: s.file_stem, code: s.file_stem, pages: null, blocks: [], markdown: s.parent_text, fileUrl: documentFileUrl(s.file_stem), previewUrl: documentPreviewUrl(s.file_stem), ...meta },
+        viewingDoc: {
+          name: s.file_stem,
+          code: s.file_stem,
+          pages: null,
+          blocks: [],
+          markdown: s.parent_text,
+          fileUrl: documentFileUrl(s.file_stem),
+          previewUrl: documentPreviewUrl(s.file_stem),
+          ...meta,
+        },
       });
       fetchDocumentMarkdown(s.file_stem)
         .then((markdown) => set((st) => (st.viewingDoc ? { viewingDoc: { ...st.viewingDoc, markdown } } : {})))
@@ -608,8 +627,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       showToast("Đã lưu cấu hình mô hình");
     },
     // ── Xác thực (Sprint 1) ──
-    openLogin: (notice) =>
-      set((s) => ({ auth: { ...s.auth, loginOpen: true, loginError: null, loginNotice: notice ?? null } })),
+    openLogin: (notice) => set((s) => ({ auth: { ...s.auth, loginOpen: true, loginError: null, loginNotice: notice ?? null } })),
     closeLogin: () => {
       pendingWriteRef.current = null;
       set((s) => ({ auth: { ...s.auth, loginOpen: false, loginError: null, loginNotice: null } }));

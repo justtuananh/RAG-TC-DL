@@ -15,7 +15,9 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
   const isPending = doc.status === "pending";
   const st = STATUS_STYLE[doc.status];
 
-  const meta = `${doc.ext}  ·  ${doc.size}  ·  ${doc.pages === "—" ? "… trang" : doc.pages + " trang"}  ·  ${doc.date}`;
+  // API chưa đếm trang (null) thì bỏ hẳn phần "trang", không in "null trang".
+  const pages = typeof doc.pages === "number" ? `${doc.pages} trang` : null;
+  const meta = [doc.ext, doc.size, pages, doc.date].filter(Boolean).join("  ·  ");
   const statusStyle: CSSProperties = {
     display: "inline-flex",
     alignItems: "center",

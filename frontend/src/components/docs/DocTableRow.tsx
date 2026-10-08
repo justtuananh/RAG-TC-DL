@@ -62,7 +62,7 @@ export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; 
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                   textOverflow: "ellipsis",
-                  maxWidth: 320,
+                  maxWidth: 560,
                 }}
               >
                 {doc.name}
