@@ -104,7 +104,6 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
         {!collapsed && (
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2, minWidth: 0 }}>
             <span style={{ fontSize: "14.5px", fontWeight: 700, color: COLOR.textOnDark, whiteSpace: "nowrap" }}>Trợ lý Kiểm định</span>
-            <span aria-hidden style={{ width: 24, height: 2, borderRadius: 2, background: COLOR.flagRed, margin: "4px 0 3px" }} />
             <span style={{ fontSize: "10.5px", color: COLOR.sidebarTextMuted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               Tra cứu quy trình kiểm định
             </span>
@@ -139,7 +138,7 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
               style={{
                 padding: collapsed ? "0" : "0 12px",
                 justifyContent: collapsed ? "center" : "flex-start",
-                background: active ? COLOR.accent : "transparent",
+                background: active ? COLOR.sidebarActive : "transparent",
                 color: active ? COLOR.textOnDark : COLOR.sidebarText,
               }}
               onMouseEnter={(e) => {
@@ -149,8 +148,8 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
                 if (!active) e.currentTarget.style.background = "transparent";
               }}
             >
-              {active && <span aria-hidden style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, borderRadius: 9999, background: COLOR.star }} />}
-              <span style={{ flexShrink: 0, display: "flex" }}>{it.icon(17)}</span>
+              {active && <span aria-hidden style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, borderRadius: 9999, background: COLOR.accentOnDark }} />}
+              <span style={{ flexShrink: 0, display: "flex", color: active ? COLOR.accentOnDark : "inherit" }}>{it.icon(17)}</span>
               {!collapsed && <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{it.label}</span>}
             </button>
           );

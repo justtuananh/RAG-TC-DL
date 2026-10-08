@@ -13,23 +13,23 @@
 /* Token CSS một lần cho toàn bộ phần thuần CSS bên dưới (khớp src/theme.ts).
    Đổi theme chỉ cần sửa khối này. */
 :root {
-  --c-bg: #f4f5ef;
+  --c-bg: #f5f7f6;
   --c-surface: #ffffff;
-  --c-surface-alt: #f0f2e9;
-  --c-surface-muted: #e6e9dc;
-  --c-border: #dadfcc;
-  --c-border-strong: #bec6ac;
-  --c-text: #1a1f14;
-  --c-text-secondary: #4c5442;
-  --c-text-muted: #767e6c;
-  --c-accent: #4b5e27;
-  --c-accent-dark: #34431a;
-  --c-accent-soft: #edf1e1;
-  --c-accent-soft-border: #cfd9b5;
+  --c-surface-alt: #f3f6f4;
+  --c-surface-muted: #e9eeeb;
+  --c-border: #e1e7e3;
+  --c-border-strong: #c7d1cb;
+  --c-text: #0f1a14;
+  --c-text-secondary: #46524b;
+  --c-text-muted: #6b7770;
+  --c-accent: #2d6a43;
+  --c-accent-dark: #1e4d30;
+  --c-accent-soft: #e8f3ec;
+  --c-accent-soft-border: #bfdcc9;
   --c-highlight: #fff3c4;
-  --c-highlight-border: #e5c04a;
-  --c-highlight-strong: #e5b700;
-  --c-shadow: rgba(26, 31, 20, 0.28);
+  --c-highlight-border: #e9c75a;
+  --c-highlight-strong: #f2c230;
+  --c-shadow: rgba(15,26,20, 0.28);
 }
 
 @layer base {
@@ -263,6 +263,8 @@ mark.src-hl .katex-display {
 /* Ô số bấm mở nguồn: số thường gạch chân chấm, icon liên kết hiện khi hover/focus */
 .prov-cell {
   display: inline-flex;
+  /* Trong ô xếp dọc (flex column) không giãn hết chiều ngang: gạch chân chỉ dưới con số. */
+  align-self: flex-start;
   align-items: center;
   gap: 4px;
   padding: 1px 2px;

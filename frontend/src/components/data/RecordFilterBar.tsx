@@ -8,7 +8,7 @@ import { formatDate } from "./format";
 // Thanh lọc của tab Dữ liệu, tách khỏi <thead> của bảng.
 // Hàng 1: tìm kiếm, chip kết luận, khoảng ngày. Hàng 2 (thu gọn mặc định, tự mở khi
 // có bộ lọc đang bật): loại thiết bị, đại lượng, QTKĐ, phạm vi đo, cấp chính xác.
-// Dưới cùng: dải chip các bộ lọc đang bật (mỗi chip có nút gỡ riêng) + tổng số hồ sơ đã duyệt.
+// Cuối hàng 1: tổng số hồ sơ đã duyệt. Dưới cùng: dải chip các bộ lọc đang bật (mỗi chip có nút gỡ riêng).
 
 export interface RecordFilterBarProps {
   filters: RecordFilters;
@@ -152,7 +152,8 @@ function MoreFilters({ filters, options, onChange }: { filters: RecordFilters; o
   );
 }
 
-function ActiveChips({ chips, total }: { chips: ActiveChip[]; total: number }) {
+function ActiveChips({ chips }: { chips: ActiveChip[] }) {
+  if (chips.length === 0) return null;
   return (
     <div style={chipRow}>
       {chips.map((chip) => (
@@ -163,10 +164,6 @@ function ActiveChips({ chips, total }: { chips: ActiveChip[]; total: number }) {
           </button>
         </span>
       ))}
-      <span style={{ flex: 1 }} />
-      <span className="tabular-nums" style={totalText}>
-        {total} hồ sơ đã duyệt
-      </span>
     </div>
   );
 }
@@ -198,11 +195,16 @@ export default function RecordFilterBar({ filters, options, total, onChange }: R
         <button type="button" aria-expanded={showMore} onClick={() => setMoreOpen((v) => !v)} style={moreButton}>
           <IcFilter size={14} /> Bộ lọc khác{secondRowCount > 0 ? ` (${secondRowCount})` : ""}
         </button>
+
+        <span style={{ flex: 1 }} />
+        <span className="tabular-nums" style={totalText}>
+          {total} hồ sơ đã duyệt
+        </span>
       </div>
 
       {showMore && <MoreFilters filters={filters} options={options} onChange={onChange} />}
 
-      <ActiveChips chips={chips} total={total} />
+      <ActiveChips chips={chips} />
     </div>
   );
 }
