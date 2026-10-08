@@ -14,7 +14,7 @@ interface Props {
 }
 
 const inputCls =
-  "h-10 border border-slate-300 rounded-[9px] px-3 font-sans text-[13.5px] text-slate-800 outline-none w-full focus:border-brand focus:shadow-[0_0_0_3px_#E9EFFF]";
+  "h-10 border border-line-strong rounded-[9px] px-3 font-sans text-[13.5px] text-on-surface outline-none w-full focus:border-brand focus:shadow-focus";
 const labelStyle = { fontSize: "12.5px", fontWeight: 600, color: COLOR.textSecondary } as const;
 
 export default function LlmConfigModal({ open, llm, testing, result, onClose, onChange, onTest, onSave }: Props) {
@@ -29,7 +29,7 @@ export default function LlmConfigModal({ open, llm, testing, result, onClose, on
         position: "fixed",
         inset: 0,
         zIndex: 85,
-        background: "rgba(15,23,42,.55)",
+        background: COLOR.overlay,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -41,7 +41,7 @@ export default function LlmConfigModal({ open, llm, testing, result, onClose, on
         style={{
           background: COLOR.surface,
           borderRadius: 14,
-          boxShadow: "0 24px 60px -12px rgba(0,0,0,.5)",
+          boxShadow: `0 24px 60px -12px ${COLOR.shadowDark}`,
           maxWidth: 460,
           width: "100%",
           maxHeight: "90vh",
@@ -73,7 +73,7 @@ export default function LlmConfigModal({ open, llm, testing, result, onClose, on
           <button
             onClick={onClose}
             title="Đóng"
-            className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+            className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
           >
             <IcX size={17} />
           </button>
@@ -198,13 +198,13 @@ export default function LlmConfigModal({ open, llm, testing, result, onClose, on
         <div style={{ flexShrink: 0, padding: "14px 18px", borderTop: `1px solid ${COLOR.border}`, display: "flex", gap: 10, justifyContent: "flex-end" }}>
           <button
             onClick={onClose}
-            className="h-10 px-4 border border-slate-200 bg-white rounded-[10px] font-sans text-[14px] font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+            className="h-10 px-4 border border-line bg-white rounded-[10px] font-sans text-[14px] font-semibold text-on-surface-variant cursor-pointer hover:bg-surface-container-low"
           >
             Đóng
           </button>
           <button
             onClick={onSave}
-            className="h-10 px-[18px] border-none bg-brand rounded-[10px] font-sans text-[14px] font-semibold text-white cursor-pointer shadow-[0_2px_6px_rgba(36,84,224,.3)] hover:bg-brand-dark"
+            className="h-10 px-[18px] border-none bg-brand rounded-[10px] font-sans text-[14px] font-semibold text-white cursor-pointer shadow-brand hover:bg-brand-dark"
           >
             Lưu cấu hình
           </button>

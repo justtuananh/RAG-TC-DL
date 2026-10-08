@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import type { DocItem } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import { extColor } from "../../services/mockEngine";
-import { COLOR } from "../../theme";
+import { COLOR, SHADOW } from "../../theme";
 import { STATUS_STYLE, statusLabel } from "./docStatus";
 import { IcAlert, IcCheck, IcClock, IcEye, IcPencil, IcPlay, IcTrash } from "../common/icons";
 
@@ -41,10 +41,10 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
         border: `1px solid ${COLOR.border}`,
         borderRadius: 13,
         padding: "13px 15px 13px 19px",
-        boxShadow: "0 1px 2px rgba(16,24,40,.06)",
+        boxShadow: SHADOW.sm,
         transition: "box-shadow .18s ease, transform .18s ease",
       }}
-      className="hover:shadow-[0_6px_18px_-8px_rgba(36,84,224,.24)] hover:-translate-y-[1px]"
+      className="hover:shadow-brand-row hover:-translate-y-[1px]"
     >
       <span aria-hidden style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, borderRadius: 9999, background: st.bar }} />
 
@@ -59,7 +59,7 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
           justifyContent: "center",
           paddingBottom: 6,
           background: extColor(doc.ext),
-          boxShadow: "0 2px 5px -1px rgba(19,27,46,.25)",
+          boxShadow: `0 2px 5px -1px ${COLOR.shadowStrong}`,
         }}
       >
         <span style={{ fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "10.5px", fontWeight: 700, color: COLOR.textOnDark }}>{doc.ext}</span>
@@ -78,7 +78,7 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
               }
             }}
             onBlur={actions.commitRenameDoc}
-            className="w-full border border-brand outline-none rounded-[7px] px-2 py-[5px] font-sans text-[14px] font-semibold text-[#101828] shadow-[0_0_0_3px_#E9EFFF]"
+            className="w-full border border-brand outline-none rounded-[7px] px-2 py-[5px] font-sans text-[14px] font-semibold text-on-surface shadow-focus"
           />
         ) : (
           <div style={{ fontWeight: 600, fontSize: "14px", color: COLOR.textPrimary, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -112,7 +112,7 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
         <button
           onClick={() => actions.processDoc(doc.id)}
           title="Bắt đầu xử lý tài liệu"
-          className="inline-flex items-center gap-[6px] h-8 px-[13px] border-none rounded-lg bg-brand text-white font-sans text-[12.5px] font-semibold cursor-pointer flex-shrink-0 shadow-[0_1px_3px_rgba(0,97,48,.3)] transition-transform hover:bg-brand-dark active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
+          className="inline-flex items-center gap-[6px] h-8 px-[13px] border-none rounded-lg bg-brand text-white font-sans text-[12.5px] font-semibold cursor-pointer flex-shrink-0 shadow-brand-sm transition-transform hover:bg-brand-dark active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
         >
           <IcPlay size={13} /> Xử lý
         </button>
@@ -123,7 +123,7 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
           onClick={() => actions.viewDoc(doc)}
           aria-label="Xem tài liệu"
           title="Xem tài liệu"
-          className={`${actionBtn} text-[#7C8896] hover:bg-[#E9EFFF] hover:text-brand`}
+          className={`${actionBtn} text-icon-muted hover:bg-row-hover hover:text-brand`}
         >
           <IcEye size={15} />
         </button>
@@ -131,7 +131,7 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
           onClick={() => actions.startRenameDoc(doc.id)}
           aria-label="Đổi tên"
           title="Đổi tên"
-          className={`${actionBtn} text-[#7C8896] hover:bg-[#E8ECF2] hover:text-[#101828]`}
+          className={`${actionBtn} text-icon-muted hover:bg-surface-container hover:text-on-surface`}
         >
           <IcPencil size={14} />
         </button>
@@ -139,7 +139,7 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
           onClick={() => actions.deleteDoc(doc.id)}
           aria-label="Xoá tài liệu"
           title="Xoá tài liệu"
-          className={`${actionBtn} text-[#7C8896] hover:bg-red-50 hover:text-[#DC2626]`}
+          className={`${actionBtn} text-icon-muted hover:bg-error-container hover:text-error`}
         >
           <IcTrash size={14} />
         </button>

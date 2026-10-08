@@ -3,6 +3,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
+import { COLOR } from "../../theme";
 
 // remark-gfm: bảng `| … |`, danh sách, ~~gạch~~ (nguồn QTKĐ có bảng pipe).
 // rehype-raw TRƯỚC rehype-katex: parse HTML thô (chip [n]) rồi mới render math.
@@ -10,7 +11,7 @@ import rehypeRaw from "rehype-raw";
 const REMARK = [remarkGfm, remarkMath];
 const REHYPE: NonNullable<Parameters<typeof ReactMarkdown>[0]["rehypePlugins"]> = [
   rehypeRaw,
-  [rehypeKatex, { throwOnError: false, strict: false, errorColor: "#DC2626" }],
+  [rehypeKatex, { throwOnError: false, strict: false, errorColor: COLOR.danger }],
 ];
 
 export default function Markdown({ children, className }: { children: string; className?: string }) {

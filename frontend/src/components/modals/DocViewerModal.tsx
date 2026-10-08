@@ -20,7 +20,7 @@ export default function DocViewerModal({ viewingDoc, onClose }: Props) {
         position: "fixed",
         inset: 0,
         zIndex: 70,
-        background: "rgba(15,23,42,.55)",
+        background: COLOR.overlay,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -35,7 +35,7 @@ export default function DocViewerModal({ viewingDoc, onClose }: Props) {
           height: "90vh", // cao cố định: khung tài liệu (Word/Excel) cuộn bên trong
           background: COLOR.surface,
           borderRadius: 16,
-          boxShadow: "0 24px 60px -12px rgba(0,0,0,.5)",
+          boxShadow: `0 24px 60px -12px ${COLOR.shadowDark}`,
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",

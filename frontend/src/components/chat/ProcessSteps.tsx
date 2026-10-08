@@ -36,7 +36,7 @@ export default function ProcessSteps({ step }: { step: number }) {
           borderRadius: "16px 16px 16px 5px",
           background: COLOR.surface,
           border: `1px solid ${COLOR.border}`,
-          boxShadow: "0 6px 18px -10px rgba(16,24,40,.18)",
+          boxShadow: `0 6px 18px -10px ${COLOR.shadowPageSoft}`,
         }}
       >
         <div style={{ fontSize: "12.5px", fontWeight: 700, color: COLOR.textSecondary, marginBottom: 11, display: "flex", alignItems: "center", gap: 8 }}>

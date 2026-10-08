@@ -24,7 +24,7 @@ export default function DocViewerPanel({ viewingDoc, onBack }: { viewingDoc: Vie
         <button
           onClick={onBack}
           title="Quay lại danh sách tài liệu"
-          className="flex-shrink-0 inline-flex items-center gap-[6px] h-8 px-[11px] border border-[#DEE3EA] rounded-[9px] bg-white font-sans text-[12.5px] font-semibold text-[#475467] cursor-pointer transition-colors hover:border-brand hover:text-brand"
+          className="flex-shrink-0 inline-flex items-center gap-[6px] h-8 px-[11px] border border-line rounded-[9px] bg-white font-sans text-[12.5px] font-semibold text-secondary cursor-pointer transition-colors hover:border-brand hover:text-brand"
         >
           <IcArrowRight size={13} style={{ transform: "rotate(180deg)" }} /> Tài liệu
         </button>

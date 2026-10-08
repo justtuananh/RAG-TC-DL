@@ -20,7 +20,7 @@ const STATUS_TABS: { key: StatusFilter; label: string }[] = [
 ];
 
 const navBtn =
-  "w-8 h-8 rounded-[7px] border border-[#DEE3EA] bg-white flex items-center justify-center text-[#475467] font-sans cursor-pointer transition-all hover:border-brand hover:text-brand active:scale-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand disabled:opacity-40 disabled:pointer-events-none";
+  "w-8 h-8 rounded-[7px] border border-line bg-white flex items-center justify-center text-secondary font-sans cursor-pointer transition-all hover:border-brand hover:text-brand active:scale-90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand disabled:opacity-40 disabled:pointer-events-none";
 
 const emptyBoxStyle = {
   display: "flex",
@@ -30,7 +30,7 @@ const emptyBoxStyle = {
   padding: "40px 20px",
 };
 
-const th = "text-left px-4 py-[10px] text-[11px] font-bold uppercase tracking-wide text-[#475467] border-b border-[#DEE3EA]";
+const th = "text-left px-4 py-[10px] text-[11px] font-bold uppercase tracking-wide text-secondary border-b border-line";
 
 /** Danh sách số trang rút gọn kiểu "1 2 … 11" khi có nhiều trang. */
 function pageNumbers(page: number, pageCount: number): (number | "…")[] {
@@ -166,7 +166,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
                     position: "absolute",
                     inset: 0,
                     zIndex: 10,
-                    background: "rgba(233,239,255,.92)",
+                    background: COLOR.dropOverlay,
                     border: `2px dashed ${COLOR.accent}`,
                     borderRadius: 14,
                     display: "flex",
@@ -201,21 +201,21 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
                 </span>
                 <div style={{ flex: 1 }} />
 
-                <div className="flex items-center gap-2 bg-white border border-[#DEE3EA] rounded-[10px] px-3 h-9 w-[220px] transition-shadow focus-within:border-brand focus-within:shadow-[0_0_0_3px_#E9EFFF]">
-                  <IcSearch size={15} style={{ color: "#7C8896", flexShrink: 0 }} />
+                <div className="flex items-center gap-2 bg-white border border-line rounded-[10px] px-3 h-9 w-[220px] transition-shadow focus-within:border-brand focus-within:shadow-focus">
+                  <IcSearch size={15} style={{ color: COLOR.textMuted, flexShrink: 0 }} />
                   <input
                     value={state.docSearch}
                     onChange={(e) => actions.setDocSearch(e.target.value)}
                     aria-label="Tìm tệp theo tên"
                     placeholder="Tìm kiếm…"
-                    className="flex-1 min-w-0 border-none outline-none font-sans text-[13px] text-[#101828] bg-transparent"
+                    className="flex-1 min-w-0 border-none outline-none font-sans text-[13px] text-on-surface bg-transparent"
                   />
                   {state.docSearch && (
                     <button
                       onClick={() => actions.setDocSearch("")}
                       aria-label="Xóa tìm kiếm"
                       title="Xóa tìm kiếm"
-                      className="flex-shrink-0 w-5 h-5 rounded-full border-none bg-[#E9EFFF] text-[#475467] flex items-center justify-center cursor-pointer transition-colors hover:bg-[#C9D8FF] hover:text-brand"
+                      className="flex-shrink-0 w-5 h-5 rounded-full border-none bg-row-hover text-secondary flex items-center justify-center cursor-pointer transition-colors hover:bg-accent-soft-border hover:text-brand"
                     >
                       <IcX size={11} />
                     </button>
@@ -245,7 +245,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
 
                 <button
                   onClick={() => fileInputRef.current?.click()}
-                  className="inline-flex items-center gap-[7px] h-9 px-[14px] border-none rounded-[10px] bg-brand text-white font-sans text-[13px] font-semibold cursor-pointer shadow-[0_1px_3px_rgba(0,97,48,.3)] transition-transform hover:bg-brand-dark active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
+                  className="inline-flex items-center gap-[7px] h-9 px-[14px] border-none rounded-[10px] bg-brand text-white font-sans text-[13px] font-semibold cursor-pointer shadow-brand-sm transition-transform hover:bg-brand-dark active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
                   title="Chọn tệp Word (.docx/.doc), Excel (.xlsx/.xls) hoặc PDF (.pdf) để tải lên, hoặc kéo thả vào bất kỳ đâu trong khung này"
                 >
                   <IcUpload size={15} /> Tải lên
@@ -273,7 +273,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
                         actions.setDocSearch("");
                         actions.setDocStatusFilter("all");
                       }}
-                      className="h-8 px-4 border border-[#DEE3EA] rounded-lg bg-white font-sans text-[12.5px] font-semibold text-[#475467] cursor-pointer transition-colors hover:border-brand hover:text-brand active:scale-95"
+                      className="h-8 px-4 border border-line rounded-lg bg-white font-sans text-[12.5px] font-semibold text-secondary cursor-pointer transition-colors hover:border-brand hover:text-brand active:scale-95"
                     >
                       Xóa bộ lọc
                     </button>

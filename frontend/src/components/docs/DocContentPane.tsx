@@ -119,7 +119,7 @@ export default function DocContentPane({ viewingDoc }: { viewingDoc: ViewingDoc 
             background: COLOR.surface,
             border: `1px solid ${COLOR.border}`,
             borderRadius: 6,
-            boxShadow: "0 6px 22px -10px rgba(16,24,40,.18)",
+            boxShadow: `0 6px 22px -10px ${COLOR.shadowPageSoft}`,
             padding: "30px 36px 26px",
           }}
         >

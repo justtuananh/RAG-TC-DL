@@ -5,7 +5,7 @@ import { COLOR, SHADOW } from "../../theme";
 import { IcEye, IcMoreHorizontal, IcPencil, IcPlay, IcTrash } from "../common/icons";
 
 const item =
-  "w-full flex items-center gap-2 px-3 h-9 border-none bg-transparent font-sans text-[13px] text-left cursor-pointer whitespace-nowrap hover:bg-[#E9EFFF]";
+  "w-full flex items-center gap-2 px-3 h-9 border-none bg-transparent font-sans text-[13px] text-left cursor-pointer whitespace-nowrap hover:bg-row-hover";
 
 export default function DocActionsMenu({ doc, actions }: { doc: DocItem; actions: Actions }) {
   const [open, setOpen] = useState(false);
@@ -35,7 +35,7 @@ export default function DocActionsMenu({ doc, actions }: { doc: DocItem; actions
         aria-haspopup="menu"
         aria-expanded={open}
         title="Thao tác khác"
-        className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] transition-colors hover:bg-[#E9EFFF] hover:text-[#101828] active:scale-90"
+        className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-icon-muted transition-colors hover:bg-row-hover hover:text-on-surface active:scale-90"
       >
         <IcMoreHorizontal size={16} />
       </button>
@@ -62,9 +62,9 @@ export default function DocActionsMenu({ doc, actions }: { doc: DocItem; actions
               setOpen(false);
               actions.viewDoc(doc);
             }}
-            className={`${item} rounded-md text-[#101828]`}
+            className={`${item} rounded-md text-on-surface`}
           >
-            <IcEye size={14} style={{ color: "#7C8896" }} /> Xem tài liệu
+            <IcEye size={14} style={{ color: COLOR.textMuted }} /> Xem tài liệu
           </button>
           {doc.status === "pending" && (
             <button
@@ -84,9 +84,9 @@ export default function DocActionsMenu({ doc, actions }: { doc: DocItem; actions
               setOpen(false);
               actions.startRenameDoc(doc.id);
             }}
-            className={`${item} rounded-md text-[#101828]`}
+            className={`${item} rounded-md text-on-surface`}
           >
-            <IcPencil size={13} style={{ color: "#7C8896" }} /> Đổi tên
+            <IcPencil size={13} style={{ color: COLOR.textMuted }} /> Đổi tên
           </button>
           <button
             role="menuitem"
@@ -94,7 +94,7 @@ export default function DocActionsMenu({ doc, actions }: { doc: DocItem; actions
               setOpen(false);
               actions.deleteDoc(doc.id);
             }}
-            className={`${item} rounded-md text-[#DC2626]`}
+            className={`${item} rounded-md text-error`}
           >
             <IcTrash size={13} /> Xoá tài liệu
           </button>

@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import { COLOR } from "../../theme";
 import { locateQuote } from "../knowledge/highlight";
 import rehypeHighlightRange, { HIGHLIGHT_CLASS, type HighlightRange } from "./rehypeHighlightRange";
 
@@ -31,7 +32,7 @@ export default function HighlightedMarkdown({ text, quote, start, end, maxHeight
   const rehype = useMemo<RehypePlugins>(
     () => [
       [rehypeHighlightRange, { source: text, range }],
-      [rehypeKatex, { throwOnError: false, strict: false, errorColor: "#DC2626" }],
+      [rehypeKatex, { throwOnError: false, strict: false, errorColor: COLOR.danger }],
     ],
     [text, range],
   );

@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { AuthState, LlmStatus, Tab } from "../../types";
-import { COLOR } from "../../theme";
+import { COLOR, SHADOW } from "../../theme";
 import { IcChevronRight, IcSettings } from "../common/icons";
 import AccountMenu from "./AccountMenu";
 
@@ -26,8 +26,8 @@ const TAB_LABEL: Record<Tab, string> = {
 
 const STATUS = {
   active: { label: "Đang hoạt động", color: COLOR.success, bg: COLOR.successBg, bd: COLOR.successBorder, dot: COLOR.success, spin: false },
-  checking: { label: "Đang kiểm tra…", color: COLOR.warning, bg: COLOR.warningBg, bd: COLOR.warningBorder, dot: "#F59E0B", spin: true },
-  error: { label: "Mất kết nối", color: COLOR.danger, bg: COLOR.dangerBg, bd: COLOR.dangerBorder, dot: "#EF4444", spin: false },
+  checking: { label: "Đang kiểm tra…", color: COLOR.warning, bg: COLOR.warningBg, bd: COLOR.warningBorder, dot: COLOR.warning, spin: true },
+  error: { label: "Mất kết nối", color: COLOR.danger, bg: COLOR.dangerBg, bd: COLOR.dangerBorder, dot: COLOR.danger, spin: false },
   none: { label: "Chưa kết nối", color: COLOR.neutral, bg: COLOR.neutralBg, bd: COLOR.neutralBorder, dot: COLOR.neutral, spin: false },
 } as const;
 
@@ -58,7 +58,7 @@ export default function TopBar({ tab, llmStatus, onGo, onOpenLlm, auth, onOpenLo
         padding: "0 20px",
         background: COLOR.surface,
         borderBottom: `1px solid ${COLOR.border}`,
-        boxShadow: "0 1px 2px rgba(16,24,40,.05)",
+        boxShadow: SHADOW.sm,
         zIndex: 20,
       }}
     >

@@ -10,6 +10,28 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Token CSS một lần cho toàn bộ phần thuần CSS bên dưới (khớp src/theme.ts).
+   Đổi theme chỉ cần sửa khối này. */
+:root {
+  --c-bg: #f4f5ef;
+  --c-surface: #ffffff;
+  --c-surface-alt: #f0f2e9;
+  --c-surface-muted: #e6e9dc;
+  --c-border: #dadfcc;
+  --c-border-strong: #bec6ac;
+  --c-text: #1a1f14;
+  --c-text-secondary: #4c5442;
+  --c-text-muted: #767e6c;
+  --c-accent: #4b5e27;
+  --c-accent-dark: #34431a;
+  --c-accent-soft: #edf1e1;
+  --c-accent-soft-border: #cfd9b5;
+  --c-highlight: #fff3c4;
+  --c-highlight-border: #e5c04a;
+  --c-highlight-strong: #e5b700;
+  --c-shadow: rgba(26, 31, 20, 0.28);
+}
+
 @layer base {
   html,
   body,
@@ -28,13 +50,13 @@
   height: 9px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #dee3ea;
+  background: var(--c-border);
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7c8896;
+  background: var(--c-text-muted);
   background-clip: padding-box;
 }
 
@@ -48,7 +70,7 @@
 .md-answer {
   font-size: 14px;
   line-height: 1.65;
-  color: #101828;
+  color: var(--c-text);
 }
 .md-answer p {
   margin: 7px 0;
@@ -77,18 +99,18 @@
 }
 .md-answer strong {
   font-weight: 700;
-  color: #101828;
+  color: var(--c-text);
 }
 .md-answer code {
-  background: #e9efff;
-  color: #173cae;
+  background: var(--c-accent-soft);
+  color: var(--c-accent-dark);
   padding: 1px 5px;
   border-radius: 6px;
   font-size: 0.92em;
 }
 .md-answer .katex-display {
-  background: #fff;
-  border: 1px solid #dee3ea;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
   border-radius: 8px;
   padding: 11px 15px;
   margin: 9px 0;
@@ -112,25 +134,25 @@
 .md-answer td,
 .md-doc th,
 .md-doc td {
-  border: 1px solid #dee3ea;
+  border: 1px solid var(--c-border);
   padding: 7px 11px;
   text-align: left;
   vertical-align: top;
 }
 .md-answer th,
 .md-doc th {
-  background: #e8ecf2;
+  background: var(--c-surface-muted);
   font-weight: 700;
-  color: #475467;
+  color: var(--c-text-secondary);
   white-space: nowrap;
 }
 .md-answer td,
 .md-doc td {
-  color: #475467;
+  color: var(--c-text-secondary);
 }
 .md-answer tbody tr:nth-child(even),
 .md-doc tbody tr:nth-child(even) {
-  background: #f8fafc;
+  background: var(--c-surface-alt);
 }
 /* Công thức trong ô bảng — không tách nền/viền như $$display$$ */
 .md-answer td .katex-display,
@@ -152,9 +174,9 @@
   padding: 0 5px;
   margin: 0 1px;
   vertical-align: -3px;
-  background: #e9efff;
-  border: 1px solid #c9d8ff;
-  color: #173cae;
+  background: var(--c-accent-soft);
+  border: 1px solid var(--c-accent-soft-border);
+  color: var(--c-accent-dark);
   border-radius: 6px;
   font-size: 11.5px;
   font-weight: 700;
@@ -162,9 +184,9 @@
   cursor: pointer;
 }
 .cite-chip:hover {
-  background: #2454e0;
-  color: #fff;
-  border-color: #2454e0;
+  background: var(--c-accent);
+  color: var(--c-surface);
+  border-color: var(--c-accent);
 }
 
 /* ── Markdown "trang tài liệu" (serif Lora) ── */
@@ -172,18 +194,18 @@
   font-family: "Lora", Georgia, serif;
   font-size: 13.5px;
   line-height: 1.65;
-  color: #101828;
+  color: var(--c-text);
 }
 .md-doc p {
   margin: 11px 0;
 }
 .md-doc strong {
   font-weight: 700;
-  color: #101828;
+  color: var(--c-text);
 }
 .md-doc .katex-display {
-  background: #f1f4f9;
-  border: 1px solid #dee3ea;
+  background: var(--c-surface-alt);
+  border: 1px solid var(--c-border);
   border-radius: 8px;
   padding: 11px 15px;
   margin: 9px 0;
@@ -195,7 +217,7 @@
 .md-doc h4 {
   font-family: "Be Vietnam Pro", sans-serif;
   font-weight: 700;
-  color: #101828;
+  color: var(--c-text);
   margin: 14px 0 5px;
   font-size: 14px;
 }
@@ -209,8 +231,8 @@
 }
 .docx-host .docx-wrapper > section.docx {
   box-shadow:
-    0 0 0 1px #dee3ea,
-    0 8px 24px -12px rgba(16, 24, 40, 0.28);
+    0 0 0 1px var(--c-border),
+    0 8px 24px -12px var(--c-shadow);
   margin-bottom: 24px;
 }
 
@@ -219,15 +241,68 @@
   font-size: 13px;
 }
 mark.src-hl {
-  background: #fff3c4;
+  background: var(--c-highlight);
   color: inherit;
-  border-bottom: 2px solid #f5cb5c;
+  border-bottom: 2px solid var(--c-highlight-border);
   border-radius: 3px;
   padding: 0 2px;
 }
 mark.src-hl .katex-display {
-  background: #fff3c4;
-  border-color: #f5cb5c;
+  background: var(--c-highlight);
+  border-color: var(--c-highlight-border);
+}
+
+/* ── Bảng dữ liệu dùng chung (RecordsTable, CatalogTable, bảng điểm đo) ── */
+.data-table tbody tr:nth-child(even) {
+  background: var(--c-surface-alt);
+}
+.data-table tbody tr:hover {
+  background: var(--c-accent-soft);
+}
+
+/* Ô số bấm mở nguồn: số thường gạch chân chấm, icon liên kết hiện khi hover/focus */
+.prov-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 2px;
+  border: none;
+  border-bottom: 1px dotted var(--c-border-strong);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--c-text);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  text-align: inherit;
+}
+.prov-cell svg {
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+.prov-cell:hover,
+.prov-cell:focus-visible {
+  color: var(--c-accent-dark);
+  background: var(--c-accent-soft);
+}
+.prov-cell:hover svg,
+.prov-cell:focus-visible svg {
+  opacity: 0.75;
+}
+
+/* Panel chi tiết trượt vào từ phải (tắt chung theo prefers-reduced-motion ở trên) */
+@keyframes dataPanelIn {
+  from {
+    transform: translateX(32px);
+    opacity: 0.4;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+.data-panel-in {
+  animation: dataPanelIn 0.16s ease-out;
 }
 
 /* ── Responsive layout (mobile) ── */
@@ -243,7 +318,7 @@ mark.src-hl .katex-display {
     height: 50vh;
     min-height: 260px;
     border-left: none !important;
-    border-top: 1px solid #dee3ea;
+    border-top: 1px solid var(--c-border);
   }
   .layout-resize-handle {
     display: none !important;

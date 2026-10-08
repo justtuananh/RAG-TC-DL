@@ -72,7 +72,7 @@ export default function GuideTab({ state, actions }: { state: AppState; actions:
             borderRadius: 16,
             padding: "26px 28px",
             color: COLOR.textOnDark,
-            boxShadow: "0 10px 26px -12px rgba(36,84,224,.5)",
+            boxShadow: `0 10px 26px -12px ${COLOR.brandShadowLg}`,
           }}
         >
           <div style={{ fontSize: "22px", fontWeight: 700, marginBottom: 6 }}>Hướng dẫn sử dụng</div>
@@ -111,7 +111,7 @@ export default function GuideTab({ state, actions }: { state: AppState; actions:
             <button
               key={i}
               onClick={() => actions.askSample(q)}
-              className="inline-flex items-center gap-2 px-[15px] py-[10px] bg-white border border-slate-200 rounded-[11px] font-sans text-[13.5px] text-slate-700 cursor-pointer text-left hover:border-brand hover:bg-primary-container hover:text-brand-dark"
+              className="inline-flex items-center gap-2 px-[15px] py-[10px] bg-white border border-line rounded-[11px] font-sans text-[13.5px] text-on-surface cursor-pointer text-left hover:border-brand hover:bg-primary-container hover:text-brand-dark"
             >
               <IcArrowRight size={15} style={{ flexShrink: 0, color: COLOR.accent }} />
               {q}
@@ -204,7 +204,7 @@ export default function GuideTab({ state, actions }: { state: AppState; actions:
           </div>
           <button
             onClick={() => actions.go("docs")}
-            className="inline-flex items-center gap-2 h-10 px-[17px] border-none rounded-[10px] bg-brand text-white font-sans text-[13.5px] font-semibold cursor-pointer shadow-[0_2px_6px_rgba(36,84,224,.3)] hover:bg-brand-dark"
+            className="inline-flex items-center gap-2 h-10 px-[17px] border-none rounded-[10px] bg-brand text-white font-sans text-[13.5px] font-semibold cursor-pointer shadow-brand hover:bg-brand-dark"
           >
             <IcUpload size={16} /> Mở mục Tài liệu
           </button>

@@ -11,7 +11,7 @@ const paper: CSSProperties = {
   background: COLOR.surface,
   border: `1px solid ${COLOR.border}`,
   borderRadius: 6,
-  boxShadow: "0 6px 22px -10px rgba(15,23,42,.16)",
+  boxShadow: `0 6px 22px -10px ${COLOR.shadowPage}`,
   fontFamily: "'Lora',Georgia,serif",
   color: COLOR.textPrimary,
   lineHeight: 1.65,

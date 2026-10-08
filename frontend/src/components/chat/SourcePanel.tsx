@@ -33,7 +33,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
       <div
         onMouseDown={actions.startResize}
         title="Kéo để thay đổi độ rộng"
-        className="layout-resize-handle w-[6px] flex-shrink-0 cursor-col-resize bg-line flex items-center justify-center hover:bg-[#E9EFFF]"
+        className="layout-resize-handle w-[6px] flex-shrink-0 cursor-col-resize bg-line flex items-center justify-center hover:bg-row-hover"
       >
         <div style={{ width: 3, height: 34, borderRadius: 2, background: COLOR.borderStrong }} />
       </div>
@@ -190,7 +190,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
               background: COLOR.surface,
               border: `1px solid ${COLOR.border}`,
               borderRadius: 6,
-              boxShadow: "0 6px 22px -10px rgba(16,24,40,.16)",
+              boxShadow: `0 6px 22px -10px ${COLOR.shadowPage}`,
               padding: "26px 30px 24px",
             }}
           >
@@ -269,7 +269,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
         >
           <button
             onClick={actions.openSourceDoc}
-            className="inline-flex items-center gap-[7px] h-9 px-[13px] border border-line bg-white rounded-[9px] font-sans text-[12.5px] font-semibold text-[#475467] cursor-pointer hover:border-brand hover:text-brand-dark hover:bg-[#E9EFFF]"
+            className="inline-flex items-center gap-[7px] h-9 px-[13px] border border-line bg-white rounded-[9px] font-sans text-[12.5px] font-semibold text-secondary cursor-pointer hover:border-brand hover:text-brand-dark hover:bg-row-hover"
           >
             <IcExternal size={14} /> Mở tài liệu gốc
           </button>

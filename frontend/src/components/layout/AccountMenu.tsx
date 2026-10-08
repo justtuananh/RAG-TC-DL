@@ -47,7 +47,7 @@ export default function AccountMenu({ auth, onLogin, onLogout }: Props) {
       <button
         onClick={onLogin}
         title="Đăng nhập để tải lên/xử lý tài liệu"
-        className={`${pill} border-[#DEE3EA] bg-white text-[#475467] hover:border-brand hover:text-brand`}
+        className={`${pill} border-line bg-white text-secondary hover:border-brand hover:text-brand`}
       >
         <IcUser size={15} /> Đăng nhập
       </button>
@@ -63,7 +63,7 @@ export default function AccountMenu({ auth, onLogin, onLogout }: Props) {
         aria-haspopup="menu"
         aria-expanded={open}
         title={displayName}
-        className={`${pill} border-[#C9D8FF] bg-[#E9EFFF] text-[#173CAE] hover:brightness-[0.98]`}
+        className={`${pill} border-accent-soft-border bg-row-hover text-brand-dark hover:brightness-[0.98]`}
       >
         <IcUser size={15} />
         <span style={{ maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{displayName}</span>
@@ -100,7 +100,7 @@ export default function AccountMenu({ auth, onLogin, onLogout }: Props) {
               setOpen(false);
               onLogout();
             }}
-            className="w-full flex items-center gap-2 px-3 h-9 border-none bg-transparent rounded-lg font-sans text-[13px] text-left text-[#DC2626] cursor-pointer hover:bg-red-50"
+            className="w-full flex items-center gap-2 px-3 h-9 border-none bg-transparent rounded-lg font-sans text-[13px] text-left text-error cursor-pointer hover:bg-error-container"
           >
             <IcLogOut size={14} /> Đăng xuất
           </button>

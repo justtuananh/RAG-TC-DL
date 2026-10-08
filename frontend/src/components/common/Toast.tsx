@@ -15,7 +15,7 @@ export default function Toast({ message }: { message: string | null }) {
         borderRadius: 10,
         fontSize: "13px",
         fontWeight: 500,
-        boxShadow: "0 10px 30px -8px rgba(0,0,0,.4)",
+        boxShadow: `0 10px 30px -8px ${COLOR.shadowToast}`,
         zIndex: 95,
         display: "flex",
         alignItems: "center",

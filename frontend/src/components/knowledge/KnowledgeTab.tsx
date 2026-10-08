@@ -430,7 +430,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
           onClick={() => setRefreshKey((key) => key + 1)}
           title="Tải lại hàng đợi"
           aria-label="Tải lại hàng đợi"
-          className={`${buttonBase} border border-[#DEE3EA] bg-white text-[#475467] hover:border-brand hover:text-brand`}
+          className={`${buttonBase} border border-line bg-white text-secondary hover:border-brand hover:text-brand`}
         >
           <IcRefresh size={14} /> Tải lại
         </button>
@@ -546,7 +546,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                     onClick={() => setRejectOpen(true)}
                     disabled={busy}
                     title="Từ chối (R)"
-                    className={`${buttonBase} border border-[#FECACA] bg-white text-[#DC2626] hover:bg-[#FEF2F2]`}
+                    className={`${buttonBase} border border-danger-border bg-white text-error hover:bg-error-container`}
                   >
                     <IcX size={15} /> Từ chối <kbd style={kbdStyle}>R</kbd>
                   </button>
@@ -555,7 +555,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                       onClick={() => void doEdit()}
                       disabled={busy}
                       title="Sửa giá trị rồi duyệt"
-                      className={`${buttonBase} border border-[#DEE3EA] bg-white text-[#475467] hover:border-brand hover:text-brand`}
+                      className={`${buttonBase} border border-line bg-white text-secondary hover:border-brand hover:text-brand`}
                     >
                       Sửa &amp; duyệt
                     </button>
@@ -565,7 +565,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
                     onClick={() => void doBulk()}
                     disabled={busy}
                     title="Duyệt mọi dòng cùng luật trong tài liệu này"
-                    className={`${buttonBase} border border-[#C9D8FF] bg-[#E9EFFF] text-[#173CAE] hover:brightness-[0.98]`}
+                    className={`${buttonBase} border border-accent-soft-border bg-row-hover text-brand-dark hover:brightness-[0.98]`}
                   >
                     <IcCheck size={15} /> Duyệt hàng loạt cùng luật
                   </button>
@@ -637,7 +637,7 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
           role="dialog"
           aria-modal="true"
           aria-label="Lý do từ chối"
-          style={{ position: "fixed", inset: 0, zIndex: 60, background: "rgba(16,24,40,.45)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
+          style={{ position: "fixed", inset: 0, zIndex: 60, background: COLOR.overlayMedium, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}
           onClick={() => setRejectOpen(false)}
         >
           <div style={{ ...panelStyle, width: 460, maxWidth: "100%", padding: 20 }} onClick={(e) => e.stopPropagation()}>
@@ -654,11 +654,11 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
               style={inputStyle}
             />
             <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 14 }}>
-              <button className={`${buttonBase} border border-[#DEE3EA] bg-white text-[#475467]`} onClick={() => setRejectOpen(false)}>
+              <button className={`${buttonBase} border border-line bg-white text-secondary`} onClick={() => setRejectOpen(false)}>
                 Hủy
               </button>
               <button
-                className={`${buttonBase} border-none bg-[#DC2626] text-white hover:brightness-110`}
+                className={`${buttonBase} border-none bg-error text-white hover:brightness-110`}
                 onClick={() => void confirmReject()}
                 disabled={busy}
               >
@@ -861,7 +861,7 @@ const kbdStyle: React.CSSProperties = {
   fontFamily: "inherit",
   fontSize: "10px",
   fontWeight: 700,
-  background: "rgba(255,255,255,.25)",
+  background: COLOR.whiteFaint,
   borderRadius: 4,
   padding: "1px 5px",
 };

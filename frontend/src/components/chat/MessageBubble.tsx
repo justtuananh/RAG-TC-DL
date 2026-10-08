@@ -33,7 +33,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
             color: COLOR.textOnDark,
             fontSize: "14px",
             lineHeight: 1.55,
-            boxShadow: "0 2px 5px rgba(36,84,224,.22)",
+            boxShadow: `0 2px 5px ${COLOR.brandShadowSoft}`,
           }}
         >
           {message.text}
@@ -132,7 +132,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
                   key={c.index}
                   onClick={() => actions.openCite(c.index)}
                   title="Bấm để mở nguồn này"
-                  className="inline-flex items-center gap-[5px] px-[10px] py-1 bg-white border border-[#DEE3EA] rounded-full font-sans text-[11.5px] font-semibold text-brand-dark cursor-pointer hover:bg-[#E9EFFF] hover:border-brand"
+                  className="inline-flex items-center gap-[5px] px-[10px] py-1 bg-white border border-line rounded-full font-sans text-[11.5px] font-semibold text-brand-dark cursor-pointer hover:bg-row-hover hover:border-brand"
                 >
                   <span style={{ fontWeight: 700 }}>{c.n}</span> {c.code}
                 </button>
@@ -148,7 +148,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
               onClick={() => actions.copyAnswer(plain)}
               aria-label="Sao chép câu trả lời"
               title="Sao chép câu trả lời"
-              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] hover:bg-[#E9EFFF] hover:text-[#475467]"
+              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-icon-muted hover:bg-row-hover hover:text-secondary"
             >
               <IcCopy size={14} />
             </button>
@@ -156,7 +156,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
               onClick={() => actions.feedback("up")}
               aria-label="Câu trả lời hữu ích"
               title="Câu trả lời hữu ích"
-              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] hover:bg-[#F1F4F9] hover:text-brand"
+              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-icon-muted hover:bg-surface-container-low hover:text-brand"
             >
               <IcThumbUp size={14} />
             </button>
@@ -164,7 +164,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
               onClick={() => actions.feedback("down")}
               aria-label="Câu trả lời chưa đúng"
               title="Câu trả lời chưa đúng"
-              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] hover:bg-[#FEF2F2] hover:text-[#DC2626]"
+              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-icon-muted hover:bg-error-container hover:text-error"
             >
               <IcThumbDown size={14} />
             </button>
@@ -173,7 +173,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
                 onClick={() => actions.regenerate()}
                 aria-label="Tạo lại câu trả lời"
                 title="Tạo lại câu trả lời"
-                className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-[#7C8896] hover:bg-[#E9EFFF] hover:text-[#475467]"
+                className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-icon-muted hover:bg-row-hover hover:text-secondary"
               >
                 <IcRefresh size={14} />
               </button>
@@ -185,7 +185,7 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
         {isErr && isLast && (
           <button
             onClick={() => actions.regenerate()}
-            className="inline-flex items-center gap-2 px-[11px] py-[7px] border border-line bg-white rounded-[9px] font-sans text-[12.5px] text-[#475467] cursor-pointer hover:border-brand hover:bg-[#E9EFFF] hover:text-brand-dark"
+            className="inline-flex items-center gap-2 px-[11px] py-[7px] border border-line bg-white rounded-[9px] font-sans text-[12.5px] text-secondary cursor-pointer hover:border-brand hover:bg-row-hover hover:text-brand-dark"
           >
             <IcRefresh size={14} style={{ color: COLOR.accent }} /> Thử lại
           </button>

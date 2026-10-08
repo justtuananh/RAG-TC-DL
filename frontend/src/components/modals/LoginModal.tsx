@@ -13,7 +13,7 @@ interface Props {
 }
 
 const inputCls =
-  "h-10 border border-slate-300 rounded-[9px] px-3 font-sans text-[13.5px] text-slate-800 outline-none w-full focus:border-brand focus:shadow-[0_0_0_3px_#E9EFFF]";
+  "h-10 border border-line-strong rounded-[9px] px-3 font-sans text-[13.5px] text-on-surface outline-none w-full focus:border-brand focus:shadow-focus";
 const labelStyle = { fontSize: "12.5px", fontWeight: 600, color: COLOR.textSecondary } as const;
 
 /**
@@ -48,7 +48,7 @@ export default function LoginModal({ open, busy, error, notice, onClose, onSubmi
         position: "fixed",
         inset: 0,
         zIndex: 90,
-        background: "rgba(15,23,42,.55)",
+        background: COLOR.overlay,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -61,7 +61,7 @@ export default function LoginModal({ open, busy, error, notice, onClose, onSubmi
         style={{
           background: COLOR.surface,
           borderRadius: 14,
-          boxShadow: "0 24px 60px -12px rgba(0,0,0,.5)",
+          boxShadow: `0 24px 60px -12px ${COLOR.shadowDark}`,
           maxWidth: 400,
           width: "100%",
           display: "flex",
@@ -95,7 +95,7 @@ export default function LoginModal({ open, busy, error, notice, onClose, onSubmi
             disabled={busy}
             title="Đóng"
             aria-label="Đóng"
-            className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-slate-500 hover:bg-slate-100 hover:text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="w-8 h-8 rounded-lg border-none bg-transparent flex items-center justify-center cursor-pointer text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface disabled:opacity-40 disabled:cursor-not-allowed"
           >
             <IcX size={17} />
           </button>
@@ -183,14 +183,14 @@ export default function LoginModal({ open, busy, error, notice, onClose, onSubmi
             type="button"
             onClick={onClose}
             disabled={busy}
-            className="h-10 px-4 border border-slate-200 bg-white rounded-[10px] font-sans text-[14px] font-semibold text-slate-600 cursor-pointer hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="h-10 px-4 border border-line bg-white rounded-[10px] font-sans text-[14px] font-semibold text-on-surface-variant cursor-pointer hover:bg-surface-container-low disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Huỷ
           </button>
           <button
             type="submit"
             disabled={busy}
-            className="inline-flex items-center justify-center gap-2 h-10 px-[18px] border-none bg-brand rounded-[10px] font-sans text-[14px] font-semibold text-white cursor-pointer shadow-[0_2px_6px_rgba(36,84,224,.3)] hover:bg-brand-dark disabled:opacity-60 disabled:cursor-not-allowed"
+            className="inline-flex items-center justify-center gap-2 h-10 px-[18px] border-none bg-brand rounded-[10px] font-sans text-[14px] font-semibold text-white cursor-pointer shadow-brand hover:bg-brand-dark disabled:opacity-60 disabled:cursor-not-allowed"
           >
             {busy && (
               <span

@@ -99,11 +99,12 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
             boxShadow: SHADOW.sidebar,
           }}
         >
-          <IcBrand size={18} style={{ color: "#fff" }} />
+          <IcBrand size={18} style={{ color: COLOR.star }} />
         </div>
         {!collapsed && (
           <div style={{ display: "flex", flexDirection: "column", lineHeight: 1.2, minWidth: 0 }}>
-            <span style={{ fontSize: "14.5px", fontWeight: 700, color: "#fff", whiteSpace: "nowrap" }}>Trợ lý Kiểm định</span>
+            <span style={{ fontSize: "14.5px", fontWeight: 700, color: COLOR.textOnDark, whiteSpace: "nowrap" }}>Trợ lý Kiểm định</span>
+            <span aria-hidden style={{ width: 24, height: 2, borderRadius: 2, background: COLOR.flagRed, margin: "4px 0 3px" }} />
             <span style={{ fontSize: "10.5px", color: COLOR.sidebarTextMuted, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
               Tra cứu quy trình kiểm định
             </span>
@@ -117,7 +118,7 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
           onClick={startNewChat}
           title="Bắt đầu hội thoại mới"
           className="inline-flex items-center justify-center gap-[7px] border-none rounded-[10px] font-sans text-[13.5px] font-semibold cursor-pointer hover:brightness-110"
-          style={{ width: collapsed ? 38 : "100%", height: 38, background: COLOR.accent, color: "#fff", boxShadow: "0 2px 6px rgba(36,84,224,.3)" }}
+          style={{ width: collapsed ? 38 : "100%", height: 38, background: COLOR.accent, color: COLOR.textOnDark, boxShadow: `0 2px 6px ${COLOR.brandShadow}` }}
         >
           <IcPlus size={16} />
           {!collapsed && "Hội thoại mới"}
@@ -139,7 +140,7 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
                 padding: collapsed ? "0" : "0 12px",
                 justifyContent: collapsed ? "center" : "flex-start",
                 background: active ? COLOR.accent : "transparent",
-                color: active ? "#fff" : COLOR.sidebarText,
+                color: active ? COLOR.textOnDark : COLOR.sidebarText,
               }}
               onMouseEnter={(e) => {
                 if (!active) e.currentTarget.style.background = COLOR.sidebarHover;
@@ -148,6 +149,7 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
                 if (!active) e.currentTarget.style.background = "transparent";
               }}
             >
+              {active && <span aria-hidden style={{ position: "absolute", left: 0, top: 8, bottom: 8, width: 3, borderRadius: 9999, background: COLOR.star }} />}
               <span style={{ flexShrink: 0, display: "flex" }}>{it.icon(17)}</span>
               {!collapsed && <span style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{it.label}</span>}
             </button>
@@ -182,7 +184,7 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
                 onChange={(e) => actions.setHistSearch(e.target.value)}
                 placeholder="Tìm hội thoại…"
                 className="flex-1 min-w-0 border-none outline-none font-sans text-[12.5px] bg-transparent"
-                style={{ color: "#fff" }}
+                style={{ color: COLOR.textOnDark }}
               />
             </div>
           </div>
@@ -231,13 +233,13 @@ export default function Sidebar({ state, actions }: { state: AppState; actions: 
           title={collapsed ? "Mở rộng menu" : "Thu gọn menu"}
           aria-label={collapsed ? "Mở rộng menu" : "Thu gọn menu"}
           className="w-8 h-8 rounded-[8px] border flex items-center justify-center cursor-pointer transition-colors active:scale-90"
-          style={{ borderColor: "rgba(255,255,255,.14)", color: COLOR.sidebarText, background: "transparent" }}
+          style={{ borderColor: COLOR.whiteSoft, color: COLOR.sidebarText, background: "transparent" }}
           onMouseEnter={(e) => {
             e.currentTarget.style.borderColor = COLOR.accent;
-            e.currentTarget.style.color = "#fff";
+            e.currentTarget.style.color = COLOR.textOnDark;
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "rgba(255,255,255,.14)";
+            e.currentTarget.style.borderColor = COLOR.whiteSoft;
             e.currentTarget.style.color = COLOR.sidebarText;
           }}
         >
@@ -265,7 +267,7 @@ function ConvRow({ conv, state, actions }: { conv: Conversation; state: AppState
       }}
       title={conv.title}
       className="flex items-center gap-2 px-2 py-[6px] rounded-lg cursor-pointer"
-      style={{ background: active ? "rgba(36,84,224,.22)" : "transparent" }}
+      style={{ background: active ? COLOR.brandShadowSoft : "transparent" }}
       onMouseEnter={(e) => {
         if (!active) e.currentTarget.style.background = COLOR.sidebarHover;
       }}
@@ -289,12 +291,12 @@ function ConvRow({ conv, state, actions }: { conv: Conversation; state: AppState
             }}
             onBlur={actions.commitRenameConv}
             className="w-full outline-none rounded-md px-[6px] py-[2px] font-sans text-[12.5px] font-semibold"
-            style={{ background: COLOR.sidebarBgAlt, border: `1px solid ${COLOR.accent}`, color: "#fff" }}
+            style={{ background: COLOR.sidebarBgAlt, border: `1px solid ${COLOR.accent}`, color: COLOR.textOnDark }}
           />
         ) : (
           <div
             className="text-[12.5px] whitespace-nowrap overflow-hidden text-ellipsis"
-            style={{ fontWeight: active ? 700 : 500, color: active ? "#fff" : COLOR.sidebarText }}
+            style={{ fontWeight: active ? 700 : 500, color: active ? COLOR.textOnDark : COLOR.sidebarText }}
           >
             {conv.title}
           </div>
@@ -322,7 +324,7 @@ function ConvRow({ conv, state, actions }: { conv: Conversation; state: AppState
           style={{ color: COLOR.sidebarTextMuted }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = COLOR.sidebarHover;
-            e.currentTarget.style.color = "#fff";
+            e.currentTarget.style.color = COLOR.textOnDark;
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.background = "transparent";
@@ -337,7 +339,7 @@ function ConvRow({ conv, state, actions }: { conv: Conversation; state: AppState
           className="w-[24px] h-[24px] rounded-md border-none bg-transparent flex items-center justify-center cursor-pointer"
           style={{ color: COLOR.sidebarTextMuted }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "rgba(220,38,38,.18)";
+            e.currentTarget.style.background = COLOR.dangerSoft;
             e.currentTarget.style.color = COLOR.dangerOnDark;
           }}
           onMouseLeave={(e) => {

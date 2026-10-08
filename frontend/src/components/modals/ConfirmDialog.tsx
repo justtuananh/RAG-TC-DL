@@ -17,7 +17,7 @@ export default function ConfirmDialog({ conv, onYes, onNo }: Props) {
         position: "fixed",
         inset: 0,
         zIndex: 80,
-        background: "rgba(15,23,42,.55)",
+        background: COLOR.overlay,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -26,7 +26,7 @@ export default function ConfirmDialog({ conv, onYes, onNo }: Props) {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{ background: COLOR.surface, borderRadius: 14, boxShadow: "0 24px 60px -12px rgba(0,0,0,.5)", maxWidth: 380, width: "100%", padding: 22 }}
+        style={{ background: COLOR.surface, borderRadius: 14, boxShadow: `0 24px 60px -12px ${COLOR.shadowDark}`, maxWidth: 380, width: "100%", padding: 22 }}
       >
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: 12 }}>
           <div
@@ -44,7 +44,7 @@ export default function ConfirmDialog({ conv, onYes, onNo }: Props) {
         <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
           <button
             onClick={onNo}
-            className="flex-1 h-[42px] border border-slate-200 bg-white rounded-[10px] font-sans text-[14px] font-semibold text-slate-600 cursor-pointer hover:bg-slate-100"
+            className="flex-1 h-[42px] border border-line bg-white rounded-[10px] font-sans text-[14px] font-semibold text-on-surface-variant cursor-pointer hover:bg-surface-container-low"
           >
             Huỷ
           </button>

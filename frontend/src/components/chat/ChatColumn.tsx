@@ -76,7 +76,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
                 <button
                   key={i}
                   onClick={() => actions.askSample(q)}
-                  className="text-left px-[15px] py-3 border border-line bg-[#F1F4F9] rounded-[11px] font-sans text-[13.5px] text-[#475467] cursor-pointer leading-[1.5] hover:border-brand hover:bg-[#E9EFFF] hover:text-brand-dark"
+                  className="text-left px-[15px] py-3 border border-line bg-surface-container-low rounded-[11px] font-sans text-[13.5px] text-secondary cursor-pointer leading-[1.5] hover:border-brand hover:bg-row-hover hover:text-brand-dark"
                 >
                   {q}
                 </button>
@@ -122,7 +122,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
             }}
             rows={1}
             placeholder="Nhập câu hỏi của bạn…"
-            className="flex-1 resize-none border border-line rounded-[11px] px-[15px] py-3 text-[14px] font-sans leading-[1.55] h-[46px] min-h-[46px] max-h-[130px] outline-none text-[#101828] focus:border-brand focus:shadow-[0_0_0_3px_#E9EFFF]"
+            className="flex-1 resize-none border border-line rounded-[11px] px-[15px] py-3 text-[14px] font-sans leading-[1.55] h-[46px] min-h-[46px] max-h-[130px] outline-none text-on-surface focus:border-brand focus:shadow-focus"
           />
           <button
             onClick={() => actions.send()}

@@ -6,7 +6,7 @@ import { STATUS_STYLE, statusLabel } from "./docStatus";
 import DocActionsMenu from "./DocActionsMenu";
 import { IcAlert, IcCheck, IcClock, IcPlay } from "../common/icons";
 
-const td = "px-4 py-[11px] border-b border-[#DEE3EA] align-middle";
+const td = "px-4 py-[11px] border-b border-line align-middle";
 
 export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; renaming: boolean; actions: Actions }) {
   const isReady = doc.status === "ready";
@@ -15,7 +15,7 @@ export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; 
   const st = STATUS_STYLE[doc.status];
 
   return (
-    <tr className="hover:bg-[#E9EFFF] transition-colors">
+    <tr className="hover:bg-row-hover transition-colors">
       <td className={td} style={{ minWidth: 220 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
           <span
@@ -30,7 +30,7 @@ export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; 
               justifyContent: "center",
               paddingBottom: 5,
               background: extColor(doc.ext),
-              boxShadow: "0 2px 5px -1px rgba(19,27,46,.25)",
+              boxShadow: `0 2px 5px -1px ${COLOR.shadowStrong}`,
             }}
           >
             <span style={{ fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "9px", fontWeight: 700, color: COLOR.textOnDark }}>{doc.ext}</span>
@@ -48,7 +48,7 @@ export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; 
                   }
                 }}
                 onBlur={actions.commitRenameDoc}
-                className="w-full border border-brand outline-none rounded-[7px] px-2 py-[4px] font-sans text-[13.5px] font-semibold text-[#101828] shadow-[0_0_0_3px_#E9EFFF]"
+                className="w-full border border-brand outline-none rounded-[7px] px-2 py-[4px] font-sans text-[13.5px] font-semibold text-on-surface shadow-focus"
               />
             ) : (
               <button
