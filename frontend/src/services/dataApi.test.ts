@@ -1,10 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import {
-  exportFilename,
-  fetchProvenance,
-  fetchRecords,
-  provenanceParams,
-} from "./dataApi";
+import { exportFilename, fetchProvenance, fetchRecords, provenanceParams } from "./dataApi";
 
 // Xác nhận client dựng đúng URL cho bề mặt tra cứu dữ liệu và ánh xạ tham chiếu
 // xuất xứ sang tham số truy vấn đúng loại (P1).

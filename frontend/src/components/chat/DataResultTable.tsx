@@ -105,12 +105,7 @@ export default function DataResultTable({
                 <tr key={rowIndex}>
                   {table.columns.map((column) => (
                     <td key={column.key} style={tdStyle}>
-                      <CellView
-                        column={column.key}
-                        cell={row[column.key]}
-                        onOpenProvenance={onOpenProvenance}
-                        onOpenDevice={onOpenDevice}
-                      />
+                      <CellView column={column.key} cell={row[column.key]} onOpenProvenance={onOpenProvenance} onOpenDevice={onOpenDevice} />
                     </td>
                   ))}
                 </tr>
@@ -122,9 +117,7 @@ export default function DataResultTable({
 
       {payload.citations.length > 0 && (
         <details style={citationsStyle}>
-          <summary style={citationsSummary}>
-            Trích dẫn sổ cái ({payload.citations.length}) — tách biệt với nguồn QTKĐ
-          </summary>
+          <summary style={citationsSummary}>Trích dẫn sổ cái ({payload.citations.length}) — tách biệt với nguồn QTKĐ</summary>
           <ul style={citationList}>
             {payload.citations.map((citation, index) => (
               <li key={index} style={citationItem}>

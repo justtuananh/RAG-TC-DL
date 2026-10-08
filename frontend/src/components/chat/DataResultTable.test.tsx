@@ -46,9 +46,7 @@ const PAYLOAD: ChatDataPayload = {
 };
 
 function render(payload: ChatDataPayload = PAYLOAD) {
-  return renderToStaticMarkup(
-    <DataResultTable payload={payload} onOpenProvenance={() => {}} onOpenDevice={() => {}} />,
-  );
+  return renderToStaticMarkup(<DataResultTable payload={payload} onOpenProvenance={() => {}} onOpenDevice={() => {}} />);
 }
 
 describe("DataResultTable — bảng số liệu chat", () => {

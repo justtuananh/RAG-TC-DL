@@ -10,11 +10,7 @@ export interface HighlightParts {
 }
 
 /** Cắt `text` tại [start, end); khoảng không hợp lệ trả về toàn bộ ở `before`. */
-export function splitHighlight(
-  text: string,
-  start: number | null | undefined,
-  end: number | null | undefined,
-): HighlightParts {
+export function splitHighlight(text: string, start: number | null | undefined, end: number | null | undefined): HighlightParts {
   if (start == null || end == null) return { before: text, match: "", after: "" };
   const from = Math.max(0, Math.min(start, text.length));
   const to = Math.max(from, Math.min(end, text.length));
@@ -23,12 +19,7 @@ export function splitHighlight(
 }
 
 /** Ưu tiên khoảng ký tự; nếu không có thì tìm `quote` nguyên văn trong `text`. */
-export function locateQuote(
-  text: string,
-  quote: string | null | undefined,
-  start: number | null | undefined,
-  end: number | null | undefined,
-): HighlightParts {
+export function locateQuote(text: string, quote: string | null | undefined, start: number | null | undefined, end: number | null | undefined): HighlightParts {
   const parts = splitHighlight(text, start, end);
   if (parts.match || !quote) return parts;
   const index = text.indexOf(quote);

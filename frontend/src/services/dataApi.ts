@@ -76,10 +76,7 @@ export async function fetchCatalogCounts(): Promise<CatalogCounts> {
   return parse<CatalogCounts>(res);
 }
 
-export async function fetchCatalogRows(
-  kind: CatalogKind,
-  filters: CatalogFilters = {},
-): Promise<CatalogPage> {
+export async function fetchCatalogRows(kind: CatalogKind, filters: CatalogFilters = {}): Promise<CatalogPage> {
   const res = await authFetch(`/api/data/catalogs/${kind}${query({ ...filters })}`);
   return parse<CatalogPage>(res);
 }
@@ -89,12 +86,14 @@ export async function fetchFilterOptions(): Promise<FilterOptions> {
   return parse<FilterOptions>(res);
 }
 
-export async function fetchDevices(params: {
-  q?: string;
-  device_type_id?: number;
-  limit?: number;
-  offset?: number;
-} = {}): Promise<{ items: DeviceSummary[]; total: number }> {
+export async function fetchDevices(
+  params: {
+    q?: string;
+    device_type_id?: number;
+    limit?: number;
+    offset?: number;
+  } = {},
+): Promise<{ items: DeviceSummary[]; total: number }> {
   const res = await authFetch(`/api/data/devices${query({ ...params })}`);
   return parse<{ items: DeviceSummary[]; total: number }>(res);
 }
