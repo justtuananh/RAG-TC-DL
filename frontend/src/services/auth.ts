@@ -168,11 +168,21 @@ export async function login(username: string, password: string): Promise<AuthUse
   return userFromToken(data.access_token) ?? { id: 0, username, full_name: null, role: "viewer" };
 }
 
-/** GET /api/auth/me — dùng khi khôi phục phiên từ localStorage để lấy họ tên/vai trò. */
-export async function fetchMe(): Promise<AuthUser> {
+export interface MeResult {
+  user: AuthUser;
+  /** false: máy chủ tắt đăng nhập, mọi người dùng là quản trị viên cục bộ. */
+  authEnabled: boolean;
+}
+
+/**
+ * GET /api/auth/me — gọi khi mount, có token thì gửi kèm. Máy chủ tắt đăng nhập
+ * trả luôn tài khoản cục bộ (không cần token); thiếu `auth_enabled` coi là đang bật.
+ */
+export async function fetchMe(): Promise<MeResult> {
   const res = await authFetch("/api/auth/me", {}, { notifyOn401: false });
   if (!res.ok) throw new AuthError(await _errorMessage(res, "Không đọc được thông tin người dùng."), res.status);
-  return (await res.json()) as AuthUser;
+  const { auth_enabled, id, username, full_name, role } = (await res.json()) as AuthUser & { auth_enabled?: boolean };
+  return { user: { id, username, full_name, role }, authEnabled: auth_enabled !== false };
 }
 
 /** POST /api/auth/refresh — gia hạn trượt, trả token mới và lưu lại. */

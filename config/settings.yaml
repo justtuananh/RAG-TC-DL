@@ -106,7 +106,7 @@ database:
   password: ${POSTGRES_PASSWORD:-qtkd_password}   # mặc định chỉ cho dev; production bị chặn
 
 auth:
-  enabled: ${AUTH_ENABLED:-true}
+  enabled: ${AUTH_ENABLED:-false}   # false: không đăng nhập, mọi người dùng là quản trị viên cục bộ
   jwt_secret_key: ${JWT_SECRET_KEY:-}     # rỗng: dev sinh khóa tạm, production dừng
   jwt_algorithm: HS256
   jwt_expiration_hours: ${JWT_EXPIRATION_HOURS:-24}

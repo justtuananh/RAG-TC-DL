@@ -10,6 +10,7 @@ def _prod(**overrides):
     base = load_settings(
         env={
             "APP_ENV": "production",
+            "AUTH_ENABLED": "true",
             "JWT_SECRET_KEY": "k" * 40,
             "POSTGRES_PASSWORD": "mat-khau-that",
         }
@@ -44,6 +45,10 @@ def test_production_rejects_short_jwt_secret():
     # HS256 cần khóa >= 32 byte (RFC 7518 mục 3.2); khóa ngắn dò được bằng brute force.
     with pytest.raises(startup.StartupError, match="32"):
         startup.validate_security(_prod(**{"auth.jwt_secret_key": "k" * 31}))
+
+
+def test_production_without_auth_needs_no_jwt_secret():
+    startup.validate_security(_prod(**{"auth.enabled": False, "auth.jwt_secret_key": None}))
 
 
 def test_production_with_real_secrets_passes():

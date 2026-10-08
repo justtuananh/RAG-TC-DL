@@ -74,6 +74,7 @@ function makeInitialState(): AppState {
     pendingDeviceId: null,
     auth: {
       user: null,
+      enabled: true,
       loginOpen: false,
       loginBusy: false,
       loginError: null,
@@ -222,22 +223,19 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     saveConversations(state.conversations);
   }, [state.conversations]);
 
-  // Khôi phục phiên từ localStorage khi mount: token còn hạn → lấy hồ sơ qua /api/auth/me;
-  // token hết hạn/hỏng → xoá im lặng (khách vẫn đọc/chat được, KHÔNG bắt đăng nhập).
+  // Khôi phục phiên khi mount qua /api/auth/me (token hết hạn/hỏng → xoá im lặng trước).
+  // Máy chủ tắt đăng nhập → /me trả tài khoản cục bộ kể cả không có token.
+  // Bật đăng nhập mà chưa có phiên → 401: khách vẫn đọc/chat được, KHÔNG bắt đăng nhập.
   useEffect(() => {
     const token = getToken();
-    if (!token || isTokenExpired(token)) {
-      if (token) clearToken();
-      set((s) => ({ auth: { ...s.auth, restoreDone: true } }));
-      return;
-    }
+    if (token && isTokenExpired(token)) clearToken();
     let cancelled = false;
     fetchMe()
-      .then((user) => {
+      .then(({ user, authEnabled }) => {
         if (cancelled) return;
-        set((s) => ({ auth: { ...s.auth, user, restoreDone: true } }));
+        set((s) => ({ auth: { ...s.auth, user, enabled: authEnabled, restoreDone: true } }));
         // Còn ít thời gian hiệu lực → gia hạn trượt trong nền (không chặn UI).
-        if (expiresWithin(getToken(), 6 * 3600 * 1000)) refreshToken().catch(() => {});
+        if (authEnabled && expiresWithin(getToken(), 6 * 3600 * 1000)) refreshToken().catch(() => {});
       })
       .catch(() => {
         clearToken();

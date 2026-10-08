@@ -70,7 +70,7 @@ export default function App() {
       />
       <ConfirmDialog conv={state.confirmDelete} onYes={actions.confirmDeleteYes} onNo={actions.confirmDeleteNo} />
       <LoginModal
-        open={state.auth.loginOpen}
+        open={state.auth.enabled && state.auth.loginOpen}
         busy={state.auth.loginBusy}
         error={state.auth.loginError}
         notice={state.auth.loginNotice}

@@ -106,8 +106,8 @@ export default function TopBar({ tab, llmStatus, onGo, onOpenLlm, auth, onOpenLo
         <IcSettings size={13} strokeWidth={2} style={{ opacity: 0.55, flexShrink: 0 }} />
       </button>
 
-      {/* tài khoản: đăng nhập / vai trò / đăng xuất */}
-      <AccountMenu auth={auth} onLogin={onOpenLogin} onLogout={onLogout} />
+      {/* tài khoản: đăng nhập / vai trò / đăng xuất — ẩn khi máy chủ tắt đăng nhập */}
+      {auth.enabled && <AccountMenu auth={auth} onLogin={onOpenLogin} onLogout={onLogout} />}
     </header>
   );
 }

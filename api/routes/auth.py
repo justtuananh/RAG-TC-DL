@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from api.schemas import LoginRequest
 from auth import create_access_token, get_current_user, verify_password
+from core.settings_loader import get_settings
 from db import get_db
 from db.models import AppUser
 
@@ -31,6 +32,7 @@ def me(user: AppUser = Depends(get_current_user)):
         "username": user.username,
         "full_name": user.full_name,
         "role": user.role.value,
+        "auth_enabled": get_settings().auth.enabled,
     }
 
 

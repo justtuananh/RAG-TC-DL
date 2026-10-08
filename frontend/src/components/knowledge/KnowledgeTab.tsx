@@ -341,6 +341,8 @@ export default function KnowledgeTab({ state, actions }: { state: AppState; acti
   );
 
   // ── Chưa đăng nhập / thiếu quyền ──
+  // Chưa biết phiên (đang gọi /api/auth/me) — giữ trống để không nháy màn "Cần đăng nhập".
+  if (!user && !state.auth.restoreDone) return null;
   if (!user) {
     return (
       <CenteredNotice

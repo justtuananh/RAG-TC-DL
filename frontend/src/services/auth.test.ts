@@ -232,13 +232,35 @@ describe("login / fetchMe / refresh / logout", () => {
   it("fetchMe gửi bearer và trả hồ sơ đầy đủ", async () => {
     const token = makeToken();
     setToken(token);
-    const spy = mockFetch(async () => jsonResponse({ id: 7, username: "tech", full_name: "Kỹ thuật", role: "technician" }));
+    const spy = mockFetch(async () => jsonResponse({ id: 7, username: "tech", full_name: "Kỹ thuật", role: "technician", auth_enabled: true }));
     vi.stubGlobal("fetch", spy);
 
-    const user = await fetchMe();
+    const { user, authEnabled } = await fetchMe();
 
-    expect(user.full_name).toBe("Kỹ thuật");
+    expect(user).toEqual({ id: 7, username: "tech", full_name: "Kỹ thuật", role: "technician" });
+    expect(authEnabled).toBe(true);
     expect(((spy.mock.calls[0][1] as RequestInit).headers as Headers).get("Authorization")).toBe(`Bearer ${token}`);
+  });
+
+  it("fetchMe không cần token khi máy chủ tắt đăng nhập", async () => {
+    vi.stubGlobal(
+      "fetch",
+      mockFetch(async () => jsonResponse({ id: 1, username: "local", full_name: null, role: "admin", auth_enabled: false })),
+    );
+
+    const { user, authEnabled } = await fetchMe();
+
+    expect(user.role).toBe("admin");
+    expect(authEnabled).toBe(false);
+  });
+
+  it("fetchMe coi thiếu auth_enabled là đang bật đăng nhập", async () => {
+    vi.stubGlobal(
+      "fetch",
+      mockFetch(async () => jsonResponse({ id: 7, username: "tech", full_name: null, role: "technician" })),
+    );
+
+    expect((await fetchMe()).authEnabled).toBe(true);
   });
 
   it("refreshToken lưu token mới", async () => {

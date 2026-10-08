@@ -277,10 +277,47 @@ def test_logout_requires_token(client, users):
     assert client.post("/api/auth/logout").status_code == 401
 
 
-def test_dev_mode_without_auth_uses_mock_user(client, monkeypatch, settings_override):
-    """auth.enabled=false must not 401 writes (local frontend workflow) and must
-    not crash on the actor FK when no persisted admin exists."""
+def test_dev_mode_without_auth_uses_local_admin(
+    client, monkeypatch, settings_override, session_factory
+):
+    """auth.enabled=false must not 401 writes (local frontend workflow); with no
+    admin yet, a persisted local admin is created so the audit actor FK holds."""
     settings_override({"auth.enabled": False})
     monkeypatch.setattr(ingestion_jobs, "start_processing", lambda stem: None)
     resp = client.post("/api/documents/stem/process")
     assert resp.status_code == 200
+
+    rows = _audit_rows(session_factory)
+    db = session_factory()
+    try:
+        admins = db.query(AppUser).filter(AppUser.role == UserRole.ADMIN).all()
+    finally:
+        db.close()
+    assert len(admins) == 1
+    assert rows and all(row.actor_id == admins[0].id for row in rows)
+
+
+def test_me_without_token_when_auth_disabled_returns_local_admin(client, settings_override):
+    settings_override({"auth.enabled": False})
+    first = client.get("/api/auth/me")
+    second = client.get("/api/auth/me")
+    assert first.status_code == 200
+    assert first.json()["role"] == "admin"
+    assert first.json()["auth_enabled"] is False
+    assert second.json()["id"] == first.json()["id"]
+
+
+def test_me_reports_auth_enabled(client, users):
+    resp = client.get(
+        "/api/auth/me", headers={"Authorization": f"Bearer {_token(users, 'viewer')}"}
+    )
+    assert resp.status_code == 200
+    assert resp.json()["auth_enabled"] is True
+
+
+def test_local_admin_cannot_log_in(client, settings_override):
+    settings_override({"auth.enabled": False})
+    username = client.get("/api/auth/me").json()["username"]
+    settings_override({"auth.enabled": True})
+    resp = client.post("/api/auth/login", json={"username": username, "password": ""})
+    assert resp.status_code in (401, 422)

@@ -181,6 +181,8 @@ export default function DataTab({ state, actions }: { state: AppState; actions: 
     }
   };
 
+  // Chưa biết phiên (đang gọi /api/auth/me) — giữ trống để không nháy màn "Cần đăng nhập".
+  if (!user && !state.auth.restoreDone) return <main aria-label="Dữ liệu" style={centered} />;
   if (!user) {
     return (
       <main aria-label="Dữ liệu" style={centered}>
