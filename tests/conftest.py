@@ -35,7 +35,7 @@ _DATA = Path(__file__).resolve().parent / "data"
 # Singleton lazy rò rỉ giữa các test (và là staleness bug tiềm ẩn trong app thật).
 _SINGLETONS = {
     "vectorstore.qdrant": ["_client"],
-    "vectorstore.hybrid_index": ["_bm25", "_chunks"],
+    "vectorstore.hybrid_index": ["_index"],
     "retrieval.router": ["_number_to_stem", "_device_aliases"],
 }
 

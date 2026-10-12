@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+from collections.abc import Iterable
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
@@ -10,6 +11,7 @@ from qdrant_client.models import (
     FieldCondition,
     Filter,
     FilterSelector,
+    MatchAny,
     MatchValue,
     VectorParams,
 )
@@ -129,10 +131,17 @@ def fetch_parent(parent_id_hex: str) -> dict | None:
     return None
 
 
-def scroll_child_payloads() -> list[dict]:
-    """Scroll every child chunk payload out of the collection (for the BM25 index)."""
+def scroll_child_payloads(file_stems: Iterable[str] | None = None) -> list[dict]:
+    """Scroll child chunk payloads out of the collection (for the BM25 index).
+
+    ``file_stems`` giới hạn ở các file đó, để BM25 cập nhật một tài liệu mà không
+    quét cả collection.
+    """
     client = get_client()
-    child_filter = Filter(must=[FieldCondition(key="is_parent", match=MatchValue(value=False))])
+    conditions = [FieldCondition(key="is_parent", match=MatchValue(value=False))]
+    if file_stems is not None:
+        conditions.append(FieldCondition(key="file_stem", match=MatchAny(any=sorted(file_stems))))
+    child_filter = Filter(must=conditions)
     payloads: list[dict] = []
     offset = None
     while True:

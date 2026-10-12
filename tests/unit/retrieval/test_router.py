@@ -101,6 +101,7 @@ def test_number_map_accepts_uploaded_stem_with_d_stroke(monkeypatch):
     """Tệp tải lên giữ chữ "Đ" trong tên ("QTKĐ 9.001 ...docx" → stem
     "QTKĐ_9.001_..."): số QTKĐ vẫn phải map được về stem đó."""
     stems = ["QTKD_1.061_2021_ND_V2", "QTKĐ_9.001_2026_Van_an_toan"]
+    monkeypatch.setattr(router_mod, "_load_db_number_map", lambda: None)
     monkeypatch.setattr(router_mod.qdrant, "get_client", lambda: _FakeClient(stems))
     monkeypatch.setattr(router_mod.qdrant, "collection_name", lambda: "c")
 
@@ -119,3 +120,69 @@ def test_invalidate_drops_cached_maps(mapping, monkeypatch):
 
     assert router_mod._number_to_stem is None
     assert router_mod._device_aliases is None
+
+
+def test_number_map_fallback_is_deterministic_and_prefers_newest(monkeypatch):
+    """Không đọc được DB: hai phiên bản cùng số QTKĐ trong Qdrant phải luôn map
+    về cùng một file (bản mới hơn), không phụ thuộc thứ tự duyệt ``set``."""
+    old, new = "QTKD_1.061_2016_ND", "QTKD_1.061_2021_ND_V2"
+    monkeypatch.setattr(router_mod, "_load_db_number_map", lambda: None)
+    monkeypatch.setattr(router_mod.qdrant, "collection_name", lambda: "c")
+    for order in ([old, new], [new, old]):
+        monkeypatch.setattr(router_mod.qdrant, "get_client", lambda o=order: _FakeClient(o))
+        assert router_mod._build_number_to_stem() == {"1.061": new}
+
+
+@pytest.fixture
+def procedure_db(monkeypatch):
+    from sqlalchemy import create_engine
+    from sqlalchemy.orm import sessionmaker
+    from sqlalchemy.pool import StaticPool
+
+    import db as db_pkg
+    from db.models import Base, Document, DocumentType, Procedure
+
+    engine = create_engine(
+        "sqlite://", connect_args={"check_same_thread": False}, poolclass=StaticPool
+    )
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(bind=engine)
+    monkeypatch.setattr(db_pkg, "SessionLocal", factory)
+
+    def add(stem: str, number: str | None) -> None:
+        session = factory()
+        session.add(
+            Document(
+                id=stem,
+                file_stem=stem,
+                display_name=f"{stem}.docx",
+                ext="DOCX",
+                doc_type=DocumentType.QTKD,
+                sha256=stem.ljust(64, "0")[:64],
+                size_bytes=1,
+            )
+        )
+        if number is not None:
+            session.add(Procedure(number=number, document_id=stem))
+        session.commit()
+        session.close()
+
+    yield add
+    engine.dispose()
+
+
+def test_number_map_reads_procedure_table(procedure_db, monkeypatch):
+    """Bảng ``procedure`` là nguồn sự thật: số lấy từ đầu mục văn bản nên tệp tên
+    không theo mẫu "QTKD_x.xxx" vẫn được ghim, và bản cũ (không còn là chủ dòng
+    procedure) không bao giờ được chọn."""
+    procedure_db("Quy_trinh_ap_ke_lo_xo", "1.088")
+    procedure_db("QTKD_1.061_2026_ND", "1.061")
+    procedure_db("QTKD_1.061_2016_ND", None)  # phiên bản cũ
+    monkeypatch.setattr(
+        router_mod.qdrant, "get_client", lambda: pytest.fail("không được quét Qdrant")
+    )
+
+    assert router_mod._build_number_to_stem() == {
+        "1.088": "Quy_trinh_ap_ke_lo_xo",
+        "1.061": "QTKD_1.061_2026_ND",
+    }

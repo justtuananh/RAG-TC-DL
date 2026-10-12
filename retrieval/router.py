@@ -3,9 +3,11 @@
 Uses explicit QTKĐ number (e.g. "1.061") or device-name alias (e.g. "van an toàn")
 found in the query text. Returns None when uncertain → full-corpus search.
 
-Number map is built lazily from Qdrant on first call (one-time scan, ~0.1s).
-Device aliases are read from the `device_type` + `procedure` tables (Sprint 3)
-with a hardcoded fallback, so retrieval never depends on Postgres being up.
+Number map and device aliases are read lazily from the `procedure` table (+ its
+`document` and `device_type`): the number comes from the document header, and the
+row always points to the current version of a QTKĐ. When Postgres is unreachable
+the number map falls back to a Qdrant file_stem scan and the aliases to a
+hardcoded table, so retrieval never depends on Postgres being up.
 """
 
 from __future__ import annotations
@@ -79,8 +81,32 @@ def _ensure_device_aliases() -> dict[str, tuple[str, ...]]:
     return _device_aliases
 
 
-def _build_number_to_stem() -> dict[str, str]:
-    """Scroll Qdrant for distinct file_stems, map QTKĐ number → full file_stem."""
+def _load_db_number_map() -> dict[str, str] | None:
+    """Số QTKĐ → file_stem từ bảng ``procedure``; None nếu không đọc được DB.
+
+    Bọc try/except rộng như ``_load_db_device_aliases``: DB chưa lên thì router
+    rơi về quét Qdrant thay vì làm hỏng truy hồi.
+    """
+    try:
+        from db import SessionLocal
+        from knowledge.reference import procedure_stem_map
+
+        session = SessionLocal()
+        try:
+            mapping = procedure_stem_map(session)
+        finally:
+            session.close()
+        return mapping or None
+    except Exception:
+        return None
+
+
+def _scan_qdrant_number_map() -> dict[str, str]:
+    """Dự phòng: quét file_stem phân biệt trong Qdrant, lấy số QTKĐ từ tên tệp.
+
+    Duyệt stem theo thứ tự sắp xếp để kết quả xác định; hai phiên bản cùng số thì
+    stem lớn hơn thắng (năm nằm ngay sau số, nên bản mới hơn thắng).
+    """
     client = qdrant.get_client()
     stems: set[str] = set()
     offset = None
@@ -101,11 +127,19 @@ def _build_number_to_stem() -> dict[str, str]:
         offset = next_offset
 
     mapping: dict[str, str] = {}
-    for stem in stems:
+    for stem in sorted(stems):
         m = _STEM_NUMBER_RE.search(stem)
         if m:
             mapping[m.group(1)] = stem
     return mapping
+
+
+def _build_number_to_stem() -> dict[str, str]:
+    """Map số QTKĐ → file_stem: bảng ``procedure`` trước, Qdrant khi DB không đọc được."""
+    from_db = _load_db_number_map()
+    if from_db is not None:
+        return from_db
+    return _scan_qdrant_number_map()
 
 
 def _ensure_mapping() -> dict[str, str]:
@@ -116,7 +150,7 @@ def _ensure_mapping() -> dict[str, str]:
 
 
 def invalidate() -> None:
-    """Bỏ map số và alias đã nạp; lần gọi sau dựng lại từ Qdrant + DB.
+    """Bỏ map số và alias đã nạp; lần gọi sau dựng lại từ DB (hoặc Qdrant).
 
     Ingestion gọi sau khi nhúng hoặc xóa tài liệu, để QTKĐ mới tải lên được ghim
     ngay mà không phải khởi động lại API.

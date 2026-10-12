@@ -63,6 +63,22 @@ def device_alias_map(session) -> dict[str, tuple[str, ...]]:
     return {alias: tuple(numbers) for alias, numbers in result.items()}
 
 
+def procedure_stem_map(session) -> dict[str, str]:
+    """Số QTKĐ → file_stem của tài liệu đang là phiên bản hiện hành.
+
+    Mỗi số có đúng một dòng ``procedure`` (cột ``number`` unique) trỏ tới bản
+    mới nhất, nên map này không bao giờ chọn nhầm phiên bản cũ.
+    """
+    from db.models import Document, Procedure
+
+    rows = (
+        session.query(Procedure.number, Document.file_stem)
+        .join(Document, Procedure.document_id == Document.id)
+        .all()
+    )
+    return {number: stem for number, stem in rows}
+
+
 def procedure_by_number(session, number: str):
     from db.models import Procedure
 
