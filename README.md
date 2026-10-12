@@ -1,10 +1,6 @@
-# RAG_TC_DL — Chatbot tra cứu tài liệu Đo lường (QTKĐ)
+# RAG-TC-DL — Tra cứu QTKĐ và tính công thức đã phê duyệt
 
-Hệ thống **RAG chạy hoàn toàn offline** để **tra cứu & trích dẫn** các Quy trình Kiểm định
-(QTKĐ — *Quy trình Kiểm định*) của Cục Tiêu chuẩn–Đo lường–Chất lượng. Người dùng hỏi bằng
-tiếng Việt → bot trả lời kèm **trích đoạn chính xác + công thức (LaTeX) + dẫn nguồn** (tên
-file, mục/điều khoản). **Chỉ tra cứu — không tự tính toán.** Không gọi API cloud: mọi model
-chạy local. Mục tiêu prod: 1 máy đơn **RTX 5060 8GB**, mở rộng từ vài file lên hàng nghìn QTKĐ.
+Ứng dụng React + FastAPI tra cứu tài liệu đo lường bằng RAG, trả lời tiếng Việt kèm nguồn và hiển thị công thức. Luồng tính riêng trong màn hình **Tài liệu → chọn DOCX → Công thức và phê duyệt**:
 
 > **Hai cách triển khai (ngang nhau):**
 > - **Mode A - Docker (stack standalone):** một lệnh `make up` dựng `ui/gradio_app.py` + Qdrant + dịch vụ
@@ -22,43 +18,19 @@ chạy local. Mục tiêu prod: 1 máy đơn **RTX 5060 8GB**, mở rộng từ 
 > `frontend-legacy/` là bản React (JS thuần) đời trước, giữ để tham khảo. Chạy nhanh local (api
 > + Vite): `./run.sh`. Chi tiết: [`frontend/README.md`](frontend/README.md).
 
-**Mục lục**
-1. [Tổng quan & vấn đề cốt lõi](#1-tổng-quan--vấn-đề-cốt-lõi)
-2. [Công nghệ](#2-công-nghệ)
-3. [Cài đặt chi tiết](#3-cài-đặt-chi-tiết)
-4. [Workflow & luồng xử lý](#4-workflow--luồng-xử-lý)
-5. [Kết quả Eval](#5-kết-quả-eval)
-6. [Tham khảo](#6-tham-khảo)
+LLM không tự tạo phép tính được phép chạy. Ingestion chỉ gợi ý biểu thức/metadata; công thức chưa duyệt, sai phiên bản hoặc nguồn hết hiệu lực đều bị chặn. Chat hiện hướng dẫn mở form, chưa tự chọn ID công thức đã duyệt từ hội thoại. Các model chạy local; lần cài đặt/build đầu cần tải thư viện và model trước khi vận hành offline.
 
----
+## Trạng thái và giới hạn
 
-## 1. Tổng quan & vấn đề cốt lõi
+- BE/FE có tạo/lấy/sửa/duyệt/từ chối nháp, ca đối chứng, kiểm tra đơn vị/miền/điều kiện và form tính. Chỉnh định nghĩa thu hồi phê duyệt; xóa rồi tải lại nguồn cũ phải duyệt lại.
+- Bảy DOCX hiện có **334 ứng viên chờ duyệt**, trong đó **57 có biểu thức gợi ý**, 277 chưa có biểu thức. Đây không phải 334 bộ tính hoạt động. Registry lab 47 bộ tính là thí nghiệm riêng.
+- PDF có trích text để tra cứu nhưng chưa tạo được nháp công thức có định vị. OLE/MathType lỗi và biểu thức phức tạp cần đối chiếu thủ công.
+- Chưa có xác thực/phân quyền người duyệt. Tên người duyệt tự nhập và nhật ký không chứng minh danh tính hay thay thế phê duyệt chuyên môn.
+- Điểm **96% trước đây là điểm checklist sau sửa các ca đã biết**, không chứng minh độ chính xác nghiệp vụ hoặc khả năng tổng quát. Trọng số và tolerance hậu kiểm có rủi ro bias. Xem [audit đánh giá](build/formula-review/BIAS_AUDIT.md); giữ [báo cáo cũ](build/formula-review/INDEPENDENT_REVIEW.md) để truy vết.
 
-### Repo này là gì
-Một chatbot hỏi–đáp trên kho tài liệu kỹ thuật đo lường. Người dùng gõ câu hỏi tiếng Việt
-(ví dụ *"sai số cho phép của áp kế theo QTKĐ 1.061 là bao nhiêu?"*), hệ thống tìm đúng đoạn
-trong tài liệu gốc, đưa cho LLM **chỉ những đoạn đó**, và trả về câu trả lời **kèm trích dẫn
-nguồn** để người dùng tự đối chiếu. Toàn bộ chạy offline để dùng được trong môi trường nội bộ,
-không phụ thuộc internet.
+## Thành phần
 
-### Vấn đề cốt lõi: công thức KHÔNG phải text  *(Risk #1)*
-Trong file `.docx` nguồn, công thức được nhúng dưới dạng **OLE object MathType (MTEF nhị
-phân)** — `word/embeddings/oleObject*.bin` — kèm một ảnh WMF đã render. **Không có** công
-thức dạng text (OMML / `m:oMath`). Trích text thông thường sẽ **mất sạch công thức**. Toàn
-bộ tầng `ingestion/` tồn tại để **khôi phục công thức trung thực** thành `$LaTeX$`. Đây là rủi
-ro lớn nhất của dự án — *độ chính xác công thức là mối quan tâm số 1 trong mọi thay đổi ingestion.*
-
-```
-.docx  →  OLE MathType (.bin, MTEF)  →  gem mathtype_to_mathml (Ruby)  →  MathML  →  LaTeX
-                                                                                      ▲
-                                          ⟦Fxxx⟧ placeholder trong Markdown được thay bằng $LaTeX$
-```
-
----
-
-## 2. Công nghệ
-
-| Lớp | Thành phần | Ghi chú |
+| Thành phần | Mã / cổng | Chức năng |
 |---|---|---|
 | **Giao diện** | **Gradio** `ui/gradio_app.py` `:7861` · **React** `frontend/` `:3000` (dev Vite `:5173`, + `python -m api.main` FastAPI `:8080`) · **kotaemon** (Mode B) | React UI **đã nối backend thật** (SSE, bảng + công thức, lịch sử/bộ nhớ) - [`frontend/README.md`](frontend/README.md) |
 | **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | model `models.llm_chat` trong `config/settings.yaml` (mặc định `qwen2.5:7b-instruct`, dùng cho sinh đáp án), `:11434`; `llm/generator.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
@@ -69,9 +41,7 @@ ro lớn nhất của dự án — *độ chính xác công thức là mối qua
 | **Hybrid retrieval** | **A:** `retrieval/` (router → lexicon → dense + BM25 → RRF k=60 → rerank trên parent → parent) · **B:** kotaemon built-in | |
 | **Adapter (Mode B)** | `kotaemon_ext/` | `QTKDDocxReader` (reader), `QTKDReranking` (reranker) |
 
-### Hai mode triển khai
-Hai dịch vụ **embedding `:8010`** và **reranker `:8011`** (cùng **Ollama `:11434`**) dùng chung
-cho cả hai mode; chỉ khác phần UI + vector store + tầng truy hồi.
+Gradio `app.py`, `frontend-legacy/` và adapter `kotaemon_ext/` được giữ để tương thích/tham khảo. Luồng phê duyệt mới nằm trong React/API chính; không mặc định có trên các UI cũ.
 
 | | **Mode A — Docker (standalone)** | **Mode B — kotaemon (host)** |
 |---|---|---|
@@ -83,9 +53,7 @@ cho cả hai mode; chỉ khác phần UI + vector store + tầng truy hồi.
 | Eval | **Có** — retrieval recall@5 = 1.000 + answer-quality (xem §5) | Không qua harness này |
 | Điểm mạnh | Tái lập, 1 lệnh, đã đo chất lượng | UI quản lý file/chat phong phú |
 
-> Repo này (`RAG_TC_DL`) cung cấp **ingestion / index / retrieval / eval** và adapter
-> `kotaemon_ext/`; [kotaemon](https://github.com/Cinnamon/kotaemon) (`../kotaemon`) là repo anh
-> em, clone riêng (không phải submodule), chỉ dùng cho Mode B.
+Python **3.12** và Node **24** là môi trường được dùng để kiểm tra cập nhật này. Cần Ruby và gem `mathtype_to_mathml` + `pry` để chuyển MathType OLE; nếu thiếu, các công thức đó vẫn phải được ghi nhận là chưa trích xuất được.
 
 ---
 
@@ -109,14 +77,16 @@ pip install -r requirements.txt          # olefile, lxml, scikit-image, rank-bm2
 gem install mathtype_to_mathml pry       # cần Ruby 2.6 (macOS system Ruby); thiếu pry → LoadError khi chuyển MathType
 make test-ruby                           # kiểm tra gem trước khi xử lý tài liệu (tự skip nếu thiếu Ruby/gem)
 
-python -m ingestion.spike_a              # đọc TC_DL/ → ghi build/spike_a/*.md + extraction_report.json
+cd frontend
+npm ci
+cd ..
+./run.sh --no-docker
 ```
-> `ingestion/mtef_to_latex.py` hardcode `_GEM_PATHS` cho Ruby 2.6 macOS. Ruby khác chỗ → chỉnh
-> `_GEM_PATHS` hoặc đặt biến `GEM_PATH`. Kiểm tra `build/spike_a/extraction_report.json` để xác
-> nhận tỉ lệ chuyển công thức.
 
-### 3.3 Mode A — Triển khai bằng Docker  *(stack standalone)*
-Toàn bộ stack gói trong `docker-compose.yml` + điều khiển qua `Makefile`. **Trình tự:**
+`run.sh` chọn venv trong dự án trước; có thể đặt `QTKD_PYTHON=/path/to/python`. Mở `http://localhost:5173`. RAG cần Qdrant, embedding, reranker và Ollama; riêng tạo nháp từ DOCX hiện có/phê duyệt/tính không cần các service model này.
+
+Chạy từng phần nếu muốn:
+
 ```bash
 # 0) Đã chạy ingestion (§3.2) → có build/spike_a/   (compose mount thư mục này read-only)
 make up            # build images + start: qdrant, embedding, reranker, ollama, api, frontend  (~10–20' lần đầu: tải model)
@@ -136,14 +106,31 @@ make index         # indexer: vectorstore.index --force → nhúng build/spike_a
 | `frontend` | build `frontend/` → nginx | 3000 | Serve bản React build; proxy `/api` → `api:8080`. **Đã nối backend thật** (chat SSE, bảng/công thức, lịch sử + bộ nhớ ngắn hạn) |
 | `indexer` | reuse `qtkd-app:local` (profile `tools`) | — | Chạy 1 lần: `vectorstore.index --force` |
 
-**Inference server tự viết** — `docker/inference/server.py`: FastAPI + `sentence-transformers`
-(`SentenceTransformer` cho embedding, `CrossEncoder` cho reranker). Model được **tải sẵn vào
-image lúc build** (qua ARG `MODE` / `EMBEDDING_MODEL` / `RERANKER_MODEL`). Đây **không phải**
-HuggingFace TEI; nó cài đúng định dạng `/v1/embeddings` + `/v1/rerank` mà code dự án cần (nên
-không có vấn đề tương thích).
+```bash
+cp .env.example .env
+mkdir -p .formula-registry build/spike_a
+make up
+make pull-model
+# Mở http://localhost:3000
+```
 
-**Lệnh `make` thường dùng:**
-| Lệnh | Tác dụng |
+Compose đầy đủ hiện khai báo NVIDIA GPU cho embedding, reranker và Ollama; cần Docker Compose v2, NVIDIA driver và Container Toolkit. API/FE cùng registry không cần GPU. Để thử riêng giao diện và luồng duyệt/tính, không dựng model:
+
+```bash
+docker compose build api frontend
+docker compose up -d --no-deps api
+docker compose up -d --no-deps frontend
+```
+
+Lúc này RAG chưa hoạt động. Tạo nháp cho tài liệu có sẵn qua nút trong UI, hoặc:
+
+```bash
+make formula-drafts-docker
+```
+
+Lệnh chỉ tạo nháp, không phê duyệt. Upload rồi “Xử lý” trên UI tạo nháp trước embedding; nếu model/Qdrant chưa chạy, trạng thái xử lý tài liệu có thể báo lỗi nhưng vẫn mở được phần công thức.
+
+| Dữ liệu | Nơi lưu bền |
 |---|---|
 | `make up` / `make start` | Start (có / không rebuild) |
 | `make down` | Dừng toàn bộ |
@@ -171,9 +158,6 @@ Xem `python -m core.settings_loader get <khóa>` để biết giá trị hiệu 
   chạy **CPU** là đủ (theo `docs/PLAN.md`), giữ VRAM cho LLM.
 - **Dữ liệu bền:** bind mount `./qdrant_storage/`, volume `ollama_data` (giữ qua restart; `make clean-volumes` để xoá).
 
-### 3.4 Mode B — kotaemon (UI tương tác trên host)
-Giao diện kotaemon với Chroma + adapter `kotaemon_ext/`. Dùng chung service `:8010/:8011/:11434`
-với Mode A (cần các container đó chạy, hoặc tự dựng).
 ```bash
 cd /Users/mac/Desktop/AI4TA
 git clone https://github.com/Cinnamon/kotaemon.git      # repo anh em (cạnh RAG_TC_DL)
@@ -264,17 +248,7 @@ flowchart TB
     VS -. "tìm child chunks" .-> HY
 ```
 
-**Luồng logic & ranh giới trách nhiệm:**
-- **Ingestion** (`spike_a` → `chunker`) bóc công thức MathType → `$LaTeX$` và chia parent/child.
-  Mode A chạy batch trên host (`make index`); Mode B chạy trong bộ nhớ mỗi lần upload qua
-  `QTKDDocxReader`. `CHUNK_SIZE=8192` (Mode B) ngăn kotaemon cắt lại child chunk làm **vỡ công
-  thức inline**.
-- **Truy hồi** lấy child chunk liên quan → rerank cross-encoder (`:8011`) → ghép context → Ollama
-  sinh đáp án **chỉ dựa trên context**, tiếng Việt, **không tính lại công thức**, kèm trích dẫn.
-- **Lookup-only được cưỡng chế TẤT ĐỊNH** (Mode A): câu yêu cầu tính toán có số liệu cho sẵn bị
-  từ chối **trước khi** retrieve (`is_calculation_request`); mọi nội dung model viết thêm sau câu
-  từ chối chuẩn bị cắt (`enforce_refusal_stop`) — không trông vào model tự tuân prompt.
-- **Độ trung thực công thức thuộc về `ingestion/`** — không phụ thuộc framework truy hồi.
+## Tài liệu
 
 ### Kho tài liệu & trạng thái
 `TC_DL/` có **11 file**: 7 `.docx` (đã xử lý) + 3 `.doc` + 1 `.xls` (**legacy — báo cáo nhưng

@@ -1,0 +1,56 @@
+{
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "packages": {
+    "fastapi": "0.141.1",
+    "pydantic": "2.12.3",
+    "starlette": "0.52.1",
+    "gradio": "5.50.0",
+    "qdrant-client": "1.19.1",
+    "lxml": "6.1.3",
+    "pymupdf": "1.28.2",
+    "pytest": "9.1.1",
+    "ruff": "0.16.9",
+    "playwright": "1.63.0"
+  },
+  "checks": {
+    "python_unit": {
+      "passed": 204,
+      "skipped": 1,
+      "skip_scope": "optional kotaemon adapter"
+    },
+    "pip_check": "pass",
+    "lint_format": "pass",
+    "artifact_fidelity": "pass, historical artifacts only",
+    "legacy_gradio_ui_construction": "pass",
+    "frontend_tests": {
+      "passed": 47
+    },
+    "frontend_typecheck_lint_build": "pass",
+    "frontend_npm_ci": "pass",
+    "frontend_npm_audit": "0 known vulnerabilities at update time",
+    "dev_preview_proxy_smoke": "pass",
+    "api_react_readonly_runtime_smoke": "pass",
+    "docker_runtime": "not tested: no CLI or daemon"
+  },
+  "known_holdout_findings": [
+    "slope precision with large offset",
+    "no whole-expression dimensional analysis"
+  ],
+  "bias_audit": "../formula-review/BIAS_AUDIT.md",
+  "scope": "Deployment/dependency regression after frozen holdout; not a new independent quality score",
+  "hashes": {
+    "Dockerfile": "e58b556b2ed634f7e8c069ebb3b02ea20256651ad0f974a48f6b82d7ca462302",
+    "docker-compose.yml": "4c0cab64e9f82b3e4135e333bd02d9cb87b4e551cf056c7372acf0a8ae7bdd9c",
+    "requirements-app.txt": "101155650bf00533ec3a2f224c0dcf9c305edf677ba3772c8597f43b64340ae9",
+    "requirements-app.lock": "a9606b3fe184969b1a26e0598abc72b274b63b0bcf39028e609b32beefb85578",
+    "requirements-dev.txt": "2eedb88cd19f5fadea73d32ef2b5afc3029e0788a555c5e785ed507279e5079d",
+    ".github/workflows/ci.yml": "0544ef2eccd1ccb4e9b8f5ed01a2b2a7f1ddbcdd2470480eef0902aeb48b9bc8",
+    "Makefile": "8676ebe386bbe2ff7f24c1ecb2fec10565bab0330451568fb0bd24042b6ac648",
+    "run.sh": "cdee4fb1d867edc005166dea2e8192d5ca5d11626bc8c25d99a00350a6edf6fa",
+    "frontend/package.json": "e091a998388cab6f88bdb3088e607be642e7bbf3beef08382cf412a1fbf98ceb",
+    "frontend/package-lock.json": "39f00d96a425ade45c3b8ce86433f3653efa0a3e23e92252d99ffda915be1507",
+    "frontend/Dockerfile": "6b44d4032d23da92610626bd419b626d3e1dda41cd1d2bed7c28a79c049f2382",
+    "frontend/vite.config.ts": "ea4ce15bb2524e175774a28fafcce5f6bc1f3240d41736d0bccba0ca041aae8a",
+    "app.py": "6634b7f3cb6b12d25deb51be7cdce8ae25ef5843d52efc2bc295490a4a8ca950"
+  }
+}

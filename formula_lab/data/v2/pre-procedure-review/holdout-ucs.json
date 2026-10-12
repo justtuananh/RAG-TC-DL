@@ -1,0 +1,4472 @@
+[
+  {
+    "id": "holdout-F001-00",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1000",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.2",
+        "unit": "m"
+      }
+    },
+    "expected": "1960.0000000000002",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-01",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "653.561763526467",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "15.3418927634854",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.285736081142773",
+        "unit": "m"
+      }
+    },
+    "expected": "2865.039822979465",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-02",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "622.178515298457",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "8.42689547149552",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.225060657773407",
+        "unit": "m"
+      }
+    },
+    "expected": "1180.0005261585011",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-03",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1447.02737587072",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.27666554490721",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.124716396575363",
+        "unit": "m"
+      }
+    },
+    "expected": "1674.1416492232772",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-04",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "574.047856817631",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "10.4555580909232",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.113102888298751",
+        "unit": "m"
+      }
+    },
+    "expected": "678.84248528739272",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-05",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1245.01105340956",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "6.20776966317053",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.159597059238842",
+        "unit": "m"
+      }
+    },
+    "expected": "1233.4844705039629",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-06",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "1094.61288689307",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "8.81691531546397",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.292571873579594",
+        "unit": "m"
+      }
+    },
+    "expected": "2823.6430793933901",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-07",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "869.384374146143",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "14.0304920013142",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.295613047988384",
+        "unit": "m"
+      }
+    },
+    "expected": "3605.8555919580449",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-08",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "937.348629133239",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "8.06994357757747",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.227391394619944",
+        "unit": "m"
+      }
+    },
+    "expected": "1720.0682208733299",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F001-09",
+    "formula": "dpi190_f001",
+    "inputs": {
+      "rho": {
+        "value": "824.467123254747",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "16.5851401881118",
+        "unit": "m/s2"
+      },
+      "h": {
+        "value": "0.309933686870062",
+        "unit": "m"
+      }
+    },
+    "expected": "4238.0031148030212",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190, tôi cần hiệu chỉnh cột áp khi chuẩn và máy lệch độ cao.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-00",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "101",
+          "102",
+          "103"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "100",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-01",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "66.5725926183971",
+          "70.5893308269943",
+          "94.2302864855571"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "125.355323698964",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-48.224587055314501",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-02",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "90.22330246782",
+          "167.197427414968",
+          "69.4140824857071"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "67.6273727364763",
+        "unit": "Pa"
+      }
+    },
+    "expected": "41.317564719688718",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-03",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "163.232870360302",
+          "100.324052943658",
+          "72.8499713646124"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "151.255273402925",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-39.119641846734211",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-04",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "86.0455516500667",
+          "77.1371998097323",
+          "151.767851031618"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "71.4173222496812",
+        "unit": "Pa"
+      }
+    },
+    "expected": "33.566211914124452",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-05",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "157.673532480107",
+          "130.812475642106",
+          "110.853073945741"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "79.0758691475684",
+        "unit": "Pa"
+      }
+    },
+    "expected": "54.037158208416258",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-06",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "148.751051193359",
+          "157.128246450211",
+          "145.30815796968"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "123.818181264281",
+        "unit": "Pa"
+      }
+    },
+    "expected": "26.577637273468994",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-07",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "93.1776689421934",
+          "60.8496022976691",
+          "108.729194200353"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "59.400915358546",
+        "unit": "Pa"
+      }
+    },
+    "expected": "28.18457312152583",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-08",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "100.203714903895",
+          "129.268645423478",
+          "79.9630255011123"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "86.7095844727401",
+        "unit": "Pa"
+      }
+    },
+    "expected": "16.435544136754999",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F004-09",
+    "formula": "dpi190_f004",
+    "inputs": {
+      "readings": {
+        "value": [
+          "124.53558420419",
+          "170.378244481211",
+          "132.870443888074"
+        ],
+        "unit": "Pa"
+      },
+      "pc": {
+        "value": "108.123724687258",
+        "unit": "Pa"
+      }
+    },
+    "expected": "34.471032837233651",
+    "unit": "Pa",
+    "question": "Tính độ lệch so với áp suất chuẩn theo QTKĐ 1.190 từ nhiều lần đọc.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-00",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-3",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "2",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-01",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-3.25406044986815",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "2.79772173782092",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.0517821876890698",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-02",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.90416961769726",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "2.02392393148428",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.9280935491815399",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-03",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.42298638517891",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "1.43713657394005",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.8601229591189599",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-04",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-2.92823339760095",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "1.34357367508932",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.2718070726902697",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-05",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.16181654669503",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "3.3603017142699",
+        "unit": "Pa"
+      }
+    },
+    "expected": "7.5221182609649295",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-06",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-2.40041213896753",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "1.94660275167888",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.3470148906464097",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-07",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.84055045778833",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "3.26323799793924",
+        "unit": "Pa"
+      }
+    },
+    "expected": "8.103788455727571",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-08",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-4.74898116357218",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "1.17098938720139",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.91997055077357",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F005-09",
+    "formula": "dpi190_f005",
+    "inputs": {
+      "bias": {
+        "value": "-3.47485956088786",
+        "unit": "Pa"
+      },
+      "u": {
+        "value": "3.13756271116213",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.6124222720499901",
+    "unit": "Pa",
+    "question": "Cho tôi tính sai số gồm độ lệch và U theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-00",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2",
+        "unit": "1"
+      },
+      "x": {
+        "value": "5",
+        "unit": "Pa"
+      }
+    },
+    "expected": "9",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-01",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.29705742416698",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.707003891",
+        "unit": "1"
+      },
+      "x": {
+        "value": "6.63605497273346",
+        "unit": "Pa"
+      }
+    },
+    "expected": "10.030714235178936",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-02",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.19893106360319",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3.16920270074936",
+        "unit": "1"
+      },
+      "x": {
+        "value": "5.68305064358293",
+        "unit": "Pa"
+      }
+    },
+    "expected": "16.811808384535219",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-03",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.46376605238635",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.81782815199056",
+        "unit": "1"
+      },
+      "x": {
+        "value": "4.60011789780212",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.8984577647139771",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-04",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.57098339633636",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.27265500709166",
+        "unit": "1"
+      },
+      "x": {
+        "value": "4.87687966483893",
+        "unit": "Pa"
+      }
+    },
+    "expected": "9.5124815929433328",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-05",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.52658497053067",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.68277293955196",
+        "unit": "1"
+      },
+      "x": {
+        "value": "8.39689457582648",
+        "unit": "Pa"
+      }
+    },
+    "expected": "21.000376573767245",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-06",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.4134270493867",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.59619456249748",
+        "unit": "1"
+      },
+      "x": {
+        "value": "5.0759959037779",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.6888500114830673",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-07",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-0.571144182991787",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.86192819205727",
+        "unit": "1"
+      },
+      "x": {
+        "value": "7.33351280924698",
+        "unit": "Pa"
+      }
+    },
+    "expected": "20.416842872605255",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-08",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.01658963165699",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3.02222217090111",
+        "unit": "1"
+      },
+      "x": {
+        "value": "7.2055255706045",
+        "unit": "Pa"
+      }
+    },
+    "expected": "20.7601095008188",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F006-09",
+    "formula": "dpi190_f006",
+    "inputs": {
+      "a": {
+        "value": "-1.15572292426873",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.98106384229664",
+        "unit": "1"
+      },
+      "x": {
+        "value": "5.03549761470704",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13.855416942905403",
+    "unit": "Pa",
+    "question": "Quan hệ tuyến tính giữa chỉ thị và áp suất chuẩn của DPI610 tính thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-00",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "10",
+          "20",
+          "30"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "20",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-01",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "15.4924056096865",
+          "32.7224828553401",
+          "19.0263884502738"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "22.4137589717668",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-02",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "12.0057465697151",
+          "33.8565176946438",
+          "25.0387083291353"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "23.633657531164733",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-03",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "15.31971760668",
+          "15.1657847372067",
+          "44.2773553162185"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "24.920952553368398",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-04",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "15.910766164201",
+          "22.1768794694064",
+          "47.0910565216219"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "28.392900718409766",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-05",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "12.5201535211778",
+          "15.0729353635044",
+          "24.9359882269263"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "17.509692370536168",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-06",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "13.2488882120501",
+          "33.5323301153856",
+          "32.0654857250902"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "26.282234684175297",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-07",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "15.6881192373102",
+          "11.2153685385711",
+          "31.0776908907899"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "19.327059555557067",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-08",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "14.2782016748929",
+          "26.5838571781781",
+          "35.3126647031383"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "25.391574518736434",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F007-09",
+    "formula": "dpi190_f007",
+    "inputs": {
+      "readings": {
+        "value": [
+          "11.5538785935186",
+          "13.994018349052",
+          "22.7026335942692"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "16.0835101789466",
+    "unit": "Pa",
+    "question": "Tôi có các giá trị X; lấy trung bình x theo QTKĐ 1.190 giúp tôi.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-00",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1",
+          "2",
+          "3"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "3",
+          "5",
+          "7"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "2",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-01",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "0.82452227386667",
+          "2.58282579316724",
+          "1.92186827989008"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "1.83428966062671",
+          "3.87064022086953",
+          "10.2415825766725"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.8161671299497462",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-02",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.14105941246368",
+          "2.28347821143943",
+          "1.66619106139107"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "2.04529571351542",
+          "7.4307524500772",
+          "11.2141960323672"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.3996815136998819",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-03",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "0.570812602748783",
+          "2.76871962721898",
+          "1.83414869061218"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "2.93010594006318",
+          "3.63458931971966",
+          "7.66874079556996"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "0.51569244684047166",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-04",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.40510052270008",
+          "2.37773473588556",
+          "3.55792480460348"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "2.7972348166699",
+          "7.53055336314798",
+          "5.51071143137479"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.1560346112230881",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-05",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.20471725866466",
+          "2.39639456451961",
+          "2.34479742174785"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "3.66583636651269",
+          "7.09228884643108",
+          "6.89434094611732"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.8554929136418981",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-06",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.21150516083269",
+          "3.34148709556947",
+          "3.95174095200466"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "3.40251321991756",
+          "5.71535367164806",
+          "6.9494686853294"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.2400363290768139",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-07",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "1.07612950400025",
+          "2.53997690228525",
+          "2.77688762639692"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "2.45477686208606",
+          "7.1952313992483",
+          "5.84728211840553"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.4334003052124387",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-08",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "0.835432255235144",
+          "2.44967185042277",
+          "4.84169703233411"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "2.3724526070114",
+          "6.96919778165366",
+          "9.73053870264548"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.7845763089233921",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F009-09",
+    "formula": "dpi190_f009",
+    "inputs": {
+      "xs": {
+        "value": [
+          "0.611315785005333",
+          "1.5300733576475",
+          "1.73577201333594"
+        ],
+        "unit": "Pa"
+      },
+      "ys": {
+        "value": [
+          "4.24835296215287",
+          "3.13173007934496",
+          "8.52646681721144"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.2755577622670247",
+    "unit": "1",
+    "question": "Độ dốc hồi quy theo QTKĐ 1.190 được tính từ các cặp đo thế nào?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-00",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "5",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-01",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "3.72954179172712",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3.39395017460411",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2.23180566001902",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-3.8450954177768737",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-02",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "4.25492709407913",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.46127533295474",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2.83681034840835",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-2.7272442407290836",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-03",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "6.31061257064519",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.28739627431441",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.3755248645082",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.5397669848504991",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-04",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "3.54489159998509",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.2364833601086",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.55929948101878",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.6168437382793925",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-05",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "3.96066450815369",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.61337547182194",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.72502078702791",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.1775582819798815",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-06",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "5.23805628977215",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "3.33022511847435",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.81332785432776",
+        "unit": "Pa"
+      }
+    },
+    "expected": "-0.80073367873935375",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-07",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "8.16802008497852",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.62746166634472",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "2.8395475758917",
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.546765255452704",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-08",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "7.42602759808628",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "1.70632708832749",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.27101760755441",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.2572558245749921",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F010-09",
+    "formula": "dpi190_f010",
+    "inputs": {
+      "y_mean": {
+        "value": "5.6166128924778",
+        "unit": "Pa"
+      },
+      "b": {
+        "value": "2.07196628182611",
+        "unit": "1"
+      },
+      "x_mean": {
+        "value": "1.48434167446561",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.5411069922757479",
+    "unit": "Pa",
+    "question": "Tìm tung độ gốc hồi quy theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-00",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "12",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "6",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-01",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "9.73832724858821",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.66817005892438",
+        "unit": "1"
+      }
+    },
+    "expected": "5.8377305098422578",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-02",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "12.1082186472488",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.09620684442412",
+        "unit": "1"
+      }
+    },
+    "expected": "3.910662063503342",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-03",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "13.2097954755344",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.67565936877287",
+        "unit": "1"
+      }
+    },
+    "expected": "4.9370243573242174",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-04",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "14.4223748499233",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.13692427224032",
+        "unit": "1"
+      }
+    },
+    "expected": "12.685431388938396",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-05",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "7.45594977224171",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.52563081967189",
+        "unit": "1"
+      }
+    },
+    "expected": "2.9521138695996467",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-06",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "12.4541867435777",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.15518799816262",
+        "unit": "1"
+      }
+    },
+    "expected": "5.7787008623820153",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-07",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "8.69348197707361",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.25344025072318",
+        "unit": "1"
+      }
+    },
+    "expected": "6.9356971519446988",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-08",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "6.75254011805223",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.79398360187029",
+        "unit": "1"
+      }
+    },
+    "expected": "3.7639921072926605",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F016-09",
+    "formula": "dpi190_f016",
+    "inputs": {
+      "u": {
+        "value": "14.1886530086005",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.04249992040667",
+        "unit": "1"
+      }
+    },
+    "expected": "4.6634850878497316",
+    "unit": "Pa",
+    "question": "Tính uch1 theo QTKĐ 1.190, có U và hệ số phủ.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-00",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "8",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "4",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-01",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "5.42211882066894",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.74798026930311",
+        "unit": "1"
+      }
+    },
+    "expected": "3.1019336521633889",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-02",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "7.51538120616879",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.49890150508497",
+        "unit": "1"
+      }
+    },
+    "expected": "3.0074739604085536",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-03",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "8.9073670066094",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.36167070170003",
+        "unit": "1"
+      }
+    },
+    "expected": "3.7716380188810841",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-04",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "9.46568001426914",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "3.08251002600451",
+        "unit": "1"
+      }
+    },
+    "expected": "3.070770227644116",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-05",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "7.77529736374392",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.34941606465601",
+        "unit": "1"
+      }
+    },
+    "expected": "3.3094595209053961",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-06",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "12.655959823599",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.11747569089349",
+        "unit": "1"
+      }
+    },
+    "expected": "5.9769091461251627",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-07",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "5.2634504786249",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.46218619254855",
+        "unit": "1"
+      }
+    },
+    "expected": "2.1377142372717266",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-08",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "5.30472134895605",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "2.88803442416502",
+        "unit": "1"
+      }
+    },
+    "expected": "1.8367929774555005",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F017-09",
+    "formula": "dpi190_f017",
+    "inputs": {
+      "u": {
+        "value": "13.1849224724782",
+        "unit": "Pa"
+      },
+      "k": {
+        "value": "1.9071399095994",
+        "unit": "1"
+      }
+    },
+    "expected": "6.9134531798706531",
+    "unit": "Pa",
+    "question": "Tính uamb theo QTKĐ 1.190 từ giấy chứng nhận.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-00",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "3",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.7320508075688774",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-01",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "2.73104393269697",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.57676894971129",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-02",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "4.35867561029885",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.516482536916298",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-03",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "3.81933231466267",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.2050925399951291",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-04",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "2.88477163030111",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.6655236773049416",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-05",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "4.99938753089903",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.8863977367478135",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-06",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "3.69709206811312",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.1345171007439401",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-07",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "4.53960026324585",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.6209394339982879",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-08",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "3.65272898525987",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.1089040629165345",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F018-09",
+    "formula": "dpi190_f018",
+    "inputs": {
+      "drift": {
+        "value": "2.73354550408648",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.5782132326264207",
+    "unit": "Pa",
+    "question": "Công thức u_stability của QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-00",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "12",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-01",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3.01634650202426",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "3.45793994194467",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "11.367877314713",
+        "unit": "Pa"
+      }
+    },
+    "expected": "12.259050921859194",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-02",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "4.48441550458189",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4.6826942460834",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "12.2112246297933",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13.825759103185169",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-03",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "4.92053810667744",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4.81534299844113",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "17.1725809432783",
+        "unit": "Pa"
+      }
+    },
+    "expected": "18.501263732657449",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-04",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3.77629536958038",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "3.16155581183882",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "13.4411138113529",
+        "unit": "Pa"
+      }
+    },
+    "expected": "14.315005496311473",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-05",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3.03435936933145",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "5.96053050403322",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "19.7423234922665",
+        "unit": "Pa"
+      }
+    },
+    "expected": "20.844533996831348",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-06",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "2.80570250118673",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4.4710165030514",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "9.97928413252799",
+        "unit": "Pa"
+      }
+    },
+    "expected": "11.289289919806665",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-07",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "1.90396261611565",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "2.84879792219987",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "9.34582365350869",
+        "unit": "Pa"
+      }
+    },
+    "expected": "9.9541520486467743",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-08",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "2.90183286427012",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "6.39524693457267",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "19.4936868438484",
+        "unit": "Pa"
+      }
+    },
+    "expected": "20.72012654624357",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F019-09",
+    "formula": "dpi190_f019",
+    "inputs": {
+      "u_ch1": {
+        "value": "3.1759125274427",
+        "unit": "Pa"
+      },
+      "u_amb": {
+        "value": "4.70607864350684",
+        "unit": "Pa"
+      },
+      "u_stability": {
+        "value": "11.851622432463",
+        "unit": "Pa"
+      }
+    },
+    "expected": "13.141329874198382",
+    "unit": "Pa",
+    "question": "Tính u_ch của QTKĐ 1.190 từ ba thành phần chuẩn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-00",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1000",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.002",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "4e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "1",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-01",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "883.323930916517",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00161745594141576",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "4.55227756133261e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "3.33960492930071",
+        "unit": "1"
+      }
+    },
+    "expected": "0.74442539058701096",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-02",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "650.443816049753",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00290878366671574",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "2.40133757282099e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "1.66679036027913",
+        "unit": "1"
+      }
+    },
+    "expected": "0.32215924754820074",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-03",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "999.902067069398",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00309029913354834",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "6.02873918275116e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "1.61770760967503",
+        "unit": "1"
+      }
+    },
+    "expected": "1.2058225833668252",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-04",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "668.209043594848",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00267951365790822",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "3.08351296377959e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "1.40130829408017",
+        "unit": "1"
+      }
+    },
+    "expected": "0.54874232646477417",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-05",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1551.64249673666",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00111004247441893",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "5.96925966225812e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "1.72374897828809",
+        "unit": "1"
+      }
+    },
+    "expected": "4.8405924390248245",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-06",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1127.44947303459",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00190197629589726",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "5.86089562413599e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.0496150254769",
+        "unit": "1"
+      }
+    },
+    "expected": "1.6950545488480693",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-07",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "1589.74566923999",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00218133364598826",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "6.45863336285251e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.38388428548388",
+        "unit": "1"
+      }
+    },
+    "expected": "1.9745176183346227",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-08",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "952.12407160591",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00169853428992233",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "5.38428721918074e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.45478079057322",
+        "unit": "1"
+      }
+    },
+    "expected": "1.2295175409838872",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F022-09",
+    "formula": "dpi190_f022",
+    "inputs": {
+      "p": {
+        "value": "922.348208579471",
+        "unit": "Pa"
+      },
+      "area": {
+        "value": "0.00303820688107494",
+        "unit": "m2"
+      },
+      "ua": {
+        "value": "5.30946418323997e-06",
+        "unit": "m2"
+      },
+      "k": {
+        "value": "2.94467887938345",
+        "unit": "1"
+      }
+    },
+    "expected": "0.54738175750606566",
+    "unit": "Pa",
+    "question": "Cho tính u2 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-00",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1000",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "-1",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-01",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1661.96134277374",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.70972697516666e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "3.18844270127999",
+        "unit": "1"
+      }
+    },
+    "expected": "-2.347408936995885",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-02",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1673.98724236416",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "1.22197174548482e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "1.26122456472072",
+        "unit": "1"
+      }
+    },
+    "expected": "-2.7150199873089225",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-03",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "766.144996743294",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.52058656436508e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "2.27828523185668",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.64940475098955197",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-04",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1077.80246222534",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.84523865839474e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "2.46424841812487",
+        "unit": "1"
+      }
+    },
+    "expected": "-1.3412587160534903",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-05",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "553.256038934207",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.36470920560793e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "2.99306950423283",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.24183172077620682",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-06",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1094.1377049328",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "1.66866055455054e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "1.43921416763241",
+        "unit": "1"
+      }
+    },
+    "expected": "-1.3879906582200749",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-07",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1042.64644690782",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "3.24761573627126e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "1.5411928293828",
+        "unit": "1"
+      }
+    },
+    "expected": "-2.290771612067636",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-08",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "634.039139537067",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "2.74283776995522e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "3.05688881104895",
+        "unit": "1"
+      }
+    },
+    "expected": "-0.36070537567097127",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F024-09",
+    "formula": "dpi190_f024",
+    "inputs": {
+      "p": {
+        "value": "1548.80909266694",
+        "unit": "Pa"
+      },
+      "ulambda": {
+        "value": "1.26493462243332e-06",
+        "unit": "1/Pa"
+      },
+      "k": {
+        "value": "2.40630695001112",
+        "unit": "1"
+      }
+    },
+    "expected": "-1.2609934583132438",
+    "unit": "Pa",
+    "question": "Cho tính u3 theo QTKĐ 1.190; giữ đúng dấu của nguồn.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-00",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1000",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "10",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.02",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "1",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-01",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "750.6220325321",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "12.6954692928136",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0192125617612474",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "3.39668684656119",
+        "unit": "1"
+      }
+    },
+    "expected": "0.33442775666320557",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-02",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "696.601384894575",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "8.86720629842902",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0154374475657792",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "2.33479577376069",
+        "unit": "1"
+      }
+    },
+    "expected": "0.51942651832256848",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-03",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1334.86846761421",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "14.6112494225933",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0187185945273164",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.86323334349791",
+        "unit": "1"
+      }
+    },
+    "expected": "0.91781913796028192",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-04",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1687.8725372921",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "14.8142464034123",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0303927479977916",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.19382734163266",
+        "unit": "1"
+      }
+    },
+    "expected": "2.9006045981254069",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-05",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "966.058754421534",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "7.18299354381869",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0320699901736714",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "2.61767474470165",
+        "unit": "1"
+      }
+    },
+    "expected": "1.6477116344816118",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-06",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "1066.53683872919",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "11.4079526342772",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0144129871572884",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.82531494959862",
+        "unit": "1"
+      }
+    },
+    "expected": "0.73821750700305122",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-07",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "827.981120042641",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "12.6954512402208",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0138749780029721",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.95926410966692",
+        "unit": "1"
+      }
+    },
+    "expected": "0.46186134120334527",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-08",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "921.411209744864",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "13.1814577505761",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0201893982832123",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "1.88839176180792",
+        "unit": "1"
+      }
+    },
+    "expected": "0.74734533506382661",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F026-09",
+    "formula": "dpi190_f026",
+    "inputs": {
+      "p": {
+        "value": "816.377435980534",
+        "unit": "Pa"
+      },
+      "mass": {
+        "value": "16.6333551758204",
+        "unit": "kg"
+      },
+      "um": {
+        "value": "0.0261352691259992",
+        "unit": "kg"
+      },
+      "k": {
+        "value": "2.0953284196504",
+        "unit": "1"
+      }
+    },
+    "expected": "0.61218968044069877",
+    "unit": "Pa",
+    "question": "Công thức u4 theo QTKĐ 1.190 là gì?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-00",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1000",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.8",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.001",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2",
+        "unit": "1"
+      }
+    },
+    "expected": "4.9000000000000004",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-01",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1638.50706352321",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "6.55486421668122",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00162589144282909",
+        "unit": "m"
+      },
+      "k": {
+        "value": "1.8411771852125",
+        "unit": "1"
+      }
+    },
+    "expected": "9.4843588661209708",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-02",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "976.123402018428",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "16.4767608566463",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00126768290462287",
+        "unit": "m"
+      },
+      "k": {
+        "value": "1.58030070919684",
+        "unit": "1"
+      }
+    },
+    "expected": "12.901715531336777",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-03",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1444.7720533425",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "7.49910762528237",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00099598581427382",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.10473217714542",
+        "unit": "1"
+      }
+    },
+    "expected": "5.127022591965515",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-04",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1257.41034515224",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "16.4882466649706",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.000691600126820939",
+        "unit": "m"
+      },
+      "k": {
+        "value": "1.9365162761661",
+        "unit": "1"
+      }
+    },
+    "expected": "7.4043240558034826",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-05",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "588.946693471233",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "8.23508093340529",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00167448724204545",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.20181368396379",
+        "unit": "1"
+      }
+    },
+    "expected": "3.6884604929581992",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-06",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1011.46756562732",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "9.20398826281718",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.0014212414262562",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.33014898625192",
+        "unit": "1"
+      }
+    },
+    "expected": "5.6782196053536209",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-07",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1593.48845655708",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "13.0316884963806",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00101945829696961",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.61773978146971",
+        "unit": "1"
+      }
+    },
+    "expected": "8.0870960974760884",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-08",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1248.88209744534",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "6.97661289317306",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.00132976645728572",
+        "unit": "m"
+      },
+      "k": {
+        "value": "1.25441475549556",
+        "unit": "1"
+      }
+    },
+    "expected": "9.2363479731099325",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F031-09",
+    "formula": "dpi190_f031",
+    "inputs": {
+      "rho": {
+        "value": "1010.21014179385",
+        "unit": "kg/m3"
+      },
+      "g": {
+        "value": "7.50619890796257",
+        "unit": "m/s2"
+      },
+      "uh": {
+        "value": "0.000608247005804769",
+        "unit": "m"
+      },
+      "k": {
+        "value": "2.99013826056756",
+        "unit": "1"
+      }
+    },
+    "expected": "1.5424834128522076",
+    "unit": "Pa",
+    "question": "Cho tôi nhập số để tính u9 theo QTKĐ 1.190.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-00",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1",
+          "-2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "19.621416870348583",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-01",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.674366762426493",
+          "-2.59088291979706",
+          "2.5322091851409",
+          "6.32611499571918",
+          "2.80418857368686",
+          "9.58669284621879",
+          "7.09857757894209",
+          "6.28634211103561",
+          "6.26355800502328",
+          "6.52615096383372"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "18.030477489006032",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-02",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.683228764932961",
+          "-1.47258855191454",
+          "4.98013319701512",
+          "2.27471635776037",
+          "6.29358798818248",
+          "4.348777265501",
+          "6.16509599926966",
+          "9.88903711306851",
+          "12.2213642479729",
+          "7.85284972348026"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "20.927564354021726",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-03",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.769927959938045",
+          "-2.77404350440042",
+          "4.85165232377267",
+          "4.97885330712549",
+          "7.47044298319339",
+          "7.19195798258223",
+          "7.13592322926254",
+          "8.2115263512352",
+          "14.9901045869958",
+          "9.01871168160157"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "24.259809484344746",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-04",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.258328204194",
+          "-2.68787640205354",
+          "1.74448584854635",
+          "5.44880905961903",
+          "2.81069718659512",
+          "9.42097088078068",
+          "5.02701573558819",
+          "10.9606863331032",
+          "5.80453783881256",
+          "12.6120889735628"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "21.825684671395766",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-05",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.53810896434711",
+          "-2.84815881988458",
+          "2.92191407847116",
+          "2.56743891690397",
+          "7.96055482991849",
+          "6.84170731015588",
+          "6.23754676734118",
+          "13.0298225659259",
+          "11.8035947894758",
+          "6.59532543689243"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "22.962859965353012",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-06",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.777784077655436",
+          "-1.24608382768653",
+          "2.36504521855727",
+          "3.03543981400471",
+          "3.32739313220453",
+          "8.13434493490409",
+          "6.68302884751346",
+          "9.48732162193728",
+          "12.0389742017394",
+          "11.2333692634996"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "22.360718912383913",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-07",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.37237859448913",
+          "-2.7949426158443",
+          "2.14626893749013",
+          "5.25335863556968",
+          "5.54283002701156",
+          "9.74781887867145",
+          "7.79599966513051",
+          "11.3470170027186",
+          "8.13198562454959",
+          "9.80143522401785"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "22.789735418063714",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-08",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "0.895918386786322",
+          "-2.03966013717345",
+          "2.85806826298015",
+          "5.10420924492866",
+          "4.47835732458531",
+          "5.64756447864566",
+          "6.08309070034648",
+          "4.60050429881174",
+          "6.71386013090412",
+          "8.99166470318019"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "16.590046491005996",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F033-09",
+    "formula": "dpi190_f033",
+    "inputs": {
+      "components": {
+        "value": [
+          "1.56054626297389",
+          "-3.20536927423771",
+          "2.22052087402856",
+          "2.61549605426723",
+          "6.22601389287167",
+          "6.34934478074157",
+          "7.72789148862541",
+          "8.97539590662821",
+          "10.6013985998529",
+          "7.09271037668666"
+        ],
+        "unit": "Pa"
+      }
+    },
+    "expected": "20.16266075757769",
+    "unit": "Pa",
+    "question": "Căn tổng bình phương u1 đến u10 theo QTKĐ 1.190?",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-00",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "6",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.4494897427831783",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-01",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "4.17853563802578",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.705880030866352",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-02",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "8.97557511140733",
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.6642631951620399",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-03",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "4.01109940739659",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.6375244759502721",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-04",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "5.42582707796798",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.2150846289329649",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-05",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "4.0421747910555",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.6502109482045308",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-06",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "8.81004641897852",
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.5966863894552592",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-07",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "4.17648267846655",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.7050419136359047",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-08",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "10.1898061180384",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.1599709278473895",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F034-09",
+    "formula": "dpi190_f034",
+    "inputs": {
+      "r": {
+        "value": "9.62997581275819",
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.9314211627668811",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r tam giác với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-00",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "3",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.7320508075688774",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-01",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "4.1675420996638",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.4061315530999932",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-02",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "3.74501406003041",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.1621848756774904",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-03",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.01833315834115",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.1652851922826106",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-04",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.24852681306067",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.2981875608006692",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-05",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "1.75309636936268",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.0121506607668989",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-06",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.37518568531906",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.371314094794305",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-07",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.77939793781808",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.6046861475843592",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-08",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "4.87342909964001",
+        "unit": "Pa"
+      }
+    },
+    "expected": "2.8136756025537153",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F035-09",
+    "formula": "dpi190_f035",
+    "inputs": {
+      "r": {
+        "value": "2.60893050452244",
+        "unit": "Pa"
+      }
+    },
+    "expected": "1.5062667290830569",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: u_r chữ nhật với độ phân giải đã xác định.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-00",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "2",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-3",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "4",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "5",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-01",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.13029108964876",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3.3655227831626",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "2.98646857500664",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-2.99523196388822",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "6.63915982787158",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "6.38125350690285",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.9817005388948594",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-02",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "0.593155928266878",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "1.95203957575046",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "1.53841268005142",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-3.84299304207883",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "3.33946474951514",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "3.79988203145554",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.3814057221302498",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-03",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.15107639418189",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "1.99235444445957",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "3.33589995642854",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-4.73319054468753",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "3.50595557194283",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "3.90844302248781",
+        "unit": "Pa"
+      }
+    },
+    "expected": "8.0690905011160705",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-04",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.58219429390014",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "2.11223282875565",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "1.53370477844826",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-2.47658502408078",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "4.95252247999442",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "3.10769575212361",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.0102898025290399",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-05",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "0.834979246378165",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "2.30957407973321",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "2.7840639370786",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-3.58651045919636",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "6.43797211920798",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "7.46833228407906",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.3705743962749599",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-06",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "0.954595561923066",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3.66341925294893",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "3.34420085396985",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-3.57083613401884",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "5.4362918744148",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "8.2326757672371",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.9150369879886897",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-07",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "0.821525816824017",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3.06828329667316",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "1.33596428760519",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-4.76176849152763",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "2.98293847231963",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "8.07946395872203",
+        "unit": "Pa"
+      }
+    },
+    "expected": "6.0977327791328202",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-08",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "1.27378515589921",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "3.6605663618236",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "3.10639830021942",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-4.31556934711221",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "4.40737999077843",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "5.67585163197369",
+        "unit": "Pa"
+      }
+    },
+    "expected": "7.4219676473316305",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F036-09",
+    "formula": "dpi190_f036",
+    "inputs": {
+      "x1": {
+        "value": "0.707262204910999",
+        "unit": "Pa"
+      },
+      "x2": {
+        "value": "2.94073049128407",
+        "unit": "Pa"
+      },
+      "x3": {
+        "value": "3.24289610108489",
+        "unit": "Pa"
+      },
+      "x4": {
+        "value": "-2.27312175833909",
+        "unit": "Pa"
+      },
+      "x5": {
+        "value": "5.70529854145177",
+        "unit": "Pa"
+      },
+      "x6": {
+        "value": "5.21711402105425",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.5160178594239797",
+    "unit": "Pa",
+    "question": "QTKĐ 1.190: f0 qua sáu loạt đọc tại điểm 0.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-00",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "2",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "4",
+        "unit": "Pa"
+      }
+    },
+    "expected": "8",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-01",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "2.32606139479983",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "6.04440955166349",
+        "unit": "Pa"
+      }
+    },
+    "expected": "14.059667712483792",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-02",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.42963707092764",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "2.93095684696262",
+        "unit": "Pa"
+      }
+    },
+    "expected": "4.1902045617069517",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-03",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.59824468644593",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "2.45307071857724",
+        "unit": "Pa"
+      }
+    },
+    "expected": "3.9206072414421729",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-04",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "3.15955844131512",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "5.83490853289244",
+        "unit": "Pa"
+      }
+    },
+    "expected": "18.435734509401932",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-05",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.80036841343706",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "3.29716135963261",
+        "unit": "Pa"
+      }
+    },
+    "expected": "5.9361051658877413",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-06",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.66277628694513",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "4.43015141092729",
+        "unit": "Pa"
+      }
+    },
+    "expected": "7.3663507136664075",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-07",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "1.87397314193126",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "5.03584861654289",
+        "unit": "Pa"
+      }
+    },
+    "expected": "9.4370450542330691",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-08",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "2.35752119049259",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "5.1342248371093",
+        "unit": "Pa"
+      }
+    },
+    "expected": "12.10404385023854",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  },
+  {
+    "id": "holdout-F050-09",
+    "formula": "dpi190_f050",
+    "inputs": {
+      "k": {
+        "value": "3.13817864936416",
+        "unit": "1"
+      },
+      "uc": {
+        "value": "2.35838357856355",
+        "unit": "Pa"
+      }
+    },
+    "expected": "7.4010289932591755",
+    "unit": "Pa",
+    "question": "Theo QTKĐ 1.190: độ không đảm bảo đo mở rộng khi đã biết u_c và k.",
+    "relative_tolerance": "1e-11",
+    "absolute_tolerance": "1e-9"
+  }
+]

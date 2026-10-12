@@ -1,0 +1,3024 @@
+{
+  "original_documents": 7,
+  "synthetic_documents": 23,
+  "new_calculators": 41,
+  "total_calculators": 47,
+  "by_source": [
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "calculators": 25,
+      "prose_rules": 0,
+      "equation_occurrences": 47,
+      "covered_occurrences": 25
+    },
+    {
+      "file": "QTKD 1.061 2021 ND V2.docx",
+      "calculators": 3,
+      "prose_rules": 2,
+      "equation_occurrences": 1,
+      "covered_occurrences": 1
+    },
+    {
+      "file": "QTKD 1.062 2021 ND.docx",
+      "calculators": 3,
+      "prose_rules": 3,
+      "equation_occurrences": 0,
+      "covered_occurrences": 0
+    },
+    {
+      "file": "QTKD 1.063 2021 BPL.docx",
+      "calculators": 2,
+      "prose_rules": 1,
+      "equation_occurrences": 1,
+      "covered_occurrences": 1
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "calculators": 5,
+      "prose_rules": 0,
+      "equation_occurrences": 12,
+      "covered_occurrences": 7
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "calculators": 1,
+      "prose_rules": 0,
+      "equation_occurrences": 67,
+      "covered_occurrences": 1
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "calculators": 8,
+      "prose_rules": 0,
+      "equation_occurrences": 46,
+      "covered_occurrences": 8
+    }
+  ],
+  "equation_occurrences": 174,
+  "covered_occurrences": 43,
+  "coverage_fraction": 0.2471264367816092,
+  "groups": {
+    "ingestion": {
+      "passed": 30,
+      "total": 30
+    },
+    "source_binding": {
+      "passed": 238,
+      "total": 238
+    }
+  },
+  "rows": [
+    {
+      "group": "ingestion",
+      "id": "D01",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D02",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D03",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D04",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D05",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D06",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D07",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D08",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D09",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D10",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D11",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D12",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D13",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D14",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D15",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D16",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D17",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D18",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D19",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D20",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D21",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D22",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D23",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D24",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D25",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D26",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D27",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D28",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D29",
+      "pass": true
+    },
+    {
+      "group": "ingestion",
+      "id": "D30",
+      "pass": true
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f001",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f005",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f006",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f007",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f009",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f010",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f016",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f017",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f018",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f019",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f022",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f024",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f026",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f031",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f033",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f034",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f035",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f036",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f037",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f050",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f008",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f038",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f039",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f042",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D01/dpi190_f043",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D02/valve",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D02/qtkd061_p001",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D02/qtkd061_p002",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D03/qtkd062_p001",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D03/qtkd062_p002",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D03/qtkd062_p003",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D04/volume",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D04/qtkd063_p001",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D05/rotation",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D05/fall",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D05/gravity",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D05/error",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D05/qtkd071_f013",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D06/qtkd159_f031",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D07/qtkd160_f001",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D07/qtkd160_f005",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D07/qtkd160_f006",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D07/qtkd160_f007",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D07/qtkd160_f008",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D07/qtkd160_f009",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D07/qtkd160_f033",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D07/qtkd160_f034",
+      "pass": true,
+      "expected": "ready",
+      "actual": "ready"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f005",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f006",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f007",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f009",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f010",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f016",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f017",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f018",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f019",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f022",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f024",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f026",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f031",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f033",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f034",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f035",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f036",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f037",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f050",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f008",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f038",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f039",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f042",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D08/dpi190_f043",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D09/valve",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D09/qtkd061_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D09/qtkd061_p002",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D10/qtkd062_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D10/qtkd062_p002",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D10/qtkd062_p003",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D11/volume",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D11/qtkd063_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D12/rotation",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D12/fall",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D12/gravity",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D12/error",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D12/qtkd071_f013",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D13/qtkd159_f031",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D14/qtkd160_f001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D14/qtkd160_f005",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D14/qtkd160_f006",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D14/qtkd160_f007",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D14/qtkd160_f008",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D14/qtkd160_f009",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D14/qtkd160_f033",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D14/qtkd160_f034",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f005",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f006",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f007",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f009",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f010",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f016",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f017",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f018",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f019",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f022",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f024",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f026",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f031",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f033",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f034",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f035",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f036",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f037",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f050",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f008",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f038",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f039",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f042",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D15/dpi190_f043",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D16/valve",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D16/qtkd061_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D16/qtkd061_p002",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D17/qtkd062_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D17/qtkd062_p002",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D17/qtkd062_p003",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D18/volume",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D18/qtkd063_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D19/rotation",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D19/fall",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D19/gravity",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D19/error",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D19/qtkd071_f013",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D20/qtkd159_f031",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D21/qtkd160_f001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D21/qtkd160_f005",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D21/qtkd160_f006",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D21/qtkd160_f007",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D21/qtkd160_f008",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D21/qtkd160_f009",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D21/qtkd160_f033",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D21/qtkd160_f034",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f005",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f006",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f007",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f009",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f010",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f016",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f017",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f018",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f019",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f022",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f024",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f026",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f031",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f033",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f034",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f035",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f036",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f037",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f050",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f008",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f038",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f039",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f042",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D22/dpi190_f043",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D23/valve",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D23/qtkd061_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D23/qtkd061_p002",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D24/qtkd062_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D24/qtkd062_p002",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D24/qtkd062_p003",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D25/volume",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D25/qtkd063_p001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D26/rotation",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D26/fall",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D26/gravity",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D26/error",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D26/qtkd071_f013",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D27/qtkd159_f031",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D28/qtkd160_f001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D28/qtkd160_f005",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D28/qtkd160_f006",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D28/qtkd160_f007",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D28/qtkd160_f008",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D28/qtkd160_f009",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D28/qtkd160_f033",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D28/qtkd160_f034",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f005",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f006",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f007",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f009",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f010",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f016",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f017",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f018",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f019",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f022",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f024",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f026",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f031",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f033",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f034",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f035",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f036",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f037",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f050",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f008",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f038",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f039",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f042",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D29/dpi190_f043",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f001",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f005",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f006",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f007",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f009",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f010",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f016",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f017",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f018",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f019",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f022",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f024",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f026",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f031",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f033",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f034",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f035",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f036",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f037",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f050",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f008",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f038",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f039",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f042",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    },
+    {
+      "group": "source_binding",
+      "id": "D30/dpi190_f043",
+      "pass": true,
+      "expected": "blocked",
+      "actual": "blocked"
+    }
+  ],
+  "coverage": [
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F001",
+      "calculator_ids": [
+        "dpi190_f001"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F002",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F003",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F004",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F005",
+      "calculator_ids": [
+        "dpi190_f005"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F006",
+      "calculator_ids": [
+        "dpi190_f006"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F007",
+      "calculator_ids": [
+        "dpi190_f007"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F008",
+      "calculator_ids": [
+        "dpi190_f008"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F009",
+      "calculator_ids": [
+        "dpi190_f009"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F010",
+      "calculator_ids": [
+        "dpi190_f010"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F011",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F012",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F013",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F014",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F015",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F016",
+      "calculator_ids": [
+        "dpi190_f016"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F017",
+      "calculator_ids": [
+        "dpi190_f017"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F018",
+      "calculator_ids": [
+        "dpi190_f018"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F019",
+      "calculator_ids": [
+        "dpi190_f019"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F020",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F022",
+      "calculator_ids": [
+        "dpi190_f022"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F024",
+      "calculator_ids": [
+        "dpi190_f024"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F026",
+      "calculator_ids": [
+        "dpi190_f026"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F027",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F028",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F029",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F030",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F031",
+      "calculator_ids": [
+        "dpi190_f031"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F032",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F033",
+      "calculator_ids": [
+        "dpi190_f033"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F034",
+      "calculator_ids": [
+        "dpi190_f034"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F035",
+      "calculator_ids": [
+        "dpi190_f035"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F036",
+      "calculator_ids": [
+        "dpi190_f036"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F037",
+      "calculator_ids": [
+        "dpi190_f037"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F038",
+      "calculator_ids": [
+        "dpi190_f038"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F039",
+      "calculator_ids": [
+        "dpi190_f039"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F040",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F041",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F042",
+      "calculator_ids": [
+        "dpi190_f042"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F043",
+      "calculator_ids": [
+        "dpi190_f043"
+      ],
+      "available": true
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F044",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F045",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F046",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F047",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F048",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F049",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx",
+      "fid": "F050",
+      "calculator_ids": [
+        "dpi190_f050"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.061 2021 ND V2.docx",
+      "fid": "F001",
+      "calculator_ids": [
+        "valve"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.063 2021 BPL.docx",
+      "fid": "F001",
+      "calculator_ids": [
+        "volume"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F001",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F002",
+      "calculator_ids": [
+        "rotation"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F007",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F008",
+      "calculator_ids": [
+        "fall"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F013",
+      "calculator_ids": [
+        "error",
+        "qtkd071_f013"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F014",
+      "calculator_ids": [
+        "error",
+        "qtkd071_f013"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F015",
+      "calculator_ids": [
+        "error",
+        "qtkd071_f013"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F024",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F027",
+      "calculator_ids": [
+        "gravity"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F033",
+      "calculator_ids": [
+        "error"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F034",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "fid": "F035",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F001",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F006",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F011",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F014",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F015",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F027",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F031",
+      "calculator_ids": [
+        "qtkd159_f031"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F034",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F036",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F039",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F047",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F048",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F049",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F050",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F051",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F052",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F054",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F055",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F056",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F057",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F059",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F060",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F061",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F062",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F063",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F064",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F067",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F070",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F072",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F074",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F076",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F078",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F080",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F081",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F084",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F085",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F087",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F089",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F092",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F093",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F095",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F097",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F099",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F101",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F103",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F105",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F107",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F109",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F111",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F112",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F114",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F116",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F118",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F120",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F122",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F124",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F126",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F127",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F128",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F129",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F130",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F131",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F132",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F133",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F134",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F176",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.159 2021 ND FINAL.docx",
+      "fid": "F210",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F001",
+      "calculator_ids": [
+        "qtkd160_f001"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F002",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F003",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F004",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F005",
+      "calculator_ids": [
+        "qtkd160_f005"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F006",
+      "calculator_ids": [
+        "qtkd160_f006"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F007",
+      "calculator_ids": [
+        "qtkd160_f007"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F008",
+      "calculator_ids": [
+        "qtkd160_f008"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F009",
+      "calculator_ids": [
+        "qtkd160_f009"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F010",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F011",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F012",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F013",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F014",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F015",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F016",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F017",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F018",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F019",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F021",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F023",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F025",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F026",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F027",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F028",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F029",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F030",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F031",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F032",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F033",
+      "calculator_ids": [
+        "qtkd160_f033"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F034",
+      "calculator_ids": [
+        "qtkd160_f034"
+      ],
+      "available": true
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F035",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F036",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F037",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F038",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F039",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F040",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F041",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F042",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F043",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F044",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F045",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F046",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F047",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F048",
+      "calculator_ids": [],
+      "available": false
+    },
+    {
+      "file": "QTKD 1.160 2021 ND FINAL.docx",
+      "fid": "F049",
+      "calculator_ids": [],
+      "available": false
+    }
+  ],
+  "limitations": "7 independent documents; descendants do not expand formula families. OLE conversion not rerun. Occurrence coverage is not mathematical-family coverage."
+}

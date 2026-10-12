@@ -1,9 +1,11 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 WORKDIR /app
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+ENV FORMULA_REGISTRY_DB=/app/.formula-registry/registry.sqlite3
 
 # System libs needed by lxml + Ruby (Stage 1 formula extraction, now runs
-# inside the api container for uploaded documents — see ingestion_jobs.py)
+# inside the api container for uploaded documents - see ingestion/jobs.py)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2 libxslt1.1 ruby-full build-essential \
     && rm -rf /var/lib/apt/lists/*
@@ -24,7 +26,8 @@ RUN pip install --no-cache-dir -r requirements.txt -r requirements-app.txt
 # Toàn bộ code backend; .dockerignore loại TC_DL/, build/, frontend/, venv, dữ liệu Qdrant.
 COPY . .
 
-EXPOSE 7861
+RUN mkdir -p /app/.formula-registry /app/TC_DL /app/build/spike_a
+EXPOSE 8080 7861
 
 # Default: run the Gradio chat app
 # Override with: docker compose run --rm indexer python -m vectorstore.index --force

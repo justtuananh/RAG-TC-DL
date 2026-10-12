@@ -390,7 +390,27 @@ def _extract_and_index(file_stem: str, source_path: Path) -> None:
         _merge_report_entry(entry)
     finally:
         shutil.rmtree(tmp_dir, ignore_errors=True)
-    _index_markdown(file_stem, _out_dir() / f"{file_stem}.md")
+
+    md_path = _out_dir() / f"{file_stem}.md"
+    if md_path.exists():
+        _register_formula_drafts(source_path, file_stem, entry, md_path)
+    _index_markdown(file_stem, md_path)
+
+
+def _register_formula_drafts(source_path: Path, file_stem: str, entry: dict, md_path: Path) -> None:
+    """Tạo nháp công thức TRƯỚC khi nhúng: tài liệu lỗi embedding vẫn rà soát được.
+
+    Chỉ tạo nháp chờ duyệt, không bao giờ tự phê duyệt hay tính.
+    """
+    from formula_registry.drafts import register_extraction
+
+    try:
+        source_hash = hashlib.sha256(source_path.read_bytes()).hexdigest()
+        register_extraction(
+            source_path, file_stem, source_hash, entry, md_path.read_text(encoding="utf-8")
+        )
+    except Exception as e:  # noqa: BLE001 - đổi tên lỗi để không bị coi là mất kết nối dịch vụ
+        raise RuntimeError(f"Không tạo được nháp công thức: {e}") from e
 
 
 def _index_markdown(file_stem: str, md_path: Path) -> None:
@@ -539,6 +559,10 @@ def delete_document(file_stem: str) -> None:
     đưa trở lại chỉ mục, để số QTKĐ đó không mất khỏi kho.
     """
     number = _delete_document_rows(file_stem)
+    from formula_registry.store import Registry
+
+    # Nguồn mất thì nháp/công thức đã duyệt của tài liệu hết hiệu lực (chặn tính).
+    Registry().invalidate(file_stem)
     source_path = _find_source(file_stem)
     if source_path is not None:
         source_path.unlink()

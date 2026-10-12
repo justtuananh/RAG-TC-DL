@@ -1,0 +1,127 @@
+[
+  {
+    "formula": "volume",
+    "pass": true,
+    "result": {
+      "status": "ok",
+      "value": "374",
+      "unit": "mL",
+      "normalized": {
+        "vd": "126"
+      },
+      "expression": "500-vd",
+      "revision": "1",
+      "formula_id": "volume",
+      "request_id": "",
+      "source": "QTKD 1.063 2021 BPL.docx",
+      "source_hash": "88a6b7c26022b6985b3cd55392b6dacf8adfc156a46cec7b13dc5e228f09fe15",
+      "strategy": "registry"
+    }
+  },
+  {
+    "formula": "rotation",
+    "pass": true,
+    "result": {
+      "status": "ok",
+      "value": "162.3921568627450980392156862745098",
+      "unit": "s",
+      "normalized": {
+        "tau_t": "202",
+        "eta_t": "0.82",
+        "eta": "1.02",
+        "dt": "4.02"
+      },
+      "expression": "tau_t*eta_t/eta",
+      "revision": "1",
+      "formula_id": "rotation",
+      "request_id": "",
+      "source": "QTKD 1.071 2022 FINAL.docx",
+      "source_hash": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "strategy": "registry"
+    }
+  },
+  {
+    "formula": "fall",
+    "pass": true,
+    "result": {
+      "status": "ok",
+      "value": "4.029126213592233009708737864077670",
+      "unit": "mm/min",
+      "normalized": {
+        "vt": "5",
+        "eta_t": "0.83",
+        "eta": "1.03",
+        "dt": "3.03"
+      },
+      "expression": "vt*eta_t/eta",
+      "revision": "1",
+      "formula_id": "fall",
+      "request_id": "",
+      "source": "QTKD 1.071 2022 FINAL.docx",
+      "source_hash": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "strategy": "registry"
+    }
+  },
+  {
+    "formula": "gravity",
+    "pass": true,
+    "result": {
+      "status": "ok",
+      "value": "101.9282868525896414342629482071713",
+      "unit": "bar",
+      "normalized": {
+        "p0": "104",
+        "gd": "9.84",
+        "g0": "10.04"
+      },
+      "expression": "p0*gd/g0",
+      "revision": "1",
+      "formula_id": "gravity",
+      "request_id": "",
+      "source": "QTKD 1.071 2022 FINAL.docx",
+      "source_hash": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "strategy": "registry"
+    }
+  },
+  {
+    "formula": "valve",
+    "pass": true,
+    "result": {
+      "status": "ok",
+      "value": "3005.94",
+      "unit": "Pa",
+      "normalized": {
+        "pm": "103006",
+        "pcd": "100000.06"
+      },
+      "expression": "pm-pcd",
+      "revision": "1",
+      "formula_id": "valve",
+      "request_id": "",
+      "source": "QTKD 1.061 2021 ND V2.docx",
+      "source_hash": "e015e7615952b6aa5b9e48772536adce395efe5409d378dcd2c7412d69e838f5",
+      "strategy": "registry"
+    }
+  },
+  {
+    "formula": "error",
+    "pass": true,
+    "result": {
+      "status": "ok",
+      "value": "11.16216216216216216216216216216216",
+      "unit": "%",
+      "normalized": {
+        "p": "111",
+        "pc1": "99.11",
+        "pc2": "98.11"
+      },
+      "expression": "((p-pc1)+(p-pc2))/2/p*100",
+      "revision": "1",
+      "formula_id": "error",
+      "request_id": "",
+      "source": "QTKD 1.071 2022 FINAL.docx",
+      "source_hash": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "strategy": "registry"
+    }
+  }
+]

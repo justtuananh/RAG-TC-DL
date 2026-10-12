@@ -1,0 +1,925 @@
+{
+  "started_utc": "2026-09-28T08:04:12.698984+00:00",
+  "finished_utc": "2026-09-28T08:04:53.136477+00:00",
+  "manifest_sha256": "00fbf51036b4411db60c53ff01210f257c1993e661e01c318a72ea3b224ce9a8",
+  "implementation_unchanged": true,
+  "results": [
+    {
+      "id": "N01",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "7",
+          "unit": "1",
+          "normalized": {
+            "x": [
+              "-11",
+              "4",
+              "13",
+              "22"
+            ]
+          },
+          "expression": "mean(x)",
+          "revision": "2",
+          "formula_id": "9ffe8620903911ceea12fc889045e79c",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.376223+00:00"
+        },
+        "absolute_error": "0",
+        "threshold": "7E-24"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.389065+00:00"
+    },
+    {
+      "id": "N02",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "7",
+          "unit": "1",
+          "normalized": {
+            "x": [
+              "22",
+              "-11",
+              "13",
+              "4"
+            ]
+          },
+          "expression": "mean(x)",
+          "revision": "2",
+          "formula_id": "5c5f1033ca00d76a6c36f51ae09895f9",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.398615+00:00"
+        },
+        "absolute_error": "0",
+        "threshold": "7E-24"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.411336+00:00"
+    },
+    {
+      "id": "N03",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "17",
+          "unit": "1",
+          "normalized": {
+            "x": [
+              "-8",
+              "15"
+            ]
+          },
+          "expression": "rss(x)",
+          "revision": "2",
+          "formula_id": "53afcc1223c363b2983e012611c47b3e",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.421630+00:00"
+        },
+        "absolute_error": "0",
+        "threshold": "1.7E-23"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.434657+00:00"
+    },
+    {
+      "id": "N04",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "51",
+          "unit": "1",
+          "normalized": {
+            "x": [
+              "-24",
+              "45"
+            ]
+          },
+          "expression": "rss(x)",
+          "revision": "2",
+          "formula_id": "ba7c785d8eac5f3d0141e104c0771575",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.445827+00:00"
+        },
+        "absolute_error": "0",
+        "threshold": "5.1E-23"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.459481+00:00"
+    },
+    {
+      "id": "N05",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "3",
+          "unit": "1",
+          "normalized": {
+            "x": [
+              "-3",
+              "1",
+              "5"
+            ],
+            "y": [
+              "-8",
+              "4",
+              "16"
+            ]
+          },
+          "expression": "slope(x,y)",
+          "revision": "2",
+          "formula_id": "5b40180bce9c916aca445e6edb889cd7",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.471999+00:00"
+        },
+        "absolute_error": "0",
+        "threshold": "3E-24"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.485363+00:00"
+    },
+    {
+      "id": "N06",
+      "passed": false,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "1.999999999985714285714387755102040",
+          "unit": "1",
+          "normalized": {
+            "x": [
+              "10000000000000000000000000000",
+              "10000000000000000000000000001",
+              "10000000000000000000000000003"
+            ],
+            "y": [
+              "0",
+              "2",
+              "6"
+            ]
+          },
+          "expression": "slope(x,y)",
+          "revision": "2",
+          "formula_id": "6dad284b0876acda5123cc8c49c513e4",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.500067+00:00"
+        },
+        "absolute_error": "1.4285714285612244897960E-11",
+        "threshold": "2E-24"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.512799+00:00"
+    },
+    {
+      "id": "N07",
+      "passed": false,
+      "actual": {
+        "stage": "approval",
+        "status": 422,
+        "body": {
+          "detail": "Ca đối chứng 1: Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.525398+00:00"
+    },
+    {
+      "id": "N08",
+      "passed": false,
+      "actual": {
+        "stage": "approval",
+        "status": 422,
+        "body": {
+          "detail": "Ca đối chứng 1: Nhập số với dấu chấm thập phân, không dùng dấu phân cách hàng nghìn."
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.540032+00:00"
+    },
+    {
+      "id": "N09",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "0.05750",
+          "unit": "1",
+          "normalized": {
+            "a": "0.17",
+            "b": "0.29",
+            "c": "0.125"
+          },
+          "expression": "(a+b)*c",
+          "revision": "2",
+          "formula_id": "f6fd44c87281ecbc06e6d9ab86c136ba",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.554494+00:00"
+        },
+        "absolute_error": "0.00000",
+        "threshold": "5.75E-26"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.567158+00:00"
+    },
+    {
+      "id": "N10",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "-0.015625",
+          "unit": "1",
+          "normalized": {
+            "a": "-4"
+          },
+          "expression": "a**-3",
+          "revision": "2",
+          "formula_id": "9f3ac319bde396d70275ab45bdb5fe97",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.580749+00:00"
+        },
+        "absolute_error": "0.000000",
+        "threshold": "1.5625E-26"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.594177+00:00"
+    },
+    {
+      "id": "N11",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "1E-30",
+          "unit": "1",
+          "normalized": {
+            "a": "1E-60"
+          },
+          "expression": "sqrt(a)",
+          "revision": "2",
+          "formula_id": "9177bee22555f42245ad73f13095af26",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.606960+00:00"
+        },
+        "absolute_error": "0E-30",
+        "threshold": "1E-54"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.618478+00:00"
+    },
+    {
+      "id": "N12",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "435.00",
+          "unit": "mm/min",
+          "normalized": {
+            "a": "435.00"
+          },
+          "expression": "a",
+          "revision": "2",
+          "formula_id": "dfe27f7eb760ff1b897a29f85055b1c7",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.632793+00:00"
+        },
+        "absolute_error": "0.00",
+        "threshold": "4.35E-22"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.644657+00:00"
+    },
+    {
+      "id": "N13",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "0.37",
+          "unit": "mPa.s",
+          "normalized": {
+            "a": "0.37"
+          },
+          "expression": "a",
+          "revision": "2",
+          "formula_id": "ed65503f8c173a7c8826bd1025474b4a",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.657916+00:00"
+        },
+        "absolute_error": "0.00",
+        "threshold": "3.7E-25"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.668955+00:00"
+    },
+    {
+      "id": "N14",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "1.250000",
+          "unit": "m2",
+          "normalized": {
+            "a": "1.250000"
+          },
+          "expression": "a",
+          "revision": "2",
+          "formula_id": "39a64990a588251709c54a7c828af901",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.686639+00:00"
+        },
+        "absolute_error": "0.000000",
+        "threshold": "1.25E-24"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.701748+00:00"
+    },
+    {
+      "id": "N15",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "210.0",
+          "unit": "s",
+          "normalized": {
+            "a": "210.0"
+          },
+          "expression": "a",
+          "revision": "2",
+          "formula_id": "0f874a6a03c70a39b162fbc11d761e5d",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.716764+00:00"
+        },
+        "absolute_error": "0.0",
+        "threshold": "2.10E-22"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.732838+00:00"
+    },
+    {
+      "id": "N16",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "4.000",
+          "unit": "mL",
+          "normalized": {
+            "a": "7.000",
+            "b": "3"
+          },
+          "expression": "a-b",
+          "revision": "2",
+          "formula_id": "ffa4aa917a4476f1841a957720b54772",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:16.752766+00:00"
+        },
+        "absolute_error": "0.000",
+        "threshold": "4E-24"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:16.852811+00:00"
+    },
+    {
+      "id": "B01",
+      "passed": true,
+      "actual": {
+        "status": 422,
+        "body": {
+          "detail": "Ngoài miền giá trị: a"
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.000039+00:00"
+    },
+    {
+      "id": "B02",
+      "passed": true,
+      "actual": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "value": "2.000",
+          "unit": "m",
+          "normalized": {
+            "a": "2.000"
+          },
+          "expression": "a",
+          "revision": "2",
+          "formula_id": "97a04b744b590944c8603e273f8782e4",
+          "source": "audit_ui.docx",
+          "source_hash": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60",
+          "approved_by": "Blind holdout synthetic",
+          "approved_at": "2026-09-28T08:04:17.023112+00:00"
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.039851+00:00"
+    },
+    {
+      "id": "B03",
+      "passed": true,
+      "actual": {
+        "status": 422,
+        "body": {
+          "detail": "Cần xác nhận đủ điều kiện áp dụng."
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.090287+00:00"
+    },
+    {
+      "id": "B04",
+      "passed": true,
+      "actual": {
+        "status": 422,
+        "body": {
+          "detail": "Cần xác nhận đủ điều kiện áp dụng."
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.140489+00:00"
+    },
+    {
+      "id": "B05",
+      "passed": true,
+      "actual": {
+        "status": 422,
+        "body": {
+          "detail": "Cấu trúc bản nháp không hợp lệ tại variables[0].key."
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.205149+00:00"
+    },
+    {
+      "id": "B06",
+      "passed": true,
+      "actual": {
+        "status": 422,
+        "body": {
+          "detail": "Cấu trúc bản nháp không hợp lệ tại test_cases[0].inputs.a.value."
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.225584+00:00"
+    },
+    {
+      "id": "B07",
+      "passed": true,
+      "actual": {
+        "status": 422,
+        "body": {
+          "detail": [
+            {
+              "type": "int_type",
+              "loc": [
+                "body",
+                "revision"
+              ],
+              "msg": "Input should be a valid integer",
+              "input": true
+            }
+          ]
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.247986+00:00"
+    },
+    {
+      "id": "B08",
+      "passed": false,
+      "actual": {
+        "status": 200,
+        "body": {
+          "id": "18593eeaf5812557781a3faf9975f910",
+          "source": {
+            "fid": "B08",
+            "kind": "synthetic",
+            "latex": "a+b",
+            "section": "Synthetic holdout",
+            "context": "Synthetic source used only for testing",
+            "document_id": "holdout_numeric",
+            "file": "audit_ui.docx",
+            "sha256": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60"
+          },
+          "proposal": {
+            "title": "B08",
+            "expression": "a+b",
+            "unit": "Pa",
+            "variables": [
+              {
+                "key": "a",
+                "label": "Pressure",
+                "unit": "Pa"
+              },
+              {
+                "key": "b",
+                "label": "Length",
+                "unit": "m"
+              }
+            ],
+            "conditions": [
+              {
+                "key": "check_a",
+                "label": "Synthetic condition A"
+              },
+              {
+                "key": "check_b",
+                "label": "Synthetic condition B"
+              }
+            ],
+            "test_cases": [
+              {
+                "inputs": {
+                  "a": {
+                    "value": "1",
+                    "unit": "Pa"
+                  },
+                  "b": {
+                    "value": "2",
+                    "unit": "m"
+                  }
+                },
+                "expected": "3",
+                "unit": "Pa"
+              }
+            ]
+          },
+          "warnings": [],
+          "status": "approved",
+          "revision": 2,
+          "created_at": "2026-09-28T08:04:17.250491+00:00",
+          "review": {
+            "reviewer": "Blind holdout synthetic",
+            "note": "Oracle fixed before run; synthetic only",
+            "at": "2026-09-28T08:04:17.275701+00:00",
+            "decision": "approve"
+          },
+          "history": [
+            {
+              "action": "draft_created",
+              "at": "2026-09-28T08:04:17.250516+00:00",
+              "revision": 1
+            },
+            {
+              "reviewer": "Blind holdout synthetic",
+              "note": "Oracle fixed before run; synthetic only",
+              "at": "2026-09-28T08:04:17.275701+00:00",
+              "decision": "approve",
+              "action": "approve",
+              "revision": 2,
+              "proposal_digest": "32069fcd68a6ac30cb9334df68bf028dbc0e1b3c34e663d3e1a32e4e5d0e62c1",
+              "proposal": {
+                "title": "B08",
+                "expression": "a+b",
+                "unit": "Pa",
+                "variables": [
+                  {
+                    "key": "a",
+                    "label": "Pressure",
+                    "unit": "Pa"
+                  },
+                  {
+                    "key": "b",
+                    "label": "Length",
+                    "unit": "m"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "key": "check_a",
+                    "label": "Synthetic condition A"
+                  },
+                  {
+                    "key": "check_b",
+                    "label": "Synthetic condition B"
+                  }
+                ],
+                "test_cases": [
+                  {
+                    "inputs": {
+                      "a": {
+                        "value": "1",
+                        "unit": "Pa"
+                      },
+                      "b": {
+                        "value": "2",
+                        "unit": "m"
+                      }
+                    },
+                    "expected": "3",
+                    "unit": "Pa"
+                  }
+                ]
+              },
+              "source_sha256": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60"
+            }
+          ],
+          "validation_errors": []
+        }
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.283080+00:00"
+    },
+    {
+      "id": "L01",
+      "passed": true,
+      "actual": {
+        "id": "1b45f3bfeae3e72909081639a7787aa6",
+        "source": {
+          "fid": "F001",
+          "kind": "omml",
+          "latex": "Z=a-b",
+          "section": "(root)",
+          "context": "HOLDOUT BEFORE alpha sentinel\n\n$ Z=a-b $\n\nHOLDOUT AFTER omega sentinel\n",
+          "document_id": "audit_ui",
+          "file": "audit_ui.docx",
+          "sha256": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60"
+        },
+        "proposal": {
+          "title": "F001 — (root)",
+          "expression": "a-b",
+          "unit": "",
+          "variables": [
+            {
+              "key": "a",
+              "label": "",
+              "unit": ""
+            },
+            {
+              "key": "b",
+              "label": "",
+              "unit": ""
+            }
+          ],
+          "conditions": [
+            {
+              "key": "applicability",
+              "label": ""
+            }
+          ],
+          "test_cases": []
+        },
+        "warnings": [
+          "Bản nháp chưa được người dùng phê duyệt. Cần đối chiếu nguồn và bổ sung ca tính đối chứng.",
+          "Gợi ý cú pháp chưa xác định ý nghĩa biến, đơn vị hay điều kiện áp dụng."
+        ],
+        "status": "pending_review",
+        "revision": 1,
+        "created_at": "2026-09-28T08:04:17.304005+00:00",
+        "review": null,
+        "history": [
+          {
+            "action": "draft_created",
+            "at": "2026-09-28T08:04:17.304049+00:00",
+            "revision": 1
+          }
+        ],
+        "validation_errors": [
+          "Đơn vị kết quả chưa được điền.",
+          "Đơn vị kết quả chưa được hỗ trợ.",
+          "Cần giải thích ý nghĩa biến a",
+          "Cần chọn đơn vị hợp lệ cho a",
+          "Cần giải thích ý nghĩa biến b",
+          "Cần chọn đơn vị hợp lệ cho b",
+          "Điều kiện áp dụng cần mô tả để người dùng xác nhận.",
+          "Cần 1–10 ca đối chứng có đầu vào và đáp án do người rà soát xác nhận."
+        ]
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.316132+00:00"
+    },
+    {
+      "id": "L02",
+      "passed": true,
+      "actual": {
+        "status": 409,
+        "public_status": "stale"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.353498+00:00"
+    },
+    {
+      "id": "L03",
+      "passed": true,
+      "actual": {
+        "restored": {
+          "id": "cfa83a83131fc7d965d5f91183650fb0",
+          "source": {
+            "fid": "L03",
+            "kind": "synthetic",
+            "latex": "a",
+            "section": "Synthetic holdout",
+            "context": "Synthetic source used only for testing",
+            "document_id": "version_cycle",
+            "file": "version_cycle.docx",
+            "sha256": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60"
+          },
+          "proposal": {
+            "title": "L03",
+            "expression": "a",
+            "unit": "Pa",
+            "variables": [
+              {
+                "key": "a",
+                "label": "Synthetic pressure",
+                "unit": "Pa"
+              }
+            ],
+            "conditions": [
+              {
+                "key": "check_a",
+                "label": "Synthetic condition A"
+              },
+              {
+                "key": "check_b",
+                "label": "Synthetic condition B"
+              }
+            ],
+            "test_cases": [
+              {
+                "inputs": {
+                  "a": {
+                    "value": "19",
+                    "unit": "Pa"
+                  }
+                },
+                "expected": "19",
+                "unit": "Pa"
+              }
+            ]
+          },
+          "warnings": [],
+          "status": "pending_review",
+          "revision": 4,
+          "created_at": "2026-09-28T08:04:17.354301+00:00",
+          "review": null,
+          "history": [
+            {
+              "action": "draft_created",
+              "at": "2026-09-28T08:04:17.354313+00:00",
+              "revision": 1
+            },
+            {
+              "reviewer": "Blind holdout synthetic",
+              "note": "Oracle fixed before run; synthetic only",
+              "at": "2026-09-28T08:04:17.362920+00:00",
+              "decision": "approve",
+              "action": "approve",
+              "revision": 2,
+              "proposal_digest": "343d1420647fa15c73759d3f925ab02cf2a2c9a7d1e049668f2901b1a75b7ca1",
+              "proposal": {
+                "title": "L03",
+                "expression": "a",
+                "unit": "Pa",
+                "variables": [
+                  {
+                    "key": "a",
+                    "label": "Synthetic pressure",
+                    "unit": "Pa"
+                  }
+                ],
+                "conditions": [
+                  {
+                    "key": "check_a",
+                    "label": "Synthetic condition A"
+                  },
+                  {
+                    "key": "check_b",
+                    "label": "Synthetic condition B"
+                  }
+                ],
+                "test_cases": [
+                  {
+                    "inputs": {
+                      "a": {
+                        "value": "19",
+                        "unit": "Pa"
+                      }
+                    },
+                    "expected": "19",
+                    "unit": "Pa"
+                  }
+                ]
+              },
+              "source_sha256": "d9ffd55c75c94e3dda09fbaeddb4c604a72e2380847d68d695e5e1ee656cec60"
+            },
+            {
+              "action": "source_superseded",
+              "at": "2026-09-28T08:04:17.370202+00:00",
+              "revision": 3
+            },
+            {
+              "action": "source_restored_for_review",
+              "at": "2026-09-28T08:04:17.400266+00:00",
+              "revision": 4
+            }
+          ],
+          "validation_errors": []
+        },
+        "compute_status": 409,
+        "other_status": "stale"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.418273+00:00"
+    },
+    {
+      "id": "L04",
+      "passed": true,
+      "actual": {
+        "statuses": [
+          409,
+          200
+        ],
+        "current_title": "Concurrent winner B"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:17.457651+00:00"
+    },
+    {
+      "id": "U01",
+      "passed": true,
+      "actual": {
+        "browser_errors": []
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:21.836183+00:00"
+    },
+    {
+      "id": "U02",
+      "passed": false,
+      "actual": {
+        "dialogs": [],
+        "title": "Unsaved holdout delta"
+      },
+      "harness_error": null,
+      "at_utc": "2026-09-28T08:04:22.162344+00:00"
+    },
+    {
+      "id": "U03",
+      "passed": false,
+      "actual": null,
+      "harness_error": "Traceback (most recent call last):\n  File \"/tmp/formula-blind-audit/run.py\", line 92, in <module>\n    with page.expect_response(lambda z:z.request.method=='PUT' and '/formula-drafts/' in z.url) as response:page.get_by_role('button',name='Lưu bản nháp',exact=True).click()\n                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/sync_api/_generated.py\", line 18032, in click\n    self._sync(\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_sync_base.py\", line 115, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_locator.py\", line 165, in click\n    return await self._frame._click(self._selector, strict=True, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_frame.py\", line 594, in _click\n    await self._channel.send(\"click\", self._timeout, locals_to_params(locals()))\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_connection.py\", line 76, in send\n    return await self._connection.wrap_api_call(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_connection.py\", line 632, in wrap_api_call\n    raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nplaywright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"button\", name=\"Lưu bản nháp\", exact=True)\n\n",
+      "at_utc": "2026-09-28T08:04:52.913799+00:00"
+    },
+    {
+      "id": "U04",
+      "passed": false,
+      "actual": null,
+      "harness_error": "Traceback (most recent call last):\n  File \"/tmp/formula-blind-audit/run.py\", line 92, in <module>\n    with page.expect_response(lambda z:z.request.method=='PUT' and '/formula-drafts/' in z.url) as response:page.get_by_role('button',name='Lưu bản nháp',exact=True).click()\n                                                                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/sync_api/_generated.py\", line 18032, in click\n    self._sync(\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_sync_base.py\", line 115, in _sync\n    return task.result()\n           ^^^^^^^^^^^^^\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_locator.py\", line 165, in click\n    return await self._frame._click(self._selector, strict=True, **params)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_frame.py\", line 594, in _click\n    await self._channel.send(\"click\", self._timeout, locals_to_params(locals()))\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_connection.py\", line 76, in send\n    return await self._connection.wrap_api_call(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/playwright/_impl/_connection.py\", line 632, in wrap_api_call\n    raise rewrite_error(error, f\"{parsed_st['apiName']}: {error}\") from None\nplaywright._impl._errors.TimeoutError: Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for get_by_role(\"button\", name=\"Lưu bản nháp\", exact=True)\n\n",
+      "at_utc": "2026-09-28T08:04:52.913860+00:00"
+    }
+  ]
+}

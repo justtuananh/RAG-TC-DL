@@ -4,6 +4,14 @@ frontend/dist/
 
 # Python environments
 .venv/
+.venv-dev/
+.venv-formula/
+.formula-runtime/
+.formula-registry/
+.env
+.env.*
+node_modules/
+frontend-legacy/node_modules/
 __pycache__/
 *.pyc
 *.pyo

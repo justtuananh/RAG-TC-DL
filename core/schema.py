@@ -41,6 +41,7 @@ class AppSettings(_Section):
 class PathSettings(_Section):
     source_dir: Path
     markdown_dir: Path
+    formula_registry_db: Path
 
 
 class ServiceSettings(_Section):

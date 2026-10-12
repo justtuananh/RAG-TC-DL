@@ -36,7 +36,7 @@ def _child(el, name):
 _NARY = {"∑": r"\sum", "∫": r"\int", "∏": r"\prod",
          "∬": r"\iint", "∭": r"\iiint", "∐": r"\coprod",
          "⋃": r"\bigcup", "⋂": r"\bigcap"}
-_ACC = {"̂": r"\hat", "̃": r"\tilde", "̄": r"\bar",
+_ACC = {"̂": r"\hat", "̃": r"\tilde", "̄": r"\bar", "̅": r"\overline",
         "̇": r"\dot", "⃗": r"\vec", "̆": r"\breve"}
 
 

@@ -1,0 +1,63 @@
+{
+  "files": {
+    "2023. QTKD 1.190 2023 DPI 610 ND 24.01.24.docx": {
+      "total": 47,
+      "statuses": {
+        "pending_review": 47
+      },
+      "with_expression": 28,
+      "without_latex": 0
+    },
+    "QTKD 1.061 2021 ND V2.docx": {
+      "total": 6,
+      "statuses": {
+        "pending_review": 6
+      },
+      "with_expression": 3,
+      "without_latex": 4
+    },
+    "QTKD 1.062 2021 ND.docx": {
+      "total": 3,
+      "statuses": {
+        "pending_review": 3
+      },
+      "with_expression": 3,
+      "without_latex": 0
+    },
+    "QTKD 1.063 2021 BPL.docx": {
+      "total": 2,
+      "statuses": {
+        "pending_review": 2
+      },
+      "with_expression": 2,
+      "without_latex": 0
+    },
+    "QTKD 1.071 2022 FINAL.docx": {
+      "total": 20,
+      "statuses": {
+        "pending_review": 20
+      },
+      "with_expression": 3,
+      "without_latex": 18
+    },
+    "QTKD 1.159 2021 ND FINAL.docx": {
+      "total": 210,
+      "statuses": {
+        "pending_review": 210
+      },
+      "with_expression": 1,
+      "without_latex": 210
+    },
+    "QTKD 1.160 2021 ND FINAL.docx": {
+      "total": 46,
+      "statuses": {
+        "pending_review": 46
+      },
+      "with_expression": 17,
+      "without_latex": 0
+    }
+  },
+  "total": 334,
+  "before_sha256": "e76c117c767950920802a08bff7761a878561c9ceaddf00d8cedcc0d1e902aea",
+  "after_sha256": "e76c117c767950920802a08bff7761a878561c9ceaddf00d8cedcc0d1e902aea"
+}

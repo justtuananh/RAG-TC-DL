@@ -1,0 +1,1172 @@
+[
+  {
+    "status": "clarify",
+    "message": "Cần nêu rõ đại lượng, thiết bị hoặc quy trình.",
+    "prepare_seconds": 4.37605194747448e-06
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "((p - pc1) + (p - pc2)) / 2 / p * 100",
+      "unit": "%",
+      "variables": [
+        {
+          "key": "p",
+          "label": "Áp suất đã hiệu chỉnh",
+          "unit": "bar",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "pc1",
+          "label": "Chỉ thị lần 1",
+          "unit": "bar",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "pc2",
+          "label": "Chỉ thị lần 2",
+          "unit": "bar",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        }
+      ],
+      "conditions": [
+        "different_gravity",
+        "pressure_corrected"
+      ],
+      "id": "error",
+      "title": "Sai số tương đối H3000 từ hai lần đo",
+      "revision": "1"
+    },
+    "source": {
+      "id": "error",
+      "title": "Sai số tương đối H3000 từ hai lần đo",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "- Sai số trong cả 3 trường hợp nêu trên đều được xác định theo các công thức sau:\n\n\n|  | $\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}$ |  |\n| --- | --- | --- |\n|  | $\\Delta_{1} = P - P_{c1}$ |  |\n|  | $\\Delta_{2} = P - P_{c2}$ |  |\n\n\nTrong đó:\n\n$\\Delta$ $ Δ_{i} $ - Sai số đo, bar;\n\n$\\Delta_{1},\\Delta_{2}$ $ Δ_{i} $ - Lần lượt là sai số đo của lần đo thứ nhất và thứ hai, bar;\n\n$P_{c1},P_{c2}$ $ Δ_{i} $ - Lần lượt là giá trị chỉ thị trên AKC tại lần đo thứ nhất và thứ hai, bar;\n\n$P$ $ P_{i} $ - Giá trị áp suất danh nghĩa tạo bởi H3000 tương ứng với giá trị gia tốc trọng trường tại nơi đo, bar.\n\nNếu bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường tại nơi đo thì giá trị P tính bằng tổng giá trị áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra:\n\n\n| $P = P_{0}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$P_{0}$ $ Δ_{i} $ - Giá trị tổng áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra, bar.\n\nTrường hợp bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường khác với gia tốc trọng trường tại nơi đo, giá trị P được tính theo công thức sau:\n\n\n| $P = P_{0} \\times \\frac{g_{d}}{g_{0}}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$g_{0}$ $ Δ_{i} $ - Gia tốc trọng trường được sử dụng để khắc độ quả cân áp suất, m/s2;\n\n$g_{d}$ $ Δ_{i} $ - Gia tốc trọng trường tại nơi đo, m/s2.\n\nSai số tương đối $\\delta$ được tính theo công thức sau:\n\n\n| $\\delta = \\frac{\\Delta}{P} \\times 100$ |  |\n| --- | --- |\n\n\nSai số tương đối của H3000 không được vượt quá ± 0,1 %.",
+      "formulas": [
+        {
+          "fid": "F013",
+          "latex": "\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F014",
+          "latex": "\\Delta_{1} = P - P_{c1}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F015",
+          "latex": "\\Delta_{2} = P - P_{c2}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F033",
+          "latex": "\\delta = \\frac{\\Delta}{P} \\times 100",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "cccdc26dfb87a81e5132ce81271ee9207abeafb2765e02a7b1499f1c0f889afa"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 143,
+        "prompt_tokens": 1430,
+        "total_tokens": 1573,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 472,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 9.646065e-05,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 9.646065e-05,
+          "upstream_inference_prompt_cost": 6.88545e-05,
+          "upstream_inference_completions_cost": 2.760615e-05
+        }
+      },
+      "provider": "StreamLake",
+      "response_cost": 9.646065e-05,
+      "response_id": "gen-1790567644-zN5KO2kXdWIfuJE6talh"
+    },
+    "prepare_seconds": 2.162510970956646
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "pm - pcd",
+      "unit": "Pa",
+      "variables": [
+        {
+          "key": "pm",
+          "label": "Áp suất mở van",
+          "unit": "Pa",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "pcd",
+          "label": "Áp suất chỉnh đặt",
+          "unit": "Pa",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        }
+      ],
+      "conditions": [],
+      "id": "valve",
+      "title": "Sai số áp suất chỉnh đặt van an toàn",
+      "revision": "1"
+    },
+    "source": {
+      "id": "valve",
+      "title": "Sai số áp suất chỉnh đặt van an toàn",
+      "file": "QTKD 1.061 2021 ND V2.docx",
+      "stem": "QTKD_1.061_2021_ND_V2",
+      "section": "6 Tiến hành kiểm định > 6.3 Kiểm tra đo lường",
+      "docx_sha256": "e015e7615952b6aa5b9e48772536adce395efe5409d378dcd2c7412d69e838f5",
+      "context": "6.3.1 Xác định sai số của áp suất chỉnh đặt\n\nTăng áp suất hệ thống một cách từ từ đến điểm áp suất chỉnh đặt của van an toàn, khi gần đến điểm áp suất chỉnh đặt thì tập trung quan sát giá trị áp suất của hệ thống trên áp kế chuẩn đồng thời chậm rãi tăng giá trị áp suất của hệ thống. Khi giá trị áp suất hệ thống bắt đầu bị tụt chính là lúc van an toàn mở ra, giá trị áp suất lớn nhất mà hệ thống đạt được chính là giá trị áp suất mở van. Ghi kết quả vào Bảng của Phụ lục A.\n\nSai số của áp suất chỉnh đặt được xác định theo công thức sau:\n\n\n|  | $\\DeltaP_{cd} = P_{m} - P_{cd}$ |  |\n| --- | --- | --- |\n\n\ntrong đó:\n\n$\\DeltaP_{cd}$ - sai số của áp suất chỉnh đặt, Pa;\n\n$P_{cd}$ - áp suất chỉnh đặt, Pa;\n\n$P_{m}$ - áp suất mở van, Pa.\n\nGiá trị cho phép của sai số áp suất chỉnh đặt bằng ± 3% áp suất chỉnh đặt của van nhưng không nhỏ hơn ± 0,15 bar.",
+      "formulas": [
+        {
+          "fid": "F001",
+          "latex": "\\DeltaP_{cd} = P_{m} - P_{cd}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "a17f9541a72ed70159256372650636d7bfa198d0dc29deb8c2f9478b0c214c29"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 80,
+        "prompt_tokens": 994,
+        "total_tokens": 1074,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 993,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 6.33051e-05,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 6.33051e-05,
+          "upstream_inference_prompt_cost": 4.78611e-05,
+          "upstream_inference_completions_cost": 1.5444e-05
+        }
+      },
+      "provider": "StreamLake",
+      "response_cost": 6.33051e-05,
+      "response_id": "gen-1790567644-wuNlmFScvQwA9tm5OREN"
+    },
+    "prepare_seconds": 7.287853282992728
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "500 - vd",
+      "unit": "mL",
+      "variables": [
+        {
+          "key": "vd",
+          "label": "Thể tích nước còn lại",
+          "unit": "mL",
+          "min": 0,
+          "max": 500,
+          "exclusive_min": false
+        }
+      ],
+      "conditions": [
+        "initial"
+      ],
+      "id": "volume",
+      "title": "Dung tích làm việc bình phân ly",
+      "revision": "1"
+    },
+    "source": {
+      "id": "volume",
+      "title": "Dung tích làm việc bình phân ly",
+      "file": "QTKD 1.063 2021 BPL.docx",
+      "stem": "QTKD_1.063_2021_BPL",
+      "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật",
+      "docx_sha256": "88a6b7c26022b6985b3cd55392b6dacf8adfc156a46cec7b13dc5e228f09fe15",
+      "context": "\n* Đối với trường hợp kiểm định ban đầu: Dùng thước cặp, ống đong chia độ tiến hành kiểm tra dung tích chứa và các kích thước ngoài theo thuyết minh kỹ thuật.\n\nTiến hành kiểm tra dung tích làm việc của bình phân ly theo thứ tự các bước và yêu cầu sau đây:\n\n- Dùng chìa vặn tháo cút nối trên ra khỏi bình phân ly và dốc ngược để cho chất lỏng trong bình chảy ra hết;\n\n- Dùng ống đong chia độ 500 mL, đổ nước cất vào ống cho đến vạch mức 500 mL;\n\n- Để bình phân ly thẳng đứng, rót nước cất từ ống đong vào bình phân ly qua cút nối trên cho đến khi thấy nước bắt đầu chảy ra ở cút dưới thì ngừng rót;\n\n- Xác định định dung tích làm việc của bình phân ly theo công thức sau:\n\n$ V_{pl}=500- V_{đ} $ [1]\n\nTrong đó:\n\n$ V_{pl} $ - dung tích làm việc của bình phân ly, mL;\n\n$ V_{đ} $ - thể tích của lượng nước còn lại trong ống đong, ml.\n\n- Dung tích làm việc của bình phân ly phải đạt yêu cầu theo công bố của nhà sản xuất.\n\n* Đối với trường hợp kiểm định định kỳ: không áp dụng kiểm tra kỹ thuật\n\n",
+      "formulas": [
+        {
+          "fid": "F001",
+          "latex": "V_{pl}=500- V_{đ}",
+          "kind": "omml"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "b28865136c08738c04c9c0448b11b395c327ff08b90029d5bcfc607b5dad5c4f"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 57,
+        "prompt_tokens": 1022,
+        "total_tokens": 1079,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 469,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 6.021315e-05,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 6.021315e-05,
+          "upstream_inference_prompt_cost": 4.92093e-05,
+          "upstream_inference_completions_cost": 1.100385e-05
+        }
+      },
+      "provider": "StreamLake",
+      "response_cost": 6.021315e-05,
+      "response_id": "gen-1790567644-5VQh6udj1J2dWL73dRc9"
+    },
+    "prepare_seconds": 1.5028267670422792
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "tau_t * (eta_t / eta)",
+      "unit": "s",
+      "variables": [
+        {
+          "key": "tau_t",
+          "label": "Thời gian ở nhiệt độ t",
+          "unit": "s",
+          "min": 180,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "eta_t",
+          "label": "Độ nhớt tại t",
+          "unit": "Pa.s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "eta",
+          "label": "Độ nhớt tiêu chuẩn",
+          "unit": "Pa.s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "dt",
+          "label": "Chênh lệch nhiệt độ",
+          "unit": "delta_degC",
+          "min": 3,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "conditions": [
+        "different_gravity",
+        "pressure_corrected"
+      ],
+      "id": "rotation",
+      "title": "Hiệu chỉnh thời gian quay tự do pít tông H3000",
+      "revision": "1"
+    },
+    "source": {
+      "id": "rotation",
+      "title": "Hiệu chỉnh thời gian quay tự do pít tông H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\nThời gian quay tự do là khoảng thời gian mà pít tông tự quay trong xi lanh đo sau khi nó đã đạt một vận tốc góc nhất định và không có ngoại lực tác dụng thêm.\n\nThời gian quay tự do của pít tông được xác định trong các điều kiện sau:\n\n- Môi trường truyền áp suất phải phù hợp với môi trường mà nhà sản xuất quy định;\n\n- Ở áp suất 140 bar;\n\n- Vận tốc góc ban đầu là (30 ± 1,5) r/min;\n\n- Ở nhiệt độ tiêu chuẩn của pít tông/xi lanh hoặc lệch với nhiệt độ tiêu chuẩn được nhà sản xuất quy định;\n\n- Xác định thời gian quay tự do khi pít tông quay cùng chiều và ngược chiều kim đồng hồ.\n\nTrong trường hợp chênh lệch nhiệt độ pít tông/xi lanh lớn hơn 3 oC so với nhiệt độ tiêu chuẩn do nhà sản xuất quy định, thời gian quay tự do được tính như sau:\n\n$ τ=τ_{t}\\frac{η_{t}}{η} $ $\\tau = \\tau_{t} \\times \\frac{\\eta_{t}}{\\eta}$\n\nTrong đó:\n\n$ τ $ - Thời gian quay tự do ở nhiệt độ tiêu chuẩn, s;\n\n$ τ_{t} $ - Thời gian quay tự do ở nhiệt độ t, s;\n\n$ η $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, Pa · s;\n\n$ η_{t} $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ t, Pa · s.\n\nSai số cho phép của các phép đo đối với:\n\n- Thời gian quay tự do là: ± 10 s;\n\n- Nhiệt độ môi trường truyền áp suất là: ± 0,5 oC;\n\n- Vận tốc góc ban đầu là: ± 1,5 r/min.\n\nThời gian quay tự do của pít tông không nhỏ hơn 3 min.\n",
+      "formulas": [
+        {
+          "fid": "F002",
+          "latex": "\\tau = \\tau_{t} \\times \\frac{\\eta_{t}}{\\eta}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "6468470cf88c8aa670a58ef49d0e9bea8e06e061aaae2e518f56305eff041a74"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 162,
+        "prompt_tokens": 1246,
+        "total_tokens": 1408,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 448,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 0.00016074,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 0.00016074,
+          "upstream_inference_prompt_cost": 0.00011214,
+          "upstream_inference_completions_cost": 4.86e-05
+        }
+      },
+      "provider": "SiliconFlow",
+      "response_cost": 0.00016074,
+      "response_id": "gen-1790567645-Wc7ICwIrYpXiPpOJ7Re4"
+    },
+    "prepare_seconds": 4.985815757070668
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "p0 * (gd / g0)",
+      "unit": "bar",
+      "variables": [
+        {
+          "key": "p0",
+          "label": "Tổng áp suất khắc độ",
+          "unit": "bar",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "gd",
+          "label": "Gia tốc tại nơi đo",
+          "unit": "m/s2",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "g0",
+          "label": "Gia tốc khắc độ",
+          "unit": "m/s2",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        }
+      ],
+      "conditions": [
+        "different_gravity"
+      ],
+      "id": "gravity",
+      "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+      "revision": "1"
+    },
+    "source": {
+      "id": "gravity",
+      "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\nNếu bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường tại nơi đo thì giá trị P tính bằng tổng giá trị áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra:\n\n\n| $P = P_{0}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$P_{0}$ $ Δ_{i} $ - Giá trị tổng áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra, bar.\n\nTrường hợp bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường khác với gia tốc trọng trường tại nơi đo, giá trị P được tính theo công thức sau:\n\n\n| $P = P_{0} \\times \\frac{g_{d}}{g_{0}}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$g_{0}$ $ Δ_{i} $ - Gia tốc trọng trường được sử dụng để khắc độ quả cân áp suất, m/s2;\n\n$g_{d}$ $ Δ_{i} $ - Gia tốc trọng trường tại nơi đo, m/s2.\n",
+      "formulas": [
+        {
+          "fid": "F027",
+          "latex": "P = P_{0} \\times \\frac{g_{d}}{g_{0}}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "7bc589a3b123fd1903ac7ffb9bb4d11982c5c6a6823753f1a4c39a48d0540c22"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 130,
+        "prompt_tokens": 1017,
+        "total_tokens": 1147,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 1016,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 7.406505e-05,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 7.406505e-05,
+          "upstream_inference_prompt_cost": 4.896855e-05,
+          "upstream_inference_completions_cost": 2.50965e-05
+        }
+      },
+      "provider": "StreamLake",
+      "response_cost": 7.406505e-05,
+      "response_id": "gen-1790567646-g6vHT7Nz120hwR4ETDS1"
+    },
+    "prepare_seconds": 1.8739556149812415
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "vt * (eta_t / eta)",
+      "unit": "mm/min",
+      "variables": [
+        {
+          "key": "vt",
+          "label": "Tốc độ trung bình ba lần đo tại t",
+          "unit": "mm/min",
+          "min": 0.0,
+          "max": 3.0,
+          "exclusive_min": false
+        },
+        {
+          "key": "eta_t",
+          "label": "Độ nhớt tại t",
+          "unit": "Pa.s",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "eta",
+          "label": "Độ nhớt tiêu chuẩn",
+          "unit": "Pa.s",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "dt",
+          "label": "Chênh lệch nhiệt độ so với tiêu chuẩn",
+          "unit": "delta_degC",
+          "min": 2.0,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "conditions": [
+        "fall_conditions",
+        "three_readings",
+        "different_gravity",
+        "pressure_corrected"
+      ],
+      "id": "fall",
+      "title": "Hiệu chỉnh tốc độ hạ pít tông H3000",
+      "revision": "1"
+    },
+    "source": {
+      "id": "fall",
+      "title": "Hiệu chỉnh tốc độ hạ pít tông H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\n- Môi trường truyền áp suất phải phù hợp với môi trường mà nhà sản xuất quy định;\n\n- Ở áp suất 700 bar;\n\n- Ở nhiệt độ tiêu chuẩn, hoặc lệch với nhiệt độ tiêu chuẩn mà nhà sản xuất cho phép;\n\n- Pít tông đo được khoá kín và tách biệt khi hệ thống tạo áp.\n\nTrường hợp chênh lệch nhiệt độ pít tông so với nhiệt độ tiêu chuẩn lớn hơn 2 oC thì tốc độ hạ của pít tông tính như sau:\n\n$ V=V_{t}\\frac{η_{t}}{η} $ $V = V_{t} \\times \\frac{\\eta_{t}}{\\eta}$\n\nTrong đó:\n\n$ V $ - Tốc độ hạ của pít tông ở nhiệt độ tiêu chuẩn, mm/min;\n\n$ V_{t} $ - Tốc độ hạ của pít tông ở nhiệt độ t, mm/min;\n\n$ η $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, Pa · s;\n\n$ η_{t} $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ t, Pa · s.\n\nTốc độ hạ của pít tông là giá trị trung bình của ba lần đo và không vượt quá 3 mm/min.\n\n\n### 5.2.5 Kiểm tra độ nhạy của áp kế pít tông\n\n\nĐộ nhạy của H3000 được xác định ở áp suất 70 bar. H3000 được gọi là nhạy khi đặt một khối lượng 290 mg tương đương với áp suất 0,007 bar thì giá trị áp suất thay đổi nhận biết được trên AKC.",
+      "formulas": [
+        {
+          "fid": "F008",
+          "latex": "V = V_{t} \\times \\frac{\\eta_{t}}{\\eta}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "350e3d2ca50992133e4cd526cf30422e62b689ddd58f643997640fab5a722731"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 184,
+        "prompt_tokens": 1155,
+        "total_tokens": 1339,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 1152,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 0.00015915,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 0.00015915,
+          "upstream_inference_prompt_cost": 0.00010395,
+          "upstream_inference_completions_cost": 5.52e-05
+        }
+      },
+      "provider": "SiliconFlow",
+      "response_cost": 0.00015915,
+      "response_id": "gen-1790567648-gLqzdSoiudDAaMz3fld3"
+    },
+    "prepare_seconds": 7.26657283003442
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "- (p0 * (gd / g0))",
+      "unit": "bar",
+      "variables": [
+        {
+          "key": "p0",
+          "label": "Tổng áp suất khắc độ",
+          "unit": "bar",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "gd",
+          "label": "Gia tốc tại nơi đo",
+          "unit": "m/s2",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "g0",
+          "label": "Gia tốc khắc độ",
+          "unit": "m/s2",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        }
+      ],
+      "conditions": [
+        "different_gravity"
+      ],
+      "id": "gravity",
+      "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+      "revision": "1"
+    },
+    "source": {
+      "id": "gravity",
+      "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\nNếu bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường tại nơi đo thì giá trị P tính bằng tổng giá trị áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra:\n\n\n| $P = P_{0}$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$P_{0}$ $ Δ_{i} $ - Giá trị tổng áp suất khắc độ trên đĩa cân gốc và các quả cân tại điểm kiểm tra, bar.\n\nTrường hợp bộ quả cân áp suất được khắc độ tương ứng với giá trị gia tốc trọng trường khác với gia tốc trọng trường tại nơi đo, giá trị P được tính theo công thức sau:\n\n\n| $P = -( P_{0} \\times \\frac{g_{d}}{g_{0}})$ |  |\n| --- | --- |\n\n\nTrong đó:\n\n$g_{0}$ $ Δ_{i} $ - Gia tốc trọng trường được sử dụng để khắc độ quả cân áp suất, m/s2;\n\n$g_{d}$ $ Δ_{i} $ - Gia tốc trọng trường tại nơi đo, m/s2.\n",
+      "formulas": [
+        {
+          "fid": "F027",
+          "latex": "P = -( P_{0} \\times \\frac{g_{d}}{g_{0}})",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "7bc589a3b123fd1903ac7ffb9bb4d11982c5c6a6823753f1a4c39a48d0540c22"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 130,
+        "prompt_tokens": 1019,
+        "total_tokens": 1149,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 448,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 0.00013071,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 0.00013071,
+          "upstream_inference_prompt_cost": 9.171e-05,
+          "upstream_inference_completions_cost": 3.9e-05
+        }
+      },
+      "provider": "SiliconFlow",
+      "response_cost": 0.00013071,
+      "response_id": "gen-1790567650-zvuVbovPKlATlJhKWMyo"
+    },
+    "prepare_seconds": 4.458859871025197
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "((p - pc1) + (p - pc2)) / 2 / p * 100",
+      "unit": "%",
+      "variables": [
+        {
+          "key": "p",
+          "label": "Áp suất đã hiệu chỉnh",
+          "unit": "bar",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "pc1",
+          "label": "Chỉ thị lần 1",
+          "unit": "bar",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "pc2",
+          "label": "Chỉ thị lần 2",
+          "unit": "bar",
+          "min": 0,
+          "max": null,
+          "exclusive_min": false
+        }
+      ],
+      "conditions": [],
+      "id": "error",
+      "title": "Sai số tương đối H3000 từ hai lần đo",
+      "revision": "1"
+    },
+    "source": {
+      "id": "error",
+      "title": "Sai số tương đối H3000 từ hai lần đo",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}\n\\Delta_{1} = P - P_{c1}\n\\Delta_{2} = P - P_{c2}\n\\delta = \\frac{\\Delta}{P} \\times 100",
+      "formulas": [
+        {
+          "fid": "F013",
+          "latex": "\\Delta = \\frac{\\Delta_{1} + \\Delta_{2}}{2}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F014",
+          "latex": "\\Delta_{1} = P - P_{c1}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F015",
+          "latex": "\\Delta_{2} = P - P_{c2}",
+          "kind": "ole"
+        },
+        {
+          "fid": "F033",
+          "latex": "\\delta = \\frac{\\Delta}{P} \\times 100",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "cccdc26dfb87a81e5132ce81271ee9207abeafb2765e02a7b1499f1c0f889afa"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 132,
+        "prompt_tokens": 909,
+        "total_tokens": 1041,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 487,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 6.925095e-05,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 6.925095e-05,
+          "upstream_inference_prompt_cost": 4.376835e-05,
+          "upstream_inference_completions_cost": 2.54826e-05
+        }
+      },
+      "provider": "StreamLake",
+      "response_cost": 6.925095e-05,
+      "response_id": "gen-1790567651-Bmci6g11zJZAbWG6mnAE"
+    },
+    "prepare_seconds": 3.9309843339724466
+  },
+  {
+    "status": "blocked",
+    "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+    "prepare_seconds": 1.180905383080244e-05
+  },
+  {
+    "status": "blocked",
+    "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+    "prepare_seconds": 6.043002940714359e-06
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "tau_t * (eta_t / eta)",
+      "unit": "s",
+      "variables": [
+        {
+          "key": "tau_t",
+          "label": "Thời gian ở nhiệt độ t",
+          "unit": "s",
+          "min": 180,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "eta_t",
+          "label": "Độ nhớt tại t",
+          "unit": "Pa.s",
+          "min": 1e-06,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "eta",
+          "label": "Độ nhớt tiêu chuẩn",
+          "unit": "Pa.s",
+          "min": 1e-06,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "dt",
+          "label": "Chênh lệch nhiệt độ",
+          "unit": "delta_degC",
+          "min": 3,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "conditions": [
+        "different_gravity",
+        "pressure_corrected"
+      ],
+      "id": "rotation",
+      "title": "Hiệu chỉnh thời gian quay tự do pít tông H3000",
+      "revision": "1"
+    },
+    "source": {
+      "id": "rotation",
+      "title": "Hiệu chỉnh thời gian quay tự do pít tông H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.3 Kiểm tra thời gian quay tự do của pít tông",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\nThời gian quay tự do là khoảng thời gian mà pít tông tự quay trong xi lanh đo sau khi nó đã đạt một vận tốc góc nhất định và không có ngoại lực tác dụng thêm.\n\nThời gian quay tự do của pít tông được xác định trong các điều kiện sau:\n\n- Môi trường truyền áp suất phải phù hợp với môi trường mà nhà sản xuất quy định;\n\n- Ở áp suất 140 bar;\n\n- Vận tốc góc ban đầu là (30 ± 1,5) r/min;\n\n- Ở nhiệt độ tiêu chuẩn của pít tông/xi lanh hoặc lệch với nhiệt độ tiêu chuẩn được nhà sản xuất quy định;\n\n- Xác định thời gian quay tự do khi pít tông quay cùng chiều và ngược chiều kim đồng hồ.\n\nTrong trường hợp chênh lệch nhiệt độ pít tông/xi lanh lớn hơn 3 oC so với nhiệt độ tiêu chuẩn do nhà sản xuất quy định, thời gian quay tự do được tính như sau:\n\n$ τ=τ_{t}\\frac{η_{t}}{η} $ $[công thức không đọc được]$\n\nTrong đó:\n\n$ τ $ - Thời gian quay tự do ở nhiệt độ tiêu chuẩn, s;\n\n$ τ_{t} $ - Thời gian quay tự do ở nhiệt độ t, s;\n\n$ η $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, Pa · s;\n\n$ η_{t} $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ t, Pa · s.\n\nSai số cho phép của các phép đo đối với:\n\n- Thời gian quay tự do là: ± 10 s;\n\n- Nhiệt độ môi trường truyền áp suất là: ± 0,5 oC;\n\n- Vận tốc góc ban đầu là: ± 1,5 r/min.\n\nThời gian quay tự do của pít tông không nhỏ hơn 3 min.\n",
+      "formulas": [],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "6468470cf88c8aa670a58ef49d0e9bea8e06e061aaae2e518f56305eff041a74"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 177,
+        "prompt_tokens": 1193,
+        "total_tokens": 1370,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 755,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 9.16128e-05,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 9.16128e-05,
+          "upstream_inference_prompt_cost": 5.744295e-05,
+          "upstream_inference_completions_cost": 3.416985e-05
+        }
+      },
+      "provider": "StreamLake",
+      "response_cost": 9.16128e-05,
+      "response_id": "gen-1790567655-EVdSicV40Ly2lLWV6ilk"
+    },
+    "prepare_seconds": 2.054995522950776
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "- (vt * eta_t / eta)",
+      "unit": "mm/min",
+      "variables": [
+        {
+          "key": "vt",
+          "label": "Tốc độ trung bình ba lần đo tại t",
+          "unit": "mm/min",
+          "min": 0,
+          "max": 3,
+          "exclusive_min": false
+        },
+        {
+          "key": "eta_t",
+          "label": "Độ nhớt tại t",
+          "unit": "Pa.s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "eta",
+          "label": "Độ nhớt tiêu chuẩn",
+          "unit": "Pa.s",
+          "min": 0,
+          "max": null,
+          "exclusive_min": true
+        },
+        {
+          "key": "dt",
+          "label": "Chênh lệch nhiệt độ so với nhiệt độ tiêu chuẩn",
+          "unit": "delta_degC",
+          "min": 2,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "conditions": [
+        "fall_conditions",
+        "three_readings"
+      ],
+      "id": "fall",
+      "title": "Hiệu chỉnh tốc độ hạ pít tông H3000",
+      "revision": "1"
+    },
+    "source": {
+      "id": "fall",
+      "title": "Hiệu chỉnh tốc độ hạ pít tông H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.2 Kiểm tra kỹ thuật > 5.2.4 Kiểm tra tốc độ hạ của pít tông",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "\n- Môi trường truyền áp suất phải phù hợp với môi trường mà nhà sản xuất quy định;\n\n- Ở áp suất 700 bar;\n\n- Ở nhiệt độ tiêu chuẩn, hoặc lệch với nhiệt độ tiêu chuẩn mà nhà sản xuất cho phép;\n\n- Pít tông đo được khoá kín và tách biệt khi hệ thống tạo áp.\n\nTrường hợp chênh lệch nhiệt độ pít tông so với nhiệt độ tiêu chuẩn lớn hơn 2 oC thì tốc độ hạ của pít tông tính như sau:\n\n$ V=V_{t}\\frac{η_{t}}{η} $ $V = -( V_{t} \\times \\frac{\\eta_{t}}{\\eta})$\n\nTrong đó:\n\n$ V $ - Tốc độ hạ của pít tông ở nhiệt độ tiêu chuẩn, mm/min;\n\n$ V_{t} $ - Tốc độ hạ của pít tông ở nhiệt độ t, mm/min;\n\n$ η $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ tiêu chuẩn, Pa · s;\n\n$ η_{t} $ - Độ nhớt động lực của môi trường truyền áp suất ở nhiệt độ t, Pa · s.\n\nTốc độ hạ của pít tông là giá trị trung bình của ba lần đo và không vượt quá 3 mm/min.\n\n\n### 5.2.5 Kiểm tra độ nhạy của áp kế pít tông\n\n\nĐộ nhạy của H3000 được xác định ở áp suất 70 bar. H3000 được gọi là nhạy khi đặt một khối lượng 290 mg tương đương với áp suất 0,007 bar thì giá trị áp suất thay đổi nhận biết được trên AKC.",
+      "formulas": [
+        {
+          "fid": "F008",
+          "latex": "V = -( V_{t} \\times \\frac{\\eta_{t}}{\\eta})",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "350e3d2ca50992133e4cd526cf30422e62b689ddd58f643997640fab5a722731"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 169,
+        "prompt_tokens": 1159,
+        "total_tokens": 1328,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 0,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 0.00023855,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 0.00023855,
+          "upstream_inference_prompt_cost": 0.00015067,
+          "upstream_inference_completions_cost": 8.788e-05
+        }
+      },
+      "provider": "Alibaba",
+      "response_cost": 0.00023855,
+      "response_id": "gen-1790567655-0I5LYe8laDahDzz1x7RW"
+    },
+    "prepare_seconds": 2.0288782729767263
+  },
+  {
+    "status": "ready",
+    "spec": {
+      "expression": "p0 * (gd / g0)",
+      "unit": "bar",
+      "variables": [
+        {
+          "key": "p0",
+          "label": "Tổng áp suất khắc độ",
+          "unit": "bar",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "gd",
+          "label": "Gia tốc tại nơi đo",
+          "unit": "m/s2",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "g0",
+          "label": "Gia tốc khắc độ",
+          "unit": "m/s2",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": false
+        },
+        {
+          "key": "dt",
+          "label": "Nhiệt độ chênh lệch",
+          "unit": "delta_degC",
+          "min": 0.0,
+          "max": null,
+          "exclusive_min": true
+        }
+      ],
+      "conditions": [
+        "different_gravity",
+        "pressure_corrected"
+      ],
+      "id": "gravity",
+      "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+      "revision": "1"
+    },
+    "source": {
+      "id": "gravity",
+      "title": "Hiệu chỉnh áp suất theo gia tốc trọng trường H3000",
+      "file": "QTKD 1.071 2022 FINAL.docx",
+      "stem": "QTKD_1.071_2022_FINAL",
+      "section": "5 Tiến hành kiểm định > 5.3 Kiểm tra đo lường",
+      "docx_sha256": "7efe8f1f99d82d3dccca6c8197c69415242b4228963d15dc1af33b63ff5291fc",
+      "context": "P = P_{0} \\times \\frac{g_{d}}{g_{0}}",
+      "formulas": [
+        {
+          "fid": "F027",
+          "latex": "P = P_{0} \\times \\frac{g_{d}}{g_{0}}",
+          "kind": "ole"
+        }
+      ],
+      "revision": "1",
+      "source_status": "technical-reviewed",
+      "review_evidence": "formula_lab/reports/source-review/REVIEW.md",
+      "fingerprint": "7bc589a3b123fd1903ac7ffb9bb4d11982c5c6a6823753f1a4c39a48d0540c22"
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 170,
+        "prompt_tokens": 774,
+        "total_tokens": 944,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 448,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 0.00012066,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 0.00012066,
+          "upstream_inference_prompt_cost": 6.966e-05,
+          "upstream_inference_completions_cost": 5.1e-05
+        }
+      },
+      "provider": "SiliconFlow",
+      "response_cost": 0.00012066,
+      "response_id": "gen-1790567655-Ox1lHHUiQJyTpl6TVtp4"
+    },
+    "prepare_seconds": 6.438916641985998
+  },
+  {
+    "status": "blocked",
+    "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+    "prepare_seconds": 1.4758901670575142e-05
+  },
+  {
+    "status": "blocked",
+    "message": "Không xác nhận được phiên bản tài liệu nguồn.",
+    "prepare_seconds": 6.00004568696022e-06
+  },
+  {
+    "status": "blocked",
+    "message": "Không diễn giải đầy đủ công thức.",
+    "error_type": "ValueError",
+    "draft": {
+      "blocked": true
+    },
+    "metadata": {
+      "model": "qwen/qwen3-30b-a3b-instruct-2507",
+      "usage": {
+        "completion_tokens": 6,
+        "prompt_tokens": 987,
+        "total_tokens": 993,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "text_tokens": null,
+          "image_tokens": 0,
+          "video_tokens": null
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cache_write_tokens": 0,
+          "cached_tokens": 697,
+          "text_tokens": null,
+          "image_tokens": null,
+          "video_tokens": 0,
+          "cache_creation_tokens": 0
+        },
+        "cost": 4.868235e-05,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 4.868235e-05,
+          "upstream_inference_prompt_cost": 4.752405e-05,
+          "upstream_inference_completions_cost": 1.1583e-06
+        }
+      },
+      "provider": "StreamLake",
+      "response_cost": 4.868235e-05,
+      "response_id": "gen-1790567657-MEXU1ePM4c6goxyzjdWk"
+    },
+    "prepare_seconds": 0.6675100970314816
+  }
+]

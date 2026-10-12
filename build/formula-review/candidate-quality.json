@@ -1,0 +1,11 @@
+{
+  "total_candidates": 334,
+  "statuses": {
+    "pending_review": 334
+  },
+  "documents": 7,
+  "missing_latex": 232,
+  "suggested_expression": 57,
+  "empty_expression": 277,
+  "note": "Candidate counts, not executable coverage or scientific correctness."
+}

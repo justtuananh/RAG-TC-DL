@@ -9,5 +9,6 @@ export default defineConfig({
     // --localstorage-file) và che mất bản của happy-dom → setup cài lại Storage thật.
     setupFiles: ["./src/test/setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
+    maxWorkers: 2, // Giữ bộ test ổn định trên máy dev/CI có ít RAM.
   },
 });

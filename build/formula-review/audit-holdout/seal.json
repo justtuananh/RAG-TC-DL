@@ -1,0 +1,11 @@
+{
+  "manifest_sha256": "00fbf51036b4411db60c53ff01210f257c1993e661e01c318a72ea3b224ce9a8",
+  "sealed_utc": "2026-09-28T08:02:42.086167+00:00",
+  "count": 32,
+  "groups": {
+    "numeric": 16,
+    "boundary_structure": 8,
+    "lifecycle": 4,
+    "ui": 4
+  }
+}

@@ -1,0 +1,65 @@
+<w:tbl xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:cx="http://schemas.microsoft.com/office/drawing/2014/chartex" xmlns:cx1="http://schemas.microsoft.com/office/drawing/2015/9/8/chartex" xmlns:cx2="http://schemas.microsoft.com/office/drawing/2015/10/21/chartex" xmlns:cx3="http://schemas.microsoft.com/office/drawing/2016/5/9/chartex" xmlns:cx4="http://schemas.microsoft.com/office/drawing/2016/5/10/chartex" xmlns:cx5="http://schemas.microsoft.com/office/drawing/2016/5/11/chartex" xmlns:cx6="http://schemas.microsoft.com/office/drawing/2016/5/12/chartex" xmlns:cx7="http://schemas.microsoft.com/office/drawing/2016/5/13/chartex" xmlns:cx8="http://schemas.microsoft.com/office/drawing/2016/5/14/chartex" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:aink="http://schemas.microsoft.com/office/drawing/2016/ink" xmlns:am3d="http://schemas.microsoft.com/office/drawing/2017/model3d" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:oel="http://schemas.microsoft.com/office/2019/extlst" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:w15="http://schemas.microsoft.com/office/word/2012/wordml" xmlns:w16cex="http://schemas.microsoft.com/office/word/2018/wordml/cex" xmlns:w16cid="http://schemas.microsoft.com/office/word/2016/wordml/cid" xmlns:w16="http://schemas.microsoft.com/office/word/2018/wordml" xmlns:w16du="http://schemas.microsoft.com/office/word/2023/wordml/word16du" xmlns:w16sdtdh="http://schemas.microsoft.com/office/word/2020/wordml/sdtdatahash" xmlns:w16se="http://schemas.microsoft.com/office/word/2015/wordml/symex" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape">
+  <w:tblPr>
+    <w:tblW w:w="10173" w:type="dxa"/>
+    <w:tblLook w:val="04A0" w:firstRow="1" w:lastRow="0" w:firstColumn="1" w:lastColumn="0" w:noHBand="0" w:noVBand="1"/>
+  </w:tblPr>
+  <w:tblGrid>
+    <w:gridCol w:w="9122"/>
+    <w:gridCol w:w="1051"/>
+  </w:tblGrid>
+  <w:tr w:rsidR="00CA6143" w:rsidRPr="00C54A32" w14:paraId="7AE2B601" w14:textId="77777777" w:rsidTr="0071512E">
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="9122" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="74BC0129" w14:textId="481EF2CD" w:rsidR="00CA6143" w:rsidRPr="00C54A32" w:rsidRDefault="00CA6143" w:rsidP="0071512E">
+        <w:pPr>
+          <w:spacing w:after="0"/>
+          <w:jc w:val="center"/>
+          <w:rPr>
+            <w:sz w:val="26"/>
+            <w:szCs w:val="26"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+        <w:r w:rsidRPr="00DC12A4">
+          <w:rPr>
+            <w:position w:val="-14"/>
+          </w:rPr>
+          <w:object w:dxaOrig="1520" w:dyaOrig="400" w14:anchorId="5EA702B0">
+            <v:shape id="_x0000_i1055" type="#_x0000_t75" style="width:74.9pt;height:20.15pt" o:ole="">
+              <v:imagedata r:id="rId77" o:title=""/>
+            </v:shape>
+            <o:OLEObject Type="Embed" ProgID="Equation.DSMT4" ShapeID="_x0000_i1055" DrawAspect="Content" ObjectID="_1836389528" r:id="rId78"/>
+          </w:object>
+        </w:r>
+      </w:p>
+    </w:tc>
+    <w:tc>
+      <w:tcPr>
+        <w:tcW w:w="1051" w:type="dxa"/>
+        <w:shd w:val="clear" w:color="auto" w:fill="auto"/>
+        <w:vAlign w:val="center"/>
+      </w:tcPr>
+      <w:p w14:paraId="6B857B93" w14:textId="77777777" w:rsidR="00CA6143" w:rsidRPr="00C54A32" w:rsidRDefault="00CA6143" w:rsidP="0071512E">
+        <w:pPr>
+          <w:pStyle w:val="ListParagraph"/>
+          <w:numPr>
+            <w:ilvl w:val="0"/>
+            <w:numId w:val="28"/>
+          </w:numPr>
+          <w:spacing w:before="120" w:after="0" w:line="240" w:lineRule="auto"/>
+          <w:contextualSpacing w:val="0"/>
+          <w:jc w:val="right"/>
+          <w:rPr>
+            <w:sz w:val="26"/>
+            <w:szCs w:val="26"/>
+            <w:lang w:val="nl-NL"/>
+          </w:rPr>
+        </w:pPr>
+      </w:p>
+    </w:tc>
+  </w:tr>
+</w:tbl>

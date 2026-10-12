@@ -1,0 +1,78 @@
+INFO:     Started server process [766103]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8081 (Press CTRL+C to quit)
+INFO:     127.0.0.1:36226 - "POST /api/documents/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36236 - "POST /api/documents/restore_round2/formula-drafts/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36240 - "GET /api/documents/restore_round2/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36256 - "PUT /api/formula-drafts/c917df62e0fdf43fecd7ad4271f75355 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36262 - "POST /api/formula-drafts/c917df62e0fdf43fecd7ad4271f75355/approve HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36274 - "DELETE /api/documents/restore_round2 HTTP/1.1" 204 No Content
+INFO:     127.0.0.1:36280 - "POST /api/documents/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36290 - "POST /api/documents/restore_round2/formula-drafts/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36292 - "GET /api/documents/restore_round2/formula-drafts HTTP/1.1" 200 OK
+/root/RAG-TC-DL/.venv-formula/lib/python3.12/site-packages/qdrant_client/qdrant_remote.py:292: UserWarning: Failed to obtain server version. Unable to check client-server compatibility. Set check_compatibility=False to skip version check.
+  show_warning(
+INFO:     127.0.0.1:36296 - "POST /api/formula-drafts/c917df62e0fdf43fecd7ad4271f75355/calculate HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:36298 - "POST /api/formula-drafts/c917df62e0fdf43fecd7ad4271f75355/approve HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36306 - "POST /api/formula-drafts/c917df62e0fdf43fecd7ad4271f75355/calculate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36314 - "POST /api/documents/restore_round2/formula-drafts/generate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36330 - "GET /api/formula-drafts/c917df62e0fdf43fecd7ad4271f75355 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36346 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36348 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50802 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50808 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50826 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50836 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50846 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50812 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50812 - "GET /api/documents/independent/markdown HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50846 - "GET /api/documents/independent/file HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50812 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50846 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50846 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50846 - "POST /api/formula-drafts/620d274cf17e832d2822f842124bb966/approve HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50846 - "POST /api/formula-drafts/620d274cf17e832d2822f842124bb966/calculate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50846 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50846 - "POST /api/formula-drafts/620d274cf17e832d2822f842124bb966/reject HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57294 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57304 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57310 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57318 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57328 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57338 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57350 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57366 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57376 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57378 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57382 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57396 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57400 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57412 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57420 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57424 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57434 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57440 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57444 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57456 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57458 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57464 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57476 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57484 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57494 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57498 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57506 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57510 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57520 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57532 - "PUT /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 422 Unprocessable Entity
+INFO:     127.0.0.1:57548 - "GET /api/formula-drafts/620d274cf17e832d2822f842124bb966 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57560 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57574 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57602 - "GET /api/examples HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57588 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57560 - "GET /api/health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57606 - "GET /api/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57606 - "GET /api/documents/independent/markdown HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57560 - "GET /api/documents/independent/file HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57606 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57560 - "GET /api/documents/independent/formula-drafts HTTP/1.1" 200 OK

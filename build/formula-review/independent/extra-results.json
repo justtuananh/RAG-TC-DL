@@ -1,0 +1,23 @@
+{
+  "chat": {
+    "status": 200,
+    "sse": "data: {\"type\": \"done\", \"answer\": \"Để tính từ số liệu, mở **Tài liệu → chọn tài liệu → Công thức và phê duyệt**, chọn bộ tính đã được phê duyệt rồi nhập số liệu và xác nhận điều kiện áp dụng. Công thức chưa được duyệt cần hoàn tất bước rà soát trước khi tính.\", \"sources\": []}\n\n",
+    "guidance_only": true
+  },
+  "docker": {
+    "yaml_parsed": true,
+    "cli_available": null,
+    "executed_container": false,
+    "formula_volumes": [
+      "./formula_registry:/app/formula_registry:ro",
+      "./formula_lab/engine.py:/app/formula_lab/engine.py:ro",
+      "./.formula-registry:/app/.formula-registry"
+    ]
+  },
+  "pdf": {
+    "status": 422,
+    "body": {
+      "detail": "Tạo bản nháp hiện hỗ trợ DOCX; PDF chưa được hỗ trợ."
+    }
+  }
+}

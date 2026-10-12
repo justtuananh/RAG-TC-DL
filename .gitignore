@@ -60,3 +60,8 @@ build/converted/
 # Dữ liệu Qdrant bind-mount (docker-compose.yml)
 qdrant_storage/*
 !qdrant_storage/README.md
+
+# Formula registry (SQLite nháp/duyệt công thức) + môi trường thí nghiệm
+.venv-formula/
+.formula-runtime/
+.formula-registry/

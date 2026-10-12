@@ -104,6 +104,12 @@ def reset_module_singletons(request):
 
 
 @pytest.fixture(autouse=True)
+def _isolated_formula_registry(tmp_path, monkeypatch):
+    """Không test nào được ghi vào SQLite công thức thật trong repo."""
+    monkeypatch.setenv("FORMULA_REGISTRY_DB", str(tmp_path / "formula-registry.sqlite3"))
+
+
+@pytest.fixture(autouse=True)
 def _fresh_settings():
     """Mỗi test bắt đầu với settings đọc lại từ file + môi trường hiện tại."""
     from core import settings_loader

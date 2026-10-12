@@ -59,7 +59,7 @@ up() { curl -s -o /dev/null --max-time 2 "$1" 2>/dev/null; }   # 0 = có phản 
 
 # ── 1) Frontend deps ─────────────────────────────────────────────────────────
 if [ ! -d "$ROOT/frontend/node_modules" ]; then
-  info "Cài deps frontend (npm install)…"; ( cd "$ROOT/frontend" && npm install ) || { err "npm install lỗi"; exit 1; }
+  info "Cài deps frontend (npm ci)…"; ( cd "$ROOT/frontend" && npm ci ) || { err "npm ci lỗi"; exit 1; }
 fi
 
 start_frontend() {

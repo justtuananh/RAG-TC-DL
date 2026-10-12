@@ -116,5 +116,47 @@
   [
    "PATCH"
   ]
+ ],
+ [
+  "/api/documents/{document_id}/formula-drafts",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/documents/{document_id}/formula-drafts/generate",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/formula-drafts/{id}",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/formula-drafts/{id}",
+  [
+   "PUT"
+  ]
+ ],
+ [
+  "/api/formula-drafts/{id}/approve",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/formula-drafts/{id}/reject",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/formula-drafts/{id}/calculate",
+  [
+   "POST"
+  ]
  ]
 ]

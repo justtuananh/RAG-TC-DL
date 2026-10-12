@@ -1,0 +1,1778 @@
+[
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f001",
+    "pass": false,
+    "question": "DPI 610: bù áp suất cột chất lỏng",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F001-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f004",
+    "pass": false,
+    "question": "DPI 610: độ lệch trung bình",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F004-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f005",
+    "pass": false,
+    "question": "DPI 610: sai số cộng độ không đảm bảo",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F005-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f006",
+    "pass": false,
+    "question": "DPI 610: chỉ thị dự đoán",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F006-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f007",
+    "pass": false,
+    "question": "DPI 610: trung bình áp suất chuẩn",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F007-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f009",
+    "pass": false,
+    "question": "DPI 610: hệ số góc hồi quy",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F009-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f010",
+    "pass": false,
+    "question": "DPI 610: hệ số chặn hồi quy",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F010-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f016",
+    "pass": false,
+    "question": "DPI 610: u_ch1",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F016-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f017",
+    "pass": false,
+    "question": "DPI 610: u_amb",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F017-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f018",
+    "pass": false,
+    "question": "DPI 610: độ trôi của chuẩn",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F018-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f019",
+    "pass": false,
+    "question": "DPI 610: tổ hợp chuẩn ba thành phần",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F019-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f022",
+    "pass": false,
+    "question": "DPI 610: độ không đảm bảo diện tích",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F022-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f024",
+    "pass": false,
+    "question": "DPI 610: hệ số giãn nở áp suất",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F024-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f026",
+    "pass": false,
+    "question": "DPI 610: độ không đảm bảo khối lượng",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F026-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f031",
+    "pass": false,
+    "question": "DPI 610: độ không đảm bảo chênh cao",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F031-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f033",
+    "pass": false,
+    "question": "DPI 610: tổng hợp 10 thành phần",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F033-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f034",
+    "pass": false,
+    "question": "DPI 610: độ phân giải tam giác",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F034-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f035",
+    "pass": false,
+    "question": "DPI 610: độ phân giải chữ nhật",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F035-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f036",
+    "pass": false,
+    "question": "DPI 610: độ lệch điểm không",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F036-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "retrieval_and_selection",
+    "id": "dpi190_f050",
+    "pass": false,
+    "question": "DPI 610: độ không đảm bảo mở rộng",
+    "status": "infrastructure_error",
+    "selected": null,
+    "hits": []
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-00",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-01",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-02",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-03",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-04",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-05",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-06",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-07",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-08",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "valid_calculation",
+    "id": "dev-F050-09",
+    "pass": false,
+    "status": "no_correct_form",
+    "unsafe": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R00",
+    "pass": false,
+    "question": "QTKĐ 1.190: độ phân giải",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R01",
+    "pass": false,
+    "question": "DPI 610: u_r",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R02",
+    "pass": false,
+    "question": "DPI 610: độ phân giải tam giác và độ phân giải chữ nhật",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R03",
+    "pass": false,
+    "question": "QTKĐ 1.190: F014",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R04",
+    "pass": false,
+    "question": "QTKĐ 1.190: F049",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R05",
+    "pass": false,
+    "question": "QTKĐ 1.190: F040",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R06",
+    "pass": false,
+    "question": "QTKĐ 1.160: độ phân giải tam giác",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R07",
+    "pass": false,
+    "question": "QTKĐ 1.159: u_ch1",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R08",
+    "pass": false,
+    "question": "Tính hệ số góc hồi quy",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R09",
+    "pass": false,
+    "question": "DPI 610 theo QTKĐ 1.071: u_amb",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R10",
+    "pass": false,
+    "question": "QTKĐ 1.190: F034 và F035",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "ambiguous_or_unsupported",
+    "id": "R11",
+    "pass": false,
+    "question": "DPI 610: F999",
+    "status": "infrastructure_error",
+    "wrong_ready": false
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f001",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f004",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f005",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f006",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f007",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f009",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f010",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f016",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f017",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f018",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f019",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f022",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f024",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f026",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f031",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f033",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f034",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f035",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f036",
+    "pass": true
+  },
+  {
+    "group": "browser_e2e",
+    "id": "dpi190_f050",
+    "pass": true
+  }
+]

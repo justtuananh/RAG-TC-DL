@@ -1,0 +1,43 @@
+{
+  "role": "public_development_regression_not_independent_holdout",
+  "groups": {
+    "browser": {
+      "passed": 21,
+      "total": 21
+    },
+    "calculation": {
+      "passed": 42,
+      "total": 42
+    },
+    "missing_conditions": {
+      "passed": 21,
+      "total": 21
+    },
+    "selection": {
+      "passed": 21,
+      "total": 21
+    },
+    "unsupported_or_ambiguous": {
+      "passed": 7,
+      "total": 7
+    }
+  },
+  "original_documents": 7,
+  "new_definitions": 21,
+  "questions": 21,
+  "numeric_cases": 42,
+  "cases_sha256": "536215eedcf503cbd4ff895492733c78b80ea37766145871d32a0b8a95040c08",
+  "runtime_sha256": {
+    "formula_lab/app.py": "2ab9555327a716af1855ea42b3ae3c0c6770b252a1460fc6367de51a65b433e1",
+    "formula_lab/engine.py": "71993ba39d5ac69745b27293018c7e4db2c6d0e9d7e1746f67ba4e35c396ddad",
+    "formula_lab/strategies.py": "aa95b27758d6e634893a9eeb66747664bfe506900263e18c62e1dc7294217d46",
+    "formula_lab/retrieval.py": "b47ce22e1646c5e6d8da97e078407d9f5e23dd878a14d2dacd1b474ed2d517a1",
+    "formula_lab/static/index.html": "a06e64a5113f23a75eefe491280edb6b188710e001815402a5ec70626f55b4d7",
+    "formula_lab/data/v3/sources.json": "9c01ba5545e36b63ef499a9b7bd380534678394c5532f0cccadc860e0c34362d",
+    "formula_lab/data/v3/registry.json": "9c6aa6f4712924512e057f4f4173d6ad27911877c2ab95f0b97bf113311bdaad",
+    "formula_lab/data/v3/conditions.json": "8dacc3768a6760417dd07526029d8f4c9172f99fb858be8916cf78eab7c83c3a",
+    "formula_lab/data/v3/review_approvals.json": "31e0aed853209b422b0ce3b71efd0b58754fee7695d2c981a7a6966a4efb484a"
+  },
+  "incorrect_numeric_outputs": 0,
+  "infrastructure_records": 0
+}

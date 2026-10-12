@@ -145,7 +145,7 @@ export async function authFetch(input: RequestInfo | URL, init: RequestInit = {}
   return res;
 }
 
-// ── API xác thực (backend api_server.py /api/auth/*) ──
+// ── API xác thực (backend api/routes/auth.py, /api/auth/*) ──
 async function _errorMessage(res: Response, fallback: string): Promise<string> {
   const body = await res.json().catch(() => null);
   return body?.detail || fallback;

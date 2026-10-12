@@ -1,0 +1,64 @@
+{
+  "documents": 30,
+  "original_documents": 7,
+  "synthetic_documents": 23,
+  "seed": 20260928,
+  "registered_calculators": 6,
+  "equation_occurrences_original": 174,
+  "distinct_latex_strings_original": 127,
+  "reviewed_equation_occurrences": 9,
+  "suspicious_equation_occurrences": 12,
+  "formula_objects_in_30_documents": 1298,
+  "grouped": {
+    "browser": {
+      "passed": 20,
+      "total": 20
+    },
+    "document_binding": {
+      "passed": 42,
+      "total": 42
+    },
+    "frozen_boundary": {
+      "passed": 20,
+      "total": 20
+    },
+    "frozen_input": {
+      "passed": 20,
+      "total": 20
+    },
+    "frozen_selection": {
+      "passed": 20,
+      "total": 20
+    },
+    "frozen_source": {
+      "passed": 20,
+      "total": 20
+    },
+    "frozen_valid": {
+      "passed": 20,
+      "total": 20
+    },
+    "invalid_input": {
+      "passed": 90,
+      "total": 96
+    },
+    "numeric": {
+      "passed": 600,
+      "total": 600
+    },
+    "unsupported_routing": {
+      "passed": 6,
+      "total": 12
+    }
+  },
+  "total": 870,
+  "passed": 858,
+  "commit": "355f442f3ca29950ce5f1b1ebd8707f1178addcf",
+  "scope": "Actual DOCX ingestion + registry source binding + isolated routing/calculation + browser. No new retrieval index or live LLM calls.",
+  "runtime_hashes": {
+    "formula_lab/engine.py": "da94e67e5fec5de1a360aea6496fa56c4d1aa8cebd53ae55a91a1e60e109b639",
+    "formula_lab/strategies.py": "935f511718b20b0682f73a6b8b277601a41247bb75bb5ba28ea6502b2931c855",
+    "formula_lab/data/registry.json": "3919a2b83631c330e38cb79d2b972aab2a4c678eb120fe33f7da6380eaf70cc3",
+    "formula_lab/expanded/run.py": "dff4a55545269e5d1dbbadb5150b5abfa9d05379fd46c876e8a647797698a2bc"
+  }
+}

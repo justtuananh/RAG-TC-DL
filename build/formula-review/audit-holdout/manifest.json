@@ -1,0 +1,605 @@
+{
+  "created_utc": "2026-09-28T08:02:42.082859+00:00",
+  "protocol": "32 locked cases:16 numeric,8 boundary/structure/capability,4 lifecycle,4 real Chromium UI. Each case weight1; group counts reported separately. No quality/capability percentage inferred. Complete-case pass iff every assertion meets manifest; no target95. Numeric abs(actual-expected)<=abs(expected)*1e-24, abs tolerance0. Expected answers from elementary algebra/unit factors and Decimal90 rational oracle, not production engine. Blocked/harness errors remain denominator as unverified; logged separately. One execution, no implementation edits, no post-run tolerance/weight change. Cases release only after result freeze.",
+  "cases": [
+    {
+      "id": "N01",
+      "group": "numeric",
+      "expression": "mean(x)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "x",
+          "label": "Synthetic x",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        }
+      ],
+      "inputs": {
+        "x": {
+          "value": [
+            "-11",
+            "4",
+            "13",
+            "22"
+          ],
+          "unit": "1"
+        }
+      },
+      "expected": "7",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N02",
+      "group": "numeric",
+      "expression": "mean(x)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "x",
+          "label": "Synthetic x",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        }
+      ],
+      "inputs": {
+        "x": {
+          "value": [
+            "22",
+            "-11",
+            "13",
+            "4"
+          ],
+          "unit": "1"
+        }
+      },
+      "expected": "7",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      },
+      "metamorphic": "Permutation invariance with N01"
+    },
+    {
+      "id": "N03",
+      "group": "numeric",
+      "expression": "rss(x)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "x",
+          "label": "Synthetic x",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        }
+      ],
+      "inputs": {
+        "x": {
+          "value": [
+            "-8",
+            "15"
+          ],
+          "unit": "1"
+        }
+      },
+      "expected": "17",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N04",
+      "group": "numeric",
+      "expression": "rss(x)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "x",
+          "label": "Synthetic x",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        }
+      ],
+      "inputs": {
+        "x": {
+          "value": [
+            "-24",
+            "45"
+          ],
+          "unit": "1"
+        }
+      },
+      "expected": "51",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      },
+      "metamorphic": "Positive scaling 3 times N03"
+    },
+    {
+      "id": "N05",
+      "group": "numeric",
+      "expression": "slope(x,y)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "x",
+          "label": "Synthetic x",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        },
+        {
+          "key": "y",
+          "label": "Synthetic y",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        }
+      ],
+      "inputs": {
+        "x": {
+          "value": [
+            "-3",
+            "1",
+            "5"
+          ],
+          "unit": "1"
+        },
+        "y": {
+          "value": [
+            "-8",
+            "4",
+            "16"
+          ],
+          "unit": "1"
+        }
+      },
+      "expected": "3",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N06",
+      "group": "numeric",
+      "expression": "slope(x,y)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "x",
+          "label": "Synthetic x",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        },
+        {
+          "key": "y",
+          "label": "Synthetic y",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        }
+      ],
+      "inputs": {
+        "x": {
+          "value": [
+            "10000000000000000000000000000",
+            "10000000000000000000000000001",
+            "10000000000000000000000000003"
+          ],
+          "unit": "1"
+        },
+        "y": {
+          "value": [
+            "0",
+            "2",
+            "6"
+          ],
+          "unit": "1"
+        }
+      },
+      "expected": "2",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      },
+      "metamorphic": "Linear y=2*(x-offset); offset must not change mathematical slope"
+    },
+    {
+      "id": "N07",
+      "group": "numeric",
+      "expression": "mean(x)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "x",
+          "label": "Synthetic x",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        }
+      ],
+      "inputs": {
+        "x": {
+          "value": [
+            "1e30",
+            "1e-10",
+            "-1e30"
+          ],
+          "unit": "1"
+        }
+      },
+      "expected": "3.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333E-11",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N08",
+      "group": "numeric",
+      "expression": "mean(x)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "x",
+          "label": "Synthetic x",
+          "unit": "1",
+          "kind": "series",
+          "min_items": 2,
+          "max_items": 8
+        }
+      ],
+      "inputs": {
+        "x": {
+          "value": [
+            "1e30",
+            "-1e30",
+            "1e-10"
+          ],
+          "unit": "1"
+        }
+      },
+      "expected": "3.33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333E-11",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      },
+      "metamorphic": "Permutation invariance with N07"
+    },
+    {
+      "id": "N09",
+      "group": "numeric",
+      "expression": "(a+b)*c",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "a",
+          "label": "Synthetic a",
+          "unit": "1"
+        },
+        {
+          "key": "b",
+          "label": "Synthetic b",
+          "unit": "1"
+        },
+        {
+          "key": "c",
+          "label": "Synthetic c",
+          "unit": "1"
+        }
+      ],
+      "inputs": {
+        "a": {
+          "value": ".17",
+          "unit": "1"
+        },
+        "b": {
+          "value": ".29",
+          "unit": "1"
+        },
+        "c": {
+          "value": ".125",
+          "unit": "1"
+        }
+      },
+      "expected": "0.0575",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N10",
+      "group": "numeric",
+      "expression": "a**-3",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "a",
+          "label": "Synthetic a",
+          "unit": "1"
+        }
+      ],
+      "inputs": {
+        "a": {
+          "value": "-4",
+          "unit": "1"
+        }
+      },
+      "expected": "-0.015625",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N11",
+      "group": "numeric",
+      "expression": "sqrt(a)",
+      "unit": "1",
+      "variables": [
+        {
+          "key": "a",
+          "label": "Synthetic a",
+          "unit": "1"
+        }
+      ],
+      "inputs": {
+        "a": {
+          "value": "1e-60",
+          "unit": "1"
+        }
+      },
+      "expected": "1e-30",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N12",
+      "group": "numeric",
+      "expression": "a",
+      "unit": "mm/min",
+      "variables": [
+        {
+          "key": "a",
+          "label": "Synthetic a",
+          "unit": "mm/min"
+        }
+      ],
+      "inputs": {
+        "a": {
+          "value": "7.25",
+          "unit": "mm/s"
+        }
+      },
+      "expected": "435",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N13",
+      "group": "numeric",
+      "expression": "a",
+      "unit": "mPa.s",
+      "variables": [
+        {
+          "key": "a",
+          "label": "Synthetic a",
+          "unit": "mPa.s"
+        }
+      ],
+      "inputs": {
+        "a": {
+          "value": ".00037",
+          "unit": "Pa.s"
+        }
+      },
+      "expected": "0.37",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N14",
+      "group": "numeric",
+      "expression": "a",
+      "unit": "m2",
+      "variables": [
+        {
+          "key": "a",
+          "label": "Synthetic a",
+          "unit": "m2"
+        }
+      ],
+      "inputs": {
+        "a": {
+          "value": "1250000",
+          "unit": "mm2"
+        }
+      },
+      "expected": "1.25",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N15",
+      "group": "numeric",
+      "expression": "a",
+      "unit": "s",
+      "variables": [
+        {
+          "key": "a",
+          "label": "Synthetic a",
+          "unit": "s"
+        }
+      ],
+      "inputs": {
+        "a": {
+          "value": "3.5",
+          "unit": "min"
+        }
+      },
+      "expected": "210",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "N16",
+      "group": "numeric",
+      "expression": "a-b",
+      "unit": "mL",
+      "variables": [
+        {
+          "key": "a",
+          "label": "Synthetic a",
+          "unit": "mL"
+        },
+        {
+          "key": "b",
+          "label": "Synthetic b",
+          "unit": "mL"
+        }
+      ],
+      "inputs": {
+        "a": {
+          "value": ".007",
+          "unit": "L"
+        },
+        "b": {
+          "value": "3",
+          "unit": "mL"
+        }
+      },
+      "expected": "4",
+      "tolerance": {
+        "relative": "1e-24",
+        "absolute": "0"
+      }
+    },
+    {
+      "id": "B01",
+      "group": "boundary_structure",
+      "description": "Exclusive minimum 3 kPa: 3000 Pa input must be rejected after conversion",
+      "expected_http": 422
+    },
+    {
+      "id": "B02",
+      "group": "boundary_structure",
+      "description": "Inclusive maximum 2 m: 2000 mm must calculate 2 m",
+      "expected_http": 200
+    },
+    {
+      "id": "B03",
+      "group": "boundary_structure",
+      "description": "Condition confirmation integer 1 instead of true must be rejected",
+      "expected_http": 422
+    },
+    {
+      "id": "B04",
+      "group": "boundary_structure",
+      "description": "Condition confirmation missing one of two required conditions must be rejected",
+      "expected_http": 422
+    },
+    {
+      "id": "B05",
+      "group": "boundary_structure",
+      "description": "Nested variable key array must be rejected without revision mutation",
+      "expected_http": 422
+    },
+    {
+      "id": "B06",
+      "group": "boundary_structure",
+      "description": "Nested reference input value mixed array string/null must be rejected without mutation",
+      "expected_http": 422
+    },
+    {
+      "id": "B07",
+      "group": "boundary_structure",
+      "description": "Revision boolean true must not pass strict integer API schema",
+      "expected_http": 422
+    },
+    {
+      "id": "B08",
+      "group": "boundary_structure",
+      "description": "Approval reference incompatible dimensions: a Pa and b m used in a+b with result Pa must be rejected automatically; capability probe, physically invalid",
+      "expected_http": 422
+    },
+    {
+      "id": "L01",
+      "group": "lifecycle",
+      "description": "Extraction actual DOCX retains exact file SHA, expression location fid, both sentinel context strings, starts pending with no approval",
+      "expected": true
+    },
+    {
+      "id": "L02",
+      "group": "lifecycle",
+      "description": "Approved source bytes changed without registry edit must block calculate409 and public status stale",
+      "expected": true
+    },
+    {
+      "id": "L03",
+      "group": "lifecycle",
+      "description": "Reingest same path/document ID A→B→A while B approved must not silently restore approval for old A; all current A definitions pending and compute409",
+      "expected": true
+    },
+    {
+      "id": "L04",
+      "group": "lifecycle",
+      "description": "Concurrent same-revision edits yield exactly one success and one409, persisted proposal matches sole winner",
+      "expected": true
+    },
+    {
+      "id": "U01",
+      "group": "ui",
+      "description": "Real React synthetic draft loads after real API generate with no browser errors",
+      "expected": true
+    },
+    {
+      "id": "U02",
+      "group": "ui",
+      "description": "Unsaved title edit then switch to document source tab: cancel dialog preserves exact title",
+      "expected": true
+    },
+    {
+      "id": "U03",
+      "group": "ui",
+      "description": "Remote revision edit then UI saves old revision: error409 shown, local unsaved title retained",
+      "expected": true
+    },
+    {
+      "id": "U04",
+      "group": "ui",
+      "description": "Mobile390 viewport no document horizontal overflow; keyboard Tab moves title focus to expression input",
+      "expected": true
+    }
+  ]
+}

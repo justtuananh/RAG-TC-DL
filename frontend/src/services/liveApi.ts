@@ -1,7 +1,7 @@
 import type { BackendSource, DocItem } from "../types";
 import { AuthError, authFetch } from "./auth";
 
-// ── Client gọi backend RAG thật (api_server.py, FastAPI + SSE) ──
+// ── Client gọi backend RAG thật (package api/, FastAPI + SSE) ──
 // Port từ frontend-legacy/src/utils/{api.js,latex.js}, có thêm AbortSignal + health.
 // Route ĐỌC/CHAT dùng fetch thường (công khai); route GHI dùng authFetch (bearer token).
 
@@ -72,7 +72,7 @@ export async function pingHealth(): Promise<boolean> {
   }
 }
 
-// ── Tài liệu thật: upload → xử lý → xem/xoá/đổi tên (api_server.py /api/documents/*) ──
+// ── Tài liệu thật: upload → xử lý → xem/xoá/đổi tên (api/routes/documents.py /api/documents/*) ──
 
 async function _json<T>(res: Response): Promise<T> {
   if (!res.ok) {

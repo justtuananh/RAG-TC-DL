@@ -13,7 +13,7 @@ import pytest
 
 from api.schemas import ChatRequest
 from api.services import chat_stream
-from llm.guards import REFUSAL_SENTENCE
+from llm.guards import CALCULATION_GUIDE
 
 
 def _events(events) -> list[dict]:
@@ -78,7 +78,7 @@ def test_calculation_guard_returns_refusal_before_retrieval(monkeypatch):
         list(chat_stream.chat_stream_events(ChatRequest(message="tính giúp 2 + 3 = ?"), None))
     )
 
-    assert events == [{"type": "done", "answer": REFUSAL_SENTENCE, "sources": []}]
+    assert events == [{"type": "done", "answer": CALCULATION_GUIDE, "sources": []}]
 
 
 def test_intent_router_module_is_gone():

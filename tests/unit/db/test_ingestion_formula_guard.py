@@ -83,6 +83,8 @@ def _prepare(tmp_path, session, monkeypatch, settings_override) -> Path:
     out.mkdir()
     settings_override({"paths.markdown_dir": str(out)})
     monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
+    # Tệp nguồn ở đây là tên giả: bỏ bước tạo nháp công thức (đã có test riêng).
+    monkeypatch.setattr(ingestion_jobs, "_register_formula_drafts", lambda *a, **k: None)
     session.add(
         Document(
             id=STEM,
@@ -162,6 +164,7 @@ def test_markdown_job_publishes_when_rate_not_worse(
     ingestion_jobs._run_job(STEM, Path(FILE))
 
     assert (out / f"{STEM}.md").read_text(encoding="utf-8") == "$y$ bản mới"
+    assert ingestion_jobs._get_job(STEM).error is None
     assert embedded == [["c1", "c2"]]
     job = ingestion_jobs._get_job(STEM)
     assert job is not None and job.stage == "ready"

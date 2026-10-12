@@ -7,8 +7,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Offline RAG chatbot for **looking up and citing** Vietnamese metrology calibration
 procedures (QTKĐ — Quy trình Kiểm định) from the documents in `TC_DL/`. Users ask in
 Vietnamese; the bot answers with exact passages + formulas + source citations (file,
-section). It is **lookup-only** (no calculation) and runs **fully offline** — every model
-is local, no cloud API calls. Target prod hardware is a single RTX 5060 8GB box; it must
+section). The chat itself never calculates and runs **fully offline** — every model
+is local, no cloud API calls.
+Calculation lives only in the separate reviewed-formula flow (`formula_registry/`, see below): a human approves each formula before it can be used. Target prod hardware is a single RTX 5060 8GB box; it must
 scale from the current handful of files to thousands of procedures.
 
 `docs/PLAN.md` is the full design doc (Vietnamese). `docs/spike_c_ui_setup.md` records the
@@ -158,6 +159,13 @@ A lower layer never imports a higher one;
   package (was duplicated); mirrored in the frontend as `liveApi.fixLatex`.
   Regression: `tests/unit/core/test_latex_fix.py`.
   `core.latex.restore_formulas(answer, context)` runs after `fix_latex` in the api, Gradio and `answer_eval`: it puts back the context's verbatim LaTeX when the model only changed a formula's form (qwen2.5:7b adds or drops `\left \right`, adds `\tag`), see `docs/experiments/2026-10-05-7b-answer-fixes.md`.
+- `formula_registry/` - reviewed formula registry (PR #3), see `docs/FORMULA_DRAFT_APPROVAL.md`.
+  `ingestion/jobs.py` registers one pending draft per extracted formula before embedding (`_register_formula_drafts`); a draft is never approved or executed automatically.
+  Router `formula_registry/api.py` is mounted in `api/main.py`: technician/admin create and edit drafts, approver/admin approve or reject (the recorded reviewer is the signed-in account), anyone can calculate with an approved formula.
+  Calculation uses the bounded Decimal engine `formula_lab/engine.py`; changing or deleting the source document invalidates its formulas.
+  The SQLite store is `paths.formula_registry_db` (`FORMULA_REGISTRY_DB`); back it up together with `TC_DL/`.
+  The chat answers a calculation request with `llm.guards.CALCULATION_GUIDE`, pointing to the form instead of computing.
+  `formula_lab/` holds the experiments and benchmarks that chose this approach (`TC_DL/TIEN_DO_NGHIEN_CUU_CONG_THUC.md`); only `engine.py` and `data/` are runtime code.
 - `evaluation/run_eval.py` - Spike E regression harness. Computes recall@k + MRR for hybrid vs
   dense-only against `evaluation/eval_set.jsonl` (question → expected file_stem + section_path).
   Run this after any retrieval change. Pass goal is recall@5 ≥ 0.85.

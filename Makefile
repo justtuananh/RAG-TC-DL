@@ -70,7 +70,7 @@ test-qdrant:
 PY ?= .venv-dev/bin/python
 
 # Các package nguồn + tests được lint/định dạng.
-LINT_PATHS = tests scripts query evaluation core api embedding vectorstore reranking retrieval llm scoring ui
+LINT_PATHS = tests scripts query evaluation core api embedding vectorstore reranking retrieval llm scoring ui formula_registry
 
 # Lint + format-check CHỈ code harness (không định dạng lại source hiện có).
 lint:
@@ -147,3 +147,11 @@ db-check:
 	@docker compose run --rm --no-deps api python scripts/migrate.py upgrade head
 	@docker compose run --rm --no-deps api python scripts/migrate.py downgrade base
 	@echo "✓ Database migrations verified"
+
+# ── Công thức: tạo nháp chờ duyệt cho tài liệu đã có (không tự phê duyệt) ───────
+.PHONY: formula-drafts formula-drafts-docker
+formula-drafts:
+	$(PY) -m formula_registry TC_DL/*.docx --report build/formula-review/backfill-latest.json
+
+formula-drafts-docker:
+	docker compose exec api sh -c 'python -m formula_registry TC_DL/*.docx --report build/spike_a/formula-review-backfill.json'

@@ -1,0 +1,8 @@
+{
+  "unit_regression_command": ".venv-formula/bin/python -m pytest formula_lab/tests tests/unit/llm tests/unit/ingestion/test_extract_docx.py -q",
+  "passed": 320,
+  "exit_code": 0,
+  "first_holdout_snapshot_reconstructs_exactly": true,
+  "current_runtime_matches_regression": true,
+  "git_diff_check": "passed"
+}

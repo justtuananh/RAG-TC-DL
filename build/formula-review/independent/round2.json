@@ -1,0 +1,178 @@
+{
+  "round": 2,
+  "score": 96,
+  "critical_all_pass": true,
+  "accepted": true,
+  "criteria": [
+    {
+      "id": "C01",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "Đọc ingestion_jobs.py: đăng ký sau trích xuất trước embedding. Tự chạy test_ingestion_creates_drafts_before_embedding_failure; nháp còn sau lỗi dịch vụ."
+    },
+    {
+      "id": "C02",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "React/API thật rerun10/10 checkpoints. Shape15 loại sai bị422 trước ghi; legacy record sai hiện lỗi dễ hiểu, không crash."
+    },
+    {
+      "id": "C03",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "Tự chạy registry suite kiểm thiếu định nghĩa/đơn vị/điều kiện/ca đối chứng/người/nhận xét/xác nhận; chỉ đầy đủ mới approve."
+    },
+    {
+      "id": "C04",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "Tự chạy pending/rejected và revision cũ chặn409; dev regression tự chạy gồm stale/hash/digest giả mạo; POST thêm status trả422."
+    },
+    {
+      "id": "C05",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "Ca độc lập lưu bản approved thu hồi; ghi revision cũ409. Tự chạy competing approval test giao dịch SQLite."
+    },
+    {
+      "id": "C06",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "F02 đã sửa và tự kiểm API approved→delete→samebytesrestore→pending/no review→compute409→reapprove→22Pa; generate tiếp created0 giữ approved/revision. Nguồnhash/địnhvị/chặnđổi/xóa và idempotency tests đều qua."
+    },
+    {
+      "id": "C07",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "14 ca số học tự thiết kế, đáp án JSON trước thực thi:13/14 bằng chính xác; slope đúng trong sai số1e-33. Phân tích hậu kiểm với absolute tolerance1e-30:14/14. Không sửa đáp án; giữ kết quả exact ban đầu. Scalar/series/đổi đơn vị/âm/0/biên và các miền sai đã kiểm."
+    },
+    {
+      "id": "C08",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "Ma trận15 malformed payload422 và không mutation; legacyUI safeerror1/1.20/20 arithmetic/security/domain block; đổiinput xóa kếtquả."
+    },
+    {
+      "id": "C09",
+      "weight": 7,
+      "status": "Đạt",
+      "score": 7,
+      "evidence": "Restart Registry còn approved, audit edit/reject, response formula_id/revision/source_hash. Tự chạy relocation test nguồn trong repo dùng relativepath."
+    },
+    {
+      "id": "C10",
+      "weight": 5,
+      "status": "Đạt",
+      "score": 5,
+      "evidence": "Rerun UI10/10: save/approve/calculate/reject, dirty reloadcancel giữbản sửa, keyboardTab và responsive. Legacyrecord sai hiệnalert+reload thayvì trắngapp."
+    },
+    {
+      "id": "C11",
+      "weight": 5,
+      "status": "Đạt",
+      "score": 5,
+      "evidence": "Đã xem ảnh Chromium desktop1440/mobile390; Be Vietnam Pro, xanh primary, navy sidebar, card/field/button đồng bộ. document scrollWidth bằng viewport1440/390."
+    },
+    {
+      "id": "C12",
+      "weight": 5,
+      "status": "Đạt",
+      "score": 5,
+      "evidence": "Nhãn input/checkbox có tên; thử Tab từ tên sang biểu thức, focus đặt được; status có chữ. Kiểm cơ bản mẫu, chưa WCAG audit hoặc screenreader."
+    },
+    {
+      "id": "C13",
+      "weight": 5,
+      "status": "Đạt",
+      "score": 5,
+      "evidence": "SQLite mở mode=ro:334 nháp trên7DOCX, tất cả pending,57 có expression,232 thiếuLaTeX. Không duyệtnguồnthật; hashSQLite trước/sau bằng nhau."
+    },
+    {
+      "id": "C14",
+      "weight": 5,
+      "status": "Đạt",
+      "score": 5,
+      "evidence": "Gọi generate PDF giả trả422 rõ chưa hỗ trợ; kiểm extractor/test OLE không đọc được vẫn nháp. Template hash-gated, không suy diễn tự hiểu công thức phức tạp/quy tắc lời văn."
+    },
+    {
+      "id": "C15",
+      "weight": 5,
+      "status": "Đạt",
+      "score": 5,
+      "evidence": "Tự chạy bộ liên quan cuối472/472 BE,47/47 FE; typecheck/lint/build qua. Compose parse/mount/import đã kiểm, chưa Docker runtime vì thiếuCLI; legacy full tests/unit còn2collectionerrors do thiếuGradio."
+    },
+    {
+      "id": "C16",
+      "weight": 4,
+      "status": "Chưa đạt",
+      "score": 0,
+      "evidence": "Chưa có xác thực/phân quyền; reviewer tự nhập không chứng minh danh tính. Chưa chuyên gia duyệt7DOCX, chưa tập đánh giá nghiệp vụ độc lập. 0/4, không cộng điểm vì ghi giới hạn."
+    },
+    {
+      "id": "C17",
+      "weight": 3,
+      "status": "Đạt",
+      "score": 3,
+      "evidence": "POST chat/stream thực tế trả hướng dẫn mở Tài liệu→Công thức và phê duyệt; chưa tự ánh xạID đã duyệt hoặc tính trong hội thoại. Chấm đúng khả năng thực tế theo tiêu chí."
+    }
+  ],
+  "numeric_exact": {
+    "passed": 13,
+    "total": 14
+  },
+  "numeric_roundoff_assessment": {
+    "passed": 14,
+    "total": 14,
+    "absolute_tolerance": "1e-30",
+    "timing": "post-run analysis explicitly disclosed; original exact result retained"
+  },
+  "blocked": {
+    "passed": 20,
+    "total": 20
+  },
+  "lifecycle": {
+    "passed": 6,
+    "total": 6
+  },
+  "fe_tests": {
+    "passed": 47,
+    "total": 47
+  },
+  "ui_browser_checks": {
+    "passed": 10,
+    "total": 10
+  },
+  "critical_finding": null,
+  "business_readiness": false,
+  "be_relevant_tests": {
+    "passed": 472,
+    "total": 472
+  },
+  "regressions": {
+    "shape": {
+      "passed": 16,
+      "total": 16
+    },
+    "restored_source": true
+  },
+  "technical_subset_scores": {
+    "BE_C01_C09": {
+      "earned": 63,
+      "weight": 63,
+      "percentage": 100.0
+    },
+    "FE_C02_C10_C12": {
+      "earned": 22,
+      "weight": 22,
+      "percentage": 100.0
+    }
+  }
+}

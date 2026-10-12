@@ -95,7 +95,7 @@ def require_role(*allowed_roles: UserRole):
         if user.role not in allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Insufficient permissions. Required roles: {allowed_roles}",
+                detail="Tài khoản của bạn không có quyền thực hiện thao tác này.",
             )
         return user
 

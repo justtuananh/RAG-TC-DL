@@ -1,0 +1,23 @@
+{
+  "config": {
+    "strategy": "registry",
+    "chat_model": "qwen/qwen3-30b-a3b-instruct-2507",
+    "embedding_model": "openai/text-embedding-3-small",
+    "temperature": 0,
+    "reranker": false,
+    "version": "docx-lab-v1"
+  },
+  "uc_hash": "c750dc2cb7112d78082f4d8388bf806dd70fc983719c1283b14562c786bf45dc",
+  "source_hash": "1b9f254b717a0f068a36877c2472dd0b36726bde47761db3b8442b25e0347aa0",
+  "commit": "9a559c0606288c49b1280037cd4c405d29bd8d50",
+  "packages": {
+    "litellm": "1.103.0",
+    "sympy": "1.14.0",
+    "qdrant-client": "1.19.1",
+    "fastapi": "0.141.1",
+    "playwright": "1.63.0"
+  },
+  "split": "dev",
+  "rounds": 1,
+  "policy": "No answer cache across rounds; definitions reused within a round for identical source payloads."
+}

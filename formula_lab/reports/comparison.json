@@ -1,0 +1,1180 @@
+{
+  "dataset_sha256": "c750dc2cb7112d78082f4d8388bf806dd70fc983719c1283b14562c786bf45dc",
+  "winner": "registry",
+  "decision": "Highest eligible pass rate with zero observed unsafe outputs.",
+  "strategies": {
+    "llm": {
+      "commit": "4e0d92aa1eeaffd05e16abb504bed3bed18a2bce",
+      "complete": true,
+      "isolated": {
+        "passed": 118,
+        "total": 180,
+        "unsafe": 20,
+        "infrastructure": 0,
+        "groups": {
+          "boundary": {
+            "passed": 16,
+            "total": 30
+          },
+          "input": {
+            "passed": 30,
+            "total": 30
+          },
+          "selection": {
+            "passed": 21,
+            "total": 30
+          },
+          "source": {
+            "passed": 15,
+            "total": 30
+          },
+          "ui": {
+            "passed": 18,
+            "total": 30
+          },
+          "valid": {
+            "passed": 18,
+            "total": 30
+          }
+        }
+      },
+      "e2e": {
+        "passed": 118,
+        "total": 180,
+        "unsafe": 20,
+        "infrastructure": 0,
+        "groups": {
+          "boundary": {
+            "passed": 16,
+            "total": 30
+          },
+          "input": {
+            "passed": 30,
+            "total": 30
+          },
+          "selection": {
+            "passed": 21,
+            "total": 30
+          },
+          "source": {
+            "passed": 15,
+            "total": 30
+          },
+          "ui": {
+            "passed": 18,
+            "total": 30
+          },
+          "valid": {
+            "passed": 18,
+            "total": 30
+          }
+        }
+      },
+      "stable_pass_unique": 38,
+      "unstable_unique": 2,
+      "valid_pass": 51,
+      "valid_total": 84,
+      "definition_calls": 36,
+      "reported_cost_usd": 0.0041299274,
+      "tokens": 43255,
+      "median_prepare_seconds": 1.6870083349058405,
+      "failures": [
+        {
+          "id": "selection-12",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "selection-15",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "selection-18",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-12",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-15",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-16",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-18",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-11",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "0E-34",
+            "unit": "bar",
+            "normalized": {
+              "p0": "0",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "p0 * (gd / g0)",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-13",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "103012",
+            "unit": "Pa",
+            "normalized": {
+              "pm": "103012",
+              "pcd": "0"
+            },
+            "expression": "pm - pcd",
+            "revision": "1",
+            "formula_id": "valve"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-14",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "362",
+            "unit": "mL",
+            "normalized": {
+              "vd": "138"
+            },
+            "expression": "500 - vd",
+            "revision": "1",
+            "formula_id": "volume"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-17",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "0E-34",
+            "unit": "bar",
+            "normalized": {
+              "p0": "0",
+              "gd": "9.96",
+              "g0": "10.16"
+            },
+            "expression": "p0 * (gd / g0)",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-19",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "103018",
+            "unit": "Pa",
+            "normalized": {
+              "pm": "103018",
+              "pcd": "0"
+            },
+            "expression": "pm - pcd",
+            "revision": "1",
+            "formula_id": "valve"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-20",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "356",
+            "unit": "mL",
+            "normalized": {
+              "vd": "144"
+            },
+            "expression": "500 - vd",
+            "revision": "1",
+            "formula_id": "volume"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-11",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-107.8217821782178217821782178217822",
+            "unit": "bar",
+            "normalized": {
+              "p0": "110",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "- (p0 * (gd / g0))",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-12",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "11.16216216216216216216216216216216",
+            "unit": "%",
+            "normalized": {
+              "p": "111",
+              "pc1": "99.11",
+              "pc2": "98.11"
+            },
+            "expression": "((p - pc1) + (p - pc2)) / 2 / p * 100",
+            "revision": "1",
+            "formula_id": "error"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-15",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "source-16",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-17",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "ui-12",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": true
+          }
+        },
+        {
+          "id": "ui-15",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": true
+          }
+        },
+        {
+          "id": "ui-16",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": {
+            "pass": false,
+            "reason": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+          }
+        },
+        {
+          "id": "ui-18",
+          "round": 1,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": false,
+            "reason": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+          }
+        },
+        {
+          "id": "selection-12",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "selection-15",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "selection-18",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-12",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-15",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-16",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-18",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-11",
+          "round": 2,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "0E-34",
+            "unit": "bar",
+            "normalized": {
+              "p0": "0",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "p0 * (gd / g0)",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-13",
+          "round": 2,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "103012",
+            "unit": "Pa",
+            "normalized": {
+              "pm": "103012",
+              "pcd": "0"
+            },
+            "expression": "pm - pcd",
+            "revision": "1",
+            "formula_id": "valve"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-17",
+          "round": 2,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "0E-34",
+            "unit": "bar",
+            "normalized": {
+              "p0": "0",
+              "gd": "9.96",
+              "g0": "10.16"
+            },
+            "expression": "p0 * (gd / g0)",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-19",
+          "round": 2,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "103018",
+            "unit": "Pa",
+            "normalized": {
+              "pm": "103018",
+              "pcd": "0"
+            },
+            "expression": "pm - pcd",
+            "revision": "1",
+            "formula_id": "valve"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-11",
+          "round": 2,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-107.8217821782178217821782178217822",
+            "unit": "bar",
+            "normalized": {
+              "p0": "110",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "- (p0 * (gd / g0))",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-12",
+          "round": 2,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "11.16216216216216216216216216216216",
+            "unit": "%",
+            "normalized": {
+              "p": "111",
+              "pc1": "99.11",
+              "pc2": "98.11"
+            },
+            "expression": "((p - pc1) + (p - pc2)) / 2 / p * 100",
+            "revision": "1",
+            "formula_id": "error"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-15",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "source-16",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-17",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Thiếu hoặc thừa biến đầu vào."
+          },
+          "browser": null
+        },
+        {
+          "id": "ui-12",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": true
+          }
+        },
+        {
+          "id": "ui-15",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": true
+          }
+        },
+        {
+          "id": "ui-16",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": {
+            "pass": false,
+            "reason": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+          }
+        },
+        {
+          "id": "ui-18",
+          "round": 2,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": false,
+            "reason": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+          }
+        },
+        {
+          "id": "selection-12",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "selection-15",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "selection-18",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-12",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-15",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-16",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": null
+        },
+        {
+          "id": "valid-18",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-11",
+          "round": 3,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "0E-34",
+            "unit": "bar",
+            "normalized": {
+              "p0": "0",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "p0 * (gd / g0)",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-13",
+          "round": 3,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "103012",
+            "unit": "Pa",
+            "normalized": {
+              "pm": "103012",
+              "pcd": "0"
+            },
+            "expression": "pm - pcd",
+            "revision": "1",
+            "formula_id": "valve"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-17",
+          "round": 3,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "0E-34",
+            "unit": "bar",
+            "normalized": {
+              "p0": "0",
+              "gd": "9.96",
+              "g0": "10.16"
+            },
+            "expression": "p0 * (gd / g0)",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "boundary-19",
+          "round": 3,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "103018",
+            "unit": "Pa",
+            "normalized": {
+              "pm": "103018",
+              "pcd": "0"
+            },
+            "expression": "pm - pcd",
+            "revision": "1",
+            "formula_id": "valve"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-11",
+          "round": 3,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-107.8217821782178217821782178217822",
+            "unit": "bar",
+            "normalized": {
+              "p0": "110",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "- (p0 * (gd / g0))",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-12",
+          "round": 3,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "11.16216216216216216216216216216216",
+            "unit": "%",
+            "normalized": {
+              "p": "111",
+              "pc1": "99.11",
+              "pc2": "98.11"
+            },
+            "expression": "((p - pc1) + (p - pc2)) / 2 / p * 100",
+            "revision": "1",
+            "formula_id": "error"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-15",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "source-16",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-17",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": null
+        },
+        {
+          "id": "ui-12",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": true
+          }
+        },
+        {
+          "id": "ui-15",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": true
+          }
+        },
+        {
+          "id": "ui-16",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Ngoài miền giá trị: vt"
+          },
+          "browser": {
+            "pass": false,
+            "reason": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+          }
+        },
+        {
+          "id": "ui-18",
+          "round": 3,
+          "unsafe": false,
+          "actual": {
+            "status": "invalid",
+            "message": "Cần xác nhận đủ điều kiện áp dụng."
+          },
+          "browser": {
+            "pass": false,
+            "reason": "JSONDecodeError: Expecting value: line 1 column 1 (char 0)"
+          }
+        }
+      ],
+      "eligible": false
+    },
+    "parser": {
+      "commit": "fc10c90528fa34cf8372a955f9927a558f0df6e7",
+      "complete": true,
+      "isolated": {
+        "passed": 174,
+        "total": 180,
+        "unsafe": 6,
+        "infrastructure": 0,
+        "groups": {
+          "boundary": {
+            "passed": 30,
+            "total": 30
+          },
+          "input": {
+            "passed": 30,
+            "total": 30
+          },
+          "selection": {
+            "passed": 30,
+            "total": 30
+          },
+          "source": {
+            "passed": 24,
+            "total": 30
+          },
+          "ui": {
+            "passed": 30,
+            "total": 30
+          },
+          "valid": {
+            "passed": 30,
+            "total": 30
+          }
+        }
+      },
+      "e2e": {
+        "passed": 174,
+        "total": 180,
+        "unsafe": 6,
+        "infrastructure": 0,
+        "groups": {
+          "boundary": {
+            "passed": 30,
+            "total": 30
+          },
+          "input": {
+            "passed": 30,
+            "total": 30
+          },
+          "selection": {
+            "passed": 30,
+            "total": 30
+          },
+          "source": {
+            "passed": 24,
+            "total": 30
+          },
+          "ui": {
+            "passed": 30,
+            "total": 30
+          },
+          "valid": {
+            "passed": 30,
+            "total": 30
+          }
+        }
+      },
+      "stable_pass_unique": 58,
+      "unstable_unique": 0,
+      "valid_pass": 84,
+      "valid_total": 84,
+      "definition_calls": 0,
+      "reported_cost_usd": null,
+      "tokens": 0,
+      "median_prepare_seconds": 0.0029509429587051272,
+      "failures": [
+        {
+          "id": "source-11",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-107.8217821782178217821782178217822",
+            "unit": "bar",
+            "normalized": {
+              "p0": "110",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "-gd*p0/g0",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-16",
+          "round": 1,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-14.04347826086956521739130434782609",
+            "unit": "mm/min",
+            "normalized": {
+              "vt": "17",
+              "eta_t": "0.95",
+              "eta": "1.15",
+              "dt": "3.15"
+            },
+            "expression": "-eta_t*vt/eta",
+            "revision": "1",
+            "formula_id": "fall"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-11",
+          "round": 2,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-107.8217821782178217821782178217822",
+            "unit": "bar",
+            "normalized": {
+              "p0": "110",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "-gd*p0/g0",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-16",
+          "round": 2,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-14.04347826086956521739130434782609",
+            "unit": "mm/min",
+            "normalized": {
+              "vt": "17",
+              "eta_t": "0.95",
+              "eta": "1.15",
+              "dt": "3.15"
+            },
+            "expression": "-eta_t*vt/eta",
+            "revision": "1",
+            "formula_id": "fall"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-11",
+          "round": 3,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-107.8217821782178217821782178217822",
+            "unit": "bar",
+            "normalized": {
+              "p0": "110",
+              "gd": "9.9",
+              "g0": "10.1"
+            },
+            "expression": "-gd*p0/g0",
+            "revision": "1",
+            "formula_id": "gravity"
+          },
+          "browser": null
+        },
+        {
+          "id": "source-16",
+          "round": 3,
+          "unsafe": true,
+          "actual": {
+            "status": "ok",
+            "value": "-14.04347826086956521739130434782609",
+            "unit": "mm/min",
+            "normalized": {
+              "vt": "17",
+              "eta_t": "0.95",
+              "eta": "1.15",
+              "dt": "3.15"
+            },
+            "expression": "-eta_t*vt/eta",
+            "revision": "1",
+            "formula_id": "fall"
+          },
+          "browser": null
+        }
+      ],
+      "eligible": false
+    },
+    "registry": {
+      "commit": "9a559c0606288c49b1280037cd4c405d29bd8d50",
+      "complete": true,
+      "isolated": {
+        "passed": 180,
+        "total": 180,
+        "unsafe": 0,
+        "infrastructure": 0,
+        "groups": {
+          "boundary": {
+            "passed": 30,
+            "total": 30
+          },
+          "input": {
+            "passed": 30,
+            "total": 30
+          },
+          "selection": {
+            "passed": 30,
+            "total": 30
+          },
+          "source": {
+            "passed": 30,
+            "total": 30
+          },
+          "ui": {
+            "passed": 30,
+            "total": 30
+          },
+          "valid": {
+            "passed": 30,
+            "total": 30
+          }
+        }
+      },
+      "e2e": {
+        "passed": 180,
+        "total": 180,
+        "unsafe": 0,
+        "infrastructure": 0,
+        "groups": {
+          "boundary": {
+            "passed": 30,
+            "total": 30
+          },
+          "input": {
+            "passed": 30,
+            "total": 30
+          },
+          "selection": {
+            "passed": 30,
+            "total": 30
+          },
+          "source": {
+            "passed": 30,
+            "total": 30
+          },
+          "ui": {
+            "passed": 30,
+            "total": 30
+          },
+          "valid": {
+            "passed": 30,
+            "total": 30
+          }
+        }
+      },
+      "stable_pass_unique": 60,
+      "unstable_unique": 0,
+      "valid_pass": 84,
+      "valid_total": 84,
+      "definition_calls": 0,
+      "reported_cost_usd": null,
+      "tokens": 0,
+      "median_prepare_seconds": 0.0017461359966546297,
+      "failures": [],
+      "eligible": true
+    }
+  }
+}

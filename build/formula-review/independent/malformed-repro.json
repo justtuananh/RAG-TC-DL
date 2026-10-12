@@ -1,0 +1,85 @@
+{
+  "put_status": 200,
+  "body": {
+    "id": "620d274cf17e832d2822f842124bb966",
+    "source": {
+      "fid": "F001",
+      "kind": "omml",
+      "latex": "P=a+b",
+      "section": "(root)",
+      "context": "Áp suất cộng; a và b cùng đơn vị Pa, cùng điểm đo.\n\n$ P=a+b $\n\nP là kết quả tại điểm đo; cần đối chiếu điều kiện áp dụng.\n",
+      "document_id": "independent",
+      "file": "independent.docx",
+      "sha256": "d50c71f4840458d1fa33361b112846130595605f0f3db6ad7a44abd7d0f979d4"
+    },
+    "proposal": {
+      "title": "F001 — (root)",
+      "expression": "a+b",
+      "unit": "",
+      "variables": null,
+      "conditions": [
+        {
+          "key": "applicability",
+          "label": ""
+        }
+      ],
+      "test_cases": []
+    },
+    "warnings": [
+      "Bản nháp chưa được người dùng phê duyệt. Cần đối chiếu nguồn và bổ sung ca tính đối chứng.",
+      "Gợi ý cú pháp chưa xác định ý nghĩa biến, đơn vị hay điều kiện áp dụng."
+    ],
+    "status": "pending_review",
+    "revision": 2,
+    "created_at": "2026-09-28T07:51:34.559014+00:00",
+    "review": null,
+    "history": [
+      {
+        "action": "draft_created",
+        "at": "2026-09-28T07:51:34.559045+00:00",
+        "revision": 1
+      },
+      {
+        "action": "draft_updated",
+        "at": "2026-09-28T07:51:34.574212+00:00",
+        "revision": 2,
+        "proposal_digest": "03b349899251b6c3c77809db54ebe5d35ba30c1636ddb694681990b86e3f82fe",
+        "previous_proposal": {
+          "title": "F001 — (root)",
+          "expression": "a+b",
+          "unit": "",
+          "variables": [
+            {
+              "key": "a",
+              "label": "",
+              "unit": ""
+            },
+            {
+              "key": "b",
+              "label": "",
+              "unit": ""
+            }
+          ],
+          "conditions": [
+            {
+              "key": "applicability",
+              "label": ""
+            }
+          ],
+          "test_cases": []
+        }
+      }
+    ],
+    "validation_errors": [
+      "Đơn vị kết quả chưa được điền.",
+      "Đơn vị kết quả chưa được hỗ trợ.",
+      "Cần từ 1 đến 12 biến đầu vào."
+    ]
+  },
+  "browser_errors": [
+    "Cannot read properties of null (reading 'map')",
+    "Cannot read properties of null (reading 'map')",
+    "Cannot read properties of null (reading 'map')"
+  ],
+  "body_text": ""
+}

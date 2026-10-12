@@ -13,6 +13,7 @@ _BACKEND = [
     "db",
     "embedding",
     "evaluation",
+    "formula_registry",
     "ingestion",
     "knowledge",
     "llm",

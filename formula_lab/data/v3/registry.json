@@ -1,0 +1,533 @@
+{
+  "qtkd160_f001": {
+    "id": "qtkd160_f001",
+    "title": "Bù áp suất do chênh cao cột chất lỏng — QTKĐ 1.160",
+    "variables": [
+      {
+        "key": "rho",
+        "label": "Khối lượng riêng môi trường",
+        "unit": "kg/m3",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "g",
+        "label": "Gia tốc trọng trường",
+        "unit": "m/s2",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "h",
+        "label": "Chênh cao có dấu giữa hai mốc",
+        "unit": "m"
+      }
+    ],
+    "expression": "rho*g*h",
+    "unit": "Pa",
+    "conditions": [
+      "v3_height_sign"
+    ],
+    "revision": "3",
+    "source_fingerprint": "71d0d5262ce2a5511dacff042a8b12b6bc3cc6c5ee7b219fa5a2dc5183062ab6"
+  },
+  "qtkd160_f005": {
+    "id": "qtkd160_f005",
+    "title": "Chỉ thị dự đoán theo quan hệ tuyến tính — QTKĐ 1.160",
+    "variables": [
+      {
+        "key": "a",
+        "label": "Hệ số chặn a",
+        "unit": "Pa"
+      },
+      {
+        "key": "b",
+        "label": "Hệ số góc b",
+        "unit": "1"
+      },
+      {
+        "key": "x",
+        "label": "Áp suất chuẩn X",
+        "unit": "Pa"
+      }
+    ],
+    "expression": "a+b*x",
+    "unit": "Pa",
+    "conditions": [
+      "v3_linear_fit"
+    ],
+    "revision": "3",
+    "source_fingerprint": "e519f5e4f461a3e688a801729ef440926d257acf5359e65271d736a22eb62bc8"
+  },
+  "qtkd160_f006": {
+    "id": "qtkd160_f006",
+    "title": "Trung bình các giá trị áp suất chuẩn — QTKĐ 1.160",
+    "variables": [
+      {
+        "key": "readings",
+        "label": "Các giá trị X_i",
+        "unit": "Pa",
+        "kind": "series",
+        "min_items": 1,
+        "max_items": 100
+      }
+    ],
+    "expression": "mean(readings)",
+    "unit": "Pa",
+    "conditions": [
+      "v3_same_series"
+    ],
+    "revision": "3",
+    "source_fingerprint": "24023acba4e46613c5ae18f0e0fc7c282fbe44d89eb623bb01141f6468f70d30"
+  },
+  "qtkd160_f007": {
+    "id": "qtkd160_f007",
+    "title": "Trung bình chỉ thị áp kế kiểm — QTKĐ 1.160",
+    "variables": [
+      {
+        "key": "readings",
+        "label": "Các giá trị Y_i",
+        "unit": "Pa",
+        "kind": "series",
+        "min_items": 1,
+        "max_items": 100
+      }
+    ],
+    "expression": "mean(readings)",
+    "unit": "Pa",
+    "conditions": [
+      "v3_same_series"
+    ],
+    "revision": "3",
+    "source_fingerprint": "d225fe00472013d255f71325f9b5f632f9ee1d728f4a12249bc31957f2690323"
+  },
+  "qtkd160_f008": {
+    "id": "qtkd160_f008",
+    "title": "Hệ số góc hồi quy bình phương tối thiểu — QTKĐ 1.160",
+    "variables": [
+      {
+        "key": "xs",
+        "label": "Các áp suất chuẩn X_i",
+        "unit": "Pa",
+        "kind": "series",
+        "min_items": 2,
+        "max_items": 100
+      },
+      {
+        "key": "ys",
+        "label": "Các chỉ thị Y_i tương ứng",
+        "unit": "Pa",
+        "kind": "series",
+        "min_items": 2,
+        "max_items": 100
+      }
+    ],
+    "expression": "slope(xs,ys)",
+    "unit": "1",
+    "conditions": [
+      "v3_paired_readings"
+    ],
+    "revision": "3",
+    "source_fingerprint": "eee9bf28aaf1fbcf464c406e22f7e894766cab85c29528a8c40644c93f05c93f"
+  },
+  "qtkd160_f009": {
+    "id": "qtkd160_f009",
+    "title": "Hệ số chặn hồi quy — QTKĐ 1.160",
+    "variables": [
+      {
+        "key": "y_mean",
+        "label": "Trung bình Y",
+        "unit": "Pa"
+      },
+      {
+        "key": "b",
+        "label": "Hệ số góc b",
+        "unit": "1"
+      },
+      {
+        "key": "x_mean",
+        "label": "Trung bình X",
+        "unit": "Pa"
+      }
+    ],
+    "expression": "y_mean-b*x_mean",
+    "unit": "Pa",
+    "conditions": [
+      "v3_linear_fit"
+    ],
+    "revision": "3",
+    "source_fingerprint": "19f87cac229d2172c3050ed41392ee0e0b9334490c0333a3f0828a2554b46761"
+  },
+  "qtkd160_f033": {
+    "id": "qtkd160_f033",
+    "title": "Độ phân giải theo phân bố tam giác — QTKĐ 1.160",
+    "variables": [
+      {
+        "key": "r",
+        "label": "Độ phân giải r",
+        "unit": "Pa",
+        "min": 0
+      }
+    ],
+    "expression": "r/sqrt(6)",
+    "unit": "Pa",
+    "conditions": [
+      "v3_triangular",
+      "v3_resolution"
+    ],
+    "revision": "3",
+    "source_fingerprint": "e94c5c74eae89c32f4d8e67c92648d76018d883d7c6c6c18d68699dd957281d0"
+  },
+  "qtkd160_f034": {
+    "id": "qtkd160_f034",
+    "title": "Độ phân giải theo phân bố chữ nhật — QTKĐ 1.160",
+    "variables": [
+      {
+        "key": "r",
+        "label": "Độ phân giải r",
+        "unit": "Pa",
+        "min": 0
+      }
+    ],
+    "expression": "r/sqrt(3)",
+    "unit": "Pa",
+    "conditions": [
+      "v3_rectangular",
+      "v3_resolution"
+    ],
+    "revision": "3",
+    "source_fingerprint": "d63c1c514a4ec698d1d84ef01c41f81cf33ec76712fbd3787c1d4dd911b007ba"
+  },
+  "dpi190_f008": {
+    "id": "dpi190_f008",
+    "title": "Trung bình chỉ thị áp kế kiểm — QTKĐ 1.190",
+    "variables": [
+      {
+        "key": "readings",
+        "label": "Các giá trị Y_i",
+        "unit": "Pa",
+        "kind": "series",
+        "min_items": 1,
+        "max_items": 100
+      }
+    ],
+    "expression": "mean(readings)",
+    "unit": "Pa",
+    "conditions": [
+      "v3_same_series"
+    ],
+    "revision": "3",
+    "source_fingerprint": "75247893fc51ac123aae1a4b362af865db6bc2ce1653b21fdae118b445ea6773"
+  },
+  "dpi190_f038": {
+    "id": "dpi190_f038",
+    "title": "Độ lặp lại chiều tăng — QTKĐ 1.190",
+    "variables": [
+      {
+        "key": "x3_j",
+        "label": "Chỉ thị loạt M3 tại điểm j",
+        "unit": "Pa"
+      },
+      {
+        "key": "x3_0",
+        "label": "Chỉ thị loạt M3 tại điểm 0",
+        "unit": "Pa"
+      },
+      {
+        "key": "x1_j",
+        "label": "Chỉ thị loạt M1 tại điểm j",
+        "unit": "Pa"
+      },
+      {
+        "key": "x1_0",
+        "label": "Chỉ thị loạt M1 tại điểm 0",
+        "unit": "Pa"
+      }
+    ],
+    "expression": "abs((x3_j-x3_0)-(x1_j-x1_0))",
+    "unit": "Pa",
+    "conditions": [
+      "v3_cycles_3_1"
+    ],
+    "revision": "3",
+    "source_fingerprint": "8dafa50b65be0fe01661ac9ff86275dac1c29815da4d53b5ea611a8eb7e027c8"
+  },
+  "dpi190_f039": {
+    "id": "dpi190_f039",
+    "title": "Độ lặp lại chiều giảm — QTKĐ 1.190",
+    "variables": [
+      {
+        "key": "x4_j",
+        "label": "Chỉ thị loạt M4 tại điểm j",
+        "unit": "Pa"
+      },
+      {
+        "key": "x4_0",
+        "label": "Chỉ thị loạt M4 tại điểm 0",
+        "unit": "Pa"
+      },
+      {
+        "key": "x2_j",
+        "label": "Chỉ thị loạt M2 tại điểm j",
+        "unit": "Pa"
+      },
+      {
+        "key": "x2_0",
+        "label": "Chỉ thị loạt M2 tại điểm 0",
+        "unit": "Pa"
+      }
+    ],
+    "expression": "abs((x4_j-x4_0)-(x2_j-x2_0))",
+    "unit": "Pa",
+    "conditions": [
+      "v3_cycles_4_2"
+    ],
+    "revision": "3",
+    "source_fingerprint": "7b53eefaba89a71ea118e3f8bcb786e873aa7fe8607c0ae9cb03708a63dcc869"
+  },
+  "dpi190_f042": {
+    "id": "dpi190_f042",
+    "title": "Độ tái lặp lại chiều tăng — QTKĐ 1.190",
+    "variables": [
+      {
+        "key": "x5_j",
+        "label": "Chỉ thị loạt M5 tại điểm j",
+        "unit": "Pa"
+      },
+      {
+        "key": "x5_0",
+        "label": "Chỉ thị loạt M5 tại điểm 0",
+        "unit": "Pa"
+      },
+      {
+        "key": "x1_j",
+        "label": "Chỉ thị loạt M1 tại điểm j",
+        "unit": "Pa"
+      },
+      {
+        "key": "x1_0",
+        "label": "Chỉ thị loạt M1 tại điểm 0",
+        "unit": "Pa"
+      }
+    ],
+    "expression": "abs((x5_j-x5_0)-(x1_j-x1_0))",
+    "unit": "Pa",
+    "conditions": [
+      "v3_cycles_5_1"
+    ],
+    "revision": "3",
+    "source_fingerprint": "a04ec7a78f2abe47892c9f3f63ea31f7487f3e9d6ef733dec394b5c0cfa1d74d"
+  },
+  "dpi190_f043": {
+    "id": "dpi190_f043",
+    "title": "Độ tái lặp lại chiều giảm — QTKĐ 1.190",
+    "variables": [
+      {
+        "key": "x6_j",
+        "label": "Chỉ thị loạt M6 tại điểm j",
+        "unit": "Pa"
+      },
+      {
+        "key": "x6_0",
+        "label": "Chỉ thị loạt M6 tại điểm 0",
+        "unit": "Pa"
+      },
+      {
+        "key": "x2_j",
+        "label": "Chỉ thị loạt M2 tại điểm j",
+        "unit": "Pa"
+      },
+      {
+        "key": "x2_0",
+        "label": "Chỉ thị loạt M2 tại điểm 0",
+        "unit": "Pa"
+      }
+    ],
+    "expression": "abs((x6_j-x6_0)-(x2_j-x2_0))",
+    "unit": "Pa",
+    "conditions": [
+      "v3_cycles_6_2"
+    ],
+    "revision": "3",
+    "source_fingerprint": "eeb3fbb5984a2092501894316574e20552c6633eb2a6459746f505ad8d9d9283"
+  },
+  "qtkd061_p001": {
+    "id": "qtkd061_p001",
+    "title": "Áp suất thử độ kín và chịu tải van — QTKĐ 1.061",
+    "expression": "1.5*pmax",
+    "variables": [
+      {
+        "key": "pmax",
+        "label": "Áp suất lớn nhất theo thiết kế",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "unit": "Pa",
+    "conditions": [
+      "v3_qtkd061_p001"
+    ],
+    "revision": "3",
+    "source_fingerprint": "607311974113f39bb24319d30f718ee7acff5014d6973b15ae18ebc6934b2c70"
+  },
+  "qtkd061_p002": {
+    "id": "qtkd061_p002",
+    "title": "Độ lớn sai số áp suất chỉnh đặt cho phép — QTKĐ 1.061",
+    "expression": "max(0.03*pcd,15000)",
+    "variables": [
+      {
+        "key": "pcd",
+        "label": "Áp suất chỉnh đặt",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "unit": "Pa",
+    "conditions": [
+      "v3_qtkd061_p002"
+    ],
+    "revision": "3",
+    "source_fingerprint": "5f1e396ef952866dd6ff879aa31fff139c34af4d12aa4de95af8e0395650215a"
+  },
+  "qtkd062_p001": {
+    "id": "qtkd062_p001",
+    "title": "Mức áp suất bơm phụ một phần mười — QTKĐ 1.062",
+    "expression": "pmax/10",
+    "variables": [
+      {
+        "key": "pmax",
+        "label": "Giới hạn áp suất làm việc tối đa",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "unit": "Pa",
+    "conditions": [
+      "v3_qtkd062_p001"
+    ],
+    "revision": "3",
+    "source_fingerprint": "7cbb5bfc392fa26c559ecf6d0127d5148a2f04e05e2f568616e77b5b750b8ccf"
+  },
+  "qtkd062_p002": {
+    "id": "qtkd062_p002",
+    "title": "Giới hạn áp suất kiểm tra van bảo vệ bơm phụ — QTKĐ 1.062",
+    "expression": "0.2*pmax",
+    "variables": [
+      {
+        "key": "pmax",
+        "label": "Giới hạn áp suất làm việc tối đa",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "unit": "Pa",
+    "conditions": [
+      "v3_qtkd062_p002"
+    ],
+    "revision": "3",
+    "source_fingerprint": "7e3fab210dddc921b9254caa91cd06ef68333cf284e11ba8937e2492d1f391c8"
+  },
+  "qtkd062_p003": {
+    "id": "qtkd062_p003",
+    "title": "Giới hạn độ tụt áp sau năm phút — QTKĐ 1.062",
+    "expression": "0.05*pmax",
+    "variables": [
+      {
+        "key": "pmax",
+        "label": "Độ lớn giới hạn áp suất làm việc tối đa",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "unit": "Pa",
+    "conditions": [
+      "v3_qtkd062_p003"
+    ],
+    "revision": "3",
+    "source_fingerprint": "984fcc97f1dcbb76a38daf28bc3444d1fb9cec0d971e37ce63ae336a54c83b73"
+  },
+  "qtkd063_p001": {
+    "id": "qtkd063_p001",
+    "title": "Giới hạn độ tụt áp bình phân ly sau năm phút — QTKĐ 1.063",
+    "expression": "0.05*pmax",
+    "variables": [
+      {
+        "key": "pmax",
+        "label": "Giới hạn áp suất làm việc tối đa",
+        "unit": "Pa",
+        "min": 0,
+        "exclusive_min": true
+      }
+    ],
+    "unit": "Pa",
+    "conditions": [
+      "v3_qtkd063_p001"
+    ],
+    "revision": "3",
+    "source_fingerprint": "579fd1c1eac3997eb0487c95ae3292fe3083cd830197ef08d1f415fc148c1de8"
+  },
+  "qtkd071_f013": {
+    "id": "qtkd071_f013",
+    "title": "Sai số tuyệt đối trung bình hai lần đo — QTKĐ 1.071",
+    "expression": "((p-pc1)+(p-pc2))/2",
+    "variables": [
+      {
+        "key": "p",
+        "label": "Áp suất danh nghĩa đã hiệu chỉnh",
+        "unit": "bar",
+        "min": 0,
+        "exclusive_min": true
+      },
+      {
+        "key": "pc1",
+        "label": "Chỉ thị chuẩn lần 1",
+        "unit": "bar",
+        "min": 0
+      },
+      {
+        "key": "pc2",
+        "label": "Chỉ thị chuẩn lần 2",
+        "unit": "bar",
+        "min": 0
+      }
+    ],
+    "unit": "bar",
+    "conditions": [
+      "v3_qtkd071_f013"
+    ],
+    "revision": "3",
+    "source_fingerprint": "8182e39cf1e75e5b827abf66a195faba05444609bf9a613873ed0c99903ee1dd"
+  },
+  "qtkd159_f031": {
+    "id": "qtkd159_f031",
+    "title": "Áp suất tuyệt đối tại đáy pít tông — QTKĐ 1.159",
+    "expression": "ps+mu",
+    "variables": [
+      {
+        "key": "ps",
+        "label": "P_s,i đã xác định riêng cho chế độ tuyệt đối",
+        "unit": "Pa",
+        "min": 0
+      },
+      {
+        "key": "mu",
+        "label": "Áp suất dư trong buồng chân không tuyệt đối",
+        "unit": "Pa",
+        "min": 0,
+        "max": "10",
+        "exclusive_max": true
+      }
+    ],
+    "unit": "Pa",
+    "conditions": [
+      "v3_qtkd159_f031"
+    ],
+    "revision": "3",
+    "source_fingerprint": "b988c6278278f13993bee20bcf704aa173207c69bfbbe1f136c817d60899f297"
+  }
+}

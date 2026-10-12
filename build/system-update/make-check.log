@@ -1,0 +1,17 @@
+.venv-dev/bin/python -m ruff check tests scripts
+All checks passed!
+.venv-dev/bin/python -m ruff format --check tests scripts
+38 files already formatted
+.venv-dev/bin/python scripts/check_fidelity.py
+✅ FIDELITY OK — 351/351 công thức, latex_rate_total=1.0, span $...$ khớp report.
+.venv-dev/bin/python -m pytest -m unit tests/unit
+........................................................................ [ 35%]
+........................................................................ [ 70%]
+............................................................             [100%]
+=============================== warnings summary ===============================
+.venv-dev/lib/python3.12/site-packages/starlette/testclient.py:45
+  /root/RAG-TC-DL/.venv-dev/lib/python3.12/site-packages/starlette/testclient.py:45: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    _PortalFactoryType = Callable[[], AbstractContextManager[anyio.abc.BlockingPortal]]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+204 passed, 1 skipped, 1 warning in 9.05s

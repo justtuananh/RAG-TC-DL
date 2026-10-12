@@ -11,6 +11,14 @@ import re
 # Câu từ chối chuẩn (khớp SYSTEM_TMPL quy tắc 5 + scoring.answer_scoring.REFUSAL_CORE).
 REFUSAL_SENTENCE = "Không tìm thấy thông tin này trong các tài liệu QTKĐ được cung cấp."
 
+# Chat không tự tính: yêu cầu tính chuyển sang form tính bằng công thức đã được người
+# duyệt phê duyệt (formula_registry), nơi đơn vị và điều kiện áp dụng được kiểm tra.
+CALCULATION_GUIDE = (
+    "Để tính từ số liệu, mở **Tài liệu → chọn tài liệu → Công thức và phê duyệt**, "
+    "chọn bộ tính đã được phê duyệt rồi nhập số liệu và xác nhận điều kiện áp dụng. "
+    "Công thức chưa được duyệt cần hoàn tất bước rà soát trước khi tính."
+)
+
 # Yêu cầu TÍNH TOÁN tường minh với số liệu cho sẵn - hệ là lookup-only nên từ
 # chối TẤT ĐỊNH trước khi gọi LLM (đo Q126: 7b lúc từ chối lúc thay số tính
 # Δ=2 bar tuỳ phương sai prompt; quy tắc 5 không đủ chắc). Mẫu giữ HẸP:

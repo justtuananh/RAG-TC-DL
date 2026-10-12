@@ -1,0 +1,21 @@
+{
+  "v3_height_sign": "Đã đối chiếu quy ước dấu và hai mốc chênh cao trong QTKĐ 1.160 mục 4.2.1.",
+  "v3_linear_fit": "X là áp suất chuẩn, Y là chỉ thị áp kế kiểm; hệ số và số liệu thuộc cùng bộ đo, cùng đơn vị.",
+  "v3_same_series": "Các số đọc thuộc cùng tập X hoặc cùng tập Y được chọn theo phụ lục D; không trộn hai tập.",
+  "v3_paired_readings": "X/Y ghép đúng từng cặp, cùng số phần tử, có ít nhất hai X khác nhau.",
+  "v3_triangular": "Cơ cấu chỉ thị áp dụng phân bố tam giác theo QTKĐ 1.160 mục D.2.3.1.",
+  "v3_rectangular": "Cơ cấu chỉ thị áp dụng phân bố chữ nhật theo QTKĐ 1.160 mục D.2.3.1.",
+  "v3_resolution": "r đã xác định theo loại chỉ thị và dao động tại D.2.3.1; dùng cùng đơn vị áp suất.",
+  "v3_cycles_3_1": "Đúng loạt M3/M1, cùng điểm áp suất j và chiều đo theo D.2.3.3 QTKĐ 1.190; mỗi loạt dùng số đọc điểm 0 của chính loạt đó. Chỉ tính độ lệch từng chiều, chưa suy ra độ không đảm bảo tổng hợp.",
+  "v3_cycles_4_2": "Đúng loạt M4/M2, cùng điểm áp suất j và chiều đo theo D.2.3.3 QTKĐ 1.190; mỗi loạt dùng số đọc điểm 0 của chính loạt đó. Chỉ tính độ lệch từng chiều, chưa suy ra độ không đảm bảo tổng hợp.",
+  "v3_cycles_5_1": "Đúng loạt M5/M1, cùng điểm áp suất j và chiều đo theo D.2.3.4 QTKĐ 1.190; mỗi loạt dùng số đọc điểm 0 của chính loạt đó. Chỉ tính độ lệch từng chiều, chưa suy ra độ không đảm bảo tổng hợp.",
+  "v3_cycles_6_2": "Đúng loạt M6/M2, cùng điểm áp suất j và chiều đo theo D.2.3.4 QTKĐ 1.190; mỗi loạt dùng số đọc điểm 0 của chính loạt đó. Chỉ tính độ lệch từng chiều, chưa suy ra độ không đảm bảo tổng hợp.",
+  "v3_qtkd061_p001": "Đúng áp suất lớn nhất theo thiết kế tại 6.2.2; chỉ tính mức áp suất thử, không kết luận van đạt.",
+  "v3_qtkd061_p002": "Áp dụng giới hạn ±3% nhưng không nhỏ hơn ±0,15 bar tại 6.3.1; kết quả là độ lớn giới hạn, không kết luận đạt.",
+  "v3_qtkd062_p001": "Bàn tạo áp có bơm nén phụ, áp dụng nhánh 5.2.1/5.2.2; không dùng cho bàn không có bơm phụ.",
+  "v3_qtkd062_p002": "Bàn tạo áp có van an toàn bảo vệ bơm phụ theo 5.2.1; kết quả là giới hạn không được vượt, không phải áp suất bắt buộc phải đạt.",
+  "v3_qtkd062_p003": "Đúng phép thử 5.3 (duy trì 20 min, điều chỉnh lại, đọc sau 5 min); pmax là độ lớn dương, không tự áp dụng cho nhánh tăng áp chân không.",
+  "v3_qtkd063_p001": "Áp dụng phép thử bình phân ly tại 5.3, duy trì 15 min rồi điều chỉnh/đọc sau 5 min và lặp lại; chỉ tính giới hạn.",
+  "v3_qtkd071_f013": "Hai lần đo cùng điểm H3000, theo hai chiều quay; P đã hiệu chỉnh gia tốc trọng trường nơi đo. Giữ dấu sai số, không lấy trị tuyệt đối.",
+  "v3_qtkd159_f031": "Chế độ tuyệt đối; P_s,i đã tính riêng, mu là áp suất dư buồng chân không ổn định dưới 10 Pa theo 5.2; kết quả tại đáy pít tông, chưa bù chênh cao."
+}

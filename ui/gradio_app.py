@@ -423,6 +423,7 @@ def build_ui() -> gr.Blocks:
             # ── Left: chat (60%) ─────────────────────────────────────────
             with gr.Column(scale=6):
                 chatbot = gr.Chatbot(
+                    type="messages",
                     label="Chat",
                     show_label=False,  # nhãn nổi đè lên dòng chat đầu tiên khi cuộn
                     elem_id="qtkd-chat",

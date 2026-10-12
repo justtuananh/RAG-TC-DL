@@ -1,0 +1,7 @@
+{
+  "sha256": "536215eedcf503cbd4ff895492733c78b80ea37766145871d32a0b8a95040c08",
+  "role": "public_development_regression_not_independent_holdout",
+  "questions": 21,
+  "cases": 42,
+  "oracle": "21 manually calculated anchors; each repeated with equivalent input units"
+}

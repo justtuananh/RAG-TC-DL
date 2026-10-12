@@ -223,3 +223,21 @@ def test_direct_outline_level_without_matching_section_number_is_not_a_heading()
     assert _heading_level(_p_outline(2, "- Kiểm tra độ kín của hệ thống"), {}) is None
     assert _heading_level(_p_outline(2, "Áp kế píttông chuẩn"), {}) is None
     assert _heading_level(_p_outline(2, "6.3 Kiểm tra đo lường"), {}) is None  # sai độ sâu
+
+
+def test_omml_mean_overline_is_not_a_hat():
+    from ingestion.omml import M, omml_to_latex
+
+    node = etree.fromstring(
+        f'<m:oMath xmlns:m="{M}"><m:acc><m:accPr><m:chr m:val="̅"/></m:accPr><m:e><m:r><m:t>x</m:t></m:r></m:e></m:acc></m:oMath>'
+    )
+    assert omml_to_latex(node) == r'\overline{x}'
+
+
+def test_omml_braces_are_valid_latex_delimiters():
+    from ingestion.omml import M, omml_to_latex
+
+    node = etree.fromstring(
+        f'<m:oMath xmlns:m="{M}"><m:d><m:dPr><m:begChr m:val="{{"/><m:endChr m:val="}}"/></m:dPr><m:e><m:r><m:t>x</m:t></m:r></m:e></m:d></m:oMath>'
+    )
+    assert omml_to_latex(node) == r'\left\{ x \right\}'

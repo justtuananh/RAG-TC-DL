@@ -17,7 +17,7 @@ from api.schemas import ChatMessage, ChatRequest
 from core.latex import fix_latex, restore_formulas
 from core.settings_loader import get_settings
 from llm import generator
-from llm.guards import REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request
+from llm.guards import CALCULATION_GUIDE, enforce_refusal_stop, is_calculation_request
 from llm.prompt import build_messages
 from query import device_ambiguity
 from retrieval import retriever
@@ -89,7 +89,7 @@ def _detect_device_ambiguity(
 
 def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[str]:
     if is_calculation_request(req.message):
-        yield _sse({"type": "done", "answer": REFUSAL_SENTENCE, "sources": []})
+        yield _sse({"type": "done", "answer": CALCULATION_GUIDE, "sources": []})
         return
 
     # "Áp kế pít tông ..." khớp nhiều loại (kiểu H3000, tiêu chuẩn): không được trả lời

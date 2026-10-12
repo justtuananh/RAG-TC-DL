@@ -1,27 +1,27 @@
-# frontend — Trợ lý Kiểm định (React + TypeScript + Tailwind)
+# React UI — Trợ lý Kiểm định
 
-Giao diện web của hệ thống RAG tra cứu QTKĐ. Đây là bản **dựng lại 1:1** từ mockup thiết kế
-`design/kiemdinh.html`, viết bằng **React 18 + TypeScript + Vite + Tailwind CSS**.
+React 18 + TypeScript + Tailwind, **đã nối API thật**. Chat SSE, tài liệu gốc, upload/xử lý, nguồn trích dẫn và luồng đăng ký nháp → phê duyệt → tính toán đều gọi package `api/` (`api/main.py`).
 
 > **Hiện trạng: đã nối backend thật.** Chat streaming (SSE), tài liệu và xác thực đi qua
 > `src/services/liveApi.ts` + `src/services/auth.ts` tới package `api/` (`python -m api.main`,
 > FastAPI + SSE). `src/services/mockEngine.ts` chỉ còn hằng số UI (TIMING/ZOOM/extColor).
 > Bản React cũ nằm ở `../frontend-legacy/`.
 
-## Chạy
+Dùng Node 24, phiên bản gợi ý trong `.nvmrc`; npm lock được commit.
 
 ```bash
-cd frontend
-npm install
-npm run dev        # → http://localhost:5173
-npm run build      # → dist/  (typecheck riêng: npm run typecheck)
-npm run preview     # xem thử bản build
+npm ci
+npm run dev       # http://localhost:5173; proxy /api sang localhost:8080
+npm run typecheck
+npm test -- --maxWorkers=2
+npm run lint
+npm run build
+npm run preview
 ```
 
-Yêu cầu: Node ≥ 18. Không cần internet khi chạy — **font tự host** qua `@fontsource`
-(Be Vietnam Pro + Lora) nên app chạy **offline** đúng tinh thần dự án.
+Backend chạy ở8080. Khi cần đổi cổng API, đặt `API_PORT` khi khởi động Vite/preview. Không có backend thì UI hiển thị lỗi tải dữ liệu, không thay bằng kết quả mock. Font Be Vietnam Pro/Lora được đóng gói qua `@fontsource`, không tải font ngoài khi chạy.
 
-## Cấu trúc
+## Công thức
 
 ```
 src/
@@ -64,25 +64,20 @@ Test: `npm test` (Vitest) — `src/services/auth.test.ts` phủ lưu/đọc toke
 
 ## Hệ thiết kế (token trong `tailwind.config.ts`)
 
-- Màu nhấn xanh `#16A34A` (hover `#15803D`), nền app `#ECF1EE`, panel trắng, slate cho chữ/viền;
-  highlight nguồn hổ phách `#FEF6DD`/`#F59E0B`.
-- Font: **Be Vietnam Pro** cho UI, **Lora** (serif) cho "trang tài liệu" — để trông như trang in.
-- Toàn app `zoom: 0.88` (cảm giác đặc, gọn) — khớp mockup.
-- Quy ước style: **inline `style` cho nội dung tĩnh** (giá trị px chính xác), **Tailwind class cho
-  phần tương tác** (để `hover:`/`focus:` hoạt động). Giá trị px lẻ dùng arbitrary value `[13.5px]`.
+Backend quyết định quyền tính; disable nút chỉ hỗ trợ trải nghiệm. Sửa định nghĩa thu hồi duyệt. FE kiểm cấu trúc phản hồi để dữ liệu lỗi không làm trắng ứng dụng, giữ bản sửa khi API lỗi và cảnh báo trước những thao tác bỏ bản sửa trong màn hình rà soát. Tên người duyệt hiện tự nhập, chưa phải danh tính được xác thực.
 
-## Tính năng (mọi tương tác hoạt động, mô phỏng bằng timer)
+## Cấu trúc và thiết kế
 
-3 tab **Trò chuyện / Tài liệu / Hướng dẫn**; thanh Lịch sử thu/phóng (tìm, ghim, đổi tên inline,
-xoá có xác nhận); chat ghim câu hỏi lên đầu + thẻ tiến trình 4 bước → câu trả lời kèm trích dẫn
-`[n]` bấm được (nhảy + tô sáng đúng đoạn ở cột nguồn), thanh thao tác, gợi ý câu hỏi; cột nguồn kéo
-giãn được; tab Tài liệu (kéo-thả tải lên → "Xử lý" → tiến trình, tìm, 5/10/100, phân trang); modal
-Cấu hình LLM (tương thích OpenAI), Trình xem tài liệu; toast góc trên-phải.
+- `src/services/liveApi.ts`, `formulaApi.ts`: HTTP/SSE và hợp đồng dữ liệu.
+- `src/store/useAppStore.ts`: trạng thái, hành động, dữ liệu tài liệu/chat.
+- `src/components/docs/FormulaReviewPanel.tsx`: editor, phê duyệt và form tính.
+- `DocViewerPanel.tsx`: tab nguồn gốc/công thức trong cùng màn hình.
+- `src/components/layout/Sidebar.tsx`: điều hướng, thu gọn trên viewport nhỏ.
+- `src/theme.ts`, `tailwind.config.ts`: token **Signal Blue**, nền slate/navy, trạng thái có chữ và màu; Be Vietnam Pro cho UI, Lora cho nội dung tài liệu.
 
-## Triển khai (Docker)
+Dùng token hiện có cho màu, viền, bo góc, focus, nút và field; không tạo theme riêng cho tính năng công thức. Test thành phần không thay thế kiểm tra trình duyệt/khả năng tiếp cận đầy đủ.
 
-`Dockerfile` (multi-stage: `npm run build` → nginx serve `dist/`) + `nginx.conf` (SPA fallback +
-proxy `/api` → `http://api:8080`). Trong `../docker-compose.yml`:
+## Docker
 
 | Service | Port (host) | Vai trò |
 |---|---|---|

@@ -12,6 +12,7 @@ app:
 paths:
   source_dir: TC_DL                       # tài liệu QTKĐ gốc (chỉ đọc + tải lên)
   markdown_dir: build/spike_a             # Markdown + assets + extraction_report.json
+  formula_registry_db: ${FORMULA_REGISTRY_DB:-.formula-registry/registry.sqlite3}  # nháp/duyệt/tính công thức (SQLite)
 
 services:
   embedding_url: ${EMBED_URL:-http://localhost:8010/v1/embeddings}

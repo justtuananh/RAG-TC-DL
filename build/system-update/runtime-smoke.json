@@ -1,0 +1,8 @@
+{
+  "health": "ok",
+  "documents": 7,
+  "pending": 334,
+  "browser_errors": [],
+  "mutations": 0,
+  "runtime": "Python3.12 locked app dependencies, Node24/Vite7.3.6"
+}

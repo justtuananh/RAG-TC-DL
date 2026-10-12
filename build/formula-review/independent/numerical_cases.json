@@ -1,0 +1,16 @@
+[
+{"id":"affine_units","expression":"(a-b)/2","variables":[["a","Pa"],["b","Pa"]],"inputs":{"a":{"value":"3.75","unit":"kPa"},"b":{"value":"1250","unit":"Pa"}},"unit":"Pa","expected":"1250"},
+{"id":"negative","expression":"(a-b)/2","variables":[["a","Pa"],["b","Pa"]],"inputs":{"a":{"value":"-7","unit":"Pa"},"b":{"value":"5","unit":"Pa"}},"unit":"Pa","expected":"-6"},
+{"id":"zero","expression":"a-b","variables":[["a","Pa"],["b","Pa"]],"inputs":{"a":{"value":"0","unit":"Pa"},"b":{"value":"0","unit":"Pa"}},"unit":"Pa","expected":"0"},
+{"id":"mean_series","expression":"mean(x)","variables":[["x","mm","series"]],"inputs":{"x":{"value":["-3","0","9","14"],"unit":"mm"}},"unit":"mm","expected":"5"},
+{"id":"rss_series","expression":"rss(x)","variables":[["x","Pa","series"]],"inputs":{"x":{"value":["-2","3","6"],"unit":"Pa"}},"unit":"Pa","expected":"7"},
+{"id":"slope_series","expression":"slope(x,y)","variables":[["x","1","series"],["y","1","series"]],"inputs":{"x":{"value":["-2","0","3"],"unit":"1"},"y":{"value":["-7","-1","8"],"unit":"1"}},"unit":"1","expected":"3"},
+{"id":"power","expression":"a**3","variables":[["a","1"]],"inputs":{"a":{"value":"-2.5","unit":"1"}},"unit":"1","expected":"-15.625"},
+{"id":"sqrt","expression":"sqrt(a)","variables":[["a","1"]],"inputs":{"a":{"value":"2.25","unit":"1"}},"unit":"1","expected":"1.5"},
+{"id":"max_abs","expression":"max(abs(a),b)","variables":[["a","Pa"],["b","Pa"]],"inputs":{"a":{"value":"-17","unit":"Pa"},"b":{"value":"12","unit":"Pa"}},"unit":"Pa","expected":"17"},
+{"id":"volume_conversion","expression":"a+b","variables":[["a","mL"],["b","mL"]],"inputs":{"a":{"value":"0.125","unit":"L"},"b":{"value":"-25","unit":"mL"}},"unit":"mL","expected":"100"},
+{"id":"area_conversion","expression":"a","variables":[["a","mm2"]],"inputs":{"a":{"value":"0.0037","unit":"m2"}},"unit":"mm2","expected":"3700"},
+{"id":"inverse_pressure_conversion","expression":"a","variables":[["a","1/Pa"]],"inputs":{"a":{"value":"7.5","unit":"1/bar"}},"unit":"1/Pa","expected":"0.000075"},
+{"id":"inclusive_lower","expression":"a","variables":[["a","1","scalar","-4","9"]],"inputs":{"a":{"value":"-4","unit":"1"}},"unit":"1","expected":"-4"},
+{"id":"inclusive_upper","expression":"a","variables":[["a","1","scalar","-4","9"]],"inputs":{"a":{"value":"9","unit":"1"}},"unit":"1","expected":"9"}
+]
