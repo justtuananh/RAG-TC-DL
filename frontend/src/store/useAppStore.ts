@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import type { AppState, BackendSource, ChatDataPayload, CiteChip, Conversation, DocItem, Message } from "../types";
+import type { AppState, BackendSource, CiteChip, Conversation, DocItem, Message } from "../types";
 import { SAMPLES } from "./seed";
 import { TIMING, ZOOM } from "../services/mockEngine";
 import {
@@ -18,7 +18,6 @@ import {
   type HistoryTurn,
 } from "../services/liveApi";
 import { loadConversations, saveConversations } from "./persistence";
-import { scopeQuestion } from "./scopeQuestion";
 import {
   AuthError,
   canWrite,
@@ -73,10 +72,6 @@ function makeInitialState(): AppState {
     examples: SAMPLES,
     liveSources: [],
     streaming: false,
-    pendingDeviceId: null,
-    pendingRecordProcedureId: null,
-    pendingReviewDocumentId: null,
-    composerFocus: false,
     auth: {
       user: null,
       enabled: true,
@@ -92,9 +87,6 @@ function makeInitialState(): AppState {
 export interface Actions {
   go: (tab: AppState["tab"]) => void;
   setInput: (v: string) => void;
-  /** Mở Trò chuyện với câu hỏi mở đầu bằng `prefix`, giữ bản nháp đang soạn, focus ô nhập. */
-  composeAbout: (prefix: string) => void;
-  consumeComposerFocus: () => void;
   send: (text?: string) => void;
   regenerate: () => void;
   copyAnswer: (text: string) => void;
@@ -126,14 +118,6 @@ export interface Actions {
   setDocPage: (n: number) => void;
   toggleFaq: (i: number) => void;
   startResize: (e: React.MouseEvent) => void;
-  // ── Chat lai (Sprint 9): mở trang thiết bị từ bảng kết quả số liệu ──
-  openDevice: (deviceId: number) => void;
-  clearPendingDevice: () => void;
-  // ── Hồ sơ QTKĐ: mở tab Dữ liệu lọc theo QTKĐ ──
-  openProcedureRecords: (procedureId: number) => void;
-  clearPendingRecordProcedure: () => void;
-  openReview: (documentId: string | null) => void;
-  clearPendingReviewDocument: () => void;
   openLlmConfig: () => void;
   closeLlmConfig: () => void;
   setLlm: (field: keyof AppState["llm"], v: string) => void;
@@ -271,10 +255,6 @@ export function useAppStore(): { state: AppState; actions: Actions } {
             loginError: null,
             loginNotice: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để tiếp tục.",
           },
-          // Lối tắt đang chờ thuộc phiên vừa hết hạn (như khi đăng xuất).
-          pendingDeviceId: null,
-          pendingRecordProcedureId: null,
-          pendingReviewDocumentId: null,
         }));
       }),
     [],
@@ -311,26 +291,22 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     abortRef.current = ac;
     let partial = "";
     let firstDelta = true;
-    let dataPayload: ChatDataPayload | null = null;
     try {
       for await (const ev of streamChat(q, hist, ac.signal)) {
         if (ev.type === "status") {
           set((s) => ({ proc: { step: Math.min((s.proc?.step ?? 0) + 1, 3) } }));
         } else if (ev.type === "sources") {
           set({ liveSources: ev.sources ?? [], activeCite: "1", proc: { step: 2 } });
-        } else if (ev.type === "data") {
-          dataPayload = ev.data ?? null;
         } else if (ev.type === "delta") {
           partial += ev.text ?? "";
           const md = fixLatex(partial);
           if (firstDelta) firstDelta = false;
           set((s) => ({ ...updateLastBot(s, { markdown: md, streaming: true }), proc: null }));
         } else if (ev.type === "done") {
-          const md = fixLatex(ev.answer || partial);
+          const md = fixLatex(partial);
           const srcs = ev.sources ?? stateRef.current.liveSources;
-          const data = ev.data ?? dataPayload;
           set((s) => {
-            // cập nhật bot message cuối + gắn nguồn + khối số liệu (nếu có)
+            // cập nhật bot message cuối + gắn nguồn
             const next = [...s.messages];
             for (let i = next.length - 1; i >= 0; i--) {
               if (next[i].role === "bot") {
@@ -341,8 +317,6 @@ export function useAppStore(): { state: AppState; actions: Actions } {
                   summary: summaryOf(srcs),
                   citeChips: chipsOf(srcs),
                   sources: srcs,
-                  branch: ev.branch ?? "text",
-                  data,
                 };
                 break;
               }
@@ -412,11 +386,6 @@ export function useAppStore(): { state: AppState; actions: Actions } {
   const actions: Actions = {
     go: (tab) => set({ tab }),
     setInput: (v) => set({ input: v }),
-    composeAbout: (prefix) =>
-      set((s) => {
-        return { tab: "chat", input: scopeQuestion(prefix, s.input), composerFocus: true };
-      }),
-    consumeComposerFocus: () => set({ composerFocus: false }),
     send,
     regenerate: () => {
       const msgs = stateRef.current.messages;
@@ -623,13 +592,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     },
     openLlmConfig: () => set({ llmConfigOpen: true }),
     closeLlmConfig: () => set({ llmConfigOpen: false }),
-    // ── Chat lai (Sprint 9) ──
-    openDevice: (deviceId) => set({ tab: "data", pendingDeviceId: deviceId }),
-    clearPendingDevice: () => set({ pendingDeviceId: null }),
-    openProcedureRecords: (procedureId) => set({ tab: "data", pendingRecordProcedureId: procedureId }),
-    clearPendingRecordProcedure: () => set({ pendingRecordProcedureId: null }),
-    openReview: (documentId) => set({ tab: "knowledge", pendingReviewDocumentId: documentId }),
-    clearPendingReviewDocument: () => set({ pendingReviewDocumentId: null }),
+    // ── Cấu hình mô hình ──
     setLlm: (field, v) => set((s) => ({ llm: { ...s.llm, [field]: v } })),
     testLlm: () => {
       const l = stateRef.current.llm;
@@ -682,12 +645,8 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     logout: () => {
       pendingWriteRef.current = null;
       void apiLogout(); // best-effort: token client luôn bị xoá trong service
-      // Lối tắt đang chờ (mở hồ sơ, lọc hàng đợi) thuộc phiên cũ: bỏ để không áp nhầm phiên sau.
       set((s) => ({
         auth: { ...s.auth, user: null, loginOpen: false, loginNotice: null, loginError: null },
-        pendingDeviceId: null,
-        pendingRecordProcedureId: null,
-        pendingReviewDocumentId: null,
       }));
       showToast("Đã đăng xuất");
     },

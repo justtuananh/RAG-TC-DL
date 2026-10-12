@@ -1,14 +1,28 @@
-import type { Conversation, ConvGroup } from "../types";
+import type { Conversation, ConvGroup, Message } from "../types";
 
 // Lưu/đọc lịch sử hội thoại ở localStorage (offline, 1 máy).
 const KEY = "qtkd.conversations.v1";
+
+/**
+ * Tin nhắn lưu trước khi gỡ nhánh số liệu còn trường `branch`/`data`;
+ * bỏ chúng khi nạp, giữ nguyên mọi trường khác.
+ */
+function dropDataBranch(conv: Conversation): Conversation {
+  if (!Array.isArray(conv.messages)) return conv;
+  const messages = conv.messages.map((m) => {
+    const { branch: _branch, data: _data, ...rest } = m as Message & { branch?: unknown; data?: unknown };
+    return rest;
+  });
+  return { ...conv, messages };
+}
 
 export function loadConversations(): Conversation[] {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return [];
     const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? (arr as Conversation[]) : [];
+    if (!Array.isArray(arr)) return [];
+    return (arr as Conversation[]).map(dropDataBranch);
   } catch {
     return [];
   }

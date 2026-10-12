@@ -3,9 +3,6 @@ import Sidebar from "./components/layout/Sidebar";
 import TopBar from "./components/layout/TopBar";
 import ChatTab from "./components/chat/ChatTab";
 import DocsTab from "./components/docs/DocsTab";
-import KnowledgeTab from "./components/knowledge/KnowledgeTab";
-import ProceduresTab from "./components/procedures/ProceduresTab";
-import DataTab from "./components/data/DataTab";
 import GuideTab from "./components/guide/GuideTab";
 import ConfirmDialog from "./components/modals/ConfirmDialog";
 import DocViewerModal from "./components/modals/DocViewerModal";
@@ -49,9 +46,6 @@ export default function App() {
 
           {state.tab === "chat" && <ChatTab state={state} actions={actions} />}
           {state.tab === "docs" && <DocsTab state={state} actions={actions} />}
-          {state.tab === "procedures" && <ProceduresTab state={state} actions={actions} />}
-          {state.tab === "knowledge" && <KnowledgeTab state={state} actions={actions} />}
-          {state.tab === "data" && <DataTab state={state} actions={actions} />}
           {state.tab === "guide" && <GuideTab state={state} actions={actions} />}
         </div>
       </div>

@@ -3,22 +3,7 @@ import type { AppState, Conversation, ConvGroup, Tab } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import { groupOf } from "../../store/persistence";
 import { COLOR, SHADOW } from "../../theme";
-import {
-  IcBook,
-  IcBrand,
-  IcChevronLeft,
-  IcChevronRight,
-  IcDatabase,
-  IcFile,
-  IcHelp,
-  IcMessage,
-  IcPencil,
-  IcPin,
-  IcPlus,
-  IcSearch,
-  IcShield,
-  IcTrash,
-} from "../common/icons";
+import { IcBrand, IcChevronLeft, IcChevronRight, IcFile, IcHelp, IcMessage, IcPencil, IcPin, IcPlus, IcSearch, IcTrash } from "../common/icons";
 
 const NAV_KEY = "nav_collapsed";
 
@@ -33,9 +18,6 @@ function loadCollapsed(): boolean {
 const NAV_ITEMS: { tab: Tab; label: string; icon: (size: number) => React.ReactNode }[] = [
   { tab: "chat", label: "Trò chuyện", icon: (s) => <IcMessage size={s} /> },
   { tab: "docs", label: "Tài liệu", icon: (s) => <IcFile size={s} /> },
-  { tab: "procedures", label: "Tri thức QTKĐ", icon: (s) => <IcBook size={s} /> },
-  { tab: "knowledge", label: "Duyệt tri thức", icon: (s) => <IcShield size={s} /> },
-  { tab: "data", label: "Dữ liệu", icon: (s) => <IcDatabase size={s} /> },
   { tab: "guide", label: "Hướng dẫn", icon: (s) => <IcHelp size={s} /> },
 ];
 

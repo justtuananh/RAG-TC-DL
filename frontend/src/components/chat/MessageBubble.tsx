@@ -1,7 +1,6 @@
-import type { Message, DataCellRef } from "../../types";
+import type { Message } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import Markdown from "../common/Markdown";
-import DataResultTable from "./DataResultTable";
 import { COLOR } from "../../theme";
 import { IcBrand, IcCheck, IcCopy, IcRefresh, IcThumbDown, IcThumbUp } from "../common/icons";
 
@@ -11,8 +10,6 @@ interface Props {
   proc: boolean;
   actions: Actions;
   pinnedRef?: (el: HTMLElement | null) => void;
-  onOpenProvenance: (ref: DataCellRef) => void;
-  onOpenDevice: (deviceId: number) => void;
 }
 
 // Thay [n] (chữ) → nút chip bấm được (render qua rehype-raw, bắt click theo uỷ quyền).
@@ -20,7 +17,7 @@ function withCiteButtons(md: string): string {
   return md.replace(/\[(\d+)\]/g, '<button class="cite-chip" data-cite="$1">[$1]</button>');
 }
 
-export default function MessageBubble({ message, isLast, proc, actions, pinnedRef, onOpenProvenance, onOpenDevice }: Props) {
+export default function MessageBubble({ message, isLast, proc, actions, pinnedRef }: Props) {
   if (message.role === "user") {
     return (
       <div ref={pinnedRef} className="animate-fadeUp" style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -113,13 +110,6 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
           )}
 
           <Markdown className="md-answer">{withCiteButtons(md)}</Markdown>
-
-          {/* Khối số liệu sổ cái (Sprint 9) — bảng giữ xuất xứ từng ô; câu trả lời phía trên ghép tất định từ chính các ô này */}
-          {!message.streaming && message.data && (
-            <div style={{ marginTop: 11 }}>
-              <DataResultTable payload={message.data} onOpenProvenance={onOpenProvenance} onOpenDevice={onOpenDevice} />
-            </div>
-          )}
 
           {/* Nguồn: chips */}
           {!message.streaming && message.citeChips && message.citeChips.length > 0 && (

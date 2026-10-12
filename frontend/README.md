@@ -5,8 +5,8 @@ Giao diện web của hệ thống RAG tra cứu QTKĐ. Đây là bản **dựng
 
 > **Hiện trạng: đã nối backend thật.** Chat streaming (SSE), tài liệu và xác thực đi qua
 > `src/services/liveApi.ts` + `src/services/auth.ts` tới package `api/` (`python -m api.main`,
-> FastAPI + SSE). `src/services/mockEngine.ts` chỉ còn dữ liệu demo + timing cho tab
-> Tài liệu/Hướng dẫn. Bản React cũ nằm ở `../frontend-legacy/`.
+> FastAPI + SSE). `src/services/mockEngine.ts` chỉ còn hằng số UI (TIMING/ZOOM/extColor).
+> Bản React cũ nằm ở `../frontend-legacy/`.
 
 ## Chạy
 
@@ -29,20 +29,20 @@ src/
   index.css                  # @fontsource + reset + thanh cuộn
   types.ts                   # kiểu dữ liệu (Message, Source, DocItem, LlmConfig, AppState…)
   store/
-    seed.ts                  # dữ liệu mẫu (SAMPLES, FAQS, SOURCES, CONVERSATIONS, DOCUMENTS)
+    seed.ts                  # dữ liệu mẫu (SAMPLES, FAQS, SOURCES, DOCUMENTS)
     useAppStore.ts           # state + actions — port từ class DCLogic (useReducer kiểu setState)
+    persistence.ts           # lưu/khôi phục hội thoại localStorage (bỏ trường luồng số liệu cũ)
   services/
-    mockEngine.ts            # responder() định tuyến từ khoá + mốc thời gian timer (RANH GIỚI để thay backend)
     liveApi.ts               # client backend thật (chat SSE, documents); route ghi dùng bearer token
     auth.ts                  # phiên đăng nhập: token localStorage, giải mã JWT, authFetch, login/logout/me/refresh
+    mockEngine.ts            # hằng số UI (TIMING/ZOOM/extColor)
   components/
-    Header.tsx               # logo + 3 tab + nút trạng thái LLM
-    layout/                  # Sidebar, TopBar, AccountMenu (đăng nhập/vai trò/đăng xuất)
-    chat/                    # ChatTab, HistorySidebar, HistoryRail, ChatColumn, MessageBubble, ProcessSteps, SourcePanel
-    docs/                    # DocsTab, DocRow
+    layout/                  # Sidebar (điều hướng + lịch sử), TopBar, AccountMenu (đăng nhập/vai trò/đăng xuất)
+    chat/                    # ChatTab, ChatColumn, MessageBubble, ProcessSteps, SourcePanel
+    docs/                    # DocsTab, DocRow, DocTableRow, DocViewerPanel, DocContentPane, xlsx/
     guide/                   # GuideTab
     modals/                  # DocViewerModal, LlmConfigModal, ConfirmDialog, LoginModal
-    common/                  # icons.tsx (SVG path 1:1 từ mockup), Toast, DocPage (trang tài liệu serif)
+    common/                  # icons.tsx (SVG path 1:1 từ mockup), Markdown, Toast, DocPage (trang tài liệu serif)
 ```
 
 ## Xác thực & phân quyền (Sprint 1)
@@ -96,5 +96,5 @@ muốn thử kèm backend).
 
 UI gọi backend thật qua `src/services/liveApi.ts` (`streamChat` SSE, `fetchExamples`, `pingHealth`,
 tài liệu, xác thực) tới package `api/` (`python -m api.main`).
-`mockEngine.ts` chỉ giữ dữ liệu demo + timing cho tab Tài liệu/Hướng dẫn.
+`mockEngine.ts` chỉ giữ hằng số UI (TIMING/ZOOM/extColor).
 Bản cũ tham khảo ở `../frontend-legacy/src/utils/api.js` (`streamChat`).

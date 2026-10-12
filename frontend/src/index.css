@@ -26,9 +26,6 @@
   --c-accent-dark: #1e4d30;
   --c-accent-soft: #e8f3ec;
   --c-accent-soft-border: #bfdcc9;
-  --c-highlight: #fff3c4;
-  --c-highlight-border: #e9c75a;
-  --c-highlight-strong: #f2c230;
   --c-shadow: rgba(15, 26, 20, 0.28);
 }
 
@@ -236,79 +233,6 @@
   margin-bottom: 24px;
 }
 
-/* ── Đoạn nguyên văn: trích dẫn được tô sáng trong mục nguồn ── */
-.md-source {
-  font-size: 13px;
-}
-mark.src-hl {
-  background: var(--c-highlight);
-  color: inherit;
-  border-bottom: 2px solid var(--c-highlight-border);
-  border-radius: 3px;
-  padding: 0 2px;
-}
-mark.src-hl .katex-display {
-  background: var(--c-highlight);
-  border-color: var(--c-highlight-border);
-}
-
-/* ── Bảng dữ liệu dùng chung (RecordsTable, CatalogTable, bảng điểm đo) ── */
-.data-table tbody tr:hover {
-  background: var(--c-surface-alt);
-}
-.serial-link:hover,
-.serial-link:focus-visible {
-  color: var(--c-accent-dark);
-  text-decoration: underline;
-}
-
-/* Ô số bấm mở nguồn: lúc nghỉ là số thường; nền, gạch chân và icon liên kết hiện khi hover/focus */
-.prov-cell {
-  display: inline-flex;
-  /* Trong ô xếp dọc (flex column) không giãn hết chiều ngang: gạch chân chỉ dưới con số. */
-  align-self: flex-start;
-  align-items: center;
-  gap: 4px;
-  padding: 1px 2px;
-  border: none;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--c-text);
-  font: inherit;
-  font-variant-numeric: tabular-nums;
-  cursor: pointer;
-  text-align: inherit;
-}
-.prov-cell svg {
-  opacity: 0;
-  transition: opacity 0.12s ease;
-}
-.prov-cell:hover,
-.prov-cell:focus-visible {
-  color: var(--c-accent-dark);
-  background: var(--c-accent-soft);
-  text-decoration: underline;
-}
-.prov-cell:hover svg,
-.prov-cell:focus-visible svg {
-  opacity: 0.75;
-}
-
-/* Panel chi tiết trượt vào từ phải (tắt chung theo prefers-reduced-motion ở trên) */
-@keyframes dataPanelIn {
-  from {
-    transform: translateX(32px);
-    opacity: 0.4;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-.data-panel-in {
-  animation: dataPanelIn 0.16s ease-out;
-}
-
 /* ── Responsive layout (mobile) ── */
 @media (max-width: 768px) {
   .layout-main {
@@ -327,30 +251,4 @@ mark.src-hl .katex-display {
   .layout-resize-handle {
     display: none !important;
   }
-}
-
-/* Trang Hồ sơ QTKĐ: dòng danh sách và nút tác vụ nhỏ */
-.procedure-row {
-  transition: background-color 0.12s ease;
-}
-.procedure-row:not([aria-current]):hover {
-  background: var(--c-surface-alt) !important;
-}
-.procedure-row:focus-visible {
-  outline: 2px solid var(--c-accent);
-  outline-offset: -2px;
-}
-.profile-chip {
-  transition:
-    background-color 0.12s ease,
-    color 0.12s ease,
-    border-color 0.12s ease;
-}
-.profile-chip:hover {
-  border-color: var(--c-accent-soft-border) !important;
-  color: var(--c-accent-dark) !important;
-}
-.profile-chip:focus-visible {
-  outline: 2px solid var(--c-accent);
-  outline-offset: 1px;
 }

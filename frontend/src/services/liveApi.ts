@@ -1,4 +1,4 @@
-import type { BackendSource, ChatDataPayload, DocItem } from "../types";
+import type { BackendSource, DocItem } from "../types";
 import { AuthError, authFetch } from "./auth";
 
 // ── Client gọi backend RAG thật (api_server.py, FastAPI + SSE) ──
@@ -6,13 +6,9 @@ import { AuthError, authFetch } from "./auth";
 // Route ĐỌC/CHAT dùng fetch thường (công khai); route GHI dùng authFetch (bearer token).
 
 export interface SseEvent {
-  type: "status" | "sources" | "delta" | "done" | "error" | "data";
+  type: "status" | "sources" | "delta" | "done" | "error";
   text?: string;
-  answer?: string;
   sources?: BackendSource[];
-  // ── Chat lai (Sprint 9) ──
-  branch?: "text" | "data" | "mixed";
-  data?: ChatDataPayload | null;
 }
 
 export interface HistoryTurn {

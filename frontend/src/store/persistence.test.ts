@@ -35,3 +35,39 @@ describe("persistence", () => {
     expect(groupOf(isoDaysAgo(30))).toBe("older");
   });
 });
+
+describe("persistence - tin nhắn cũ của nhánh số liệu", () => {
+  it("nạp được, bỏ branch/data, giữ phần văn bản", () => {
+    localStorage.setItem(
+      "qtkd.conversations.v1",
+      JSON.stringify([
+        {
+          id: "c1",
+          title: "Lần kiểm định gần nhất",
+          snippet: "…",
+          pinned: false,
+          createdAt: isoDaysAgo(1),
+          updatedAt: isoDaysAgo(1),
+          liveSources: [],
+          activeCite: "1",
+          messages: [
+            { role: "user", text: "Lần kiểm định gần nhất của SN-1?" },
+            {
+              role: "bot",
+              markdown: "Kết quả tra cứu: …",
+              branch: "data",
+              data: { intent: "latest_record", branch: "data", tables: [], citations: [] },
+              streaming: false,
+            },
+          ],
+        },
+      ]),
+    );
+
+    const [conv] = loadConversations();
+    expect(conv.messages).toHaveLength(2);
+    expect(conv.messages[1].markdown).toBe("Kết quả tra cứu: …");
+    expect(conv.messages[1]).not.toHaveProperty("branch");
+    expect(conv.messages[1]).not.toHaveProperty("data");
+  });
+});

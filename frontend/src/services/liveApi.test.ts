@@ -68,33 +68,34 @@ describe("liveApi — đọc công khai / ghi có xác thực", () => {
     expect(out.id).toBe("a");
   });
 
-  it("streamChat phân tích event data của chat lai (Sprint 9)", async () => {
-    const payload = {
-      intent: "latest_record",
-      branch: "data",
-      title: "Lần kiểm định gần nhất",
-      note: "sổ cái",
-      empty: false,
-      tables: [],
-      citations: [],
+  it("streamChat phân tích chuỗi event văn bản (sources + done)", async () => {
+    const source = {
+      index: 1,
+      file_stem: "QTKD_1.159_2021",
+      section_path: "6.3.2",
+      kind: "paragraph",
+      snippet: "…",
+      rerank_score: 0.7,
+      parent_text: "…",
+      child_text: "…",
     };
     const sse =
-      [
-        `data: ${JSON.stringify({ type: "data", data: payload })}`,
-        `data: ${JSON.stringify({ type: "done", answer: "Kết quả tra cứu:", sources: [], branch: "data", data: payload })}`,
-        "",
-      ].join("\n\n") + "\n\n";
+      [`data: ${JSON.stringify({ type: "sources", sources: [source] })}`, `data: ${JSON.stringify({ type: "done", sources: [source] })}`, ""].join("\n\n") +
+      "\n\n";
     vi.stubGlobal(
       "fetch",
       mockFetch(async () => new Response(sse, { status: 200, headers: { "Content-Type": "text/event-stream" } })),
     );
 
     const events = [];
-    for await (const ev of streamChat("Lần kiểm định gần nhất của SN-1?", [])) events.push(ev);
+    for await (const ev of streamChat("Thời gian quay tự do tối thiểu?", [])) events.push(ev);
 
-    expect(events[0].type).toBe("data");
-    expect(events[0].data?.intent).toBe("latest_record");
-    expect(events[1].branch).toBe("data");
-    expect(events[1].data?.branch).toBe("data");
+    expect(events[0].type).toBe("sources");
+    expect(events[0].sources?.[0].file_stem).toBe("QTKD_1.159_2021");
+    expect(events[1].type).toBe("done");
+    // done không còn trường riêng của nhánh số liệu (branch/data/answer)
+    expect(events[1]).not.toHaveProperty("branch");
+    expect(events[1]).not.toHaveProperty("data");
+    expect(events[1]).not.toHaveProperty("answer");
   });
 });
