@@ -14,6 +14,11 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
   const isProcessing = doc.status === "processing";
   const isPending = doc.status === "pending";
   const st = STATUS_STYLE[doc.status];
+  // `error` và `superseded` đều mang câu giải thích trong `doc.error`; hiện làm chú thích của nhãn trạng thái.
+  const statusNote = doc.status === "error" || doc.status === "superseded" ? doc.error : undefined;
+  // Riêng `superseded`, câu lý do ("Đã có phiên bản mới hơn: …") còn hiện thành dòng phụ
+  // ngay dưới tên tệp để đọc được mà không cần rê chuột vào nhãn trạng thái.
+  const supersededNote = doc.status === "superseded" ? doc.error : undefined;
 
   // API chưa đếm trang (null) thì bỏ hẳn phần "trang", không in "null trang".
   const pages = typeof doc.pages === "number" ? `${doc.pages} trang` : null;
@@ -87,6 +92,21 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
             {doc.name}
           </div>
         )}
+        {supersededNote && (
+          <div
+            title={supersededNote}
+            style={{
+              fontSize: "12px",
+              color: COLOR.textSecondary,
+              marginTop: 2,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {supersededNote}
+          </div>
+        )}
         <div className="tabular-nums" style={{ fontSize: "11.5px", color: COLOR.textSecondary, marginTop: 3 }}>
           {meta}
         </div>
@@ -97,7 +117,7 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
         )}
       </div>
 
-      <span style={statusStyle} title={doc.status === "error" ? doc.error : undefined}>
+      <span style={statusStyle} title={statusNote}>
         {isReady && <IcCheck size={12} strokeWidth={2.5} />}
         {isProcessing && (
           <span

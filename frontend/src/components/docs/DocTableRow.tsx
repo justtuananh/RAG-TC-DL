@@ -13,6 +13,11 @@ export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; 
   const isProcessing = doc.status === "processing";
   const isPending = doc.status === "pending";
   const st = STATUS_STYLE[doc.status];
+  // `error` và `superseded` đều mang câu giải thích trong `doc.error`; hiện làm chú thích của nhãn trạng thái.
+  const statusNote = doc.status === "error" || doc.status === "superseded" ? doc.error : undefined;
+  // Riêng `superseded`, câu lý do ("Đã có phiên bản mới hơn: …") còn hiện thành dòng phụ
+  // ngay dưới tên tệp để đọc được mà không cần rê chuột vào nhãn trạng thái.
+  const supersededNote = doc.status === "superseded" ? doc.error : undefined;
 
   return (
     <tr className="hover:bg-row-hover transition-colors">
@@ -68,6 +73,22 @@ export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; 
                 {doc.name}
               </button>
             )}
+            {supersededNote && (
+              <div
+                title={supersededNote}
+                style={{
+                  fontSize: "12px",
+                  color: COLOR.textSecondary,
+                  marginTop: 2,
+                  maxWidth: 560,
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
+                {supersededNote}
+              </div>
+            )}
             {isProcessing && (
               <div style={{ height: 5, background: COLOR.surfaceMuted, borderRadius: 9999, overflow: "hidden", marginTop: 5, maxWidth: 160 }}>
                 <div style={{ height: "100%", borderRadius: 9999, background: COLOR.warning, width: `${doc.progress || 0}%`, transition: "width .3s ease" }} />
@@ -79,7 +100,7 @@ export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; 
 
       <td className={td}>
         <span
-          title={doc.status === "error" ? doc.error : undefined}
+          title={statusNote}
           style={{
             display: "inline-flex",
             alignItems: "center",

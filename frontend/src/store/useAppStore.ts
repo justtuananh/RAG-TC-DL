@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import type { AppState, BackendSource, CiteChip, Conversation, DocItem, Message } from "../types";
+import type { AppState, BackendSource, CiteChip, Conversation, DocItem, Message, ToastKind } from "../types";
 import { SAMPLES } from "./seed";
 import { TIMING, ZOOM } from "../services/mockEngine";
 import {
@@ -260,8 +260,8 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     [],
   );
 
-  const showToast = (msg: string) => {
-    set({ toast: msg });
+  const showToast = (msg: string, kind: ToastKind = "success") => {
+    set({ toast: { message: msg, kind } });
     clearTimeout(toastTimer.current);
     toastTimer.current = window.setTimeout(() => set({ toast: null }), TIMING.toast);
   };
@@ -279,7 +279,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       return false;
     }
     if (!canWrite(user.role)) {
-      showToast("Tài khoản của bạn không có quyền thực hiện thao tác này.");
+      showToast("Tài khoản của bạn không có quyền thực hiện thao tác này.", "error");
       return false;
     }
     return true;
@@ -463,11 +463,11 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         uploadDocument(file)
           .then((doc) => {
             set((s) => ({ documents: [doc, ...s.documents.filter((d) => d.id !== doc.id)], docPage: 1 }));
-            showToast("Đã tải lên — tài liệu đang chờ xử lý");
+            showToast("Đã tải lên - tài liệu đang chờ xử lý");
           })
           .catch((e) => {
             if (e instanceof AuthError && e.status === 401) return; // màn hình đăng nhập đã mở
-            showToast(e instanceof Error ? e.message : "Tải lên thất bại");
+            showToast(e instanceof Error ? e.message : "Tải lên thất bại", "error");
           });
       if (!ensureWriteAccess("tải tài liệu lên", run)) return;
       run();
@@ -480,7 +480,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
           .then(refreshDocuments)
           .catch((e) => {
             if (e instanceof AuthError && e.status === 401) return;
-            showToast(e instanceof Error ? e.message : "Không xử lý được tài liệu");
+            showToast(e instanceof Error ? e.message : "Không xử lý được tài liệu", "error");
             refreshDocuments();
           });
       };
@@ -501,17 +501,23 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         .then(() => showToast("Đã đổi tên tài liệu"))
         .catch((e) => {
           if (e instanceof AuthError && e.status === 401) return;
-          showToast(e instanceof Error ? e.message : "Đổi tên thất bại");
+          showToast(e instanceof Error ? e.message : "Đổi tên thất bại", "error");
         });
     },
     deleteDoc: (id) => {
       const run = () => {
         set((s) => ({ documents: s.documents.filter((d) => d.id !== id) }));
         deleteDocument(id)
-          .then(() => showToast("Đã xoá tài liệu"))
+          .then(() => {
+            showToast("Đã xoá tài liệu");
+            // Backend có thể khôi phục một tài liệu khác về xử lý sau khi xoá
+            // (xoá bản mới của một QTKĐ → bản cũ `superseded` trở lại `processing`).
+            // Nạp lại danh sách để phản ánh trạng thái mới (poll 2s khi còn processing).
+            refreshDocuments();
+          })
           .catch((e) => {
             if (e instanceof AuthError && e.status === 401) return;
-            showToast(e instanceof Error ? e.message : "Xoá thất bại");
+            showToast(e instanceof Error ? e.message : "Xoá thất bại", "error");
             refreshDocuments();
           });
       };
@@ -519,8 +525,9 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       run();
     },
     viewDoc: (d) => {
-      if (d.status && d.status !== "ready") {
-        showToast("Tài liệu đang được xử lý — vui lòng đợi");
+      // `superseded` vẫn xem được như `ready` (tệp gốc còn giữ, chỉ gỡ khỏi chỉ mục tìm kiếm).
+      if (d.status && d.status !== "ready" && d.status !== "superseded") {
+        showToast("Tài liệu đang được xử lý - vui lòng đợi", "error");
         return;
       }
       // Hiện tệp gốc ngay (.docx/.doc qua docx-preview, .xlsx/.xls qua trình xem Excel, .pdf);

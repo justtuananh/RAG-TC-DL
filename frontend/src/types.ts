@@ -79,7 +79,7 @@ export interface Conversation {
 }
 
 export type DocExt = "PDF" | "DOCX" | "DOC" | "XLSX" | "XLS"; // khớp `ext` backend trả (.doc/.xls cũ vẫn là tài liệu nguồn)
-export type DocStatus = "ready" | "processing" | "pending" | "error";
+export type DocStatus = "ready" | "processing" | "pending" | "error" | "superseded";
 
 export interface DocItem {
   id: string;
@@ -147,6 +147,14 @@ export interface AuthState {
   restoreDone: boolean; // đã thử khôi phục phiên từ localStorage xong chưa
 }
 
+export type ToastKind = "success" | "error";
+
+/** Nội dung toast đang hiện; `kind` quyết định icon (✓ thành công / cảnh báo lỗi). */
+export interface ToastState {
+  message: string;
+  kind: ToastKind;
+}
+
 export interface Proc {
   step: number;
 }
@@ -170,7 +178,7 @@ export interface AppState {
   renamingConv: string | null;
   renamingDoc: string | null;
   faqOpen: number;
-  toast: string | null;
+  toast: ToastState | null;
   docSearch: string;
   docStatusFilter: DocStatus | "all";
   docPageSize: number;

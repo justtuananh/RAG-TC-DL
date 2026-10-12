@@ -73,7 +73,7 @@ export default function App() {
         onClose={actions.closeLogin}
         onSubmit={actions.submitLogin}
       />
-      <Toast message={state.toast} />
+      <Toast toast={state.toast} />
     </div>
   );
 }

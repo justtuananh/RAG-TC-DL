@@ -8,6 +8,8 @@ export const STATUS_STYLE: Record<DocStatus, { bar: string; bg: string; color: s
   processing: { bar: COLOR.warning, bg: COLOR.warningBg, color: COLOR.warning, border: COLOR.warningBorder },
   pending: { bar: COLOR.neutral, bg: COLOR.neutralBg, color: COLOR.neutral, border: COLOR.neutralBorder },
   error: { bar: COLOR.danger, bg: COLOR.dangerBg, color: COLOR.danger, border: COLOR.dangerBorder },
+  // Phiên bản cũ đã bị thay thế: dùng bộ màu trung tính như `pending`, không phải cảnh báo/lỗi.
+  superseded: { bar: COLOR.neutral, bg: COLOR.neutralBg, color: COLOR.neutral, border: COLOR.neutralBorder },
 };
 
 export const STATUS_TAB_LABEL: Record<DocStatus, string> = {
@@ -15,6 +17,7 @@ export const STATUS_TAB_LABEL: Record<DocStatus, string> = {
   processing: "Đang xử lý",
   pending: "Chờ xử lý",
   error: "Lỗi",
+  superseded: "Đã thay thế",
 };
 
 export function statusLabel(doc: Pick<DocItem, "status" | "progress" | "error">): string {
@@ -25,7 +28,14 @@ export function statusLabel(doc: Pick<DocItem, "status" | "progress" | "error">)
       return `Đang xử lý ${doc.progress || 0}%`;
     case "pending":
       return "Chưa xử lý";
-    default:
+    case "error":
       return "Lỗi xử lý";
+    case "superseded":
+      return "Đã thay thế";
+    default: {
+      // Kiểm tra exhaustive: TypeScript báo lỗi ngay khi DocStatus có trạng thái mới chưa xử lý.
+      const _exhaustive: never = doc.status;
+      return _exhaustive;
+    }
   }
 }

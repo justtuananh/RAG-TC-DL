@@ -17,6 +17,7 @@ const STATUS_TABS: { key: StatusFilter; label: string }[] = [
   { key: "processing", label: STATUS_TAB_LABEL.processing },
   { key: "pending", label: STATUS_TAB_LABEL.pending },
   { key: "error", label: STATUS_TAB_LABEL.error },
+  { key: "superseded", label: STATUS_TAB_LABEL.superseded },
 ];
 
 const navBtn =
@@ -97,7 +98,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
         <input
           ref={fileInputRef}
           type="file"
-          accept=".docx,.doc,.xlsx,.xls,.pdf"
+          accept=".docx,.doc,.pdf"
           hidden
           onChange={(e) => {
             handleFiles(e.target.files);
@@ -246,7 +247,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   className="inline-flex items-center gap-[7px] h-9 px-[14px] border-none rounded-[10px] bg-brand text-white font-sans text-[13px] font-semibold cursor-pointer shadow-brand-sm transition-transform hover:bg-brand-dark active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
-                  title="Chọn tệp Word (.docx/.doc), Excel (.xlsx/.xls) hoặc PDF (.pdf) để tải lên, hoặc kéo thả vào bất kỳ đâu trong khung này"
+                  title="Chọn tệp Word (.docx/.doc) hoặc PDF (.pdf) để tải lên, hoặc kéo thả vào bất kỳ đâu trong khung này"
                 >
                   <IcUpload size={15} /> Tải lên
                 </button>
