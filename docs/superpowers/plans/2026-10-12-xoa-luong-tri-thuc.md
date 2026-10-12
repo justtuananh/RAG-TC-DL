@@ -42,7 +42,7 @@ Backend:
 
 - Package: `review/`, `records/` (sau khi dời `xlsx_grid`), `catalogs/`, phần còn lại của `knowledge/` (`extract.py`, `llm_extract.py`, `record_labels.py`, `units.py`, `rules/`), phần còn lại của `query/`.
 - `api/routes/extractions.py`, `records.py`, `data.py`, `knowledge.py`, `api/errors.py`; bỏ khỏi `_ROUTERS` trong `api/main.py`.
-- `api/services/chat_stream.py`: bỏ `query_router.plan_route`, `build_data_payload`, nhánh `data`/`mixed`, các trường `branch`/`data`/`answer` của `done`.
+- `api/services/chat_stream.py`: bỏ `query_router.plan_route`, `build_data_payload`, nhánh `data`/`mixed`, các trường `branch`/`data` của `done` (GIỮ `done.answer`: đó là câu trả lời cuối của nhánh văn bản).
   Câu hỏi đi thẳng: mơ hồ thiết bị → `retrieve` → `build_messages` → `stream_ollama`, đúng như nhánh `text` hiện tại.
 - `ingestion/jobs.py`: bỏ `_run_record_job`, `_run_extraction`, `_run_catalog`, `_RECORD_DOC_TYPES`; mọi loại tài liệu đi `_run_markdown_job`.
   Sau khi nhúng một tài liệu `qtkd`, gọi `knowledge.procedure.ensure_procedure` (best-effort như cũ, lỗi ghi vào `ingest_error`) để QTKĐ mới vẫn có dòng `procedure` cho router.
@@ -70,7 +70,7 @@ Frontend:
 
 - Xóa tab `procedures`, `knowledge`, `data` khỏi `Tab`, `Sidebar`, `App`, `TopBar`; xóa `components/{procedures,knowledge,data}/`, `components/chat/DataResultTable*`, `services/{dataApi,knowledgeApi,reviewApi}*`.
 - `SourceExcerpt`, `QuoteTable`, `quoteRows`, `HighlightedMarkdown`, `rehypeHighlightRange`: chỉ xóa nếu không còn nơi dùng sau khi gỡ (kiểm bằng grep).
-- `services/liveApi.ts` + store: bỏ xử lý SSE event `data`, `done.branch`/`done.data`/`done.answer`.
+- `services/liveApi.ts` + store: bỏ xử lý SSE event `data`, `done.branch`/`done.data`; vẫn dùng `done.answer`.
 - `store/persistence.ts`: tab đã lưu là `procedures`/`knowledge`/`data` rơi về `chat`; tin nhắn cũ có `data` vẫn hiển thị phần văn bản, không lỗi; có test.
 - Modal upload: chỉ còn loại tài liệu RAG xử lý được (`qtkd`, `danh_muc`, `khac`).
 - Tab Hướng dẫn và mọi chuỗi UI nhắc tới duyệt tri thức, sổ cái, biên bản phải sửa.
