@@ -14,10 +14,35 @@ thêm quy trình mới, không cần sửa mã.
 from __future__ import annotations
 
 import re
+import unicodedata
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from query.record_fields import tokens
+# Các biến thể viết "píttông" gộp về một token (giữ lại từ tầng tra cứu biên bản
+# đã gỡ; nhánh văn bản vẫn cần để nhận diện tên loại thiết bị).
+_PISTON_FORMS = frozenset({"píttông", "pittông", "pitông", "pittong", "píttong", "piston"})
+_WORD_RE = re.compile(r"\w+", re.UNICODE)
+
+
+def tokens(text_value: str | None) -> list[str]:
+    """Từ viết thường GIỮ dấu; gộp "pít tông"/"píttông"/"pittông" thành ``pittong``."""
+    words = _WORD_RE.findall(unicodedata.normalize("NFC", (text_value or "").casefold()))
+    merged: list[str] = []
+    index = 0
+    while index < len(words):
+        word = words[index]
+        if (
+            word in ("pít", "pit")
+            and index + 1 < len(words)
+            and words[index + 1] in ("tông", "tong")
+        ):
+            merged.append("pittong")
+            index += 2
+            continue
+        merged.append("pittong" if word in _PISTON_FORMS else word)
+        index += 1
+    return merged
+
 
 # Phần đầu tên tối thiểu để coi là cùng một họ thiết bị: "thiết bị" (2/6 từ) trùng
 # đầu "Thiết bị đo áp suất số" lẫn "Thiết bị hiệu chuẩn áp suất" nhưng không phải

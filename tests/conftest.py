@@ -6,9 +6,9 @@
 - reset_module_singletons: dọn các singleton lazy của retrieval/* giữa mỗi test.
 - require_services: skip test integration khi service chưa sẵn sàng.
 
-Các package nguồn (api, auth, catalogs, core, db, embedding, evaluation, ingestion, knowledge,
-llm, query, records, reranking, retrieval, review, scoring, scripts, ui, vectorstore) import
-được nhờ pythonpath=["."] khai trong pyproject.toml.
+Các package nguồn (api, auth, core, db, embedding, evaluation, ingestion, knowledge,
+llm, query, reranking, retrieval, scoring, scripts, ui, vectorstore) import được nhờ
+pythonpath=["."] khai trong pyproject.toml.
 """
 
 from __future__ import annotations

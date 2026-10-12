@@ -4,9 +4,9 @@ Backs the /api/documents/* routes in api/routes/documents.py. Each ingestion job
 a dedicated worker thread (not asyncio BackgroundTasks) so a slow Ruby/MTEF
 subprocess or embedding-service HTTP call never blocks the chat SSE event loop.
 
-Tài liệu QTKĐ (.docx/.pdf) đi đường trích Markdown + nhúng Qdrant. Hồ sơ kiểm
-định (.xlsx/.docx loại ``ho_so_kiem_dinh``/``phieu_do``) KHÔNG nhúng vào kho văn
-bản: bước "Xử lý" gọi ``records.ingest`` để ghi bản ghi chờ duyệt.
+Mọi loại tài liệu (QTKĐ, danh mục, khác) đi cùng một đường: trích Markdown,
+nhúng Qdrant. Tài liệu QTKĐ được sinh thêm một dòng ``procedure`` (nếu chưa có)
+để router văn bản ghim đúng file.
 """
 from __future__ import annotations
 
@@ -21,17 +21,12 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from qdrant_client.http.exceptions import ResponseHandlingException
-from sqlalchemy import func, select
-from sqlalchemy.orm import Session
 
 from core.settings_loader import REPO_ROOT, get_settings
 from db import SessionLocal
 from db.models import (
-    Base,
     Document,
     DocumentType,
-    Extraction,
-    ExtractionStatus,
     IngestStatus,
     Procedure,
 )
@@ -64,38 +59,13 @@ def _report_path() -> Path:
     """``extraction_report.json`` theo thư mục Markdown hiện hành."""
     return _out_dir() / "extraction_report.json"
 
-_PROCESSING_STAGES = {"queued", "extracting", "reading_record", "chunking", "embedding"}
+_PROCESSING_STAGES = {"queued", "extracting", "chunking", "embedding"}
 _STAGE_PROGRESS = {
     "queued": 5,
     "extracting": 35,
-    "reading_record": 55,
     "chunking": 60,
     "embedding": 85,
     "ready": 100,
-}
-
-# Loại tài liệu đi đường ghi hồ sơ, không đi đường trích Markdown + nhúng Qdrant.
-_RECORD_DOC_TYPES = frozenset({DocumentType.HO_SO_KIEM_DINH, DocumentType.PHIEU_DO})
-
-
-class DocumentInUseError(RuntimeError):
-    """Tài liệu còn dữ liệu đã duyệt hoặc đang được tham chiếu: không được xoá (giữ P1)."""
-
-
-# Trích xuất chưa thành dữ liệu sổ cái: xoá cùng tài liệu được.
-_REMOVABLE_EXTRACTIONS = (ExtractionStatus.PENDING, ExtractionStatus.REJECTED)
-
-# Tên bảng → nhãn hiển thị trong thông báo chặn xoá (người dùng không thấy tên bảng).
-_REFERENCE_LABELS = {
-    "extraction": "trích xuất của tài liệu khác",
-    "procedure_fact": "dữ kiện QTKĐ",
-    "procedure_standard": "chuẩn của QTKĐ",
-    "term": "thuật ngữ",
-    "calibration_record": "biên bản kiểm định",
-    "lab_standard": "chuẩn của phòng thí nghiệm",
-    "inspector": "kiểm định viên",
-    "procedure_catalog": "danh mục QTKĐ",
-    "capability": "năng lực kiểm định",
 }
 
 
@@ -105,10 +75,9 @@ class UploadError(ValueError):
 
 @dataclass
 class Job:
-    stage: str  # "queued" | "extracting" | "reading_record" | "chunking" | "embedding" | "ready" | "error"
+    stage: str  # "queued" | "extracting" | "chunking" | "embedding" | "ready" | "error"
     progress: int
     error: str | None = None
-    result: dict | None = None  # StoreResult.as_dict() cho job hồ sơ
 
 
 _jobs: dict[str, Job] = {}
@@ -118,11 +87,11 @@ _executor = ThreadPoolExecutor(max_workers=1)
 logger = logging.getLogger(__name__)
 
 
-def _set_job(file_stem: str, stage: str, error: str | None = None, result: dict | None = None) -> None:
+def _set_job(file_stem: str, stage: str, error: str | None = None) -> None:
     with _jobs_lock:
         prev = _jobs.get(file_stem)
         progress = _STAGE_PROGRESS[stage] if stage in _STAGE_PROGRESS else (prev.progress if prev else 0)
-        _jobs[file_stem] = Job(stage=stage, progress=progress, error=error, result=result)
+        _jobs[file_stem] = Job(stage=stage, progress=progress, error=error)
 
 
 def _get_job(file_stem: str) -> Job | None:
@@ -148,9 +117,9 @@ def _invalidate_bm25() -> None:
         pass
 
 
-# Đuôi tệp được nhận khi upload + tìm tệp gốc. Gồm .xlsx vì hồ sơ kiểm định
-# (biên bản/phiếu đo) cũng vào sổ tài liệu rồi đi đường ``records.ingest``; gồm
-# .doc/.xls cũ vì K1 chuyển bằng LibreOffice rồi trích Markdown như QTKĐ.
+# Đuôi tệp được nhận khi upload + tìm tệp gốc. Gồm .xlsx vì bảng tính cũng được
+# trích Markdown cho RAG; gồm .doc/.xls cũ vì K1 chuyển bằng LibreOffice rồi trích
+# Markdown như QTKĐ.
 SUPPORTED_EXTS = (".docx", ".doc", ".pdf", ".xlsx", ".xls")
 
 
@@ -246,20 +215,17 @@ def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> s
     return candidate
 
 
-def _status_for(file_stem: str) -> tuple[str, int, str | None, dict | None]:
+def _status_for(file_stem: str) -> tuple[str, int, str | None]:
     job = _get_job(file_stem)
     if job is not None:
         if job.stage in _PROCESSING_STAGES:
-            return "processing", job.progress, None, None
+            return "processing", job.progress, None
         if job.stage == "error":
-            return "error", job.progress, job.error, None
-        # Job hồ sơ xong: trạng thái ready đến từ kết quả ghi, không có .md.
-        if job.stage == "ready" and job.result is not None:
-            return "ready", 100, None, job.result
-        # job.stage == "ready" của tài liệu QTKĐ falls through to the file check below
+            return "error", job.progress, job.error
+        # stage == "ready" rơi xuống kiểm tra .md dưới đây.
     if (_out_dir() / f"{file_stem}.md").exists():
-        return "ready", 100, None, None
-    return "pending", 0, None, None
+        return "ready", 100, None
+    return "pending", 0, None
 
 
 def list_documents() -> list[dict]:
@@ -268,7 +234,7 @@ def list_documents() -> list[dict]:
         rows = db.query(Document).order_by(Document.uploaded_at.desc()).all()
         result = []
         for row in rows:
-            status, progress, error, job_result = _status_for(row.file_stem)
+            status, progress, error = _status_for(row.file_stem)
             # Tài liệu READY trong sổ nhưng job đã mất sau khi API khởi động lại.
             status_out = status if status != "pending" or row.ingest_status.value == "pending" else row.ingest_status.value
             result.append({
@@ -283,7 +249,6 @@ def list_documents() -> list[dict]:
                 "error": error or row.ingest_error,
                 "doc_type": row.doc_type.value,
                 "sha256": row.sha256,
-                "result": job_result,
             })
         return result
     finally:
@@ -373,47 +338,9 @@ def _publish_extraction(tmp_dir: Path, file_stem: str) -> None:
         shutil.move(str(assets_src), str(assets_dst))
 
 
-def _document_doc_type(file_stem: str) -> DocumentType | None:
-    """Loại tài liệu trong sổ (None nếu chưa có dòng nào)."""
-    db = SessionLocal()
-    try:
-        row = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
-        return row.doc_type if row is not None else None
-    finally:
-        db.close()
-
-
 def _run_job(file_stem: str, source_path: Path) -> None:
-    """Điều phối: hồ sơ kiểm định ghi bản ghi, còn lại trích Markdown + nhúng."""
-    if _document_doc_type(file_stem) in _RECORD_DOC_TYPES:
-        _run_record_job(file_stem)
-    else:
-        _run_markdown_job(file_stem, source_path)
-
-
-def _run_record_job(file_stem: str) -> None:
-    """Đọc hồ sơ thành bản ghi chờ duyệt: KHÔNG trích Markdown, KHÔNG nhúng Qdrant.
-
-    ``records.ingest`` tự nhận QTKĐ từ nội dung hồ sơ rồi dựng cấu hình từ Phụ
-    lục A đã duyệt (P3). Lỗi nghiệp vụ (thiếu cấu hình, thiếu QTKĐ) hiện nguyên
-    văn trên UI; lỗi khác đi nhánh chung.
-    """
-    from records.ingest import IngestError, ingest_file_stem
-    from records.template import TemplateError
-
-    try:
-        _set_db_status(file_stem, IngestStatus.PROCESSING)
-        _set_job(file_stem, "reading_record")
-        result = ingest_file_stem(file_stem)
-        payload = result.as_dict()
-        _set_job(file_stem, "ready", result=payload)
-        _set_db_status(file_stem, IngestStatus.READY)
-    except (IngestError, TemplateError) as e:
-        _set_job(file_stem, "error", str(e))
-        _set_db_status(file_stem, IngestStatus.ERROR, str(e))
-    except Exception as e:  # noqa: BLE001 - surface any failure as a job error, never crash the worker thread
-        _set_job(file_stem, "error", str(e))
-        _set_db_status(file_stem, IngestStatus.ERROR, str(e))
+    """Điều phối: mọi loại tài liệu đều trích Markdown + nhúng Qdrant."""
+    _run_markdown_job(file_stem, source_path)
 
 
 def _run_markdown_job(file_stem: str, source_path: Path) -> None:
@@ -448,25 +375,15 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
         upsert.index_chunks(client, chunks)
         _invalidate_bm25()
 
-        # Sprint 4: sau khi nhúng, trích xuất tri thức cho QTKĐ (trạng thái pending).
-        # Lỗi trích xuất không làm hỏng tài liệu đã nhúng; ghi lại để rà sau.
+        # Tài liệu QTKĐ được sinh thêm dòng ``procedure`` để router văn bản ghim
+        # đúng file. Lỗi ở bước này không làm hỏng tài liệu đã nhúng; ghi lại để rà sau.
         errors: list[str] = []
         try:
-            _run_extraction(file_stem, md_path)
+            _ensure_procedure(file_stem, md_path)
         except Exception as e:  # noqa: BLE001 - best-effort, không chặn ingestion
-            errors.append(f"Trích xuất tri thức thất bại: {e}")
+            errors.append(f"Tạo dòng procedure thất bại: {e}")
 
-        # Pha D1: tài liệu danh mục có thể chứa bảng NAS (chuẩn mẫu, KĐV, quy
-        # trình, lĩnh vực). Không phải mọi danh mục đều có bảng NAS nên
-        # ``CatalogError`` được bỏ qua; lỗi khác ghi vào ``ingest_error``.
-        catalog_result: dict | None = None
-        if _document_doc_type(file_stem) == DocumentType.DANH_MUC:
-            try:
-                catalog_result = _run_catalog(file_stem, source_path)
-            except Exception as e:  # noqa: BLE001 - best-effort, không chặn ingestion
-                errors.append(f"Đọc danh mục NAS thất bại: {e}")
-
-        _set_job(file_stem, "ready", result=catalog_result)
+        _set_job(file_stem, "ready")
         _set_db_status(file_stem, IngestStatus.READY, "; ".join(errors) if errors else None)
     except _CONNECTION_ERRORS as e:
         _set_job(file_stem, "error", f"Không kết nối được dịch vụ embedding/Qdrant - kiểm tra Docker đã chạy chưa ({e}).")
@@ -476,79 +393,21 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
         _set_db_status(file_stem, IngestStatus.ERROR, str(e))
 
 
-def _run_extraction(file_stem: str, md_path: Path) -> None:
-    """Chạy bộ luật trích xuất cho tài liệu QTKĐ và ghi extraction ``pending``.
+def _ensure_procedure(file_stem: str, md_path: Path) -> None:
+    """Sinh dòng ``procedure`` cho tài liệu QTKĐ vừa nhúng (không commit khi lỗi).
 
-    Bỏ qua tài liệu không phải QTKĐ. Dùng procedure đã sinh nếu có; nếu chưa,
-    ``knowledge.extract`` tự dựng từ đầu mục Markdown để giữ liên kết P1.
-
-    Sprint 5: sau luật, tùy chọn chạy trích xuất §6 bằng LLM (``SECTION6_LLM_ENABLED``).
-    Bọc trong SAVEPOINT và thất bại an toàn - Ollama chưa lên/model chưa pull
-    không được làm hỏng phần luật đã ghi, và mọi dòng mới vẫn ``pending`` (P3).
+    Chỉ chạy cho loại ``qtkd``. Dùng procedure đã có nếu trùng ``document_id``;
+    nếu chưa, dựng từ đầu mục Markdown để giữ liên kết P1.
     """
-    from db.models import Procedure
-    from knowledge.extract import extract_and_store, extract_section6_and_store
-    from knowledge.llm_extract import llm_extraction_enabled
+    from knowledge.procedure import ensure_procedure
 
     db = SessionLocal()
     try:
         document = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
         if document is None or document.doc_type != DocumentType.QTKD:
             return
-        text = md_path.read_text(encoding="utf-8")
-        procedure = (
-            db.query(Procedure).filter(Procedure.document_id == document.id).one_or_none()
-        )
-        extract_and_store(db, document, text, procedure=procedure)
-
-        if llm_extraction_enabled():
-            try:
-                with db.begin_nested():
-                    extract_section6_and_store(db, document, text, procedure=procedure)
-            except Exception as e:  # noqa: BLE001 - §6 best-effort, không chặn ingestion
-                logger.warning("Trích xuất §6 bằng LLM thất bại cho %s: %s", file_stem, e)
-
+        ensure_procedure(db, document, md_path.read_text(encoding="utf-8"))
         db.commit()
-    except Exception:
-        db.rollback()
-        raise
-    finally:
-        db.close()
-
-
-def _run_catalog(file_stem: str, source_path: Path) -> dict | None:
-    """Đọc bảng danh mục NAS của tài liệu loại ``danh_muc`` và ghi ``pending``.
-
-    Bản ``.doc``/``.xls`` dùng bản chuyển đổi trong ``build/converted`` (K1); bản
-    ``.docx``/``.xlsx`` đọc thẳng. Trả ``None`` khi tệp không chứa bảng NAS
-    (``CatalogError``) hoặc định dạng không đọc được; lỗi khác để tầng gọi ghi vào
-    ``ingest_error`` như bước trích tri thức.
-    """
-    from catalogs.readers import CatalogError, read_catalog
-    from catalogs.store import store_catalog_draft
-    from ingestion import convert_legacy
-
-    suffix = source_path.suffix.lower()
-    if suffix not in (".doc", ".docx", ".xls", ".xlsx"):
-        return None
-    path = source_path
-    if suffix in (".doc", ".xls"):
-        path = convert_legacy.cache_path(source_path)
-        if not path.exists():
-            path = convert_legacy.convert_legacy(source_path)
-    try:
-        draft = read_catalog(path)
-    except CatalogError:
-        return None
-
-    db = SessionLocal()
-    try:
-        document = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
-        if document is None:
-            return None
-        summary = store_catalog_draft(db, document=document, draft=draft)
-        db.commit()
-        return summary
     except Exception:
         db.rollback()
         raise
@@ -580,11 +439,7 @@ def start_processing(file_stem: str) -> None:
 
 
 def delete_document(file_stem: str) -> None:
-    """Xoá một tài liệu: bước CSDL TRƯỚC, rồi mới tới tệp, Markdown, report và Qdrant.
-
-    Bước CSDL có thể từ chối (``DocumentInUseError``); làm nó trước nghĩa là khi bị chặn
-    thì chưa có gì không đảo ngược được bị xoá.
-    """
+    """Xoá một tài liệu: bước CSDL TRƯỚC, rồi mới tới tệp, Markdown, report và Qdrant."""
     _delete_document_rows(file_stem)
     source_path = _find_source(file_stem)
     if source_path is not None:
@@ -616,98 +471,25 @@ def delete_document(file_stem: str) -> None:
 
 
 def _delete_document_rows(file_stem: str) -> None:
-    """Xoá hàng ``document`` cùng mọi dữ liệu CHƯA duyệt của nó, trong một transaction.
+    """Xoá hàng ``document`` cùng dòng ``procedure`` của nó, trong một transaction.
 
-    Thuộc về tài liệu (xoá cùng): trích xuất chờ duyệt / bị từ chối, QTKĐ của nó, và mọi hàng
-    gắn vào các trích xuất đó (dữ kiện, chuẩn, thuật ngữ... tạo ngay khi xử lý; duyệt nằm ở
-    extraction nên chúng chưa là dữ liệu sổ cái).
-    Chặn khi còn trích xuất đã duyệt / đã thay thế, hoặc khi hàng nào KHÁC tham chiếu tới
-    những thứ trên: xoá sẽ làm mất xuất xứ của số liệu đã duyệt (P1).
-    Khoá ngoại được dò từ metadata nên bảng mới tự được tính.
+    Sau khi gỡ luồng tri thức, hàng duy nhất trỏ tới tài liệu là ``procedure``
+    (khoá ngoại nullable); xoá tài liệu kèm procedure để không còn dòng mồ côi.
     """
     db = SessionLocal()
     try:
         doc = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
         if doc is None:
             return
-        extractions = (
-            db.query(Extraction.id, Extraction.status)
-            .filter(Extraction.document_id == doc.id)
-            .all()
-        )
-        reviewed = {r.id for r in extractions if r.status not in _REMOVABLE_EXTRACTIONS}
-        owned = {
-            "document": {doc.id},
-            "extraction": {r.id for r in extractions if r.status in _REMOVABLE_EXTRACTIONS},
-            "procedure": {
-                row.id for row in db.query(Procedure.id).filter(Procedure.document_id == doc.id)
-            },
-        }
-        _add_rows_of_owned_extractions(db, owned)
-        # Trích xuất đã duyệt của chính tài liệu được báo riêng, không đếm lại là tham chiếu.
-        blockers = _foreign_references(db, owned, reported={"extraction": reviewed})
-        if reviewed:
-            blockers = {"trích xuất đã duyệt/đã thay thế": len(reviewed), **blockers}
-        if blockers:
-            detail = "; ".join(
-                f"{_REFERENCE_LABELS.get(name, name)}: {count}" for name, count in blockers.items()
-            )
-            raise DocumentInUseError(
-                f"Không xoá được: tài liệu còn dữ liệu đã duyệt hoặc đang được dùng ({detail})."
-            )
-        # Bảng phụ thuộc trước bảng được tham chiếu. NO ACTION kiểm ở cuối câu lệnh nên một
-        # DELETE cho cả nhóm hàng tự tham chiếu (extraction.supersedes_id) vẫn hợp lệ.
-        for table in reversed(Base.metadata.sorted_tables):
-            ids = owned.get(table.name)
-            if ids:
-                db.execute(table.delete().where(table.c.id.in_(ids)))
+        for row in db.query(Procedure).filter(Procedure.document_id == doc.id).all():
+            db.delete(row)
+        db.delete(doc)
         db.commit()
     except Exception:
         db.rollback()
         raise
     finally:
         db.close()
-
-
-def _add_rows_of_owned_extractions(db: Session, owned: dict[str, set]) -> None:
-    """Thêm vào ``owned`` các hàng có khoá ngoại tới một trích xuất thuộc tài liệu."""
-    extraction_ids = owned["extraction"]
-    if not extraction_ids:
-        return
-    for table in Base.metadata.sorted_tables:
-        if table.name == "extraction" or "id" not in table.c:
-            continue
-        for fk in table.foreign_keys:
-            if fk.column.table.name != "extraction":
-                continue
-            query = select(table.c.id).where(fk.parent.in_(extraction_ids))
-            ids = set(db.execute(query).scalars())
-            if ids:
-                owned.setdefault(table.name, set()).update(ids)
-
-
-def _foreign_references(
-    db: Session, owned: dict[str, set], reported: dict[str, set]
-) -> dict[str, int]:
-    """Số hàng (theo bảng) có khoá ngoại trỏ tới một hàng thuộc tài liệu.
-
-    Không đếm chính các hàng thuộc tài liệu (``owned``) và các hàng đã được báo ở chỗ khác
-    (``reported``).
-    """
-    counts: dict[str, int] = {}
-    for table in Base.metadata.sorted_tables:
-        own_ids = owned.get(table.name, set()) | reported.get(table.name, set())
-        for fk in table.foreign_keys:
-            target_ids = owned.get(fk.column.table.name)
-            if not target_ids:
-                continue
-            query = select(func.count()).select_from(table).where(fk.parent.in_(target_ids))
-            if own_ids:
-                query = query.where(table.c.id.not_in(own_ids))
-            count = db.execute(query).scalar_one()
-            if count:
-                counts[table.name] = counts.get(table.name, 0) + count
-    return counts
 
 
 def rename_document(file_stem: str, name: str) -> dict:

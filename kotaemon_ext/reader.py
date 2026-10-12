@@ -49,7 +49,7 @@ class QTKDDocxReader(BaseReader):
 
             md_path = out_dir / f"{_safe(file.stem)}.md"
             if not md_path.exists():
-                # Extraction produced nothing (e.g. legacy .doc skipped)
+                # Bước trích xuất không ra gì (ví dụ .doc cũ bị bỏ qua)
                 return []
 
             # Stage 2: parse Markdown → parent + child Chunks

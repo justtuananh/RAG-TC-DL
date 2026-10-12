@@ -16,7 +16,7 @@ import pytest
 from ingestion import convert_legacy
 from ingestion.convert_legacy import ConvertLegacyError, cache_path
 from ingestion.convert_legacy import convert_legacy as convert
-from scripts.knowledge_corpus import ooxml as ox
+from tests.support import ooxml as ox
 
 HAS_SOFFICE = Path(convert_legacy._soffice_bin()).exists()
 

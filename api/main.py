@@ -6,8 +6,7 @@ Endpoints:
   GET    /api/health
   GET    /api/examples
   POST   /api/chat/stream            - SSE streaming (text/event-stream)
-    Sprint 9: định tuyến 3 nhánh - text (RAG hiện tại) / data (sổ cái) / mixed.
-    Event: status | sources | data (khối số liệu) | delta | done{branch,data} | error
+    Event: status | sources | delta | done{answer,sources} | error
   GET    /api/documents              - list real files in TC_DL/ + ingestion status
   POST   /api/documents/upload       - save a .docx/.xlsx/.pdf (multipart "file"), status "pending"
   POST   /api/documents/{id}/process - extract -> chunk -> embed (background thread)
@@ -16,11 +15,6 @@ Endpoints:
   GET    /api/documents/{id}/preview - bản xem trên trình duyệt (.doc/.xls -> .docx/.xlsx)
   DELETE /api/documents/{id}
   PATCH  /api/documents/{id}         - {"name": str} display-name override
-
-  Sprint 6 - hàng đợi duyệt (vai trò approver/admin): /api/extractions*
-  Sprint 7 - nạp và đọc hồ sơ kiểm định: /api/records*
-  Sprint 8 - tra cứu dữ liệu và danh mục NAS: /api/data/*
-  Hồ sơ QTKĐ - tri thức đã duyệt của từng quy trình: /api/knowledge/procedures*
 """
 
 from __future__ import annotations
@@ -31,12 +25,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import auth, chat, data, documents, extractions, knowledge, records, system
+from api.routes import auth, chat, documents, system
 from core.settings_loader import get_settings
 from core.startup import startup
 from vectorstore import qdrant
 
-_ROUTERS = (system, auth, chat, documents, extractions, records, data, knowledge)
+_ROUTERS = (system, auth, chat, documents)
 
 
 @asynccontextmanager

@@ -9,7 +9,7 @@ def test_classifies_qtkd_from_filename():
     assert result.confidence >= 0.95
 
 
-def test_classifies_calibration_record_from_content():
+def test_classifies_record_document_from_content():
     result = classify_document("record.docx", "Biên bản kiểm định phương tiện đo")
     assert result.doc_type == "ho_so_kiem_dinh"
 
@@ -27,7 +27,7 @@ def test_unknown_documents_are_not_guessed():
         "Biên bản kiểm định áp kế pittông SN 1045 2024-06-25.xlsx",
     ],
 )
-def test_spreadsheet_records_are_calibration_records(name):
+def test_spreadsheet_records_are_record_documents(name):
     """Bảng tính theo mẫu biên bản (kể cả viết tắt BBKD) là hồ sơ kiểm định,
     không phải quy trình dù tên có kèm mã QTKĐ."""
     assert classify_document(name).doc_type == "ho_so_kiem_dinh"
@@ -76,7 +76,7 @@ def test_bbkd_requires_word_boundary():
         "Biểu 4/CN danh mục thiết bị.docx",
     ],
 )
-def test_nas_catalogs_are_danh_muc(name):
+def test_nas_danh_muc_documents(name):
     """Biểu/danh mục/chuẩn mẫu/KĐV là danh mục, xét TRƯỚC quy trình."""
     assert classify_document(name).doc_type == "danh_muc"
 

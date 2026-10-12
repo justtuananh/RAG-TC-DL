@@ -13,7 +13,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, BeforeValidator, ConfigDict, Field, SecretStr, model_validator
 
-LlmRole = Literal["chat", "intent", "extraction"]
+LlmRole = Literal["chat"]
 
 
 def _blank_to_none(value: object) -> object:
@@ -64,8 +64,6 @@ class ModelSettings(_Section):
     embedding: EmbeddingModel
     reranker: RerankerModel
     llm_chat: str
-    llm_intent: OptionalStr = None
-    llm_extraction: OptionalStr = None
 
 
 class EmbeddingSettings(_Section):
@@ -129,22 +127,9 @@ class ContextSettings(_Section):
     source_rel_floor: Annotated[float, Field(ge=0, le=1)]
 
 
-class AuxLlmSettings(_Section):
-    """Lời gọi LLM phụ (phân loại intent, trích xuất §6): URL rỗng = dùng URL chung."""
-
-    enabled: bool
-    url: OptionalStr = None
-    timeout_s: PositiveFloat
-    num_ctx: Positive
-    temperature: Temperature
-    keep_alive: str
-
-
 class LlmSettings(_Section):
     chat: ChatLlmSettings
     context: ContextSettings
-    intent: AuxLlmSettings
-    extraction: AuxLlmSettings
 
     @property
     def total_context_chars(self) -> int:
@@ -183,14 +168,6 @@ class ApiSettings(_Section):
     cors_origins: tuple[str, ...]
 
 
-class QuerySettings(_Section):
-    list_limit_max: Positive
-    export_limit_max: Positive
-    catalog_row_limit: Positive
-    trend_point_cap: Positive
-    cache_ttl_s: PositiveFloat
-
-
 class Settings(_Section):
     app: AppSettings
     paths: PathSettings
@@ -206,17 +183,14 @@ class Settings(_Section):
     database: DatabaseSettings
     auth: AuthSettings
     api: ApiSettings
-    query: QuerySettings
 
     def llm_model(self, role: LlmRole) -> str:
-        """Model cho một vai trò; intent/extraction để trống thì dùng model chat."""
-        specific = {"intent": self.models.llm_intent, "extraction": self.models.llm_extraction}
-        return specific.get(role) or self.models.llm_chat
+        """Model chat (vai trò LLM duy nhất còn lại)."""
+        return self.models.llm_chat
 
     def llm_url(self, role: LlmRole) -> str:
-        """URL Ollama cho một vai trò; intent/extraction để trống thì dùng URL chung."""
-        specific = {"intent": self.llm.intent.url, "extraction": self.llm.extraction.url}
-        return specific.get(role) or self.services.ollama_url
+        """URL Ollama (vai trò LLM duy nhất còn lại)."""
+        return self.services.ollama_url
 
 
 @dataclass

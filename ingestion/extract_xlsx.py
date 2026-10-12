@@ -4,12 +4,12 @@ Mỗi sheet là một mục ``# <tên sheet>``. Mỗi vùng bảng liền mạch
 liệu, ngăn bởi dòng trống) thành một bảng Markdown pipe:
 
   * ô gộp / tiêu đề nhiều tầng được ghép theo CỘT bằng giá trị ô góc trên trái
-    (nhờ ``records.xlsx_grid`` giữ vùng gộp), nối các tầng bằng " - ";
+    (nhờ ``ingestion.xlsx_grid`` giữ vùng gộp), nối các tầng bằng " - ";
   * dòng/cột trống hoàn toàn bị bỏ;
   * ô nhiều dòng thay xuống dòng bằng " / " để bảng Markdown luôn hợp lệ.
 
 Chỉ đọc, không sửa tệp nguồn; không thêm phụ thuộc (dùng lxml gián tiếp qua
-``records.xlsx_grid``).
+``ingestion.xlsx_grid``).
 """
 
 from __future__ import annotations
@@ -17,7 +17,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from records.xlsx_grid import Sheet, read_sheets
+from ingestion.xlsx_grid import Sheet, read_sheets
 
 _MAX_HEADER_ROWS = 3
 

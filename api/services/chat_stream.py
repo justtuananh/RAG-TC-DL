@@ -1,7 +1,8 @@
-"""Luồng SSE của /api/chat/stream: định tuyến intent, truy hồi và stream LLM.
+"""Luồng SSE của /api/chat/stream: truy hồi văn bản và stream LLM.
 
 Tách nguyên từ api_server.py. Gọi qua tên module (retriever.retrieve,
-generator.stream_ollama) để test chỉ cần patch một chỗ.
+generator.stream_ollama) để test chỉ cần patch một chỗ. Câu hỏi đi thẳng pipeline
+RAG; xử lý câu hỏi mơ hồ thiết bị nằm ở nhánh văn bản.
 """
 
 from __future__ import annotations
@@ -19,7 +20,6 @@ from llm import generator
 from llm.guards import REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request
 from llm.prompt import build_messages
 from query import device_ambiguity
-from query import router as query_router
 from retrieval import retriever
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.quote import build_quote
@@ -96,54 +96,6 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     # bằng số liệu của một loại như câu trả lời chung.
     ambiguity = _detect_device_ambiguity(db, req.message)
 
-    # ── Sprint 9: định tuyến chat lai văn bản + số liệu ──────────────────────
-    # Không chắc chắn → nhánh text (pipeline RAG hiện tại, không đổi). Nhánh số
-    # liệu lỗi cũng rơi về text: trả lời thiếu số liệu tốt hơn trả lời sai nhánh.
-    branch = "text"
-    data_payload = None
-    if db is not None:
-        decision = query_router.plan_route(req.message)
-        single_procedure = (
-            decision.request is not None
-            and decision.request.intent in query_router.SINGLE_PROCEDURE_INTENTS
-        )
-        if (
-            decision.request is not None
-            and decision.branch in ("data", "mixed")
-            and not (ambiguity is not None and single_procedure)
-        ):
-            try:
-                data_payload = query_router.build_data_payload(db, decision.request)
-                branch = decision.branch
-                if data_payload.empty:
-                    # Bảng rỗng (định tuyến nhầm hoặc chưa có dòng đã duyệt): trả lời
-                    # bằng nhánh văn bản thay vì để người dùng không có câu trả lời.
-                    branch, data_payload = "text", None
-            except Exception as e:  # noqa: BLE001 - không chặn câu trả lời văn bản
-                logger.warning("Tra cứu số liệu thất bại, rơi về nhánh văn bản: %s", e)
-                branch = "text"
-                data_payload = None
-
-    if branch == "data":
-        yield _sse({"type": "status", "text": "⏳ Đang tra cứu sổ cái hồ sơ đã duyệt…"})
-        payload = query_router.payload_to_dict(data_payload) if data_payload else None
-        if data_payload is not None and not data_payload.empty:
-            # Cực trị: câu trả lời tất định từ nguyên văn ô của biên bản thắng.
-            answer = data_payload.answer or "Kết quả tra cứu từ sổ cái hồ sơ đã duyệt:"
-        else:
-            answer = "Không tìm thấy hồ sơ đã duyệt phù hợp trong sổ cái."
-        yield _sse({"type": "data", "data": payload})
-        yield _sse(
-            {
-                "type": "done",
-                "answer": answer,
-                "sources": [],
-                "branch": "data",
-                "data": payload,
-            }
-        )
-        return
-
     yield _sse({"type": "status", "text": "⏳ Đang nhúng câu hỏi (embedding)…"})
 
     retrieval_query = (
@@ -158,20 +110,11 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
         return
 
     if not results:
-        mixed_payload = (
-            query_router.payload_to_dict(data_payload)
-            if branch == "mixed" and data_payload is not None
-            else None
-        )
-        if mixed_payload is not None:
-            yield _sse({"type": "data", "data": mixed_payload})
         yield _sse(
             {
                 "type": "done",
                 "answer": "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ.",
                 "sources": [],
-                "branch": branch,
-                "data": mixed_payload,
             }
         )
         return
@@ -206,20 +149,4 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
 
     body = restore_formulas(fix_latex(enforce_refusal_stop(partial)), context_str)
     answer = preface + body + closing
-    # Nhánh mixed: ghép thêm khối số liệu sổ cái, giữ trích dẫn QTKĐ tách bạch.
-    mixed_payload = (
-        query_router.payload_to_dict(data_payload)
-        if branch == "mixed" and data_payload is not None
-        else None
-    )
-    if mixed_payload is not None:
-        yield _sse({"type": "data", "data": mixed_payload})
-    yield _sse(
-        {
-            "type": "done",
-            "answer": answer,
-            "sources": sources,
-            "branch": branch,
-            "data": mixed_payload,
-        }
-    )
+    yield _sse({"type": "done", "answer": answer, "sources": sources})

@@ -17,7 +17,7 @@ Revises: 007_query_views
 
 from alembic import op
 
-from db.views import create_reference_views, drop_reference_views
+from db.migrations.legacy_views import create_reference_views, drop_reference_views
 
 revision = "008_reference_views"
 down_revision = "007_query_views"

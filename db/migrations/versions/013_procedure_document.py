@@ -11,7 +11,7 @@ Revises: 012_record_fields
 
 from alembic import op
 
-from db.views import recreate_procedure_view
+from db.migrations.legacy_views import recreate_procedure_view
 
 revision = "013_procedure_document"
 down_revision = "012_record_fields"

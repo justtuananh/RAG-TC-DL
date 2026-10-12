@@ -1,7 +1,9 @@
-"""Đọc đầu mục QTKĐ và suy luận loại thiết bị (thuần hàm).
+"""Đọc đầu mục QTKĐ, suy luận loại thiết bị và sinh bản ghi ``procedure``.
 
 Dùng bởi ``scripts/generate_procedures.py`` để sinh bản ghi ``procedure`` cho các
-QTKĐ đang có. Không phụ thuộc DB: nhận text Markdown + danh sách ứng viên.
+QTKĐ đang có, và bởi ``ingestion.jobs`` sau khi nhúng một tài liệu QTKĐ mới (để
+router văn bản luôn có dòng ``procedure``). Các hàm thuần nhận text Markdown +
+danh sách ứng viên; ``ensure_procedure`` là điểm ghi DB duy nhất ở đây.
 """
 
 from __future__ import annotations
@@ -9,7 +11,8 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
-from knowledge.reference import normalize_alias
+from knowledge.reference import device_type_aliases, normalize_alias
+from knowledge.seed_data import KNOWN_PROCEDURE_DEVICE_TYPES
 
 # Dòng mã QTKĐ: "QTKĐ 1.061 : 2021" / "QTKD 1.062 :2021" (K11: nhận cả không dấu Đ).
 _HEADER_RE = re.compile(
@@ -80,3 +83,45 @@ def infer_device_type(title: str, candidates) -> str | None:
             if normalized and normalized in normalized_title and len(normalized) > best_length:
                 best, best_length = key, len(normalized)
     return best
+
+
+def ensure_procedure(session, document, text: str):
+    """Tìm procedure của tài liệu; tạo mới từ đầu mục Markdown nếu chưa có.
+
+    Giữ ``procedure.document_id`` để truy nguyên P1. Trả ``None`` nếu văn bản
+    không có mã QTKĐ - khi đó router văn bản không ghim được file, nhưng tài liệu
+    vẫn được nhúng bình thường.
+    """
+    from db.models import DeviceType, Procedure
+
+    procedure = session.query(Procedure).filter(Procedure.document_id == document.id).one_or_none()
+    if procedure is not None:
+        return procedure
+
+    header = parse_procedure_header(text)
+    if header is None:
+        return None
+
+    procedure = session.query(Procedure).filter(Procedure.number == header.number).one_or_none()
+    if procedure is None:
+        procedure = Procedure(number=header.number)
+        session.add(procedure)
+    procedure.year = header.year
+    procedure.title = header.title
+    procedure.document_id = document.id
+    procedure.edition = parse_edition(document.file_stem)
+
+    candidates = [
+        (item.name_vi, device_type_aliases(item)) for item in session.query(DeviceType).all()
+    ]
+    device_type_name = infer_device_type(header.title, candidates)
+    if device_type_name is None:
+        device_type_name = KNOWN_PROCEDURE_DEVICE_TYPES.get(header.number)
+    device_type = (
+        session.query(DeviceType).filter(DeviceType.name_vi == device_type_name).one_or_none()
+        if device_type_name
+        else None
+    )
+    procedure.device_type_id = device_type.id if device_type is not None else None
+    session.flush()
+    return procedure

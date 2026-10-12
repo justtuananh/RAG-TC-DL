@@ -150,7 +150,7 @@ def test_markdown_job_publishes_when_rate_not_worse(
     )
     monkeypatch.setattr(ingestion_jobs, "parse_file", lambda p: ["c1", "c2"])
     monkeypatch.setattr("vectorstore.qdrant.ensure_collection", lambda client: None)
-    monkeypatch.setattr(ingestion_jobs, "_run_extraction", lambda stem, path: None)
+    monkeypatch.setattr(ingestion_jobs, "_ensure_procedure", lambda stem, path: None)
 
     def fake_process_one(source: Path, out_dir: Path) -> dict:
         out_dir.mkdir(parents=True, exist_ok=True)

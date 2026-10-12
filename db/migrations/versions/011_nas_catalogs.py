@@ -15,7 +15,7 @@ Revises: 010_measurement_error_unit
 import sqlalchemy as sa
 from alembic import op
 
-from db.views import create_catalog_views, drop_catalog_views
+from db.migrations.legacy_views import create_catalog_views, drop_catalog_views
 
 revision = "011_nas_catalogs"
 down_revision = "010_measurement_error_unit"

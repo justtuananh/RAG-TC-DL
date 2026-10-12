@@ -9,7 +9,6 @@ from core.settings_loader import REPO_ROOT
 _BACKEND = [
     "api",
     "auth",
-    "catalogs",
     "core",
     "db",
     "embedding",
@@ -18,10 +17,8 @@ _BACKEND = [
     "knowledge",
     "llm",
     "query",
-    "records",
     "reranking",
     "retrieval",
-    "review",
     "scoring",
     "scripts",
     "ui",

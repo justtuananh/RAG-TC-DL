@@ -7,7 +7,7 @@ Revises: 003_create_measurement_framework
 from alembic import op
 import sqlalchemy as sa
 
-from db.views import create_approved_views, drop_approved_views
+from db.migrations.legacy_views import create_approved_views, drop_approved_views
 
 revision = "004_create_extraction"
 down_revision = "003_create_measurement_framework"

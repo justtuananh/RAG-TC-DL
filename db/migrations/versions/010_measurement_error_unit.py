@@ -17,7 +17,7 @@ Revises: 009_fix_id_sequences
 import sqlalchemy as sa
 from alembic import op
 
-from db.views import recreate_measurement_detail_view
+from db.migrations.legacy_views import recreate_measurement_detail_view
 from knowledge import seed_data
 
 revision = "010_measurement_error_unit"

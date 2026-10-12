@@ -16,7 +16,7 @@ Revises: 011_nas_catalogs
 import sqlalchemy as sa
 from alembic import op
 
-from db.views import create_field_views, drop_field_views, recreate_record_detail_views
+from db.migrations.legacy_views import create_field_views, drop_field_views, recreate_record_detail_views
 
 revision = "012_record_fields"
 down_revision = "011_nas_catalogs"

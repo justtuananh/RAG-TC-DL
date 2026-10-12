@@ -1,1 +1,1 @@
-"""Tầng tra cứu dữ liệu đã duyệt (P3). Xem ``query/approved.py``."""
+"""Xử lý truy vấn văn bản: nhận diện câu hỏi mơ hồ thiết bị (``device_ambiguity``)."""

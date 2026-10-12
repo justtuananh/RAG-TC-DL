@@ -12,7 +12,7 @@ Revises: 005_review_indexes
 import sqlalchemy as sa
 from alembic import op
 
-from db.views import create_record_views, drop_record_views
+from db.migrations.legacy_views import create_record_views, drop_record_views
 
 revision = "006_create_records"
 down_revision = "005_review_indexes"

@@ -27,8 +27,6 @@ models:
     name: BAAI/bge-reranker-v2-m3         # phải khớp docker-compose service reranker
     max_length: 1024
   llm_chat: ${OLLAMA_MODEL:-qwen2.5:7b-instruct}
-  llm_intent: ${INTENT_LLM_MODEL:-}       # rỗng = llm_chat
-  llm_extraction: ${SECTION6_LLM_MODEL:-} # rỗng = llm_chat
 
 embedding:
   query_timeout_s: 120
@@ -76,20 +74,6 @@ llm:
     formula_line_slack: 400               # khối dài hơn ngân sách bị cắt theo dòng: được vượt tới N ký tự để không cắt giữa dòng công thức
     source_abs_floor: 0.08
     source_rel_floor: 0.20
-  intent:
-    enabled: ${INTENT_ROUTER_ENABLED:-true}
-    url: ${INTENT_OLLAMA_URL:-}           # rỗng = services.ollama_url
-    timeout_s: ${INTENT_LLM_TIMEOUT:-60}
-    num_ctx: ${INTENT_LLM_NUM_CTX:-8192}
-    temperature: ${INTENT_LLM_TEMPERATURE:-0.0}
-    keep_alive: 10m
-  extraction:
-    enabled: ${SECTION6_LLM_ENABLED:-false}
-    url: ${SECTION6_OLLAMA_URL:-}
-    timeout_s: ${SECTION6_LLM_TIMEOUT:-120}
-    num_ctx: ${SECTION6_LLM_NUM_CTX:-8192}
-    temperature: ${SECTION6_LLM_TEMPERATURE:-0.0}
-    keep_alive: 10m
 
 ingestion:
   soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH
@@ -119,10 +103,3 @@ api:
     - http://localhost:5174
     - http://localhost:3000
     - http://127.0.0.1:5173
-
-query:
-  list_limit_max: 200
-  export_limit_max: 20000
-  catalog_row_limit: 200
-  trend_point_cap: 200
-  cache_ttl_s: 30.0                       # cache danh mục / sổ cái / số hiệu

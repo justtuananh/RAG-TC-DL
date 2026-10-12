@@ -16,7 +16,7 @@ Revises: 006_create_records
 
 from alembic import op
 
-from db.views import create_query_views, drop_query_views
+from db.migrations.legacy_views import create_query_views, drop_query_views
 
 revision = "007_query_views"
 down_revision = "006_create_records"

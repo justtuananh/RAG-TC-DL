@@ -1,13 +1,10 @@
-"""Định tuyến upload/xử lý cho .doc/.xls cũ (K1) + chuyển đổi trong spike_a.process_one.
+"""Đọc tệp .doc/.xls cũ (K1) + chuyển đổi trong spike_a.process_one.
 
 Không cần LibreOffice: ca ``process_one`` thay ``spike_a.convert_legacy`` bằng
-một tệp .docx/.xlsx thật dựng bằng OOXML thô; ca định tuyến chỉ monkeypatch hai
-nhánh ``_run_markdown_job`` / ``_run_record_job``.
+một tệp .docx/.xlsx thật dựng bằng OOXML thô.
 """
 
 from __future__ import annotations
-
-from pathlib import Path
 
 import pytest
 from sqlalchemy import create_engine
@@ -17,11 +14,10 @@ from sqlalchemy.pool import StaticPool
 from db.models import Base, Document, DocumentType
 from ingestion import jobs as ingestion_jobs
 from ingestion import spike_a
-from scripts.knowledge_corpus import ooxml as ox
+from tests.support import ooxml as ox
 
 DOC_STEM = "Bieu_1_NAS"
 XLS_STEM = "Bieu_3_NAS"
-RECORD_STEM = "BB_2024_002"
 
 
 @pytest.fixture
@@ -49,21 +45,6 @@ def _clear_jobs():
         ingestion_jobs._jobs.clear()
 
 
-def _add_document(session, stem: str, doc_type: DocumentType, ext: str) -> None:
-    session.add(
-        Document(
-            id=stem,
-            file_stem=stem,
-            display_name=f"{stem}.{ext.lower()}",
-            ext=ext,
-            doc_type=doc_type,
-            sha256="0" * 64,
-            size_bytes=1,
-        )
-    )
-    session.commit()
-
-
 def test_find_source_locates_doc_and_xls(tmp_path, monkeypatch, settings_override):
     settings_override({"paths.source_dir": str(tmp_path)})
     doc = tmp_path / f"{DOC_STEM}.doc"
@@ -84,46 +65,6 @@ def test_save_upload_accepts_doc_and_updates_ledger(
 
     assert (tmp_path / "tc_dl" / f"{stem}.doc").exists()
     assert session.get(Document, stem).doc_type == DocumentType.DANH_MUC
-
-
-def test_doc_catalog_routes_markdown(session, monkeypatch):
-    monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
-    _add_document(session, DOC_STEM, DocumentType.DANH_MUC, "DOC")
-
-    seen: list[str] = []
-    monkeypatch.setattr(ingestion_jobs, "_run_markdown_job", lambda stem, path: seen.append("md"))
-    monkeypatch.setattr(ingestion_jobs, "_run_record_job", lambda stem: seen.append("record"))
-
-    ingestion_jobs._run_job(DOC_STEM, Path(DOC_STEM + ".doc"))
-
-    assert seen == ["md"]
-
-
-def test_xls_catalog_routes_markdown(session, monkeypatch):
-    monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
-    _add_document(session, XLS_STEM, DocumentType.DANH_MUC, "XLS")
-
-    seen: list[str] = []
-    monkeypatch.setattr(ingestion_jobs, "_run_markdown_job", lambda stem, path: seen.append("md"))
-    monkeypatch.setattr(ingestion_jobs, "_run_record_job", lambda stem: seen.append("record"))
-
-    ingestion_jobs._run_job(XLS_STEM, Path(XLS_STEM + ".xls"))
-
-    assert seen == ["md"]
-
-
-def test_xlsx_record_still_routes_record(session, monkeypatch):
-    """Không lùi: .xlsx loại hồ sơ kiểm định vẫn đi đường ghi bản ghi."""
-    monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
-    _add_document(session, RECORD_STEM, DocumentType.HO_SO_KIEM_DINH, "XLSX")
-
-    seen: list[str] = []
-    monkeypatch.setattr(ingestion_jobs, "_run_markdown_job", lambda stem, path: seen.append("md"))
-    monkeypatch.setattr(ingestion_jobs, "_run_record_job", lambda stem: seen.append("record"))
-
-    ingestion_jobs._run_job(RECORD_STEM, Path(RECORD_STEM + ".xlsx"))
-
-    assert seen == ["record"]
 
 
 def test_process_one_doc_converts_and_keeps_original_name(tmp_path, monkeypatch):
