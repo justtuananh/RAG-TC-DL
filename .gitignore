@@ -65,3 +65,6 @@ qdrant_storage/*
 .venv-formula/
 .formula-runtime/
 .formula-registry/
+
+# Bản dump CSDL của make db-backup (chứa dữ liệu thật, không commit)
+backups/
