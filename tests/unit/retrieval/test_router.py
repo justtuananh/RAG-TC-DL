@@ -82,3 +82,40 @@ def test_route_files_returns_all_distinct_stems(mapping):
     assert stems == frozenset({mapping["1.061"], mapping["1.159"]})
     assert route_files("không có gì") == frozenset()
     assert route_files("kiểm định bình phân ly") == frozenset({mapping["1.063"]})
+
+
+class _FakePoint:
+    def __init__(self, stem):
+        self.payload = {"file_stem": stem}
+
+
+class _FakeClient:
+    def __init__(self, stems):
+        self._points = [_FakePoint(s) for s in stems]
+
+    def scroll(self, **_kwargs):
+        return self._points, None
+
+
+def test_number_map_accepts_uploaded_stem_with_d_stroke(monkeypatch):
+    """Tệp tải lên giữ chữ "Đ" trong tên ("QTKĐ 9.001 ...docx" → stem
+    "QTKĐ_9.001_..."): số QTKĐ vẫn phải map được về stem đó."""
+    stems = ["QTKD_1.061_2021_ND_V2", "QTKĐ_9.001_2026_Van_an_toan"]
+    monkeypatch.setattr(router_mod.qdrant, "get_client", lambda: _FakeClient(stems))
+    monkeypatch.setattr(router_mod.qdrant, "collection_name", lambda: "c")
+
+    assert router_mod._build_number_to_stem() == {
+        "1.061": "QTKD_1.061_2021_ND_V2",
+        "9.001": "QTKĐ_9.001_2026_Van_an_toan",
+    }
+
+
+def test_invalidate_drops_cached_maps(mapping, monkeypatch):
+    """Sau khi nhúng/xóa tài liệu, router phải dựng lại map số và alias thiết bị
+    thay vì giữ bản cũ tới khi khởi động lại API."""
+    monkeypatch.setattr(router_mod, "_device_aliases", {"x": ("1.061",)})
+
+    router_mod.invalidate()
+
+    assert router_mod._number_to_stem is None
+    assert router_mod._device_aliases is None

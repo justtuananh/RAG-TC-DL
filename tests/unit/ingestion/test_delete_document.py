@@ -49,7 +49,7 @@ def corpus(tmp_path, factory, monkeypatch, settings_override):
     monkeypatch.setattr(
         ingestion_jobs.qdrant, "delete_file_chunks", lambda _c, stem: qdrant_deletes.append(stem)
     )
-    monkeypatch.setattr(ingestion_jobs, "_invalidate_bm25", lambda: None)
+    monkeypatch.setattr(ingestion_jobs, "_invalidate_search_caches", lambda: None)
 
     db = factory()
     db.add(

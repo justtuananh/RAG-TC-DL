@@ -35,7 +35,7 @@ from ingestion.classify import classify_document
 from ingestion.spike_a import _safe, process_one, totals_from_entries
 from vectorstore import qdrant, upsert
 
-# vectorstore.hybrid_index is imported lazily where used (see invalidate_bm25) -
+# vectorstore.hybrid_index is imported lazily where used (see _invalidate_search_caches) -
 # it requires rank_bm25, and retriever.py already avoids a hard module-level
 # dependency on that package for the same reason.
 
@@ -106,8 +106,10 @@ def _human_size(n: int) -> str:
     return f"{n / 1024:.0f} KB"
 
 
-def _invalidate_bm25() -> None:
-    """Best-effort - a stale BM25 cache is a search-quality issue, not a reason
+def _invalidate_search_caches() -> None:
+    """Bỏ cache BM25 và map số/alias của router sau khi kho đổi.
+
+    Best-effort - a stale cache is a search-quality issue, not a reason
     to fail an otherwise-successful embed or delete (also lets this work in
     environments where rank_bm25 isn't installed, same as retriever.py)."""
     try:
@@ -115,6 +117,9 @@ def _invalidate_bm25() -> None:
         invalidate()
     except Exception:
         pass
+    from retrieval import router
+
+    router.invalidate()
 
 
 # Đuôi tệp được nhận khi upload + tìm tệp gốc. Gồm .xlsx vì bảng tính cũng được
@@ -373,7 +378,6 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
         client = qdrant.get_client()
         qdrant.ensure_collection(client)
         upsert.index_chunks(client, chunks)
-        _invalidate_bm25()
 
         # Tài liệu QTKĐ được sinh thêm dòng ``procedure`` để router văn bản ghim
         # đúng file. Lỗi ở bước này không làm hỏng tài liệu đã nhúng; ghi lại để rà sau.
@@ -382,6 +386,7 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
             _ensure_procedure(file_stem, md_path)
         except Exception as e:  # noqa: BLE001 - best-effort, không chặn ingestion
             errors.append(f"Tạo dòng procedure thất bại: {e}")
+        _invalidate_search_caches()
 
         _set_job(file_stem, "ready")
         _set_db_status(file_stem, IngestStatus.READY, "; ".join(errors) if errors else None)
@@ -467,7 +472,7 @@ def delete_document(file_stem: str) -> None:
     with _jobs_lock:
         _jobs.pop(file_stem, None)
 
-    _invalidate_bm25()
+    _invalidate_search_caches()
 
 
 def _delete_document_rows(file_stem: str) -> None:

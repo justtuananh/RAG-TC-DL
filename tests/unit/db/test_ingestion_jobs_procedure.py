@@ -91,16 +91,32 @@ def test_markdown_job_invokes_ensure_procedure(factory, monkeypatch, tmp_path, s
     monkeypatch.setattr(ingestion_jobs, "process_one", _fake_process_one)
     monkeypatch.setattr(ingestion_jobs, "_merge_report_entry", lambda entry: None)
     monkeypatch.setattr(ingestion_jobs, "parse_file", lambda md_path: [])
-    monkeypatch.setattr(ingestion_jobs, "_invalidate_bm25", lambda: None)
+    monkeypatch.setattr(
+        ingestion_jobs, "_invalidate_search_caches", lambda: calls.append("invalidate")
+    )
     monkeypatch.setattr(ingestion_jobs.qdrant, "get_client", lambda: object())
     monkeypatch.setattr(ingestion_jobs.qdrant, "ensure_collection", lambda client: None)
     monkeypatch.setattr(ingestion_jobs.upsert, "index_chunks", lambda client, chunks: None)
 
     ingestion_jobs._run_markdown_job(QTKD_STEM, tmp_path / f"{QTKD_STEM}.docx")
 
-    assert calls == [QTKD_STEM]
+    # Cache router dựng lại SAU khi có dòng procedure, để alias của QTKĐ mới có hiệu lực.
+    assert calls == [QTKD_STEM, "invalidate"]
     db = factory()
     try:
         assert db.query(Procedure).count() == 0  # spy không ghi DB thật
     finally:
         db.close()
+
+
+def test_invalidate_search_caches_resets_bm25_and_router(monkeypatch):
+    import retrieval.router as router_mod
+    import vectorstore.hybrid_index as hybrid_index
+
+    calls: list[str] = []
+    monkeypatch.setattr(hybrid_index, "invalidate", lambda: calls.append("bm25"))
+    monkeypatch.setattr(router_mod, "invalidate", lambda: calls.append("router"))
+
+    ingestion_jobs._invalidate_search_caches()
+
+    assert calls == ["bm25", "router"]

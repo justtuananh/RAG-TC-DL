@@ -41,7 +41,8 @@ _FALLBACK_DEVICE_ALIASES: dict[str, str] = {
 
 _number_to_stem: dict[str, str] | None = None
 _device_aliases: dict[str, tuple[str, ...]] | None = None
-_STEM_NUMBER_RE = re.compile(r'QTKD_(\d+\.\d+)')
+# Tệp tải lên có thể giữ chữ "Đ" trong tên (stem "QTKĐ_9.001_...").
+_STEM_NUMBER_RE = re.compile(r'QTK[DĐ]_(\d+\.\d+)')
 
 
 def _load_db_device_aliases() -> dict[str, tuple[str, ...]] | None:
@@ -112,6 +113,17 @@ def _ensure_mapping() -> dict[str, str]:
     if _number_to_stem is None:
         _number_to_stem = _build_number_to_stem()
     return _number_to_stem
+
+
+def invalidate() -> None:
+    """Bỏ map số và alias đã nạp; lần gọi sau dựng lại từ Qdrant + DB.
+
+    Ingestion gọi sau khi nhúng hoặc xóa tài liệu, để QTKĐ mới tải lên được ghim
+    ngay mà không phải khởi động lại API.
+    """
+    global _number_to_stem, _device_aliases
+    _number_to_stem = None
+    _device_aliases = None
 
 
 def route_files(query: str) -> frozenset[str]:
