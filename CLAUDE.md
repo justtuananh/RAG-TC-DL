@@ -112,29 +112,13 @@ A lower layer never imports a higher one;
   (`retrieval.retriever` + `llm/`: `guards.is_calculation_request` → `retrieve` →
   `prompt.build_messages` → `generator.stream_ollama`).
   Each SSE source carries `quote` (`retrieval/quote.py`): its matched children plus the formula each one refers to (a "trong đó" definition line brings the formula above it, a lead-in ending in ":" the formula after it), shown in the panel's "Đoạn trả lời" box.
-- `query/intents.py` + `query/router.py` — **chat lai văn bản + số liệu** (Sprint 9, spec §8).
-  `intents.py` định nghĩa 7 intent tra cứu số liệu (`device_history`, `latest_record`,
-  `records_by_period`, `procedure_params`, `devices_by_range`, `standards_for`, `error_trend`)
-  với schema tham số pydantic; LLM chỉ chọn intent + điền tham số, **không có text-to-SQL**.
-  `router.py` phân ba nhánh `text`/`data`/`mixed` và **mặc định rơi về `text`** khi không chắc.
-  `device_ambiguity.py`: câu hỏi chỉ nêu tên chung của nhiều loại thiết bị ("áp kế pít tông" →
-  kiểu H3000 / tiêu chuẩn) không được trả lời bằng một loại; nhánh text liệt kê từng loại và trả
-  lời riêng từng QTKĐ, `_find_procedure` không chọn bừa khi tên khớp nhiều QTKĐ.
-  Nhánh số liệu chỉ đọc view đã duyệt (P3) qua `query/records.py` + `query/approved.py`, trả mỗi
-  con số kèm tham chiếu xuất xứ (P1) và trích dẫn sổ cái tách bạch với nguồn QTKĐ. Tích hợp ở
-  `/api/chat/stream` (SSE event `data`, `done.branch`/`done.data`); bảng do frontend render
-  (`components/chat/DataResultTable.tsx`), ô số bấm được để mở nguồn.
-  Câu trả lời của intent sổ cái (`record_lookup`, `records_summary`, `device_history`) là MỘT
-  câu tất định (`DataPayload.answer` → `done.answer`), không qua LLM, ghép từ NGUYÊN VĂN đúng
-  các ô của bảng đi kèm (`query/answer_phrases.py` + `query/record_answer*.py`); chỉ thêm số
-  đếm và chữ đối chiếu mức cho phép ("nên không đạt" chỉ khi kết luận biên bản cũng vậy).
-  Bảng chỉ có điều được hỏi: cực trị → dòng thắng; đếm toàn sổ cái → tổng hợp + biên bản không
-  đạt; đếm/liệt kê có lọc → biên bản khớp; đếm thiết bị → bảng thiết bị.
-  `procedure_params` (dữ kiện đã duyệt của một QTKĐ) chỉ trả lời khi câu hỏi hỏi đúng loại dữ
-  kiện (phạm vi đo, cấp chính xác, chu kỳ, nhiệt độ / độ ẩm…) VÀ mọi phần được hỏi đều có dữ
-  kiện (`query/procedure_scope.py`); câu hỏi quy định khác (sai số, độ chênh áp, tốc độ hạ,
-  công thức…) hoặc thiếu dữ kiện đi nhánh văn bản, vì model phân loại đưa mọi câu có số QTKĐ
-  vào intent này. Ngữ cảnh LLM của một mục dài (`retrieval.context_builder.window`) dựng từ
+- `api/services/chat_stream.py` — **chat chỉ còn nhánh văn bản**: câu hỏi đi thẳng
+  `retrieve` → `build_messages` → `stream_ollama`, không còn bộ phân loại intent hay
+  nhánh `data`/`mixed`. SSE event: `status` | `sources` | `delta` | `done{answer,sources}` |
+  `error`. Câu hỏi nêu tên chung của nhiều loại thiết bị ("áp kế pít tông" → kiểu H3000 /
+  tiêu chuẩn) được nhận diện ở `query/device_ambiguity.py`: câu trả lời liệt kê từng loại và
+  trả lời riêng từng QTKĐ thay vì chọn một loại làm câu chung.
+  Ngữ cảnh LLM của một mục dài (`retrieval.context_builder.window`) dựng từ
   khối trọn quanh MỌI đoạn con khớp của mục trong pool rerank (`anchor_texts`, theo thứ hạng
   RRF): mỗi đoạn neo kéo công thức nó nói tới và danh sách "trong đó" của công thức (mô hình
   khối của `retrieval/quote.py`), lần lượt tới hết ngân sách, phần dư mở rộng quanh các đoạn
@@ -143,20 +127,6 @@ A lower layer never imports a higher one;
   trả lời, 2,5 ký tự/token đo thật): nguồn trên lấy trước, nguồn dưới giữ chỗ
   `min_block_chars`, trần `max_block_chars` không áp cho nguồn top. Ngữ cảnh vượt num_ctx thì
   Ollama cắt prompt.
-- `query/record_*.py` — **tra cứu biên bản có cấu trúc** (Pha R). Hai intent `record_lookup`
-  (một biên bản theo số hiệu / số biên bản / ngày: trường được hỏi, bảng kết quả, căn cứ kết
-  luận không đạt) và `records_summary` (đếm / liệt kê / cực trị trên sổ cái, lọc theo người,
-  đơn vị phạm vi đo, ngày). Trường đầu mục của biên bản nằm ở bảng `record_field` (view
-  `v_record_field`), nguyên văn từng ô ở `measurement_point.cells`; `v_record_detail` lấy phạm
-  vi đo của CHÍNH thiết bị. `record_fields.py` dựng danh mục trường từ nhãn Phụ lục A đã duyệt
-  + bí danh ký hiệu (A0, uCmax, U(p)); `record_signals.py` sửa lựa chọn của LLM bằng định danh
-  khớp đúng sổ cái (chạy sau `disambiguate_catalogs`), kể cả kiểu câu hỏi (`measure` đếm/liệt
-  kê, `subject` biên bản/thiết bị, `across_records`). Cực trị chỉ so biên bản cùng một QTKĐ.
-  `record_query.py` (tra biên bản) và `record_summary.py` (tổng hợp) đọc view qua
-  `record_cells.py`. Gate: `make record-eval` chấm bộ `bo20` trên CÂU TRẢ LỜI (đủ "số liệu
-  bắt buộc" của `Bo_20_cau.xlsx`, số khớp trọn), các bộ khác trên câu trả lời + bảng.
-  Biên bản đã duyệt trước migration 012 được bổ sung bằng `python -m records.backfill`.
-  Prompt phân loại ở `query/intent_prompt.py` (~4 000 token → bộ phân loại dùng `num_ctx` 8192).
 - `frontend/` — **React 18 + TypeScript + Vite + Tailwind** web UI (Docker nginx on **:3000**,
   proxies `/api` → the `api/` package; dev server is Vite on **:5173**). A 1:1 rebuild of
   `design/kiemdinh.html`, now **wired to the real backend**: `src/services/liveApi.ts`
@@ -172,18 +142,11 @@ A lower layer never imports a higher one;
   `components/docs/xlsx/` (ExcelJS, lazy-loaded; merges, borders, fonts, VN number formats,
   never silently truncates a number). Legacy `.doc`/`.xls` come from
   `GET /api/documents/{id}/preview`, which serves the LibreOffice-converted copy
-  (`ingestion/jobs.py` `get_preview_path`). The "Đoạn nguyên văn" (provenance drawer + review
-  queue) renders through `components/common/SourceExcerpt.tsx`: Markdown section with the
-  quote highlighted by source offset (no `rehype-raw`), or, for Excel records, the original
-  cell grid around the row located by `query/sheet_locate.py` (`source_location`).
+  (`ingestion/jobs.py` `get_preview_path`). The source-excerpt viewer renders through
+  `components/common/SourceExcerpt.tsx`: Markdown section with the quote highlighted by
+  source offset (no `rehype-raw`).
   `frontend-legacy/` is the earlier plain-JS React prototype, kept for reference. Quick local
   run of the api + Vite together: `./run.sh`. See `frontend/README.md`.
-- **Hồ sơ QTKĐ** (tab "Tri thức QTKĐ", `frontend/src/components/procedures/`) is where the extracted knowledge becomes visible.
-  `query/procedure_profile.py` assembles one procedure from the approved views only: parameters, test conditions, the Bảng 1 step matrix (merged "A / - B" cells split back into their source rows, modes from `condition_text`), Bảng 2 standards, formulas, terms, and a ledger summary.
-  It is served by `GET /api/knowledge/procedures` (accent-insensitive search; counts are computed for the current page only) and `GET /api/knowledge/procedures/{id}` (`api/routes/knowledge.py`).
-  Every value opens its source through `/api/data/provenance`: facts by `fact_id`, standards and terms by `extraction_id`.
-  Migration 013 adds `document_file_stem` / `document_name` to `v_procedure`.
-  Nothing appears on the page until a reviewer approves it in the "Duyệt tri thức" tab (the review queue, formerly "Tri thức").
 - `core/latex.py` - shared `fix_latex` normalizer (strip backticks around `$…$`; `\[…\]`/`\(…\)` →
   `$$…$$`/`$…$`; collapse `\\` → `\`) imported by **both** `ui/gradio_app.py` and the `api/`
   package (was duplicated); mirrored in the frontend as `liveApi.fixLatex`.
@@ -192,13 +155,8 @@ A lower layer never imports a higher one;
 - `evaluation/run_eval.py` - Spike E regression harness. Computes recall@k + MRR for hybrid vs
   dense-only against `evaluation/eval_set.jsonl` (question → expected file_stem + section_path).
   Run this after any retrieval change. Pass goal is recall@5 ≥ 0.85.
-- `evaluation/intent_eval.py` - Sprint 9 gate for the hybrid chat router: intent accuracy ≥ 0.90,
-  parameter-validation fallback to `text`, zero untraceable numbers, and text questions never
-  routed to the data branch. Runs a scripted classifier by default (no Ollama); `--live` measures
-  the real model. Part of `make check` via `intent-eval`.
-- `evaluation/record_query_eval.py` - `make record-eval`: bộ 20 câu `Bo_20_cau` + câu diễn đạt khác
-  (`evaluation/record_query_set.jsonl`) chạy trên sổ cái thật (cần Postgres + Ollama, không nằm trong
-  `make check`); đạt khi intent đúng và bảng chứa đủ số liệu bắt buộc. Cổng ≥ 0.90.
+- `evaluation/answer_eval.py` - answer-quality harness (coverage / citation / refusal / hallucination)
+  against `evaluation/answer_set.jsonl`; `make answer-eval` needs Ollama + services.
 
 ## Virtualenvs
 
@@ -218,7 +176,7 @@ A lower layer never imports a higher one;
 | Embedding  | 8010  | OpenAI-compat `/v1/embeddings`, **1024-dim** (`BAAI/bge-m3`) |
 | Reranker   | 8011  | `/v1/rerank` (`BAAI/bge-reranker-v2-m3`)         |
 | Qdrant     | 6333  | collection `qtkd_rag` (cosine, 1024 dims), bind mount `./qdrant_storage/` |
-| Ollama     | 11434 | **native `/api/chat`** (`llm/generator.py` maps a `/v1` `OLLAMA_URL` to it); model `models.llm_chat` (default `qwen2.5:7b-instruct`, also the intent classifier). KHÔNG quay lại `/v1/chat/completions`: endpoint đó BỎ QUA `options` → num_ctx/num_predict không có hiệu lực (đo 2026-06-11). |
+| Ollama     | 11434 | **native `/api/chat`** (`llm/generator.py` maps a `/v1` `OLLAMA_URL` to it); model `models.llm_chat` (default `qwen2.5:7b-instruct`). KHÔNG quay lại `/v1/chat/completions`: endpoint đó BỎ QUA `options` → num_ctx/num_predict không có hiệu lực (đo 2026-06-11). |
 | api        | 8080  | `python -m api.main` (FastAPI+SSE) - backend cho React frontend; same pipeline as `ui/gradio_app.py` |
 | ui         | 7861  | `python -m ui.gradio_app` (Gradio, KaTeX vendored under `ui/static/katex/`) |
 | frontend   | 3000 (Docker) / 5173 (Vite dev) | React UI (nginx, proxy `/api`→api:8080); **đã nối backend thật** (chat SSE + lịch sử/bộ nhớ) - xem `frontend/README.md` |
@@ -271,10 +229,6 @@ python -m api.main
 # Eval — retrieval regression (run after any retrieval change)
 python -m evaluation.run_eval                    # hybrid vs dense, recall@k + MRR
 python -m evaluation.run_eval --mode hybrid -v
-
-# Eval — chat lai văn bản + số liệu (Sprint 9; tất định, không cần Ollama)
-python -m evaluation.intent_eval                 # intent ≥ 0.90, 0 số không nguồn
-python -m evaluation.intent_eval --live          # đo model phân loại thật
 ```
 
 Verification gates: `extraction_report.json` (Stage 1 formula fidelity), `evaluation/run_eval.py`

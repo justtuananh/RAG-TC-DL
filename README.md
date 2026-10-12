@@ -61,7 +61,7 @@ ro lớn nhất của dự án — *độ chính xác công thức là mối qua
 | Lớp | Thành phần | Ghi chú |
 |---|---|---|
 | **Giao diện** | **Gradio** `ui/gradio_app.py` `:7861` · **React** `frontend/` `:3000` (dev Vite `:5173`, + `python -m api.main` FastAPI `:8080`) · **kotaemon** (Mode B) | React UI **đã nối backend thật** (SSE, bảng + công thức, lịch sử/bộ nhớ) - [`frontend/README.md`](frontend/README.md) |
-| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | model `models.llm_chat` trong `config/settings.yaml` (mặc định `qwen2.5:7b-instruct`, dùng cho cả sinh đáp án lẫn phân loại intent), `:11434`; `llm/generator.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
+| **LLM sinh đáp án** | [Ollama](https://ollama.com) + **Qwen2.5** | model `models.llm_chat` trong `config/settings.yaml` (mặc định `qwen2.5:7b-instruct`, dùng cho sinh đáp án), `:11434`; `llm/generator.py` gọi **native `/api/chat`** (xem ghi chú §3.3) |
 | **Embedding** | **bge-m3** (1024 chiều) qua **inference server tự viết** | `docker/inference/server.py` (FastAPI + sentence-transformers), `:8010`, `/v1/embeddings` |
 | **Reranker** | **bge-reranker-v2-m3** qua cùng server (CrossEncoder) | `:8011`, `/v1/rerank` (Cohere-style); env `RERANKER_MAX_LENGTH` (mặc định 1024) |
 | **Vector store** | **A: Qdrant** `:6333` (collection `qtkd_rag`) · **B: Chroma** (nhúng) | `1024` chiều (`models.embedding.vector_size` trong `config/settings.yaml`) |
@@ -340,7 +340,7 @@ python -m evaluation.answer_eval --model qwen2.5:7b -v --dump /tmp/rec_{model}.j
 > trên backend ổn định (GPU prod, hoặc Ollama native; 7b trong Docker-VM hay bị OOM-kill → 500).
 
 Yêu cầu: service `:8010`/`:8011`/`:6333` (+ `:11434` cho answer-eval) đang chạy + `.venv-dev`
-trên host. `make check` (1700+ unit test + guard công thức 351/351) là cổng CI không cần Docker.
+trên host. `make check` (hơn 500 unit test + guard công thức 351/351) là cổng CI không cần Docker.
 Lịch sử số liệu lưu ở [`result_eval.md`](result_eval.md).
 
 ---
