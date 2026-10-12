@@ -4,9 +4,12 @@ Backs the /api/documents/* routes in api/routes/documents.py. Each ingestion job
 a dedicated worker thread (not asyncio BackgroundTasks) so a slow Ruby/MTEF
 subprocess or embedding-service HTTP call never blocks the chat SSE event loop.
 
-Mọi loại tài liệu (QTKĐ, danh mục, khác) đi cùng một đường: trích Markdown,
-nhúng Qdrant. Tài liệu QTKĐ được sinh thêm một dòng ``procedure`` (nếu chưa có)
-để router văn bản ghim đúng file.
+Kho nhận quy trình kiểm định (QTKĐ) dạng Word/PDF. Mỗi tài liệu đi một đường:
+trích Markdown, nhúng Qdrant. Tài liệu có mã QTKĐ trong đầu mục được nhận là
+QTKĐ (kể cả khi tên tệp không nói vậy) và giữ dòng ``procedure`` của số đó để
+router văn bản ghim đúng file. Mỗi số QTKĐ chỉ có MỘT phiên bản trong chỉ mục:
+bản cũ hơn chuyển sang ``superseded`` (gỡ khỏi Qdrant, giữ tệp gốc + Markdown)
+và được khôi phục khi bản mới bị xóa.
 """
 from __future__ import annotations
 
@@ -33,6 +36,7 @@ from db.models import (
 from ingestion.chunker import parse_file
 from ingestion.classify import classify_document
 from ingestion.spike_a import _safe, process_one, totals_from_entries
+from knowledge.procedure import ProcedureHeader, parse_procedure_header
 from vectorstore import qdrant, upsert
 
 # vectorstore.hybrid_index is imported lazily where used (see _invalidate_search_caches) -
@@ -106,26 +110,29 @@ def _human_size(n: int) -> str:
     return f"{n / 1024:.0f} KB"
 
 
-def _invalidate_search_caches() -> None:
-    """Bỏ cache BM25 và map số/alias của router sau khi kho đổi.
+def _invalidate_search_caches(file_stems: set[str]) -> None:
+    """Cập nhật BM25 cho các file vừa đổi và bỏ map số/alias của router.
 
     Best-effort - a stale cache is a search-quality issue, not a reason
     to fail an otherwise-successful embed or delete (also lets this work in
     environments where rank_bm25 isn't installed, same as retriever.py)."""
     try:
-        from vectorstore.hybrid_index import invalidate
-        invalidate()
+        from vectorstore.hybrid_index import refresh_files
+
+        refresh_files(file_stems)
     except Exception:
-        pass
+        logger.warning("Không cập nhật được BM25 cho %s", sorted(file_stems), exc_info=True)
     from retrieval import router
 
     router.invalidate()
 
 
-# Đuôi tệp được nhận khi upload + tìm tệp gốc. Gồm .xlsx vì bảng tính cũng được
-# trích Markdown cho RAG; gồm .doc/.xls cũ vì K1 chuyển bằng LibreOffice rồi trích
-# Markdown như QTKĐ.
-SUPPORTED_EXTS = (".docx", ".doc", ".pdf", ".xlsx", ".xls")
+# Đuôi tệp được nhận khi upload: QTKĐ là văn bản Word/PDF; .doc cũ được K1 chuyển
+# bằng LibreOffice rồi trích Markdown như .docx.
+UPLOAD_EXTS = (".docx", ".doc", ".pdf")
+# Đuôi tệp gốc có thể có trong kho (tìm/xem/xóa): gồm cả bảng tính đã nạp trước
+# khi kho chỉ nhận QTKĐ.
+SUPPORTED_EXTS = (*UPLOAD_EXTS, ".xlsx", ".xls")
 
 
 def _find_source(file_stem: str) -> Path | None:
@@ -164,12 +171,10 @@ def get_preview_path(file_stem: str) -> Path | None:
 
 
 def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> str:
-    """Validate + save an uploaded .docx/.doc/.pdf/.xlsx/.xls into TC_DL/. Returns its file_stem."""
+    """Validate + save an uploaded .docx/.doc/.pdf into TC_DL/. Returns its file_stem."""
     ext = Path(filename).suffix.lower()
-    if ext not in SUPPORTED_EXTS:
-        raise UploadError(
-            "Chỉ hỗ trợ tệp Word (.docx/.doc), Excel (.xlsx/.xls) hoặc PDF (.pdf)."
-        )
+    if ext not in UPLOAD_EXTS:
+        raise UploadError("Chỉ hỗ trợ quy trình kiểm định dạng Word (.docx/.doc) hoặc PDF (.pdf).")
     if len(data) == 0:
         raise UploadError("Tệp rỗng.")
     max_bytes = get_settings().ingestion.max_upload_bytes
@@ -220,14 +225,17 @@ def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> s
     return candidate
 
 
-def _status_for(file_stem: str) -> tuple[str, int, str | None]:
+def _status_for(file_stem: str, ingest_status: IngestStatus) -> tuple[str, int, str | None]:
     job = _get_job(file_stem)
     if job is not None:
         if job.stage in _PROCESSING_STAGES:
             return "processing", job.progress, None
         if job.stage == "error":
             return "error", job.progress, job.error
-        # stage == "ready" rơi xuống kiểm tra .md dưới đây.
+        # stage == "ready" rơi xuống kiểm tra sổ + .md dưới đây.
+    # Bản cũ vẫn giữ .md (để khôi phục), nên xét trạng thái sổ trước .md.
+    if ingest_status == IngestStatus.SUPERSEDED:
+        return "superseded", 100, None
     if (_out_dir() / f"{file_stem}.md").exists():
         return "ready", 100, None
     return "pending", 0, None
@@ -239,7 +247,7 @@ def list_documents() -> list[dict]:
         rows = db.query(Document).order_by(Document.uploaded_at.desc()).all()
         result = []
         for row in rows:
-            status, progress, error = _status_for(row.file_stem)
+            status, progress, error = _status_for(row.file_stem, row.ingest_status)
             # Tài liệu READY trong sổ nhưng job đã mất sau khi API khởi động lại.
             status_out = status if status != "pending" or row.ingest_status.value == "pending" else row.ingest_status.value
             result.append({
@@ -250,7 +258,7 @@ def list_documents() -> list[dict]:
                 "pages": None,
                 "date": row.uploaded_at.strftime("%d/%m/%Y"),
                 "status": status_out,
-                "progress": 100 if status_out == "ready" else progress,
+                "progress": 100 if status_out in ("ready", "superseded") else progress,
                 "error": error or row.ingest_error,
                 "doc_type": row.doc_type.value,
                 "sha256": row.sha256,
@@ -344,52 +352,20 @@ def _publish_extraction(tmp_dir: Path, file_stem: str) -> None:
 
 
 def _run_job(file_stem: str, source_path: Path) -> None:
-    """Điều phối: mọi loại tài liệu đều trích Markdown + nhúng Qdrant."""
-    _run_markdown_job(file_stem, source_path)
+    """Điều phối: trích Markdown rồi đưa vào chỉ mục."""
+    _run_guarded(file_stem, lambda: _extract_and_index(file_stem, source_path))
 
 
-def _run_markdown_job(file_stem: str, source_path: Path) -> None:
+def _restore_job(file_stem: str) -> None:
+    """Đưa phiên bản cũ trở lại chỉ mục từ Markdown đã có (không trích lại)."""
+    _run_guarded(file_stem, lambda: _index_markdown(file_stem, _out_dir() / f"{file_stem}.md"))
+
+
+def _run_guarded(file_stem: str, work) -> None:
+    """Chạy một job trên luồng worker: mọi lỗi thành trạng thái lỗi, không làm sập worker."""
     try:
         _set_db_status(file_stem, IngestStatus.PROCESSING)
-        _set_job(file_stem, "extracting")
-        # B10: trích vào thư mục tạm trước, chỉ công bố nếu không làm giảm
-        # độ trung thực công thức so với bản đã kiểm chứng trong report.
-        tmp_dir = Path(tempfile.mkdtemp(prefix=f"ingest_{file_stem}_"))
-        try:
-            entry = process_one(source_path, tmp_dir)
-            old = _old_entry(entry)
-            if old is not None:
-                message = _regression_message(entry, old)
-                if message is not None:
-                    raise RuntimeError(message)
-            _publish_extraction(tmp_dir, file_stem)
-            _merge_report_entry(entry)
-        finally:
-            shutil.rmtree(tmp_dir, ignore_errors=True)
-
-        md_path = _out_dir() / f"{file_stem}.md"
-        if not md_path.exists():
-            raise RuntimeError("Không trích xuất được nội dung - tệp có thể bị lỗi hoặc rỗng.")
-
-        _set_job(file_stem, "chunking")
-        chunks = parse_file(md_path)
-
-        _set_job(file_stem, "embedding")
-        client = qdrant.get_client()
-        qdrant.ensure_collection(client)
-        upsert.index_chunks(client, chunks)
-
-        # Tài liệu QTKĐ được sinh thêm dòng ``procedure`` để router văn bản ghim
-        # đúng file. Lỗi ở bước này không làm hỏng tài liệu đã nhúng; ghi lại để rà sau.
-        errors: list[str] = []
-        try:
-            _ensure_procedure(file_stem, md_path)
-        except Exception as e:  # noqa: BLE001 - best-effort, không chặn ingestion
-            errors.append(f"Tạo dòng procedure thất bại: {e}")
-        _invalidate_search_caches()
-
-        _set_job(file_stem, "ready")
-        _set_db_status(file_stem, IngestStatus.READY, "; ".join(errors) if errors else None)
+        work()
     except _CONNECTION_ERRORS as e:
         _set_job(file_stem, "error", f"Không kết nối được dịch vụ embedding/Qdrant - kiểm tra Docker đã chạy chưa ({e}).")
         _set_db_status(file_stem, IngestStatus.ERROR, str(e))
@@ -398,24 +374,137 @@ def _run_markdown_job(file_stem: str, source_path: Path) -> None:
         _set_db_status(file_stem, IngestStatus.ERROR, str(e))
 
 
-def _ensure_procedure(file_stem: str, md_path: Path) -> None:
-    """Sinh dòng ``procedure`` cho tài liệu QTKĐ vừa nhúng (không commit khi lỗi).
+def _extract_and_index(file_stem: str, source_path: Path) -> None:
+    _set_job(file_stem, "extracting")
+    # B10: trích vào thư mục tạm trước, chỉ công bố nếu không làm giảm
+    # độ trung thực công thức so với bản đã kiểm chứng trong report.
+    tmp_dir = Path(tempfile.mkdtemp(prefix=f"ingest_{file_stem}_"))
+    try:
+        entry = process_one(source_path, tmp_dir)
+        old = _old_entry(entry)
+        if old is not None:
+            message = _regression_message(entry, old)
+            if message is not None:
+                raise RuntimeError(message)
+        _publish_extraction(tmp_dir, file_stem)
+        _merge_report_entry(entry)
+    finally:
+        shutil.rmtree(tmp_dir, ignore_errors=True)
+    _index_markdown(file_stem, _out_dir() / f"{file_stem}.md")
+
+
+def _index_markdown(file_stem: str, md_path: Path) -> None:
+    """Nhận diện QTKĐ, chọn phiên bản, rồi chunk + nhúng Markdown vào Qdrant."""
+    if not md_path.exists():
+        raise RuntimeError("Không trích xuất được nội dung - tệp có thể bị lỗi hoặc rỗng.")
+    text = md_path.read_text(encoding="utf-8")
+    header = parse_procedure_header(text)
+
+    newer = _classify_and_find_newer(file_stem, header)
+    if newer is not None:
+        # Bản cũ hơn bản đang dùng: không đưa vào chỉ mục (gỡ chunk của lần nhúng trước, nếu có).
+        _supersede(file_stem, newer)
+        _set_job(file_stem, "ready")
+        _invalidate_search_caches({file_stem})
+        return
+
+    _set_job(file_stem, "chunking")
+    chunks = parse_file(md_path)
+
+    _set_job(file_stem, "embedding")
+    client = qdrant.get_client()
+    qdrant.ensure_collection(client)
+    upsert.index_chunks(client, chunks)
+
+    # Dòng ``procedure`` để router ghim đúng file. Lỗi ở bước này không làm hỏng
+    # tài liệu đã nhúng; ghi lại để rà sau.
+    touched = {file_stem}
+    errors: list[str] = []
+    try:
+        replaced = _claim_procedure(file_stem, text)
+    except Exception as e:  # noqa: BLE001 - best-effort, không chặn ingestion
+        replaced = None
+        errors.append(f"Tạo dòng procedure thất bại: {e}")
+    if replaced is not None:
+        _supersede(replaced, _display_name(file_stem))
+        touched.add(replaced)
+
+    _set_job(file_stem, "ready")
+    _set_db_status(file_stem, IngestStatus.READY, "; ".join(errors) if errors else None)
+    _invalidate_search_caches(touched)
+
+
+def _classify_and_find_newer(file_stem: str, header: ProcedureHeader | None) -> str | None:
+    """Nhận tài liệu là QTKĐ theo đầu mục; trả tên phiên bản mới hơn nếu tài liệu là bản cũ.
+
+    Tên tệp không nhắc "QTKĐ" thì lúc upload tài liệu rơi vào ``khac``; nội dung
+    có mã QTKĐ ở đầu mục mới là bằng chứng chắc chắn. Chỉ nâng ``khac`` → ``qtkd``,
+    không đổi loại đã nhận rõ khác (biên bản thường nhắc QTKĐ trong nội dung).
+    """
+    from knowledge.procedure import newer_version_document_id
+
+    if header is None:
+        return None
+    db = SessionLocal()
+    try:
+        document = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
+        if document is None:
+            return None
+        if document.doc_type == DocumentType.KHAC:
+            document.doc_type = DocumentType.QTKD
+            db.commit()
+        if document.doc_type != DocumentType.QTKD:
+            return None
+        newer_id = newer_version_document_id(db, document, header)
+        if newer_id is None:
+            return None
+        newer = db.get(Document, newer_id)
+        return newer.display_name if newer is not None else None
+    finally:
+        db.close()
+
+
+def _claim_procedure(file_stem: str, text: str) -> str | None:
+    """Gán dòng ``procedure`` cho tài liệu QTKĐ; trả file_stem phiên bản cũ vừa bị thay.
 
     Chỉ chạy cho loại ``qtkd``. Dùng procedure đã có nếu trùng ``document_id``;
     nếu chưa, dựng từ đầu mục Markdown để giữ liên kết P1.
     """
     from knowledge.procedure import ensure_procedure
+    from knowledge.reference import procedure_by_number
 
     db = SessionLocal()
     try:
         document = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
         if document is None or document.doc_type != DocumentType.QTKD:
-            return
-        ensure_procedure(db, document, md_path.read_text(encoding="utf-8"))
+            return None
+        header = parse_procedure_header(text)
+        current = procedure_by_number(db, header.number) if header is not None else None
+        previous_id = current.document_id if current is not None else None
+        procedure = ensure_procedure(db, document, text)
         db.commit()
+        if procedure is None or previous_id in (None, document.id):
+            return None
+        previous = db.get(Document, previous_id)
+        return previous.file_stem if previous is not None else None
     except Exception:
         db.rollback()
         raise
+    finally:
+        db.close()
+
+
+def _supersede(file_stem: str, newer_name: str) -> None:
+    """Gỡ một phiên bản cũ khỏi chỉ mục; tệp gốc và Markdown giữ lại để khôi phục."""
+    qdrant.delete_file_chunks(qdrant.get_client(), file_stem)
+    _set_db_status(file_stem, IngestStatus.SUPERSEDED, f"Đã có phiên bản mới hơn: {newer_name}")
+
+
+def _display_name(file_stem: str) -> str:
+    db = SessionLocal()
+    try:
+        document = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
+        return document.display_name if document is not None else file_stem
     finally:
         db.close()
 
@@ -444,8 +533,12 @@ def start_processing(file_stem: str) -> None:
 
 
 def delete_document(file_stem: str) -> None:
-    """Xoá một tài liệu: bước CSDL TRƯỚC, rồi mới tới tệp, Markdown, report và Qdrant."""
-    _delete_document_rows(file_stem)
+    """Xoá một tài liệu: bước CSDL TRƯỚC, rồi mới tới tệp, Markdown, report và Qdrant.
+
+    Xoá phiên bản hiện hành của một QTKĐ thì phiên bản cũ mới nhất còn lại được
+    đưa trở lại chỉ mục, để số QTKĐ đó không mất khỏi kho.
+    """
+    number = _delete_document_rows(file_stem)
     source_path = _find_source(file_stem)
     if source_path is not None:
         source_path.unlink()
@@ -472,27 +565,62 @@ def delete_document(file_stem: str) -> None:
     with _jobs_lock:
         _jobs.pop(file_stem, None)
 
-    _invalidate_search_caches()
+    _invalidate_search_caches({file_stem})
+
+    successor = _latest_superseded_version(number) if number is not None else None
+    if successor is not None:
+        _set_job(successor, "queued")
+        _executor.submit(_restore_job, successor)
 
 
-def _delete_document_rows(file_stem: str) -> None:
+def _delete_document_rows(file_stem: str) -> str | None:
     """Xoá hàng ``document`` cùng dòng ``procedure`` của nó, trong một transaction.
 
-    Sau khi gỡ luồng tri thức, hàng duy nhất trỏ tới tài liệu là ``procedure``
-    (khoá ngoại nullable); xoá tài liệu kèm procedure để không còn dòng mồ côi.
+    Hàng duy nhất trỏ tới tài liệu là ``procedure`` (khoá ngoại nullable); xoá
+    tài liệu kèm procedure để không còn dòng mồ côi. Trả số QTKĐ tài liệu đang
+    giữ (nếu có), để tìm phiên bản cũ thay thế.
     """
     db = SessionLocal()
     try:
         doc = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
         if doc is None:
-            return
+            return None
+        number = None
         for row in db.query(Procedure).filter(Procedure.document_id == doc.id).all():
+            number = row.number
             db.delete(row)
         db.delete(doc)
         db.commit()
+        return number
     except Exception:
         db.rollback()
         raise
+    finally:
+        db.close()
+
+
+def _latest_superseded_version(number: str) -> str | None:
+    """file_stem của phiên bản cũ mới nhất (năm lớn nhất, rồi tải lên sau) của số QTKĐ."""
+    db = SessionLocal()
+    try:
+        rows = (
+            db.query(Document)
+            .filter(Document.ingest_status == IngestStatus.SUPERSEDED)
+            .order_by(Document.uploaded_at)
+            .all()
+        )
+        best: tuple[int, str] | None = None
+        for row in rows:
+            md_path = _out_dir() / f"{row.file_stem}.md"
+            if not md_path.exists():
+                continue
+            header = parse_procedure_header(md_path.read_text(encoding="utf-8"))
+            if header is None or header.number != number:
+                continue
+            candidate = (header.year or 0, row.file_stem)
+            if best is None or candidate[0] >= best[0]:
+                best = candidate
+        return best[1] if best is not None else None
     finally:
         db.close()
 

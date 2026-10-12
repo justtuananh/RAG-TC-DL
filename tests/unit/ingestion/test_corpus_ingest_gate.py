@@ -55,12 +55,15 @@ def test_legacy_formats_converted_by_spike_a(manifest_id, corpus_file_paths, tmp
 
 
 @pytest.mark.parametrize("manifest_id", _ids("G"))
-def test_legacy_formats_accepted_on_upload(manifest_id, corpus_file_paths):
-    """G01/G02 (.doc/.xls): upload nhận định dạng cũ (chuyển khi Xử lý)."""
+def test_legacy_word_accepted_and_legacy_excel_rejected_on_upload(manifest_id, corpus_file_paths):
+    """G01/G02: .doc cũ được nhận (chuyển khi Xử lý); .xls bị chặn vì kho chỉ nhận QTKĐ."""
     obj = _MANIFEST[manifest_id]
     file_path = corpus_file_paths[obj["file"]]
-    stem = save_upload(file_path.name, file_path.read_bytes())
-    assert stem
+    if file_path.suffix.lower() == ".xls":
+        with pytest.raises(UploadError, match="Word"):
+            save_upload(file_path.name, file_path.read_bytes())
+    else:
+        assert save_upload(file_path.name, file_path.read_bytes())
 
 
 def test_f01_duplicate_has_same_sha256_as_a01(corpus_file_paths):
@@ -94,10 +97,11 @@ def test_docx_pdf_with_ok_ingest_are_accepted(manifest_id, corpus_file_paths):
 
 
 @pytest.mark.parametrize("manifest_id", _xlsx_ids())
-def test_xlsx_accepted_on_upload(manifest_id, corpus_file_paths):
-    """.xlsx (phiếu đo, nhóm E) nay được nhận ở upload chung (B1/B2 pha nạp hồ sơ
-    Excel); trước đây chỉ .docx/.pdf được hỗ trợ."""
+def test_xlsx_rejected_on_upload(manifest_id, corpus_file_paths, tmp_path):
+    """.xlsx (phiếu đo, nhóm E) bị chặn: kho chỉ nhận QTKĐ dạng Word/PDF, và tệp
+    bị chặn không được ghi xuống thư mục nguồn."""
     obj = _MANIFEST[manifest_id]
     file_path = corpus_file_paths[obj["file"]]
-    stem = save_upload(file_path.name, file_path.read_bytes())
-    assert stem
+    with pytest.raises(UploadError, match="Word"):
+        save_upload(file_path.name, file_path.read_bytes())
+    assert not (tmp_path / "tc_dl").exists()

@@ -28,5 +28,5 @@ tests/data/knowledge_corpus/
 
 - `test_corpus_integrity.py`: tệp khớp manifest, số tệp theo nhóm, định dạng hợp lệ.
 - `test_corpus_classify.py`: phân loại tài liệu từ tên file khớp `expected_doc_type`.
-- `test_corpus_ingest_gate.py`: upload nhận định dạng cũ, chặn tệp trùng sha256, nhận docx/pdf/xlsx.
+- `test_corpus_ingest_gate.py`: upload nhận .docx/.doc/.pdf, chặn .xlsx/.xls và tệp trùng sha256.
 - `test_corpus_procedure_header.py`: đầu mục QTKĐ nhóm A/B/F và phiên bản mới thay dòng `procedure`.

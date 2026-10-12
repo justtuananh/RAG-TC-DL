@@ -123,7 +123,7 @@ def test_markdown_job_blocks_formula_regression(tmp_path, monkeypatch, session, 
 
     monkeypatch.setattr(ingestion_jobs, "process_one", fake_process_one)
 
-    ingestion_jobs._run_markdown_job(STEM, Path(FILE))
+    ingestion_jobs._run_job(STEM, Path(FILE))
 
     assert verified.read_bytes() == before
     assert embedded == []
@@ -150,7 +150,7 @@ def test_markdown_job_publishes_when_rate_not_worse(
     )
     monkeypatch.setattr(ingestion_jobs, "parse_file", lambda p: ["c1", "c2"])
     monkeypatch.setattr("vectorstore.qdrant.ensure_collection", lambda client: None)
-    monkeypatch.setattr(ingestion_jobs, "_ensure_procedure", lambda stem, path: None)
+    monkeypatch.setattr(ingestion_jobs, "_claim_procedure", lambda stem, text: None)
 
     def fake_process_one(source: Path, out_dir: Path) -> dict:
         out_dir.mkdir(parents=True, exist_ok=True)
@@ -159,7 +159,7 @@ def test_markdown_job_publishes_when_rate_not_worse(
 
     monkeypatch.setattr(ingestion_jobs, "process_one", fake_process_one)
 
-    ingestion_jobs._run_markdown_job(STEM, Path(FILE))
+    ingestion_jobs._run_job(STEM, Path(FILE))
 
     assert (out / f"{STEM}.md").read_text(encoding="utf-8") == "$y$ bản mới"
     assert embedded == [["c1", "c2"]]

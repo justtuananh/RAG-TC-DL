@@ -1,20 +1,22 @@
 """SQLAlchemy ORM models for QTKĐ RAG system."""
+import enum
 from datetime import datetime
+
 from sqlalchemy import (
+    JSON,
     BigInteger,
     Column,
     DateTime,
-    Enum as SQLEnum,
     Float,
     ForeignKey,
     Integer,
-    JSON,
     String,
     Text,
 )
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-import enum
+from sqlalchemy import (
+    Enum as SQLEnum,
+)
+from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
@@ -83,6 +85,8 @@ class IngestStatus(str, enum.Enum):
     PROCESSING = "processing"
     READY = "ready"
     ERROR = "error"
+    # Phiên bản cũ của một QTKĐ đã có bản mới hơn: gỡ khỏi chỉ mục, giữ tệp gốc + Markdown.
+    SUPERSEDED = "superseded"
 
 
 class Document(Base):

@@ -85,12 +85,30 @@ def infer_device_type(title: str, candidates) -> str | None:
     return best
 
 
+def newer_version_document_id(session, document, header: ProcedureHeader) -> str | None:
+    """``document_id`` của phiên bản MỚI HƠN đang giữ số QTKĐ này, nếu có.
+
+    Mỗi số QTKĐ chỉ có một dòng ``procedure`` trỏ tới phiên bản hiện hành. Tài
+    liệu có năm ban hành nhỏ hơn năm của bản đang giữ là bản cũ; cùng năm hoặc
+    thiếu năm thì bản xử lý sau thắng (phiên bản sửa đổi trong năm).
+    """
+    from db.models import Procedure
+
+    current = session.query(Procedure).filter(Procedure.number == header.number).one_or_none()
+    if current is None or current.document_id in (None, document.id):
+        return None
+    if current.year is not None and header.year is not None and current.year > header.year:
+        return current.document_id
+    return None
+
+
 def ensure_procedure(session, document, text: str):
     """Tìm procedure của tài liệu; tạo mới từ đầu mục Markdown nếu chưa có.
 
     Giữ ``procedure.document_id`` để truy nguyên P1. Trả ``None`` nếu văn bản
     không có mã QTKĐ - khi đó router văn bản không ghim được file, nhưng tài liệu
-    vẫn được nhúng bình thường.
+    vẫn được nhúng bình thường - hoặc nếu tài liệu là phiên bản cũ hơn bản đang
+    giữ số QTKĐ (dòng procedure giữ nguyên, trỏ bản mới).
     """
     from db.models import DeviceType, Procedure
 
@@ -100,6 +118,8 @@ def ensure_procedure(session, document, text: str):
 
     header = parse_procedure_header(text)
     if header is None:
+        return None
+    if newer_version_document_id(session, document, header) is not None:
         return None
 
     procedure = session.query(Procedure).filter(Procedure.number == header.number).one_or_none()

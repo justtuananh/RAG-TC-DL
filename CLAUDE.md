@@ -89,6 +89,12 @@ A lower layer never imports a higher one;
   `1.061:2021`, `MPa`, `bar`) - dense embeddings blur these, so BM25 is required for symbol/code
   precision. The corpus text for each chunk includes `file_stem` + `section_path` so BM25 can
   match QTKĐ numbers. `embedding/sparse_embedder.py` owns `tokenize()` + `sparse_document_text()`.
+  After the first build, ingestion updates BM25 per file (`hybrid_index.refresh_files`) instead of re-scrolling the whole collection.
+- `retrieval/router.py` - pins a query to a file by QTKĐ number or device alias.
+  The number → file map comes from the `procedure` table (the number is read from the document header, not the file name), with a deterministic Qdrant file-name scan only when Postgres is unreachable.
+- `ingestion/jobs.py` - upload accepts only `.docx`/`.doc`/`.pdf` (QTKĐ); older `.xlsx`/`.xls` already in the store stay viewable.
+  A document whose Markdown header carries a QTKĐ code is treated as `qtkd` even when its file name does not say so.
+  Each QTKĐ number keeps exactly one version in the index: the newer issue year wins (same year: the one processed later), the older one becomes `superseded` (removed from Qdrant, source file + Markdown kept), and deleting the current version re-indexes the newest superseded one.
 - `retrieval/retriever.py` - full hybrid pipeline: `embed_query` → `dense_search` (children only) +
   `bm25_search` → `rrf_fuse` (Reciprocal Rank Fusion, k=60) → noise filter → `rerank_hits`
   (cross-encoder) → `fetch_parent` (return the full section). `retrieval/hybrid_retriever.py` holds
