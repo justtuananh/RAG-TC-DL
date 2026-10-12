@@ -118,11 +118,11 @@ test: test-unit test-int
 
 # Run pending migrations
 db-upgrade:
-	docker compose run --rm --no-deps api python scripts/migrate.py upgrade head
+	docker compose run --rm --no-deps api python -m scripts.migrate upgrade head
 
 # Downgrade all migrations
 db-downgrade:
-	docker compose run --rm --no-deps api python scripts/migrate.py downgrade base
+	docker compose run --rm --no-deps api python -m scripts.migrate downgrade base
 
 # Backup database
 db-backup:
@@ -144,8 +144,8 @@ generate-procedures:
 db-check:
 	@echo "Testing database migrations..."
 	@docker compose up -d postgres
-	@docker compose run --rm --no-deps api python scripts/migrate.py upgrade head
-	@docker compose run --rm --no-deps api python scripts/migrate.py downgrade base
+	@docker compose run --rm --no-deps api python -m scripts.migrate upgrade head
+	@docker compose run --rm --no-deps api python -m scripts.migrate downgrade base
 	@echo "✓ Database migrations verified"
 
 # ── Công thức: tạo nháp chờ duyệt cho tài liệu đã có (không tự phê duyệt) ───────

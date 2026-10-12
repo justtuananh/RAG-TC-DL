@@ -9,7 +9,8 @@ procedures (QTKĐ — Quy trình Kiểm định) from the documents in `TC_DL/`.
 Vietnamese; the bot answers with exact passages + formulas + source citations (file,
 section). The chat itself never calculates and runs **fully offline** — every model
 is local, no cloud API calls.
-Calculation lives only in the separate reviewed-formula flow (`formula_registry/`, see below): a human approves each formula before it can be used. Target prod hardware is a single RTX 5060 8GB box; it must
+Calculation lives only in the separate reviewed-formula flow (`formula_registry/`, see below): a human approves each formula before it can be used.
+Target prod hardware is a single RTX 5060 8GB box; it must
 scale from the current handful of files to thousands of procedures.
 
 `docs/PLAN.md` is the full design doc (Vietnamese). `docs/spike_c_ui_setup.md` records the
