@@ -303,7 +303,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
           if (firstDelta) firstDelta = false;
           set((s) => ({ ...updateLastBot(s, { markdown: md, streaming: true }), proc: null }));
         } else if (ev.type === "done") {
-          const md = fixLatex(partial);
+          const md = fixLatex(ev.answer || partial);
           const srcs = ev.sources ?? stateRef.current.liveSources;
           set((s) => {
             // cập nhật bot message cuối + gắn nguồn

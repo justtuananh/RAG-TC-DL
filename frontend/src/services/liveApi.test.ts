@@ -80,8 +80,11 @@ describe("liveApi — đọc công khai / ghi có xác thực", () => {
       child_text: "…",
     };
     const sse =
-      [`data: ${JSON.stringify({ type: "sources", sources: [source] })}`, `data: ${JSON.stringify({ type: "done", sources: [source] })}`, ""].join("\n\n") +
-      "\n\n";
+      [
+        `data: ${JSON.stringify({ type: "sources", sources: [source] })}`,
+        `data: ${JSON.stringify({ type: "done", answer: "Tối thiểu 10 s [1].", sources: [source] })}`,
+        "",
+      ].join("\n\n") + "\n\n";
     vi.stubGlobal(
       "fetch",
       mockFetch(async () => new Response(sse, { status: 200, headers: { "Content-Type": "text/event-stream" } })),
@@ -93,9 +96,7 @@ describe("liveApi — đọc công khai / ghi có xác thực", () => {
     expect(events[0].type).toBe("sources");
     expect(events[0].sources?.[0].file_stem).toBe("QTKD_1.159_2021");
     expect(events[1].type).toBe("done");
-    // done không còn trường riêng của nhánh số liệu (branch/data/answer)
-    expect(events[1]).not.toHaveProperty("branch");
-    expect(events[1]).not.toHaveProperty("data");
-    expect(events[1]).not.toHaveProperty("answer");
+    // done mang câu trả lời cuối của server (đã sửa LaTeX, chèn lời dẫn mơ hồ thiết bị)
+    expect(events[1].answer).toBe("Tối thiểu 10 s [1].");
   });
 });

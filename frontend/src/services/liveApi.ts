@@ -8,6 +8,7 @@ import { AuthError, authFetch } from "./auth";
 export interface SseEvent {
   type: "status" | "sources" | "delta" | "done" | "error";
   text?: string;
+  answer?: string;
   sources?: BackendSource[];
 }
 
