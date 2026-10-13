@@ -236,6 +236,9 @@ def _status_for(file_stem: str, ingest_status: IngestStatus) -> tuple[str, int, 
     # Bản cũ vẫn giữ .md (để khôi phục), nên xét trạng thái sổ trước .md.
     if ingest_status == IngestStatus.SUPERSEDED:
         return "superseded", 100, None
+    # Lỗi xử lý có thể xảy ra sau khi .md đã công bố (vd. bước nháp công thức).
+    if ingest_status == IngestStatus.ERROR:
+        return "error", 0, None
     if (_out_dir() / f"{file_stem}.md").exists():
         return "ready", 100, None
     return "pending", 0, None
@@ -559,10 +562,6 @@ def delete_document(file_stem: str) -> None:
     đưa trở lại chỉ mục, để số QTKĐ đó không mất khỏi kho.
     """
     number = _delete_document_rows(file_stem)
-    from formula_registry.store import Registry
-
-    # Nguồn mất thì nháp/công thức đã duyệt của tài liệu hết hiệu lực (chặn tính).
-    Registry().invalidate(file_stem)
     source_path = _find_source(file_stem)
     if source_path is not None:
         source_path.unlink()
@@ -603,17 +602,24 @@ def _delete_document_rows(file_stem: str) -> str | None:
     Hàng duy nhất trỏ tới tài liệu là ``procedure`` (khoá ngoại nullable); xoá
     tài liệu kèm procedure để không còn dòng mồ côi. Trả số QTKĐ tài liệu đang
     giữ (nếu có), để tìm phiên bản cũ thay thế.
+
+    Nháp/công thức đã duyệt của tài liệu hết hiệu lực (chặn tính) TRƯỚC khi
+    commit: sổ công thức không ghi được (vd. SQLite thuộc root) thì rollback,
+    tài liệu còn nguyên và xoá lại được, thay vì mất hàng mà tệp còn.
     """
+    from formula_registry.store import Registry
+
     db = SessionLocal()
     try:
         doc = db.query(Document).filter(Document.file_stem == file_stem).one_or_none()
-        if doc is None:
-            return None
         number = None
-        for row in db.query(Procedure).filter(Procedure.document_id == doc.id).all():
-            number = row.number
-            db.delete(row)
-        db.delete(doc)
+        if doc is not None:
+            for row in db.query(Procedure).filter(Procedure.document_id == doc.id).all():
+                number = row.number
+                db.delete(row)
+            db.delete(doc)
+            db.flush()
+        Registry().invalidate(file_stem)
         db.commit()
         return number
     except Exception:

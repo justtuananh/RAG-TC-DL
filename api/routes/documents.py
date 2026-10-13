@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import sqlite3
+
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
@@ -110,7 +112,13 @@ def delete_document(
     db: Session = Depends(get_db),
 ):
     before = next((d for d in ingestion_jobs.list_documents() if d["id"] == file_stem), None)
-    ingestion_jobs.delete_document(file_stem)
+    try:
+        ingestion_jobs.delete_document(file_stem)
+    except sqlite3.OperationalError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Không ghi được sổ công thức, tài liệu chưa bị xoá ({exc}).",
+        ) from exc
     if before is not None:
         record_audit(db, user, "delete", "document", file_stem, before=document_snapshot(before))
 

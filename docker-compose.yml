@@ -183,6 +183,10 @@ services:
       dockerfile: Dockerfile
     image: qtkd-app:local
     container_name: qtkd-api
+    # Chạy bằng UID/GID của người dùng host (không phải root): tệp ghi vào TC_DL/,
+    # build/spike_a/ và .formula-registry/ phải ghi lại được khi chạy API trên host
+    # (run-dev.sh). Sổ công thức thuộc root từng làm xoá/tải lên tài liệu hỏng.
+    user: "${APP_UID:-1000}:${APP_GID:-1000}"
     ports:
       - "8080:8080"
     volumes:
@@ -194,6 +198,7 @@ services:
       - ${FORMULA_REGISTRY_DIR:-./.formula-registry}:/app/.formula-registry
     environment:
       FORMULA_REGISTRY_DB: /app/.formula-registry/registry.sqlite3
+      HOME: /tmp   # UID host không có thư mục nhà trong image
       EMBED_URL: http://embedding:8010/v1/embeddings
       RERANK_URL: http://reranker:8011/v1/rerank
       QDRANT_URL: http://qdrant:6333

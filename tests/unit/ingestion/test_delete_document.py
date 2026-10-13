@@ -87,3 +87,45 @@ def test_document_and_procedure_are_removed_with_files(corpus):
     assert not (corpus["src"] / f"{STEM}.docx").exists()
     assert not (corpus["out"] / f"{STEM}.md").exists()
     assert corpus["qdrant_deletes"] == [STEM]
+
+
+def test_registry_failure_leaves_document_intact_and_retry_succeeds(corpus, monkeypatch):
+    """Sổ công thức không ghi được (vd. SQLite thuộc root): xoá hỏng sạch, giữ nguyên tài liệu."""
+    from formula_registry.store import Registry
+
+    def _readonly(self, document_id):
+        raise OSError("attempt to write a readonly database")
+
+    original = Registry.invalidate
+    monkeypatch.setattr(Registry, "invalidate", _readonly)
+
+    with pytest.raises(OSError):
+        ingestion_jobs.delete_document(STEM)
+
+    assert _counts(corpus["factory"]) == {"document": 1, "procedure": 1}
+    assert (corpus["src"] / f"{STEM}.docx").exists()
+    assert (corpus["out"] / f"{STEM}.md").exists()
+    assert corpus["qdrant_deletes"] == []
+
+    monkeypatch.setattr(Registry, "invalidate", original)
+    ingestion_jobs.delete_document(STEM)
+
+    assert _counts(corpus["factory"]) == {"document": 0, "procedure": 0}
+    assert not (corpus["src"] / f"{STEM}.docx").exists()
+
+
+def test_failed_processing_still_reports_error_after_restart(corpus):
+    """Job trong bộ nhớ mất khi API khởi động lại: sổ ghi ERROR thì không được báo "ready" chỉ vì .md còn."""
+    from db.models import IngestStatus
+
+    db = corpus["factory"]()
+    row = db.query(Document).one()
+    row.ingest_status = IngestStatus.ERROR
+    row.ingest_error = "Không tạo được nháp công thức"
+    db.commit()
+    db.close()
+
+    (doc,) = ingestion_jobs.list_documents()
+
+    assert doc["status"] == "error"
+    assert doc["error"] == "Không tạo được nháp công thức"

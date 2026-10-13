@@ -210,6 +210,23 @@ def test_delete_records_before_snapshot(client, users, session_factory, monkeypa
     assert rows[0].before["name"] == "stem.docx"
 
 
+def test_delete_reports_unwritable_formula_registry(client, users, session_factory, monkeypatch):
+    import sqlite3
+
+    def _readonly(stem):
+        raise sqlite3.OperationalError("attempt to write a readonly database")
+
+    monkeypatch.setattr(ingestion_jobs, "list_documents", lambda: [])
+    monkeypatch.setattr(ingestion_jobs, "delete_document", _readonly)
+
+    headers = {"Authorization": f"Bearer {_token(users, 'admin')}"}
+    resp = client.delete("/api/documents/stem", headers=headers)
+
+    assert resp.status_code == 503
+    assert "sổ công thức" in resp.json()["detail"]
+    assert _audit_rows(session_factory) == []
+
+
 def test_rename_records_before_and_after(client, users, session_factory, monkeypatch):
     before = {
         "id": "stem",
