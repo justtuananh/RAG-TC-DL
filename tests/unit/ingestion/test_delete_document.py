@@ -129,3 +129,22 @@ def test_failed_processing_still_reports_error_after_restart(corpus):
 
     assert doc["status"] == "error"
     assert doc["error"] == "Không tạo được nháp công thức"
+
+
+def test_report_entry_with_decomposed_unicode_name_is_removed(corpus, monkeypatch, tmp_path):
+    """Tên tệp NFD (macOS) phải cho cùng stem với NFC, để xoá gỡ được mục report."""
+    import json
+    import unicodedata
+
+    stem = "Biểu_mẫu"
+    (corpus["src"] / f"{stem}.docx").write_bytes(b"docx")
+    nfd_name = unicodedata.normalize("NFD", "Biểu mẫu.docx")
+    report_path = tmp_path / "report.json"
+    report_path.write_text(
+        json.dumps({"files": [{"file": nfd_name}], "totals": {}}), encoding="utf-8"
+    )
+    monkeypatch.setattr(ingestion_jobs, "_report_path", lambda: report_path)
+
+    ingestion_jobs.delete_document(stem)
+
+    assert json.loads(report_path.read_text(encoding="utf-8"))["files"] == []

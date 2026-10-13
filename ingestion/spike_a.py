@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import json
 import sys
+import unicodedata
 import zipfile
 from pathlib import Path
 
@@ -36,7 +37,8 @@ OUT_DEFAULT = "build/spike_a"
 
 
 def _safe(name: str) -> str:
-    return "".join(c if c.isalnum() or c in "-._" else "_" for c in name)
+    # NFC trước: tên NFD (macOS) có dấu tách rời, không chuẩn hoá thì "á" thành "a_".
+    return "".join(c if c.isalnum() or c in "-._" else "_" for c in unicodedata.normalize("NFC", name))
 
 
 def _dump_asset(z: zipfile.ZipFile, part: str | None, dest: Path) -> int:
