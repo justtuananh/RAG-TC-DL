@@ -64,7 +64,7 @@ llm:
     num_ctx: 8192                         # phải khớp OLLAMA_CONTEXT_LENGTH của container
     max_new_tokens: 1024
     temperature: 0.1
-    keep_alive: 30m
+    keep_alive: "-1m"                     # giữ LLM trên GPU mãi; nạp lại sau khi embedding chiếm VRAM là tràn sang CPU
     history_turns: 3
   context:
     chars_per_token: 2.5                  # đo qwen2.5:7b 2026-10-05: ngữ cảnh QTKĐ 2,54 ký tự/token (LaTeX tốn token)

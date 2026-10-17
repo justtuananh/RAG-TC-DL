@@ -108,3 +108,33 @@ def test_matching_model_logs_no_error(monkeypatch, caplog):
     monkeypatch.setattr(startup.requests, "get", lambda url, **kwargs: _Resp(url))
     startup.check_services(settings)
     assert "chạy model" not in caplog.text
+
+
+def _ollama_ps(monkeypatch, models):
+    class _Resp:
+        ok = True
+
+        def __init__(self, url):
+            self.url = url
+
+        def json(self):
+            return {"models": models} if self.url.endswith("/api/ps") else {}
+
+    monkeypatch.setattr(startup.requests, "get", lambda url, **kwargs: _Resp(url))
+
+
+def test_llm_partly_on_cpu_is_logged(monkeypatch, caplog):
+    # GPU 8 GB: embedding chiếm VRAM trước thì Ollama đẩy một phần layer sang CPU, chậm ~4 lần.
+    settings = load_settings(env={})
+    model = settings.llm_model("chat")
+    _ollama_ps(monkeypatch, [{"name": model, "size": 5_000, "size_vram": 2_700}])
+    startup.check_services(settings)
+    assert "46 % trên CPU" in caplog.text
+
+
+def test_llm_fully_on_gpu_logs_no_error(monkeypatch, caplog):
+    settings = load_settings(env={})
+    model = settings.llm_model("chat")
+    _ollama_ps(monkeypatch, [{"name": model, "size": 5_000, "size_vram": 5_000}])
+    startup.check_services(settings)
+    assert "trên CPU" not in caplog.text

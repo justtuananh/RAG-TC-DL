@@ -94,6 +94,11 @@ services:
     ports:
       - "8010:8010"
     restart: unless-stopped
+    # GPU 8 GB ưu tiên Ollama: chỉ khởi động khi LLM đã nằm trọn trên GPU, rồi
+    # server.py tự chọn GPU nếu phần VRAM còn dư đủ (EMBEDDING_GPU_MIN_FREE_MB), không thì CPU.
+    depends_on:
+      ollama:
+        condition: service_healthy
     deploy:
       resources:
         reservations:
@@ -132,8 +137,8 @@ services:
     ports:
       - "8011:8011"
     restart: unless-stopped
-    # CPU-only — nhường VRAM cho Ollama (embedding + Ollama đã đủ tải GPU 8GB;
-    # reranker chỉ chạy trên top-k ứng viên nhỏ mỗi câu hỏi, không phải bottleneck).
+    # CPU-only (không cấp GPU; server.py cũng luôn chọn CPU cho reranker) — nhường VRAM
+    # cho Ollama; reranker chỉ chấm top-k ứng viên nhỏ mỗi câu hỏi, không phải bottleneck.
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8011/health')"]
       interval: 30s
@@ -160,13 +165,21 @@ services:
       # llm/generator.py nay gọi /api/chat (options được tôn trọng); env này là
       # lưới an toàn cho mọi client /v1 khác.
       OLLAMA_CONTEXT_LENGTH: "8192"
-      # Buộc offload tất cả layers lên GPU (tránh Ollama tự partial-offload khi
-      # ước tính VRAM không đủ). qwen2.5:7b-instruct ~4.7GB (ctx 8192) vừa trên 8GB.
-      OLLAMA_NUM_GPU: "999"
-      # Giữ model trên GPU mãi mãi — embedding/reranker sẽ tự nhả VRAM sau idle,
-      # nhường lại cho Ollama thay vì Ollama unload rồi reload lại.
+      # Giữ model trên GPU mãi mãi (llm.chat.keep_alive cũng là -1): Ollama mà nhả rồi
+      # nạp lại sau khi embedding đã chiếm VRAM thì chỉ còn chỗ cho một phần layer -> chạy CPU.
       OLLAMA_KEEP_ALIVE: "-1"
+      OLLAMA_MAX_LOADED_MODELS: "1"
+      # Model healthcheck nạp trước; cùng giá trị với models.llm_chat của config/settings.yaml.
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:7b-instruct}
     restart: unless-stopped
+    # Healthy = model chat đã nạp lên GPU. Lần đầu healthcheck tự nạp model khi VRAM còn
+    # trống (embedding chờ healthy mới khởi động), nên qwen2.5:7b (~5 GB, ctx 8192) chạy 100% GPU.
+    healthcheck:
+      test: ["CMD-SHELL", "ollama ps | grep -q \"$$OLLAMA_MODEL\" || ollama run \"$$OLLAMA_MODEL\" '' </dev/null >/dev/null 2>&1"]
+      interval: 30s
+      timeout: 300s
+      retries: 5
+      start_period: 600s
     # ── NVIDIA GPU: bỏ comment để dùng RTX 5060 ──────────────────────────────
     deploy:
       resources:

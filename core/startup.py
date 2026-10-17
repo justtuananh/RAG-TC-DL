@@ -93,7 +93,31 @@ def check_services(settings: Settings) -> dict[str, bool]:
             logger.warning("Service %s chưa phản hồi ở %s", name, url)
         elif name in expected_models:
             _check_served_model(name, resp, expected_models[name])
+        elif name == "ollama":
+            _check_llm_on_gpu(url, settings.llm_model("chat"))
     return status
+
+
+def _check_llm_on_gpu(ollama_root: str, model: str) -> None:
+    """LLM phải nằm trọn trên GPU; một phần trên CPU làm mỗi câu trả lời chậm vài lần.
+
+    Chưa nạp (Ollama nạp lúc có câu hỏi đầu) thì chưa đủ thông tin để kết luận.
+    """
+    try:
+        loaded = (
+            requests.get(ollama_root + "/api/ps", timeout=_PROBE_TIMEOUT_S).json().get("models", [])
+        )
+    except (OSError, ValueError, requests.RequestException):
+        return
+    for entry in loaded:
+        size, on_gpu = entry.get("size") or 0, entry.get("size_vram") or 0
+        if entry.get("name") == model and size and on_gpu < size:
+            logger.error(
+                "LLM %s đang chạy %d %% trên CPU: VRAM bị service khác chiếm trước khi Ollama nạp "
+                "model; khởi động lại embedding sau khi Ollama đã nạp xong",
+                model,
+                round(100 * (size - on_gpu) / size),
+            )
 
 
 def _check_served_model(name: str, resp: requests.Response, expected: str) -> None:

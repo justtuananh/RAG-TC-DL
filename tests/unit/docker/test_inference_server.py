@@ -104,3 +104,29 @@ def test_rerank_empty_documents(server_mod):
     client = TestClient(server_mod.app)
     r = client.post("/v1/rerank", json={"query": "q", "documents": []})
     assert r.json()["results"] == []
+
+
+_GB = 1024**3
+
+
+def test_reranker_always_runs_on_cpu(server_mod):
+    # GPU dành cho Ollama + embedding; reranker không bao giờ chiếm VRAM.
+    assert server_mod.choose_device("reranker", free_vram_bytes=8 * _GB) == "cpu"
+
+
+def test_embedding_uses_gpu_when_ollama_leaves_enough_vram(server_mod):
+    assert server_mod.choose_device("embedding", free_vram_bytes=3 * _GB) == "cuda"
+
+
+def test_embedding_falls_back_to_cpu_when_vram_is_short(server_mod):
+    # Không giành VRAM của Ollama: thiếu chỗ thì chạy CPU thay vì đẩy LLM ra CPU.
+    assert server_mod.choose_device("embedding", free_vram_bytes=1 * _GB) == "cpu"
+
+
+def test_embedding_runs_on_cpu_without_cuda(server_mod):
+    assert server_mod.choose_device("embedding", free_vram_bytes=None) == "cpu"
+
+
+def test_embedding_vram_cap_keeps_safety_margin(server_mod):
+    fraction = server_mod.vram_fraction(free_vram_bytes=3 * _GB, total_vram_bytes=8 * _GB)
+    assert 0 < fraction * 8 * _GB < 3 * _GB
