@@ -27,6 +27,9 @@ RUN pip install --no-cache-dir -r requirements.txt -r requirements-app.txt
 COPY . .
 
 RUN mkdir -p /app/.formula-registry /app/TC_DL /app/build/spike_a
+# Container api chạy bằng UID của người dùng host (docker-compose.yml `user:`),
+# nên thư mục log (config/logging.yaml: logs/app.log) phải ghi được với mọi UID.
+RUN mkdir -p /app/logs && chmod 1777 /app/logs
 EXPOSE 8080 7861
 
 # Default: run the Gradio chat app
