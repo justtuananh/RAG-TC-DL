@@ -196,8 +196,8 @@ A lower layer never imports a higher one;
 | ui         | 7861  | `python -m ui.gradio_app` (Gradio, KaTeX vendored under `ui/static/katex/`) |
 | frontend   | 3000 (Docker) / 5173 (Vite dev) | React UI (nginx, proxy `/api`→api:8080); **đã nối backend thật** (chat SSE + lịch sử/bộ nhớ) - xem `frontend/README.md` |
 
-GPU 8 GB is split Ollama-first: compose starts the reranker only after Ollama is healthy (its healthcheck preloads the chat model, `keep_alive` -1), so the LLM sits 100% on GPU.
-Then `reranker` and, after it, `embedding` each go on GPU only if `GPU_MIN_FREE_MB` VRAM is still free (`docker/inference/server.py`), else CPU; on 8 GB only the reranker fits, the embedding runs on CPU.
+GPU 8 GB is split Ollama-first: compose starts `embedding` only after Ollama is healthy (its healthcheck preloads the chat model, `keep_alive` -1), so the LLM sits 100% on GPU.
+`docker/inference/server.py` then puts the embedding on GPU only if `EMBEDDING_GPU_MIN_FREE_MB` VRAM is left, else CPU; the reranker always runs on CPU.
 `core/startup.py` logs an error when Ollama runs partly on CPU.
 
 Service URLs, ports, and model names are **not** hardcoded in code: they come from

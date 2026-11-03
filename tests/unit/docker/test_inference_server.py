@@ -109,26 +109,22 @@ def test_rerank_empty_documents(server_mod):
 _GB = 1024**3
 
 
-def test_reranker_uses_leftover_vram(server_mod):
-    # Ollama nạp trước, reranker lấy phần VRAM còn dư, embedding lấy phần còn lại sau cùng.
-    assert server_mod.choose_device(free_vram_bytes=int(1.8 * _GB)) == "cuda"
-
-
-def test_reranker_falls_back_to_cpu_when_vram_is_short(server_mod):
-    assert server_mod.choose_device(free_vram_bytes=int(0.8 * _GB)) == "cpu"
+def test_reranker_always_runs_on_cpu(server_mod):
+    # GPU dành cho Ollama + embedding; reranker không bao giờ chiếm VRAM.
+    assert server_mod.choose_device("reranker", free_vram_bytes=8 * _GB) == "cpu"
 
 
 def test_embedding_uses_gpu_when_ollama_leaves_enough_vram(server_mod):
-    assert server_mod.choose_device(free_vram_bytes=3 * _GB) == "cuda"
+    assert server_mod.choose_device("embedding", free_vram_bytes=3 * _GB) == "cuda"
 
 
 def test_embedding_falls_back_to_cpu_when_vram_is_short(server_mod):
     # Không giành VRAM của Ollama: thiếu chỗ thì chạy CPU thay vì đẩy LLM ra CPU.
-    assert server_mod.choose_device(free_vram_bytes=1 * _GB) == "cpu"
+    assert server_mod.choose_device("embedding", free_vram_bytes=1 * _GB) == "cpu"
 
 
 def test_embedding_runs_on_cpu_without_cuda(server_mod):
-    assert server_mod.choose_device(free_vram_bytes=None) == "cpu"
+    assert server_mod.choose_device("embedding", free_vram_bytes=None) == "cpu"
 
 
 def test_embedding_vram_cap_keeps_safety_margin(server_mod):

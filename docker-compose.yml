@@ -94,11 +94,10 @@ services:
     ports:
       - "8010:8010"
     restart: unless-stopped
-    # Nạp sau cùng (Ollama -> reranker -> embedding): lấy VRAM còn dư nếu đủ
-    # (GPU_MIN_FREE_MB), không thì CPU. Trên GPU 8 GB phần dư chỉ đủ cho một model
-    # fp16 nên embedding chạy CPU: mỗi câu hỏi chỉ nhúng một câu ngắn (~0,1 s).
+    # GPU 8 GB ưu tiên Ollama: chỉ khởi động khi LLM đã nằm trọn trên GPU, rồi
+    # server.py tự chọn GPU nếu phần VRAM còn dư đủ (EMBEDDING_GPU_MIN_FREE_MB), không thì CPU.
     depends_on:
-      reranker:
+      ollama:
         condition: service_healthy
     deploy:
       resources:
@@ -133,24 +132,13 @@ services:
       RERANKER_MAX_LENGTH: "1024"
       PORT: "8011"
       HF_HUB_OFFLINE: "1"  # xem giải thích ở service embedding
-      PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
     volumes:
       - hf_cache_reranker:/root/.cache/huggingface
     ports:
       - "8011:8011"
     restart: unless-stopped
-    # Nạp ngay sau Ollama, trước embedding: chấm 60 ứng viên trên CPU mất ~54 s mỗi câu
-    # hỏi, là bước chậm nhất nên được phần VRAM còn dư trước (server.py tự về CPU nếu thiếu).
-    depends_on:
-      ollama:
-        condition: service_healthy
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu]
+    # CPU-only (không cấp GPU; server.py cũng luôn chọn CPU cho reranker) — nhường VRAM
+    # cho Ollama; reranker chỉ chấm top-k ứng viên nhỏ mỗi câu hỏi, không phải bottleneck.
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8011/health')"]
       interval: 30s
