@@ -9,8 +9,8 @@ Endpoints:
 Env:
   EMBEDDING_MODEL      default: BAAI/bge-large-en-v1.5
   RERANKER_MODEL       default: BAAI/bge-reranker-v2-m3
-  EMBEDDING_GPU_MIN_FREE_MB default: 2048 — VRAM trống tối thiểu để embedding lên GPU,
-                       thiếu thì chạy CPU (GPU ưu tiên cho Ollama; reranker luôn CPU)
+  GPU_MIN_FREE_MB      default: 1536 — VRAM trống tối thiểu để model lên GPU, thiếu thì
+                       chạy CPU (GPU ưu tiên Ollama, rồi reranker, rồi embedding)
   RERANKER_MAX_LENGTH  default: 1024 — token cap của cross-encoder; 512 cắt mất
                        nội dung section dài (đo được Q39/Q48 bị giáng hạng vì vậy)
   PORT                 default: 8000
@@ -37,20 +37,20 @@ _embedder: SentenceTransformer | None = None
 _reranker: CrossEncoder | None = None
 
 
-# Chia GPU 8 GB: Ollama nạp trước và chiếm trọn phần nó cần (docker-compose cho
-# embedding chờ Ollama healthy = model đã nằm trên GPU). Embedding chỉ dùng phần
-# VRAM còn dư; reranker luôn chạy CPU (chỉ chấm top-k ứng viên mỗi câu hỏi).
-# bge-m3 fp16 ~1,1 GB trọng số + CUDA context + activation: dưới 2 GB trống thì chạy CPU.
-EMBEDDING_GPU_MIN_FREE_MB = int(os.getenv("EMBEDDING_GPU_MIN_FREE_MB", "2048"))
+# Chia GPU 8 GB theo thứ tự nạp: Ollama trước (chiếm trọn phần nó cần), rồi reranker,
+# rồi embedding (docker-compose cho mỗi service chờ service trước healthy). Mỗi service
+# lên GPU chỉ khi phần VRAM còn dư đủ cho model fp16 (~1,1 GB) + CUDA context +
+# activation, không thì chạy CPU: không bao giờ giành VRAM của Ollama.
+GPU_MIN_FREE_MB = int(os.getenv("GPU_MIN_FREE_MB", "1536"))
 # Chừa lại cho CUDA context của tiến trình này (nằm ngoài allocator của PyTorch).
 _VRAM_SAFETY_MARGIN_BYTES = 512 * 1024**2
 
 
-def choose_device(mode: str, free_vram_bytes: int | None) -> str:
-    """Thiết bị chạy model: reranker luôn CPU; embedding lên GPU khi VRAM còn đủ."""
-    if mode == "reranker" or free_vram_bytes is None:
+def choose_device(free_vram_bytes: int | None) -> str:
+    """Lên GPU khi VRAM còn dư đủ (None = không có CUDA), không thì CPU."""
+    if free_vram_bytes is None:
         return "cpu"
-    return "cuda" if free_vram_bytes >= EMBEDDING_GPU_MIN_FREE_MB * 1024**2 else "cpu"
+    return "cuda" if free_vram_bytes >= GPU_MIN_FREE_MB * 1024**2 else "cpu"
 
 
 def vram_fraction(free_vram_bytes: int, total_vram_bytes: int) -> float:
@@ -64,19 +64,19 @@ async def lifespan(app: FastAPI):
     import torch
     cuda = torch.cuda.is_available()
     free, total = torch.cuda.mem_get_info() if cuda else (None, None)
-    device = choose_device(MODE, free)
+    device = choose_device(free)
     if cuda:
         log.info("GPU: %s, VRAM trống %.2f / %.2f GB -> %s chạy trên %s",
                  torch.cuda.get_device_name(0), free / 1024**3, total / 1024**3, MODE, device)
     if device == "cuda":
         torch.cuda.set_per_process_memory_fraction(vram_fraction(free, total))
-    elif MODE != "reranker":
-        log.warning("Embedding chạy CPU: VRAM trống không đủ %d MB (Ollama được ưu tiên GPU)",
-                    EMBEDDING_GPU_MIN_FREE_MB)
+    else:
+        log.warning("%s chạy CPU: VRAM trống không đủ %d MB (Ollama được ưu tiên GPU)",
+                    MODE, GPU_MIN_FREE_MB)
     # fp16 trên GPU: giảm ~một nửa VRAM so với fp32 mặc định của sentence-transformers.
     model_kwargs = {"torch_dtype": torch.float16} if device == "cuda" else None
     if MODE == "reranker":
-        log.info("Loading reranker: %s on %s (max_length=%d)", RERANKER_MODEL, device, RERANKER_MAX_LENGTH)
+        log.info("Loading reranker: %s on %s (max_length=%d, fp16=%s)", RERANKER_MODEL, device, RERANKER_MAX_LENGTH, device == "cuda")
         _reranker = CrossEncoder(RERANKER_MODEL, max_length=RERANKER_MAX_LENGTH, device=device, model_kwargs=model_kwargs)
         log.info("Reranker ready")
     else:
