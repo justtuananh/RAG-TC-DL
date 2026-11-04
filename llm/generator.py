@@ -54,16 +54,22 @@ def stream_ollama(messages: list[dict], *, model: str | None = None) -> Iterator
         stream=True,
         timeout=chat.timeout_s,
     )
-    resp.raise_for_status()
-    for line in resp.iter_lines():
-        if not line:
-            continue
-        try:
-            chunk = json.loads(line.decode("utf-8"))
-        except json.JSONDecodeError:
-            continue
-        delta = (chunk.get("message") or {}).get("content", "")
-        if delta:
-            yield delta
-        if chunk.get("done"):
-            break
+    try:
+        resp.raise_for_status()
+        for line in resp.iter_lines():
+            if not line:
+                continue
+            try:
+                chunk = json.loads(line.decode("utf-8"))
+            except json.JSONDecodeError:
+                continue
+            delta = (chunk.get("message") or {}).get("content", "")
+            if delta:
+                yield delta
+            if chunk.get("done"):
+                break
+    finally:
+        # Generator bị close (vd. lọc CJK ngắt sớm) -> đóng kết nối để Ollama ngừng sinh.
+        close = getattr(resp, "close", None)
+        if close is not None:
+            close()

@@ -18,6 +18,7 @@ from core.latex import fix_latex, restore_formulas
 from core.settings_loader import get_settings
 from llm import generator
 from llm.guards import CALCULATION_GUIDE, enforce_refusal_stop, is_calculation_request
+from llm.lang_guard import LANGUAGE_FALLBACK, CjkStreamGuard, strip_cjk
 from llm.prompt import build_messages
 from query import device_ambiguity
 from retrieval import retriever
@@ -136,14 +137,31 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if preface:
         yield _sse({"type": "delta", "text": preface})
 
-    partial = ""
+    guard = CjkStreamGuard()
+    stream = generator.stream_ollama(messages)
     try:
-        for delta in generator.stream_ollama(messages):
-            partial += delta
-            yield _sse({"type": "delta", "text": delta})
+        for delta in stream:
+            emit, stop = guard.feed(delta)
+            if emit:
+                yield _sse({"type": "delta", "text": emit})
+            if stop:  # đuôi dịch tiếng Trung đã rõ: ngắt luồng Ollama, khỏi sinh tiếp
+                break
     except Exception as e:
         yield _sse({"type": "error", "text": f"Lỗi LLM: {e}"})
         return
+    finally:
+        close = getattr(stream, "close", None)
+        if close is not None:
+            close()
+    # Tầng 3: lọc CJK tất định trên văn bản cuối (sự kiện ``done`` thay phần đã stream).
+    stripped = strip_cjk(guard.raw)
+    partial = LANGUAGE_FALLBACK if stripped.empty else stripped.text
+    if stripped.fixed:
+        logger.warning(
+            "Câu trả lời lẫn CJK đã được lọc (needs_regen=%s, empty=%s)",
+            stripped.needs_regen,
+            stripped.empty,
+        )
     if closing:
         yield _sse({"type": "delta", "text": closing})
 
