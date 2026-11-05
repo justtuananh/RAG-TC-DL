@@ -5106,11 +5106,16 @@
           "latex": "U_{c}=k×u_{c}"
         }
       ]
+    },
+    {
+      "file": "TIEN_DO_NGHIEN_CUU_CONG_THUC.md",
+      "status": "skipped-legacy",
+      "note": "định dạng chưa được hỗ trợ"
     }
   ],
   "totals": {
     "docx_processed": 7,
-    "legacy_skipped": 0,
+    "legacy_skipped": 1,
     "formulas_found": 351,
     "formulas_ole_mathtype": 232,
     "formulas_omml_native": 119,

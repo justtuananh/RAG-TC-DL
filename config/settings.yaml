@@ -63,7 +63,7 @@ llm:
     timeout_s: ${OLLAMA_TIMEOUT:-300}     # tới token đầu tiên; CPU nguội cần >120s
     num_ctx: 8192                         # phải khớp OLLAMA_CONTEXT_LENGTH của container
     max_new_tokens: 1024
-    temperature: 0.1
+    temperature: 0.0
     keep_alive: "-1m"                     # giữ LLM trên GPU mãi; nạp lại sau khi embedding chiếm VRAM là tràn sang CPU
     history_turns: 3
   context:
