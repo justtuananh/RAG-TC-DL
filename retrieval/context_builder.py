@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from core.settings_loader import get_settings
 from retrieval import quote
+from retrieval import doc_titles
 
 # ── Lọc nguồn theo độ tin cậy (cắt đuôi nguồn yếu) ───────────────────────────
 # Reranker (bge-reranker-v2-m3) trả điểm sigmoid [0,1]. Với câu HẸP, chỉ 1-2 nguồn
@@ -181,6 +182,15 @@ def _block_budgets(lengths: list[int], total: int, floor: int, cap: int) -> list
     return budgets
 
 
+
+def _source_header(i: int, payload: dict) -> str:
+    """Đầu mục nguồn: kèm tên đối tượng của tài liệu để LLM biết nguồn nói về thiết bị nào."""
+    stem = payload["file_stem"]
+    title = doc_titles.title_for(stem)
+    label = f"{stem} ({title})" if title else stem
+    return f"[{i}] Nguồn: {label} — {payload['section_path']}\n---\n"
+
+
 _SOURCE_SEP = "\n\n---\n\n"
 
 
@@ -196,10 +206,7 @@ def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
     """
     llm = get_settings().llm
     texts = [(r.get("parent_payload") or r["payload"])["text"] for r in results]
-    headers = [
-        f"[{i}] Nguồn: {r['payload']['file_stem']} — {r['payload']['section_path']}\n---\n"
-        for i, r in enumerate(results, 1)
-    ]
+    headers = [_source_header(i, r["payload"]) for i, r in enumerate(results, 1)]
     # Đầu mục nguồn và dấu ngăn cách cũng chiếm chỗ trong trần tổng.
     overhead = sum(map(len, headers)) + len(_SOURCE_SEP) * max(len(results) - 1, 0)
     budgets = _block_budgets(
