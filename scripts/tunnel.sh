@@ -9,14 +9,8 @@ PORT="${FRONTEND_PORT:-3000}"
 
 command -v cloudflared >/dev/null || { echo "Thiếu cloudflared" >&2; exit 1; }
 
-# Công khai ra internet mà không đăng nhập = ai cũng xoá/tải tài liệu được.
-auth="$(grep -E '^AUTH_ENABLED=' .env 2>/dev/null | tail -1 | cut -d= -f2 || true)"
-if [ "${auth:-false}" != "true" ] && [ "${ALLOW_OPEN_TUNNEL:-0}" != "1" ]; then
-  echo "AUTH_ENABLED chưa bật trong .env - từ chối mở tunnel công khai." >&2
-  echo "Đặt AUTH_ENABLED=true + JWT_SECRET_KEY, chạy 'docker compose up -d api', rồi" >&2
-  echo "'python -m scripts.create_admin'. (Bỏ qua kiểm tra: ALLOW_OPEN_TUNNEL=1)" >&2
-  exit 1
-fi
+# Chưa có đăng nhập: ai có link cũng xoá/tải tài liệu được. Chỉ chia sẻ link cho người tin cậy.
+echo "Cảnh báo: AUTH tắt - ai có link đều có quyền quản trị." >&2
 
 curl -fsS "http://localhost:${PORT}/api/health" >/dev/null \
   || { echo "Frontend/API chưa chạy ở :${PORT} (docker compose up -d)" >&2; exit 1; }
