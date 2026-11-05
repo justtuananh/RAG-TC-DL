@@ -13,6 +13,15 @@ from core.settings_loader import get_settings
 from reranking.reranker import rerank_hits
 
 
+import pytest
+
+
+@pytest.fixture(autouse=True)
+def _no_known_files(monkeypatch):
+    """Chế độ phủ tài liệu cần danh sách file đã nạp; mặc định test giả lập kho rỗng (phễu toàn kho)."""
+    monkeypatch.setattr("retrieval.router.known_files", lambda: frozenset())
+
+
 def _child(cid, pid, section="6 Tiến hành > 6.1 X"):
     return {
         "id": cid,
@@ -215,3 +224,34 @@ def test_rerank_hits_keeps_every_matched_child_of_a_section_as_anchor(monkeypatc
     out = rerank_hits("q", hits, top_n=5)
     assert out[0]["anchor_texts"] == ["child-c1", "child-c2", "child-c3"]
     assert out[1]["anchor_texts"] == ["child-c4"]
+
+
+@responses.activate
+def test_unanchored_query_covers_every_document(monkeypatch, settings_override):
+    settings_override({"retrieval.coverage_per_file": 1})
+    files = ["DOC_A", "DOC_B", "DOC_C"]
+    monkeypatch.setattr("retrieval.router.known_files", lambda: frozenset(files))
+    monkeypatch.setattr("embedding.embedder.embed_query", lambda q: [0.0] * 1024)
+
+    def child(stem, n):
+        c = _child(f"{stem}-{n}", f"{stem}-p{n}")
+        c["payload"]["file_stem"] = stem
+        return c
+
+    monkeypatch.setattr(
+        "vectorstore.qdrant.dense_search",
+        lambda vec, top_k=50, file_stem=None: [child(file_stem, 1), child(file_stem, 2)],
+    )
+    monkeypatch.setattr("vectorstore.hybrid_index.bm25_search", lambda q, top_k=50, file_stem=None: [])
+    monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset())
+    monkeypatch.setattr(
+        "vectorstore.qdrant.fetch_parent",
+        lambda pid: {"text": f"parent-{pid}", "section_path": "6", "file_stem": pid.split("-")[0]},
+    )
+    responses.add_callback(
+        responses.POST, get_settings().services.rerank_url, callback=_rerank_callback, content_type="application/json"
+    )
+
+    out = R.retrieve("điều kiện môi trường", top_k=50, top_n=2)
+
+    assert sorted(h["payload"]["file_stem"] for h in out) == files  # mỗi tài liệu đúng 1 mục

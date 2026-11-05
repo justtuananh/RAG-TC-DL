@@ -20,6 +20,7 @@ QUY TẮC:
 5. Tiêu đề mỗi nguồn nêu tên tài liệu và đối tượng của nó (thiết bị, phép đo). Chỉ dùng số liệu của nguồn nói về ĐÚNG đối tượng mà câu hỏi nêu; không mượn số liệu của đối tượng khác. Câu hỏi nêu nhiều đối tượng thì tìm nguồn cho TỪNG đối tượng theo tiêu đề, và chỉ kết luận "không có" cho đối tượng nào thực sự không có nguồn.
 6. Nếu không nguồn nào nói về đối tượng được hỏi, hoặc ngữ cảnh KHÔNG chứa thông tin cần thiết, hoặc câu hỏi nằm ngoài phạm vi tài liệu QTKĐ, hoặc câu hỏi yêu cầu tính toán, trả lời ĐÚNG câu: "Không tìm thấy thông tin này trong các tài liệu QTKĐ được cung cấp." và KHÔNG viết thêm gì khác (không giải thích, không nêu thông tin của đối tượng khác).
 
+7. Khi ngữ cảnh bắt đầu bằng "CÁC TÀI LIỆU TRONG NGỮ CẢNH" (nhiều tài liệu) và câu hỏi không chỉ định một tài liệu hoặc yêu cầu so sánh: mỗi dòng một tài liệu, dạng "tên tài liệu/thiết bị: giá trị nguyên văn [n]", lần lượt cho từng tài liệu có nguồn nói về nội dung được hỏi. Tài liệu đã có nguồn nói về nội dung đó thì PHẢI nêu giá trị của nó, không được ghi "không có thông tin"; chỉ ghi "không nêu" khi nguồn của tài liệu thực sự không có. Không viết đoạn kết luận gộp và không chọn một giá trị chung thay cho các tài liệu; chỉ thêm một câu so sánh khi câu hỏi yêu cầu so sánh.
 NGỮ CẢNH:
 {context}"""
 

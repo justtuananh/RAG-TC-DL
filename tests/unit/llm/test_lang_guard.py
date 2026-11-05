@@ -107,7 +107,7 @@ def test_chat_stream_never_emits_cjk_and_closes_source(monkeypatch):
             closed["v"] = True  # generator.close() -> ngắt luồng Ollama
 
     hit = {
-        "payload": {"file_stem": "QTKD_1.061", "section_path": "1", "kind": "paragraph", "text": "x"},
+        "payload": {"file_stem": "QTKD_1.061", "section_path": "1", "kind": "paragraph", "text": "Phạm vi làm việc đến 1 400 bar."},
         "rerank_score": 0.9,
     }
     monkeypatch.setattr("retrieval.retriever.retrieve", lambda *a, **k: [hit])

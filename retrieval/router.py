@@ -185,6 +185,11 @@ def route_files(query: str) -> frozenset[str]:
     return frozenset(stems)
 
 
+def known_files() -> frozenset[str]:
+    """Mọi file_stem QTKĐ đang được định tuyến (đã nạp), dùng cho truy hồi phủ đủ tài liệu."""
+    return frozenset(_ensure_mapping().values())
+
+
 def route(query: str) -> str | None:
     """Return file_stem if query clearly targets EXACTLY one QTKĐ file, else None.
 

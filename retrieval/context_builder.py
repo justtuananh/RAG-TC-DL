@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from core.settings_loader import get_settings
 from retrieval import quote
-from retrieval import doc_titles
+from retrieval import doc_pages, doc_titles
 
 # ── Lọc nguồn theo độ tin cậy (cắt đuôi nguồn yếu) ───────────────────────────
 # Reranker (bge-reranker-v2-m3) trả điểm sigmoid [0,1]. Với câu HẸP, chỉ 1-2 nguồn
@@ -184,11 +184,31 @@ def _block_budgets(lengths: list[int], total: int, floor: int, cap: int) -> list
 
 
 def _source_header(i: int, payload: dict) -> str:
-    """Đầu mục nguồn: kèm tên đối tượng của tài liệu để LLM biết nguồn nói về thiết bị nào."""
+    """Đầu mục nguồn: kèm tên đối tượng của tài liệu và số trang (từ Mục lục) để LLM biết nguồn nói về
+    thiết bị nào và người dùng đối soát được."""
     stem = payload["file_stem"]
     title = doc_titles.title_for(stem)
     label = f"{stem} ({title})" if title else stem
-    return f"[{i}] Nguồn: {label} — {payload['section_path']}\n---\n"
+    page = doc_pages.label(stem, payload["section_path"])
+    where = f"{payload['section_path']}, {page}" if page else payload["section_path"]
+    return f"[{i}] Nguồn: {label} — {where}\n---\n"
+
+
+def documents_preface(results: list[dict]) -> str:
+    """Danh sách tài liệu có trong ngữ cảnh kèm số nguồn của từng tài liệu (chỉ khi ≥ 2 tài liệu).
+
+    Model 7B tổng hợp nhiều tài liệu hay bỏ sót: liệt kê sẵn để câu trả lời đi lần lượt từng tài liệu."""
+    by_file: dict[str, list[int]] = {}
+    for i, r in enumerate(results, 1):
+        by_file.setdefault(r["payload"]["file_stem"], []).append(i)
+    if len(by_file) < 2:
+        return ""
+    lines = []
+    for n, (stem, idx) in enumerate(by_file.items(), 1):
+        title = doc_titles.title_for(stem)
+        refs = "".join(f"[{i}]" for i in idx)
+        lines.append(f"({n}) {stem}" + (f" — {title}" if title else "") + f": nguồn {refs}")
+    return "CÁC TÀI LIỆU TRONG NGỮ CẢNH:\n" + "\n".join(lines) + "\n\n---\n\n"
 
 
 _SOURCE_SEP = "\n\n---\n\n"
@@ -208,7 +228,8 @@ def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
     texts = [(r.get("parent_payload") or r["payload"])["text"] for r in results]
     headers = [_source_header(i, r["payload"]) for i, r in enumerate(results, 1)]
     # Đầu mục nguồn và dấu ngăn cách cũng chiếm chỗ trong trần tổng.
-    overhead = sum(map(len, headers)) + len(_SOURCE_SEP) * max(len(results) - 1, 0)
+    preface = documents_preface(results)
+    overhead = sum(map(len, headers)) + len(_SOURCE_SEP) * max(len(results) - 1, 0) + len(preface)
     budgets = _block_budgets(
         [len(t) for t in texts],
         llm.total_context_chars - overhead,
@@ -230,8 +251,10 @@ def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
         if len(child_text) > 220:
             snippet += "…"
         i = len(cite_parts) + 1
-        cite_parts.append(f"**[{i}]** `{p['file_stem']}` • {p['section_path']}\n> {snippet}")
+        page = doc_pages.label(p["file_stem"], p["section_path"])
+        where = f"{p['section_path']} ({page})" if page else p["section_path"]
+        cite_parts.append(f"**[{i}]** `{p['file_stem']}` • {where}\n> {snippet}")
 
-    context_str = _SOURCE_SEP.join(ctx_parts)
+    context_str = preface + _SOURCE_SEP.join(ctx_parts)
     citations_md = "\n\n---\n\n**📎 Nguồn tham khảo:**\n\n" + "\n\n".join(cite_parts)
     return context_str, citations_md

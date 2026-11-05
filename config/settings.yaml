@@ -52,6 +52,9 @@ retrieval:
   rrf_weight_dense: 1.0                   # trọng số nhánh dense trong RRF; chỉ tỷ lệ dense/BM25 có tác dụng
   rrf_weight_bm25: 1.0                    # trọng số nhánh BM25 trong RRF
   min_routed_candidates: 6                # ít hơn thì bỏ lọc theo file, tìm toàn kho
+  coverage_per_file: 2                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
+  coverage_pool_per_file: 6               # ứng viên RRF mỗi tài liệu vào cross-encoder ở chế độ trên
+  coverage_max_sources: 10                # trần số nguồn ở chế độ trên (nguồn điểm thấp vẫn bị lọc tin cậy)
 
 reranking:
   timeout_s: 60
@@ -75,6 +78,24 @@ llm:
     formula_line_slack: 400               # khối dài hơn ngân sách bị cắt theo dòng: được vượt tới N ký tự để không cắt giữa dòng công thức
     source_abs_floor: 0.08
     source_rel_floor: 0.20
+  rewrite:                                # câu tiếp theo mất chủ ngữ ("Còn độ ẩm thì sao?") -> viết lại độc lập trước khi truy hồi
+    enabled: true
+    max_history_turns: 2
+    answer_chars: 300
+    max_query_chars: 400
+    num_predict: 120
+    timeout_s: 30
+  number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn
+    enabled: true
+    max_regen: 1                          # số lần sinh lại khi có số không có trong nguồn
+
+calc:                                     # tính trong chat bằng công thức đã duyệt (formula_registry); không có công thức duyệt thì như cũ
+  enabled: true
+  intent_pattern: '\b(tính|quy đổi|đổi sang|xác định|hiệu chỉnh|chuyển đổi)\b'
+  max_formulas: 3
+  min_variable_coverage: 0.6              # tỷ lệ từ nhãn biến phải có trong câu hỏi để chọn công thức
+  num_predict: 300
+  timeout_s: 60
 
 ingestion:
   soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH

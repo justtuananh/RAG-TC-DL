@@ -73,3 +73,29 @@ def stream_ollama(messages: list[dict], *, model: str | None = None) -> Iterator
         close = getattr(resp, "close", None)
         if close is not None:
             close()
+
+
+def chat_once(
+    messages: list[dict],
+    *,
+    num_predict: int,
+    timeout_s: float,
+    json_mode: bool = False,
+    model: str | None = None,
+) -> str:
+    """Một lượt gọi Ollama native /api/chat KHÔNG stream, nhiệt độ 0: trích số liệu, viết lại
+    câu hỏi. ``json_mode`` ép đầu ra là JSON hợp lệ. Lỗi mạng/HTTP -> ngoại lệ cho nơi gọi xử lý."""
+    settings = get_settings()
+    chat = settings.llm.chat
+    body: dict = {
+        "model": model or settings.llm_model("chat"),
+        "messages": messages,
+        "stream": False,
+        "keep_alive": chat.keep_alive,
+        "options": {"num_ctx": chat.num_ctx, "num_predict": num_predict, "temperature": 0},
+    }
+    if json_mode:
+        body["format"] = "json"
+    resp = requests.post(native_chat_url(settings.llm_url("chat")), json=body, timeout=timeout_s)
+    resp.raise_for_status()
+    return ((resp.json().get("message") or {}).get("content") or "").strip()
