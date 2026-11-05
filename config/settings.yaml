@@ -88,6 +88,11 @@ llm:
   number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn
     enabled: true
     max_regen: 1                          # số lần sinh lại khi có số không có trong nguồn
+  citation:                               # khối "Nguồn:" tất định: tên văn bản + mục sâu nhất + trang, bỏ [n] không tồn tại
+    enabled: true
+    min_keyword_len: 5                    # từ khóa của câu trả lời (khi không có [n] nào) dài tối thiểu N ký tự
+    min_keyword_hits: 2                   # số từ khóa tối thiểu trùng với nguồn khi câu trả lời không có số
+    max_auto_sources: 1                   # số nguồn tự gắn khi câu trả lời thiếu [n]
 
 calc:                                     # tính trong chat bằng công thức đã duyệt (formula_registry); không có công thức duyệt thì như cũ
   enabled: true

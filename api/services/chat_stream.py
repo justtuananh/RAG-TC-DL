@@ -16,12 +16,12 @@ from sqlalchemy.orm import Session
 from api.schemas import ChatMessage, ChatRequest
 from core.latex import fix_latex, restore_formulas
 from core.settings_loader import get_settings
-from llm import generator, number_check
+from llm import citations, generator, number_check
 from llm.guards import CALCULATION_GUIDE, enforce_refusal_stop, is_calculation_request
 from llm.lang_guard import LANGUAGE_FALLBACK, CjkStreamGuard, strip_cjk
 from llm.prompt import build_messages
 from query import chat_calc, device_ambiguity, history_context
-from retrieval import doc_pages, retriever
+from retrieval import doc_pages, doc_titles, retriever
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.quote import build_quote
 
@@ -229,5 +229,7 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if calc_answer and bad_numbers:
         # Model diễn đạt kết quả tính bằng số lạ: chỉ giữ kết quả do bộ tính tạo ra (đã xác minh).
         body = "Kết quả tính bằng công thức đã được phê duyệt:\n" + calc.summary
+    else:
+        body = citations.add_citations(body, sources, doc_titles.title_for)
     answer = preface + body + closing
     yield _sse({"type": "done", "answer": answer, "sources": sources})

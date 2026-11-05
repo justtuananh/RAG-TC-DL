@@ -49,7 +49,7 @@ def test_done_event_has_only_text_fields(monkeypatch):
     assert [event["type"] for event in events] == ["status", "sources", "status", "delta", "done"]
     done = events[-1]
     assert set(done) == {"type", "answer", "sources"}
-    assert done["answer"] == "Sai số là 0,5 % [1]"
+    assert done["answer"].startswith("Sai số là 0,5 % [1]\n\nNguồn:\n- [1] QTKD_1.061")
     assert done["sources"][0]["file_stem"] == "QTKD_1.061"
 
 
@@ -190,7 +190,7 @@ def test_text_branch_unchanged(monkeypatch):
     assert "sources" in types and "delta" in types
     done = events[-1]
     assert done["type"] == "done"
-    assert done["answer"] == "Sai số là 0,5 % [1]"
+    assert done["answer"].startswith("Sai số là 0,5 % [1]\n\nNguồn:\n- [1] QTKD_1.061")
     assert done["sources"][0]["file_stem"] == "QTKD_1.061"
 
 
@@ -287,7 +287,7 @@ def test_specific_device_question_has_no_ambiguity_preface(piston_procedures, mo
         )
     )
     done = events[-1]
-    assert done["answer"] == "10 bar đến 700 bar [1]"
+    assert done["answer"].startswith("10 bar đến 700 bar [1]\n\nNguồn:\n- [1] QTKD_1.071_2022_FINAL")
 
 
 def test_done_answer_shows_the_source_formula_verbatim(monkeypatch):
@@ -305,4 +305,4 @@ def test_done_answer_shows_the_source_formula_verbatim(monkeypatch):
         )
     )
     done = events[-1]
-    assert done["answer"] == f"$${source}$$ [1]"
+    assert done["answer"].startswith(f"$${source}$$ [1]\n\nNguồn:")

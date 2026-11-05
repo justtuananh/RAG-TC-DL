@@ -150,11 +150,21 @@ class NumberCheckSettings(_Section):
     max_regen: NonNegative = 1
 
 
+class CitationSettings(_Section):
+    """Khối 'Nguồn:' dựng tất định từ các nguồn được [n] tham chiếu (llm/citations.py)."""
+
+    enabled: bool = True
+    min_keyword_len: Positive = 5          # từ khóa của câu trả lời: chữ có ít nhất N ký tự
+    min_keyword_hits: Positive = 2         # số từ khóa tối thiểu có trong nguồn khi câu trả lời không có số
+    max_auto_sources: Positive = 1         # số nguồn tự gắn khi câu trả lời thiếu [n]
+
+
 class LlmSettings(_Section):
     chat: ChatLlmSettings
     context: ContextSettings
     rewrite: RewriteSettings = Field(default_factory=RewriteSettings)
     number_check: NumberCheckSettings = Field(default_factory=NumberCheckSettings)
+    citation: CitationSettings = Field(default_factory=CitationSettings)
 
     @property
     def total_context_chars(self) -> int:
