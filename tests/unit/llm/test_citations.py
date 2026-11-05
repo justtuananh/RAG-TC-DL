@@ -52,3 +52,9 @@ def test_missing_refs_keywords_when_no_numbers():
 def test_unknown_source_when_nothing_matches():
     out = citations.add_citations("Giá trị 12,5 mm.", [_src(1, text="không có")])
     assert out.endswith("Nguồn: " + citations.UNKNOWN_SOURCE)
+
+
+def test_language_fallback_gets_no_sources_block():
+    from llm.lang_guard import LANGUAGE_FALLBACK
+
+    assert citations.add_citations(LANGUAGE_FALLBACK, [_src(1)]) == LANGUAGE_FALLBACK

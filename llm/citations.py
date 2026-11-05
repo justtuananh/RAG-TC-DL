@@ -14,6 +14,7 @@ import unicodedata
 
 from core.settings_loader import get_settings
 from llm.guards import REFUSAL_SENTENCE
+from llm.lang_guard import LANGUAGE_FALLBACK
 
 UNKNOWN_SOURCE = "chưa xác định được nguồn"
 
@@ -93,7 +94,7 @@ def source_line(src: dict, title: str = "") -> str:
 def add_citations(body: str, sources: list[dict], title_for=None) -> str:
     """Hậu xử lý trích dẫn (xem docstring module). ``title_for(file_stem) -> str`` tra tên văn bản."""
     cfg = get_settings().llm.citation
-    if not cfg.enabled or not body.strip() or REFUSAL_SENTENCE in body:
+    if not cfg.enabled or not body.strip() or REFUSAL_SENTENCE in body or body.strip() == LANGUAGE_FALLBACK:
         return body
     text = strip_own_block(body)
     by_idx = {s["index"]: s for s in sources}
