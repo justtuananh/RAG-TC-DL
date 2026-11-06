@@ -17,6 +17,12 @@
 # --reinstall --no-deps forces the CUDA build in. Confirm with:
 #   .venv-pdf/Scripts/python.exe -c "import torch; print(torch.cuda.is_available())"
 #
+# CPU-only setup in use here (no CUDA wheel; extract_pdf_marker.py also sets
+# TORCH_DEVICE=cpu so Marker never competes with Ollama for the 8GB GPU):
+#   python3.11 -m venv .venv-pdf
+#   .venv-pdf/bin/python -m pip install --extra-index-url https://download.pytorch.org/whl/cpu torch torchvision
+#   .venv-pdf/bin/python -m pip install -r requirements-pdf.txt
+#
 # extract_pdf_marker.py looks for this venv at ../.venv-pdf by default, or at
 # the path in the MARKER_PYTHON env var.
 
