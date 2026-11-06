@@ -72,9 +72,9 @@ def test_merge_identical_keeps_range_between_numbers():
 
 
 def test_merge_identical_skips_when_value_too_long_or_missing():
-    entries = [("A", "x " * 60 + "5 bar [1]"), ("B", "5 bar [2]")]
+    entries = [("A", "5 bar " + "x " * 60 + "7 bar [1]"), ("B", "5 bar " + "x " * 60 + "7 bar [2]")]
 
-    assert md.merge_identical(entries, max_value_chars=20)[0][0] == "A"
+    assert md.merge_identical(entries, max_value_chars=20) == entries
     assert md.merge_identical([("A", "không nêu"), ("B", "không nêu")]) == [
         ("A", "không nêu"),
         ("B", "không nêu"),
@@ -192,7 +192,8 @@ def test_single_named_document_uses_one_pass(monkeypatch):
 
     events = _events(chat_stream.chat_stream_events(ChatRequest(message="Áp suất của A?"), None))
 
-    assert events[-1]["answer"] == "5 bar [1]"
+    assert events[-1]["answer"].startswith("5 bar [1]")
+    assert "- **" not in events[-1]["answer"]
 
 
 def test_llm_error_falls_back_to_single_pass(monkeypatch):
@@ -201,4 +202,5 @@ def test_llm_error_falls_back_to_single_pass(monkeypatch):
 
     events = _events(chat_stream.chat_stream_events(ChatRequest(message="Áp suất?"), None))
 
-    assert events[-1]["answer"] == "chung [1]"
+    assert events[-1]["answer"].startswith("chung [1]")
+    assert "- **" not in events[-1]["answer"]
