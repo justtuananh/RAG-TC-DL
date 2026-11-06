@@ -36,6 +36,9 @@ RUN mkdir -p /app/.formula-registry /app/TC_DL /app/build/spike_a
 # Container api chạy bằng UID của người dùng host (docker-compose.yml `user:`),
 # nên thư mục log (config/logging.yaml: logs/app.log) phải ghi được với mọi UID.
 RUN mkdir -p /app/logs && chmod 1777 /app/logs
+# Bản .docx/.xlsx chuyển từ .doc/.xls cũ (ingestion/convert_legacy.py CONVERTED_DIR) là bộ nhớ đệm
+# tạo lại được, không gắn ra host: thư mục cha /app/build thuộc root nên phải ghi được với mọi UID.
+RUN mkdir -p /app/build/converted && chmod 1777 /app/build/converted
 EXPOSE 8080 7861
 
 # Default: run the Gradio chat app
