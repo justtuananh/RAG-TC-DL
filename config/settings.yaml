@@ -76,6 +76,7 @@ llm:
     min_block_chars: 600                  # chỗ giữ cho mỗi nguồn xếp dưới khi nguồn trên lấy ngân sách trước
     quote_anchors: 2                      # panel nguồn: trích N đoạn con khớp nhất của mục (ngữ cảnh LLM dùng mọi đoạn khớp)
     formula_line_slack: 400               # khối dài hơn ngân sách bị cắt theo dòng: được vượt tới N ký tự để không cắt giữa dòng công thức
+    linearize_tables: true                # bảng markdown có cột TT -> dòng 'Tên: nhãn cột = giá trị' (retrieval/table_linearize.py)
     source_abs_floor: 0.08
     source_rel_floor: 0.20
   rewrite:                                # câu tiếp theo mất chủ ngữ ("Còn độ ẩm thì sao?") -> viết lại độc lập trước khi truy hồi

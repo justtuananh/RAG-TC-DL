@@ -9,6 +9,7 @@ from __future__ import annotations
 from core.settings_loader import get_settings
 from retrieval import quote
 from retrieval import doc_pages, doc_titles
+from retrieval.table_linearize import linearize_tables
 
 # ── Lọc nguồn theo độ tin cậy (cắt đuôi nguồn yếu) ───────────────────────────
 # Reranker (bge-reranker-v2-m3) trả điểm sigmoid [0,1]. Với câu HẸP, chỉ 1-2 nguồn
@@ -244,6 +245,8 @@ def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
         child_text = p["text"]
         if len(ctx_text) > budget:
             ctx_text = window(ctx_text, r.get("anchor_texts") or child_text, budget)
+        if llm.context.linearize_tables:
+            ctx_text = linearize_tables(ctx_text)
 
         ctx_parts.append(header + ctx_text)
 

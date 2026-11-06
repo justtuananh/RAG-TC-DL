@@ -128,6 +128,7 @@ class ContextSettings(_Section):
     min_block_chars: Positive
     quote_anchors: Positive
     formula_line_slack: Positive
+    linearize_tables: bool = True
     source_abs_floor: Annotated[float, Field(ge=0)]
     source_rel_floor: Annotated[float, Field(ge=0, le=1)]
 
