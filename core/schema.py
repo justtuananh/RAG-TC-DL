@@ -144,6 +144,13 @@ class RewriteSettings(_Section):
     timeout_s: PositiveFloat = 30
 
 
+class MultiDocumentSettings(_Section):
+    """Câu hỏi không chỉ định một QTKĐ (chung chung hoặc nêu ≥ 2 QTKĐ): trả lời theo từng tài liệu."""
+
+    enabled: bool = True
+    min_documents: Positive = 2           # ít hơn số tài liệu này trong ngữ cảnh thì không thêm chỉ dẫn
+
+
 class NumberCheckSettings(_Section):
     """Kiểm số liệu trong câu trả lời so với nguồn; sinh lại khi có số không có trong nguồn."""
 
@@ -166,6 +173,7 @@ class LlmSettings(_Section):
     rewrite: RewriteSettings = Field(default_factory=RewriteSettings)
     number_check: NumberCheckSettings = Field(default_factory=NumberCheckSettings)
     citation: CitationSettings = Field(default_factory=CitationSettings)
+    multi_document: MultiDocumentSettings = Field(default_factory=MultiDocumentSettings)
 
     @property
     def total_context_chars(self) -> int:

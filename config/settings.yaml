@@ -86,6 +86,9 @@ llm:
     max_query_chars: 400
     num_predict: 120
     timeout_s: 30
+  multi_document:                         # câu không chỉ định một QTKĐ (chung chung hoặc nêu ≥2 QTKĐ): mẫu trả lời từng dòng một tài liệu
+    enabled: true
+    min_documents: 2
   number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn
     enabled: true
     max_regen: 1                          # số lần sinh lại khi có số không có trong nguồn

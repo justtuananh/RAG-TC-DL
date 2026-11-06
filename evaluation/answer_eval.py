@@ -34,7 +34,7 @@ from evaluation.pipeline import production_retrieve  # noqa: E402
 from llm.generator import stream_ollama  # noqa: E402
 from llm.guards import REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request  # noqa: E402
 from llm.prompt import build_messages  # noqa: E402
-from retrieval.context_builder import build_context_and_citations, multi_doc_guidance  # noqa: E402
+from retrieval.context_builder import build_context_and_citations  # noqa: E402
 from scoring import answer_scoring  # noqa: E402
 
 # ── service / model helpers ───────────────────────────────────────────────────
@@ -72,7 +72,7 @@ def _answer(query: str, retrieved: list[dict], model: str, retries: int = 3) -> 
     if is_calculation_request(query):
         return REFUSAL_SENTENCE
     context_str, _ = build_context_and_citations(retrieved)
-    messages = build_messages(query, context_str, [], guidance=multi_doc_guidance(retrieved))
+    messages = build_messages(query, context_str, [])
     err = ""
     for attempt in range(retries + 1):
         if attempt:

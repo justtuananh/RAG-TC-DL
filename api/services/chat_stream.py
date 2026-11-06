@@ -20,8 +20,8 @@ from llm import citations, generator, number_check
 from llm.guards import CALCULATION_GUIDE, enforce_refusal_stop, is_calculation_request
 from llm.lang_guard import LANGUAGE_FALLBACK, CjkStreamGuard, strip_cjk
 from llm.prompt import build_messages
-from query import chat_calc, device_ambiguity, history_context
-from retrieval import doc_pages, doc_titles, retriever
+from query import chat_calc, device_ambiguity, history_context, multi_document
+from retrieval import doc_pages, doc_titles, retriever, router
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.quote import build_quote
 
@@ -89,6 +89,26 @@ def _detect_device_ambiguity(
         logger.warning("Không đọc được danh mục QTKĐ để kiểm tra câu hỏi mơ hồ: %s", e)
         return None
     return device_ambiguity.find_device_ambiguity(question, catalog)
+
+
+def _multi_document_guidance(question: str, results: list[dict]) -> str | None:
+    """Câu không nêu QTKĐ/thiết bị nào, hoặc nêu ≥ 2: mẫu trả lời từng tài liệu (đúng 1 → None)."""
+    cfg = get_settings().llm.multi_document
+    stems = [r["payload"]["file_stem"] for r in results]
+    if not cfg.enabled or len(set(stems)) < max(cfg.min_documents, 2):
+        return None  # một tài liệu: khỏi định tuyến
+    try:
+        named = router.route_files(question)
+    except Exception as e:  # noqa: BLE001 - không định tuyến được thì trả lời như cũ
+        logger.warning("Không định tuyến được câu hỏi cho chỉ dẫn nhiều tài liệu: %s", e)
+        return None
+    if len(named) == 1:
+        return None
+    documents = multi_document.group_documents(stems, {s: doc_titles.title_for(s) for s in set(stems)})
+    if named:  # câu so sánh: chỉ các tài liệu được nêu
+        by_stem = dict(zip(dict.fromkeys(stems), documents, strict=True))
+        documents = [by_stem[s] for s in by_stem if s in named]
+    return multi_document.per_document_guidance(documents, min_documents=cfg.min_documents)
 
 
 def _finalize_text(raw: str, context: str) -> str:
@@ -182,6 +202,8 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if calc is not None and calc.kind == "answer":
         context_str = calc.block + "\n\n---\n\n" + context_str
     guidance = device_ambiguity.ambiguity_guidance(ambiguity) if ambiguity is not None else None
+    if guidance is None:
+        guidance = _multi_document_guidance(req.message, results)
     if calc is not None and calc.kind == "answer":
         # Model nhỏ bám lượt người dùng cuối hơn system prompt: đặt kết quả đã xác minh ở đây.
         calc_note = (
