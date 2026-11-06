@@ -15,6 +15,21 @@ from retrieval.normalize import fold, semantic_query
 from retrieval.query_expansion import expand_query
 
 
+def _section_pool(hits: list[dict], limit: int) -> list[dict]:
+    """Cap distinct sections, retaining all matched child anchors of each section."""
+    chosen = set()
+    out = []
+    for hit in hits:
+        payload = hit['payload']
+        key = (payload['file_stem'], payload.get('parent_id') or payload['chunk_id'])
+        if key not in chosen:
+            if len(chosen) >= limit:
+                continue
+            chosen.add(key)
+        out.append(hit)
+    return out
+
+
 def retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> list[dict]:
     settings = get_settings()
     multi = settings.llm.multi_document
@@ -41,7 +56,7 @@ def retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> 
     # Định tuyến thu hẹp quá ít ứng viên: tìm lại toàn kho.
     if file_stem and len(dense) + len(sparse) < cfg.min_routed_candidates:
         dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k)
-    fused = hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse))[: cfg.rerank_pool]
+    fused = _section_pool(hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse)), cfg.rerank_pool)
     return reranker.rerank_hits(ranking_query, fused, top_n=top_n)
 
 
@@ -62,7 +77,7 @@ def _retrieve_per_file(
     fused: list[dict] = []
     for stem in sorted(stems):
         dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k, file_stem=stem)
-        fused.extend(hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse))[:pool])
+        fused.extend(_section_pool(hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse)), pool))
     reranked = reranker.rerank_hits(query, fused, top_n=len(fused))
     return hybrid.merge_per_file(reranked, stems, top_n)
 
@@ -83,7 +98,11 @@ def _retrieve_coverage(query: str, vec: list[float], expanded: str, *, top_k: in
     fused: list[dict] = []
     for stem in files:
         dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k, file_stem=stem)
-        fused.extend(hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse))[: cfg.coverage_pool_per_file])
+        fused.extend(
+            _section_pool(
+                hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse)), cfg.coverage_pool_per_file
+            )
+        )
     if not fused:
         return []
     reranked = reranker.rerank_hits(query, fused, top_n=len(fused))

@@ -7,6 +7,7 @@ import re
 from itertools import zip_longest
 
 from core.settings_loader import get_settings
+from core.table_focus import focus_equipment_tables
 from query.multi_document import DocumentGroup
 from reranking import reranker
 from retrieval import doc_titles
@@ -23,12 +24,55 @@ def evidence_units(text: str) -> list[str]:
 def _evidence_pairs(text: str) -> list[tuple[str, str]]:
     """Rank compact units; retain adjacent qualifications in displayed quotations."""
     blocks = [b.strip() for b in re.split(r'\n\s*\n', text) if b.strip()]
+    conditions = {}
+    active_conditions = ''
+    for i, block in enumerate(blocks):
+        if block.startswith('#'):
+            active_conditions = ''
+        if re.search(r'\btrong các điều kiện sau\s*:', block, re.IGNORECASE):
+            end = i + 1
+            while end < len(blocks) and re.match(r'^[-*+] ', blocks[end]):
+                end += 1
+            if end > i + 1:
+                active_conditions = '\n\n'.join(blocks[i:end])
+        if active_conditions:
+            conditions[i] = active_conditions
+    tables = {}
+    for i, block in enumerate(blocks):
+        caption = re.match(r'^(?:#+\s*)?Bảng\s+(\d+)\b', block, re.IGNORECASE)
+        if caption is None:
+            continue
+        for end in range(i + 1, min(i + 5, len(blocks))):
+            if any(line.lstrip().startswith('|') for line in blocks[end].splitlines()):
+                tables[caption.group(1)] = '\n\n'.join(blocks[i : end + 1])
+                break
+            if blocks[end].startswith('#'):
+                break
+    formulas = {}
+    for i, block in enumerate(blocks):
+        is_formula = block.startswith('$$') or (
+            '$' in block
+            and ('=' in block or r'\frac' in block)
+            and (block.startswith('$') or block.startswith('|'))
+        )
+        if not is_formula:
+            continue
+        start = i - 1 if i > 0 and blocks[i - 1].endswith(':') else i
+        end = i + 1
+        if end < len(blocks) and re.match(r'^trong đó\b', blocks[end], re.IGNORECASE):
+            end += 1
+            while end < len(blocks) and re.match(r'^\$[^$]+\$\s*(?:là\b|[-–])', blocks[end]):
+                end += 1
+        for index in range(start, end):
+            formulas[index] = '\n\n'.join(blocks[start:end])
     units = []
     seen = set()
     for i, block in enumerate(blocks):
         if block.startswith('#') and '\n' not in block:
             continue
-        if any(line.lstrip().startswith('|') for line in block.splitlines()) or '$' in block:
+        if i in formulas:
+            block = formulas[i]
+        elif any(line.lstrip().startswith('|') for line in block.splitlines()):
             start = max(0, i - 1)
             if start > 0 and re.match(r'^(?:#+\s*|Bảng\s)', blocks[start]):
                 start -= 1
@@ -43,6 +87,12 @@ def _evidence_pairs(text: str) -> list[tuple[str, str]]:
         if i + 1 < len(blocks) and re.match(r'^CHÚ THÍCH\b', blocks[i + 1], re.IGNORECASE):
             if blocks[i + 1] not in block:
                 block += '\n\n' + blocks[i + 1]
+        if i in conditions and conditions[i] not in block:
+            block = conditions[i] + '\n\n' + block
+        for number in re.findall(r'\bBảng\s+(\d+)\b', ranking_text, re.IGNORECASE):
+            table = tables.get(number)
+            if table and table not in block:
+                block += '\n\n' + table
         if ranking_text not in seen:
             units.append((ranking_text, block))
             seen.add(ranking_text)
@@ -81,7 +131,7 @@ def answer(
     if not candidates:
         return None
     documents = [
-        f"{stem} — {results[pos]['payload']['section_path']}\n{text}"
+        f"{stem} — {results[pos]['payload']['section_path']}\n{focus_equipment_tables(text, question)}"
         for stem, pos, _, text in candidates
     ]
     try:

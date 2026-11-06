@@ -11,12 +11,13 @@ import logging
 import requests
 
 from core.settings_loader import get_settings
+from core.table_focus import focus_equipment_tables
 from vectorstore import qdrant
 
 logger = logging.getLogger(__name__)
 
 
-def build_rerank_doc(payload: dict, parent: dict | None) -> str:
+def build_rerank_doc(payload: dict, parent: dict | None, *, query: str = '') -> str:
     """Dựng document cho cross-encoder từ một ứng viên (chỉ dùng lúc rerank,
     KHÔNG lưu vào store - text trong payload/Qdrant giữ nguyên).
 
@@ -32,6 +33,7 @@ def build_rerank_doc(payload: dict, parent: dict | None) -> str:
     """
     cfg = get_settings().reranking
     text = parent["text"] if parent else payload["text"]
+    text = focus_equipment_tables(text, query)
     if len(text) > cfg.doc_cap_chars:
         child = payload["text"]
         idx = text.find(child[:80])
@@ -100,7 +102,7 @@ def rerank_hits(query: str, hits: list[dict], top_n: int | None = None) -> list[
         pid = h["payload"].get("parent_id")
         parent = qdrant.fetch_parent(pid) if pid else None
         parent_payloads.append(parent)
-        documents.append(build_rerank_doc(h["payload"], parent))
+        documents.append(build_rerank_doc(h["payload"], parent, query=query))
 
     try:
         scores = score_documents(query, documents)

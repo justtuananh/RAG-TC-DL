@@ -1,5 +1,7 @@
 # Accuracy95 isolated branch report — 2026-11-06
 
+Historical snapshot at commitf20fe2d3. See [continuation report](accuracy95-continuation-report.md) for subsequent observed progress.
+
 Branch: `fix/accuracy95`, based on T12 `d53ae236`. Candidate code lives at `/home/hiennt/stg/accuracy95-work`. No merge, push or production deployment was performed. Only the isolated API on port18081 was restarted for this final round.
 
 ## Scope and measurement limits

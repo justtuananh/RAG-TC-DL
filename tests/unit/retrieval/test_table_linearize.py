@@ -72,7 +72,10 @@ VALUE_TABLE = """| Giới hạn đo, / MPa | Cấp chính xác hoặc độ chí
 
 def test_value_table_becomes_row_lines():
     out = linearize_tables(VALUE_TABLE)
-    assert "- Giới hạn đo, / MPa = Từ -0,1 đến 6: Cấp chính xác 0,01 = 4; Cấp chính xác 0,02 = 3" in out
+    assert (
+        "- Giới hạn đo, / MPa = Từ -0,1 đến 6: Cấp chính xác 0,01 = 4; Cấp chính xác 0,02 = 3"
+        in out
+    )
     assert "- Giới hạn đo, / MPa = Lớn hơn 6: Cấp chính xác 0,01 = 6" in out
     assert "| --- |" not in out
 
@@ -112,3 +115,33 @@ def test_prune_short_table_or_no_match_unchanged():
 def test_prune_ignores_words_present_in_most_rows():
     long = _long_table(20)  # "mục" và "thứ" có ở mọi dòng: không đủ để chọn dòng
     assert prune_long_tables(long, "mục thứ", 12) == long
+
+
+def test_equipment_focus_keeps_continuation_and_column_qualifications():
+    from core.table_focus import focus_equipment_tables
+
+    text = (
+        '| TT | Tên | Phạm vi | Sai số |\n| --- | --- | --- | --- |\n'
+        '| 1 | Thước đo chiều dài | 300 mm | 1 mm |\n'
+        '| 2 | Đồng hồ bấm giây | 24 h | ±4,8 s/d |\n'
+        '|  |  | d=0,01 s | Còn hiệu lực |'
+    )
+    focused = focus_equipment_tables(text, 'Đồng hồ bấm giây dùng loại nào?')
+    assert 'Thước đo chiều dài' not in focused
+    assert '| Sai số |' in focused and '±4,8 s/d' in focused
+    assert 'd=0,01 s' in focused and 'Còn hiệu lực' in focused
+
+
+def test_equipment_focus_does_not_select_by_values_or_short_generic_words():
+    from core.table_focus import focus_equipment_tables
+
+    text = '| TT | Tên | Phạm vi |\n| --- | --- | --- |\n| 1 | Áp kế chuẩn | 24 h |'
+    assert focus_equipment_tables(text, 'Thiết bị có phạm vi 24 h?') == text
+    assert focus_equipment_tables(text, 'Áp suất?') == text
+
+
+def test_equipment_focus_leaves_malformed_table_untouched():
+    from core.table_focus import focus_equipment_tables
+
+    text = '| TT | Tên | Phạm vi |\n| --- | --- | --- |\n| 1 | Đồng hồ bấm giây |'
+    assert focus_equipment_tables(text, 'Đồng hồ bấm giây?') == text

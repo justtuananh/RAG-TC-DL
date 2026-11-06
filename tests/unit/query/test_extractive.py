@@ -188,3 +188,73 @@ def test_qualification_enrichment_does_not_change_ranking_input(monkeypatch):
     )
     assert any(doc.endswith(original) for doc in scored)
     assert note in body
+
+
+def test_table_ranking_focuses_component_but_quote_keeps_full_table(monkeypatch):
+    setup(monkeypatch)
+    text = (
+        '| TT | Tên phương tiện | Phạm vi |\n| --- | --- | --- |\n'
+        '| 1 | Áp kế chuẩn | 500 bar |\n'
+        '| 2 | Đồng hồ bấm giây điện tử | 24 h |'
+    )
+    results = [hit('A', text)]
+    seen = []
+
+    def score(query, docs):
+        seen.extend(docs)
+        return [0.9] * len(docs)
+
+    monkeypatch.setattr(extractive.reranker, 'score_documents', score)
+    body = extractive.answer(
+        'Đồng hồ bấm giây?', results, multi_document.group_by_document(['A']), allow_single=True
+    )
+    assert all('Áp kế chuẩn' not in doc for doc in seen)
+    assert 'Áp kế chuẩn' in body and 'Đồng hồ bấm giây điện tử' in body
+
+
+def test_formula_and_symbol_definitions_form_one_candidate():
+    text = (
+        'Tốc độ được tính theo:\n\n$$V=V_t \\eta_t/\\eta$$\n\ntrong đó:\n\n'
+        '$V$ là tốc độ tiêu chuẩn;\n\n$V_t$ là tốc độ đo;\n\n'
+        '$\\eta$ là độ nhớt tiêu chuẩn;\n\n$\\eta_t$ là độ nhớt đo.\n\n'
+        'Tốc độ là trung bình ba lần và không vượt quá Bảng 4.'
+    )
+    formulas = [unit for unit in extractive.evidence_units(text) if '$' in unit]
+    assert len(formulas) == 1
+    assert '$V=V_t' in formulas[0] and '$\\eta_t$ là độ nhớt đo.' in formulas[0]
+    assert 'trung bình ba lần' not in formulas[0]
+
+
+def test_selected_table_reference_keeps_its_same_section_table_and_units(monkeypatch):
+    setup(monkeypatch, evidence_candidates_per_source=1)
+    statement = 'Tốc độ là trung bình ba lần, không vượt quá 5 % giá trị tại Bảng 4.'
+    text = (
+        statement
+        + '\n\nBảng 4 - Tốc độ cho phép\n\nĐơn vị: mm/min\n\n| Cấp | Tốc độ |\n| --- | --- |\n| 0,02 | 1,5 |'
+    )
+    results = [hit('A', statement)]
+    results[0]['parent_payload'] = {'text': text}
+    monkeypatch.setattr(extractive.reranker, 'score_documents', lambda q, docs: [0.9] * len(docs))
+    body = extractive.answer(
+        'Tốc độ?', results, multi_document.group_by_document(['A']), allow_single=True
+    )
+    assert statement in body
+    assert 'Bảng 4 - Tốc độ cho phép' in body and 'Đơn vị: mm/min' in body
+    assert '| 0,02 | 1,5 |' in body
+
+
+def test_limit_quote_keeps_explicit_measurement_conditions_in_same_section(monkeypatch):
+    setup(monkeypatch, evidence_candidates_per_source=1)
+    limit = 'Tốc độ hạ là trung bình ba lần đo và không vượt quá 3 mm/min.'
+    text = (
+        'Tốc độ hạ được xác định trong các điều kiện sau:\n\n- Ở áp suất 700 bar;\n\n- Ở nhiệt độ tiêu chuẩn;\n\n'
+        + limit
+    )
+    results = [hit('A', limit)]
+    results[0]['parent_payload'] = {'text': text}
+    monkeypatch.setattr(extractive.reranker, 'score_documents', lambda q, docs: [0.9] * len(docs))
+    body = extractive.answer(
+        'Tốc độ?', results, multi_document.group_by_document(['A']), allow_single=True
+    )
+    assert 'Ở áp suất 700 bar' in body and 'Ở nhiệt độ tiêu chuẩn' in body
+    assert limit in body
