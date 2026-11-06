@@ -42,3 +42,22 @@ def test_fallback_on_ragged_rows():
 
 def test_plain_text_untouched():
     assert linearize_tables("a\n\nb | c") == "a\n\nb | c"
+
+
+LONG = """| TT | Tên | Đặc trưng kỹ thuật đo lường |  |
+| --- | --- | --- | --- |
+|  |  | Phạm vi đo | Cấp chính xác hoặc độ chính xác hoặc sai số hoặc độ không đảm bảo đo |
+| 1 | Áp kế chuẩn | Phù hợp với áp kế cần kiểm định (sau đây viết tắt là AKKĐ) | ĐKĐBĐ < 1/4 sai số cho phép của AKKĐ |
+| 2 | Ẩm kế | (0 ÷ 100) %RH | ± 5 %RH |"""
+
+
+def test_long_label_shortened_with_one_legend():
+    out = linearize_tables(LONG)
+    legend = 'Cột "Cấp chính xác" = "Cấp chính xác hoặc độ chính xác hoặc sai số hoặc độ không đảm bảo đo"'
+    assert out.count("hoặc độ chính xác") == 1 and legend in out
+    assert "- 2. Ẩm kế: Phạm vi đo = (0 ÷ 100) %RH; Cấp chính xác = ± 5 %RH" in out
+
+
+def test_abbreviation_cell_quoted():
+    out = linearize_tables(LONG)
+    assert "Phạm vi đo = «Phù hợp với áp kế cần kiểm định (sau đây viết tắt là AKKĐ)»" in out

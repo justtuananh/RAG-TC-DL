@@ -143,3 +143,4 @@ def test_whole_context_with_source_headers_stays_within_budget():
     ]
     ctx, _ = context_builder.build_context_and_citations(results)
     assert len(ctx) <= llm.total_context_chars
+

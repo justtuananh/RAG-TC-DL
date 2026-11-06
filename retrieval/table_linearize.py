@@ -11,6 +11,8 @@ import re
 
 _TT = re.compile(r"^(TT|STT|No\.?|Số TT)$", re.IGNORECASE)
 _SEQ = re.compile(r"^\d+(\.\d+)*\.?$")
+_LONG = 30
+_ABBR = re.compile(r"tắt là", re.IGNORECASE)
 _SEP_CELL = re.compile(r"^:?-{3,}:?$")
 
 
@@ -40,6 +42,21 @@ def _labels(header_rows: list[list[str]], n: int) -> list[str]:
     return labels
 
 
+def _short(label: str) -> str:
+    """Nhãn dài kiểu "Cấp chính xác hoặc độ chính xác hoặc sai số ..." lặp ở MỌI dòng làm tốn ngữ
+    cảnh: rút về cụm đầu trước " hoặc " (nhãn đầy đủ in một lần ở dòng chú giải cột)."""
+    if len(label) <= _LONG:
+        return label
+    head = re.split(r"\s+hoặc\s+", label, maxsplit=1)[0].strip(" /")
+    return head or label
+
+
+def _value(v: str) -> str:
+    """Ô có định nghĩa viết tắt ("sau đây viết tắt là X") đặt trong «» để X không bị đọc thành
+    viết tắt của tên thiết bị đầu dòng."""
+    return f"«{v}»" if _ABBR.search(v) else v
+
+
 def _one(lines: list[str]) -> list[str] | None:
     rows = [_cells(ln) for ln in lines]
     n = len(rows[0])
@@ -56,8 +73,11 @@ def _one(lines: list[str]) -> list[str] | None:
     if any(not labels[j] for j in (1, 2)):
         return None
     out: list[str] = []
+    short = [_short(x) for x in labels]
+    legend = [f'(Cột "{short[j]}" = "{labels[j]}")' for j in range(2, n) if short[j] != labels[j]]
+    out.extend(legend)
     for r in body[first:]:
-        pairs = [f"{labels[j]} = {r[j]}" for j in range(2, n) if r[j]]
+        pairs = [f"{short[j]} = {_value(r[j])}" for j in range(2, n) if r[j]]
         if _SEQ.match(r[0]):
             out.append(f"- {r[0]}. {r[1]}: " + "; ".join(pairs))
         elif not r[0] and not r[1] and pairs:  # dòng nối tiếp của dòng trước
