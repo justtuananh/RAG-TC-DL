@@ -9,8 +9,10 @@ PORT="${FRONTEND_PORT:-3000}"
 
 command -v cloudflared >/dev/null || { echo "Thiếu cloudflared" >&2; exit 1; }
 
-# Chưa có đăng nhập: ai có link cũng xoá/tải tài liệu được. Chỉ chia sẻ link cho người tin cậy.
-echo "Cảnh báo: AUTH tắt - ai có link đều có quyền quản trị." >&2
+# Đăng nhập bật mặc định (AUTH_ENABLED=true). Nếu ai đó tắt nó, ai có link cũng có quyền quản trị.
+if [ "${AUTH_ENABLED:-true}" = "false" ]; then
+  echo "Cảnh báo: AUTH_ENABLED=false - ai có link đều có quyền quản trị." >&2
+fi
 
 curl -fsS "http://localhost:${PORT}/api/health" >/dev/null \
   || { echo "Frontend/API chưa chạy ở :${PORT} (docker compose up -d)" >&2; exit 1; }
