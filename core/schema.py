@@ -48,6 +48,7 @@ class ServiceSettings(_Section):
     embedding_url: str
     rerank_url: str
     qdrant_url: str
+    qdrant_api_key: OptionalSecret = None
     ollama_url: str
 
 
@@ -150,6 +151,12 @@ class MultiDocumentSettings(_Section):
     """Câu hỏi không chỉ định một QTKĐ (chung chung hoặc nêu ≥ 2 QTKĐ): trả lời theo từng tài liệu."""
 
     enabled: bool = True
+    extractive_enabled: bool = False
+    evidence_per_document: Positive = 3
+    evidence_candidates_per_source: Positive = 12
+    evidence_max_candidates: Positive = 96
+    evidence_min_score: Annotated[float, Field(ge=0, le=1)] = 0.35
+    evidence_relative_floor: Annotated[float, Field(ge=0, le=1)] = 0.35
     min_documents: Positive = 2           # ít hơn số tài liệu này thì trả lời một lượt như thường
     max_documents: Positive = 6           # trần số tài liệu xét bổ sung
     max_followups: Positive = 2           # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)

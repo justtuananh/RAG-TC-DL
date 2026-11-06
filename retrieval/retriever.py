@@ -10,21 +10,30 @@ from core.settings_loader import get_settings
 from embedding import embedder
 from reranking import reranker
 from retrieval import hybrid_retriever as hybrid
-from retrieval import router
+from retrieval import reference_lookup, router
+from retrieval.normalize import fold, semantic_query
 from retrieval.query_expansion import expand_query
 
 
 def retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> list[dict]:
+    settings = get_settings()
+    multi = settings.llm.multi_document
+    if multi.enabled and multi.extractive_enabled and reference_lookup.is_reference_query(query):
+        references = reference_lookup.lookup(query, router.known_files())
+        if references:
+            return references
     cfg = get_settings().retrieval
     top_k = top_k or cfg.top_k
     top_n = top_n or cfg.top_n
-    expanded = expand_query(query)
-    vec = embedder.embed_query(expanded)
     stems = router.route_files(query)
+    topic = semantic_query(query) if len(stems) >= 2 else query
+    expanded = expand_query(topic)
+    ranking_query = expanded if fold(topic) == topic.lower() else topic
+    vec = embedder.embed_query(expanded)
     if len(stems) >= 2:
-        return _retrieve_per_file(query, vec, expanded, stems, top_k=top_k, top_n=top_n)
+        return _retrieve_per_file(ranking_query, vec, expanded, stems, top_k=top_k, top_n=top_n)
     if not stems and cfg.coverage_per_file > 0:
-        covered = _retrieve_coverage(query, vec, expanded, top_k=top_k)
+        covered = _retrieve_coverage(ranking_query, vec, expanded, top_k=top_k)
         if covered:
             return covered
     file_stem = next(iter(stems)) if stems else None
@@ -33,7 +42,7 @@ def retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> 
     if file_stem and len(dense) + len(sparse) < cfg.min_routed_candidates:
         dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k)
     fused = hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse))[: cfg.rerank_pool]
-    return reranker.rerank_hits(query, fused, top_n=top_n)
+    return reranker.rerank_hits(ranking_query, fused, top_n=top_n)
 
 
 def _retrieve_per_file(

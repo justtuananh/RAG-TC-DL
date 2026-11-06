@@ -39,3 +39,13 @@ def test_collection_vector_size_none_when_missing(monkeypatch):
     fake = SimpleNamespace(get_collections=lambda: SimpleNamespace(collections=[]))
     monkeypatch.setattr(qdrant, "get_client", lambda: fake)
     assert qdrant.collection_vector_size("qtkd_rag") is None
+
+
+def test_client_authenticates_with_configured_secret(monkeypatch, settings_override):
+    settings_override({"services.qdrant_api_key": "test-only-key"})
+    created = []
+    monkeypatch.setattr(qdrant, "QdrantClient", lambda **kw: created.append(kw) or object())
+    qdrant.get_client()
+    assert created[0]["api_key"] == "test-only-key"
+    from core.settings_loader import get_settings
+    assert "test-only-key" not in repr(get_settings().services)

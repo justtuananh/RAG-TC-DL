@@ -24,7 +24,11 @@ _client: QdrantClient | None = None
 def get_client() -> QdrantClient:
     global _client
     if _client is None:
-        _client = QdrantClient(url=get_settings().services.qdrant_url)
+        services = get_settings().services
+        options = {}
+        if services.qdrant_api_key is not None:
+            options['api_key'] = services.qdrant_api_key.get_secret_value()
+        _client = QdrantClient(url=services.qdrant_url, **options)
     return _client
 
 

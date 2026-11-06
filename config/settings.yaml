@@ -18,6 +18,7 @@ services:
   embedding_url: ${EMBED_URL:-http://localhost:8010/v1/embeddings}
   rerank_url: ${RERANK_URL:-http://localhost:8011/v1/rerank}
   qdrant_url: ${QDRANT_URL:-http://localhost:6333}
+  qdrant_api_key: ${QDRANT_API_KEY:-}
   ollama_url: ${OLLAMA_URL:-http://localhost:11434/api/chat}   # native /api/chat, không dùng /v1
 
 models:
@@ -46,15 +47,15 @@ chunking:
 retrieval:
   top_k: 50                               # ứng viên mỗi nhánh dense / BM25
   top_n: 5                                # nguồn trả về sau rerank
-  top_n_per_file: 4                       # câu so sánh ≥2 QTKĐ: nguồn MỖI file (tổng = số file × giá trị này, không dưới top_n)
+  top_n_per_file: 6                       # câu so sánh ≥2 QTKĐ: nguồn MỖI file (tổng = số file × giá trị này, không dưới top_n)
   rerank_pool: 60                         # trần ứng viên vào cross-encoder sau RRF + lọc nhiễu
   rrf_k: 60
   rrf_weight_dense: 1.0                   # trọng số nhánh dense trong RRF; chỉ tỷ lệ dense/BM25 có tác dụng
   rrf_weight_bm25: 1.0                    # trọng số nhánh BM25 trong RRF
   min_routed_candidates: 6                # ít hơn thì bỏ lọc theo file, tìm toàn kho
-  coverage_per_file: 3                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
+  coverage_per_file: 6                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
   coverage_pool_per_file: 8               # ứng viên RRF mỗi tài liệu vào cross-encoder ở chế độ trên
-  coverage_max_sources: 16               # trần số nguồn ở chế độ trên (nguồn điểm thấp vẫn bị lọc tin cậy)
+  coverage_max_sources: 32               # trần số nguồn ở chế độ trên (nguồn điểm thấp vẫn bị lọc tin cậy)
 
 reranking:
   timeout_s: 60
@@ -90,8 +91,14 @@ llm:
     timeout_s: 30
   multi_document:                         # câu không chỉ định một QTKĐ (chung chung hoặc nêu ≥2 QTKĐ): trả lời chung TRƯỚC, chỉ hỏi RIÊNG tài liệu chưa được trích [n]
     enabled: true
+    extractive_enabled: true
+    evidence_per_document: 3
+    evidence_candidates_per_source: 12
+    evidence_max_candidates: 96
+    evidence_min_score: 0.35
+    evidence_relative_floor: 0.35
     min_documents: 2                      # ít hơn thì trả lời một lượt như thường
-    max_documents: 6                      # trần số tài liệu xét bổ sung
+    max_documents: 7                      # trần số tài liệu xét bổ sung
     max_followups: 2                      # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
     max_followups_named: 4                # trần khi câu hỏi nêu rõ ≥ 2 QTKĐ
     min_followup_score: 0.30              # câu chung: chỉ hỏi tài liệu có nguồn rerank_score ≥ mức này

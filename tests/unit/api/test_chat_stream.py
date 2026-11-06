@@ -86,6 +86,53 @@ def test_intent_router_module_is_gone():
         importlib.import_module("query.router")
 
 
+def test_refusal_with_available_source_tries_verified_quote(monkeypatch):
+    from query import extractive
+
+    monkeypatch.setattr(
+        chat_stream.retriever, 'retrieve', lambda *a, **k: [_hit('A', 'Chất lỏng cần thay.')]
+    )
+    monkeypatch.setattr(chat_stream, '_object_out_of_scope', lambda *a: False)
+    monkeypatch.setattr(
+        chat_stream.generator, 'stream_ollama', lambda *a: iter([chat_stream.REFUSAL_SENTENCE])
+    )
+    calls = []
+
+    def quoted(*args, **kwargs):
+        calls.append(kwargs)
+        return 'Chất lỏng cần thay. [1]'
+
+    monkeypatch.setattr(extractive, 'answer', quoted)
+    events = _events(chat_stream.chat_stream_events(ChatRequest(message='Chất lỏng?'), None))
+    assert calls == [{'allow_single': True}]
+    assert events[-1]['answer'].startswith('Chất lỏng cần thay. [1]')
+
+
+def test_extractive_multi_document_skips_llm_and_preserves_sources(monkeypatch):
+    from query import extractive, multi_document
+
+    hits = [_hit('A', 'Giới hạn 8 bar.'), _hit('B', 'Giới hạn 9 bar.')]
+    monkeypatch.setattr(chat_stream.retriever, 'retrieve', lambda *a, **k: hits)
+    monkeypatch.setattr(chat_stream, '_object_out_of_scope', lambda *a: False)
+    monkeypatch.setattr(
+        chat_stream, '_document_plan', lambda *a: multi_document.group_by_document(['A', 'B'])
+    )
+    monkeypatch.setattr(
+        extractive,
+        'answer',
+        lambda *a: '- **A**: Giới hạn 8 bar. [1]\n- **B**: Giới hạn 9 bar. [2]',
+    )
+
+    def fail(*args):
+        raise AssertionError('extractive answers must not call LLM')
+
+    monkeypatch.setattr(chat_stream.generator, 'stream_ollama', fail)
+    events = _events(chat_stream.chat_stream_events(ChatRequest(message='Giới hạn?'), None))
+    assert events[-1]['type'] == 'done'
+    assert 'Giới hạn 8 bar. [1]' in events[-1]['answer']
+    assert len(events[-1]['sources']) == 2
+
+
 def test_generic_device_question_answers_every_type(data_db, monkeypatch):
     from db.models import DeviceType, Procedure
 
@@ -287,7 +334,9 @@ def test_specific_device_question_has_no_ambiguity_preface(piston_procedures, mo
         )
     )
     done = events[-1]
-    assert done["answer"].startswith("10 bar đến 700 bar [1]\n\nNguồn:\n- [1] QTKD_1.071_2022_FINAL")
+    assert done["answer"].startswith(
+        "10 bar đến 700 bar [1]\n\nNguồn:\n- [1] QTKD_1.071_2022_FINAL"
+    )
 
 
 def test_done_answer_shows_the_source_formula_verbatim(monkeypatch):

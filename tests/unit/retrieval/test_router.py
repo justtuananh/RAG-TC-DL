@@ -64,6 +64,18 @@ def test_no_signal_returns_none(mapping):
     assert route("câu hỏi chung không có mã hay tên thiết bị") is None
 
 
+def test_device_aliases_match_without_accents_or_unicode_composition(mapping, monkeypatch):
+    import unicodedata
+    monkeypatch.setattr(router_mod, '_device_aliases', {'bình phân ly': ('1.063',)})
+    assert route('BINH PHAN LY cần điều kiện gì') == mapping['1.063']
+    assert route(unicodedata.normalize('NFD', 'bình phân ly')) == mapping['1.063']
+
+
+def test_device_alias_does_not_match_inside_another_word(mapping, monkeypatch):
+    monkeypatch.setattr(router_mod, '_device_aliases', {'dpi': ('1.190',)})
+    assert route('abcdpixyz') is None
+
+
 def test_number_present_but_not_in_mapping(mapping):
     # 9.999 khớp regex nhưng không có trong mapping → None (không alias) .
     assert route("tiêu chuẩn 9.999") is None

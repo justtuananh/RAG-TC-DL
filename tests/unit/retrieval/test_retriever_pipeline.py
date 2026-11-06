@@ -6,14 +6,12 @@ stub HTTP rerank :8011. Không chạm mạng thật.
 
 import json
 
+import pytest
 import responses
 
 import retrieval.retriever as R
 from core.settings_loader import get_settings
 from reranking.reranker import rerank_hits
-
-
-import pytest
 
 
 @pytest.fixture(autouse=True)
@@ -120,6 +118,18 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
 def test_rerank_hits_empty_returns_empty():
     # Không gọi mạng (return sớm) - an toàn dưới network-guard.
     assert rerank_hits("q", []) == []
+
+
+def test_disabling_extraction_disables_structural_shortcut(monkeypatch):
+    settings = get_settings()
+    multi = settings.llm.multi_document.model_copy(update={'extractive_enabled': False})
+    llm = settings.llm.model_copy(update={'multi_document': multi})
+    monkeypatch.setattr(R, 'get_settings', lambda: settings.model_copy(update={'llm': llm}))
+    monkeypatch.setattr(R.reference_lookup, 'lookup', lambda *a: (_ for _ in ()).throw(AssertionError('disabled')))
+    monkeypatch.setattr(R.router, 'route_files', lambda *a: frozenset())
+    monkeypatch.setattr(R.embedder, 'embed_query', lambda *a: [])
+    monkeypatch.setattr(R.hybrid, 'search_both', lambda *a, **k: ([], []))
+    assert R.retrieve('Phụ lục D của QTKĐ 8.765 có nội dung gì?') == []
 
 
 @responses.activate

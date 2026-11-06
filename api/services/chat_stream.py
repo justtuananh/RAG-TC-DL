@@ -19,10 +19,23 @@ from api.schemas import ChatMessage, ChatRequest
 from core.latex import fix_latex, restore_formulas
 from core.settings_loader import get_settings
 from llm import citations, generator, number_check
-from llm.guards import CALCULATION_GUIDE, REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request
+from llm.guards import (
+    CALCULATION_GUIDE,
+    REFUSAL_SENTENCE,
+    enforce_refusal_stop,
+    is_calculation_request,
+)
 from llm.lang_guard import LANGUAGE_FALLBACK, CjkStreamGuard, strip_cjk
 from llm.prompt import build_messages
-from query import chat_calc, device_ambiguity, history_context, multi_document, object_scope, unit_convert
+from query import (
+    chat_calc,
+    device_ambiguity,
+    extractive,
+    history_context,
+    multi_document,
+    object_scope,
+    unit_convert,
+)
 from retrieval import doc_pages, doc_titles, retriever, router
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.quote import build_quote
@@ -297,11 +310,30 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     sources = _build_sources_payload(results)
     yield _sse({"type": "sources", "sources": sources})
 
+    reference = extractive.reference_answer(results)
+    if reference is not None:
+        reference = citations.add_citations(reference, sources, doc_titles.title_for)
+        yield _sse({"type": "delta", "text": reference})
+        yield _sse({"type": "done", "answer": reference, "sources": sources})
+        return
+
     context_str, _ = build_context_and_citations(results, question=retrieval_query)
     if calc is not None and calc.kind == "answer":
         context_str = calc.block + "\n\n---\n\n" + context_str
     guidance = device_ambiguity.ambiguity_guidance(ambiguity) if ambiguity is not None else None
     plan = _document_plan(retrieval_query, results) if ambiguity is None and calc is None else None
+    if ambiguity is not None and calc is None:
+        plan = multi_document.group_by_document([r['payload']['file_stem'] for r in results])
+    if plan is not None:
+        quoted = extractive.answer(retrieval_query, results, plan)
+        if quoted is not None:
+            if ambiguity is not None:
+                quoted = device_ambiguity.ambiguity_preface(ambiguity) + quoted + device_ambiguity.ambiguity_closing(ambiguity)
+            # Exact quotations retain their original source index; no LLM rewrite.
+            quoted = citations.add_citations(quoted, sources, doc_titles.title_for)
+            yield _sse({"type": "delta", "text": quoted})
+            yield _sse({"type": "done", "answer": quoted, "sources": sources})
+            return
     if calc is not None and calc.kind == "answer":
         # Model nhỏ bám lượt người dùng cuối hơn system prompt: đặt kết quả đã xác minh ở đây.
         calc_note = (
@@ -344,6 +376,11 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
         yield _sse({"type": "delta", "text": closing})
 
     body = _finalize_text(guard.raw, context_str)
+    if calc is None and REFUSAL_SENTENCE in body:
+        groups = multi_document.group_by_document([r['payload']['file_stem'] for r in results])
+        quoted = extractive.answer(retrieval_query, results, groups, allow_single=True)
+        if quoted is not None:
+            body = quoted
     allowed_extra = req.message + "\n" + "\n".join(u for u, _ in prior)
     calc_answer = calc is not None and calc.kind == "answer"
     body, bad_numbers = _verify_numbers(body, messages, context_str, allowed_extra, annotate=not calc_answer)
