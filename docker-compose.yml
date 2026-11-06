@@ -240,6 +240,14 @@ services:
       AUTH_ENABLED: ${AUTH_ENABLED:-true}
       # Rỗng: dev sinh khóa tạm mỗi tiến trình; APP_ENV=production thì bắt buộc đặt (>= 32 byte).
       JWT_SECRET_KEY: ${JWT_SECRET_KEY:-}
+    # Marker (upload PDF) chạy trên GPU: ingestion.marker_device=cuda, tạm dỡ LLM khỏi GPU rồi nạp lại.
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     command: ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8080"]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8080/api/health', timeout=5)"]

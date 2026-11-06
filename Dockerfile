@@ -29,6 +29,22 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libreoffice-writer libreoffice-calc fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
+# Marker (PDF -> Markdown + công thức), venv riêng với torch CUDA: ingestion/extract_pdf_marker.py
+# gọi marker_single qua MARKER_PYTHON. Đặt SAU các lớp trên và TRƯỚC `COPY . .` để sửa code
+# không cài lại; chỉ requirements-pdf.txt đổi mới dựng lại lớp này. Cache pip giữ wheel đã tải.
+# Mô hình (Surya/Texify) tải sẵn vào image: chạy offline, không tải lúc upload PDF.
+COPY requirements-pdf.txt ./
+ENV MARKER_PYTHON=/opt/venv-pdf/bin/python XDG_CACHE_HOME=/opt/cache
+RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 \
+    && rm -rf /var/lib/apt/lists/*
+RUN --mount=type=cache,target=/root/.cache/pip \
+    python -m venv /opt/venv-pdf \
+    && /opt/venv-pdf/bin/pip install torch==2.11.0 torchvision==0.26.0 \
+        --index-url https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.org/simple \
+    && /opt/venv-pdf/bin/pip install -r requirements-pdf.txt
+RUN TORCH_DEVICE=cpu /opt/venv-pdf/bin/python -c "from marker.models import create_model_dict; create_model_dict()" \
+    && chmod -R a+rX /opt/cache
+
 # Toàn bộ code backend; .dockerignore loại TC_DL/, build/, frontend/, venv, dữ liệu Qdrant.
 COPY . .
 
