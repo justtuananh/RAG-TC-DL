@@ -94,7 +94,6 @@ export interface Actions {
   regenerate: () => void;
   copyAnswer: (text: string) => void;
   exportChat: (format: ExportFormat) => Promise<void>;
-  feedback: (type: "up" | "down") => void;
   feedback: (index: number, type: "up" | "down") => void;
   askSample: (q: string) => void;
   newChat: () => void;

@@ -18,7 +18,7 @@ const COL_HEADER_HEIGHT = 22;
 const headerCell: CSSProperties = {
   background: "#F3F4F6",
   color: "#475467",
-  fontFamily: "'Be Vietnam Pro', sans-serif",
+  fontFamily: "Arial, sans-serif",
   fontSize: 11,
   fontWeight: 500,
   textAlign: "center",

@@ -85,7 +85,10 @@ def check_services(settings: Settings) -> dict[str, bool]:
     status = {}
     for name, url in probes.items():
         try:
-            resp = requests.get(url, timeout=_PROBE_TIMEOUT_S)
+            headers = {}
+            if name == "qdrant" and s.qdrant_api_key is not None:
+                headers["api-key"] = s.qdrant_api_key.get_secret_value()
+            resp = requests.get(url, timeout=_PROBE_TIMEOUT_S, headers=headers)
             status[name] = resp.ok
         except (OSError, requests.RequestException):
             status[name] = False

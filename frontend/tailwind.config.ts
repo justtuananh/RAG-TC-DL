@@ -47,8 +47,8 @@ export default {
         "icon-muted": "#6B7770",
       },
       fontFamily: {
-        sans: ["'Be Vietnam Pro'", "system-ui", "-apple-system", "sans-serif"],
-        serif: ["'Lora'", "Georgia", "serif"],
+        sans: ["Arial", "system-ui", "-apple-system", "sans-serif"],
+        serif: ["'Times New Roman'", "Georgia", "serif"],
       },
       boxShadow: {
         // Bóng đổ theo accent xanh rừng cho nút/hàng động (thay các mã rgba viết cứng)

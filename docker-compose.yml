@@ -57,7 +57,9 @@ services:
     image: qdrant/qdrant:v1.10.1
     container_name: qtkd-qdrant
     ports:
-      - "6333:6333"
+      - "127.0.0.1:6333:6333"
+    environment:
+      QDRANT__SERVICE__API_KEY: ${QDRANT_API_KEY:?Cần đặt QDRANT_API_KEY trong .env}
     volumes:
       - ./qdrant_storage:/qdrant/storage   # bind mount: xem qdrant_storage/README.md
     restart: unless-stopped
@@ -227,6 +229,7 @@ services:
       EMBED_URL: http://embedding:8010/v1/embeddings
       RERANK_URL: http://reranker:8011/v1/rerank
       QDRANT_URL: http://qdrant:6333
+      QDRANT_API_KEY: ${QDRANT_API_KEY:?Cần đặt QDRANT_API_KEY trong .env}
       OLLAMA_URL: http://ollama:11434/api/chat
       OLLAMA_MODEL: ${OLLAMA_MODEL:-}   # rỗng: dùng models.llm_chat của config/settings.yaml
       APP_ENV: ${APP_ENV:-development}
@@ -278,6 +281,7 @@ services:
     environment:
       EMBED_URL: http://embedding:8010/v1/embeddings
       QDRANT_URL: http://qdrant:6333
+      QDRANT_API_KEY: ${QDRANT_API_KEY:?Cần đặt QDRANT_API_KEY trong .env}
     depends_on:
       qdrant:
         condition: service_healthy

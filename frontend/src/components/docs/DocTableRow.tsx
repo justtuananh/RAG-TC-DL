@@ -38,7 +38,7 @@ export default function DocTableRow({ doc, renaming, actions }: { doc: DocItem; 
               boxShadow: `0 2px 5px -1px ${COLOR.shadowStrong}`,
             }}
           >
-            <span style={{ fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "9px", fontWeight: 700, color: COLOR.textOnDark }}>{doc.ext}</span>
+            <span style={{ fontFamily: "Arial,sans-serif", fontSize: "9px", fontWeight: 700, color: COLOR.textOnDark }}>{doc.ext}</span>
           </span>
           <div style={{ minWidth: 0 }}>
             {renaming ? (

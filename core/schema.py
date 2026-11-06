@@ -48,6 +48,7 @@ class ServiceSettings(_Section):
     embedding_url: str
     rerank_url: str
     qdrant_url: str
+    qdrant_api_key: OptionalSecret = None
     ollama_url: str
 
 

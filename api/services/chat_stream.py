@@ -22,7 +22,7 @@ from llm import citations, generator, number_check
 from llm.guards import CALCULATION_GUIDE, enforce_refusal_stop, is_calculation_request
 from llm.lang_guard import LANGUAGE_FALLBACK, CjkStreamGuard, strip_cjk
 from llm.prompt import build_messages
-from query import chat_calc, device_ambiguity, history_context, multi_document
+from query import basic_calc, chat_calc, device_ambiguity, history_context, multi_document
 from retrieval import doc_pages, doc_titles, retriever, router
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.quote import build_quote
@@ -226,6 +226,11 @@ def _verify_numbers(
 
 
 def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[str]:
+    basic = basic_calc.try_basic_calc(req.message, retriever.retrieve)
+    if basic is not None:
+        answer, hits = basic
+        yield _sse({"type": "done", "answer": answer, "sources": _build_sources_payload(hits)})
+        return
     # Tính toán chỉ bằng công thức ĐÃ DUYỆT (bộ tính Decimal), không để model tự tính.
     calc = chat_calc.try_calc(req.message)
     if calc is not None and calc.kind in ("ask", "invalid"):

@@ -177,7 +177,7 @@ export default function DocContentPane({ viewingDoc, onDownload }: { viewingDoc:
               paddingBottom: 11,
               marginBottom: 5,
               borderBottom: `1px dashed ${COLOR.border}`,
-              fontFamily: "'Be Vietnam Pro',sans-serif",
+              fontFamily: "Arial,sans-serif",
               fontSize: "10.5px",
               letterSpacing: ".08em",
               color: COLOR.textMuted,

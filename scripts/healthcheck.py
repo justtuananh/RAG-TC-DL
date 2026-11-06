@@ -36,8 +36,8 @@ def health_urls() -> dict[str, str]:
     return {
         "embedding": _base(services.embedding_url) + "/health",
         "reranker": _base(services.rerank_url) + "/health",
-        # Qdrant trả 200 ở root "/" (kèm version) - liveness đơn giản, ổn định.
-        "qdrant": _base(services.qdrant_url),
+        # /healthz chỉ báo liveness, không đọc dữ liệu và không cần khóa.
+        "qdrant": _base(services.qdrant_url) + "/healthz",
         "ollama": _base(services.ollama_url) + "/api/tags",
     }
 

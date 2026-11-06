@@ -73,7 +73,7 @@ export default function XlsxFilePreview({ fileUrl, onDownload }: { fileUrl: stri
                 borderBottom: `2px solid ${selected ? COLOR.accent : "transparent"}`,
                 background: selected ? COLOR.accentSoft : "transparent",
                 color: selected ? COLOR.accentDark : COLOR.textSecondary,
-                fontFamily: "'Be Vietnam Pro', sans-serif",
+                fontFamily: "Arial, sans-serif",
                 fontSize: 12.5,
                 fontWeight: selected ? 700 : 500,
                 cursor: "pointer",

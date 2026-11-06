@@ -287,7 +287,9 @@ def test_specific_device_question_has_no_ambiguity_preface(piston_procedures, mo
         )
     )
     done = events[-1]
-    assert done["answer"].startswith("10 bar đến 700 bar [1]\n\nNguồn:\n- [1] QTKD_1.071_2022_FINAL")
+    assert done["answer"].startswith(
+        "10 bar đến 700 bar [1]\n\nNguồn:\n- [1] QTKD_1.071_2022_FINAL"
+    )
 
 
 def test_done_answer_shows_the_source_formula_verbatim(monkeypatch):
@@ -306,3 +308,46 @@ def test_done_answer_shows_the_source_formula_verbatim(monkeypatch):
     )
     done = events[-1]
     assert done["answer"].startswith(f"$${source}$$ [1]\n\nNguồn:")
+
+
+def test_unit_conversion_done_without_retrieval_or_llm(monkeypatch):
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Đổi đơn vị không gọi truy hồi hay mô hình.')
+
+    monkeypatch.setattr('retrieval.retriever.retrieve', forbidden)
+    monkeypatch.setattr('llm.generator.stream_ollama', forbidden)
+    monkeypatch.setattr('query.chat_calc.try_calc', forbidden)
+    events = _events(
+        list(chat_stream.chat_stream_events(ChatRequest(message='Quy đổi 700 bar sang MPa.'), None))
+    )
+    assert len(events) == 1 and events[0]['type'] == 'done'
+    assert '70 MPa' in events[0]['answer'] and events[0]['sources'] == []
+
+
+def test_van_calculation_attaches_source_without_model_arithmetic(monkeypatch):
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Kết quả số không qua mô hình.')
+
+    monkeypatch.setattr('llm.generator.stream_ollama', forbidden)
+    monkeypatch.setattr(
+        'retrieval.retriever.retrieve',
+        lambda q: [
+            _hit(
+                'QTKD_1.061',
+                'Sai số áp suất chỉnh đặt bằng ± 3% áp suất chỉnh đặt nhưng không nhỏ hơn ± 0,15 bar.',
+            )
+        ],
+    )
+    events = _events(
+        list(
+            chat_stream.chat_stream_events(
+                ChatRequest(
+                    message='Van an toàn chỉnh đặt 40 bar mở ở 42 bar thì sai số tương đối là bao nhiêu?'
+                ),
+                None,
+            )
+        )
+    )
+    assert len(events) == 1 and events[0]['type'] == 'done'
+    assert '5 %' in events[0]['answer'] and 'Không đạt' in events[0]['answer']
+    assert events[0]['sources'][0]['file_stem'] == 'QTKD_1.061'

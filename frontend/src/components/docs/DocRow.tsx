@@ -69,7 +69,7 @@ export default function DocRow({ doc, renaming, actions }: { doc: DocItem; renam
           boxShadow: `0 2px 5px -1px ${COLOR.shadowStrong}`,
         }}
       >
-        <span style={{ fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "10.5px", fontWeight: 700, color: COLOR.textOnDark }}>{doc.ext}</span>
+        <span style={{ fontFamily: "Arial,sans-serif", fontSize: "10.5px", fontWeight: 700, color: COLOR.textOnDark }}>{doc.ext}</span>
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>

@@ -342,3 +342,7 @@ Lịch sử số liệu lưu ở [`result_eval.md`](result_eval.md).
 **Tài liệu nội bộ**
 - [`docs/PLAN.md`](docs/PLAN.md) — thiết kế & kế hoạch đầy đủ · [`docs/spike_c_ui_setup.md`](docs/spike_c_ui_setup.md) — bake-off UI + setup
 - [`docs/archive/plan-7.md`](docs/archive/plan-7.md) — kế hoạch cải thiện retrieval (lưu trữ) · [`result_eval.md`](result_eval.md) — log kết quả eval · [`CLAUDE.md`](CLAUDE.md) — hướng dẫn kiến trúc cho agent
+
+### Bảo vệ Qdrant
+
+Docker yêu cầu `QDRANT_API_KEY` riêng trong `.env` (không đưa khóa vào Git). Sinh bằng `python3 -c "import secrets; print(secrets.token_urlsafe(48))"`, lưu kết quả vào biến này trước khi khởi động. API và indexer dùng cùng khóa; client Python cục bộ đọc `.env`. Cổng Qdrant chỉ mở tại `127.0.0.1:6333`, và mọi thao tác dữ liệu cần khóa. Chi tiết kiểm chứng và lưu ý vận hành: [báo cáo bảo vệ Qdrant](docs/evidence/qdrant-security-2026-11-06.md).

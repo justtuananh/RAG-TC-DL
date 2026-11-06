@@ -221,7 +221,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
                 paddingBottom: 11,
                 marginBottom: 5,
                 borderBottom: `1px dashed ${COLOR.border}`,
-                fontFamily: "'Be Vietnam Pro',sans-serif",
+                fontFamily: "Arial,sans-serif",
                 fontSize: "11px",
                 fontWeight: 500,
                 color: COLOR.textMuted,
@@ -251,7 +251,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
                   right: 12,
                   background: COLOR.accent,
                   color: COLOR.textOnDark,
-                  fontFamily: "'Be Vietnam Pro',sans-serif",
+                  fontFamily: "Arial,sans-serif",
                   fontSize: "9.5px",
                   fontWeight: 700,
                   letterSpacing: ".03em",
@@ -266,7 +266,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
 
             {/* ngữ cảnh đầy đủ (parent_text) */}
             <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${COLOR.border}` }}>
-              <div style={{ fontFamily: "'Be Vietnam Pro',sans-serif", fontSize: "11px", fontWeight: 600, color: COLOR.textMuted, marginBottom: 6 }}>
+              <div style={{ fontFamily: "Arial,sans-serif", fontSize: "11px", fontWeight: 600, color: COLOR.textMuted, marginBottom: 6 }}>
                 Ngữ cảnh đầy đủ
               </div>
               <Markdown className="md-doc">{src.parent_text}</Markdown>

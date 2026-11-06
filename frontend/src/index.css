@@ -1,9 +1,3 @@
-/* Tự host font (offline) — bản @fontsource đã kèm subset vietnamese */
-@import "@fontsource/be-vietnam-pro/400.css";
-@import "@fontsource/be-vietnam-pro/500.css";
-@import "@fontsource/be-vietnam-pro/600.css";
-@import "@fontsource/be-vietnam-pro/700.css";
-@import "@fontsource/lora/400.css";
 @import "katex/dist/katex.min.css";
 
 @tailwind base;
