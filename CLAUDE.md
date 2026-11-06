@@ -119,6 +119,9 @@ A lower layer never imports a higher one;
   `POST /api/chat/stream` (SSE). Reuses the SAME pipeline as `ui/gradio_app.py`
   (`retrieval.retriever` + `llm/`: `guards.is_calculation_request` → `retrieve` →
   `prompt.build_messages` → `generator.stream_ollama`).
+  Login is mandatory (`auth.enabled`, default true): every route except `/api/health` and `/api/auth/login` needs a bearer token, and the React app shows only a full-page login screen until signed in.
+  Create the first account with `python scripts/create_admin.py`.
+  `GET /api/documents/{id}/download` returns the original upload (same format) as an attachment named after the display name.
   Each SSE source carries `quote` (`retrieval/quote.py`): its matched children plus the formula each one refers to (a "trong đó" definition line brings the formula above it, a lead-in ending in ":" the formula after it), shown in the panel's "Đoạn trả lời" box.
 - `api/services/chat_stream.py` — **chat chỉ còn nhánh văn bản**: câu hỏi đi thẳng
   `retrieve` → `build_messages` → `stream_ollama`, không còn bộ phân loại intent hay

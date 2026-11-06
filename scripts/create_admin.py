@@ -8,6 +8,7 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from auth.dependencies import LOCAL_ADMIN_USERNAME
 from auth.security import hash_password
 from db import SessionLocal
 from db.models import AppUser, UserRole
@@ -19,7 +20,12 @@ def create_admin():
 
     try:
         # Check if admin already exists
-        existing_admin = db.query(AppUser).filter(AppUser.role == UserRole.ADMIN).first()
+        # Tài khoản `local` (tự tạo khi tắt đăng nhập) không đăng nhập được nên không tính.
+        existing_admin = (
+            db.query(AppUser)
+            .filter(AppUser.role == UserRole.ADMIN, AppUser.username != LOCAL_ADMIN_USERNAME)
+            .first()
+        )
         if existing_admin:
             print(f"❌ Admin user already exists: {existing_admin.username}")
             sys.exit(1)

@@ -3,7 +3,7 @@ import { AuthError, authFetch } from "./auth";
 
 // ── Client gọi backend RAG thật (package api/, FastAPI + SSE) ──
 // Port từ frontend-legacy/src/utils/{api.js,latex.js}, có thêm AbortSignal + health.
-// Route ĐỌC/CHAT dùng fetch thường (công khai); route GHI dùng authFetch (bearer token).
+// Mọi route trừ /api/health đều cần đăng nhập nên đi qua authFetch (bearer token).
 
 export interface SseEvent {
   type: "status" | "sources" | "delta" | "done" | "error";
@@ -19,7 +19,7 @@ export interface HistoryTurn {
 
 /** SSE generator: POST {message, history} → yield từng event đã parse. */
 export async function* streamChat(message: string, history: HistoryTurn[], signal?: AbortSignal): AsyncGenerator<SseEvent> {
-  const response = await fetch("/api/chat/stream", {
+  const response = await authFetch("/api/chat/stream", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ message, history }),
@@ -54,7 +54,7 @@ export async function* streamChat(message: string, history: HistoryTurn[], signa
 
 export async function fetchExamples(): Promise<string[]> {
   try {
-    const res = await fetch("/api/examples");
+    const res = await authFetch("/api/examples");
     if (!res.ok) return [];
     const data = await res.json();
     return data.examples ?? [];
@@ -86,7 +86,7 @@ async function _json<T>(res: Response): Promise<T> {
 }
 
 export async function fetchDocuments(): Promise<DocItem[]> {
-  const res = await fetch("/api/documents");
+  const res = await authFetch("/api/documents");
   const data = await _json<{ documents: DocItem[] }>(res);
   return data.documents;
 }
@@ -104,7 +104,7 @@ export async function processDocument(fileStem: string): Promise<void> {
 }
 
 export async function fetchDocumentMarkdown(fileStem: string): Promise<string> {
-  const res = await fetch(`/api/documents/${encodeURIComponent(fileStem)}/markdown`);
+  const res = await authFetch(`/api/documents/${encodeURIComponent(fileStem)}/markdown`);
   const data = await _json<{ markdown: string }>(res);
   return data.markdown;
 }
@@ -117,6 +117,56 @@ export function documentFileUrl(fileStem: string): string {
 /** Bản xem trên trình duyệt: .doc/.xls cũ được backend trả dưới dạng .docx/.xlsx đã chuyển. */
 export function documentPreviewUrl(fileStem: string): string {
   return `/api/documents/${encodeURIComponent(fileStem)}/preview`;
+}
+
+/**
+ * Đọc tên tệp từ Content-Disposition: ưu tiên `filename*=UTF-8''…` (tên tiếng Việt),
+ * rồi `filename="…"`; không có thì dùng `fallback`.
+ */
+export function filenameFromDisposition(header: string | null, fallback: string): string {
+  if (!header) return fallback;
+  const star = /filename\*\s*=\s*(?:UTF-8|utf-8)''([^;]+)/.exec(header);
+  if (star) {
+    try {
+      return decodeURIComponent(star[1].trim());
+    } catch {
+      /* mã hoá hỏng → thử filename thường */
+    }
+  }
+  const plain = /filename\s*=\s*"?([^";]+)"?/.exec(header);
+  return plain ? plain[1].trim() : fallback;
+}
+
+/** Lưu một Blob thành tệp tải xuống của trình duyệt. */
+function saveBlob(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.rel = "noopener";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  // Trì hoãn thu hồi để trình duyệt kịp bắt đầu tải.
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/**
+ * Tải xuống tệp gốc đúng định dạng đã tải lên (.docx/.doc/.pdf/.xlsx/.xls).
+ * Cần token nên không dùng được thẻ <a href> trần: tải qua authFetch rồi lưu Blob.
+ * Trả về tên tệp đã lưu.
+ */
+export async function downloadDocument(fileStem: string): Promise<string> {
+  const res = await authFetch(`/api/documents/${encodeURIComponent(fileStem)}/download`);
+  if (!res.ok) {
+    const body = await res.json().catch(() => null);
+    const message = body?.detail || `HTTP ${res.status}`;
+    if (res.status === 401) throw new AuthError(message, 401);
+    throw new Error(message);
+  }
+  const filename = filenameFromDisposition(res.headers.get("content-disposition"), fileStem);
+  saveBlob(await res.blob(), filename);
+  return filename;
 }
 
 export async function deleteDocument(fileStem: string): Promise<void> {

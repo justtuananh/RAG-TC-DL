@@ -2,6 +2,8 @@
 
 Chạy: python -m api.main  (hoặc uvicorn api.main:app)
 
+Mọi endpoint trừ /api/health và /api/auth/login cần đăng nhập (auth.enabled).
+
 Endpoints:
   GET    /api/health
   GET    /api/examples
@@ -13,6 +15,7 @@ Endpoints:
   GET    /api/documents/{id}/markdown
   GET    /api/documents/{id}/file    - tệp gốc (.docx/.xlsx/.pdf) thô, để hiển thị "tài liệu gốc"
   GET    /api/documents/{id}/preview - bản xem trên trình duyệt (.doc/.xls -> .docx/.xlsx)
+  GET    /api/documents/{id}/download - tải xuống tệp gốc đúng định dạng đã tải lên
   DELETE /api/documents/{id}
   PATCH  /api/documents/{id}         - {"name": str} display-name override
 """

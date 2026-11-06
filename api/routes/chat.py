@@ -8,9 +8,11 @@ from sqlalchemy.orm import Session
 
 from api.schemas import ChatRequest
 from api.services.chat_stream import chat_stream_events
+from auth import get_current_user
 from db import get_db
 
-router = APIRouter()
+# Bắt buộc đăng nhập (auth.enabled=false thì get_current_user trả quản trị viên cục bộ).
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 @router.post("/api/chat/stream")

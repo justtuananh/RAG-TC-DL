@@ -3,17 +3,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, ConfigDict, Field, StrictBool
 
-from auth import require_role
+from auth import get_current_user, require_role
 from db.models import AppUser, UserRole
 from formula_lab.engine import UNITS, Invalid
 
 from .drafts import generate_from_docx
 from .store import Conflict, Registry
 
-router = APIRouter(prefix='/api', tags=['formula-review'])
+router = APIRouter(prefix='/api', tags=['formula-review'], dependencies=[Depends(get_current_user)])
 
 # Tạo/sửa nháp là việc của kỹ thuật viên; phê duyệt/từ chối là việc của người duyệt.
-# Xem và tính bằng công thức đã duyệt mở cho mọi người dùng, như tra cứu tài liệu.
+# Xem và tính bằng công thức đã duyệt mở cho mọi người dùng đã đăng nhập.
 _editor = require_role(UserRole.TECHNICIAN, UserRole.ADMIN)
 _approver = require_role(UserRole.APPROVER, UserRole.ADMIN)
 

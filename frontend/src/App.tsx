@@ -7,12 +7,25 @@ import GuideTab from "./components/guide/GuideTab";
 import ConfirmDialog from "./components/modals/ConfirmDialog";
 import DocViewerModal from "./components/modals/DocViewerModal";
 import LlmConfigModal from "./components/modals/LlmConfigModal";
-import LoginModal from "./components/modals/LoginModal";
+import LoginScreen from "./components/auth/LoginScreen";
 import Toast from "./components/common/Toast";
 import { useAppStore } from "./store/useAppStore";
 
 export default function App() {
   const { state, actions } = useAppStore();
+  const { auth } = state;
+
+  // Đăng nhập bắt buộc: đang khôi phục phiên thì để trống (tránh nháy màn hình đăng nhập),
+  // chưa có người dùng thì chỉ hiện màn hình đăng nhập.
+  if (auth.enabled && !auth.user) {
+    if (!auth.restoreDone) return <div aria-busy="true" style={{ minHeight: "100vh", background: COLOR.bg }} />;
+    return (
+      <>
+        <LoginScreen busy={auth.loginBusy} error={auth.loginError} notice={auth.loginNotice} onSubmit={actions.submitLogin} />
+        <Toast toast={state.toast} />
+      </>
+    );
+  }
 
   return (
     <div
@@ -39,7 +52,6 @@ export default function App() {
             onGo={actions.go}
             onOpenLlm={actions.openLlmConfig}
             auth={state.auth}
-            onOpenLogin={() => actions.openLogin()}
             onLogout={actions.logout}
             docName={state.tab === "docs" ? state.viewingDoc?.name : undefined}
           />
@@ -53,7 +65,11 @@ export default function App() {
       {/* overlays */}
       {/* Trong tab Tài liệu, việc xem tài liệu hiển thị NGAY trong khung (DocsTab renders DocViewerPanel) —
           hộp thoại nổi này chỉ dùng khi mở tài liệu gốc từ trích dẫn trong tab Trò chuyện. */}
-      <DocViewerModal viewingDoc={state.tab !== "docs" ? state.viewingDoc : null} onClose={actions.closeViewer} />
+      <DocViewerModal
+        viewingDoc={state.tab !== "docs" ? state.viewingDoc : null}
+        onClose={actions.closeViewer}
+        onDownload={() => state.viewingDoc && actions.downloadDoc(state.viewingDoc.code)}
+      />
       <LlmConfigModal
         open={state.llmConfigOpen}
         llm={state.llm}
@@ -65,14 +81,6 @@ export default function App() {
         onSave={actions.saveLlm}
       />
       <ConfirmDialog conv={state.confirmDelete} onYes={actions.confirmDeleteYes} onNo={actions.confirmDeleteNo} />
-      <LoginModal
-        open={state.auth.enabled && state.auth.loginOpen}
-        busy={state.auth.loginBusy}
-        error={state.auth.loginError}
-        notice={state.auth.loginNotice}
-        onClose={actions.closeLogin}
-        onSubmit={actions.submitLogin}
-      />
       <Toast toast={state.toast} />
     </div>
   );
