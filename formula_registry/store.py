@@ -162,6 +162,20 @@ class Registry:
             (self._public(r) for r in records), key=lambda r: (r['source']['fid'], r['created_at'])
         )
 
+    def approved(self):
+        """Mọi công thức đã duyệt còn nguyên (nguồn chưa đổi) của mọi tài liệu, dạng public.
+
+        Dùng cho chat: chỉ công thức người duyệt đã phê duyệt đúng phiên bản hiện tại mới được tính."""
+        with self.connection() as db:
+            records = [json.loads(r[0]) for r in db.execute('SELECT record FROM formulas')]
+        return [
+            self._public(r)
+            for r in records
+            if r['status'] == 'approved'
+            and self._fresh(r)
+            and r.get('_approved_digest') == digest([r['source'], r['proposal']])
+        ]
+
     def get(self, id):
         with self.connection() as db:
             return self._public(self._load(db, id))

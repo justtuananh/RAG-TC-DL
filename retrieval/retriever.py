@@ -23,6 +23,10 @@ def retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> 
     stems = router.route_files(query)
     if len(stems) >= 2:
         return _retrieve_per_file(query, vec, expanded, stems, top_k=top_k, top_n=top_n)
+    if not stems and cfg.coverage_per_file > 0:
+        covered = _retrieve_coverage(query, vec, expanded, top_k=top_k)
+        if covered:
+            return covered
     file_stem = next(iter(stems)) if stems else None
     dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k, file_stem=file_stem)
     # Định tuyến thu hẹp quá ít ứng viên: tìm lại toàn kho.
@@ -52,3 +56,35 @@ def _retrieve_per_file(
         fused.extend(hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse))[:pool])
     reranked = reranker.rerank_hits(query, fused, top_n=len(fused))
     return hybrid.merge_per_file(reranked, stems, top_n)
+
+
+def _retrieve_coverage(query: str, vec: list[float], expanded: str, *, top_k: int) -> list[dict]:
+    """Câu hỏi KHÔNG nêu thiết bị/QTKĐ nào: phễu riêng cho từng tài liệu, rerank chung, giữ
+    ``coverage_per_file`` mục tốt nhất mỗi tài liệu.
+
+    Một phễu toàn kho bị vài tài liệu cùng từ vựng áp đảo nên top-N thiếu hẳn tài liệu khác
+    (đo bộ 200 câu: câu hỏi chung chung chỉ có nguồn của 5/7 tài liệu) và model chỉ trả lời
+    một vài tài liệu. Tài liệu không liên quan có điểm rerank thấp nên bị ``filter_by_confidence``
+    loại sau đó; trả [] (rơi về phễu toàn kho) khi có < 2 tài liệu.
+    """
+    cfg = get_settings().retrieval
+    files = sorted(router.known_files())
+    if len(files) < 2:
+        return []
+    fused: list[dict] = []
+    for stem in files:
+        dense, sparse = hybrid.search_both(vec, expanded, top_k=top_k, file_stem=stem)
+        fused.extend(hybrid.filter_noise(hybrid.rrf_fuse(dense, sparse))[: cfg.coverage_pool_per_file])
+    if not fused:
+        return []
+    reranked = reranker.rerank_hits(query, fused, top_n=len(fused))
+    taken: dict[str, int] = {}
+    out: list[dict] = []
+    for hit in reranked:
+        stem = hit["payload"]["file_stem"]
+        if taken.get(stem, 0) < cfg.coverage_per_file:
+            taken[stem] = taken.get(stem, 0) + 1
+            out.append(hit)
+        if len(out) >= cfg.coverage_max_sources:
+            break
+    return out

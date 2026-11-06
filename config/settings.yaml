@@ -52,6 +52,9 @@ retrieval:
   rrf_weight_dense: 1.0                   # trọng số nhánh dense trong RRF; chỉ tỷ lệ dense/BM25 có tác dụng
   rrf_weight_bm25: 1.0                    # trọng số nhánh BM25 trong RRF
   min_routed_candidates: 6                # ít hơn thì bỏ lọc theo file, tìm toàn kho
+  coverage_per_file: 3                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
+  coverage_pool_per_file: 8               # ứng viên RRF mỗi tài liệu vào cross-encoder ở chế độ trên
+  coverage_max_sources: 16               # trần số nguồn ở chế độ trên (nguồn điểm thấp vẫn bị lọc tin cậy)
 
 reranking:
   timeout_s: 60
@@ -73,8 +76,47 @@ llm:
     min_block_chars: 600                  # chỗ giữ cho mỗi nguồn xếp dưới khi nguồn trên lấy ngân sách trước
     quote_anchors: 2                      # panel nguồn: trích N đoạn con khớp nhất của mục (ngữ cảnh LLM dùng mọi đoạn khớp)
     formula_line_slack: 400               # khối dài hơn ngân sách bị cắt theo dòng: được vượt tới N ký tự để không cắt giữa dòng công thức
+    linearize_value_tables: true          # bảng tra giá trị không có cột TT (hàng tiêu đề + hàng nhãn con) -> dòng 'nhãn hàng = giá trị: nhãn cột = giá trị'
+    long_table_rows: 12                   # bảng dài hơn số dòng này: chỉ giữ dòng tiêu đề + dòng khớp từ khóa câu hỏi (0 = tắt)
+    linearize_tables: true                # bảng markdown có cột TT -> dòng 'Tên: nhãn cột = giá trị' (retrieval/table_linearize.py)
     source_abs_floor: 0.08
     source_rel_floor: 0.20
+  rewrite:                                # câu tiếp theo mất chủ ngữ ("Còn độ ẩm thì sao?") -> viết lại độc lập trước khi truy hồi
+    enabled: true
+    max_history_turns: 2
+    answer_chars: 300
+    max_query_chars: 400
+    num_predict: 120
+    timeout_s: 30
+  multi_document:                         # câu không chỉ định một QTKĐ (chung chung hoặc nêu ≥2 QTKĐ): trả lời chung TRƯỚC, chỉ hỏi RIÊNG tài liệu chưa được trích [n]
+    enabled: true
+    min_documents: 2                      # ít hơn thì trả lời một lượt như thường
+    max_documents: 6                      # trần số tài liệu xét bổ sung
+    max_followups: 2                      # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
+    max_followups_named: 4                # trần khi câu hỏi nêu rõ ≥ 2 QTKĐ
+    min_followup_score: 0.30              # câu chung: chỉ hỏi tài liệu có nguồn rerank_score ≥ mức này
+    time_budget_s: 6.0                    # quá ngần này giây từ lúc bắt đầu sinh thì bỏ các lượt hỏi riêng còn lại
+    generic_device_words: [thiết, bộ, hệ, máy, dụng]  # từ đầu alias quá chung: không tính là câu nêu một loại thiết bị
+    context_chars: 5000                   # trần ngữ cảnh mỗi lượt (chỉ nguồn của tài liệu đó)
+    num_predict: 90                       # trần token mỗi lượt hỏi riêng
+    merge_identical: true                 # tài liệu cùng bộ số liệu gộp một dòng
+    merge_max_chars: 80                   # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
+  number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn
+    enabled: true
+    max_regen: 1                          # số lần sinh lại khi có số không có trong nguồn
+  citation:                               # khối "Nguồn:" tất định: tên văn bản + mục sâu nhất + trang, bỏ [n] không tồn tại
+    enabled: true
+    min_keyword_len: 5                    # từ khóa của câu trả lời (khi không có [n] nào) dài tối thiểu N ký tự
+    min_keyword_hits: 2                   # số từ khóa tối thiểu trùng với nguồn khi câu trả lời không có số
+    max_auto_sources: 1                   # số nguồn tự gắn khi câu trả lời thiếu [n]
+
+calc:                                     # tính trong chat bằng công thức đã duyệt (formula_registry); không có công thức duyệt thì như cũ
+  enabled: true
+  intent_pattern: '\b(tính|quy đổi|đổi sang|xác định|hiệu chỉnh|chuyển đổi)\b'
+  max_formulas: 3
+  min_variable_coverage: 0.6              # tỷ lệ từ nhãn biến phải có trong câu hỏi để chọn công thức
+  num_predict: 300
+  timeout_s: 60
 
 ingestion:
   soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH

@@ -89,6 +89,10 @@ class RetrievalSettings(_Section):
     top_n: Positive
     top_n_per_file: Positive
     rerank_pool: Positive
+    # Câu hỏi không nêu thiết bị: lấy tốt nhất MỖI tài liệu (0 = tắt) để trả lời đủ các tài liệu.
+    coverage_per_file: NonNegative = 0
+    coverage_pool_per_file: Positive = 6
+    coverage_max_sources: Positive = 10
     rrf_k: Positive
     rrf_weight_dense: NonNegativeFloat
     rrf_weight_bm25: NonNegativeFloat
@@ -124,13 +128,64 @@ class ContextSettings(_Section):
     min_block_chars: Positive
     quote_anchors: Positive
     formula_line_slack: Positive
+    linearize_tables: bool = True
+    linearize_value_tables: bool = True   # bảng tra giá trị không có cột TT -> dòng 'nhãn hàng: nhãn cột = giá trị'
+    long_table_rows: Annotated[int, Field(ge=0)] = 12  # bảng dài hơn: chỉ giữ dòng khớp từ khóa câu hỏi (0 = tắt)
     source_abs_floor: Annotated[float, Field(ge=0)]
     source_rel_floor: Annotated[float, Field(ge=0, le=1)]
+
+
+class RewriteSettings(_Section):
+    """Viết lại câu hỏi tiếp theo thành câu độc lập (hội thoại nhiều lượt)."""
+
+    enabled: bool = True
+    max_history_turns: Positive = 2
+    answer_chars: Positive = 300
+    max_query_chars: Positive = 400
+    num_predict: Positive = 120
+    timeout_s: PositiveFloat = 30
+
+
+class MultiDocumentSettings(_Section):
+    """Câu hỏi không chỉ định một QTKĐ (chung chung hoặc nêu ≥ 2 QTKĐ): trả lời theo từng tài liệu."""
+
+    enabled: bool = True
+    min_documents: Positive = 2           # ít hơn số tài liệu này thì trả lời một lượt như thường
+    max_documents: Positive = 6           # trần số tài liệu xét bổ sung
+    max_followups: Positive = 2           # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
+    max_followups_named: Positive = 4     # trần khi câu hỏi nêu rõ ≥ 2 QTKĐ (mọi tài liệu được nêu đều đáng hỏi)
+    min_followup_score: Annotated[float, Field(ge=0, le=1)] = 0.3  # câu chung: chỉ hỏi tài liệu có nguồn rerank_score ≥ mức này
+    time_budget_s: PositiveFloat = 6.0    # quá ngần này giây từ lúc bắt đầu sinh thì bỏ các lượt hỏi riêng còn lại
+    generic_device_words: tuple[str, ...] = ()  # từ đầu tên thiết bị quá chung, không tính là nêu một loại thiết bị
+    context_chars: Positive = 5000        # trần ngữ cảnh mỗi lượt (chỉ nguồn của một tài liệu)
+    num_predict: Positive = 90            # trần token mỗi lượt hỏi riêng
+    merge_identical: bool = True          # tài liệu cùng bộ số liệu gộp một dòng
+    merge_max_chars: Positive = 80        # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
+
+
+class NumberCheckSettings(_Section):
+    """Kiểm số liệu trong câu trả lời so với nguồn; sinh lại khi có số không có trong nguồn."""
+
+    enabled: bool = True
+    max_regen: NonNegative = 1
+
+
+class CitationSettings(_Section):
+    """Khối 'Nguồn:' dựng tất định từ các nguồn được [n] tham chiếu (llm/citations.py)."""
+
+    enabled: bool = True
+    min_keyword_len: Positive = 5          # từ khóa của câu trả lời: chữ có ít nhất N ký tự
+    min_keyword_hits: Positive = 2         # số từ khóa tối thiểu có trong nguồn khi câu trả lời không có số
+    max_auto_sources: Positive = 1         # số nguồn tự gắn khi câu trả lời thiếu [n]
 
 
 class LlmSettings(_Section):
     chat: ChatLlmSettings
     context: ContextSettings
+    rewrite: RewriteSettings = Field(default_factory=RewriteSettings)
+    number_check: NumberCheckSettings = Field(default_factory=NumberCheckSettings)
+    citation: CitationSettings = Field(default_factory=CitationSettings)
+    multi_document: MultiDocumentSettings = Field(default_factory=MultiDocumentSettings)
 
     @property
     def total_context_chars(self) -> int:
@@ -169,6 +224,17 @@ class ApiSettings(_Section):
     cors_origins: tuple[str, ...]
 
 
+class CalcSettings(_Section):
+    """Tính trong chat bằng công thức ĐÃ DUYỆT (formula_registry); công thức nháp không bao giờ được dùng."""
+
+    enabled: bool = True
+    intent_pattern: str = r"\b(tính|quy đổi|đổi sang|xác định|hiệu chỉnh|chuyển đổi)\b"
+    max_formulas: Positive = 3
+    min_variable_coverage: Annotated[float, Field(ge=0, le=1)] = 0.6
+    num_predict: Positive = 300
+    timeout_s: PositiveFloat = 60
+
+
 class Settings(_Section):
     app: AppSettings
     paths: PathSettings
@@ -184,6 +250,7 @@ class Settings(_Section):
     database: DatabaseSettings
     auth: AuthSettings
     api: ApiSettings
+    calc: CalcSettings = Field(default_factory=CalcSettings)
 
     def llm_model(self, role: LlmRole) -> str:
         """Model chat (vai trò LLM duy nhất còn lại)."""

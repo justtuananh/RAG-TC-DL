@@ -11,7 +11,8 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
-_DIRS = (Path("/app/build/spike_a"), Path(__file__).resolve().parents[1] / "build" / "spike_a")
+from core.settings_loader import get_settings
+
 _CODE = re.compile(r"^QTK[DĐ]\s*[\d.]+\s*:\s*\d{4}", re.IGNORECASE)
 _END = re.compile(r"^QUY\s+TR[ÌI]NH\s+KI[ỂE]M\s+Đ[ỊI]NH", re.IGNORECASE)
 _MAX = 140
@@ -32,12 +33,9 @@ def parse_title(head_lines: list[str]) -> str:
 
 @lru_cache(maxsize=256)
 def title_for(file_stem: str) -> str:
-    for d in _DIRS:
-        path = d / f"{file_stem}.md"
-        if path.is_file():
-            try:
-                with path.open(encoding="utf-8") as f:
-                    return parse_title([next(f, "") for _ in range(40)])
-            except OSError:
-                return ""
-    return ""
+    path = Path(get_settings().paths.markdown_dir) / f"{file_stem}.md"
+    try:
+        with path.open(encoding="utf-8") as f:
+            return parse_title([next(f, "") for _ in range(40)])
+    except OSError:
+        return ""
