@@ -13,6 +13,9 @@ import {
   WidthType,
   type ParagraphChild,
 } from "docx";
+import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
+import katex from "katex";
+import { mml2omml } from "mathml2omml";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
@@ -81,6 +84,87 @@ function plainText(n: MdNode): string {
   return n.value ?? (n.children ?? []).map(plainText).join("");
 }
 
+const EMPTY_NARY_BODY = "<m:e/></m:nary>";
+const XML_TAG = /<(\/?)([\w:]+)[^>]*?(\/?)>/g;
+
+/** Vị trí ngay sau phần tử bắt đầu tại `start`, hoặc -1 nếu ở đó không phải thẻ mở. */
+function elementEnd(xml: string, start: number): number {
+  XML_TAG.lastIndex = start;
+  let depth = 0;
+  for (let m = XML_TAG.exec(xml); m; m = XML_TAG.exec(xml)) {
+    if (m.index !== start && depth === 0) return -1;
+    if (m[1]) depth -= 1;
+    else if (!m[3]) depth += 1;
+    if (depth <= 0) return depth < 0 ? -1 : XML_TAG.lastIndex;
+  }
+  return -1;
+}
+
+/**
+ * KaTeX đặt thân của Σ, ∏, ∫ làm phần tử đứng sau; bộ chuyển để thân trống nên Word hiện ô vuông.
+ * Đưa phần tử đứng ngay sau vào thân (toán tử lớn áp dụng cho số hạng kế tiếp).
+ */
+function fillEmptyNary(omml: string): string {
+  let out = omml;
+  for (let at = out.indexOf(EMPTY_NARY_BODY); at >= 0; at = out.indexOf(EMPTY_NARY_BODY, at + 1)) {
+    const next = at + EMPTY_NARY_BODY.length;
+    const end = elementEnd(out, next);
+    if (end < 0) continue;
+    out = `${out.slice(0, at)}<m:e>${out.slice(next, end)}</m:e></m:nary>${out.slice(end)}`;
+  }
+  return out;
+}
+
+const OMML_TEXT_NODE = /(<m:t\b[^>]*>[^<]*<\/m:t>)|>([^<]+)</g;
+
+/** Bộ chuyển đôi khi để chữ trần (vd. "(x)") ngoài <m:r><m:t>: sai lược đồ, Word có thể báo hỏng hoặc bỏ chữ. */
+function wrapBareText(omml: string): string {
+  return omml.replace(OMML_TEXT_NODE, (all, textRun: string | undefined, bare: string | undefined) =>
+    textRun || !bare?.trim() ? all : `><m:r><m:t xml:space="preserve">${bare}</m:t></m:r><`,
+  );
+}
+
+/** Công thức Word (OMML) dựng từ LaTeX nguyên văn; null nếu KaTeX hoặc bộ chuyển không đọc được. */
+export function latexToOmml(latex: string): string | null {
+  try {
+    const html = katex.renderToString(latex, { output: "mathml", throwOnError: true });
+    const mathml = (html.match(/<math[\s\S]*<\/math>/)?.[0] ?? "").replace(/<annotation[\s\S]*?<\/annotation>/g, "");
+    const omml = wrapBareText(fillEmptyNary(mml2omml(mathml)));
+    return omml.includes("<m:oMath") ? omml : null;
+  } catch {
+    return null;
+  }
+}
+
+// Công thức đi qua docx dưới dạng chạy chữ giữ chỗ, rồi được thay bằng OMML sau khi đóng gói
+// (thư viện docx không nhận XML công thức thô). Giữ chỗ mang sẵn OMML nên không cần trạng thái chung.
+const MATH_OPEN = "⟦OMML:";
+const MATH_CLOSE = "⟧";
+const MATH_RUN = new RegExp(`<w:r>(?:<w:rPr>.*?</w:rPr>)?<w:t[^>]*>${MATH_OPEN}([DI])([^${MATH_CLOSE}]*)${MATH_CLOSE}</w:t></w:r>`, "g");
+
+function mathRun(latex: string, display: boolean): TextRun {
+  const omml = latexToOmml(latex);
+  if (!omml) {
+    // Không chuyển được: giữ LaTeX nguyên văn thay vì mất công thức.
+    const d = display ? "$$" : "$";
+    return new TextRun({ text: `${d}${latex}${d}`, font: FONT_MONO, size: 20, color: ACCENT });
+  }
+  return new TextRun({ text: `${MATH_OPEN}${display ? "D" : "I"}${encodeURIComponent(omml)}${MATH_CLOSE}` });
+}
+
+async function injectMath(docx: Blob): Promise<Blob> {
+  const files = unzipSync(new Uint8Array(await docx.arrayBuffer()));
+  const xml = strFromU8(files["word/document.xml"]);
+  if (!xml.includes(MATH_OPEN)) return docx;
+  files["word/document.xml"] = strToU8(
+    xml.replace(MATH_RUN, (_, kind: string, enc: string) => {
+      const omml = decodeURIComponent(enc);
+      return kind === "D" ? `<m:oMathPara>${omml}</m:oMathPara>` : omml;
+    }),
+  );
+  return new Blob([zipSync(files)], { type: docx.type });
+}
+
 function inlineRuns(nodes: MdNode[] | undefined, style: RunStyle = {}): ParagraphChild[] {
   return (nodes ?? []).flatMap((n): ParagraphChild[] => {
     switch (n.type) {
@@ -93,8 +177,8 @@ function inlineRuns(nodes: MdNode[] | undefined, style: RunStyle = {}): Paragrap
       case "inlineCode":
         return [new TextRun({ text: n.value ?? "", font: FONT_MONO, size: 20, ...style })];
       case "inlineMath":
-        // Công thức giữ nguyên LaTeX gốc, không viết lại.
-        return [new TextRun({ text: `$${n.value ?? ""}$`, font: FONT_MONO, size: 20, color: ACCENT, ...style })];
+        // Công thức giữ nguyên nội dung LaTeX gốc, chỉ đổi cách hiển thị.
+        return [mathRun(n.value ?? "", false)];
       case "break":
         return [new TextRun({ text: "", break: 1 })];
       default:
@@ -132,8 +216,7 @@ function blocks(nodes: MdNode[], depth = 0): Block[] {
           new Paragraph({
             alignment: AlignmentType.CENTER,
             spacing: { before: 80, after: 140 },
-            shading: { type: ShadingType.CLEAR, fill: ACCENT_SOFT },
-            children: [new TextRun({ text: `$$${n.value ?? ""}$$`, font: FONT_MONO, size: 20, color: ACCENT })],
+            children: [mathRun(n.value ?? "", true)],
           }),
         ];
       case "code":
@@ -304,7 +387,7 @@ export async function buildExportBlob(format: ExportFormat, title: string, messa
   if (format === "json") {
     return new Blob([buildExportJson(title, messages, now)], { type: "application/json;charset=utf-8" });
   }
-  return Packer.toBlob(buildDocx(title, messages, now));
+  return injectMath(await Packer.toBlob(buildDocx(title, messages, now)));
 }
 
 export function downloadBlob(blob: Blob, fileName: string): void {
