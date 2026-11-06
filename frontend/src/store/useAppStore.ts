@@ -18,6 +18,7 @@ import {
   uploadDocument,
   type HistoryTurn,
 } from "../services/liveApi";
+import type { ExportFormat } from "../services/exportConversation";
 import { loadConversations, saveConversations } from "./persistence";
 import {
   AuthError,
@@ -91,6 +92,7 @@ export interface Actions {
   send: (text?: string) => void;
   regenerate: () => void;
   copyAnswer: (text: string) => void;
+  exportChat: (format: ExportFormat) => Promise<void>;
   feedback: (type: "up" | "down") => void;
   askSample: (q: string) => void;
   newChat: () => void;
@@ -413,6 +415,19 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         /* noop */
       }
       showToast("Đã sao chép câu trả lời");
+    },
+    exportChat: async (format) => {
+      const messages = stateRef.current.messages;
+      const title = messages.find((m) => m.role === "user")?.text || "Hội thoại mới";
+      try {
+        // Nạp lười: thư viện docx khá nặng, chỉ tải khi người dùng thực sự xuất.
+        const { buildExportBlob, downloadBlob, exportFileName } = await import("../services/exportConversation");
+        const now = new Date();
+        downloadBlob(await buildExportBlob(format, title, messages, now), exportFileName(title, format, now));
+        showToast(`Đã xuất hội thoại (.${format})`);
+      } catch {
+        showToast("Không xuất được hội thoại. Vui lòng thử lại.", "error");
+      }
     },
     feedback: (type) => showToast(type === "up" ? "Cảm ơn phản hồi của bạn!" : "Đã ghi nhận — trợ lý sẽ cải thiện."),
     askSample: (q) => {
