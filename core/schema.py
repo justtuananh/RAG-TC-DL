@@ -148,7 +148,11 @@ class MultiDocumentSettings(_Section):
     """Câu hỏi không chỉ định một QTKĐ (chung chung hoặc nêu ≥ 2 QTKĐ): trả lời theo từng tài liệu."""
 
     enabled: bool = True
-    min_documents: Positive = 2           # ít hơn số tài liệu này trong ngữ cảnh thì không thêm chỉ dẫn
+    min_documents: Positive = 2           # ít hơn số tài liệu này thì trả lời một lượt như thường
+    max_documents: Positive = 6           # trần số tài liệu hỏi riêng (mỗi tài liệu một lượt sinh)
+    context_chars: Positive = 5000        # trần ngữ cảnh mỗi lượt (chỉ nguồn của một tài liệu)
+    num_predict: Positive = 220           # trần token câu trả lời mỗi tài liệu
+    merge_identical: bool = True          # câu chung chung: tài liệu cùng bộ số liệu gộp một dòng
 
 
 class NumberCheckSettings(_Section):

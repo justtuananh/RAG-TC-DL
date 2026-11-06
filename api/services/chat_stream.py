@@ -91,24 +91,58 @@ def _detect_device_ambiguity(
     return device_ambiguity.find_device_ambiguity(question, catalog)
 
 
-def _multi_document_guidance(question: str, results: list[dict]) -> str | None:
-    """Câu không nêu QTKĐ/thiết bị nào, hoặc nêu ≥ 2: mẫu trả lời từng tài liệu (đúng 1 → None)."""
+def _document_plan(question: str, results: list[dict]) -> tuple[list[multi_document.DocumentGroup], bool] | None:
+    """Tài liệu cần hỏi riêng (và cờ "câu chung chung"), hoặc None: trả lời một lượt như thường."""
     cfg = get_settings().llm.multi_document
-    stems = [r["payload"]["file_stem"] for r in results]
-    if not cfg.enabled or len(set(stems)) < max(cfg.min_documents, 2):
-        return None  # một tài liệu: khỏi định tuyến
+    groups = multi_document.group_by_document([r["payload"]["file_stem"] for r in results])
+    if not cfg.enabled or len(groups) < max(cfg.min_documents, 2):
+        return None
     try:
         named = router.route_files(question)
     except Exception as e:  # noqa: BLE001 - không định tuyến được thì trả lời như cũ
-        logger.warning("Không định tuyến được câu hỏi cho chỉ dẫn nhiều tài liệu: %s", e)
+        logger.warning("Không định tuyến được câu hỏi cho nhánh nhiều tài liệu: %s", e)
         return None
-    if len(named) == 1:
+    chosen = multi_document.select_documents(
+        groups, named, min_documents=cfg.min_documents, max_documents=cfg.max_documents
+    )
+    return (chosen, not named) if chosen else None
+
+
+def _answer_per_document(
+    question: str, results: list[dict], groups: list[multi_document.DocumentGroup], generic: bool
+) -> tuple[str, str] | None:
+    """Hỏi RIÊNG từng tài liệu (ngữ cảnh chỉ gồm nguồn của nó, giữ số [n] gốc) rồi ghép từng dòng.
+
+    Trả (câu trả lời, ngữ cảnh đã dùng) hoặc None khi lỗi/không tài liệu nào có nội dung."""
+    cfg = get_settings().llm.multi_document
+    chat = get_settings().llm.chat
+    entries: list[tuple[str, str]] = []
+    contexts: list[str] = []
+    for group in groups:
+        subset = [results[i] for i in group.positions]
+        ctx, _ = build_context_and_citations(
+            subset, numbers=[i + 1 for i in group.positions], total_chars=cfg.context_chars
+        )
+        title = doc_titles.title_for(group.stem)
+        label = f"{group.stem} ({title})" if title else group.stem
+        messages = build_messages(question, ctx, [], guidance=multi_document.document_note(label))
+        try:
+            raw = generator.chat_once(messages, num_predict=cfg.num_predict, timeout_s=chat.timeout_s)
+        except Exception as e:  # noqa: BLE001 - lỗi một tài liệu: bỏ cả nhánh, trả lời một lượt như cũ
+            logger.warning("Hỏi riêng tài liệu %s thất bại: %s", group.stem, e)
+            return None
+        text = _finalize_text(raw, ctx)
+        contexts.append(ctx)
+        if multi_document.is_empty_answer(text):
+            if generic:
+                continue  # câu chung chung: tài liệu không liên quan thì không liệt kê
+            text = multi_document.NO_INFO
+        entries.append((label, text))
+    if not entries:
         return None
-    documents = multi_document.group_documents(stems, {s: doc_titles.title_for(s) for s in set(stems)})
-    if named:  # câu so sánh: chỉ các tài liệu được nêu
-        by_stem = dict(zip(dict.fromkeys(stems), documents, strict=True))
-        documents = [by_stem[s] for s in by_stem if s in named]
-    return multi_document.per_document_guidance(documents, min_documents=cfg.min_documents)
+    if generic and cfg.merge_identical:
+        entries = multi_document.merge_identical(entries)
+    return multi_document.render(entries), "\n\n---\n\n".join(contexts)
 
 
 def _finalize_text(raw: str, context: str) -> str:
@@ -202,8 +236,20 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if calc is not None and calc.kind == "answer":
         context_str = calc.block + "\n\n---\n\n" + context_str
     guidance = device_ambiguity.ambiguity_guidance(ambiguity) if ambiguity is not None else None
-    if guidance is None:
-        guidance = _multi_document_guidance(req.message, results)
+    plan = _document_plan(retrieval_query, results) if ambiguity is None and calc is None else None
+    if plan is not None:
+        yield _sse({"type": "status", "text": "💭 Đang tổng hợp câu trả lời theo từng tài liệu…"})
+        per_doc = _answer_per_document(retrieval_query, results, *plan)
+        if per_doc is not None:
+            body, used_context = per_doc
+            allowed_extra = req.message + "\n" + "\n".join(u for u, _ in prior)
+            bad = number_check.unsupported(body, used_context + "\n" + allowed_extra)
+            if bad:
+                logger.warning("Số liệu chưa có trong nguồn: %s", bad)
+                body += "\n\n> Lưu ý: số liệu " + "; ".join(f"«{b}»" for b in bad) + " chưa tìm thấy trong các nguồn đã trích, cần đối chiếu trực tiếp với tài liệu."
+            yield _sse({"type": "delta", "text": body})
+            yield _sse({"type": "done", "answer": body, "sources": sources})
+            return
     if calc is not None and calc.kind == "answer":
         # Model nhỏ bám lượt người dùng cuối hơn system prompt: đặt kết quả đã xác minh ở đây.
         calc_note = (

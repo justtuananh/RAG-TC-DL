@@ -215,7 +215,9 @@ def documents_preface(results: list[dict]) -> str:
 _SOURCE_SEP = "\n\n---\n\n"
 
 
-def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
+def build_context_and_citations(
+    results: list[dict], *, numbers: list[int] | None = None, total_chars: int | None = None
+) -> tuple[str, str]:
     """Dựng (context_str cho system prompt, citations_md cho UI) từ kết quả retrieve.
 
     Context dùng PARENT text (đủ ngữ cảnh) với ngân sách theo thứ hạng ``_block_budgets``
@@ -224,16 +226,19 @@ def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
     ``max_block_chars`` cho nguồn sau nguồn top: ngữ cảnh ~18-20k ký tự từng chôn fact (đo
     2026-06-10). Nguồn dài hơn ngân sách lấy cửa sổ quanh các đoạn neo (``window``). Citations dùng
     snippet CHILD (cap 220). Đánh số [n] khớp 1:1 giữa hai phần và với results[n-1].
+    ``numbers`` (số [n] của từng nguồn) và ``total_chars`` (trần ngữ cảnh) cho phép dựng ngữ cảnh
+    riêng của MỘT TÀI LIỆU mà vẫn giữ số [n] của danh sách đầy đủ.
     """
     llm = get_settings().llm
     texts = [(r.get("parent_payload") or r["payload"])["text"] for r in results]
-    headers = [_source_header(i, r["payload"]) for i, r in enumerate(results, 1)]
+    numbers = numbers or list(range(1, len(results) + 1))
+    headers = [_source_header(n, r["payload"]) for n, r in zip(numbers, results, strict=True)]
     # Đầu mục nguồn và dấu ngăn cách cũng chiếm chỗ trong trần tổng.
     preface = documents_preface(results)
     overhead = sum(map(len, headers)) + len(_SOURCE_SEP) * max(len(results) - 1, 0) + len(preface)
     budgets = _block_budgets(
         [len(t) for t in texts],
-        llm.total_context_chars - overhead,
+        min(total_chars or llm.total_context_chars, llm.total_context_chars) - overhead,
         llm.context.min_block_chars,
         llm.context.max_block_chars,
     )
@@ -253,7 +258,7 @@ def build_context_and_citations(results: list[dict]) -> tuple[str, str]:
         snippet = child_text[:220].replace("\n", " ")
         if len(child_text) > 220:
             snippet += "…"
-        i = len(cite_parts) + 1
+        i = numbers[len(cite_parts)]
         page = doc_pages.label(p["file_stem"], p["section_path"])
         where = f"{p['section_path']} ({page})" if page else p["section_path"]
         cite_parts.append(f"**[{i}]** `{p['file_stem']}` • {where}\n> {snippet}")

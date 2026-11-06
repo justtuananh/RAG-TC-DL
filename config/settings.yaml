@@ -52,9 +52,9 @@ retrieval:
   rrf_weight_dense: 1.0                   # trọng số nhánh dense trong RRF; chỉ tỷ lệ dense/BM25 có tác dụng
   rrf_weight_bm25: 1.0                    # trọng số nhánh BM25 trong RRF
   min_routed_candidates: 6                # ít hơn thì bỏ lọc theo file, tìm toàn kho
-  coverage_per_file: 2                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
-  coverage_pool_per_file: 6               # ứng viên RRF mỗi tài liệu vào cross-encoder ở chế độ trên
-  coverage_max_sources: 10                # trần số nguồn ở chế độ trên (nguồn điểm thấp vẫn bị lọc tin cậy)
+  coverage_per_file: 3                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
+  coverage_pool_per_file: 8               # ứng viên RRF mỗi tài liệu vào cross-encoder ở chế độ trên
+  coverage_max_sources: 16               # trần số nguồn ở chế độ trên (nguồn điểm thấp vẫn bị lọc tin cậy)
 
 reranking:
   timeout_s: 60
@@ -86,9 +86,13 @@ llm:
     max_query_chars: 400
     num_predict: 120
     timeout_s: 30
-  multi_document:                         # câu không chỉ định một QTKĐ (chung chung hoặc nêu ≥2 QTKĐ): mẫu trả lời từng dòng một tài liệu
+  multi_document:                         # câu không chỉ định một QTKĐ (chung chung hoặc nêu ≥2 QTKĐ): hỏi RIÊNG từng tài liệu rồi ghép từng dòng
     enabled: true
-    min_documents: 2
+    min_documents: 2                      # ít hơn thì trả lời một lượt như thường
+    max_documents: 6                      # trần số tài liệu hỏi riêng
+    context_chars: 5000                   # trần ngữ cảnh mỗi lượt (chỉ nguồn của tài liệu đó)
+    num_predict: 220                      # trần token mỗi tài liệu
+    merge_identical: true                 # câu chung chung: tài liệu cùng bộ số liệu gộp một dòng
   number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn
     enabled: true
     max_regen: 1                          # số lần sinh lại khi có số không có trong nguồn
