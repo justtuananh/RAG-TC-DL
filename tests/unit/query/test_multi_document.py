@@ -204,3 +204,43 @@ def test_llm_error_falls_back_to_single_pass(monkeypatch):
 
     assert events[-1]["answer"].startswith("chung [1]")
     assert "- **" not in events[-1]["answer"]
+
+
+_ALIASES = {
+    "van an toàn": ("1.061",),
+    "bàn tạo áp": ("1.062",),
+    "áp kế píttông tiêu chuẩn": ("1.159",),
+    "áp kế pít tông kiểu h3000": ("1.071",),
+    "thiết bị đo áp suất số": ("1.160",),
+    "dpi 610": ("1.190",),
+}
+
+
+def test_names_device_by_unique_head_word():
+    assert md.names_device("Van nhà em chạy chất lỏng thì chênh áp bao nhiêu?", _ALIASES)
+    assert md.names_device("DPI cần mấy điểm đo?", _ALIASES)
+
+
+def test_names_device_ignores_shared_or_generic_heads():
+    # "áp" mở đầu alias của nhiều QTKĐ; "thiết" nằm trong danh sách từ chung.
+    assert not md.names_device("Áp suất thử tối thiểu là bao nhiêu?", _ALIASES, ["thiết"])
+    assert not md.names_device("Thiết bị tạo áp phải đạt gì?", _ALIASES, ["thiết"])
+    assert not md.names_device("Đồng hồ bấm giây cần đặc trưng nào?", _ALIASES)
+
+
+def test_followup_groups_filters_by_score_and_limit():
+    groups = md.group_by_document(["A", "B", "C", "A"])
+    scores = [0.9, 0.2, 0.5, 0.1]
+
+    assert [g.stem for g in md.followup_groups(groups, scores, limit=5, min_score=0.3)] == ["A", "C"]
+    assert [g.stem for g in md.followup_groups(groups, scores, limit=1, min_score=0.0)] == ["A"]
+    assert md.followup_groups(groups, scores, limit=0) == []
+
+
+def test_within_budget():
+    assert md.within_budget(5.9, 6.0)
+    assert not md.within_budget(6.0, 6.0)
+
+
+def test_docstring_has_no_benchmark_question():
+    assert "Nhiệt kế dùng trong kiểm định" not in (md.__doc__ or "")

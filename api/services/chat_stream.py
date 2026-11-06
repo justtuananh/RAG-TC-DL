@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import time
 from collections.abc import Iterator
 
 from sqlalchemy.orm import Session
@@ -92,6 +93,16 @@ def _detect_device_ambiguity(
     return device_ambiguity.find_device_ambiguity(question, catalog)
 
 
+def _names_device(question: str) -> bool:
+    try:
+        return multi_document.names_device(
+            question, router.device_aliases(), get_settings().llm.multi_document.generic_device_words
+        )
+    except Exception as e:  # noqa: BLE001 - không đọc được từ điển thiết bị thì coi như không nêu
+        logger.warning("Không đọc được từ điển thiết bị: %s", e)
+        return False
+
+
 def _document_plan(question: str, results: list[dict]) -> list[multi_document.DocumentGroup] | None:
     """Tài liệu có thể cần hỏi bổ sung, hoặc None: chỉ trả lời một lượt như thường."""
     cfg = get_settings().llm.multi_document
@@ -107,13 +118,19 @@ def _document_plan(question: str, results: list[dict]) -> list[multi_document.Do
     except Exception as e:  # noqa: BLE001 - không định tuyến được thì trả lời như cũ
         logger.warning("Không định tuyến được câu hỏi cho nhánh nhiều tài liệu: %s", e)
         return None
+    if not named and _names_device(question):
+        return None  # nêu một loại thiết bị (chưa đủ để ghim file): trả lời một lượt, không tách tài liệu
     return multi_document.select_documents(
         groups, named, min_documents=cfg.min_documents, max_documents=cfg.max_documents
     )
 
 
 def _supplement_uncovered(
-    question: str, results: list[dict], groups: list[multi_document.DocumentGroup], general: str
+    question: str,
+    results: list[dict],
+    groups: list[multi_document.DocumentGroup],
+    general: str,
+    started_at: float | None = None,
 ) -> tuple[str, str] | None:
     """Câu trả lời chung có trước; chỉ hỏi RIÊNG các tài liệu mà nó chưa có dòng khẳng định trích [n] tới.
 
@@ -121,13 +138,26 @@ def _supplement_uncovered(
     không ghi đè lên câu chung. Trả (các dòng bổ sung, ngữ cảnh đã dùng) hoặc None khi không có gì thêm."""
     cfg = get_settings().llm.multi_document
     chat = get_settings().llm.chat
-    missing = multi_document.uncovered_groups(general, groups)[: cfg.max_followups]
+    try:
+        named = len(router.route_files(question)) >= 2
+    except Exception:  # noqa: BLE001 - không định tuyến được: coi như câu chung
+        named = False
+    missing = multi_document.followup_groups(
+        multi_document.uncovered_groups(general, groups),
+        [r.get("rerank_score", 0.0) for r in results],
+        limit=cfg.max_followups_named if named else cfg.max_followups,
+        min_score=0.0 if named else cfg.min_followup_score,  # tài liệu được nêu đích danh luôn đáng hỏi
+    )
     entries: list[tuple[str, str]] = []
     contexts: list[str] = []
     for group in missing:
+        if started_at is not None and not multi_document.within_budget(
+            time.monotonic() - started_at, cfg.time_budget_s
+        ):
+            break  # đã quá ngân sách thời gian: giữ p95
         subset = [results[i] for i in group.positions]
         ctx, _ = build_context_and_citations(
-            subset, numbers=[i + 1 for i in group.positions], total_chars=cfg.context_chars
+            subset, numbers=[i + 1 for i in group.positions], total_chars=cfg.context_chars, question=question
         )
         title = doc_titles.title_for(group.stem)
         number = re.search(r"\d+\.\d+", group.stem)
@@ -238,7 +268,7 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     sources = _build_sources_payload(results)
     yield _sse({"type": "sources", "sources": sources})
 
-    context_str, _ = build_context_and_citations(results)
+    context_str, _ = build_context_and_citations(results, question=retrieval_query)
     if calc is not None and calc.kind == "answer":
         context_str = calc.block + "\n\n---\n\n" + context_str
     guidance = device_ambiguity.ambiguity_guidance(ambiguity) if ambiguity is not None else None
@@ -261,6 +291,7 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if preface:
         yield _sse({"type": "delta", "text": preface})
 
+    started_at = time.monotonic()
     guard = CjkStreamGuard()
     stream = generator.stream_ollama(messages)
     try:
@@ -288,7 +319,7 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     calc_answer = calc is not None and calc.kind == "answer"
     body, bad_numbers = _verify_numbers(body, messages, context_str, allowed_extra, annotate=not calc_answer)
     if plan is not None and ambiguity is None and not calc_answer:
-        extra = _supplement_uncovered(retrieval_query, results, plan, body)
+        extra = _supplement_uncovered(retrieval_query, results, plan, body, started_at)
         if extra is not None:
             lines, used_context = extra
             bad = number_check.unsupported(lines, used_context + "\n" + allowed_extra)

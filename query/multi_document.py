@@ -1,7 +1,7 @@
 """Trả lời TỪNG tài liệu riêng cho câu hỏi không chỉ định một QTKĐ.
 
-Hai tình huống cùng gốc: (1) câu hỏi chung ("Nhiệt kế dùng trong kiểm định phải có phạm vi đo
-thế nào?") mà mỗi QTKĐ nêu một giá trị riêng; (2) câu hỏi nêu ≥ 2 QTKĐ/thiết bị. Một lượt sinh
+Hai tình huống cùng gốc: (1) câu hỏi chung ("<Phương tiện đo> dùng trong kiểm định phải có đặc
+trưng nào?") mà mỗi QTKĐ nêu một giá trị riêng; (2) câu hỏi nêu ≥ 2 QTKĐ/thiết bị. Một lượt sinh
 duy nhất trên ngữ cảnh trộn nhiều tài liệu làm model 7B gán giá trị của tài liệu này cho tài
 liệu khác, lặp một giá trị cho mọi tài liệu hoặc ghi "không nêu" dù nguồn có. Ở đây mỗi tài liệu
 được hỏi RIÊNG với ngữ cảnh chỉ gồm nguồn của nó; module này chứa phần logic thuần (chọn tài
@@ -11,7 +11,8 @@ liệu, lọc câu trả lời rỗng, gộp dòng) để chạy được không
 from __future__ import annotations
 
 import re
-from collections.abc import Sequence
+import unicodedata
+from collections.abc import Collection, Mapping, Sequence
 from dataclasses import dataclass
 
 _REF_RE = re.compile(r"\[(\d+)\]")
@@ -70,6 +71,50 @@ def select_documents(
     chosen = [g for g in groups if not named or g.stem in named]
     chosen = chosen[: max(max_documents, 1)]
     return chosen if len(chosen) >= max(min_documents, 2) else None
+
+
+def names_device(
+    question: str, aliases: Mapping[str, Sequence[str]], generic_words: Collection[str] = ()
+) -> bool:
+    """Câu hỏi nêu một loại thiết bị (từ đầu của alias thiết bị) dù không đủ tên đầy đủ để định tuyến.
+
+    ``aliases``: alias thiết bị → các số QTKĐ (từ điển thiết bị của tài liệu). Từ đầu của alias là
+    "từ nhận diện" khi nó chỉ xuất hiện ở alias của đúng một QTKĐ (ở bất kỳ vị trí nào) và không
+    nằm trong ``generic_words``; câu hỏi chứa từ đó là câu về MỘT loại thiết bị, đi nhánh một lượt
+    (không tách theo từng tài liệu)."""
+    owners: dict[str, set[str]] = {}
+    heads: set[str] = set()
+    for alias, numbers in aliases.items():
+        words = _plain_tokens(alias)
+        for word in words:
+            owners.setdefault(word, set()).update(numbers)
+        if words:
+            heads.add(words[0])
+    generic = {w.casefold() for w in generic_words}
+    keys = {h for h in heads if len(owners.get(h, ())) == 1 and h not in generic}
+    return bool(keys.intersection(_plain_tokens(question)))
+
+
+def _plain_tokens(text: str) -> list[str]:
+    return re.findall(r"\w+", unicodedata.normalize("NFC", text).casefold())
+
+
+def followup_groups(
+    missing: Sequence[DocumentGroup],
+    scores: Sequence[float],
+    *,
+    limit: int,
+    min_score: float = 0.0,
+) -> list[DocumentGroup]:
+    """Các tài liệu đáng hỏi bổ sung: điểm rerank cao nhất trong nguồn của tài liệu ≥ ``min_score``
+    (``scores[i]`` là điểm nguồn vị trí i), lấy tối đa ``limit`` theo thứ tự đã xếp hạng."""
+    ok = [g for g in missing if max((scores[i] for i in g.positions), default=0.0) >= min_score]
+    return ok[: max(limit, 0)]
+
+
+def within_budget(elapsed_s: float, budget_s: float) -> bool:
+    """Còn ngân sách thời gian cho thêm một lượt hỏi riêng?"""
+    return elapsed_s < budget_s
 
 
 def document_note(label: str) -> str:

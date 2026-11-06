@@ -129,6 +129,8 @@ class ContextSettings(_Section):
     quote_anchors: Positive
     formula_line_slack: Positive
     linearize_tables: bool = True
+    linearize_value_tables: bool = True   # bảng tra giá trị không có cột TT -> dòng 'nhãn hàng: nhãn cột = giá trị'
+    long_table_rows: Annotated[int, Field(ge=0)] = 12  # bảng dài hơn: chỉ giữ dòng khớp từ khóa câu hỏi (0 = tắt)
     source_abs_floor: Annotated[float, Field(ge=0)]
     source_rel_floor: Annotated[float, Field(ge=0, le=1)]
 
@@ -150,9 +152,13 @@ class MultiDocumentSettings(_Section):
     enabled: bool = True
     min_documents: Positive = 2           # ít hơn số tài liệu này thì trả lời một lượt như thường
     max_documents: Positive = 6           # trần số tài liệu xét bổ sung
-    max_followups: Positive = 4           # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
+    max_followups: Positive = 2           # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
+    max_followups_named: Positive = 4     # trần khi câu hỏi nêu rõ ≥ 2 QTKĐ (mọi tài liệu được nêu đều đáng hỏi)
+    min_followup_score: Annotated[float, Field(ge=0, le=1)] = 0.3  # câu chung: chỉ hỏi tài liệu có nguồn rerank_score ≥ mức này
+    time_budget_s: PositiveFloat = 6.0    # quá ngần này giây từ lúc bắt đầu sinh thì bỏ các lượt hỏi riêng còn lại
+    generic_device_words: tuple[str, ...] = ()  # từ đầu tên thiết bị quá chung, không tính là nêu một loại thiết bị
     context_chars: Positive = 5000        # trần ngữ cảnh mỗi lượt (chỉ nguồn của một tài liệu)
-    num_predict: Positive = 120           # trần token mỗi lượt hỏi riêng
+    num_predict: Positive = 90            # trần token mỗi lượt hỏi riêng
     merge_identical: bool = True          # tài liệu cùng bộ số liệu gộp một dòng
     merge_max_chars: Positive = 80        # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
 

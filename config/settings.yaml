@@ -76,6 +76,8 @@ llm:
     min_block_chars: 600                  # chỗ giữ cho mỗi nguồn xếp dưới khi nguồn trên lấy ngân sách trước
     quote_anchors: 2                      # panel nguồn: trích N đoạn con khớp nhất của mục (ngữ cảnh LLM dùng mọi đoạn khớp)
     formula_line_slack: 400               # khối dài hơn ngân sách bị cắt theo dòng: được vượt tới N ký tự để không cắt giữa dòng công thức
+    linearize_value_tables: true          # bảng tra giá trị không có cột TT (hàng tiêu đề + hàng nhãn con) -> dòng 'nhãn hàng = giá trị: nhãn cột = giá trị'
+    long_table_rows: 12                   # bảng dài hơn số dòng này: chỉ giữ dòng tiêu đề + dòng khớp từ khóa câu hỏi (0 = tắt)
     linearize_tables: true                # bảng markdown có cột TT -> dòng 'Tên: nhãn cột = giá trị' (retrieval/table_linearize.py)
     source_abs_floor: 0.08
     source_rel_floor: 0.20
@@ -90,9 +92,13 @@ llm:
     enabled: true
     min_documents: 2                      # ít hơn thì trả lời một lượt như thường
     max_documents: 6                      # trần số tài liệu xét bổ sung
-    max_followups: 4                      # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
+    max_followups: 2                      # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
+    max_followups_named: 4                # trần khi câu hỏi nêu rõ ≥ 2 QTKĐ
+    min_followup_score: 0.30              # câu chung: chỉ hỏi tài liệu có nguồn rerank_score ≥ mức này
+    time_budget_s: 6.0                    # quá ngần này giây từ lúc bắt đầu sinh thì bỏ các lượt hỏi riêng còn lại
+    generic_device_words: [thiết, bộ, hệ, máy, dụng]  # từ đầu alias quá chung: không tính là câu nêu một loại thiết bị
     context_chars: 5000                   # trần ngữ cảnh mỗi lượt (chỉ nguồn của tài liệu đó)
-    num_predict: 120                      # trần token mỗi lượt hỏi riêng
+    num_predict: 90                       # trần token mỗi lượt hỏi riêng
     merge_identical: true                 # tài liệu cùng bộ số liệu gộp một dòng
     merge_max_chars: 80                   # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
   number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn

@@ -9,7 +9,7 @@ from __future__ import annotations
 from core.settings_loader import get_settings
 from retrieval import quote
 from retrieval import doc_pages, doc_titles
-from retrieval.table_linearize import linearize_tables
+from retrieval.table_linearize import linearize_tables, prune_long_tables
 
 # ── Lọc nguồn theo độ tin cậy (cắt đuôi nguồn yếu) ───────────────────────────
 # Reranker (bge-reranker-v2-m3) trả điểm sigmoid [0,1]. Với câu HẸP, chỉ 1-2 nguồn
@@ -216,7 +216,11 @@ _SOURCE_SEP = "\n\n---\n\n"
 
 
 def build_context_and_citations(
-    results: list[dict], *, numbers: list[int] | None = None, total_chars: int | None = None
+    results: list[dict],
+    *,
+    numbers: list[int] | None = None,
+    total_chars: int | None = None,
+    question: str = "",
 ) -> tuple[str, str]:
     """Dựng (context_str cho system prompt, citations_md cho UI) từ kết quả retrieve.
 
@@ -227,7 +231,8 @@ def build_context_and_citations(
     2026-06-10). Nguồn dài hơn ngân sách lấy cửa sổ quanh các đoạn neo (``window``). Citations dùng
     snippet CHILD (cap 220). Đánh số [n] khớp 1:1 giữa hai phần và với results[n-1].
     ``numbers`` (số [n] của từng nguồn) và ``total_chars`` (trần ngữ cảnh) cho phép dựng ngữ cảnh
-    riêng của MỘT TÀI LIỆU mà vẫn giữ số [n] của danh sách đầy đủ.
+    riêng của MỘT TÀI LIỆU mà vẫn giữ số [n] của danh sách đầy đủ. ``question`` (nếu có) để bảng dài
+    (> ``long_table_rows`` dòng) chỉ còn dòng khớp từ khóa câu hỏi.
     """
     llm = get_settings().llm
     texts = [(r.get("parent_payload") or r["payload"])["text"] for r in results]
@@ -250,8 +255,10 @@ def build_context_and_citations(
         child_text = p["text"]
         if len(ctx_text) > budget:
             ctx_text = window(ctx_text, r.get("anchor_texts") or child_text, budget)
+        if question:
+            ctx_text = prune_long_tables(ctx_text, question, llm.context.long_table_rows)
         if llm.context.linearize_tables:
-            ctx_text = linearize_tables(ctx_text)
+            ctx_text = linearize_tables(ctx_text, value_tables=llm.context.linearize_value_tables)
 
         ctx_parts.append(header + ctx_text)
 

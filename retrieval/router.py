@@ -185,6 +185,11 @@ def route_files(query: str) -> frozenset[str]:
     return frozenset(stems)
 
 
+def device_aliases() -> dict[str, tuple[str, ...]]:
+    """Từ điển thiết bị: alias (chữ thường) → các số QTKĐ (đã nạp từ DB, dự phòng bằng hằng số)."""
+    return dict(_ensure_device_aliases())
+
+
 def known_files() -> frozenset[str]:
     """Mọi file_stem QTKĐ đang được định tuyến (đã nạp), dùng cho truy hồi phủ đủ tài liệu."""
     return frozenset(_ensure_mapping().values())
