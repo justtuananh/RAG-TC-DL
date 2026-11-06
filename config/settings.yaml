@@ -117,6 +117,16 @@ calc:                                     # tính trong chat bằng công thức
   min_variable_coverage: 0.6              # tỷ lệ từ nhãn biến phải có trong câu hỏi để chọn công thức
   num_predict: 300
   timeout_s: 60
+  convert_enabled: true                   # "<số> <đv> sang <đv>" thuần túy: trả lời tất định bằng bảng UNITS, không qua LLM
+  convert_verbs: 'quy đổi|chuyển đổi|đổi|chuyển'
+
+object_scope:                             # hỏi quy trình/điều kiện kiểm định của đối tượng không có trong tiêu đề/phạm vi áp dụng các QTKĐ -> từ chối
+  enabled: true
+  trigger_pattern: 'quy trình|trình tự|phép kiểm định|điều kiện|chu kỳ|phương pháp|yêu cầu|nội dung|thời hạn'
+  scope_section_pattern: 'phạm vi áp dụng'
+  generic_words: [thiết, bị, đo, phương, tiện, dụng, cụ, máy, loại, các, những, một]
+  ignore_words: [này, đó, ấy, nêu, trên, lại, định, kỳ, ban, đầu, sau, sửa, chữa, bất, kỳ, mỗi, từng, mọi, tất, cả, được, bằng, theo, tại, của, cho, với, trong, ở]
+  stop_words: [gồm, là, có, cần, phải, như, bao, nào, gì, được, trong, theo, thì, khi, ở, tại, bằng, với, mà, và, hay, hoặc, ra, sao, thế, để, bởi, do, nếu]
 
 ingestion:
   soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH

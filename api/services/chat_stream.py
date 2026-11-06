@@ -19,10 +19,10 @@ from api.schemas import ChatMessage, ChatRequest
 from core.latex import fix_latex, restore_formulas
 from core.settings_loader import get_settings
 from llm import citations, generator, number_check
-from llm.guards import CALCULATION_GUIDE, enforce_refusal_stop, is_calculation_request
+from llm.guards import CALCULATION_GUIDE, REFUSAL_SENTENCE, enforce_refusal_stop, is_calculation_request
 from llm.lang_guard import LANGUAGE_FALLBACK, CjkStreamGuard, strip_cjk
 from llm.prompt import build_messages
-from query import chat_calc, device_ambiguity, history_context, multi_document
+from query import chat_calc, device_ambiguity, history_context, multi_document, object_scope, unit_convert
 from retrieval import doc_pages, doc_titles, retriever, router
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.quote import build_quote
@@ -91,6 +91,28 @@ def _detect_device_ambiguity(
         logger.warning("Không đọc được danh mục QTKĐ để kiểm tra câu hỏi mơ hồ: %s", e)
         return None
     return device_ambiguity.find_device_ambiguity(question, catalog)
+
+
+def _object_out_of_scope(question: str, results: list[dict]) -> bool:
+    """Hỏi quy trình/điều kiện kiểm định của đối tượng không thuộc QTKĐ nào trong kho?"""
+    cfg = get_settings().object_scope
+    if not cfg.enabled or not object_scope.object_phrase(question, cfg):
+        return False
+    try:
+        if router.route_files(question):
+            return False  # nêu số QTKĐ hoặc thiết bị đã biết: đối tượng thuộc kho
+        objects = [doc_titles.title_for(stem) for stem in router.known_files()]
+        objects += list(router.device_aliases())
+    except Exception as e:  # noqa: BLE001 - không dựng được tập đối tượng thì trả lời như cũ
+        logger.warning("Không dựng được tập đối tượng kiểm định: %s", e)
+        return False
+    scope_re = re.compile(cfg.scope_section_pattern, re.IGNORECASE)
+    scopes = []
+    for r in results:
+        for payload in (r.get("payload") or {}, r.get("parent_payload") or {}):
+            if scope_re.search(payload.get("section_path", "")):
+                scopes.append(payload.get("text", ""))
+    return object_scope.is_out_of_scope(question, objects, scopes, cfg)
 
 
 def _names_device(question: str) -> bool:
@@ -227,6 +249,10 @@ def _verify_numbers(
 
 def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[str]:
     # Tính toán chỉ bằng công thức ĐÃ DUYỆT (bộ tính Decimal), không để model tự tính.
+    conv = unit_convert.try_convert(req.message)
+    if conv is not None:
+        yield _sse({"type": "done", "answer": conv.text, "sources": []})
+        return
     calc = chat_calc.try_calc(req.message)
     if calc is not None and calc.kind in ("ask", "invalid"):
         yield _sse({"type": "done", "answer": calc.text, "sources": []})
@@ -265,6 +291,9 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
 
     # Cắt đuôi nguồn điểm thấp → panel + ngữ cảnh LLM chỉ còn nguồn uy tín ([n] khớp).
     results = filter_by_confidence(results)
+    if _object_out_of_scope(req.message, results):
+        yield _sse({"type": "done", "answer": REFUSAL_SENTENCE, "sources": []})
+        return
     sources = _build_sources_payload(results)
     yield _sse({"type": "sources", "sources": sources})
 

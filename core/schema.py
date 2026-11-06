@@ -233,6 +233,19 @@ class CalcSettings(_Section):
     min_variable_coverage: Annotated[float, Field(ge=0, le=1)] = 0.6
     num_predict: Positive = 300
     timeout_s: PositiveFloat = 60
+    convert_enabled: bool = True          # câu quy đổi đơn vị thuần túy: trả lời tất định bằng bảng UNITS, không qua LLM
+    convert_verbs: str = r"quy đổi|chuyển đổi|đổi|chuyển"  # động từ đứng trước "<số> <đv> sang <đv>"
+
+
+class ObjectScopeSettings(_Section):
+    """Từ chối khi câu hỏi về quy trình/điều kiện kiểm định của một đối tượng không thuộc các QTKĐ trong kho."""
+
+    enabled: bool = True
+    trigger_pattern: str = r"quy trình|trình tự|phép kiểm định|điều kiện|chu kỳ|phương pháp|yêu cầu|nội dung|thời hạn"
+    scope_section_pattern: str = r"phạm vi áp dụng"  # mục nguồn nêu đối tượng được kiểm định (ngoài tiêu đề tài liệu)
+    generic_words: tuple[str, ...] = ()   # từ chỉ loại chung ("thiết bị", "đo"...): không đủ để nhận diện đối tượng
+    ignore_words: tuple[str, ...] = ()    # từ chức năng/đại từ đứng sau "kiểm định" (này, lại, định kỳ...)
+    stop_words: tuple[str, ...] = ()      # từ kết thúc cụm tên đối tượng (gồm, là, có, cần...)
 
 
 class Settings(_Section):
@@ -251,6 +264,7 @@ class Settings(_Section):
     auth: AuthSettings
     api: ApiSettings
     calc: CalcSettings = Field(default_factory=CalcSettings)
+    object_scope: ObjectScopeSettings = Field(default_factory=ObjectScopeSettings)
 
     def llm_model(self, role: LlmRole) -> str:
         """Model chat (vai trò LLM duy nhất còn lại)."""
