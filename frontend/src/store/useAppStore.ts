@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer, useRef } from "react";
-import type { AppState, BackendSource, CiteChip, Conversation, DocItem, Message, ToastKind } from "../types";
+import type { AppState, BackendSource, CiteChip, Conversation, DocItem, Message, Proc, ToastKind } from "../types";
 import { SAMPLES } from "./seed";
 import { TIMING, ZOOM } from "../services/mockEngine";
 import {
@@ -300,18 +300,29 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     abortRef.current = ac;
     let partial = "";
     let firstDelta = true;
+    // Pha chỉ tăng (không lùi). Chữ ngừng về IDLE_MS mà chưa "done" = backend đang hậu kiểm
+    // (hỏi bổ sung từng QTKĐ, kiểm số liệu, gắn trích dẫn) → chuyển sang pha cuối.
+    const IDLE_MS = 700;
+    let idle: number | undefined;
+    const advance = (step: number, extra?: Partial<Proc>) => set((s) => (s.proc ? { proc: { ...s.proc, ...extra, step: Math.max(s.proc.step, step) } } : {}));
     try {
       for await (const ev of streamChat(q, hist, ac.signal)) {
         if (ev.type === "status") {
-          set((s) => ({ proc: { step: Math.min((s.proc?.step ?? 0) + 1, 3) } }));
+          // chỉ là thông báo của backend; pha do sources/delta/done quyết định
         } else if (ev.type === "sources") {
-          set({ liveSources: ev.sources ?? [], activeCite: "1", sourceOpen: false, proc: { step: 2 } });
+          const srcs = ev.sources ?? [];
+          set({ liveSources: srcs, activeCite: "1", sourceOpen: false });
+          advance(1, { passages: srcs.length, docs: new Set(srcs.map((x) => x.file_stem)).size });
         } else if (ev.type === "delta") {
           partial += ev.text ?? "";
           const md = fixLatex(partial);
           if (firstDelta) firstDelta = false;
-          set((s) => ({ ...updateLastBot(s, { markdown: md, streaming: true }), proc: null }));
+          set((s) => updateLastBot(s, { markdown: md, streaming: true }));
+          advance(1);
+          window.clearTimeout(idle);
+          idle = window.setTimeout(() => advance(2), IDLE_MS);
         } else if (ev.type === "done") {
+          window.clearTimeout(idle);
           const md = fixLatex(ev.answer || partial);
           const srcs = ev.sources ?? stateRef.current.liveSources;
           set((s) => {
@@ -366,6 +377,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         set((s) => ({ ...updateLastBot(s, { markdown: "❌ Lỗi kết nối: " + msg, error: true, streaming: false }), proc: null, streaming: false }));
       }
     } finally {
+      window.clearTimeout(idle);
       set({ proc: null, streaming: false });
       abortRef.current = null;
     }

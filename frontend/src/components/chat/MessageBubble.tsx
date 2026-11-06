@@ -1,6 +1,7 @@
-import type { Message } from "../../types";
+import type { Message, Proc } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import Markdown from "../common/Markdown";
+import { StepList } from "./ProcessSteps";
 import { COLOR } from "../../theme";
 import { IcBrand, IcCheck, IcCopy, IcRefresh, IcThumbDown, IcThumbUp } from "../common/icons";
 
@@ -9,6 +10,7 @@ interface Props {
   index: number;
   isLast: boolean;
   proc: boolean;
+  steps?: Proc | null; // pha xử lý của câu trả lời ĐANG gen (đặt ở đầu bong bóng, trên phần chữ)
   actions: Actions;
   pinnedRef?: (el: HTMLElement | null) => void;
 }
@@ -18,7 +20,7 @@ function withCiteButtons(md: string): string {
   return md.replace(/\[(\d+)\]/g, '<button class="cite-chip" data-cite="$1">[$1]</button>');
 }
 
-export default function MessageBubble({ message, index, isLast, proc, actions, pinnedRef }: Props) {
+export default function MessageBubble({ message, index, isLast, proc, steps, actions, pinnedRef }: Props) {
   if (message.role === "user") {
     return (
       <div ref={pinnedRef} className="animate-fadeUp" style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -41,9 +43,9 @@ export default function MessageBubble({ message, index, isLast, proc, actions, p
   }
 
   const md = message.markdown ?? "";
-  // Đang xử lý mà chưa có chữ → KHÔNG dựng bong bóng rỗng; <ProcessSteps> là
-  // chỉ báo "đang xử lý" duy nhất. Khi delta đầu về, proc=null + markdown được
-  // set CÙNG một lúc → câu trả lời gen ngay trong bong bóng này (giữ nguyên box).
+  // Đang xử lý mà chưa có chữ → KHÔNG dựng bong bóng rỗng; <ProcessSteps> là chỉ báo
+  // duy nhất. Khi đã có chữ, các pha chuyển vào ĐẦU bong bóng này (StepList) và giữ tới
+  // "done", nên pha luôn đọc từ trên xuống: tìm nguồn → soạn → kiểm tra số liệu & trích dẫn.
   if (message.streaming && !md) return null;
 
   const isErr = !!message.error;
@@ -89,6 +91,11 @@ export default function MessageBubble({ message, index, isLast, proc, actions, p
             lineHeight: 1.65,
           }}
         >
+          {steps && message.streaming && (
+            <div style={{ paddingBottom: 11, marginBottom: 11, borderBottom: `1px solid ${COLOR.border}` }}>
+              <StepList proc={steps} />
+            </div>
+          )}
           {message.summary && (
             <div
               style={{

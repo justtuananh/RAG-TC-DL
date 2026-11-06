@@ -98,13 +98,15 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
               index={i}
               isLast={i === lastIdx}
               proc={!!state.proc}
+              steps={i === lastIdx && m.role === "bot" && m.streaming && m.markdown ? state.proc : null}
               actions={actions}
               pinnedRef={i === state.pinIndex ? (el) => (pinRef.current = el) : undefined}
             />
           ))
         )}
 
-        {state.proc && <ProcessSteps step={state.proc.step} />}
+        {/* chưa có chữ nào → khung xử lý riêng; có chữ rồi thì các pha nằm ở đầu bong bóng trả lời */}
+        {state.proc && !(state.messages[lastIdx]?.role === "bot" && state.messages[lastIdx]?.markdown) && <ProcessSteps proc={state.proc} />}
       </div>
 
       {/* composer */}

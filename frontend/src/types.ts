@@ -157,7 +157,10 @@ export interface ToastState {
 }
 
 export interface Proc {
+  // Pha xử lý, chỉ tăng: 0 tìm & lọc nguồn → 1 soạn câu trả lời → 2 kiểm tra số liệu & trích dẫn.
   step: number;
+  passages?: number; // số đoạn nguồn backend trả về (sự kiện "sources")
+  docs?: number; // số tài liệu khác nhau trong các đoạn đó
 }
 
 export interface FaqItem {
