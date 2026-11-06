@@ -172,6 +172,7 @@ export interface AppState {
   pulse: number;
   pinIndex: number;
   sourceW: number;
+  sourceOpen: boolean; // thanh nguồn bên phải: ẩn mặc định, chỉ mở khi người dùng bấm [n] hoặc chip nguồn
   activeConvId: string | null;
   messages: Message[];
   histSearch: string;

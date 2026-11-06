@@ -3,7 +3,7 @@ import type { AppState, BackendSource } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import Markdown from "../common/Markdown";
 import { COLOR } from "../../theme";
-import { IcExternal, IcFile, IcFolder, IcShield } from "../common/icons";
+import { IcExternal, IcFile, IcFolder, IcShield, IcX } from "../common/icons";
 
 function relForScore(score: number) {
   if (score >= 0.5) return { t: "Cao", c: COLOR.success, bg: COLOR.successBg };
@@ -79,6 +79,25 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
             <span style={{ fontSize: "11.5px", fontWeight: 700, background: COLOR.accentSoft, color: COLOR.accent, padding: "3px 10px", borderRadius: 9999 }}>
               {srcs.length} nguồn
             </span>
+            <button
+              onClick={() => actions.closeSource()}
+              title="Ẩn nguồn"
+              aria-label="Ẩn nguồn"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                width: 26,
+                height: 26,
+                borderRadius: 8,
+                border: `1px solid ${COLOR.border}`,
+                background: COLOR.surface,
+                color: COLOR.textMuted,
+                cursor: "pointer",
+              }}
+            >
+              <IcX size={14} />
+            </button>
           </div>
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
             {srcs.map((s) => {

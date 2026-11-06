@@ -48,6 +48,7 @@ function makeInitialState(): AppState {
     pulse: 0,
     pinIndex: -1,
     sourceW: 430,
+    sourceOpen: false,
     activeConvId: null,
     messages: [], // LIVE: bắt đầu rỗng (màn hình chào + câu hỏi mẫu)
     histSearch: "",
@@ -95,6 +96,7 @@ export interface Actions {
   askSample: (q: string) => void;
   newChat: () => void;
   openCite: (id: string) => void;
+  closeSource: () => void;
   openConv: (conv: Conversation) => void;
   togglePin: (e: React.MouseEvent, id: string) => void;
   startRenameConv: (e: React.MouseEvent, id: string) => void;
@@ -303,7 +305,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         if (ev.type === "status") {
           set((s) => ({ proc: { step: Math.min((s.proc?.step ?? 0) + 1, 3) } }));
         } else if (ev.type === "sources") {
-          set({ liveSources: ev.sources ?? [], activeCite: "1", proc: { step: 2 } });
+          set({ liveSources: ev.sources ?? [], activeCite: "1", sourceOpen: false, proc: { step: 2 } });
         } else if (ev.type === "delta") {
           partial += ev.text ?? "";
           const md = fixLatex(partial);
@@ -379,6 +381,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       proc: { step: 0 },
       streaming: true,
       liveSources: [],
+      sourceOpen: false,
       pinIndex: s.messages.length,
     }));
     void runLive(t, prior);
@@ -386,7 +389,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
 
   const resetAndSend = (q: string, base: AppState["messages"], extra?: Partial<AppState>) => {
     abortRef.current?.abort();
-    set({ messages: base, proc: null, streaming: false, liveSources: [], input: "", ...extra });
+    set({ messages: base, proc: null, streaming: false, liveSources: [], sourceOpen: false, input: "", ...extra });
     window.setTimeout(() => send(q), 30);
   };
 
@@ -424,13 +427,14 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     newChat: () => {
       if (!mayLeaveFormula()) return;
       abortRef.current?.abort();
-      set({ tab: "chat", messages: [], proc: null, input: "", activeConvId: null, pinIndex: -1, streaming: false, liveSources: [] });
+      set({ tab: "chat", messages: [], proc: null, input: "", activeConvId: null, pinIndex: -1, streaming: false, liveSources: [], sourceOpen: false });
       showToast("Đã tạo hội thoại mới");
     },
     openCite: (id) => {
       if (!mayLeaveFormula()) return;
-      set((s) => ({ tab: "chat", activeCite: id, pulse: s.pulse + 1 }));
+      set((s) => ({ tab: "chat", activeCite: id, sourceOpen: true, pulse: s.pulse + 1 }));
     },
+    closeSource: () => set({ sourceOpen: false }),
     openConv: (conv) => {
       if (stateRef.current.renamingConv === conv.id || !mayLeaveFormula()) return;
       abortRef.current?.abort();
@@ -443,6 +447,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         messages: stored.messages,
         liveSources: stored.liveSources,
         activeCite: stored.activeCite || "1",
+        sourceOpen: false,
         activeConvId: conv.id,
         pinIndex: stored.messages.length ? 0 : -1,
       });

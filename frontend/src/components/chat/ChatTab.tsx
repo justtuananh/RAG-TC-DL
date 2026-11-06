@@ -4,7 +4,8 @@ import ChatColumn from "./ChatColumn";
 import SourcePanel from "./SourcePanel";
 
 export default function ChatTab({ state, actions }: { state: AppState; actions: Actions }) {
-  const showSource = state.liveSources.length > 0;
+  // Nguồn ẩn mặc định; chỉ hiện khi người dùng bấm [n] hoặc chip nguồn (actions.openCite).
+  const showSource = state.sourceOpen && state.liveSources.length > 0;
 
   return (
     <main className="layout-main" style={{ flex: 1, minHeight: 0, display: "flex" }}>
