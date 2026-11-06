@@ -55,8 +55,31 @@ def test_vietnamese_curly_quotes_preserved():
 
 def _tokens_q6() -> list[str]:
     head = ["Phạm vi làm việc tối đa của van an toàn theo QTKĐ 1.061", " là 1 400 bar", ", ứng với"]
-    tail = ["范例", "翻译", "：", " 根据", "QTKD", " 1.", "061", "的", "规定", "，", "安全", "阀", "的",
-            "工作", "范围", "上限", "是", "1400", " bar", "。", "[", "1", "]"]
+    tail = [
+        "范例",
+        "翻译",
+        "：",
+        " 根据",
+        "QTKD",
+        " 1.",
+        "061",
+        "的",
+        "规定",
+        "，",
+        "安全",
+        "阀",
+        "的",
+        "工作",
+        "范围",
+        "上限",
+        "是",
+        "1400",
+        " bar",
+        "。",
+        "[",
+        "1",
+        "]",
+    ]
     return head + tail
 
 
@@ -107,7 +130,12 @@ def test_chat_stream_never_emits_cjk_and_closes_source(monkeypatch):
             closed["v"] = True  # generator.close() -> ngắt luồng Ollama
 
     hit = {
-        "payload": {"file_stem": "QTKD_1.061", "section_path": "1", "kind": "paragraph", "text": "x"},
+        "payload": {
+            "file_stem": "QTKD_1.061",
+            "section_path": "1",
+            "kind": "paragraph",
+            "text": "x",
+        },
         "rerank_score": 0.9,
     }
     monkeypatch.setattr("retrieval.retriever.retrieve", lambda *a, **k: [hit])
@@ -124,7 +152,9 @@ def test_chat_stream_never_emits_cjk_and_closes_source(monkeypatch):
 
 
 def test_translation_tail_does_not_duplicate_citation():
-    out = strip_cjk("Chu kỳ kiểm định là 12 tháng. [1] 检定周期为12个月，适用于安全阀的定期检定。[1]")
+    out = strip_cjk(
+        "Chu kỳ kiểm định là 12 tháng. [1] 检定周期为12个月，适用于安全阀的定期检定。[1]"
+    )
     assert out.text == "Chu kỳ kiểm định là 12 tháng. [1]"
     assert out.empty is False
 
@@ -141,13 +171,20 @@ def test_valid_vietnamese_with_cjk_noise_is_not_empty():
 
 def test_chat_stream_all_chinese_answer_uses_vietnamese_fallback(monkeypatch):
     hit = {
-        "payload": {"file_stem": "QTKD_1.061", "section_path": "1", "kind": "paragraph", "text": "x"},
+        "payload": {
+            "file_stem": "QTKD_1.061",
+            "section_path": "1",
+            "kind": "paragraph",
+            "text": "x",
+        },
         "rerank_score": 0.9,
     }
     monkeypatch.setattr("retrieval.retriever.retrieve", lambda *a, **k: [hit])
     monkeypatch.setattr(
         "llm.generator.stream_ollama",
-        lambda messages: iter(["安全阀的", "检定周期", "为十二个月", "，请参阅", "规程规定。", "[1]"]),
+        lambda messages: iter(
+            ["安全阀的", "检定周期", "为十二个月", "，请参阅", "规程规定。", "[1]"]
+        ),
     )
     ev = _events(list(chat_stream.chat_stream_events(ChatRequest(message="请用中文回答"), None)))
     assert not _has_cjk("".join(e.get("text", "") for e in ev if e["type"] == "delta"))

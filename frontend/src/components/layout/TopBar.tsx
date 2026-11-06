@@ -10,7 +10,6 @@ interface Props {
   onGo: (tab: Tab) => void;
   onOpenLlm: () => void;
   auth: AuthState;
-  onOpenLogin: () => void;
   onLogout: () => void;
   /** Tên tài liệu đang xem — thêm nhánh thứ 3 vào breadcrumb khi có */
   docName?: string;
@@ -29,7 +28,7 @@ const STATUS = {
   none: { label: "Chưa kết nối", color: COLOR.neutral, bg: COLOR.neutralBg, bd: COLOR.neutralBorder, dot: COLOR.neutral, spin: false },
 } as const;
 
-export default function TopBar({ tab, llmStatus, onGo, onOpenLlm, auth, onOpenLogin, onLogout, docName }: Props) {
+export default function TopBar({ tab, llmStatus, onGo, onOpenLlm, auth, onLogout, docName }: Props) {
   const m = STATUS[llmStatus];
   const btnStyle: CSSProperties = {
     display: "inline-flex",
@@ -104,8 +103,8 @@ export default function TopBar({ tab, llmStatus, onGo, onOpenLlm, auth, onOpenLo
         <IcSettings size={13} strokeWidth={2} style={{ opacity: 0.55, flexShrink: 0 }} />
       </button>
 
-      {/* tài khoản: đăng nhập / vai trò / đăng xuất — ẩn khi máy chủ tắt đăng nhập */}
-      {auth.enabled && <AccountMenu auth={auth} onLogin={onOpenLogin} onLogout={onLogout} />}
+      {/* tài khoản: tên / vai trò / đăng xuất - ẩn khi máy chủ tắt đăng nhập */}
+      {auth.enabled && auth.user && <AccountMenu user={auth.user} onLogout={onLogout} />}
     </header>
   );
 }

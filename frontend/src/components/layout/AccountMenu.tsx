@@ -1,25 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import type { AuthState } from "../../types";
+import type { AuthUser } from "../../types";
 import { COLOR, SHADOW } from "../../theme";
 import { ROLE_LABEL } from "../../services/auth";
 import { IcChevronDown, IcLogOut, IcUser } from "../common/icons";
 
 interface Props {
-  auth: AuthState;
-  onLogin: () => void;
+  user: AuthUser;
   onLogout: () => void;
 }
 
 const pill = "inline-flex items-center gap-[7px] h-[34px] px-3 rounded-full border font-sans text-[12.5px] font-semibold cursor-pointer transition-colors";
 
-/**
- * Nút tài khoản trên thanh trên cùng: chưa đăng nhập → "Đăng nhập";
- * đã đăng nhập → tên + menu vai trò/đăng xuất. Không ép đăng nhập để đọc/chat.
- */
-export default function AccountMenu({ auth, onLogin, onLogout }: Props) {
+/** Nút tài khoản trên thanh trên cùng: tên người dùng + menu vai trò/đăng xuất. */
+export default function AccountMenu({ user, onLogout }: Props) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
-  const user = auth.user;
 
   useEffect(() => {
     if (!open) return;
@@ -36,23 +31,6 @@ export default function AccountMenu({ auth, onLogin, onLogout }: Props) {
       document.removeEventListener("keydown", onKey);
     };
   }, [open]);
-
-  // Đang khôi phục phiên từ localStorage — giữ chỗ để tránh nhấp nháy nút "Đăng nhập".
-  if (!user && !auth.restoreDone) {
-    return <span aria-hidden style={{ display: "inline-block", width: 104, height: 34 }} />;
-  }
-
-  if (!user) {
-    return (
-      <button
-        onClick={onLogin}
-        title="Đăng nhập để tải lên/xử lý tài liệu"
-        className={`${pill} border-line bg-white text-secondary hover:border-brand hover:text-brand`}
-      >
-        <IcUser size={15} /> Đăng nhập
-      </button>
-    );
-  }
 
   const displayName = user.full_name || user.username;
 

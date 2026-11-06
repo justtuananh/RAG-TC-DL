@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { renderAsync } from "docx-preview";
 import type { ViewingDoc } from "../../types";
 import { COLOR } from "../../theme";
+import { authFetch } from "../../services/auth";
 import DocPage from "../common/DocPage";
 import Markdown from "../common/Markdown";
+import DownloadFallback from "./DownloadFallback";
 import XlsxFilePreview from "./xlsx/XlsxFilePreview";
 
 /** Nền "bàn làm việc" quanh trang giấy, khớp token giao diện (thay nền xám của docx-preview). */
@@ -31,7 +33,58 @@ function fitPagesToWidth(scroller: HTMLElement, wrapper: HTMLElement | null) {
  * đi qua cùng đường này: backend trả bản .docx đã chuyển bằng LibreOffice nên giữ đúng
  * khổ giấy, lề, font, bảng của tài liệu gốc. Khung có thanh cuộn riêng.
  */
-function DocxFilePreview({ previewUrl, downloadUrl, name }: { previewUrl: string; downloadUrl: string; name: string }) {
+/**
+ * PDF gốc trong iframe. Route tệp cần token nên không gán thẳng URL cho iframe:
+ * tải qua authFetch rồi hiển thị bằng object URL (thu hồi khi đổi tài liệu).
+ */
+function PdfFilePreview({ fileUrl, name, onDownload }: { fileUrl: string; name: string; onDownload?: () => void }) {
+  const [blobUrl, setBlobUrl] = useState<string | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    let objectUrl: string | null = null;
+    setBlobUrl(null);
+    setFailed(false);
+    authFetch(fileUrl, { signal: controller.signal })
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        return res.blob();
+      })
+      .then((blob) => {
+        objectUrl = URL.createObjectURL(blob.type ? blob : new Blob([blob], { type: "application/pdf" }));
+        setBlobUrl(objectUrl);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted) setFailed(true);
+      });
+    return () => {
+      controller.abort();
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [fileUrl]);
+
+  return (
+    <div style={{ flex: 1, minWidth: 0, display: "flex", background: DESK_BG }}>
+      {blobUrl ? (
+        <iframe src={blobUrl} title={name} style={{ flex: 1, border: "none" }} />
+      ) : (
+        <div style={{ flex: 1, padding: 24, textAlign: "center", color: COLOR.textMuted, fontSize: 13 }}>
+          {failed ? (
+            <>
+              Không hiển thị được tệp gốc.
+              <DownloadFallback onDownload={onDownload} />
+            </>
+          ) : (
+            "Đang tải tệp gốc…"
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function DocxFilePreview({ previewUrl, onDownload }: { previewUrl: string; onDownload?: () => void }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
@@ -42,7 +95,7 @@ function DocxFilePreview({ previewUrl, downloadUrl, name }: { previewUrl: string
     const controller = new AbortController();
     setStatus("loading");
     container.innerHTML = "";
-    fetch(previewUrl, { signal: controller.signal })
+    authFetch(previewUrl, { signal: controller.signal })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         return res.blob();
@@ -72,11 +125,8 @@ function DocxFilePreview({ previewUrl, downloadUrl, name }: { previewUrl: string
       {status === "loading" && <div style={{ padding: 24, textAlign: "center", color: COLOR.textMuted, fontSize: 13 }}>Đang tải tệp gốc…</div>}
       {status === "error" && (
         <div style={{ padding: 24, textAlign: "center", color: COLOR.textMuted, fontSize: 13 }}>
-          Không hiển thị được tệp gốc.{" "}
-          <a href={downloadUrl} download={name} style={{ color: COLOR.accent, fontWeight: 600 }}>
-            Tải xuống để xem
-          </a>
-          .
+          Không hiển thị được tệp gốc.
+          <DownloadFallback onDownload={onDownload} />
         </div>
       )}
       <div ref={containerRef} className="docx-host" style={{ display: status === "ready" ? "block" : "none" }} />
@@ -85,26 +135,22 @@ function DocxFilePreview({ previewUrl, downloadUrl, name }: { previewUrl: string
 }
 
 /** Nội dung tài liệu: ưu tiên tệp gốc (Word, Excel, PDF); Markdown đã trích xuất chỉ là phương án dự phòng. */
-export default function DocContentPane({ viewingDoc }: { viewingDoc: ViewingDoc }) {
+export default function DocContentPane({ viewingDoc, onDownload }: { viewingDoc: ViewingDoc; onDownload?: () => void }) {
   const { ext, fileUrl, previewUrl, name } = viewingDoc;
   const pageLabel = viewingDoc.pages ? `TRANG 01 / ${String(viewingDoc.pages).padStart(2, "0")}` : "TRANG 01";
 
   if (fileUrl && ext === "PDF") {
-    return (
-      <div style={{ flex: 1, minWidth: 0, display: "flex" }}>
-        <iframe src={fileUrl} title={name} style={{ flex: 1, border: "none" }} />
-      </div>
-    );
+    return <PdfFilePreview fileUrl={fileUrl} name={name} onDownload={onDownload} />;
   }
 
   if (fileUrl && previewUrl && (ext === "DOCX" || ext === "DOC")) {
-    return <DocxFilePreview previewUrl={previewUrl} downloadUrl={fileUrl} name={name} />;
+    return <DocxFilePreview previewUrl={previewUrl} onDownload={onDownload} />;
   }
 
   if (fileUrl && previewUrl && (ext === "XLSX" || ext === "XLS")) {
     return (
       <div style={{ flex: 1, minWidth: 0, minHeight: 0, display: "flex" }}>
-        <XlsxFilePreview fileUrl={previewUrl} downloadUrl={fileUrl} name={name} />
+        <XlsxFilePreview fileUrl={previewUrl} onDownload={onDownload} />
       </div>
     );
   }

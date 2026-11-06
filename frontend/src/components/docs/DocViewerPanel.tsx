@@ -4,6 +4,7 @@ import FormulaReviewPanel from "./FormulaReviewPanel";
 import { COLOR } from "../../theme";
 import DocContentPane from "./DocContentPane";
 import DocInfoPanel from "./DocInfoPanel";
+import DownloadButton from "./DownloadButton";
 import { IcArrowRight, IcFile, IcFolder } from "../common/icons";
 
 /** Trang xem tài liệu - hiển thị NGAY TRONG khung Tài liệu (không phải hộp thoại nổi), cao đúng khung nhìn. */
@@ -11,10 +12,12 @@ export default function DocViewerPanel({
   viewingDoc,
   onBack,
   onDirtyChange,
+  onDownload,
 }: {
   viewingDoc: ViewingDoc;
   onBack: () => void;
   onDirtyChange: (dirty: boolean) => void;
+  onDownload: () => void;
 }) {
   useEffect(() => () => onDirtyChange(false), [onDirtyChange]);
   // Panel công thức chỉ mount khi mở lần đầu, rồi giữ nguyên (ẩn) để không mất phần đang sửa.
@@ -71,6 +74,7 @@ export default function DocViewerPanel({
             )}
           </div>
         </div>
+        <DownloadButton onDownload={onDownload} ext={viewingDoc.ext} />
       </div>
 
       <div className="flex-shrink-0 flex flex-wrap gap-2 px-4 sm:px-5 py-3 border-b border-line bg-surface" role="tablist" aria-label="Nội dung tài liệu">
@@ -107,7 +111,7 @@ export default function DocViewerPanel({
       {tab === "document" && (
         /* body - khung tài liệu tự cuộn (thanh cuộn riêng), đầu trang + panel thông tin đứng yên */
         <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
-          <DocContentPane viewingDoc={viewingDoc} />
+          <DocContentPane viewingDoc={viewingDoc} onDownload={onDownload} />
           <DocInfoPanel viewingDoc={viewingDoc} />
         </div>
       )}

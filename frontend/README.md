@@ -52,11 +52,13 @@ Frontend nối vào đó:
 
 - `src/services/auth.ts` — lưu token JWT ở localStorage (`qtkd.auth.token`), giải mã payload để
   biết vai trò/hạn, `authFetch` gắn `Authorization: Bearer`, và API `login/logout/me/refresh`.
-- `src/components/modals/LoginModal.tsx` — form đăng nhập (username + password).
-- `src/components/layout/AccountMenu.tsx` — nút tài khoản/đăng xuất trên TopBar.
-- Route **đọc/chat** công khai (không cần token). Route **ghi** (upload/process/delete/rename)
-  dùng bearer token; chưa đăng nhập thì mở màn hình đăng nhập rồi chạy lại thao tác đang chờ.
-- Token hết hạn/401 khi gọi route ghi → xoá token và mở lại màn hình đăng nhập.
+- `src/components/auth/LoginScreen.tsx` - màn hình đăng nhập toàn trang (username + password).
+- `src/components/layout/AccountMenu.tsx` - nút tài khoản/đăng xuất trên TopBar.
+- Đăng nhập **bắt buộc** (`auth.enabled`, mặc định bật): chưa đăng nhập thì App chỉ hiện
+  màn hình đăng nhập; mọi route (chat, tài liệu, công thức, câu hỏi mẫu) gắn bearer token, trừ `/api/health`.
+- Token hết hạn/401 ở bất kỳ request nào → xoá token và quay về màn hình đăng nhập kèm thông báo.
+- Nút **Tải xuống** (menu "Thao tác khác" của tài liệu, đầu khung xem tài liệu) gọi
+  `GET /api/documents/{id}/download` và lưu tệp gốc đúng định dạng đã tải lên, đặt tên theo tên hiển thị.
 - Vai trò `viewer`/`approver` bị chặn tại UI; `technician`/`admin` mới thao tác ghi được.
 
 Test: `npm test` (Vitest) — `src/services/auth.test.ts` phủ lưu/đọc token, hạn token, ma trận quyền,

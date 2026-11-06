@@ -17,15 +17,23 @@ from __future__ import annotations
 import re
 from typing import NamedTuple
 
-_CJK_RANGES = (
-    "⺀-鿿㐀-䶿가-힯豈-﫿＀-￯　-〿"
-)
+_CJK_RANGES = "⺀-鿿㐀-䶿가-힯豈-﫿＀-￯　-〿"
 CJK_CHAR = re.compile(f"[{_CJK_RANGES}]")
 CJK_RUN = re.compile(f"[{_CJK_RANGES}]+")
 
 # Dấu câu toàn chiều rộng -> ASCII. KHÔNG đụng “ ” ‘ ’ (tiếng Việt dùng hợp lệ).
 _FULLWIDTH = str.maketrans(
-    {"。": ".", "，": ",", "：": ":", "；": ";", "（": "(", "）": ")", "！": "!", "？": "?", "、": ","}
+    {
+        "。": ".",
+        "，": ",",
+        "：": ":",
+        "；": ";",
+        "（": "(",
+        "）": ")",
+        "！": "!",
+        "？": "?",
+        "、": ",",
+    }
 )
 
 _VI_DIACRITIC = re.compile(

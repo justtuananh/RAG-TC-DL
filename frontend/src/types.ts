@@ -139,11 +139,10 @@ export interface AuthUser {
 /** Trạng thái phiên đăng nhập phía client (token nằm ở localStorage, xem services/auth.ts). */
 export interface AuthState {
   user: AuthUser | null;
-  enabled: boolean; // false: máy chủ tắt đăng nhập (không có nút/màn hình đăng nhập)
-  loginOpen: boolean; // mở màn hình đăng nhập (khi bấm thao tác ghi hoặc token hết hạn)
+  enabled: boolean; // true: bắt buộc đăng nhập (màn hình đăng nhập toàn trang); false: máy chủ tắt đăng nhập
   loginBusy: boolean;
   loginError: string | null;
-  loginNotice: string | null; // lý do mở màn hình (ví dụ "cần đăng nhập để tải lên")
+  loginNotice: string | null; // thông báo trên màn hình đăng nhập (ví dụ phiên đã hết hạn)
   restoreDone: boolean; // đã thử khôi phục phiên từ localStorage xong chưa
 }
 

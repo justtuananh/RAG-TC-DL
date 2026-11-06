@@ -11,10 +11,21 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app
+from auth import get_current_user
+from db.models import AppUser, UserRole
 from ingestion import convert_legacy
 from ingestion import jobs as ingestion_jobs
 
 pytestmark = pytest.mark.unit
+
+
+@pytest.fixture
+def signed_in():
+    """Route tài liệu cần đăng nhập: giả một người xem đã đăng nhập, không cần DB."""
+    user = AppUser(id=1, username="xem", full_name=None, role=UserRole.VIEWER)
+    app.dependency_overrides[get_current_user] = lambda: user
+    yield
+    app.dependency_overrides.pop(get_current_user, None)
 
 
 @pytest.fixture
@@ -62,7 +73,7 @@ def test_missing_source_has_no_preview(corpus):
     assert ingestion_jobs.get_preview_path("khong_co") is None
 
 
-def test_preview_route_serves_converted_docx(corpus):
+def test_preview_route_serves_converted_docx(corpus, signed_in):
     source, _ = corpus
     legacy = source / "Bieu 4.doc"
     legacy.write_bytes(b"legacy doc")
@@ -75,7 +86,7 @@ def test_preview_route_serves_converted_docx(corpus):
     )
 
 
-def test_preview_route_404_and_conversion_error(corpus, monkeypatch):
+def test_preview_route_404_and_conversion_error(corpus, monkeypatch, signed_in):
     client = TestClient(app)
     assert client.get("/api/documents/khong_co/preview").status_code == 404
 
