@@ -50,10 +50,39 @@ describe("buildExportBlob docx", () => {
     const xml = strFromU8(files["word/document.xml"]);
     expect(xml).toContain("Câu hỏi 1");
     expect(xml).toContain("Áp suất tính thế nào?");
-    expect(xml).toContain("$p=\\frac{F}{S}$");
-    expect(xml).toContain("$$p=\\frac{F}{S}$$");
+    // công thức thành công thức Word thật (phân số), cả inline lẫn khối
+    expect(xml).toContain("<m:f>");
+    expect(xml).toContain("<m:oMathPara>");
+    expect(xml.match(/<m:oMath[ >]/g)).toHaveLength(2);
+    expect(xml).not.toContain("⟦OMML");
     expect(xml).toContain("<w:tbl>");
     expect(xml).toContain("QTKĐ 1.159");
     expect(xml).not.toContain("đang gõ");
+  });
+
+  it("keeps verbatim LaTeX when a formula cannot be converted", async () => {
+    const bad: Message[] = [{ role: "bot", markdown: "Công thức $\\badmacro{x}$ ở đây" }];
+    const blob = await buildExportBlob("docx", "T", bad, NOW);
+    const xml = strFromU8(unzipSync(new Uint8Array(await blob.arrayBuffer()))["word/document.xml"]);
+    expect(xml).toContain("$\\badmacro{x}$");
+    expect(xml).not.toContain("<m:oMath");
+  });
+
+  it("puts the term after a sum into the sum body, leaving no empty placeholder", async () => {
+    const sum: Message[] = [{ role: "bot", markdown: "$$\\sum_{i=1}^{n} x_i$$" }];
+    const blob = await buildExportBlob("docx", "T", sum, NOW);
+    const xml = strFromU8(unzipSync(new Uint8Array(await blob.arrayBuffer()))["word/document.xml"]);
+    expect(xml).toMatch(/<m:nary>.*<m:e><m:sSub>.*<\/m:sSub><\/m:e><\/m:nary>/s);
+    expect(xml).not.toContain("<m:e/>");
+  });
+
+  it("wraps text the converter leaves bare, so every character sits in an m:t", async () => {
+    const md: Message[] = [{ role: "bot", markdown: "$$\\int_0^1 f(x)\\,dx$$" }];
+    const blob = await buildExportBlob("docx", "T", md, NOW);
+    const xml = strFromU8(unzipSync(new Uint8Array(await blob.arrayBuffer()))["word/document.xml"]);
+    const math = xml.slice(xml.indexOf("<m:oMathPara>"), xml.indexOf("</m:oMathPara>"));
+    expect(math).toContain("(x)");
+    expect(math).not.toMatch(/<\/(m:r|m:sub|m:sup)>[^<\s]/);
+    expect(math.replace(/<m:t[^>]*>[^<]*<\/m:t>/g, "")).not.toMatch(/>[^<\s]+</);
   });
 });
