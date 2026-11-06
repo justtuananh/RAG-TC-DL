@@ -81,6 +81,9 @@ ingestion:
   convert_timeout_s: 120
   max_upload_bytes: 52428800              # 50 MiB
   marker_python: ${MARKER_PYTHON:-}
+  marker_device: ${MARKER_DEVICE:-cuda}                 # cuda: tạm dỡ LLM khỏi GPU khi xử lý PDF rồi nạp lại; cpu: chậm và tốn RAM (>6 GB)
+  marker_memory_max_mb: ${MARKER_MEMORY_MAX_MB:-5120}   # trần RAM của tiến trình Marker (cgroup qua systemd-run); vượt thì chỉ Marker bị dừng, 0 = không giới hạn
+  marker_threads: ${MARKER_THREADS:-4}                  # số luồng CPU torch/BLAS của Marker
 
 database:
   url: ${DATABASE_URL:-}                  # đặt thì thắng mọi trường bên dưới

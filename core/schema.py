@@ -145,6 +145,9 @@ class IngestionSettings(_Section):
     convert_timeout_s: PositiveFloat
     max_upload_bytes: Positive
     marker_python: OptionalStr = None
+    marker_device: Literal["cuda", "cpu"]
+    marker_memory_max_mb: NonNegative
+    marker_threads: Positive
 
 
 class DatabaseSettings(_Section):

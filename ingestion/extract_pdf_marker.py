@@ -36,11 +36,16 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 import subprocess
 import tempfile
 import time
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
+from urllib.parse import urlsplit
+
+import requests
 
 from core.settings_loader import get_settings
 
@@ -124,12 +129,73 @@ def _run_timeout(start: int, end: int, force_ocr: bool) -> int:
     return 600 + n_pages * per_page
 
 
+# Marker chạy trên CPU với mức tài nguyên tối thiểu: không tiến trình con, lô 1 cho
+# mọi mô hình, để đỉnh RAM thấp nhất có thể (xem requirements-pdf.txt).
+_LIGHT_FLAGS = [
+    "--disable_multiprocessing",
+    *(f"--{m}_batch_size=1" for m in (
+        "layout", "detection", "ocr_error", "recognition", "equation", "table_rec")),
+]
+
+
+def _marker_command(marker_exe: str, device: str, memory_max_mb: int, threads: int) -> list[str]:
+    """Lệnh chạy Marker trên ``device``, số luồng giới hạn; bọc trong cgroup giới hạn
+    RAM nếu có systemd-run (người dùng).
+
+    Biến môi trường đặt qua `env` để không phải đọc biến môi trường của tiến trình
+    (chỉ core/ được đọc).
+    """
+    cmd = ["env", f"TORCH_DEVICE={device}", f"OMP_NUM_THREADS={threads}", f"MKL_NUM_THREADS={threads}", marker_exe]
+    if memory_max_mb <= 0 or not shutil.which("systemd-run"):
+        return cmd
+    return [
+        "systemd-run", "--user", "--scope", "--quiet",
+        "-p", f"MemoryMax={memory_max_mb}M", "-p", "MemorySwapMax=0",
+        *cmd,
+    ]
+
+
+def _ollama_generate(payload: dict) -> None:
+    """POST /api/generate không sinh chữ: chỉ đổi trạng thái nạp của model."""
+    settings = get_settings()
+    parts = urlsplit(settings.llm_url("chat"))
+    requests.post(
+        f"{parts.scheme}://{parts.netloc}/api/generate",
+        json={"model": settings.llm_model("chat"), **payload},
+        timeout=60,
+    ).raise_for_status()
+
+
+@contextmanager
+def _llm_off_gpu(device: str):
+    """Marker trên GPU 8GB không đủ VRAM khi Ollama giữ LLM (keep_alive -1): dỡ LLM
+    trong lúc chạy rồi nạp lại với đúng num_ctx/keep_alive của chat. Ollama không
+    chạy thì bỏ qua: không có gì để dỡ."""
+    if device != "cuda":
+        yield
+        return
+    try:
+        _ollama_generate({"keep_alive": 0})
+    except requests.RequestException as e:
+        print(f"[pdf-marker] không dỡ được LLM khỏi GPU ({e}); tiếp tục.", flush=True)
+    try:
+        yield
+    finally:
+        chat = get_settings().llm.chat
+        try:
+            _ollama_generate({"keep_alive": chat.keep_alive, "options": {"num_ctx": chat.num_ctx}})
+        except requests.RequestException as e:
+            print(f"[pdf-marker] không nạp lại được LLM ({e}); lần chat đầu sẽ nạp.", flush=True)
+
+
 def _run_marker(marker_exe: str, pdf_path: str, page_range: str, out_dir: Path, force_ocr: bool) -> str:
+    cfg = get_settings().ingestion
     cmd = [
-        marker_exe, pdf_path,
+        *_marker_command(marker_exe, cfg.marker_device, cfg.marker_memory_max_mb, cfg.marker_threads), pdf_path,
         "--page_range", page_range,
         "--output_dir", str(out_dir),
         "--output_format", "markdown",
+        *_LIGHT_FLAGS,
     ]
     if force_ocr:
         cmd.append("--force_ocr")
@@ -139,10 +205,16 @@ def _run_marker(marker_exe: str, pdf_path: str, page_range: str, out_dir: Path, 
         subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=timeout)
     except subprocess.TimeoutExpired as e:
         raise RuntimeError(
-            f"Marker didn't finish pages {page_range} within {timeout}s — likely stuck "
-            f"(common cause: another Marker/torch process still holding GPU memory; "
-            f"check `nvidia-smi` for orphaned python.exe/marker_single.exe processes)."
+            f"Marker didn't finish pages {page_range} within {timeout}s - likely stuck "
+            f"(check `ps` for orphaned marker_single processes)."
         ) from e
+    except subprocess.CalledProcessError as e:
+        if e.returncode in (-9, 137):
+            raise RuntimeError(
+                f"Marker bị dừng vì vượt trần RAM {cfg.marker_memory_max_mb} MB "
+                f"(ingestion.marker_memory_max_mb) ở trang {page_range}."
+            ) from e
+        raise RuntimeError(f"Marker lỗi (mã {e.returncode}) ở trang {page_range}: {e.stderr[-500:]}") from e
 
     stem = Path(pdf_path).stem
     md_path = out_dir / stem / f"{stem}.md"
@@ -210,7 +282,9 @@ def extract_pdf_marker(pdf_path: str, marker_python: str | None = None) -> PdfMa
     parts: list[str] = []
     run_reports: list[dict] = []
     n_pages_ocr = 0
-    with tempfile.TemporaryDirectory(prefix="pdf_marker_") as work_dir:
+    with _llm_off_gpu(get_settings().ingestion.marker_device), tempfile.TemporaryDirectory(
+        prefix="pdf_marker_"
+    ) as work_dir:
         for i, (is_ocr, start, end) in enumerate(runs, 1):
             page_range = str(start) if start == end else f"{start}-{end}"
             out_dir = Path(work_dir) / f"run_{start}_{end}_{'ocr' if is_ocr else 'fast'}"
