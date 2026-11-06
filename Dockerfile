@@ -23,6 +23,12 @@ RUN gem install mathtype_to_mathml pry
 COPY requirements.txt requirements-app.txt ./
 RUN pip install --no-cache-dir -r requirements.txt -r requirements-app.txt
 
+# LibreOffice headless: ingestion/convert_legacy.py chuyển .doc/.xls cũ sang .docx/.xlsx.
+# Đặt sau pip install để thêm lớp này không làm mất cache của lớp cài thư viện Python.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libreoffice-writer libreoffice-calc fonts-dejavu-core \
+    && rm -rf /var/lib/apt/lists/*
+
 # Toàn bộ code backend; .dockerignore loại TC_DL/, build/, frontend/, venv, dữ liệu Qdrant.
 COPY . .
 
