@@ -75,8 +75,21 @@ def _no_real_network(request, monkeypatch):
             f"(responses cho requests, hoặc patch hàm qdrant)."
         )
 
+    real_connect = socket.socket.connect
+    real_connect_ex = socket.socket.connect_ex
+    real_socketpair = socket.socketpair
+
+    def _socketpair(*args, **kwargs):
+        # Windows dựng socketpair bằng một kết nối loopback (event loop của TestClient dùng nó):
+        # không phải mạng thật nên tạm mở chốt trong lúc tạo cặp socket.
+        with monkeypatch.context() as m:
+            m.setattr(socket.socket, "connect", real_connect)
+            m.setattr(socket.socket, "connect_ex", real_connect_ex)
+            return real_socketpair(*args, **kwargs)
+
     monkeypatch.setattr(socket.socket, "connect", _guard, raising=True)
     monkeypatch.setattr(socket.socket, "connect_ex", _guard, raising=True)
+    monkeypatch.setattr(socket, "socketpair", _socketpair, raising=True)
 
 
 # ── Reset singleton lazy của retrieval/* ──────────────────────────────────────

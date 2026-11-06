@@ -1,9 +1,10 @@
-"""Route công khai: health và danh sách câu hỏi ví dụ."""
+"""Route hệ thống: health (công khai, cho healthcheck) và câu hỏi ví dụ (cần đăng nhập)."""
 
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 
+from auth import get_current_user
 from core.settings_loader import get_settings
 
 router = APIRouter()
@@ -23,6 +24,6 @@ def health():
     return {"status": "ok", "model": get_settings().llm_model("chat")}
 
 
-@router.get("/api/examples")
+@router.get("/api/examples", dependencies=[Depends(get_current_user)])
 def examples():
     return {"examples": EXAMPLES}

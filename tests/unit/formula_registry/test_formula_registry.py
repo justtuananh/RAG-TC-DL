@@ -471,12 +471,13 @@ def test_approval_oracle_scales_to_small_values(env, expression, expected, passe
     ],
 )
 def test_write_endpoints_require_role(env, role, edit_status, approve_status, settings_override):
-    """Sửa nháp: kỹ thuật viên; phê duyệt: người duyệt; xem và tính: mọi người."""
+    """Sửa nháp: kỹ thuật viên; phê duyệt: người duyệt; xem và tính: mọi người đã đăng nhập."""
     settings_override({'auth.enabled': True})
     _, registry, draft = env
     url = '/api/formula-drafts/' + draft['id']
     with TestClient(_app(role)) as client:
-        assert client.get('/api/documents/demo/formula-drafts').status_code == 200
+        listed = client.get('/api/documents/demo/formula-drafts')
+        assert listed.status_code == (401 if role is None else 200)
         edited = client.put(url, json={'revision': 1, 'proposal': complete_proposal(draft)})
         assert edited.status_code == edit_status
         if edit_status != 200:

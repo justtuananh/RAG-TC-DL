@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import ExcelJS from "exceljs";
 import { describe, expect, it } from "vitest";
@@ -167,9 +167,12 @@ describe("sliceRows - trích đoạn quanh một dòng", () => {
   });
 });
 
+// Biên bản thật không nằm trong git (dữ liệu khách hàng): chỉ chạy khi có tệp trong TC_DL/.
+const REAL_REPORT = resolve(__dirname, "../../../../../TC_DL/Biên_bản_kiểm_định_áp_kế_pittông_SN_1045_2023-06-20.xlsx");
+
 describe("buildWorkbookModel - biên bản thật", () => {
-  it("đọc đủ sheet và giữ nguyên văn ô đầu mục", async () => {
-    const file = resolve(__dirname, "../../../../../TC_DL/Biên_bản_kiểm_định_áp_kế_pittông_SN_1045_2023-06-20.xlsx");
+  it.skipIf(!existsSync(REAL_REPORT))("đọc đủ sheet và giữ nguyên văn ô đầu mục", async () => {
+    const file = REAL_REPORT;
     const wb = new ExcelJS.Workbook();
     const bytes = readFileSync(file);
     await wb.xlsx.load(bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength));

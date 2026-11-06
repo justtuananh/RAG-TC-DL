@@ -7,8 +7,7 @@ Lọc đuôi nguồn điểm thấp, chia ngân sách ký tự theo thứ hạng
 from __future__ import annotations
 
 from core.settings_loader import get_settings
-from retrieval import quote
-from retrieval import doc_titles
+from retrieval import doc_titles, quote
 
 # ── Lọc nguồn theo độ tin cậy (cắt đuôi nguồn yếu) ───────────────────────────
 # Reranker (bge-reranker-v2-m3) trả điểm sigmoid [0,1]. Với câu HẸP, chỉ 1-2 nguồn
@@ -180,7 +179,6 @@ def _block_budgets(lengths: list[int], total: int, floor: int, cap: int) -> list
         budgets.append(share)
         remaining -= share
     return budgets
-
 
 
 def _source_header(i: int, payload: dict) -> str:

@@ -338,3 +338,66 @@ def test_local_admin_cannot_log_in(client, settings_override):
     settings_override({"auth.enabled": True})
     resp = client.post("/api/auth/login", json={"username": username, "password": ""})
     assert resp.status_code in (401, 422)
+
+
+# ── Đăng nhập bắt buộc cho mọi route dữ liệu ─────────────────────────────────
+
+READ_ROUTES = [
+    ("get", "/api/documents", {}),
+    ("get", "/api/documents/stem/markdown", {}),
+    ("get", "/api/documents/stem/file", {}),
+    ("get", "/api/documents/stem/preview", {}),
+    ("get", "/api/documents/stem/download", {}),
+    ("get", "/api/documents/stem/formula-drafts", {}),
+    ("get", "/api/examples", {}),
+    ("post", "/api/chat/stream", {"json": {"message": "Sai số cho phép?", "history": []}}),
+]
+
+
+@pytest.mark.parametrize("method, path, kwargs", READ_ROUTES)
+def test_read_routes_require_login(client, method, path, kwargs):
+    resp = getattr(client, method)(path, **kwargs)
+    assert resp.status_code == 401
+
+
+def test_health_stays_public(client):
+    assert client.get("/api/health").status_code == 200
+
+
+def test_viewer_downloads_original_with_display_name(client, users, tmp_path, monkeypatch):
+    source = tmp_path / "QTKD_1.159_2021.docx"
+    source.write_bytes(b"docx-bytes")
+    doc = {"id": "QTKD_1.159_2021", "name": "QTKĐ 1.159 áp kế", "ext": "DOCX"}
+    monkeypatch.setattr(ingestion_jobs, "get_source_path", lambda stem: source)
+    monkeypatch.setattr(ingestion_jobs, "list_documents", lambda: [doc])
+
+    headers = {"Authorization": f"Bearer {_token(users, 'viewer')}"}
+    resp = client.get("/api/documents/QTKD_1.159_2021/download", headers=headers)
+
+    assert resp.status_code == 200
+    assert resp.content == b"docx-bytes"
+    disposition = resp.headers["content-disposition"]
+    assert disposition.startswith("attachment;")
+    # Tên hiển thị tiếng Việt + đúng đuôi định dạng gốc (mã hoá RFC 5987).
+    assert "filename*=utf-8''QTK%C4%90%201.159%20%C3%A1p%20k%E1%BA%BF.docx" in disposition
+
+
+def test_download_missing_file_is_404(client, users, monkeypatch):
+    monkeypatch.setattr(ingestion_jobs, "get_source_path", lambda stem: None)
+    headers = {"Authorization": f"Bearer {_token(users, 'viewer')}"}
+    assert client.get("/api/documents/ghost/download", headers=headers).status_code == 404
+
+
+@pytest.mark.parametrize(
+    "display, suffix, expected",
+    [
+        ("QTKĐ 1.061", ".docx", "QTKĐ 1.061.docx"),
+        ("Bieu 4.doc", ".doc", "Bieu 4.doc"),
+        ("a/b\\c", ".pdf", "a_b_c.pdf"),
+        ("   ", ".xlsx", "tai-lieu.xlsx"),
+    ],
+)
+def test_download_filename(display, suffix, expected):
+    from api.routes.documents import download_filename
+
+    assert download_filename(display, suffix) == expected

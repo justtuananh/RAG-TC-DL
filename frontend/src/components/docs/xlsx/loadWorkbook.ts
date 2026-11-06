@@ -1,3 +1,4 @@
+import { authFetch } from "../../../services/auth";
 import { buildWorkbookModel, type WorkbookModel } from "./sheetModel";
 
 // Tải + dựng mô hình workbook cho trình xem tài liệu và ngăn xuất xứ. ExcelJS (~1 MB)
@@ -23,7 +24,7 @@ function remember(url: string, entry: CachedModel): void {
 }
 
 async function fetchAndBuild(url: string): Promise<WorkbookModel> {
-  const [{ default: ExcelJS }, response] = await Promise.all([import("exceljs"), fetch(url, { cache: "no-cache" })]);
+  const [{ default: ExcelJS }, response] = await Promise.all([import("exceljs"), authFetch(url, { cache: "no-cache" })]);
   if (!response.ok) {
     const body = await response.json().catch(() => null);
     throw new Error((body as { detail?: string } | null)?.detail || `HTTP ${response.status}`);

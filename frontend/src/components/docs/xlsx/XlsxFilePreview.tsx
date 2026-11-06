@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { COLOR } from "../../../theme";
+import DownloadFallback from "../DownloadFallback";
 import XlsxSheetTable from "./XlsxSheetTable";
 import { useWorkbook } from "./useWorkbook";
 
 /** Trình xem tệp Excel gốc (.xlsx, .xls đã chuyển) ngay trong trình duyệt: lưới ô + tab sheet ở đáy như Excel. */
-export default function XlsxFilePreview({ fileUrl, downloadUrl, name }: { fileUrl: string; downloadUrl: string; name: string }) {
+export default function XlsxFilePreview({ fileUrl, onDownload }: { fileUrl: string; onDownload?: () => void }) {
   const state = useWorkbook(fileUrl);
   const [active, setActive] = useState(0);
 
@@ -15,11 +16,8 @@ export default function XlsxFilePreview({ fileUrl, downloadUrl, name }: { fileUr
           "Đang tải tệp gốc…"
         ) : (
           <span>
-            Không hiển thị được tệp gốc ({state.message}).{" "}
-            <a href={downloadUrl} download={name} style={{ color: COLOR.accent, fontWeight: 600 }}>
-              Tải xuống để xem
-            </a>
-            .
+            Không hiển thị được tệp gốc ({state.message}).
+            <DownloadFallback onDownload={onDownload} />
           </span>
         )}
       </div>

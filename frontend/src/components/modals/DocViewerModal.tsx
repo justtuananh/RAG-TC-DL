@@ -1,16 +1,18 @@
 import type { ViewingDoc } from "../../types";
 import DocContentPane from "../docs/DocContentPane";
 import DocInfoPanel from "../docs/DocInfoPanel";
+import DownloadButton from "../docs/DownloadButton";
 import { IcFile, IcFolder, IcX } from "../common/icons";
 import { COLOR } from "../../theme";
 
 interface Props {
   viewingDoc: ViewingDoc | null;
   onClose: () => void;
+  onDownload: () => void;
 }
 
 /** Hộp thoại xem tài liệu — dùng khi mở tài liệu gốc từ trích dẫn trong Trò chuyện (không có "danh sách" để quay lại). */
-export default function DocViewerModal({ viewingDoc, onClose }: Props) {
+export default function DocViewerModal({ viewingDoc, onClose, onDownload }: Props) {
   if (!viewingDoc) return null;
 
   return (
@@ -72,6 +74,7 @@ export default function DocViewerModal({ viewingDoc, onClose }: Props) {
               )}
             </div>
           </div>
+          <DownloadButton onDownload={onDownload} ext={viewingDoc.ext} />
           <button
             onClick={onClose}
             title="Đóng"
@@ -84,7 +87,7 @@ export default function DocViewerModal({ viewingDoc, onClose }: Props) {
 
         {/* body */}
         <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
-          <DocContentPane viewingDoc={viewingDoc} />
+          <DocContentPane viewingDoc={viewingDoc} onDownload={onDownload} />
           <DocInfoPanel viewingDoc={viewingDoc} />
         </div>
       </div>
