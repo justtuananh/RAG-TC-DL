@@ -3,6 +3,7 @@ import type { AppState } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import { COLOR, SHADOW } from "../../theme";
 import { IcBrand, IcMessage, IcSend } from "../common/icons";
+import ExportMenu from "./ExportMenu";
 import MessageBubble from "./MessageBubble";
 import ProcessSteps from "./ProcessSteps";
 
@@ -40,6 +41,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
   const firstUser = state.messages.find((m) => m.role === "user");
   const chatTitle = firstUser ? firstUser.text : "Hội thoại mới";
   const lastIdx = state.messages.length - 1;
+  const canExport = state.messages.some((m) => m.role === "bot" && !!m.markdown && !m.streaming && !m.error);
   const canSend = !!state.input.trim() && !state.proc;
 
   return (
@@ -50,6 +52,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
         <span style={{ fontWeight: 600, fontSize: "13.5px", color: COLOR.textSecondary, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {chatTitle}
         </span>
+        {canExport && <ExportMenu onExport={(f) => void actions.exportChat(f)} />}
       </div>
 
       {/* scroll area */}
