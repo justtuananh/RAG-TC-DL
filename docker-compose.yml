@@ -224,6 +224,8 @@ services:
     environment:
       FORMULA_REGISTRY_DB: /app/.formula-registry/registry.sqlite3
       HOME: /tmp   # UID host không có thư mục nhà trong image
+      USER: qtkd   # UID host không có trong /etc/passwd: torch (Marker) gọi getpass.getuser() và lỗi KeyError nếu thiếu
+      TORCHINDUCTOR_CACHE_DIR: /tmp/torchinductor
       EMBED_URL: http://embedding:8010/v1/embeddings
       RERANK_URL: http://reranker:8011/v1/rerank
       QDRANT_URL: http://qdrant:6333
