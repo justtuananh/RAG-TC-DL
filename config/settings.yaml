@@ -86,13 +86,15 @@ llm:
     max_query_chars: 400
     num_predict: 120
     timeout_s: 30
-  multi_document:                         # câu không chỉ định một QTKĐ (chung chung hoặc nêu ≥2 QTKĐ): hỏi RIÊNG từng tài liệu rồi ghép từng dòng
+  multi_document:                         # câu không chỉ định một QTKĐ (chung chung hoặc nêu ≥2 QTKĐ): trả lời chung TRƯỚC, chỉ hỏi RIÊNG tài liệu chưa được trích [n]
     enabled: true
     min_documents: 2                      # ít hơn thì trả lời một lượt như thường
-    max_documents: 6                      # trần số tài liệu hỏi riêng
+    max_documents: 6                      # trần số tài liệu xét bổ sung
+    max_followups: 4                      # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
     context_chars: 5000                   # trần ngữ cảnh mỗi lượt (chỉ nguồn của tài liệu đó)
-    num_predict: 220                      # trần token mỗi tài liệu
-    merge_identical: true                 # câu chung chung: tài liệu cùng bộ số liệu gộp một dòng
+    num_predict: 120                      # trần token mỗi lượt hỏi riêng
+    merge_identical: true                 # tài liệu cùng bộ số liệu gộp một dòng
+    merge_max_chars: 80                   # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
   number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn
     enabled: true
     max_regen: 1                          # số lần sinh lại khi có số không có trong nguồn

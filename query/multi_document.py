@@ -21,6 +21,20 @@ _EMPTY_RE = re.compile(
 )
 _EMPTY_MAX_CHARS = 160
 NO_INFO = "không nêu"
+_NEGATION_RE = re.compile(r"không\s+(?:nêu|có|đề cập|tìm thấy|quy định|được nêu)", re.IGNORECASE)
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[.;!?])\s+|\n+")
+_UNIT = (
+    r"(?:tháng|năm|ngày|giờ|phút|giây|lần|điểm|%|°\s?[CF]|[oº]C|℃|mm|cm|km|m|kPa|MPa|Pa|mbar|bar"
+    r"|kg|mg|g|mA|kV|V|A|kHz|Hz|N|s)"
+)
+_VALUE_RE = re.compile(rf"[±≤≥<>]?\s*\d+(?:[.,]\d+)?(?:\s*{_UNIT}(?!\w))?")
+
+# Mã văn bản ngoài kho: quy chuẩn/tiêu chuẩn có mã (QCVN 01:2008, ISO 5167...) và văn bản pháp luật có số.
+_DOC_CODE_RE = re.compile(
+    r"\b(?:QCVN|TCVN|ISO|IEC|OIML|ASTM|DIN)\s*[-:]?\s*\d[\w.\-:/]*"
+    r"|\b(?:nghị định|thông tư|quyết định)\s+(?:số\s+)?\d+(?:/[\w\-]+)*",
+    re.IGNORECASE,
+)
 
 
 @dataclass(frozen=True)
@@ -79,27 +93,69 @@ def _signature(text: str) -> tuple[str, ...]:
     return tuple(sorted(_NUM_RE.findall(_REF_RE.sub("", text))))
 
 
-def merge_identical(entries: Sequence[tuple[str, str]]) -> list[tuple[str, str]]:
-    """Gộp các tài liệu có cùng bộ số liệu (câu trả lời giống hệt về giá trị) thành một dòng.
+def _normalize(text: str) -> str:
+    return re.sub(r"[\W_]+", "", text.casefold())
 
-    Câu hỏi chung mà mọi tài liệu cùng một giá trị thì liệt kê từng tài liệu là dài dòng và dễ
-    bị coi là mâu thuẫn; dòng gộp giữ tên mọi tài liệu và [n] của chúng.
-    """
-    merged: list[tuple[list[str], str, tuple[str, ...]]] = []
+
+def names_unknown_document(question: str, source_texts: Sequence[str]) -> bool:
+    """Câu hỏi nêu mã văn bản (QCVN, TCVN, ISO, nghị định, thông tư...) mà không nguồn nào nhắc tới.
+
+    Văn bản ấy không có trong kho: không tách theo tài liệu (mỗi lượt riêng dễ bịa giá trị cho
+    văn bản không tồn tại) mà để một lượt như thường, nơi cơ chế từ chối sẵn có hoạt động."""
+    codes = [_normalize(m.group(0)) for m in _DOC_CODE_RE.finditer(question)]
+    if not codes:
+        return False
+    corpus = _normalize("\n".join(source_texts))
+    return any(code not in corpus for code in codes)
+
+
+def uncovered_groups(answer: str, groups: Sequence[DocumentGroup]) -> list[DocumentGroup]:
+    """Các tài liệu mà câu trả lời chung chưa có câu khẳng định nào trích [n] tới nguồn của nó.
+
+    Câu phủ định ("không nêu"...) không tính là khẳng định. ``positions`` là chỉ số 0-based nên
+    nguồn [n] ứng với vị trí n-1."""
+    cited: set[int] = set()
+    for sentence in _SENTENCE_SPLIT_RE.split(answer):
+        if _NEGATION_RE.search(sentence):
+            continue
+        cited.update(int(n) - 1 for n in _REF_RE.findall(sentence))
+    return [g for g in groups if not cited.intersection(g.positions)]
+
+
+def _value_span(text: str, max_chars: int) -> str | None:
+    """Đoạn ngắn nhất của câu trả lời bao mọi số liệu (kèm đơn vị), bỏ [n]; None nếu không có/quá dài."""
+    clean = _REF_RE.sub("", text)
+    found = list(_VALUE_RE.finditer(clean))
+    if not found:
+        return None
+    span = " ".join(clean[found[0].start() : found[-1].end()].split()).strip(" ,;.:")
+    return span if span and len(span) <= max_chars else None
+
+
+def merge_identical(entries: Sequence[tuple[str, str]], max_value_chars: int = 80) -> list[tuple[str, str]]:
+    """Gộp các tài liệu cùng bộ số liệu thành một dòng trung tính: ``tên1, tên2: giá trị [1][2]``.
+
+    Dòng gộp được DỰNG từ giá trị đã trích (đoạn quanh các số, không lấy nguyên câu của một tài
+    liệu vì câu đó nêu tên thiết bị của riêng nó) và dồn mọi [n] liền sau giá trị. Không rút
+    được giá trị gọn thì không gộp."""
+    groups: list[list[tuple[str, str]]] = []
+    sigs: list[tuple[str, ...]] = []
     for label, text in entries:
         sig = _signature(text)
-        for item in merged:
-            if sig and item[2] == sig:
-                item[0].append(label)
-                known = set(_REF_RE.findall(item[1]))
-                extra = [n for n in _REF_RE.findall(text) if n not in known]
-                if extra:
-                    item_text = item[1].rstrip() + " " + "".join(f"[{n}]" for n in dict.fromkeys(extra))
-                    merged[merged.index(item)] = (item[0], item_text, sig)
-                break
+        if sig and sig in sigs:
+            groups[sigs.index(sig)].append((label, text))
         else:
-            merged.append(([label], text, sig))
-    return [("; ".join(labels), text) for labels, text, _ in merged]
+            groups.append([(label, text)])
+            sigs.append(sig)
+    out: list[tuple[str, str]] = []
+    for members in groups:
+        span = _value_span(members[0][1], max_value_chars) if len(members) > 1 else None
+        if span is None:
+            out.extend(members)
+            continue
+        refs = dict.fromkeys(n for _, t in members for n in _REF_RE.findall(t))
+        out.append((", ".join(label for label, _ in members), f"{span} {''.join(f'[{n}]' for n in refs)}".strip()))
+    return out
 
 
 def render(entries: Sequence[tuple[str, str]]) -> str:

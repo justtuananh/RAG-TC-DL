@@ -149,10 +149,12 @@ class MultiDocumentSettings(_Section):
 
     enabled: bool = True
     min_documents: Positive = 2           # ít hơn số tài liệu này thì trả lời một lượt như thường
-    max_documents: Positive = 6           # trần số tài liệu hỏi riêng (mỗi tài liệu một lượt sinh)
+    max_documents: Positive = 6           # trần số tài liệu xét bổ sung
+    max_followups: Positive = 4           # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
     context_chars: Positive = 5000        # trần ngữ cảnh mỗi lượt (chỉ nguồn của một tài liệu)
-    num_predict: Positive = 220           # trần token câu trả lời mỗi tài liệu
-    merge_identical: bool = True          # câu chung chung: tài liệu cùng bộ số liệu gộp một dòng
+    num_predict: Positive = 120           # trần token mỗi lượt hỏi riêng
+    merge_identical: bool = True          # tài liệu cùng bộ số liệu gộp một dòng
+    merge_max_chars: Positive = 80        # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
 
 
 class NumberCheckSettings(_Section):
