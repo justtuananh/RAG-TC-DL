@@ -92,7 +92,7 @@ export interface Actions {
   send: (text?: string) => void;
   regenerate: () => void;
   copyAnswer: (text: string) => void;
-  feedback: (type: "up" | "down") => void;
+  feedback: (index: number, type: "up" | "down") => void;
   askSample: (q: string) => void;
   newChat: () => void;
   openCite: (id: string) => void;
@@ -418,7 +418,18 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       }
       showToast("Đã sao chép câu trả lời");
     },
-    feedback: (type) => showToast(type === "up" ? "Cảm ơn phản hồi của bạn!" : "Đã ghi nhận — trợ lý sẽ cải thiện."),
+    feedback: (index, type) => {
+      const cur = stateRef.current.messages[index];
+      if (!cur || cur.role !== "bot") return;
+      const value = cur.feedback === type ? undefined : type; // bấm lại cùng nút thì bỏ đánh giá
+      const next = stateRef.current.messages.map((m, i) => (i === index ? { ...m, feedback: value } : m));
+      const id = stateRef.current.activeConvId;
+      set((s) => ({
+        messages: next,
+        conversations: id ? s.conversations.map((c) => (c.id === id ? { ...c, messages: next } : c)) : s.conversations,
+      }));
+      if (value) showToast(value === "up" ? "Cảm ơn phản hồi của bạn!" : "Đã ghi nhận — trợ lý sẽ cải thiện.");
+    },
     askSample: (q) => {
       if (!mayLeaveFormula()) return;
       set({ tab: "chat" });

@@ -18,6 +18,7 @@ export interface Message {
   streaming?: boolean;
   error?: boolean;
   sources?: BackendSource[]; // nguồn của câu trả lời này (để lưu/khôi phục hội thoại)
+  feedback?: "up" | "down"; // đánh giá của người dùng cho câu trả lời này (bấm lại để bỏ)
 }
 
 /** Nguồn trả về từ api/services/chat_stream.py (_build_sources_payload) */

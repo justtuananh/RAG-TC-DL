@@ -6,6 +6,7 @@ import { IcBrand, IcCheck, IcCopy, IcRefresh, IcThumbDown, IcThumbUp } from "../
 
 interface Props {
   message: Message;
+  index: number;
   isLast: boolean;
   proc: boolean;
   actions: Actions;
@@ -17,7 +18,7 @@ function withCiteButtons(md: string): string {
   return md.replace(/\[(\d+)\]/g, '<button class="cite-chip" data-cite="$1">[$1]</button>');
 }
 
-export default function MessageBubble({ message, isLast, proc, actions, pinnedRef }: Props) {
+export default function MessageBubble({ message, index, isLast, proc, actions, pinnedRef }: Props) {
   if (message.role === "user") {
     return (
       <div ref={pinnedRef} className="animate-fadeUp" style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -143,20 +144,28 @@ export default function MessageBubble({ message, isLast, proc, actions, pinnedRe
               <IcCopy size={14} />
             </button>
             <button
-              onClick={() => actions.feedback("up")}
+              onClick={() => actions.feedback(index, "up")}
               aria-label="Câu trả lời hữu ích"
-              title="Câu trả lời hữu ích"
-              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-icon-muted hover:bg-surface-container-low hover:text-brand"
+              aria-pressed={message.feedback === "up"}
+              title={message.feedback === "up" ? "Đã đánh giá hữu ích — bấm lại để bỏ" : "Câu trả lời hữu ích"}
+              className={`w-7 h-7 rounded-[7px] border-none flex items-center justify-center cursor-pointer transition-colors ${
+                message.feedback === "up"
+                  ? "bg-surface-container-low text-brand"
+                  : "bg-transparent text-icon-muted hover:bg-surface-container-low hover:text-brand"
+              }`}
             >
-              <IcThumbUp size={14} />
+              <IcThumbUp size={14} style={message.feedback === "up" ? { fill: "currentColor", fillOpacity: 0.25 } : undefined} />
             </button>
             <button
-              onClick={() => actions.feedback("down")}
+              onClick={() => actions.feedback(index, "down")}
               aria-label="Câu trả lời chưa đúng"
-              title="Câu trả lời chưa đúng"
-              className="w-7 h-7 rounded-[7px] border-none bg-transparent flex items-center justify-center cursor-pointer text-icon-muted hover:bg-error-container hover:text-error"
+              aria-pressed={message.feedback === "down"}
+              title={message.feedback === "down" ? "Đã đánh giá chưa đúng — bấm lại để bỏ" : "Câu trả lời chưa đúng"}
+              className={`w-7 h-7 rounded-[7px] border-none flex items-center justify-center cursor-pointer transition-colors ${
+                message.feedback === "down" ? "bg-error-container text-error" : "bg-transparent text-icon-muted hover:bg-error-container hover:text-error"
+              }`}
             >
-              <IcThumbDown size={14} />
+              <IcThumbDown size={14} style={message.feedback === "down" ? { fill: "currentColor", fillOpacity: 0.25 } : undefined} />
             </button>
             {showRegen && (
               <button

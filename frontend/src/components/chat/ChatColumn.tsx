@@ -95,6 +95,7 @@ export default function ChatColumn({ state, actions }: { state: AppState; action
             <MessageBubble
               key={i}
               message={m}
+              index={i}
               isLast={i === lastIdx}
               proc={!!state.proc}
               actions={actions}
