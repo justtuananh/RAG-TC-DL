@@ -1,4 +1,6 @@
-"""Route tài liệu: liệt kê, tải lên, xử lý, xem Markdown/tệp gốc, xóa, đổi tên."""
+"""Route tài liệu: liệt kê, tải lên, xử lý, xem Markdown/tệp gốc, tải xuống, xóa, đổi tên.
+
+Mọi route đều cần đăng nhập; route ghi còn kiểm vai trò."""
 
 from __future__ import annotations
 
@@ -10,12 +12,12 @@ from sqlalchemy.orm import Session
 
 from api.audit import document_snapshot, record_audit
 from api.schemas import RenameRequest
-from auth import require_role
+from auth import get_current_user, require_role
 from db import get_db
 from db.models import AppUser, UserRole
 from ingestion import jobs as ingestion_jobs
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(get_current_user)])
 
 
 @router.get("/api/documents")
@@ -86,6 +88,26 @@ def document_file(file_stem: str):
     media_type = _FILE_MEDIA_TYPES.get(path.suffix.lower(), "application/octet-stream")
     return FileResponse(
         path, media_type=media_type, filename=path.name, content_disposition_type="inline"
+    )
+
+
+def download_filename(display_name: str, suffix: str) -> str:
+    """Tên tệp khi tải xuống: tên hiển thị (có thể đã đổi) + đúng đuôi định dạng gốc."""
+    name = display_name.replace("/", "_").replace("\\", "_").strip() or "tai-lieu"
+    return name if name.lower().endswith(suffix.lower()) else f"{name}{suffix}"
+
+
+@router.get("/api/documents/{file_stem}/download")
+def document_download(file_stem: str):
+    """Tải xuống tệp gốc đúng định dạng đã tải lên (.docx/.doc/.pdf/.xlsx/.xls)."""
+    path = ingestion_jobs.get_source_path(file_stem)
+    if path is None:
+        raise HTTPException(status_code=404, detail="Không tìm thấy tệp gốc.")
+    doc = next((d for d in ingestion_jobs.list_documents() if d["id"] == file_stem), None)
+    filename = download_filename(doc["name"] if doc else path.stem, path.suffix)
+    media_type = _FILE_MEDIA_TYPES.get(path.suffix.lower(), "application/octet-stream")
+    return FileResponse(
+        path, media_type=media_type, filename=filename, content_disposition_type="attachment"
     )
 
 

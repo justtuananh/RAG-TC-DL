@@ -5,6 +5,7 @@ import { TIMING, ZOOM } from "../services/mockEngine";
 import {
   deleteDocument,
   documentFileUrl,
+  downloadDocument,
   documentPreviewUrl,
   fetchDocumentMarkdown,
   fetchDocuments,
@@ -76,7 +77,6 @@ function makeInitialState(): AppState {
     auth: {
       user: null,
       enabled: true,
-      loginOpen: false,
       loginBusy: false,
       loginError: null,
       loginNotice: null,
@@ -127,8 +127,7 @@ export interface Actions {
   testLlm: () => void;
   saveLlm: () => void;
   // ── Xác thực (Sprint 1) ──
-  openLogin: (notice?: string) => void;
-  closeLogin: () => void;
+  downloadDoc: (id: string) => void;
   submitLogin: (username: string, password: string) => void;
   logout: () => void;
 }
@@ -183,8 +182,6 @@ export function useAppStore(): { state: AppState; actions: Actions } {
   const upTimer = useRef<number | undefined>(undefined);
   const llmTimer = useRef<number | undefined>(undefined);
   const abortRef = useRef<AbortController | null>(null);
-  // Thao tác ghi đang chờ đăng nhập → tự chạy lại sau khi đăng nhập thành công.
-  const pendingWriteRef = useRef<(() => void) | null>(null);
 
   // Nạp danh sách tài liệu thật; khi còn tài liệu "processing" thì poll lại sau
   // ~2s để cập nhật tiến độ/kết quả (dừng khi không còn tài liệu nào đang xử lý).
@@ -201,19 +198,14 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       .catch(() => {});
   }, []);
 
-  // mount: nạp câu hỏi mẫu + ping sức khoẻ backend (lặp 30s) + tài liệu thật
+  // mount: ping sức khoẻ backend (lặp 30s) - /api/health công khai, không cần đăng nhập.
   useEffect(() => {
-    fetchExamples()
-      .then((ex) => ex.length && set({ examples: ex }))
-      .catch(() => {});
     const ping = () =>
       pingHealth()
         .then((ok) => set({ llmStatus: ok ? "active" : "none" }))
         .catch(() => set({ llmStatus: "none" }));
     ping();
     const iv = window.setInterval(ping, 30000);
-
-    refreshDocuments();
 
     return () => {
       clearInterval(iv);
@@ -222,7 +214,18 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       clearTimeout(llmTimer.current);
       abortRef.current?.abort();
     };
-  }, [refreshDocuments]);
+  }, []);
+
+  // Mọi route dữ liệu đều cần đăng nhập: chỉ nạp câu hỏi mẫu + tài liệu khi đã có người dùng
+  // (sau khi khôi phục phiên hoặc đăng nhập; máy chủ tắt đăng nhập thì /me trả tài khoản cục bộ).
+  const userId = state.auth.user?.id;
+  useEffect(() => {
+    if (userId === undefined) return;
+    fetchExamples()
+      .then((ex) => ex.length && set({ examples: ex }))
+      .catch(() => {});
+    refreshDocuments();
+  }, [userId, refreshDocuments]);
 
   // Lưu lịch sử hội thoại mỗi khi danh sách thay đổi
   useEffect(() => {
@@ -231,7 +234,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
 
   // Khôi phục phiên khi mount qua /api/auth/me (token hết hạn/hỏng → xoá im lặng trước).
   // Máy chủ tắt đăng nhập → /me trả tài khoản cục bộ kể cả không có token.
-  // Bật đăng nhập mà chưa có phiên → 401: khách vẫn đọc/chat được, KHÔNG bắt đăng nhập.
+  // Bật đăng nhập mà chưa có phiên → 401: App hiện màn hình đăng nhập toàn trang (bắt buộc).
   useEffect(() => {
     const token = getToken();
     if (token && isTokenExpired(token)) clearToken();
@@ -252,17 +255,18 @@ export function useAppStore(): { state: AppState; actions: Actions } {
     };
   }, []);
 
-  // Một request ghi gặp 401 (token hết hạn/bị từ chối) → xoá người dùng và mở màn hình đăng nhập.
+  // Một request gặp 401 (token hết hạn/bị từ chối) → xoá người dùng, App quay về màn hình đăng nhập.
+  // Chỉ báo "hết hạn" khi trước đó thật sự đang đăng nhập (không báo ở lần mở trang đầu).
   useEffect(
     () =>
       subscribeUnauthorized(() => {
+        abortRef.current?.abort();
         set((s) => ({
           auth: {
             ...s.auth,
             user: null,
-            loginOpen: true,
             loginError: null,
-            loginNotice: "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để tiếp tục.",
+            loginNotice: s.auth.user ? "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại để tiếp tục." : s.auth.loginNotice,
           },
         }));
       }),
@@ -276,17 +280,12 @@ export function useAppStore(): { state: AppState; actions: Actions } {
   };
 
   /**
-   * Cổng kiểm quyền cho thao tác ghi (upload/process/delete/rename).
-   * - Chưa đăng nhập → mở màn hình đăng nhập, ghi nhớ `retry` để chạy lại sau khi đăng nhập.
-   * - Đã đăng nhập nhưng vai trò không đủ (viewer/approver) → báo toast, không gọi backend.
+   * Cổng kiểm quyền cho thao tác ghi (upload/process/delete/rename). Đăng nhập là bắt buộc
+   * nên luôn có người dùng; vai trò không đủ (viewer/approver) → báo toast, không gọi backend.
    */
-  const ensureWriteAccess = (label: string, retry: () => void): boolean => {
+  const ensureWriteAccess = (): boolean => {
     const user = stateRef.current.auth.user;
-    if (!user) {
-      pendingWriteRef.current = retry;
-      set((s) => ({ auth: { ...s.auth, loginOpen: true, loginError: null, loginNotice: `Vui lòng đăng nhập để ${label}.` } }));
-      return false;
-    }
+    if (!user) return false;
     if (!canWrite(user.role)) {
       showToast("Tài khoản của bạn không có quyền thực hiện thao tác này.", "error");
       return false;
@@ -513,7 +512,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
             if (e instanceof AuthError && e.status === 401) return; // màn hình đăng nhập đã mở
             showToast(e instanceof Error ? e.message : "Tải lên thất bại", "error");
           });
-      if (!ensureWriteAccess("tải tài liệu lên", run)) return;
+      if (!ensureWriteAccess()) return;
       run();
     },
     processDoc: (id) => {
@@ -528,11 +527,11 @@ export function useAppStore(): { state: AppState; actions: Actions } {
             refreshDocuments();
           });
       };
-      if (!ensureWriteAccess("xử lý tài liệu", run)) return;
+      if (!ensureWriteAccess()) return;
       run();
     },
     startRenameDoc: (id) => {
-      if (!ensureWriteAccess("đổi tên tài liệu", () => set({ renamingDoc: id }))) return;
+      if (!ensureWriteAccess()) return;
       set({ renamingDoc: id });
     },
     renameDoc: (id, v) => set((s) => ({ documents: s.documents.map((d) => (d.id === id ? { ...d, name: v } : d)) })),
@@ -565,7 +564,7 @@ export function useAppStore(): { state: AppState; actions: Actions } {
             refreshDocuments();
           });
       };
-      if (!ensureWriteAccess("xoá tài liệu", run)) return;
+      if (!ensureWriteAccess()) return;
       run();
     },
     viewDoc: (d) => {
@@ -667,12 +666,15 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       set({ llmConfigOpen: false });
       showToast("Đã lưu cấu hình mô hình");
     },
-    // ── Xác thực (Sprint 1) ──
-    openLogin: (notice) => set((s) => ({ auth: { ...s.auth, loginOpen: true, loginError: null, loginNotice: notice ?? null } })),
-    closeLogin: () => {
-      pendingWriteRef.current = null;
-      set((s) => ({ auth: { ...s.auth, loginOpen: false, loginError: null, loginNotice: null } }));
+    downloadDoc: (id) => {
+      downloadDocument(id)
+        .then((filename) => showToast("Đã tải xuống " + filename))
+        .catch((e) => {
+          if (e instanceof AuthError && e.status === 401) return; // đã quay về màn hình đăng nhập
+          showToast(e instanceof Error ? e.message : "Tải xuống thất bại", "error");
+        });
     },
+    // ── Xác thực: đăng nhập bắt buộc ──
     submitLogin: (username, password) => {
       const u = username.trim();
       if (!u || !password) {
@@ -681,13 +683,15 @@ export function useAppStore(): { state: AppState; actions: Actions } {
       }
       set((s) => ({ auth: { ...s.auth, loginBusy: true, loginError: null } }));
       apiLogin(u, password)
+        // Token không mang họ tên: hỏi /me để hiện đúng tên người dùng (lỗi thì dùng thông tin từ token).
+        .then((fromToken) =>
+          fetchMe()
+            .then(({ user }) => user)
+            .catch(() => fromToken),
+        )
         .then((user) => {
-          set((s) => ({ auth: { ...s.auth, user, loginBusy: false, loginOpen: false, loginNotice: null, loginError: null } }));
+          set((s) => ({ auth: { ...s.auth, user, loginBusy: false, loginNotice: null, loginError: null } }));
           showToast("Đã đăng nhập: " + (user.full_name || user.username));
-          // chạy lại thao tác ghi đã bị chặn trước đó (nếu có)
-          const pending = pendingWriteRef.current;
-          pendingWriteRef.current = null;
-          if (pending) pending();
         })
         .catch((e) => {
           set((s) => ({
@@ -696,10 +700,13 @@ export function useAppStore(): { state: AppState; actions: Actions } {
         });
     },
     logout: () => {
-      pendingWriteRef.current = null;
+      abortRef.current?.abort();
       void apiLogout(); // best-effort: token client luôn bị xoá trong service
+      // Không giữ dữ liệu của phiên trước trên màn hình đăng nhập.
       set((s) => ({
-        auth: { ...s.auth, user: null, loginOpen: false, loginNotice: null, loginError: null },
+        auth: { ...s.auth, user: null, loginNotice: null, loginError: null },
+        documents: [],
+        viewingDoc: null,
       }));
       showToast("Đã đăng xuất");
     },

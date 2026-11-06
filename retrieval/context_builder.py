@@ -7,8 +7,7 @@ Lọc đuôi nguồn điểm thấp, chia ngân sách ký tự theo thứ hạng
 from __future__ import annotations
 
 from core.settings_loader import get_settings
-from retrieval import quote
-from retrieval import doc_pages, doc_titles
+from retrieval import doc_pages, doc_titles, quote
 from retrieval.table_linearize import linearize_tables, prune_long_tables
 
 # ── Lọc nguồn theo độ tin cậy (cắt đuôi nguồn yếu) ───────────────────────────
@@ -181,7 +180,6 @@ def _block_budgets(lengths: list[int], total: int, floor: int, cap: int) -> list
         budgets.append(share)
         remaining -= share
     return budgets
-
 
 
 def _source_header(i: int, payload: dict) -> str:

@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import type { DocItem } from "../../types";
 import type { Actions } from "../../store/useAppStore";
 import { COLOR, SHADOW } from "../../theme";
-import { IcEye, IcMoreHorizontal, IcPencil, IcPlay, IcTrash } from "../common/icons";
+import { IcDownload, IcEye, IcMoreHorizontal, IcPencil, IcPlay, IcTrash } from "../common/icons";
 
 // Menu nổi phải thoát khỏi khung bảng (overflow: hidden / auto) nên render qua portal với
 // position: fixed, tính vị trí từ nút bấm; thiếu chỗ phía dưới thì lật lên trên.
@@ -111,6 +111,16 @@ export default function DocActionsMenu({ doc, actions }: { doc: DocItem; actions
               className={`${item} rounded-md text-on-surface`}
             >
               <IcEye size={14} style={{ color: COLOR.textMuted }} /> Xem tài liệu
+            </button>
+            <button
+              role="menuitem"
+              onClick={() => {
+                setOpen(false);
+                actions.downloadDoc(doc.id);
+              }}
+              className={`${item} rounded-md text-on-surface`}
+            >
+              <IcDownload size={14} style={{ color: COLOR.textMuted }} /> Tải xuống (.{doc.ext.toLowerCase()})
             </button>
             {doc.status === "pending" && (
               <button
