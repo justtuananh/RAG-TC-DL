@@ -34,6 +34,7 @@ from query import (
     history_context,
     multi_document,
     object_scope,
+    table_lookup,
     unit_convert,
 )
 from retrieval import doc_pages, doc_titles, retriever, router
@@ -131,7 +132,9 @@ def _object_out_of_scope(question: str, results: list[dict]) -> bool:
 def _names_device(question: str) -> bool:
     try:
         return multi_document.names_device(
-            question, router.device_aliases(), get_settings().llm.multi_document.generic_device_words
+            question,
+            router.device_aliases(),
+            get_settings().llm.multi_document.generic_device_words,
         )
     except Exception as e:  # noqa: BLE001 - không đọc được từ điển thiết bị thì coi như không nêu
         logger.warning("Không đọc được từ điển thiết bị: %s", e)
@@ -181,7 +184,9 @@ def _supplement_uncovered(
         multi_document.uncovered_groups(general, groups),
         [r.get("rerank_score", 0.0) for r in results],
         limit=cfg.max_followups_named if named else cfg.max_followups,
-        min_score=0.0 if named else cfg.min_followup_score,  # tài liệu được nêu đích danh luôn đáng hỏi
+        min_score=0.0
+        if named
+        else cfg.min_followup_score,  # tài liệu được nêu đích danh luôn đáng hỏi
     )
     entries: list[tuple[str, str]] = []
     contexts: list[str] = []
@@ -192,7 +197,10 @@ def _supplement_uncovered(
             break  # đã quá ngân sách thời gian: giữ p95
         subset = [results[i] for i in group.positions]
         ctx, _ = build_context_and_citations(
-            subset, numbers=[i + 1 for i in group.positions], total_chars=cfg.context_chars, question=question
+            subset,
+            numbers=[i + 1 for i in group.positions],
+            total_chars=cfg.context_chars,
+            question=question,
         )
         title = doc_titles.title_for(group.stem)
         number = re.search(r"\d+\.\d+", group.stem)
@@ -200,7 +208,9 @@ def _supplement_uncovered(
         label = f"{short} ({title})" if title else short
         messages = build_messages(question, ctx, [], guidance=multi_document.document_note(label))
         try:
-            raw = generator.chat_once(messages, num_predict=cfg.num_predict, timeout_s=chat.timeout_s)
+            raw = generator.chat_once(
+                messages, num_predict=cfg.num_predict, timeout_s=chat.timeout_s
+            )
         except Exception as e:  # noqa: BLE001 - lỗi một tài liệu: giữ câu trả lời chung
             logger.warning("Hỏi riêng tài liệu %s thất bại: %s", group.stem, e)
             break
@@ -242,7 +252,9 @@ def _verify_numbers(
         )
         retry = messages[:-1] + [{"role": "user", "content": messages[-1]["content"] + hint}]
         try:
-            text = generator.chat_once(retry, num_predict=chat.max_new_tokens, timeout_s=chat.timeout_s)
+            text = generator.chat_once(
+                retry, num_predict=chat.max_new_tokens, timeout_s=chat.timeout_s
+            )
         except Exception as exc:  # noqa: BLE001 - giữ câu trả lời ban đầu
             logger.warning("Sinh lại để sửa số liệu thất bại: %s", exc)
             break
@@ -256,7 +268,11 @@ def _verify_numbers(
     if bad:
         logger.warning("Số liệu chưa có trong nguồn: %s", bad)
         if annotate:
-            body += "\n\n> Lưu ý: số liệu " + "; ".join(f"«{b}»" for b in bad) + " chưa tìm thấy trong các nguồn đã trích, cần đối chiếu trực tiếp với tài liệu."
+            body += (
+                "\n\n> Lưu ý: số liệu "
+                + "; ".join(f"«{b}»" for b in bad)
+                + " chưa tìm thấy trong các nguồn đã trích, cần đối chiếu trực tiếp với tài liệu."
+            )
     return body, bad
 
 
@@ -317,6 +333,14 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
         yield _sse({"type": "done", "answer": reference, "sources": sources})
         return
 
+    if calc is None and get_settings().llm.multi_document.extractive_enabled:
+        cell_answer = table_lookup.answer(req.message, results)
+        if cell_answer is not None:
+            cell_answer = citations.add_citations(cell_answer, sources, doc_titles.title_for)
+            yield _sse({"type": "delta", "text": cell_answer})
+            yield _sse({"type": "done", "answer": cell_answer, "sources": sources})
+            return
+
     context_str, _ = build_context_and_citations(results, question=retrieval_query)
     if calc is not None and calc.kind == "answer":
         context_str = calc.block + "\n\n---\n\n" + context_str
@@ -328,7 +352,11 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
         quoted = extractive.answer(retrieval_query, results, plan)
         if quoted is not None:
             if ambiguity is not None:
-                quoted = device_ambiguity.ambiguity_preface(ambiguity) + quoted + device_ambiguity.ambiguity_closing(ambiguity)
+                quoted = (
+                    device_ambiguity.ambiguity_preface(ambiguity)
+                    + quoted
+                    + device_ambiguity.ambiguity_closing(ambiguity)
+                )
             # Exact quotations retain their original source index; no LLM rewrite.
             quoted = citations.add_citations(quoted, sources, doc_titles.title_for)
             yield _sse({"type": "delta", "text": quoted})
@@ -383,7 +411,9 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
             body = quoted
     allowed_extra = req.message + "\n" + "\n".join(u for u, _ in prior)
     calc_answer = calc is not None and calc.kind == "answer"
-    body, bad_numbers = _verify_numbers(body, messages, context_str, allowed_extra, annotate=not calc_answer)
+    body, bad_numbers = _verify_numbers(
+        body, messages, context_str, allowed_extra, annotate=not calc_answer
+    )
     if plan is not None and ambiguity is None and not calc_answer:
         extra = _supplement_uncovered(retrieval_query, results, plan, body, started_at)
         if extra is not None:
@@ -391,7 +421,11 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
             bad = number_check.unsupported(lines, used_context + "\n" + allowed_extra)
             if bad:
                 logger.warning("Số liệu chưa có trong nguồn: %s", bad)
-                lines += "\n\n> Lưu ý: số liệu " + "; ".join(f"«{b}»" for b in bad) + " chưa tìm thấy trong các nguồn đã trích, cần đối chiếu trực tiếp với tài liệu."
+                lines += (
+                    "\n\n> Lưu ý: số liệu "
+                    + "; ".join(f"«{b}»" for b in bad)
+                    + " chưa tìm thấy trong các nguồn đã trích, cần đối chiếu trực tiếp với tài liệu."
+                )
             body = body.rstrip() + "\n\n" + lines
             yield _sse({"type": "delta", "text": "\n\n" + lines})
     if calc_answer and bad_numbers:

@@ -355,3 +355,42 @@ def test_done_answer_shows_the_source_formula_verbatim(monkeypatch):
     )
     done = events[-1]
     assert done["answer"].startswith(f"$${source}$$ [1]\n\nNguồn:")
+
+
+def test_unique_typed_table_cell_answers_without_device_ambiguity_or_generation(
+    piston_procedures, monkeypatch, settings_override
+):
+    settings_override({'llm.multi_document.extractive_enabled': True})
+    table = (
+        'Bảng 7 - Thời gian quay tự do\n\nĐơn vị: min\n\n'
+        '| Giới hạn đo, / MPa | Cấp chính xác (%) |  |\n'
+        '| --- | --- | --- |\n|  | 0,03 | 0,1 |\n| Từ 0 đến 6 | 7 | 2 |'
+    )
+    monkeypatch.setattr(
+        chat_stream.retriever,
+        'retrieve',
+        lambda *a, **k: [
+            _hit('QTKD_1.071_2022_FINAL', 'Không có bảng phù hợp.'),
+            _hit('QTKD_1.159_2021_ND_FINAL', table),
+        ],
+    )
+    monkeypatch.setattr(chat_stream, '_object_out_of_scope', lambda *a: False)
+    monkeypatch.setattr(
+        chat_stream.generator,
+        'stream_ollama',
+        lambda *a: (_ for _ in ()).throw(AssertionError('unique cell should answer directly')),
+    )
+    events = _events(
+        list(
+            chat_stream.chat_stream_events(
+                ChatRequest(
+                    message='Áp kế píttông cấp chính xác 0,03, giới hạn đo trên 4 MPa, thời gian quay tự do ít nhất bao nhiêu phút?'
+                ),
+                piston_procedures,
+            )
+        )
+    )
+    done = events[-1]
+    assert '**7 min**' in done['answer'] and '[2]' in done['answer']
+    assert 'Câu hỏi chưa nêu rõ' not in done['answer']
+    assert any(event['type'] == 'delta' and '**7 min**' in event['text'] for event in events)
