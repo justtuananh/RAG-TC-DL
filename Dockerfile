@@ -42,8 +42,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
     && /opt/venv-pdf/bin/pip install torch==2.11.0 torchvision==0.26.0 \
         --index-url https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.org/simple \
     && /opt/venv-pdf/bin/pip install -r requirements-pdf.txt
-RUN TORCH_DEVICE=cpu /opt/venv-pdf/bin/python -c "from marker.models import create_model_dict; create_model_dict()" \
-    && chmod -R a+rX /opt/cache
+# Font của Marker mặc định tải vào site-packages lúc chạy (container chạy UID host, không ghi được).
+RUN TORCH_DEVICE=cpu /opt/venv-pdf/bin/python -c "from marker.models import create_model_dict; from marker.util import download_font; create_model_dict(); download_font()" \
+    && chmod -R a+rX /opt/cache /opt/venv-pdf
 
 # Toàn bộ code backend; .dockerignore loại TC_DL/, build/, frontend/, venv, dữ liệu Qdrant.
 COPY . .
