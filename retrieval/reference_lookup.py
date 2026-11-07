@@ -11,6 +11,7 @@ import re
 from pathlib import Path
 
 from core.settings_loader import get_settings
+from core.table_focus import lookup_verification_mode, verification_mode_request
 from retrieval import doc_titles
 from retrieval.normalize import fold
 
@@ -26,6 +27,8 @@ def is_reference_query(question: str) -> bool:
     q = fold(question)
     if not _CODE.search(q):
         return False
+    if verification_mode_request(question):
+        return bool(re.search(r'\bqtkd\s*\d\.\d{3}(?!\d)', q))
     if _replacement_request(q):
         return True
     labels = _APPENDIX.findall(q)
@@ -64,7 +67,13 @@ def lookup(question: str, stems: set[str] | frozenset[str]) -> list[dict]:
             text = (root / f'{stem}.md').read_text(encoding='utf-8')
         except OSError:
             continue
-        if _replacement_request(q):
+        if verification_mode_request(question):
+            if not numbers.intersection(_CODE.findall(stem)):
+                continue
+            selected = lookup_verification_mode(text, question)
+            if selected is not None:
+                hits.append(_hit(stem, 'Các phép kiểm định (bảng chế độ kiểm định)', selected))
+        elif _replacement_request(q):
             for paragraph in re.split(r'\n\s*\n', text[:12000]):
                 normalized = fold(paragraph)
                 if (

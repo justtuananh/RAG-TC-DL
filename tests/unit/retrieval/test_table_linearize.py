@@ -145,3 +145,32 @@ def test_equipment_focus_leaves_malformed_table_untouched():
 
     text = '| TT | Tên | Phạm vi |\n| --- | --- | --- |\n| 1 | Đồng hồ bấm giây |'
     assert focus_equipment_tables(text, 'Đồng hồ bấm giây?') == text
+
+
+def test_verification_mode_ranking_labels_symbols_and_preserves_blank_cell():
+    from core.table_focus import focus_equipment_tables
+
+    text = (
+        '| TT | Tên phép kiểm định | Theo điều | Chế độ kiểm định |  |  |\n'
+        '| --- | --- | --- | --- | --- | --- |\n'
+        '|  |  |  | Ban đầu | Định kỳ | Sau sửa chữa |\n'
+        '| 1 | Kiểm tra kỹ thuật | 5.2 | + |  | + |'
+    )
+    ranked = focus_equipment_tables(text, 'Kiểm tra kỹ thuật khi kiểm định định kỳ?')
+    assert 'Chế độ kiểm định Định kỳ: không đánh dấu áp dụng (ô trống)' in ranked
+    assert 'Chế độ kiểm định Ban đầu: có áp dụng (+)' in ranked
+    assert '| + |  | + |' in ranked
+
+
+def test_verification_mode_does_not_guess_unknown_symbol():
+    from core.table_focus import focus_equipment_tables
+
+    text = (
+        '| TT | Tên phép kiểm định | Theo điều | Chế độ kiểm định |  |  |\n'
+        '| --- | --- | --- | --- | --- | --- |\n'
+        '|  |  |  | Ban đầu | Định kỳ | Sau sửa chữa |\n'
+        '| 1 | Kiểm tra kỹ thuật | 5.2 | + | ? | + |'
+    )
+    ranked = focus_equipment_tables(text, 'Kiểm tra kỹ thuật khi kiểm định định kỳ?')
+    assert 'có áp dụng' not in ranked and 'không đánh dấu áp dụng' not in ranked
+    assert '| + | ? | + |' in ranked

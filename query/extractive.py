@@ -7,7 +7,7 @@ import re
 from itertools import zip_longest
 
 from core.settings_loader import get_settings
-from core.table_focus import focus_equipment_tables
+from core.table_focus import focus_equipment_tables, verification_mode_summary
 from query.multi_document import DocumentGroup
 from reranking import reranker
 from retrieval import doc_titles
@@ -93,6 +93,9 @@ def _evidence_pairs(text: str) -> list[tuple[str, str]]:
             table = tables.get(number)
             if table and table not in block:
                 block += '\n\n' + table
+        mode_summary = verification_mode_summary(block)
+        if mode_summary:
+            block = mode_summary + '\n\n' + block
         if ranking_text not in seen:
             units.append((ranking_text, block))
             seen.add(ranking_text)

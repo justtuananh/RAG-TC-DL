@@ -258,3 +258,23 @@ def test_limit_quote_keeps_explicit_measurement_conditions_in_same_section(monke
     )
     assert 'Ở áp suất 700 bar' in body and 'Ở nhiệt độ tiêu chuẩn' in body
     assert limit in body
+
+
+def test_verification_mode_quote_labels_each_applicability_column(monkeypatch):
+    setup(monkeypatch)
+    table = (
+        '| TT | Tên phép kiểm định | Theo điều | Chế độ kiểm định |  |  |\n'
+        '| --- | --- | --- | --- | --- | --- |\n'
+        '|  |  |  | Ban đầu | Định kỳ | Sau sửa chữa |\n'
+        '| 1 | Kiểm tra kỹ thuật | 5.2 | + |  | + |'
+    )
+    results = [hit('A', table)]
+    monkeypatch.setattr(extractive.reranker, 'score_documents', lambda q, docs: [0.9] * len(docs))
+    body = extractive.answer(
+        'Kiểm tra kỹ thuật định kỳ?',
+        results,
+        multi_document.group_by_document(['A']),
+        allow_single=True,
+    )
+    assert 'Chế độ kiểm định Định kỳ: không đánh dấu áp dụng (ô trống)' in body
+    assert '| + |  | + |' in body and '[1]' in body
