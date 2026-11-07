@@ -133,8 +133,10 @@ def answer(
     candidates = candidates[: cfg.evidence_max_candidates]
     if not candidates:
         return None
+    titles = {group.stem: doc_titles.title_for(group.stem) for group in groups}
     documents = [
-        f"{stem} — {results[pos]['payload']['section_path']}\n{focus_equipment_tables(text, question)}"
+        (f'{titles[stem]}\n' if titles.get(stem) else '')
+        + f"{stem} — {results[pos]['payload']['section_path']}\n{focus_equipment_tables(text, question)}"
         for stem, pos, _, text in candidates
     ]
     try:

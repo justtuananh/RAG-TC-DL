@@ -278,3 +278,29 @@ def test_verification_mode_quote_labels_each_applicability_column(monkeypatch):
     )
     assert 'Chế độ kiểm định Định kỳ: không đánh dấu áp dụng (ô trống)' in body
     assert '| + |  | + |' in body and '[1]' in body
+
+
+def test_ranked_units_include_own_catalog_title_without_changing_source_quotes(monkeypatch):
+    setup(monkeypatch)
+    titles = {'A': 'Máy thử kiểu X', 'B': 'Máy thử kiểu Y'}
+    monkeypatch.setattr(extractive.doc_titles, 'title_for', titles.get)
+    results = [hit('A', 'Kiểm tra X ở 350 rồi 700 bar.'), hit('B', 'Kiểm tra Y ở 50 rồi 100 %.')]
+    seen = []
+
+    def score(query, docs):
+        seen.extend(docs)
+        return [0.9 if doc.startswith(tuple(titles.values())) else 0.01 for doc in docs]
+
+    monkeypatch.setattr(extractive.reranker, 'score_documents', score)
+    body = extractive.answer(
+        'Máy thử hoạt động ở mức nào?', results, multi_document.group_by_document(['A', 'B'])
+    )
+    assert body is not None
+    assert all(
+        doc.startswith(titles['A'] + '\n')
+        if '\nA — ' in doc
+        else doc.startswith(titles['B'] + '\n')
+        for doc in seen
+    )
+    assert 'Kiểm tra X ở 350 rồi 700 bar. [1]' in body
+    assert 'Kiểm tra Y ở 50 rồi 100 %. [2]' in body
