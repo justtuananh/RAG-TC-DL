@@ -6,6 +6,8 @@ Reranker vẫn nhận truy vấn GỐC - chèn thêm đồng nghĩa làm hỏng 
 
 from __future__ import annotations
 
+from retrieval.normalize import fold
+
 LEXICON: dict[str, str] = {
     # Cầu nối từ vựng: trigger (substring, lowercase) → cụm đồng nghĩa nối thêm vào
     # truy vấn embed + BM25 (reranker vẫn nhận query gốc). Nhắm khẩu ngữ/paraphrase
@@ -28,6 +30,7 @@ LEXICON: dict[str, str] = {
     "kẹp chì": "kẹp chì niêm phong dấu niêm phong kiểm tra bên ngoài",
     "thiết bị chuẩn": "phương tiện kiểm định thiết bị chuẩn áp kế chuẩn",
     "số lần đo": "số lần đo số loạt đo số điểm đo chu trình kiểm định",
+    "kiểm định lại": "chu kỳ kiểm định định kỳ thời hạn tháng năm xử lý chung",
     "chu kỳ kiểm định": "chu kỳ kiểm định định kỳ thời hạn tháng xử lý chung",
     "diện tích hiệu dụng": "diện tích hiệu dụng píttông xác định đo lường",
     "van xả áp": "van an toàn van xả áp suất safety valve",
@@ -40,6 +43,6 @@ def expand_query(query: str) -> str:
     Reranker still receives the original query - expanded text degrades
     cross-encoder performance (arXiv 2311.09175).
     """
-    q_lower = query.lower()
-    extras = [exp for trigger, exp in LEXICON.items() if trigger in q_lower]
+    q_lower = fold(query)
+    extras = [exp for trigger, exp in LEXICON.items() if fold(trigger) in q_lower]
     return (query + " " + " ".join(extras)) if extras else query

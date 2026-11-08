@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import re
 
+from retrieval.normalize import fold
 from vectorstore import qdrant
 
 # X.YYY — exactly one digit, dot, exactly 3 digits, NOT followed by another digit.
@@ -169,7 +170,7 @@ def route_files(query: str) -> frozenset[str]:
     còn chunk 1.061 nào dù query nhắc 'van an toàn').
     """
     mapping = _ensure_mapping()
-    q = query.lower()
+    q = fold(query)
 
     stems: set[str] = set()
     for num in _NUMBER_RE.findall(q):
@@ -177,7 +178,7 @@ def route_files(query: str) -> frozenset[str]:
         if stem:
             stems.add(stem)
     for alias, numbers in _ensure_device_aliases().items():
-        if alias in q:
+        if re.search(r"(?<!\w)" + re.escape(fold(alias)) + r"(?!\w)", q):
             for number in numbers:
                 stem = mapping.get(number)
                 if stem:

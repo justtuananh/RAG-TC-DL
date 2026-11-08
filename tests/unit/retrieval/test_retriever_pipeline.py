@@ -6,14 +6,12 @@ stub HTTP rerank :8011. Không chạm mạng thật.
 
 import json
 
+import pytest
 import responses
 
 import retrieval.retriever as R
 from core.settings_loader import get_settings
 from reranking.reranker import rerank_hits
-
-
-import pytest
 
 
 @pytest.fixture(autouse=True)
@@ -120,6 +118,20 @@ def test_routing_fallback_when_too_few_hits(monkeypatch):
 def test_rerank_hits_empty_returns_empty():
     # Không gọi mạng (return sớm) - an toàn dưới network-guard.
     assert rerank_hits("q", []) == []
+
+
+def test_disabling_extraction_disables_structural_shortcut(monkeypatch):
+    settings = get_settings()
+    multi = settings.llm.multi_document.model_copy(update={'extractive_enabled': False})
+    llm = settings.llm.model_copy(update={'multi_document': multi})
+    monkeypatch.setattr(R, 'get_settings', lambda: settings.model_copy(update={'llm': llm}))
+    monkeypatch.setattr(
+        R.reference_lookup, 'lookup', lambda *a: (_ for _ in ()).throw(AssertionError('disabled'))
+    )
+    monkeypatch.setattr(R.router, 'route_files', lambda *a: frozenset())
+    monkeypatch.setattr(R.embedder, 'embed_query', lambda *a: [])
+    monkeypatch.setattr(R.hybrid, 'search_both', lambda *a, **k: ([], []))
+    assert R.retrieve('Phụ lục D của QTKĐ 8.765 có nội dung gì?') == []
 
 
 @responses.activate
@@ -242,16 +254,43 @@ def test_unanchored_query_covers_every_document(monkeypatch, settings_override):
         "vectorstore.qdrant.dense_search",
         lambda vec, top_k=50, file_stem=None: [child(file_stem, 1), child(file_stem, 2)],
     )
-    monkeypatch.setattr("vectorstore.hybrid_index.bm25_search", lambda q, top_k=50, file_stem=None: [])
+    monkeypatch.setattr(
+        "vectorstore.hybrid_index.bm25_search", lambda q, top_k=50, file_stem=None: []
+    )
     monkeypatch.setattr("retrieval.router.route_files", lambda q: frozenset())
     monkeypatch.setattr(
         "vectorstore.qdrant.fetch_parent",
         lambda pid: {"text": f"parent-{pid}", "section_path": "6", "file_stem": pid.split("-")[0]},
     )
     responses.add_callback(
-        responses.POST, get_settings().services.rerank_url, callback=_rerank_callback, content_type="application/json"
+        responses.POST,
+        get_settings().services.rerank_url,
+        callback=_rerank_callback,
+        content_type="application/json",
     )
 
     out = R.retrieve("điều kiện môi trường", top_k=50, top_n=2)
 
     assert sorted(h["payload"]["file_stem"] for h in out) == files  # mỗi tài liệu đúng 1 mục
+
+
+def test_coverage_pool_counts_sections_and_keeps_late_anchors(monkeypatch, settings_override):
+    settings_override({'retrieval.coverage_pool_per_file': 2})
+    monkeypatch.setattr(R.router, 'known_files', lambda: frozenset({'A', 'B'}))
+    children = [_child(f'c{i}', 'repeated') for i in range(8)] + [
+        _child('answer', 'target'),
+        _child('last', 'repeated'),
+        _child('outside', 'third'),
+    ]
+    monkeypatch.setattr(R.hybrid, 'search_both', lambda *a, **k: (children, []))
+    captured = []
+
+    def rerank(query, hits, top_n):
+        captured.extend(hits)
+        return []
+
+    monkeypatch.setattr(R.reranker, 'rerank_hits', rerank)
+    R._retrieve_coverage('query', [], 'query', top_k=50)
+    assert any(h['payload']['parent_id'] == 'target' for h in captured)
+    assert any(h['payload']['chunk_id'] == 'last' for h in captured)
+    assert not any(h['payload']['parent_id'] == 'third' for h in captured)

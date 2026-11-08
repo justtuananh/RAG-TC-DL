@@ -57,3 +57,21 @@ def test_child_not_found_in_parent_uses_lead_window():
     parent = {"text": "## heading\n" + "z" * (RERANK_DOC_CAP * 2)}
     doc = build_rerank_doc(_payload("child không xuất hiện trong parent"), parent)
     assert doc.splitlines()[1].startswith("## heading")  # fallback: đầu mục
+
+
+def test_query_keeps_late_equipment_row_inside_ranking_window():
+    table = (
+        '| TT | Tên phương tiện | Phạm vi | Sai số |\n'
+        '| --- | --- | --- | --- |\n'
+        + '\n'.join(
+            f'| {i} | Thiết bị khác {i} | ' + 'Nội dung dài ' * 70 + ' | 1 |' for i in range(1, 9)
+        )
+        + '\n| 9 | Đồng hồ bấm giây điện tử | (0 đến 24) h; d=0,01 s | ±4,8 s/d |'
+    )
+    parent = {'text': table}
+    payload = _payload('Thiết bị khác 1')
+    doc = build_rerank_doc(payload, parent, query='Đồng hồ bấm giây phải có đặc trưng gì?')
+    assert 'Đồng hồ bấm giây điện tử' in doc
+    assert '(0 đến 24) h; d=0,01 s' in doc and '±4,8 s/d' in doc
+    assert 'Thiết bị khác 1' not in doc
+    assert parent['text'] == table

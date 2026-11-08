@@ -98,6 +98,9 @@ class RetrievalSettings(_Section):
     rrf_weight_dense: NonNegativeFloat
     rrf_weight_bm25: NonNegativeFloat
     min_routed_candidates: NonNegative
+    # Gắn mục con đánh số (6.3.2...) chứa đoạn khớp vào đường dẫn nguồn hiển thị.
+    locate_subsection: bool = False
+    subsection_title_chars: Positive = 120
 
     @model_validator(mode="after")
     def _not_both_weights_zero(self) -> RetrievalSettings:
@@ -111,6 +114,11 @@ class RerankingSettings(_Section):
     timeout_s: PositiveFloat
     doc_cap_chars: Positive
     doc_back_chars: NonNegative
+    # Chia lô khi gọi cross-encoder: GPU dùng chung nên một lô lớn dễ CUDA OOM (HTTP 500).
+    batch_size: Positive = 8  # số cặp tối đa mỗi lần gọi (<= 32)
+    batch_max_chars: Positive = 12000  # tổng ký tự document tối đa mỗi lô
+    max_doc_chars: Positive = 1500  # cắt mỗi document trước khi gửi
+    min_batch_pause_s: NonNegativeFloat = 0.0  # nghỉ giữa các lô
 
 
 class ChatLlmSettings(_Section):
@@ -151,6 +159,12 @@ class MultiDocumentSettings(_Section):
     """Câu hỏi không chỉ định một QTKĐ (chung chung hoặc nêu ≥ 2 QTKĐ): trả lời theo từng tài liệu."""
 
     enabled: bool = True
+    extractive_enabled: bool = False
+    evidence_per_document: Positive = 3
+    evidence_candidates_per_source: Positive = 12
+    evidence_max_candidates: Positive = 96
+    evidence_min_score: Annotated[float, Field(ge=0, le=1)] = 0.35
+    evidence_relative_floor: Annotated[float, Field(ge=0, le=1)] = 0.35
     min_documents: Positive = 2           # ít hơn số tài liệu này thì trả lời một lượt như thường
     max_documents: Positive = 6           # trần số tài liệu xét bổ sung
     max_followups: Positive = 2           # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
@@ -162,6 +176,10 @@ class MultiDocumentSettings(_Section):
     num_predict: Positive = 90            # trần token mỗi lượt hỏi riêng
     merge_identical: bool = True          # tài liệu cùng bộ số liệu gộp một dòng
     merge_max_chars: Positive = 80        # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
+    grounding_min_coverage: Annotated[float, Field(ge=0, le=1)] = 0.6          # trích thay cho sinh: tỷ lệ từ khóa câu hỏi phải có trong đoạn trích
+    grounding_min_coverage_refusal: Annotated[float, Field(ge=0, le=1)] = 0.8  # trích thay cho câu từ chối: chặt hơn
+    grounding_absent_term_coverage: Annotated[float, Field(ge=0, le=1)] = 0.9  # có từ khóa vắng khỏi mọi nguồn thì cần phủ ≥ mức này
+    grounding_stop_words: tuple[str, ...] = ()  # từ hỏi/từ chức năng không tính là từ khóa đối tượng
 
 
 class NumberCheckSettings(_Section):
@@ -237,6 +255,19 @@ class CalcSettings(_Section):
     min_variable_coverage: Annotated[float, Field(ge=0, le=1)] = 0.6
     num_predict: Positive = 300
     timeout_s: PositiveFloat = 60
+    convert_enabled: bool = True          # câu quy đổi đơn vị thuần túy: trả lời tất định bằng bảng UNITS, không qua LLM
+    convert_verbs: str = r"quy đổi|chuyển đổi|đổi|chuyển"  # động từ đứng trước "<số> <đv> sang <đv>"
+
+
+class ObjectScopeSettings(_Section):
+    """Từ chối khi câu hỏi về quy trình/điều kiện kiểm định của một đối tượng không thuộc các QTKĐ trong kho."""
+
+    enabled: bool = True
+    trigger_pattern: str = r"quy trình|trình tự|phép kiểm định|điều kiện|chu kỳ|phương pháp|yêu cầu|nội dung|thời hạn"
+    scope_section_pattern: str = r"phạm vi áp dụng"  # mục nguồn nêu đối tượng được kiểm định (ngoài tiêu đề tài liệu)
+    generic_words: tuple[str, ...] = ()   # từ chỉ loại chung ("thiết bị", "đo"...): không đủ để nhận diện đối tượng
+    ignore_words: tuple[str, ...] = ()    # từ chức năng/đại từ đứng sau "kiểm định" (này, lại, định kỳ...)
+    stop_words: tuple[str, ...] = ()      # từ kết thúc cụm tên đối tượng (gồm, là, có, cần...)
 
 
 class Settings(_Section):
@@ -255,6 +286,7 @@ class Settings(_Section):
     auth: AuthSettings
     api: ApiSettings
     calc: CalcSettings = Field(default_factory=CalcSettings)
+    object_scope: ObjectScopeSettings = Field(default_factory=ObjectScopeSettings)
 
     def llm_model(self, role: LlmRole) -> str:
         """Model chat (vai trò LLM duy nhất còn lại)."""

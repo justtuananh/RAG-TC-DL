@@ -47,19 +47,25 @@ chunking:
 retrieval:
   top_k: 50                               # ứng viên mỗi nhánh dense / BM25
   top_n: 5                                # nguồn trả về sau rerank
-  top_n_per_file: 4                       # câu so sánh ≥2 QTKĐ: nguồn MỖI file (tổng = số file × giá trị này, không dưới top_n)
+  top_n_per_file: 6                       # câu so sánh ≥2 QTKĐ: nguồn MỖI file (tổng = số file × giá trị này, không dưới top_n)
   rerank_pool: 60                         # trần ứng viên vào cross-encoder sau RRF + lọc nhiễu
   rrf_k: 60
   rrf_weight_dense: 1.0                   # trọng số nhánh dense trong RRF; chỉ tỷ lệ dense/BM25 có tác dụng
   rrf_weight_bm25: 1.0                    # trọng số nhánh BM25 trong RRF
+  locate_subsection: true                 # nguồn hiển thị kèm mục con đánh số (vd. 6.3.2) chứa đoạn khớp nhất trong section cha
+  subsection_title_chars: 120             # tiêu đề mục con dài hơn mức này không coi là tiêu đề
   min_routed_candidates: 6                # ít hơn thì bỏ lọc theo file, tìm toàn kho
-  coverage_per_file: 3                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
+  coverage_per_file: 6                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
   coverage_pool_per_file: 8               # ứng viên RRF mỗi tài liệu vào cross-encoder ở chế độ trên
-  coverage_max_sources: 16               # trần số nguồn ở chế độ trên (nguồn điểm thấp vẫn bị lọc tin cậy)
+  coverage_max_sources: 32               # trần số nguồn ở chế độ trên (nguồn điểm thấp vẫn bị lọc tin cậy)
 
 reranking:
   timeout_s: 60
   doc_cap_chars: 1400                     # service rerank cắt ở 512 token (~1500 ký tự): 1400 + breadcrumb vẫn lọt
+  batch_size: 8                           # cặp tối đa mỗi lần gọi reranker (GPU dùng chung, lô lớn bị CUDA OOM); lỗi thì tự chia đôi lô
+  batch_max_chars: 12000                  # tổng ký tự document tối đa mỗi lô
+  max_doc_chars: 1500                     # cắt mỗi document trước khi gửi (service cắt ở 512 token)
+  min_batch_pause_s: 0.0                  # nghỉ giữa các lô (giây)
   doc_back_chars: 200                     # ngữ cảnh lấy phía trước vị trí child trong section cha
 
 llm:
@@ -91,8 +97,14 @@ llm:
     timeout_s: 30
   multi_document:                         # câu không chỉ định một QTKĐ (chung chung hoặc nêu ≥2 QTKĐ): trả lời chung TRƯỚC, chỉ hỏi RIÊNG tài liệu chưa được trích [n]
     enabled: true
+    extractive_enabled: true
+    evidence_per_document: 3
+    evidence_candidates_per_source: 12
+    evidence_max_candidates: 96
+    evidence_min_score: 0.35
+    evidence_relative_floor: 0.35
     min_documents: 2                      # ít hơn thì trả lời một lượt như thường
-    max_documents: 6                      # trần số tài liệu xét bổ sung
+    max_documents: 7                      # trần số tài liệu xét bổ sung
     max_followups: 2                      # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
     max_followups_named: 4                # trần khi câu hỏi nêu rõ ≥ 2 QTKĐ
     min_followup_score: 0.30              # câu chung: chỉ hỏi tài liệu có nguồn rerank_score ≥ mức này
@@ -102,6 +114,10 @@ llm:
     num_predict: 90                       # trần token mỗi lượt hỏi riêng
     merge_identical: true                 # tài liệu cùng bộ số liệu gộp một dòng
     merge_max_chars: 80                   # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
+    grounding_min_coverage: 0.6           # trích dẫn thay cho sinh: tỷ lệ từ khóa của câu hỏi có trong đoạn trích/tiêu đề, thấp hơn thì không dùng đường trích
+    grounding_min_coverage_refusal: 0.8   # trích dẫn thay cho câu từ chối của model: chặt hơn, không đạt thì giữ câu từ chối
+    grounding_absent_term_coverage: 0.9   # câu hỏi có từ khóa không xuất hiện ở bất kỳ nguồn truy hồi nào: cần phủ ≥ mức này mới được trích
+    grounding_stop_words: [gồm, là, có, cần, phải, như, bao, nhiêu, nào, gì, được, trong, theo, thì, khi, ở, tại, bằng, với, mà, và, hay, hoặc, ra, sao, thế, để, bởi, do, nếu, lâu, một, lần, các, những, của, cho, này, đó, ấy, nêu, trên, lại, bất, mỗi, từng, mọi, tất, cả, thiết, bị, đo, phương, tiện, dụng, cụ, máy, loại, kiểm, định, kỳ, ban, đầu, sau, sửa, chữa, muốn, thực, hiện, tối, đa, mấy, cách, xác, nghĩa, như, thế, nào, bao, nhiêu, cũng, đã, sẽ, đang, về, từ, đến, hơn, ít, nhất, những, ai, đâu]
   number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn
     enabled: true
     max_regen: 1                          # số lần sinh lại khi có số không có trong nguồn
@@ -118,6 +134,16 @@ calc:                                     # tính trong chat bằng công thức
   min_variable_coverage: 0.6              # tỷ lệ từ nhãn biến phải có trong câu hỏi để chọn công thức
   num_predict: 300
   timeout_s: 60
+  convert_enabled: true                   # "<số> <đv> sang <đv>" thuần túy: trả lời tất định bằng bảng UNITS, không qua LLM
+  convert_verbs: 'quy đổi|chuyển đổi|đổi|chuyển'
+
+object_scope:                             # hỏi quy trình/điều kiện kiểm định của đối tượng không có trong tiêu đề/phạm vi áp dụng các QTKĐ -> từ chối
+  enabled: true
+  trigger_pattern: 'quy trình|trình tự|phép kiểm định|điều kiện|chu kỳ|phương pháp|yêu cầu|nội dung|thời hạn'
+  scope_section_pattern: 'phạm vi áp dụng'
+  generic_words: [thiết, bị, đo, phương, tiện, dụng, cụ, máy, loại, các, những, một]
+  ignore_words: [này, đó, ấy, nêu, trên, lại, định, kỳ, ban, đầu, sau, sửa, chữa, bất, kỳ, mỗi, từng, mọi, tất, cả, được, bằng, theo, tại, của, cho, với, trong, ở]
+  stop_words: [gồm, là, có, cần, phải, như, bao, nào, gì, được, trong, theo, thì, khi, ở, tại, bằng, với, mà, và, hay, hoặc, ra, sao, thế, để, bởi, do, nếu]
 
 ingestion:
   soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH

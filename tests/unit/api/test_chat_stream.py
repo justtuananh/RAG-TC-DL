@@ -86,6 +86,53 @@ def test_intent_router_module_is_gone():
         importlib.import_module("query.router")
 
 
+def test_refusal_with_available_source_tries_verified_quote(monkeypatch):
+    from query import extractive
+
+    monkeypatch.setattr(
+        chat_stream.retriever, 'retrieve', lambda *a, **k: [_hit('A', 'Chất lỏng cần thay.')]
+    )
+    monkeypatch.setattr(chat_stream, '_object_out_of_scope', lambda *a: False)
+    monkeypatch.setattr(
+        chat_stream.generator, 'stream_ollama', lambda *a: iter([chat_stream.REFUSAL_SENTENCE])
+    )
+    calls = []
+
+    def quoted(*args, **kwargs):
+        calls.append(kwargs)
+        return 'Chất lỏng cần thay. [1]'
+
+    monkeypatch.setattr(extractive, 'answer', quoted)
+    events = _events(chat_stream.chat_stream_events(ChatRequest(message='Chất lỏng?'), None))
+    assert calls == [{'allow_single': True, 'replaces_refusal': True}]
+    assert events[-1]['answer'].startswith('Chất lỏng cần thay. [1]')
+
+
+def test_extractive_multi_document_skips_llm_and_preserves_sources(monkeypatch):
+    from query import extractive, multi_document
+
+    hits = [_hit('A', 'Giới hạn 8 bar.'), _hit('B', 'Giới hạn 9 bar.')]
+    monkeypatch.setattr(chat_stream.retriever, 'retrieve', lambda *a, **k: hits)
+    monkeypatch.setattr(chat_stream, '_object_out_of_scope', lambda *a: False)
+    monkeypatch.setattr(
+        chat_stream, '_document_plan', lambda *a: multi_document.group_by_document(['A', 'B'])
+    )
+    monkeypatch.setattr(
+        extractive,
+        'answer',
+        lambda *a: '- **A**: Giới hạn 8 bar. [1]\n- **B**: Giới hạn 9 bar. [2]',
+    )
+
+    def fail(*args):
+        raise AssertionError('extractive answers must not call LLM')
+
+    monkeypatch.setattr(chat_stream.generator, 'stream_ollama', fail)
+    events = _events(chat_stream.chat_stream_events(ChatRequest(message='Giới hạn?'), None))
+    assert events[-1]['type'] == 'done'
+    assert 'Giới hạn 8 bar. [1]' in events[-1]['answer']
+    assert len(events[-1]['sources']) == 2
+
+
 def test_generic_device_question_answers_every_type(data_db, monkeypatch):
     from db.models import DeviceType, Procedure
 
@@ -308,6 +355,45 @@ def test_done_answer_shows_the_source_formula_verbatim(monkeypatch):
     )
     done = events[-1]
     assert done["answer"].startswith(f"$${source}$$ [1]\n\nNguồn:")
+
+
+def test_unique_typed_table_cell_answers_without_device_ambiguity_or_generation(
+    piston_procedures, monkeypatch, settings_override
+):
+    settings_override({'llm.multi_document.extractive_enabled': True})
+    table = (
+        'Bảng 7 - Thời gian quay tự do\n\nĐơn vị: min\n\n'
+        '| Giới hạn đo, / MPa | Cấp chính xác (%) |  |\n'
+        '| --- | --- | --- |\n|  | 0,03 | 0,1 |\n| Từ 0 đến 6 | 7 | 2 |'
+    )
+    monkeypatch.setattr(
+        chat_stream.retriever,
+        'retrieve',
+        lambda *a, **k: [
+            _hit('QTKD_1.071_2022_FINAL', 'Không có bảng phù hợp.'),
+            _hit('QTKD_1.159_2021_ND_FINAL', table),
+        ],
+    )
+    monkeypatch.setattr(chat_stream, '_object_out_of_scope', lambda *a: False)
+    monkeypatch.setattr(
+        chat_stream.generator,
+        'stream_ollama',
+        lambda *a: (_ for _ in ()).throw(AssertionError('unique cell should answer directly')),
+    )
+    events = _events(
+        list(
+            chat_stream.chat_stream_events(
+                ChatRequest(
+                    message='Áp kế píttông cấp chính xác 0,03, giới hạn đo trên 4 MPa, thời gian quay tự do ít nhất bao nhiêu phút?'
+                ),
+                piston_procedures,
+            )
+        )
+    )
+    done = events[-1]
+    assert '**7 min**' in done['answer'] and '[2]' in done['answer']
+    assert 'Câu hỏi chưa nêu rõ' not in done['answer']
+    assert any(event['type'] == 'delta' and '**7 min**' in event['text'] for event in events)
 
 
 def test_unit_conversion_done_without_retrieval_or_llm(monkeypatch):
