@@ -98,6 +98,9 @@ class RetrievalSettings(_Section):
     rrf_weight_dense: NonNegativeFloat
     rrf_weight_bm25: NonNegativeFloat
     min_routed_candidates: NonNegative
+    # Gắn mục con đánh số (6.3.2...) chứa đoạn khớp vào đường dẫn nguồn hiển thị.
+    locate_subsection: bool = False
+    subsection_title_chars: Positive = 120
 
     @model_validator(mode="after")
     def _not_both_weights_zero(self) -> RetrievalSettings:
@@ -111,6 +114,11 @@ class RerankingSettings(_Section):
     timeout_s: PositiveFloat
     doc_cap_chars: Positive
     doc_back_chars: NonNegative
+    # Chia lô khi gọi cross-encoder: GPU dùng chung nên một lô lớn dễ CUDA OOM (HTTP 500).
+    batch_size: Positive = 8  # số cặp tối đa mỗi lần gọi (<= 32)
+    batch_max_chars: Positive = 12000  # tổng ký tự document tối đa mỗi lô
+    max_doc_chars: Positive = 1500  # cắt mỗi document trước khi gửi
+    min_batch_pause_s: NonNegativeFloat = 0.0  # nghỉ giữa các lô
 
 
 class ChatLlmSettings(_Section):

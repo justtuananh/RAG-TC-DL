@@ -76,7 +76,7 @@ def _build_sources_payload(results: list[dict]) -> list[dict]:
             {
                 "index": i,
                 "file_stem": p["file_stem"],
-                "section_path": p["section_path"],
+                "section_path": r.get("cited_section_path") or p["section_path"],
                 "page": page,
                 "page_exact": page_exact,
                 "kind": p.get("kind", "paragraph"),

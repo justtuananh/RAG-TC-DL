@@ -7,6 +7,7 @@ cửa sổ neo child); hit trả về kèm parent_payload để tầng trên d�
 from __future__ import annotations
 
 import logging
+import time
 
 import requests
 
@@ -47,14 +48,8 @@ def build_rerank_doc(payload: dict, parent: dict | None, *, query: str = '') -> 
     return f"{payload['file_stem']} — {payload['section_path']}\n{text}"
 
 
-def score_documents(query: str, documents: list[str]) -> list[float]:
-    """Gọi cross-encoder, trả điểm theo ĐÚNG thứ tự ``documents``.
-
-    Service có thể trả ``results`` lộn thứ tự nên sắp lại theo trường ``index``.
-    Tách riêng để công cụ quét cache theo từng cặp (query, document).
-    """
-    if not documents:
-        return []
+def _post_scores(query: str, documents: list[str]) -> list[float]:
+    """Một lời gọi HTTP tới cross-encoder; điểm theo ĐÚNG thứ tự ``documents``."""
     settings = get_settings()
     resp = requests.post(
         settings.services.rerank_url,
@@ -66,6 +61,86 @@ def score_documents(query: str, documents: list[str]) -> list[float]:
     if set(by_index) != set(range(len(documents))):
         raise ValueError(f"Service rerank trả {len(by_index)} điểm cho {len(documents)} document")
     return [by_index[i] for i in range(len(documents))]
+
+
+# Cỡ lô đang dùng được: hạ khi service báo lỗi (OOM), nhích lên lại sau chuỗi lô thành công.
+_RECOVER_AFTER = 20
+_state = {"cap": None, "ok_streak": 0, "fails": 0}
+
+
+def _effective_batch(configured: int) -> int:
+    cap = _state["cap"]
+    return configured if cap is None else max(1, min(configured, cap))
+
+
+def _note_failure(size: int) -> None:
+    _state["cap"] = max(1, size // 2)
+    _state["ok_streak"] = 0
+    _state["fails"] += 1
+
+
+def _note_success(configured: int) -> None:
+    _state["ok_streak"] += 1
+    cap = _state["cap"]
+    if cap is not None and _state["ok_streak"] >= _RECOVER_AFTER:
+        _state["cap"] = cap * 2 if cap * 2 < configured else None
+        _state["ok_streak"] = 0
+
+
+def _score_resilient(query: str, documents: list[str]) -> list[float]:
+    """Gọi một lô; nếu service lỗi (vd. CUDA OOM → 500) thì chia đôi lô và thử lại.
+
+    Một document đơn lẻ lỗi thì gửi cặp [doc, doc] (lô 2 nhẹ hơn lô 1 trên service này) lấy điểm đầu.
+    """
+    try:
+        return _post_scores(query, documents)
+    except requests.RequestException:
+        _note_failure(len(documents))
+        if len(documents) == 1:
+            return _post_scores(query, documents * 2)[:1]
+        mid = len(documents) // 2
+        return _score_resilient(query, documents[:mid]) + _score_resilient(query, documents[mid:])
+
+
+def make_batches(documents: list[str], batch_size: int, max_chars: int) -> list[list[int]]:
+    """Chia chỉ số document thành lô: tối đa ``batch_size`` cặp và ``max_chars`` ký tự mỗi lô."""
+    batches: list[list[int]] = []
+    cur: list[int] = []
+    chars = 0
+    for i, doc in enumerate(documents):
+        if cur and (len(cur) >= batch_size or chars + len(doc) > max_chars):
+            batches.append(cur)
+            cur, chars = [], 0
+        cur.append(i)
+        chars += len(doc)
+    if cur:
+        batches.append(cur)
+    return batches
+
+
+def score_documents(query: str, documents: list[str]) -> list[float]:
+    """Gọi cross-encoder theo LÔ NHỎ, trả điểm theo ĐÚNG thứ tự ``documents``.
+
+    Service có thể trả ``results`` lộn thứ tự nên sắp lại theo trường ``index``.
+    Mỗi document bị cắt ở ``max_doc_chars``; lô lỗi được chia đôi (xem ``_score_resilient``).
+    Tách riêng để công cụ quét cache theo từng cặp (query, document).
+    """
+    if not documents:
+        return []
+    cfg = get_settings().reranking
+    docs = [d[: cfg.max_doc_chars] for d in documents]
+    scores: list[float] = [0.0] * len(docs)
+    configured = min(cfg.batch_size, 32)
+    batches = make_batches(docs, _effective_batch(configured), cfg.batch_max_chars)
+    for n, batch in enumerate(batches):
+        if n and cfg.min_batch_pause_s:
+            time.sleep(cfg.min_batch_pause_s)
+        fails_before = _state["fails"]
+        for i, s in zip(batch, _score_resilient(query, [docs[i] for i in batch]), strict=True):
+            scores[i] = s
+        if _state["fails"] == fails_before:
+            _note_success(configured)
+    return scores
 
 
 def rerank_hits(query: str, hits: list[dict], top_n: int | None = None) -> list[dict]:

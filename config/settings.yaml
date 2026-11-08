@@ -52,6 +52,8 @@ retrieval:
   rrf_k: 60
   rrf_weight_dense: 1.0                   # trọng số nhánh dense trong RRF; chỉ tỷ lệ dense/BM25 có tác dụng
   rrf_weight_bm25: 1.0                    # trọng số nhánh BM25 trong RRF
+  locate_subsection: true                 # nguồn hiển thị kèm mục con đánh số (vd. 6.3.2) chứa đoạn khớp nhất trong section cha
+  subsection_title_chars: 120             # tiêu đề mục con dài hơn mức này không coi là tiêu đề
   min_routed_candidates: 6                # ít hơn thì bỏ lọc theo file, tìm toàn kho
   coverage_per_file: 6                    # câu không nêu thiết bị: lấy N mục tốt nhất MỖI tài liệu (0 = tắt)
   coverage_pool_per_file: 8               # ứng viên RRF mỗi tài liệu vào cross-encoder ở chế độ trên
@@ -60,6 +62,10 @@ retrieval:
 reranking:
   timeout_s: 60
   doc_cap_chars: 1400                     # service rerank cắt ở 512 token (~1500 ký tự): 1400 + breadcrumb vẫn lọt
+  batch_size: 8                           # cặp tối đa mỗi lần gọi reranker (GPU dùng chung, lô lớn bị CUDA OOM); lỗi thì tự chia đôi lô
+  batch_max_chars: 12000                  # tổng ký tự document tối đa mỗi lô
+  max_doc_chars: 1500                     # cắt mỗi document trước khi gửi (service cắt ở 512 token)
+  min_batch_pause_s: 0.0                  # nghỉ giữa các lô (giây)
   doc_back_chars: 200                     # ngữ cảnh lấy phía trước vị trí child trong section cha
 
 llm:

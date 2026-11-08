@@ -10,7 +10,7 @@ from core.settings_loader import get_settings
 from embedding import embedder
 from reranking import reranker
 from retrieval import hybrid_retriever as hybrid
-from retrieval import reference_lookup, router
+from retrieval import reference_lookup, router, subsection
 from retrieval.normalize import fold, semantic_query
 from retrieval.query_expansion import expand_query
 
@@ -30,7 +30,34 @@ def _section_pool(hits: list[dict], limit: int) -> list[dict]:
     return out
 
 
+def annotate_subsections(hits: list[dict]) -> list[dict]:
+    """Gắn ``cited_section_path`` (đường dẫn tới MỤC CON chứa đoạn khớp nhất) cho từng hit.
+
+    Chỉ thêm khóa, không đổi payload/thứ hạng; tắt bằng retrieval.locate_subsection=false.
+    """
+    cfg = get_settings().retrieval
+    if not cfg.locate_subsection:
+        return hits
+    for hit in hits:
+        payload = hit["payload"]
+        parent = hit.get("parent_payload")
+        if not parent or "cited_section_path" in hit:
+            continue
+        anchors = hit.get("anchor_texts") or [payload["text"]]
+        hit["cited_section_path"] = subsection.locate(
+            payload.get("section_path", ""),
+            parent.get("text", ""),
+            anchors[0],
+            max_title_chars=cfg.subsection_title_chars,
+        )
+    return hits
+
+
 def retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> list[dict]:
+    return annotate_subsections(_retrieve(query, top_k, top_n))
+
+
+def _retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> list[dict]:
     settings = get_settings()
     multi = settings.llm.multi_document
     if multi.enabled and multi.extractive_enabled and reference_lookup.is_reference_query(query):
