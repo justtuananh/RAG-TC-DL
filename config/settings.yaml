@@ -108,6 +108,10 @@ llm:
     num_predict: 90                       # trần token mỗi lượt hỏi riêng
     merge_identical: true                 # tài liệu cùng bộ số liệu gộp một dòng
     merge_max_chars: 80                   # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
+    grounding_min_coverage: 0.6           # trích dẫn thay cho sinh: tỷ lệ từ khóa của câu hỏi có trong đoạn trích/tiêu đề, thấp hơn thì không dùng đường trích
+    grounding_min_coverage_refusal: 0.8   # trích dẫn thay cho câu từ chối của model: chặt hơn, không đạt thì giữ câu từ chối
+    grounding_absent_term_coverage: 0.9   # câu hỏi có từ khóa không xuất hiện ở bất kỳ nguồn truy hồi nào: cần phủ ≥ mức này mới được trích
+    grounding_stop_words: [gồm, là, có, cần, phải, như, bao, nhiêu, nào, gì, được, trong, theo, thì, khi, ở, tại, bằng, với, mà, và, hay, hoặc, ra, sao, thế, để, bởi, do, nếu, lâu, một, lần, các, những, của, cho, này, đó, ấy, nêu, trên, lại, bất, mỗi, từng, mọi, tất, cả, thiết, bị, đo, phương, tiện, dụng, cụ, máy, loại, kiểm, định, kỳ, ban, đầu, sau, sửa, chữa, muốn, thực, hiện, tối, đa, mấy, cách, xác, nghĩa, như, thế, nào, bao, nhiêu, cũng, đã, sẽ, đang, về, từ, đến, hơn, ít, nhất, những, ai, đâu]
   number_check:                           # số liệu (a ± b, số kèm đơn vị) trong câu trả lời phải có trong nguồn
     enabled: true
     max_regen: 1                          # số lần sinh lại khi có số không có trong nguồn

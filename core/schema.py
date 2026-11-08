@@ -168,6 +168,10 @@ class MultiDocumentSettings(_Section):
     num_predict: Positive = 90            # trần token mỗi lượt hỏi riêng
     merge_identical: bool = True          # tài liệu cùng bộ số liệu gộp một dòng
     merge_max_chars: Positive = 80        # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
+    grounding_min_coverage: Annotated[float, Field(ge=0, le=1)] = 0.6          # trích thay cho sinh: tỷ lệ từ khóa câu hỏi phải có trong đoạn trích
+    grounding_min_coverage_refusal: Annotated[float, Field(ge=0, le=1)] = 0.8  # trích thay cho câu từ chối: chặt hơn
+    grounding_absent_term_coverage: Annotated[float, Field(ge=0, le=1)] = 0.9  # có từ khóa vắng khỏi mọi nguồn thì cần phủ ≥ mức này
+    grounding_stop_words: tuple[str, ...] = ()  # từ hỏi/từ chức năng không tính là từ khóa đối tượng
 
 
 class NumberCheckSettings(_Section):

@@ -15,6 +15,10 @@ def setup(monkeypatch, **overrides):
         evidence_max_candidates=96,
         evidence_min_score=0.35,
         evidence_relative_floor=0.35,
+        grounding_min_coverage=0.0,
+        grounding_min_coverage_refusal=0.0,
+        grounding_absent_term_coverage=0.0,
+        grounding_stop_words=(),
     )
     cfg.update(overrides)
     monkeypatch.setattr(
@@ -304,3 +308,46 @@ def test_ranked_units_include_own_catalog_title_without_changing_source_quotes(m
     )
     assert 'Kiểm tra X ở 350 rồi 700 bar. [1]' in body
     assert 'Kiểm tra Y ở 50 rồi 100 %. [2]' in body
+
+
+STOP = ('là', 'bao', 'nhiêu', 'kiểm', 'định', 'của', 'được')
+
+
+def grounded(question, quoted, corpus=(), **kw):
+    args = dict(min_coverage=0.6, absent_coverage=0.9, stop_words=STOP)
+    args.update(kw)
+    return extractive.is_grounded(question, quoted, list(corpus), **args)
+
+
+def test_grounded_when_question_terms_appear_in_quote():
+    quote = '- **QTKĐ 1.061 (VAN AN TOÀN)**: Chu kỳ của van an toàn là 12 tháng. [1]'
+    assert grounded('Chu kỳ kiểm định van an toàn là bao nhiêu?', quote, [quote])
+
+
+def test_not_grounded_when_asked_object_is_missing_from_quote():
+    quote = '- **QTKĐ 1.158 (ĐO NHIỆT ĐỘ)**: Nhiệt độ chuẩn trung bình. [1]'
+    assert not grounded('Sai số cho phép của ca đong bình đong là bao nhiêu?', quote, [quote])
+
+
+def test_not_grounded_when_question_cites_document_absent_from_sources():
+    quote = 'Bàn tạo áp có chu kỳ kiểm định 12 tháng. [1]'
+    question = 'Theo QCVN 01:2008/BLĐTBXH, chu kỳ kiểm định bàn tạo áp là bao nhiêu?'
+    assert not grounded(question, quote, [quote])
+
+
+def test_term_absent_from_every_source_blocks_even_with_high_coverage():
+    quote = 'Áp kế lò xo cơ sai số cho phép 1,6 %. [1]'
+    question = 'Áp kế lò xo cơ sai số cho phép huyết?'
+    assert not grounded(question, quote, [quote], absent_coverage=0.95)
+    assert grounded(question, quote, [quote + ' huyết'], absent_coverage=0.95)
+
+
+def test_answer_drops_ungrounded_quotes_and_keeps_grounded(monkeypatch):
+    setup(monkeypatch, grounding_min_coverage=0.6, grounding_min_coverage_refusal=0.8,
+          grounding_absent_term_coverage=0.9, grounding_stop_words=STOP)
+    monkeypatch.setattr(extractive.reranker, 'score_documents', lambda q, docs: [0.9] * len(docs))
+    results = [hit('QTKD_1.061', 'Chu kỳ của van an toàn là 12 tháng.')]
+    groups = [multi_document.DocumentGroup('QTKD_1.061', [0])]
+    ok = extractive.answer('Chu kỳ van an toàn là bao nhiêu', results, groups, allow_single=True, replaces_refusal=True)
+    assert ok and '12 tháng' in ok
+    assert extractive.answer('Sai số của ca đong bình đong', results, groups, allow_single=True, replaces_refusal=True) is None

@@ -104,7 +104,7 @@ def test_refusal_with_available_source_tries_verified_quote(monkeypatch):
 
     monkeypatch.setattr(extractive, 'answer', quoted)
     events = _events(chat_stream.chat_stream_events(ChatRequest(message='Chất lỏng?'), None))
-    assert calls == [{'allow_single': True}]
+    assert calls == [{'allow_single': True, 'replaces_refusal': True}]
     assert events[-1]['answer'].startswith('Chất lỏng cần thay. [1]')
 
 

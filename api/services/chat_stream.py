@@ -406,7 +406,9 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     body = _finalize_text(guard.raw, context_str)
     if calc is None and REFUSAL_SENTENCE in body:
         groups = multi_document.group_by_document([r['payload']['file_stem'] for r in results])
-        quoted = extractive.answer(retrieval_query, results, groups, allow_single=True)
+        quoted = extractive.answer(
+            retrieval_query, results, groups, allow_single=True, replaces_refusal=True
+        )
         if quoted is not None:
             body = quoted
     allowed_extra = req.message + "\n" + "\n".join(u for u, _ in prior)

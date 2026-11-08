@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import logging
 import re
+import unicodedata
+from collections.abc import Iterable
 from itertools import zip_longest
 
 from core.settings_loader import get_settings
 from core.table_focus import focus_equipment_tables, verification_mode_summary
-from query.multi_document import DocumentGroup
+from query.multi_document import DocumentGroup, names_unknown_document
 from reranking import reranker
 from retrieval import doc_titles
 from retrieval.normalize import semantic_query
@@ -102,10 +104,80 @@ def _evidence_pairs(text: str) -> list[tuple[str, str]]:
     return units
 
 
+def _terms(text: str) -> list[str]:
+    return re.findall(r'\w+', unicodedata.normalize('NFC', text).casefold())
+
+
+def is_grounded(
+    question: str,
+    quoted: str,
+    corpus: list[str],
+    *,
+    min_coverage: float,
+    absent_coverage: float,
+    stop_words: Iterable[str] = (),
+) -> bool:
+    """Quotations may stand in for an answer only if they are about what was asked.
+
+    False when the question cites a document code that no source mentions, when too few of its
+    keywords occur in the quotation (labels/titles included), or when a keyword is missing from
+    every retrieved source (the asked object is not in the corpus) and coverage is not near total."""
+    if names_unknown_document(question, corpus):
+        return False
+    stop = {w.casefold() for w in stop_words}
+    keys = {w for w in _terms(question) if w not in stop}
+    if not keys:
+        return True
+    quoted_terms = set(_terms(quoted))
+    fused_quote = ''.join(_terms(quoted))
+    corpus_terms = set(_terms('\n'.join(corpus)))
+    fused_corpus = ''.join(_terms('\n'.join(corpus)))
+    covered = {w for w in keys if w in quoted_terms or w in fused_quote}
+    coverage = len(covered) / len(keys)
+    if coverage < min_coverage:
+        return False
+    absent = [w for w in keys if w not in corpus_terms and w not in fused_corpus]
+    return not (absent and coverage < absent_coverage)
+
+
 def answer(
+    question: str,
+    results: list[dict],
+    groups: list[DocumentGroup],
+    *,
+    allow_single: bool = False,
+    replaces_refusal: bool = False,
+) -> str | None:
+    """Return source-bound quotes, or None to retain generation fallback.
+
+    Quotes that are not grounded in the question (see ``is_grounded``) are dropped, so the
+    generation step (and its refusal) stays authoritative; ``replaces_refusal`` applies the stricter bar."""
+    quoted = _quotes(question, results, groups, allow_single=allow_single)
+    if quoted is None:
+        return None
+    cfg = get_settings().llm.multi_document
+    corpus = [f"{doc_titles.title_for(g.stem) or ''} {g.stem}" for g in groups]
+    for hit in results:
+        corpus.append(hit['payload'].get('text', ''))
+        if hit.get('parent_payload'):
+            corpus.append(hit['parent_payload'].get('text', ''))
+    grounded = is_grounded(
+        question,
+        quoted,
+        corpus,
+        min_coverage=cfg.grounding_min_coverage_refusal if replaces_refusal else cfg.grounding_min_coverage,
+        absent_coverage=cfg.grounding_absent_term_coverage,
+        stop_words=cfg.grounding_stop_words,
+    )
+    if not grounded:
+        logger.info('Quotation not grounded in the question; keeping generation path')
+        return None
+    return quoted
+
+
+def _quotes(
     question: str, results: list[dict], groups: list[DocumentGroup], *, allow_single: bool = False
 ) -> str | None:
-    """Return source-bound quotes, or None to retain generation fallback."""
     cfg = get_settings().llm.multi_document
     if not cfg.extractive_enabled or not groups or (len(groups) < 2 and not allow_single):
         return None
