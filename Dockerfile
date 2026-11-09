@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libreoffice-writer libreoffice-calc fonts-dejavu-core \
     && rm -rf /var/lib/apt/lists/*
 
-# Marker (PDF -> Markdown + công thức), venv riêng với torch CUDA: ingestion/extract_pdf_marker.py
+# Marker (PDF -> Markdown + công thức), venv riêng với torch bản CPU (chạy bằng CPU/RAM, không dùng GPU): ingestion/extract_pdf_marker.py
 # gọi marker_single qua MARKER_PYTHON. Đặt SAU các lớp trên và TRƯỚC `COPY . .` để sửa code
 # không cài lại; chỉ requirements-pdf.txt đổi mới dựng lại lớp này. Cache pip giữ wheel đã tải.
 # Mô hình (Surya/Texify) tải sẵn vào image: chạy offline, không tải lúc upload PDF.
@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2
 RUN --mount=type=cache,target=/root/.cache/pip \
     python -m venv /opt/venv-pdf \
     && /opt/venv-pdf/bin/pip install torch==2.11.0 torchvision==0.26.0 \
-        --index-url https://download.pytorch.org/whl/cu128 --extra-index-url https://pypi.org/simple \
+        --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple \
     && /opt/venv-pdf/bin/pip install -r requirements-pdf.txt
 # Font của Marker mặc định tải vào site-packages lúc chạy (container chạy UID host, không ghi được).
 RUN TORCH_DEVICE=cpu /opt/venv-pdf/bin/python -c "from marker.models import create_model_dict; from marker.util import download_font; create_model_dict(); download_font()" \

@@ -90,3 +90,16 @@ def flags_to_runs(flags: list[bool]) -> list[tuple[bool, int, int]]:
             runs.append((flags[start], start, i - 1))
             start = i
     return runs
+
+
+def split_runs(runs: list[tuple[bool, int, int]], max_pages: int) -> list[tuple[bool, int, int]]:
+    """Cắt mỗi run dài hơn ``max_pages`` thành các run liên tiếp không quá ``max_pages`` trang.
+
+    Marker chạy trên CPU giữ RAM theo số trang của một lần chạy; chia nhỏ giữ đỉnh RAM
+    không tăng theo độ dài tài liệu. Thứ tự và cờ OCR của trang được giữ nguyên.
+    """
+    out = []
+    for needs_ocr, start, end in runs:
+        for chunk_start in range(start, end + 1, max_pages):
+            out.append((needs_ocr, chunk_start, min(chunk_start + max_pages - 1, end)))
+    return out

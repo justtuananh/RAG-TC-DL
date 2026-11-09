@@ -220,6 +220,7 @@ class IngestionSettings(_Section):
     max_upload_bytes: Positive
     marker_python: OptionalStr = None
     marker_device: Literal["cuda", "cpu"]
+    marker_pages_per_run: Positive
     marker_memory_max_mb: NonNegative
     marker_threads: Positive
 

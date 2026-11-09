@@ -49,7 +49,7 @@ import requests
 
 from core.settings_loader import get_settings
 
-from .pdf_math_scan import flags_to_runs, scan_pdf_pages
+from .pdf_math_scan import flags_to_runs, scan_pdf_pages, split_runs
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _DEFAULT_VENV = _REPO_ROOT / ".venv-pdf"
@@ -117,7 +117,11 @@ def _marker_single_exe(python_exe: str) -> str:
     return str(exe)
 
 
-def _run_timeout(start: int, end: int, force_ocr: bool) -> int:
+# CPU chậm hơn GPU nhiều lần: nới trần thời gian tương ứng.
+_CPU_TIMEOUT_FACTOR = 4
+
+
+def _run_timeout(start: int, end: int, force_ocr: bool, device: str) -> int:
     """Generous per-run budget, not a tight one: this only exists to catch a
     genuinely stuck subprocess (e.g. GPU memory held by another orphaned
     Marker process — hit exactly this during development) rather than to cap
@@ -126,7 +130,8 @@ def _run_timeout(start: int, end: int, force_ocr: bool) -> int:
     """
     n_pages = end - start + 1
     per_page = 600 if force_ocr else 90
-    return 600 + n_pages * per_page
+    factor = _CPU_TIMEOUT_FACTOR if device == "cpu" else 1
+    return (600 + n_pages * per_page) * factor
 
 
 # Marker chạy trên CPU với mức tài nguyên tối thiểu: không tiến trình con, lô 1 cho
@@ -200,7 +205,7 @@ def _run_marker(marker_exe: str, pdf_path: str, page_range: str, out_dir: Path, 
     if force_ocr:
         cmd.append("--force_ocr")
     start, end = (int(p) for p in (page_range.split("-") if "-" in page_range else [page_range, page_range]))
-    timeout = _run_timeout(start, end, force_ocr)
+    timeout = _run_timeout(start, end, force_ocr, cfg.marker_device)
     try:
         subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=timeout)
     except subprocess.TimeoutExpired as e:
@@ -268,7 +273,7 @@ def extract_pdf_marker(pdf_path: str, marker_python: str | None = None) -> PdfMa
     marker_exe = _marker_single_exe(python_exe)
 
     flags = scan_pdf_pages(pdf_path)
-    runs = flags_to_runs(flags)
+    runs = split_runs(flags_to_runs(flags), get_settings().ingestion.marker_pages_per_run)
     n_flagged = sum(1 for is_ocr, _, _ in runs if is_ocr)
     print(
         f"[pdf-marker] {Path(pdf_path).name}: {len(flags)} pages, {sum(flags)} flagged "
