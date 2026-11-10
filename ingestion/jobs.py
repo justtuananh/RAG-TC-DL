@@ -187,7 +187,12 @@ def save_upload(filename: str, data: bytes, uploaded_by: int | None = None) -> s
     _source_dir().mkdir(parents=True, exist_ok=True)
     db = SessionLocal()
     try:
-        if db.query(Document).filter(Document.sha256 == digest).first() is not None:
+        existing = db.query(Document).filter(Document.sha256 == digest).first()
+        if existing is not None:
+            # Lần nạp trước xử lý lỗi: dùng lại bản ghi để xử lý lại, nếu không tệp đó bị
+            # chặn "trùng" mãi mà chưa hề vào chỉ mục. Tệp chờ xử lý/đang chạy/đã xong vẫn là trùng.
+            if existing.ingest_status == IngestStatus.ERROR and _find_source(existing.file_stem):
+                return existing.file_stem
             raise UploadError("Tài liệu đã tồn tại trong kho (trùng nội dung).")
     finally:
         db.close()

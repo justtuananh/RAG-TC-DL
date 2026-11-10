@@ -11,7 +11,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from db.models import Base, Document, DocumentType
+from db.models import Base, Document, DocumentType, IngestStatus
 from ingestion import jobs as ingestion_jobs
 from ingestion import spike_a
 from tests.support import ooxml as ox
@@ -65,6 +65,40 @@ def test_save_upload_accepts_doc_and_updates_ledger(
 
     assert (tmp_path / "tc_dl" / f"{stem}.doc").exists()
     assert session.get(Document, stem).doc_type == DocumentType.DANH_MUC
+
+
+def _upload_with_status(tmp_path, monkeypatch, session, settings_override, status):
+    settings_override({"paths.source_dir": str(tmp_path / "tc_dl")})
+    monkeypatch.setattr(ingestion_jobs, "SessionLocal", lambda: session)
+    data = b"\xd0\xcf\x11\xe0 noi dung"
+    stem = ingestion_jobs.save_upload("QTKĐ 1.016 2014.doc", data)
+    session.get(Document, stem).ingest_status = status
+    session.commit()
+    return stem, data
+
+
+@pytest.mark.parametrize("status", [IngestStatus.ERROR])
+def test_save_upload_reuses_failed_duplicate(
+    tmp_path, monkeypatch, session, settings_override, status
+):
+    """Lần nạp trước xử lý lỗi: nạp lại phải dùng bản ghi cũ, không bị từ chối 'trùng'."""
+    stem, data = _upload_with_status(tmp_path, monkeypatch, session, settings_override, status)
+
+    assert ingestion_jobs.save_upload("QTKĐ 1.016 2014.doc", data) == stem
+    assert session.query(Document).count() == 1
+
+
+@pytest.mark.parametrize(
+    "status",
+    [IngestStatus.PENDING, IngestStatus.PROCESSING, IngestStatus.READY, IngestStatus.SUPERSEDED],
+)
+def test_save_upload_rejects_duplicate_of_pending_running_or_finished_document(
+    tmp_path, monkeypatch, session, settings_override, status
+):
+    _, data = _upload_with_status(tmp_path, monkeypatch, session, settings_override, status)
+
+    with pytest.raises(ingestion_jobs.UploadError, match="trùng nội dung"):
+        ingestion_jobs.save_upload("QTKĐ 1.016 2014.doc", data)
 
 
 def test_process_one_doc_converts_and_keeps_original_name(tmp_path, monkeypatch):
