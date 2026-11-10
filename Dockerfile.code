@@ -1,0 +1,12 @@
+# Cập nhật CHỈ code backend lên image qtkd-app:local đã có (không dựng lại apt/pip/Marker).
+# Dùng khi chỉ sửa mã Python/cấu hình, hoặc khi build đầy đủ (Dockerfile) hết RAM/quá lâu:
+#
+#   docker build -f Dockerfile.code -t qtkd-app:local .
+#   docker compose -p hraesvelg up -d --no-build api
+#
+# Đổi requirements*.txt, gem, LibreOffice hay mô hình Marker thì vẫn phải build bằng Dockerfile.
+FROM qtkd-app:local
+
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 PYTHONUTF8=1 PYTHONIOENCODING=utf-8
+
+COPY . .
