@@ -8,6 +8,7 @@ Qdrant: nơi gọi truyền vào hàm đo số chiều (vector_size_probe).
 from __future__ import annotations
 
 import logging
+import sys
 from collections.abc import Callable
 from urllib.parse import urlsplit
 
@@ -142,10 +143,20 @@ def check_vector_size(settings: Settings, probe: VectorSizeProbe) -> None:
         )
 
 
+def ensure_utf8_streams() -> None:
+    """stdout/stderr luôn UTF-8: máy chủ có locale ASCII (LANG=C/POSIX) làm print() tên tệp
+    tiếng Việt ("QTKĐ…") văng UnicodeEncodeError và hỏng cả tác vụ nạp tài liệu."""
+    for stream in (sys.stdout, sys.stderr):
+        reconfigure = getattr(stream, "reconfigure", None)
+        if reconfigure is not None:
+            reconfigure(encoding="utf-8", errors="replace")
+
+
 def startup(
     *, vector_size_probe: VectorSizeProbe | None = None, check_services_now: bool | None = None
 ) -> Settings:
     """Gọi một lần ở đầu mọi entrypoint (API lifespan, CLI)."""
+    ensure_utf8_streams()
     configure_logging()
     settings = get_settings()
     validate_security(settings)

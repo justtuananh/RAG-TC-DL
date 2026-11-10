@@ -2,6 +2,8 @@ FROM python:3.12-slim
 
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+# Tên tệp QTKĐ có chữ "Đ": locale ASCII làm đường dẫn/print văng UnicodeEncodeError ('ascii' codec).
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 PYTHONUTF8=1 PYTHONIOENCODING=utf-8
 ENV FORMULA_REGISTRY_DB=/app/.formula-registry/registry.sqlite3
 
 # System libs needed by lxml + Ruby (Stage 1 formula extraction, now runs
