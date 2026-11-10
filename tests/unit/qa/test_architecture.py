@@ -25,7 +25,8 @@ _BACKEND = [
     "ui",
     "vectorstore",
 ]
-_ENV_ALLOWED = {"core/settings_loader.py", "core/logging_setup.py"}
+# scripts/ingest_cli.py chạy trên máy không có venv dự án (chỉ thư viện chuẩn), không import được core.
+_ENV_ALLOWED = {"core/settings_loader.py", "core/logging_setup.py", "scripts/ingest_cli.py"}
 # Tầng → các package nó KHÔNG được import (pipeline một chiều, core là đáy).
 _FORBIDDEN = {
     "core": {
