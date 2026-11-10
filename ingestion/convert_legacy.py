@@ -53,8 +53,11 @@ def cache_path(path: str | Path, out_dir: str | Path | None = None) -> Path:
     return directory / f"{_sha256(src)}.{target}"
 
 
-def _run_soffice(src: Path, target: str, tmp: Path, profile: Path) -> Path:
-    """Gọi soffice trong thư mục tạm với hồ sơ riêng; trả tệp kết quả (chưa kiểm tồn tại)."""
+def _run_soffice(src: Path, target: str, tmp: Path, profile: Path, label: str | None = None) -> Path:
+    """Gọi soffice trong thư mục tạm với hồ sơ riêng; trả tệp kết quả (chưa kiểm tồn tại).
+
+    ``label`` là tên gốc để báo lỗi khi ``src`` là bản sao đặt tên ASCII."""
+    label = label or src.name
     soffice = _soffice_bin()
     timeout_s = get_settings().ingestion.convert_timeout_s
     command = [
@@ -71,15 +74,15 @@ def _run_soffice(src: Path, target: str, tmp: Path, profile: Path) -> Path:
         subprocess.run(command, check=True, capture_output=True, timeout=timeout_s)
     except FileNotFoundError as exc:
         raise ConvertLegacyError(
-            f"Không tìm thấy LibreOffice ({soffice}) để chuyển đổi {src.name}."
+            f"Không tìm thấy LibreOffice ({soffice}) để chuyển đổi {label}."
         ) from exc
     except subprocess.TimeoutExpired as exc:
         raise ConvertLegacyError(
-            f"Chuyển đổi {src.name} quá thời gian ({timeout_s} giây)."
+            f"Chuyển đổi {label} quá thời gian ({timeout_s} giây)."
         ) from exc
     except subprocess.CalledProcessError as exc:
         detail = (exc.stderr or b"").decode("utf-8", "ignore").strip() or f"mã lỗi {exc.returncode}"
-        raise ConvertLegacyError(f"LibreOffice không chuyển được {src.name}: {detail}") from exc
+        raise ConvertLegacyError(f"LibreOffice không chuyển được {label}: {detail}") from exc
     return tmp / f"{src.stem}.{target}"
 
 
@@ -105,7 +108,11 @@ def convert_legacy(path: str | Path, out_dir: str | Path | None = None) -> Path:
     with tempfile.TemporaryDirectory(prefix="convert_legacy_") as tmp_name:
         tmp = Path(tmp_name)
         profile = tmp / "profile"
-        produced = _run_soffice(src, target, tmp, profile)
+        # Bản sao tên ASCII: tên gốc có "Đ"/dấu làm subprocess (locale ASCII) văng UnicodeEncodeError
+        # và soffice không mở được đường dẫn không-ASCII, nên không phụ thuộc locale của máy chủ.
+        staged = tmp / f"source{src.suffix.lower()}"
+        shutil.copyfile(src, staged)
+        produced = _run_soffice(staged, target, tmp, profile, label=src.name)
         if not produced.exists():
             raise ConvertLegacyError(
                 f"LibreOffice không tạo ra tệp {target} từ {src.name}."
