@@ -2,8 +2,6 @@ FROM python:3.12-slim
 
 WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
-# Tên tệp QTKĐ có chữ "Đ": locale ASCII làm đường dẫn/print văng UnicodeEncodeError ('ascii' codec).
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 PYTHONUTF8=1 PYTHONIOENCODING=utf-8
 ENV FORMULA_REGISTRY_DB=/app/.formula-registry/registry.sqlite3
 
 # System libs needed by lxml + Ruby (Stage 1 formula extraction, now runs
@@ -47,6 +45,9 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 # Font của Marker mặc định tải vào site-packages lúc chạy (container chạy UID host, không ghi được).
 RUN TORCH_DEVICE=cpu /opt/venv-pdf/bin/python -c "from marker.models import create_model_dict; from marker.util import download_font; create_model_dict(); download_font()" \
     && chmod -R a+rX /opt/cache /opt/venv-pdf
+
+# Đặt SAU các lớp nặng (apt/pip/Marker) để không làm mất cache của chúng. Tên tệp QTKĐ có chữ "Đ": locale ASCII làm đường dẫn/print văng UnicodeEncodeError ('ascii' codec).
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 PYTHONUTF8=1 PYTHONIOENCODING=utf-8
 
 # Toàn bộ code backend; .dockerignore loại TC_DL/, build/, frontend/, venv, dữ liệu Qdrant.
 COPY . .
