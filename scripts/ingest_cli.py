@@ -28,9 +28,11 @@ import sys
 import tempfile
 import time
 import uuid
+from collections.abc import Callable
 from contextlib import contextmanager
 from pathlib import Path
 from urllib import error, request
+from urllib.parse import quote
 
 UPLOAD_EXTS = (".docx", ".doc", ".pdf")
 DONE_STATUSES = {"ready", "superseded", "error"}
@@ -150,22 +152,30 @@ class Api:
         return self._call("POST", "/api/documents/upload", body, f"multipart/form-data; boundary={boundary}")
 
     def process(self, doc_id: str) -> None:
-        self._call("POST", f"/api/documents/{doc_id}/process", b"", "application/json")
+        self._call("POST", f"/api/documents/{quote(doc_id)}/process", b"", "application/json")
+
+    def documents(self) -> list[dict]:
+        return self._call("GET", "/api/documents", None, "application/json")["documents"]
 
     def document(self, doc_id: str) -> dict | None:
-        docs = self._call("GET", "/api/documents", None, "application/json")["documents"]
-        return next((d for d in docs if d["id"] == doc_id), None)
+        return next((d for d in self.documents() if d["id"] == doc_id), None)
 
 
 def ingest_one(api: Api, path: Path) -> tuple[str, float]:
     """Upload + xử lý một tệp, chờ xong. Trả (trạng thái, giây)."""
     start = time.monotonic()
     doc = api.upload(path)
-    api.process(doc["id"])
+    return process_and_wait(api, doc["id"], start)
+
+
+def process_and_wait(api: Api, doc_id: str, start: float | None = None) -> tuple[str, float]:
+    """Bấm "Xử lý" cho tài liệu đã có trong kho, chờ xong. Trả (trạng thái, giây)."""
+    start = time.monotonic() if start is None else start
+    api.process(doc_id)
     last = ""
     while True:
         time.sleep(POLL_S)
-        current = api.document(doc["id"])
+        current = api.document(doc_id)
         if current is None:
             return "error: tài liệu biến mất", time.monotonic() - start
         stage = f"{current['status']} {current['progress']}%"
@@ -177,20 +187,36 @@ def ingest_one(api: Api, path: Path) -> tuple[str, float]:
             return current["status"] + suffix, time.monotonic() - start
 
 
-def run(api: Api, files: list[Path]) -> int:
+Job = tuple[str, Callable[[], tuple[str, float]]]
+
+
+def run_jobs(jobs: list[Job]) -> int:
     failed = 0
-    for i, path in enumerate(files, 1):
-        print(f"[{i}/{len(files)}] {path.name}", flush=True)
+    for i, (label, work) in enumerate(jobs, 1):
+        print(f"[{i}/{len(jobs)}] {label}", flush=True)
         try:
-            status, secs = ingest_one(api, path)
+            status, secs = work()
         except CliError as e:
             print(f"    BỎ QUA/LỖI: {e}")
             failed += 1
             continue
         print(f"    -> {status} ({secs:.1f}s)")
         failed += status.startswith("error")
-    print(f"\nXong: {len(files) - failed}/{len(files)} tệp", file=sys.stderr)
+    print(f"\nXong: {len(jobs) - failed}/{len(jobs)} tệp", file=sys.stderr)
     return 1 if failed else 0
+
+
+def run(api: Api, files: list[Path], process_pending: bool) -> int:
+    jobs: list[Job] = [(f.name, lambda f=f: ingest_one(api, f)) for f in files]
+    if process_pending:
+        # Tài liệu đã upload nhưng chưa xử lý xong (lần nạp trước dở dang) bị chặn "trùng nội dung"
+        # nếu nạp lại; xử lý thẳng bản ghi đã có.
+        jobs += [
+            (f"{d['name']} (đã có trong kho)", lambda d=d: process_and_wait(api, d["id"]))
+            for d in api.documents()
+            if d["status"] == "pending"
+        ]
+    return run_jobs(jobs)
 
 
 def main() -> int:
@@ -198,13 +224,17 @@ def main() -> int:
     for stream in (sys.stdout, sys.stderr):
         stream.reconfigure(encoding="utf-8", errors="replace")
     parser = argparse.ArgumentParser(description="Nạp tài liệu QTKĐ qua terminal")
-    parser.add_argument("paths", nargs="+", help="Tệp hoặc thư mục (.docx/.doc/.pdf).")
+    parser.add_argument("paths", nargs="*", help="Tệp hoặc thư mục (.docx/.doc/.pdf).")
     parser.add_argument("--api", default="http://localhost:8080", help="URL API khi không dùng --ssh.")
     parser.add_argument("--ssh", metavar="USER@HOST", help="Mở tunnel SSH tới API trên host.")
     parser.add_argument("--ssh-pass-file", help="Tệp chứa mật khẩu SSH (bắt buộc với --ssh).")
     parser.add_argument("--remote-port", type=int, default=8080, help="Cổng API trên host.")
     parser.add_argument("--user", default=os.environ.get("QTKD_USER"), help="Tài khoản ứng dụng.")
     parser.add_argument("--password-file", help="Tệp mật khẩu tài khoản ứng dụng.")
+    parser.add_argument(
+        "--process-pending", action="store_true",
+        help="Xử lý luôn các tài liệu đã upload nhưng đang chờ (pending) trong kho.",
+    )
     args = parser.parse_args()
 
     try:
@@ -214,18 +244,18 @@ def main() -> int:
         if not args.user or not password:
             raise CliError("Thiếu tài khoản: dùng --user (mật khẩu sẽ được hỏi, hoặc --password-file / QTKD_PASSWORD).")
         files = collect_files(args.paths)
-        if not files:
-            raise CliError("Không có tệp .docx/.doc/.pdf nào.")
+        if not files and not args.process_pending:
+            raise CliError("Không có tệp .docx/.doc/.pdf nào (hoặc dùng --process-pending).")
         if args.ssh:
             if not args.ssh_pass_file:
                 raise CliError("--ssh cần --ssh-pass-file.")
             with ssh_tunnel(args.ssh, args.ssh_pass_file, args.remote_port) as base:
                 api = Api(base)
                 api.login(args.user, password)
-                return run(api, files)
+                return run(api, files, args.process_pending)
         api = Api(args.api)
         api.login(args.user, password)
-        return run(api, files)
+        return run(api, files, args.process_pending)
     except CliError as e:
         print(f"LỖI: {e}", file=sys.stderr)
         return 1
