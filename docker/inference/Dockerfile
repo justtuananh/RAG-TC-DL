@@ -3,10 +3,11 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Torch CUDA 12.8 (Blackwell sm_120, compute cap 12.0) — phải cài trước sentence-transformers
-RUN pip install --no-cache-dir torch \
+# --retries/--timeout: torch + wheel NVIDIA nặng cả GB, mạng chậm hay timeout giữa chừng
+RUN pip install --no-cache-dir --retries 10 --timeout 120 torch \
     --index-url https://download.pytorch.org/whl/cu128
 
-RUN pip install --no-cache-dir \
+RUN pip install --no-cache-dir --retries 10 --timeout 120 \
     fastapi \
     uvicorn \
     sentence-transformers \
