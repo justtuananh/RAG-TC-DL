@@ -143,7 +143,51 @@ object_scope:                             # hỏi quy trình/điều kiện ki�
   scope_section_pattern: 'phạm vi áp dụng'
   generic_words: [thiết, bị, đo, phương, tiện, dụng, cụ, máy, loại, các, những, một]
   ignore_words: [này, đó, ấy, nêu, trên, lại, định, kỳ, ban, đầu, sau, sửa, chữa, bất, kỳ, mỗi, từng, mọi, tất, cả, được, bằng, theo, tại, của, cho, với, trong, ở]
-  stop_words: [gồm, là, có, cần, phải, như, bao, nào, gì, được, trong, theo, thì, khi, ở, tại, bằng, với, mà, và, hay, hoặc, ra, sao, thế, để, bởi, do, nếu]
+  stop_words: [gồm, là, có, cần, phải, như, bao, nào, gì, được, trong, theo, thì, khi, ở, tại, bằng, với, mà, và, hay, hoặc, ra, sao, thế, để, bởi, do, nếu, khác, giống, so]  # khác/giống/so: câu so sánh, không thuộc tên đối tượng
+
+doc_profile:                              # "QTKĐ này để làm gì / nói về gì / gồm những mục nào": trả lời từ hồ sơ tài liệu, trích nguyên văn, không qua LLM
+  enabled: true
+  max_scope_chars: 1500                   # trích mục "Phạm vi áp dụng" tối đa bấy nhiêu ký tự
+  max_documents: 3                        # câu hỏi khớp nhiều hơn số tài liệu này thì để pipeline RAG trả lời
+  # Mẫu so trên câu hỏi đã bỏ dấu, chữ thường.
+  purpose_pattern: '\b(?:de lam gi|dung de|dung cho|dung lam gi|ap dung cho|ap dung doi voi|pham vi ap dung|pham vi su dung|muc dich|kiem dinh (?:(?:loai|thiet bi|phuong tien|dung cu|binh|ap ke)(?: \w+){0,3} )?(?:gi|nao)|theo quy trinh nao)\b'
+  overview_pattern: '\b(?:noi ve (?:\w+ ){0,2}(?:gi|nao)|noi dung (?:chinh )?(?:la )?gi|tom tat|gioi thieu|la tai lieu gi|la (?:quy trinh|tieu chuan|van ban)(?: kiem dinh)? gi|quy dinh (?:noi dung )?gi|de cap (?:den )?(?:noi dung )?gi)\b'
+  toc_pattern: '\b(?:muc luc|gom (?:nhung|cac) (?:muc|phan|chuong|noi dung) nao|co (?:nhung|cac) (?:muc|phan|chuong) nao|bao gom (?:nhung|cac) (?:muc|phan|chuong)|cau truc)\b'
+  # Câu hỏi về chi tiết khác (chu kỳ, sai số, điều kiện...) đi pipeline RAG dù có từ khoá ý định.
+  exclude_pattern: '\b(?:chu ky|sai so|cong thuc|dieu kien|phuong tien kiem dinh|chuan bi|trinh tu|cac buoc|cach tinh|cach kiem|cach xac dinh|tinh toan|yeu cau|gioi han|bao lau|so sanh|khac nhau|khac gi|giong|ai|co quan|bien soan|ban hanh|thoi han|diem kiem tra|phep kiem dinh|liet ke|bang \d)\b'
+
+doc_sections:                             # câu hỏi về một mục cấu trúc của tài liệu chỉ đích danh: trả lời nguyên văn mục đó, không qua LLM
+  enabled: true
+  max_documents: 3                        # câu khớp nhiều tài liệu hơn thì để pipeline RAG trả lời
+  max_section_chars: 8000                 # mục dài hơn thì để pipeline RAG trích phần liên quan
+  # Mẫu so trên câu hỏi đã bỏ dấu, chữ thường.
+  equipment_pattern: '\b(?:phuong tien (?:kiem dinh|chuan|do chuan)|thiet bi chuan|chuan (?:duoc )?(?:dung|su dung|can dung) (?:de|khi|cho) kiem dinh|(?:can|dung|su dung) (?:nhung |cac )?(?:phuong tien|thiet bi chuan) (?:gi|nao))\b'
+  conditions_pattern: '\b(?:dieu kien (?:kiem dinh|moi truong)|chuan bi (?:gi|nhung gi|truoc khi|kiem dinh)|can chuan bi)\b'
+  cycle_pattern: '\bchu ky\b(?! lam viec)'
+  agency_pattern: '\b(?:co quan (?:bien soan|de nghi|trinh duyet|xet duyet|ban hanh|chu tri)|(?:ai|don vi nao) (?:bien soan|ban hanh|chu tri)|chu nhiem)\b'
+  # Câu hỏi cần suy luận / tính toán đi pipeline RAG dù có từ khoá mục.
+  exclude_pattern: '\b(?:tai sao|vi sao|cach tinh|tinh toan|cong thuc|co dat|dat khong)\b'
+  # Câu so sánh nhiều tài liệu nêu đích danh: thêm khối phạm vi + điều kiện + chu kỳ nguyên văn vào ngữ cảnh LLM.
+  comparison_pattern: '\b(?:so sanh|khac nhau|khac (?:gi|o|cho|diem)|diem khac|giong nhau)\b'
+  max_fact_chars: 1500
+
+doc_catalog:                              # "những QTKĐ nào liên quan đến X": tìm X trong tên + phạm vi áp dụng của mọi tài liệu đã nạp
+  enabled: true
+  question_pattern: '\b(?:(?:nhung|cac) (?:qtkd|quy trinh|tai lieu)(?: kiem dinh)?(?: nao)? (?:lien quan|ap dung|dung cho|ve)|(?:qtkd|quy trinh|tai lieu) nao (?:lien quan|ap dung|dung cho|ve|quy dinh))\b'
+  topic_pattern: '\b(?:lien quan (?:den|toi)|ap dung cho|dung cho|quy dinh ve|ve)\s+(.+)$'
+  topic_prefix_pattern: '^(?:cac |nhung )?(?:viec |thiet bi |phuong tien (?:do )?)?(?:do |co )?'
+  max_documents: 10
+
+query_synonyms:                           # từ người dùng hay dùng nhưng tài liệu gọi khác: thêm tên trong tài liệu vào câu hỏi
+  - {term: "độ kín", adds: "độ tụt áp"}
+
+doc_summary:                              # tóm tắt tài liệu do LLM viết lúc nạp, người duyệt phê duyệt rồi chat mới dùng
+  enabled: true
+  generate_on_ingest: true                # nạp xong tài liệu thì xếp hàng sinh nháp tóm tắt (luồng nền, một việc mỗi lúc)
+  use_in_chat: true                       # câu "tóm tắt / nói về gì" dùng bản đã duyệt thay cho trích phạm vi
+  max_input_chars: 14000                  # văn bản đưa LLM; cộng câu trả lời phải nằm trong llm.chat.num_ctx
+  max_new_tokens: 700
+  timeout_s: 600
 
 ingestion:
   soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH

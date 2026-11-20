@@ -31,10 +31,14 @@ from query import (
     basic_calc,
     chat_calc,
     device_ambiguity,
+    doc_catalog,
+    doc_overview,
+    doc_sections,
     extractive,
     history_context,
     multi_document,
     object_scope,
+    synonyms,
     table_lookup,
     unit_convert,
 )
@@ -278,6 +282,8 @@ def _verify_numbers(
 
 
 def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[str]:
+    # "độ kín" → "độ kín (độ tụt áp)": tìm kiếm và LLM thấy đúng tên gọi trong tài liệu.
+    req = req.model_copy(update={"message": synonyms.expand(req.message)})
     basic = basic_calc.try_basic_calc(req.message, retriever.retrieve)
     if basic is not None:
         answer, hits = basic
@@ -295,6 +301,17 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if calc is None and is_calculation_request(req.message):
         yield _sse({"type": "done", "answer": CALCULATION_GUIDE, "sources": []})
         return
+    # Câu về cấu trúc tài liệu (liệt kê QTKĐ theo chủ đề; phương tiện, điều kiện, chu kỳ, cơ quan, định nghĩa;
+    # để làm gì / nói về gì / mục lục): trích nguyên văn từ chính tài liệu, không qua LLM. Cụ thể trước, chung sau.
+    for answerer in (
+        doc_catalog.try_catalog_answer,
+        doc_sections.try_section_answer,
+        doc_overview.try_document_answer,
+    ):
+        direct = answerer(req.message)
+        if direct is not None:
+            yield _sse({"type": "done", "answer": direct.text, "sources": _build_sources_payload(direct.hits)})
+            return
     prior = _history_to_prior(req.history)
 
     # "Áp kế pít tông ..." khớp nhiều loại (kiểu H3000, tiêu chuẩn): không được trả lời
@@ -348,6 +365,9 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
             return
 
     context_str, _ = build_context_and_citations(results, question=retrieval_query)
+    facts = doc_sections.comparison_facts(req.message)
+    if facts is not None:
+        context_str = facts + "\n\n---\n\n" + context_str
     if calc is not None and calc.kind == "answer":
         context_str = calc.block + "\n\n---\n\n" + context_str
     guidance = device_ambiguity.ambiguity_guidance(ambiguity) if ambiguity is not None else None

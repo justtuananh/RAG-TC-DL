@@ -38,10 +38,19 @@ def test_out_of_scope(q):
         "Quy trình kiểm định này gồm những phép nào?",
         "Điều kiện kiểm định định kỳ là gì?",
         "Áp kế pít tông có phạm vi đo bao nhiêu?",  # không nêu "kiểm định <đối tượng>"
+        # Câu so sánh: từ "khác/giống/so với" không thuộc tên đối tượng (câu #30 của bộ kiểm tra).
+        "Chu kỳ kiểm định áp kế píttông khác chu kỳ kiểm định áp kế chuẩn hiện số và lò xo như thế nào?",
+        "Chu kỳ kiểm định áp kế píttông so với áp kế lò xo thì khác gì?",
+        "Chu kỳ kiểm định áp kế píttông giống áp kế lò xo không?",
     ],
 )
 def test_in_scope_or_not_applicable(q):
     assert not osc.is_out_of_scope(q, OBJECTS, SCOPES, CFG)
+
+
+def test_comparison_keeps_refusing_unknown_object():
+    q = "Chu kỳ kiểm định nhiệt kế khác chu kỳ kiểm định tốc độ kế như thế nào?"
+    assert osc.is_out_of_scope(q, OBJECTS, SCOPES, CFG)
 
 
 def test_disabled():

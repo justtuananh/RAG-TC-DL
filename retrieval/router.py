@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import re
 
+from retrieval import doc_profile
 from retrieval.normalize import fold
 from vectorstore import qdrant
 
@@ -44,6 +45,12 @@ _FALLBACK_DEVICE_ALIASES: dict[str, str] = {
 
 _number_to_stem: dict[str, str] | None = None
 _device_aliases: dict[str, tuple[str, ...]] | None = None
+# Tài liệu đã nhúng và sẵn sàng nhưng KHÔNG giữ dòng procedure (TCVN, hoặc QTKĐ trùng số với một
+# QTKĐ khác nhưng là thiết bị khác). Thiếu tập này, chúng không bao giờ được tìm khi câu hỏi không nêu thiết bị.
+_extra_stems: frozenset[str] | None = None
+# (file_stem, số hiệu TCVN, từ khoá kiểu thiết bị) rút từ hồ sơ tài liệu, dựng một lần cho mọi tài liệu đã nạp.
+_profile_index: tuple[tuple[str, str | None, tuple[str, ...], str], ...] | None = None
+_TCVN_DIGITS_RE = re.compile(r"\d{3,5}")
 # Tệp tải lên có thể giữ chữ "Đ" trong tên (stem "QTKĐ_9.001_...").
 _STEM_NUMBER_RE = re.compile(r'QTK[DĐ]_(\d+\.\d+)')
 
@@ -150,15 +157,100 @@ def _ensure_mapping() -> dict[str, str]:
     return _number_to_stem
 
 
+def _load_db_extra_stems(mapped: set[str]) -> frozenset[str]:
+    """file_stem của tài liệu ``ready`` không nằm trong map số; rỗng nếu không đọc được DB."""
+    try:
+        from db import SessionLocal
+        from db.models import Document, IngestStatus
+
+        session = SessionLocal()
+        try:
+            rows = session.query(Document.file_stem).filter(
+                Document.ingest_status == IngestStatus.READY
+            )
+            return frozenset(stem for (stem,) in rows if stem not in mapped)
+        finally:
+            session.close()
+    except Exception:
+        return frozenset()
+
+
+def _ensure_extra_stems() -> frozenset[str]:
+    global _extra_stems
+    if _extra_stems is None:
+        _extra_stems = _load_db_extra_stems(set(_ensure_mapping().values()))
+    return _extra_stems
+
+
+def _ensure_profile_index() -> tuple[tuple[str, str | None, tuple[str, ...], str], ...]:
+    global _profile_index
+    if _profile_index is None:
+        entries = []
+        for stem in sorted(known_files()):
+            profile = doc_profile.profile_for(stem)
+            if profile is None:
+                continue
+            code = profile.code
+            digits = None
+            if code is not None and code.kind == "TCVN":
+                match = _TCVN_DIGITS_RE.search(code.number)
+                digits = match.group(0) if match else None
+            if digits or profile.keywords or profile.subject:
+                entries.append((stem, digits, profile.keywords, profile.subject))
+        _profile_index = tuple(entries)
+    return _profile_index
+
+
+def _profile_stems(folded_query: str, raw_query: str) -> tuple[set[str], list[set[str]]]:
+    """(mã, các nhóm tên) - tài liệu nêu đích danh bằng mã TCVN/ISO ("TCVN 6165", "ISO/IEC 17025"); và nhóm
+    tài liệu nêu bằng kiểu thiết bị ("DPI 610") hoặc tên đối tượng lấy từ tên tài liệu ("lưu lượng kế chất
+    lỏng"). Các tài liệu cùng một tên đối tượng ("bàn tạo áp": 1.033 và 1.062) là MỘT nhóm."""
+    compact = doc_profile.normalize_keyword(raw_query)
+    by_code: set[str] = set()
+    by_keyword: list[set[str]] = []
+    by_subject: dict[str, set[str]] = {}
+    for stem, digits, keywords, subject in _ensure_profile_index():
+        if digits and re.search(rf"\b(?:tcvn|iso)\b[^0-9]{{0,20}}{digits}(?!\d)", folded_query):
+            by_code.add(stem)
+        elif any(keyword in compact for keyword in keywords):
+            by_keyword.append({stem})
+        elif subject and re.search(rf"(?<!\w){re.escape(subject)}(?!\w)", folded_query):
+            by_subject.setdefault(subject, set()).add(stem)
+    return by_code, by_keyword + list(by_subject.values())
+
+
+def _stem_number(stem: str) -> str | None:
+    match = _STEM_NUMBER_RE.search(stem)
+    return match.group(1) if match else None
+
+
+def _stems_for_number(number: str, folded_query: str, mapping: dict[str, str]) -> set[str]:
+    """Các file mang số QTKĐ này: bản giữ dòng procedure cùng tài liệu khác thiết bị trùng số.
+
+    Câu hỏi nêu cả năm ("1.062:2016") thì thu hẹp về file có năm đó; không file nào khớp năm
+    thì giữ tất cả thay vì để mất hết.
+    """
+    candidates = {stem for stem in [mapping.get(number)] if stem}
+    candidates |= {stem for stem in _ensure_extra_stems() if _stem_number(stem) == number}
+    year = re.search(rf"{re.escape(number)}\s*[:/_-]\s*(\d{{4}})", folded_query)
+    if year and len(candidates) > 1:
+        narrowed = {s for s in candidates if f"_{number}_{year.group(1)}" in fold(s)}
+        if narrowed:
+            return narrowed
+    return candidates
+
+
 def invalidate() -> None:
     """Bỏ map số và alias đã nạp; lần gọi sau dựng lại từ DB (hoặc Qdrant).
 
     Ingestion gọi sau khi nhúng hoặc xóa tài liệu, để QTKĐ mới tải lên được ghim
     ngay mà không phải khởi động lại API.
     """
-    global _number_to_stem, _device_aliases
+    global _number_to_stem, _device_aliases, _extra_stems, _profile_index
     _number_to_stem = None
     _device_aliases = None
+    _extra_stems = None
+    _profile_index = None
 
 
 def route_files(query: str) -> frozenset[str]:
@@ -172,18 +264,26 @@ def route_files(query: str) -> frozenset[str]:
     mapping = _ensure_mapping()
     q = fold(query)
 
-    stems: set[str] = set()
+    by_number: set[str] = set()
     for num in _NUMBER_RE.findall(q):
-        stem = mapping.get(num)
-        if stem:
-            stems.add(stem)
+        by_number |= _stems_for_number(num, q, mapping)
+    by_code, named_groups = _profile_stems(q, query)
+    stems = by_number | by_code
     for alias, numbers in _ensure_device_aliases().items():
         if re.search(r"(?<!\w)" + re.escape(fold(alias)) + r"(?!\w)", q):
-            for number in numbers:
-                stem = mapping.get(number)
-                if stem:
-                    stems.add(stem)
+            stems |= _unless_confirming({mapping[n] for n in numbers if n in mapping}, by_number)
+    if not by_number:
+        # Tên lấy từ tên tài liệu ("áp kế pít tông" của 1.071) là tên loại thiết bị, không phải mã: câu đã nêu
+        # số QTKĐ ("áp kế pít tông theo QTKĐ 1.159") thì số quyết định, tên không kéo thêm tài liệu khác.
+        for group in named_groups:
+            stems |= group
     return frozenset(stems)
+
+
+def _unless_confirming(named: set[str], by_number: set[str]) -> set[str]:
+    """Tên thiết bị chỉ XÁC NHẬN số QTKĐ đã nêu thì không thêm tài liệu: "bàn tạo áp theo QTKĐ 1.062:2021"
+    là đúng 1.062:2021, không kéo thêm 1.033 (cũng là bàn tạo áp). Tên mâu thuẫn số thì vẫn thêm (câu mơ hồ)."""
+    return set() if named & by_number else named
 
 
 def device_aliases() -> dict[str, tuple[str, ...]]:
@@ -193,7 +293,7 @@ def device_aliases() -> dict[str, tuple[str, ...]]:
 
 def known_files() -> frozenset[str]:
     """Mọi file_stem QTKĐ đang được định tuyến (đã nạp), dùng cho truy hồi phủ đủ tài liệu."""
-    return frozenset(_ensure_mapping().values())
+    return frozenset(_ensure_mapping().values()) | _ensure_extra_stems()
 
 
 def route(query: str) -> str | None:

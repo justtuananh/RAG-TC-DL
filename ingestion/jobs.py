@@ -460,6 +460,20 @@ def _index_markdown(file_stem: str, md_path: Path) -> None:
     _set_job(file_stem, "ready")
     _set_db_status(file_stem, IngestStatus.READY, "; ".join(errors) if errors else None)
     _invalidate_search_caches(touched)
+    _queue_summary(file_stem)
+
+
+def _queue_summary(file_stem: str) -> None:
+    """Xếp hàng sinh nháp tóm tắt (chờ duyệt) trên luồng nền; lỗi không ảnh hưởng tài liệu đã nạp."""
+    from knowledge import doc_summary
+
+    cfg = get_settings().doc_summary
+    if not (cfg.enabled and cfg.generate_on_ingest):
+        return
+    try:
+        doc_summary.queue(file_stem)
+    except Exception as e:  # noqa: BLE001 - tóm tắt là phụ trợ, không chặn ingestion
+        logging.getLogger(__name__).warning("Không xếp hàng được tóm tắt %s: %s", file_stem, e)
 
 
 def _classify_and_find_newer(file_stem: str, header: ProcedureHeader | None) -> str | None:
@@ -613,6 +627,7 @@ def _delete_document_rows(file_stem: str) -> str | None:
     tài liệu còn nguyên và xoá lại được, thay vì mất hàng mà tệp còn.
     """
     from formula_registry.store import Registry
+    from knowledge import doc_summary
 
     db = SessionLocal()
     try:
@@ -622,6 +637,7 @@ def _delete_document_rows(file_stem: str) -> str | None:
             for row in db.query(Procedure).filter(Procedure.document_id == doc.id).all():
                 number = row.number
                 db.delete(row)
+            doc_summary.delete_for(db, doc.id)
             db.delete(doc)
             db.flush()
         Registry().invalidate(file_stem)

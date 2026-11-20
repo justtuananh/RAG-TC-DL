@@ -124,6 +124,36 @@
   ]
  ],
  [
+  "/api/documents/{file_stem}/summary",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/summary/generate",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/summary",
+  [
+   "PUT"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/summary/approve",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/summary/reject",
+  [
+   "POST"
+  ]
+ ],
+ [
   "/api/documents/{document_id}/formula-drafts",
   [
    "GET"

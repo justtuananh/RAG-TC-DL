@@ -1,28 +1,43 @@
 import { useEffect, useState } from "react";
-import type { ViewingDoc } from "../../types";
+import type { UserRole, ViewingDoc } from "../../types";
 import FormulaReviewPanel from "./FormulaReviewPanel";
+import SummaryReviewPanel from "./SummaryReviewPanel";
 import { COLOR } from "../../theme";
 import DocContentPane from "./DocContentPane";
 import DocInfoPanel from "./DocInfoPanel";
 import DownloadButton from "./DownloadButton";
 import { IcArrowRight, IcFile, IcFolder } from "../common/icons";
 
+type ViewerTab = "document" | "summary" | "formulas";
+
+const tabClass = (active: boolean) =>
+  `px-3 py-2 rounded-lg border font-sans text-[12.5px] font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${active ? "border-primary-container bg-primary-container text-brand" : "border-line text-secondary hover:border-brand hover:text-brand"}`;
+
 /** Trang xem tài liệu - hiển thị NGAY TRONG khung Tài liệu (không phải hộp thoại nổi), cao đúng khung nhìn. */
 export default function DocViewerPanel({
   viewingDoc,
+  role = null,
   onBack,
   onDirtyChange,
   onDownload,
 }: {
   viewingDoc: ViewingDoc;
+  /** Vai trò người đang đăng nhập (null = máy chủ tắt đăng nhập); quyết định nút sửa / duyệt hiện ra. */
+  role?: UserRole | null;
   onBack: () => void;
   onDirtyChange: (dirty: boolean) => void;
   onDownload: () => void;
 }) {
-  useEffect(() => () => onDirtyChange(false), [onDirtyChange]);
-  // Panel công thức chỉ mount khi mở lần đầu, rồi giữ nguyên (ẩn) để không mất phần đang sửa.
+  // Panel tóm tắt / công thức chỉ mount khi mở lần đầu, rồi giữ nguyên (ẩn) để không mất phần đang sửa.
   const [formulaOpened, setFormulaOpened] = useState(false);
-  const [tab, setTab] = useState<"document" | "formulas">("document");
+  const [summaryOpened, setSummaryOpened] = useState(false);
+  const [tab, setTab] = useState<ViewerTab>("document");
+  // Mỗi panel một cờ "chưa lưu": panel này báo sạch không được xoá cờ của panel kia.
+  const [formulaDirty, setFormulaDirty] = useState(false);
+  const [summaryDirty, setSummaryDirty] = useState(false);
+  const dirty = formulaDirty || summaryDirty;
+  useEffect(() => onDirtyChange(dirty), [dirty, onDirtyChange]);
+  useEffect(() => () => onDirtyChange(false), [onDirtyChange]);
   return (
     <div
       style={{
@@ -78,18 +93,24 @@ export default function DocViewerPanel({
       </div>
 
       <div className="flex-shrink-0 flex flex-wrap gap-2 px-4 sm:px-5 py-3 border-b border-line bg-surface" role="tablist" aria-label="Nội dung tài liệu">
-        <button
-          role="tab"
-          aria-selected={tab === "document"}
-          className={`px-3 py-2 rounded-lg border font-sans text-[12.5px] font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${tab === "document" ? "border-primary-container bg-primary-container text-brand" : "border-line text-secondary hover:border-brand hover:text-brand"}`}
-          onClick={() => setTab("document")}
-        >
+        <button role="tab" aria-selected={tab === "document"} className={tabClass(tab === "document")} onClick={() => setTab("document")}>
           Tài liệu gốc
         </button>
         <button
           role="tab"
+          aria-selected={tab === "summary"}
+          className={tabClass(tab === "summary")}
+          onClick={() => {
+            setSummaryOpened(true);
+            setTab("summary");
+          }}
+        >
+          Tóm tắt và phê duyệt
+        </button>
+        <button
+          role="tab"
           aria-selected={tab === "formulas"}
-          className={`px-3 py-2 rounded-lg border font-sans text-[12.5px] font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${tab === "formulas" ? "border-primary-container bg-primary-container text-brand" : "border-line text-secondary hover:border-brand hover:text-brand"}`}
+          className={tabClass(tab === "formulas")}
           onClick={() => {
             setFormulaOpened(true);
             setTab("formulas");
@@ -98,10 +119,15 @@ export default function DocViewerPanel({
           Công thức và phê duyệt
         </button>
       </div>
+      {summaryOpened && (
+        <div style={{ flex: 1, minHeight: 0, overflow: "auto", display: tab === "summary" ? "block" : "none" }}>
+          <SummaryReviewPanel key={viewingDoc.code} documentId={viewingDoc.code} role={role} onDirtyChange={setSummaryDirty} />
+        </div>
+      )}
       {formulaOpened && (
         <div style={{ flex: 1, minHeight: 0, overflow: "auto", display: tab === "formulas" ? "block" : "none" }}>
           <FormulaReviewPanel
-            onDirtyChange={onDirtyChange}
+            onDirtyChange={setFormulaDirty}
             key={viewingDoc.code}
             documentId={viewingDoc.code}
             isDocx={viewingDoc.ext === "DOCX" || viewingDoc.name.toLowerCase().endsWith(".docx")}

@@ -109,6 +109,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
         {state.viewingDoc ? (
           <DocViewerPanel
             viewingDoc={state.viewingDoc}
+            role={state.auth.user?.role ?? null}
             onBack={actions.closeViewer}
             onDirtyChange={actions.setFormulaDirty}
             onDownload={() => state.viewingDoc && actions.downloadDoc(state.viewingDoc.code)}

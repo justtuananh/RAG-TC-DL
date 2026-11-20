@@ -186,8 +186,7 @@ def _source_header(i: int, payload: dict) -> str:
     """Đầu mục nguồn: kèm tên đối tượng của tài liệu và số trang (từ Mục lục) để LLM biết nguồn nói về
     thiết bị nào và người dùng đối soát được."""
     stem = payload["file_stem"]
-    title = doc_titles.title_for(stem)
-    label = f"{stem} ({title})" if title else stem
+    label = doc_titles.display_label(stem)
     page = doc_pages.label(stem, payload["section_path"])
     where = f"{payload['section_path']}, {page}" if page else payload["section_path"]
     return f"[{i}] Nguồn: {label} — {where}\n---\n"
@@ -204,9 +203,8 @@ def documents_preface(results: list[dict]) -> str:
         return ""
     lines = []
     for n, (stem, idx) in enumerate(by_file.items(), 1):
-        title = doc_titles.title_for(stem)
         refs = "".join(f"[{i}]" for i in idx)
-        lines.append(f"({n}) {stem}" + (f" — {title}" if title else "") + f": nguồn {refs}")
+        lines.append(f"({n}) {doc_titles.display_label(stem)}: nguồn {refs}")
     return "CÁC TÀI LIỆU TRONG NGỮ CẢNH:\n" + "\n".join(lines) + "\n\n---\n\n"
 
 

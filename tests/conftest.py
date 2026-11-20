@@ -36,7 +36,7 @@ _DATA = Path(__file__).resolve().parent / "data"
 _SINGLETONS = {
     "vectorstore.qdrant": ["_client"],
     "vectorstore.hybrid_index": ["_index"],
-    "retrieval.router": ["_number_to_stem", "_device_aliases"],
+    "retrieval.router": ["_number_to_stem", "_device_aliases", "_extra_stems", "_profile_index"],
 }
 
 
@@ -114,6 +114,17 @@ def reset_module_singletons(request):
     _reset()
     yield
     _reset()
+
+
+@pytest.fixture(autouse=True)
+def _no_background_summaries(request, monkeypatch):
+    """Nạp tài liệu trong unit test không được bắn luồng nền gọi LLM sinh tóm tắt."""
+    if _is_live(request):
+        return
+    from knowledge import doc_summary
+
+    monkeypatch.setattr(doc_summary, "_submit", lambda file_stem, force: None)
+    monkeypatch.setattr(doc_summary, "_pending", {})
 
 
 @pytest.fixture(autouse=True)

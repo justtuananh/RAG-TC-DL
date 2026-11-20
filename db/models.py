@@ -116,6 +116,49 @@ class Document(Base):
     uploader = relationship("AppUser", foreign_keys=[uploaded_by])
 
 
+class SummaryStatus(enum.StrEnum):
+    """Vòng đời bản tóm tắt tài liệu: LLM viết nháp, người duyệt phê duyệt hoặc từ chối."""
+
+    GENERATING = "generating"
+    DRAFT = "draft"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+    ERROR = "error"
+
+
+class DocumentSummary(Base):
+    """Bản tóm tắt một tài liệu do LLM viết lúc nạp; chat chỉ dùng bản đã được người duyệt phê duyệt.
+
+    ``source_sha256`` là băm Markdown lúc sinh: tài liệu xử lý lại mà Markdown đổi thì bản tóm tắt
+    (kể cả đã duyệt) được viết lại thành nháp mới. ``revision`` chặn hai người ghi đè lên nhau.
+    """
+
+    __tablename__ = "document_summary"
+
+    id = Column(Integer, primary_key=True)
+    document_id = Column(
+        String(128), ForeignKey("document.id", ondelete="CASCADE"), unique=True, nullable=False, index=True
+    )
+    status = Column(String(16), nullable=False, default=SummaryStatus.GENERATING.value)
+    text = Column(Text, nullable=True)
+    generated_text = Column(Text, nullable=True)
+    warnings = Column(JSON, nullable=False, default=list)
+    source_sha256 = Column(String(64), nullable=True)
+    model = Column(String(128), nullable=True)
+    error = Column(Text, nullable=True)
+    revision = Column(Integer, nullable=False, default=1)
+    generated_at = Column(DateTime, nullable=True)
+    edited_by = Column(Integer, ForeignKey("app_user.id"), nullable=True)
+    edited_at = Column(DateTime, nullable=True)
+    reviewed_by = Column(Integer, ForeignKey("app_user.id"), nullable=True)
+    reviewed_at = Column(DateTime, nullable=True)
+    review_note = Column(Text, nullable=True)
+
+    document = relationship("Document")
+    editor = relationship("AppUser", foreign_keys=[edited_by])
+    reviewer = relationship("AppUser", foreign_keys=[reviewed_by])
+
+
 # ── Sprint 3: measurement concept framework ───────────────────────────────────
 # Bốn bảng nền, seed sẵn, người dùng không nhập (spec §5.1). Chúng là nền ngữ
 # nghĩa để router văn bản nhận diện loại thiết bị: đại lượng → đơn vị → loại

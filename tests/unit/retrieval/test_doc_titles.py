@@ -36,3 +36,13 @@ def test_source_header_has_title_only_when_known(monkeypatch):
         _source_header(3, {"file_stem": "S2", "section_path": "5.1"})
         == "[3] Nguồn: S2 — 5.1\n---\n"
     )
+
+
+def test_source_header_names_the_document_by_its_code(monkeypatch):
+    # LLM gọi tài liệu là "QTKĐ 1.071:2022" thay cho tên tệp "QTKD_1.071_2022_FINAL_2".
+    monkeypatch.setattr(doc_titles, "title_for", lambda s: "ÁP KẾ PÍT TÔNG")
+    monkeypatch.setattr(doc_titles, "code_for", lambda s: "QTKĐ 1.071:2022")
+    assert (
+        _source_header(1, {"file_stem": "S9", "section_path": "6 Xử lý chung"})
+        == "[1] Nguồn: QTKĐ 1.071:2022 - ÁP KẾ PÍT TÔNG — 6 Xử lý chung\n---\n"
+    )

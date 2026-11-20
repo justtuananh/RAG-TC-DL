@@ -271,6 +271,67 @@ class ObjectScopeSettings(_Section):
     stop_words: tuple[str, ...] = ()      # từ kết thúc cụm tên đối tượng (gồm, là, có, cần...)
 
 
+class DocProfileSettings(_Section):
+    """Trả lời tất định câu hỏi "tài liệu này để làm gì / nói về gì / gồm những mục nào" từ hồ sơ tài liệu.
+
+    Mẫu so trên câu hỏi đã bỏ dấu, chữ thường. Câu khớp ``exclude_pattern`` (hỏi chu kỳ, sai số,
+    điều kiện...) đi pipeline RAG như cũ dù có từ khoá ý định.
+    """
+
+    enabled: bool = True
+    max_scope_chars: int = 1500
+    max_documents: int = 3
+    purpose_pattern: str = r"\b(?:de lam gi|dung de|dung cho|ap dung cho|pham vi ap dung)\b"
+    overview_pattern: str = r"\b(?:noi ve (?:\w+ ){0,2}(?:gi|nao)|tom tat)\b"
+    toc_pattern: str = r"\b(?:muc luc|gom (?:nhung|cac) (?:muc|phan) nao)\b"
+    exclude_pattern: str = r"\b(?:chu ky|sai so|cong thuc|dieu kien)\b"
+
+
+class DocSectionsSettings(_Section):
+    """Câu hỏi về một mục cấu trúc (phương tiện, điều kiện, chu kỳ, cơ quan, định nghĩa) của tài liệu chỉ
+    đích danh: trả lời bằng nguyên văn mục đó. Mẫu so trên câu hỏi đã bỏ dấu, chữ thường."""
+
+    enabled: bool = True
+    max_documents: int = 3
+    max_section_chars: int = 8000
+    equipment_pattern: str = r"\bphuong tien kiem dinh\b"
+    conditions_pattern: str = r"\bdieu kien kiem dinh\b"
+    cycle_pattern: str = r"\bchu ky kiem dinh\b"
+    agency_pattern: str = r"\bco quan bien soan\b"
+    exclude_pattern: str = r"\b(?:tai sao|vi sao|cach tinh|tinh toan|cong thuc)\b"
+    comparison_pattern: str = r"\b(?:so sanh|khac nhau)\b"
+    max_fact_chars: int = 1500  # mục điều kiện dài hơn thì không đưa vào khối thông tin so sánh
+
+
+class DocCatalogSettings(_Section):
+    """Câu "những QTKĐ nào liên quan đến X": tìm X trong tên và phạm vi áp dụng của mọi tài liệu đã nạp."""
+
+    enabled: bool = True
+    question_pattern: str = r"\bnhung (?:qtkd|quy trinh) nao\b"
+    topic_pattern: str = r"\b(?:lien quan (?:den|toi)|ap dung cho|dung cho|ve)\s+(.+)$"
+    topic_prefix_pattern: str = r"^(?:cac |nhung )?(?:viec |thiet bi |phuong tien )?(?:do |co )?"
+    max_documents: int = 10
+
+
+class QuerySynonym(_Section):
+    term: str
+    adds: str
+
+
+class DocSummarySettings(_Section):
+    """Bản tóm tắt tài liệu do LLM viết lúc nạp; chat chỉ dùng bản người duyệt đã phê duyệt.
+
+    ``max_input_chars`` + câu trả lời phải nằm trong ``llm.chat.num_ctx`` (2,5 ký tự/token).
+    """
+
+    enabled: bool = True
+    generate_on_ingest: bool = True
+    use_in_chat: bool = True
+    max_input_chars: int = 14000
+    max_new_tokens: int = 700
+    timeout_s: float = 600
+
+
 class Settings(_Section):
     app: AppSettings
     paths: PathSettings
@@ -288,6 +349,11 @@ class Settings(_Section):
     api: ApiSettings
     calc: CalcSettings = Field(default_factory=CalcSettings)
     object_scope: ObjectScopeSettings = Field(default_factory=ObjectScopeSettings)
+    doc_profile: DocProfileSettings = Field(default_factory=DocProfileSettings)
+    doc_summary: DocSummarySettings = Field(default_factory=DocSummarySettings)
+    doc_sections: DocSectionsSettings = Field(default_factory=DocSectionsSettings)
+    doc_catalog: DocCatalogSettings = Field(default_factory=DocCatalogSettings)
+    query_synonyms: list[QuerySynonym] = Field(default_factory=list)
 
     def llm_model(self, role: LlmRole) -> str:
         """Model chat (vai trò LLM duy nhất còn lại)."""

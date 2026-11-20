@@ -169,6 +169,19 @@ A lower layer never imports a higher one;
   The SQLite store is `paths.formula_registry_db` (`FORMULA_REGISTRY_DB`); back it up together with `TC_DL/`.
   Chat first attempts supported generic arithmetic in `query/basic_calc.py`, then approved registry formulas in `query/chat_calc.py`; unsupported calculations receive `llm.guards.CALCULATION_GUIDE`. Generic arithmetic never approves or executes registry drafts.
   `formula_lab/` holds the experiments and benchmarks that chose this approach (`TC_DL/TIEN_DO_NGHIEN_CUU_CONG_THUC.md`); only `engine.py` and `data/` are runtime code.
+- `retrieval/doc_profile.py` + `query/doc_overview.py` - document profile built from the Markdown: code (QTKĐ/TCVN), title, verbatim "Phạm vi áp dụng", section list and device-model keywords.
+  The router pins a question to a document by TCVN/ISO code or model keyword through it.
+  Questions "để làm gì / nói về gì / gồm những mục nào" that name a document are answered from the profile without the LLM (patterns in `doc_profile:` of settings).
+  The profile also yields the device name from the title (`subject`, "lưu lượng kế chất lỏng"), so the router pins documents by name without a device-alias row; a name that only confirms an explicit QTKĐ number adds no other document.
+- `retrieval/doc_sections.py` + `query/doc_sections.py` - questions about a structural section of a named document (phương tiện kiểm định, điều kiện và chuẩn bị, chu kỳ, cơ quan biên soạn, thuật ngữ "X là gì") are answered with that section verbatim, without the LLM (`doc_sections:` in settings).
+  Comparison questions over named documents get a verbatim "thông tin chính" block (scope, conditions, cycle) prepended to the LLM context.
+  `query/doc_catalog.py` answers "những QTKĐ nào liên quan đến X" from every profile; `query/synonyms.py` adds the document's own term to the question ("độ kín" → "độ tụt áp", `query_synonyms:`).
+  Chat tries catalog → sections → overview before retrieval; each returns `None` to fall back to RAG.
+- `retrieval/hybrid_retriever.filter_noise` keeps an appendix whose real title is content ("Bình định mức - Yêu cầu chung") even when `vectorstore/noise.py` flags its bare or "(Quy định)" path; appendices titled "Mẫu ..." stay filtered.
+- `knowledge/doc_summary.py` - LLM summary written after ingestion (background thread, table `document_summary`, migration 016).
+  It stays a draft until an approver approves it in the "Tóm tắt và phê duyệt" tab (`api/routes/summaries.py`); only an approved summary answers "tóm tắt / nói về gì".
+  Numbers in the summary that are absent from the document are listed as warnings for the reviewer; re-processing a document whose Markdown changed turns its summary back into a new draft.
+  Backfill existing documents with `python -m knowledge.doc_summary [stems] [--force]`.
 - `evaluation/run_eval.py` - Spike E regression harness. Computes recall@k + MRR for hybrid vs
   dense-only against `evaluation/eval_set.jsonl` (question → expected file_stem + section_path).
   Run this after any retrieval change. Pass goal is recall@5 ≥ 0.85.

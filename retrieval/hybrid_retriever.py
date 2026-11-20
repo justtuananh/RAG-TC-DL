@@ -7,14 +7,46 @@ payload.chunk_id và sắp theo điểm RRF. filter_noise, rrf_fuse, merge_per_f
 
 from __future__ import annotations
 
+import re
+
 from core.settings_loader import get_settings
+from retrieval import doc_profile
+from retrieval.normalize import fold
 from vectorstore import hybrid_index, qdrant
 from vectorstore.noise import is_noise_path
 
+_APPENDIX_LABEL_RE = re.compile(r"^(Phụ lục\s+[A-Z])\b")
+_PARENTHESES_RE = re.compile(r"\([^)]*\)")
+
+
+def _is_content_appendix(payload: dict) -> bool:
+    """Phụ lục mang nội dung thật (bảng sai số "Bình định mức - Yêu cầu chung"), không phải mẫu biểu.
+
+    ``is_noise_path`` loại mọi phụ lục có tiêu đề trần ("Phụ lục C") hoặc "(Quy định)" vì mẫu biên bản /
+    giấy chứng nhận nằm ở đó; nhưng nhiều QTKĐ đặt bảng yêu cầu kỹ thuật trong phụ lục quy định. Tên thật
+    của phụ lục (dòng sau tiêu đề, ``doc_profile``) phân biệt hai loại: có chữ "Mẫu" mới là mẫu biểu.
+    """
+    match = _APPENDIX_LABEL_RE.match(payload.get("section_path", ""))
+    if not match:
+        return False
+    profile = doc_profile.profile_for(payload.get("file_stem", ""))
+    if profile is None:
+        return False
+    number = match.group(1).lower()
+    for section in profile.sections:
+        if section.number.lower() == number:
+            title = fold(_PARENTHESES_RE.sub("", section.title))
+            return bool(title.strip()) and "mau" not in title.split()
+    return False
+
 
 def filter_noise(hits: list[dict]) -> list[dict]:
-    """Remove boilerplate form/template sections before reranking."""
-    return [h for h in hits if not is_noise_path(h["payload"].get("section_path", ""))]
+    """Remove boilerplate form/template sections before reranking (giữ phụ lục có nội dung thật)."""
+    return [
+        h
+        for h in hits
+        if not is_noise_path(h["payload"].get("section_path", "")) or _is_content_appendix(h["payload"])
+    ]
 
 
 def rrf_fuse(

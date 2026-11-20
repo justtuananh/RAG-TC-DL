@@ -39,3 +39,20 @@ def title_for(file_stem: str) -> str:
             return parse_title([next(f, "") for _ in range(40)])
     except OSError:
         return ""
+
+
+def code_for(file_stem: str) -> str:
+    """Mã tài liệu ("QTKĐ 1.071:2022", "TCVN 6165:1996") để LLM gọi đúng tên thay cho tên tệp; rỗng nếu không rõ."""
+    from retrieval import doc_profile
+
+    profile = doc_profile.profile_for(file_stem)
+    return profile.code.label if profile is not None and profile.code is not None else ""
+
+
+def display_label(file_stem: str) -> str:
+    """"QTKĐ 1.071:2022 - ÁP KẾ ..." khi biết mã; nếu không "<file_stem> (<tên>)" hoặc chỉ file_stem."""
+    code = code_for(file_stem)
+    title = title_for(file_stem)
+    if code:
+        return f"{code} - {title}" if title else code
+    return f"{file_stem} ({title})" if title else file_stem

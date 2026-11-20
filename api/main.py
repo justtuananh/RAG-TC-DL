@@ -28,13 +28,13 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import auth, chat, documents, system
+from api.routes import auth, chat, documents, summaries, system
 from core.settings_loader import get_settings
 from core.startup import startup
 from formula_registry import api as formula_review
 from vectorstore import qdrant
 
-_ROUTERS = (system, auth, chat, documents, formula_review)
+_ROUTERS = (system, auth, chat, documents, summaries, formula_review)
 
 
 @asynccontextmanager

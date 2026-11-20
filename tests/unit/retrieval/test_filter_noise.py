@@ -56,3 +56,22 @@ def test_missing_section_path_is_safe():
 def test_markers_cover_known_boilerplate():
     assert "Mẫu biên bản" in _NOISE_PATH_MARKERS
     assert "(Quy định)" in _NOISE_PATH_MARKERS
+
+
+def test_keeps_appendix_with_real_content_but_still_drops_forms(tmp_path, settings_override):
+    """Phụ lục C "Bình định mức - Yêu cầu chung" (Bảng C.1 sai số) là nội dung thật, không phải mẫu biểu."""
+    (tmp_path / "DT.md").write_text(
+        "# 1 Phạm vi áp dụng\nNội dung.\n"
+        "# Phụ lục A\n(Quy định)\nMẫu biên bản kiểm định\n"
+        "# Phụ lục C\n(Quy định)\nBình định mức – Yêu cầu chung\n| 100 | ±0,100 |\n",
+        encoding="utf-8",
+    )
+    settings_override({"paths.markdown_dir": str(tmp_path)})
+    hits = [
+        {"payload": {"section_path": "Phụ lục A", "file_stem": "DT"}},
+        {"payload": {"section_path": "Phụ lục C", "file_stem": "DT"}},
+        {"payload": {"section_path": "Phụ lục C", "file_stem": "KHAC"}},  # không có hồ sơ: giữ quy tắc cũ
+    ]
+    assert [(h["payload"]["section_path"], h["payload"]["file_stem"]) for h in filter_noise(hits)] == [
+        ("Phụ lục C", "DT")
+    ]

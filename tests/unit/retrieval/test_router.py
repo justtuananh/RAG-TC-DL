@@ -198,3 +198,83 @@ def test_number_map_reads_procedure_table(procedure_db, monkeypatch):
         "1.088": "Quy_trinh_ap_ke_lo_xo",
         "1.061": "QTKD_1.061_2026_ND",
     }
+
+
+@pytest.fixture
+def collided(mapping, monkeypatch):
+    """Hai tài liệu cùng số 1.062: bản 2021 giữ dòng procedure, bản 2016 (thiết bị khác) chỉ được nhúng."""
+    mapping["1.062"] = "QTKD_1.062_2021_ND_2"
+    extras = frozenset({"QTKĐ_1.062_2016_2", "TCVN_ISO_IEC17025_2017_2"})
+    monkeypatch.setattr(router_mod, "_extra_stems", extras)
+    return mapping
+
+
+def test_known_files_include_indexed_documents_without_procedure(collided):
+    # Câu hỏi không nêu thiết bị chạy phễu riêng cho từng file trong known_files: tài liệu thiếu dòng
+    # procedure (TCVN, QTKĐ cùng số) trước đây không bao giờ được tìm.
+    known = router_mod.known_files()
+    assert {"QTKĐ_1.062_2016_2", "TCVN_ISO_IEC17025_2017_2"} <= known
+    assert collided["1.061"] in known
+
+
+def test_number_shared_by_two_documents_routes_to_both(collided):
+    both = frozenset({"QTKD_1.062_2021_ND_2", "QTKĐ_1.062_2016_2"})
+    assert route_files("QTKĐ 1.062 là quy trình gì") == both
+    assert route("QTKĐ 1.062 là quy trình gì") is None  # mơ hồ: không ghim nhầm một file
+
+
+def test_year_narrows_a_shared_number(collided):
+    assert route("QTKĐ 1.062:2016 áp dụng cho thiết bị nào") == "QTKĐ_1.062_2016_2"
+    assert route("QTKĐ 1.062 : 2021 áp dụng cho thiết bị nào") == "QTKD_1.062_2021_ND_2"
+    # Năm không khớp tài liệu nào: giữ cả hai thay vì mất hết.
+    assert len(route_files("QTKĐ 1.062:1999")) == 2
+
+
+def test_number_unique_to_one_document_is_still_pinned(collided):
+    assert route("phạm vi của 1.061 là gì") == collided["1.061"]
+
+
+@pytest.fixture
+def profiled(mapping, monkeypatch):
+    monkeypatch.setattr(router_mod, "_extra_stems", frozenset())
+    mapping["1.033"] = "QTKĐ_1.033_2021_2"
+    mapping["1.062"] = "QTKD_1.062_2021_ND_2"
+    index = (
+        ("TCVN6165_1996_905114_2", "6165", (), "do luong hoc"),
+        ("TCVN_ISO_IEC17025_2017_2", "17025", (), ""),
+        ("QTKĐ_1.197_2024_2", None, ("tch1200",), "lo nhiet do chuan"),
+        ("QTKD_1.071_2022_FINAL_2", None, ("h3000sp70700", "h3000"), "ap ke pit tong"),
+        ("QTKĐ_1.213_2025_2", None, (), "luu luong ke chat long"),
+        ("QTKĐ_1.033_2021_2", None, (), "ban tao ap"),
+        ("QTKD_1.062_2021_ND_2", None, (), "ban tao ap"),
+    )
+    monkeypatch.setattr(router_mod, "_profile_index", index)
+    return mapping
+
+
+def test_tcvn_and_iso_codes_pin_their_document(profiled):
+    assert route("TCVN 6165:1996 là tài liệu gì?") == "TCVN6165_1996_905114_2"
+    assert route("TCVN ISO/IEC 17025:2017 nói về nội dung gì?") == "TCVN_ISO_IEC17025_2017_2"
+    assert route("ISO 17025 yêu cầu gì") == "TCVN_ISO_IEC17025_2017_2"
+    assert route("áp suất 6165 bar") is None  # số trần không kèm TCVN/ISO thì không ghim
+
+
+def test_device_model_keyword_pins_its_document(profiled):
+    assert route("Chu kỳ kiểm định lò TCH 1200?") == "QTKĐ_1.197_2024_2"
+    assert route("áp kế pít tông H3000 dùng để làm gì") == "QTKD_1.071_2022_FINAL_2"
+
+
+def test_subject_from_document_title_pins_its_document(profiled):
+    # Tên đối tượng lấy từ tên tài liệu khi nạp: không cần khai báo alias thiết bị trong CSDL.
+    stems = route_files("So sánh chu kỳ kiểm định của van an toàn và của lưu lượng kế chất lỏng.")
+    assert stems == frozenset({"QTKD_1.061_2021_ND_V2", "QTKĐ_1.213_2025_2"})
+    assert route("Chu kỳ kiểm định LƯU LƯỢNG KẾ CHẤT LỎNG") == "QTKĐ_1.213_2025_2"
+    assert route("lưu lượng kế khí") is None  # phải khớp trọn tên, không khớp một phần
+
+
+def test_name_shared_by_two_documents_confirms_the_explicit_number(profiled):
+    # "bàn tạo áp" là cả 1.033 và 1.062: câu đã nêu 1.062:2021 thì không kéo thêm 1.033.
+    assert route("Điều kiện kiểm định bàn tạo áp theo QTKĐ 1.062:2021 là gì?") == "QTKD_1.062_2021_ND_2"
+    assert len(route_files("Điều kiện kiểm định bàn tạo áp")) == 2
+    # Tên lấy từ tên tài liệu là tên loại thiết bị: số QTKĐ đã nêu quyết định ("áp kế pít tông theo 1.159").
+    assert route("áp kế pít tông theo QTKĐ 1.061") == "QTKD_1.061_2021_ND_V2"
