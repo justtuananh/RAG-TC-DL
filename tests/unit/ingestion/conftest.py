@@ -31,7 +31,7 @@ def _read_jsonl(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
         raise FileNotFoundError(f"Corpus file not found: {path}")
     result = []
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:  # Windows mặc định cp1252, manifest là UTF-8 tiếng Việt
         for line in f:
             if line.strip():
                 result.append(json.loads(line))

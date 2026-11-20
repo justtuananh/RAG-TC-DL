@@ -21,7 +21,7 @@ RUN gem install mathtype_to_mathml pry
 
 # Stage 0-3 Python deps (database, auth, index + retrieval + Gradio)
 COPY requirements.txt requirements-app.txt ./
-RUN pip install --no-cache-dir -r requirements.txt -r requirements-app.txt
+RUN pip install --no-cache-dir --retries 10 --timeout 120 -r requirements.txt -r requirements-app.txt
 
 # LibreOffice headless: ingestion/convert_legacy.py chuyển .doc/.xls cũ sang .docx/.xlsx.
 # Đặt sau pip install để thêm lớp này không làm mất cache của lớp cài thư viện Python.
@@ -37,11 +37,12 @@ COPY requirements-pdf.txt ./
 ENV MARKER_PYTHON=/opt/venv-pdf/bin/python XDG_CACHE_HOME=/opt/cache
 RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libglib2.0-0 \
     && rm -rf /var/lib/apt/lists/*
+# --retries/--timeout: wheel torch/marker nặng, mạng chậm hay timeout giữa chừng (lần thử lại dùng cache pip).
 RUN --mount=type=cache,target=/root/.cache/pip \
     python -m venv /opt/venv-pdf \
-    && /opt/venv-pdf/bin/pip install torch==2.11.0 torchvision==0.26.0 \
+    && /opt/venv-pdf/bin/pip install --retries 10 --timeout 120 torch==2.11.0 torchvision==0.26.0 \
         --index-url https://download.pytorch.org/whl/cpu --extra-index-url https://pypi.org/simple \
-    && /opt/venv-pdf/bin/pip install -r requirements-pdf.txt
+    && /opt/venv-pdf/bin/pip install --retries 10 --timeout 120 -r requirements-pdf.txt
 # Font của Marker mặc định tải vào site-packages lúc chạy (container chạy UID host, không ghi được).
 RUN TORCH_DEVICE=cpu /opt/venv-pdf/bin/python -c "from marker.models import create_model_dict; from marker.util import download_font; create_model_dict(); download_font()" \
     && chmod -R a+rX /opt/cache /opt/venv-pdf

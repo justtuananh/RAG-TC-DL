@@ -131,11 +131,11 @@ def templates():
         spec_path = folder / 'registry.json'
         if not cards_path.exists() or not spec_path.exists():
             continue
-        cards = json.loads(cards_path.read_text())
-        specs = json.loads(spec_path.read_text())
+        cards = json.loads(cards_path.read_text(encoding='utf-8'))
+        specs = json.loads(spec_path.read_text(encoding='utf-8'))
         labels = {}
         if (folder / 'conditions.json').exists():
-            labels = json.loads((folder / 'conditions.json').read_text())
+            labels = json.loads((folder / 'conditions.json').read_text(encoding='utf-8'))
         for card in cards:
             if len(card['formulas']) != 1:
                 continue
@@ -241,5 +241,5 @@ def generate_from_docx(source_path, document_id, registry=None):
     source_hash = hashlib.sha256(source_path.read_bytes()).hexdigest()
     with tempfile.TemporaryDirectory(prefix='formula-drafts-') as temp:
         entry = process_one(source_path, Path(temp))
-        markdown = (Path(temp) / (_safe(source_path.stem) + '.md')).read_text()
+        markdown = (Path(temp) / (_safe(source_path.stem) + '.md')).read_text(encoding='utf-8')
         return register_extraction(source_path, document_id, source_hash, entry, markdown, registry)

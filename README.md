@@ -81,12 +81,20 @@ Biến trong `.env` ghi đè file đó theo mẫu `${TÊN:-mặc_định}`.
 
 ### 1.3 Build và chạy
 
+Tải model chat vào Ollama **trước** khi dựng cả stack.
+Healthcheck của Ollama tự tải model nếu chưa có, nhưng mỗi lần check chỉ được 5 phút.
+Mạng chậm thì tải không kịp, Ollama thành `unhealthy` và reranker, embedding, api, frontend không khởi động (`dependency failed to start`).
+
 ```bash
+docker compose up -d ollama
+docker compose exec ollama ollama pull qwen2.5:7b-instruct      # ~4,7GB, = make pull-model
 docker compose up -d --build
 ```
 
-Tương đương `make up`.
+`docker compose up -d --build` tương đương `make up`.
 Lần đầu mất 10 đến 20 phút (lâu hơn khi mạng chậm) vì phải tải torch/CUDA và model bge.
+Các lệnh `pip install` trong Dockerfile có `--retries 10 --timeout 120`, nhưng build vẫn có thể thất bại khi mạng quá yếu (`ReadTimeoutError` từ `files.pythonhosted.org`).
+Chạy lại cùng lệnh, cache pip giữ các wheel đã tải xong.
 
 Build 4 image song song dễ làm Docker Desktop hết RAM rồi chết giữa chừng (lỗi `EOF`).
 Trong trường hợp đó build tuần tự:
@@ -106,14 +114,20 @@ Embedding và reranker chỉ lấy GPU nếu còn đủ VRAM (`GPU_MIN_FREE_MB`)
 ### 1.4 Thiết lập lần đầu
 
 ```bash
-# 1. Tải LLM vào container ollama (~4,7GB)
-docker compose exec ollama ollama pull qwen2.5:7b-instruct      # = make pull-model
+# 1. Tạo bảng trong Postgres (bắt buộc trước khi tạo tài khoản)
+make db-upgrade
+# hoặc: docker compose exec api python -m scripts.migrate upgrade head
 
 # 2. Tạo tài khoản quản trị đầu tiên
 docker compose exec api python scripts/create_admin.py
 
 # 3. Mở http://localhost:3000 và đăng nhập
 ```
+
+`docker compose up` không tự chạy migration.
+Thiếu bước 1 thì `create_admin.py` báo `relation "app_user" does not exist`.
+Chạy lại `make db-upgrade` mỗi khi dựng Postgres mới (xóa volume `postgres_storage`) hoặc cập nhật code có migration mới trong `db/migrations/versions/`.
+Model LLM đã tải ở mục 1.3.
 
 Nạp tài liệu có ba cách:
 
@@ -227,6 +241,9 @@ docker compose up -d --no-deps postgres api frontend
 |---|---|
 | Build chết với `EOF` hoặc treo hàng giờ | Build tuần tự (`COMPOSE_PARALLEL_LIMIT=1`), tăng RAM WSL, kiểm tra ổ đĩa bằng `docker system df` |
 | Compose báo thiếu `QDRANT_API_KEY` | Đặt khóa trong `.env` (mục 1.2) |
+| Build lỗi `ReadTimeoutError` khi `pip install` | Lỗi mạng. Chạy lại lệnh build (cache pip giữ wheel đã tải), hoặc `docker compose build --no-parallel` để các image không chia băng thông |
+| `qtkd-ollama` unhealthy, `dependency failed to start` | Model chưa tải xong. `docker compose exec ollama ollama pull qwen2.5:7b-instruct` rồi `docker compose up -d` (mục 1.3) |
+| `create_admin.py` báo `relation "app_user" does not exist` | Chưa chạy migration: `make db-upgrade` (mục 1.4) |
 | Xóa dữ liệu Docker mà ổ C không giảm (Windows) | File `.vhdx` của Docker không tự co. Dùng Settings, Resources, Disk image size trong Docker Desktop, hoặc `wsl --shutdown` rồi `Optimize-VHD` |
 | `api` không healthy | `docker compose logs api`. Production thiếu `JWT_SECRET_KEY` hoặc còn mật khẩu Postgres mặc định thì api từ chối khởi động |
 | Chat chậm, LLM chạy CPU | `core/startup.py` ghi log lỗi khi Ollama chạy một phần trên CPU. Kiểm tra `docker compose exec ollama ollama ps` và VRAM trống |
