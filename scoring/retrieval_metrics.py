@@ -7,11 +7,25 @@ tránh viết lại toán metric ở nhiều nơi.
 from __future__ import annotations
 
 import math
+import re
+
+
+def same_document(result_stem: str, expected_stem: str) -> bool:
+    """Cùng tài liệu: trùng tên tệp, hoặc một bên là bản tải lên lại ``<stem>_<n>`` của bên kia.
+
+    Tải lại một tệp trùng tên tạo stem ``QTKD_1.061_2021_ND_V2_2``; bộ eval ghi stem gốc vẫn phải khớp.
+    """
+    if result_stem == expected_stem:
+        return True
+    for longer, shorter in ((result_stem, expected_stem), (expected_stem, result_stem)):
+        if longer.startswith(shorter + "_") and re.fullmatch(r"\d+", longer[len(shorter) + 1 :]):
+            return True
+    return False
 
 
 def matches(result_payload: dict, expected: dict) -> bool:
-    """A hit matches if file_stem equals AND section_path starts with expected."""
-    if result_payload.get("file_stem") != expected["file_stem"]:
+    """A hit matches if it is the same document AND section_path starts with expected."""
+    if not same_document(result_payload.get("file_stem", ""), expected["file_stem"]):
         return False
     expected_path = expected["section_path"]
     result_path = result_payload.get("section_path", "")

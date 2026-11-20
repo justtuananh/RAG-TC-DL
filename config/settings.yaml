@@ -187,6 +187,60 @@ limit_clarify:                            # "có đạt không" mà giới hạn
 query_synonyms:                           # từ người dùng hay dùng nhưng tài liệu gọi khác: thêm tên trong tài liệu vào câu hỏi
   - {term: "độ kín", adds: "độ tụt áp"}
 
+doc_scopes:                               # loại câu hỏi -> chỉ tìm trong nhóm tài liệu của loại đó (câu không nêu số QTKĐ / mã TCVN)
+  enabled: true
+  fallback_min_score: 0.1                 # nguồn tốt nhất trong nhóm dưới mức này thì tìm lại toàn kho (nhóm là ưu tiên, không phải rào cứng)
+  # Câu liệt kê cả nhóm ("những thiết bị chuẩn mẫu nào có trong kho") trả lời tất định từ hồ sơ tài liệu, không qua LLM.
+  # Câu có điều kiện lọc (số, phạm vi, cấp chính xác, "đo được ...") khớp list_exclude_pattern thì để RAG chọn tài liệu.
+  list_pattern: '\b(?:liet ke|danh sach|co bao nhieu|gom (?:nhung|cac)|(?:nhung|cac) (?:\w+ ){1,6}nao (?:co |hien co |dang co |duoc )?(?:trong|o) (?:kho|he thong|co so du lieu)|(?:nhung|cac) (?:\w+ ){1,6}nao(?: dang)? (?:co|hien co|duoc luu)$)\b'
+  list_exclude_pattern: '\d|\b(?:do duoc|dung (?:cho|de)|pham vi|dai do|cap chinh xac|sai so|khong dam bao|tuyet doi|chan khong|thuy luc|khi nen|ap suat (?:khi|du|am)|lon nhat|nho nhat|cao nhat|thap nhat)\b'
+  # Mẫu so trên câu hỏi / tên tài liệu / tên mục đã bỏ dấu, chữ thường. Tài liệu vào nhóm khi khớp một bộ chọn:
+  # stem_pattern (tên tệp), title_pattern (tên tài liệu trong hồ sơ), section_pattern (tên mục cấp 1-2).
+  # priority: loại này thắng cả tên thiết bị router nhận ra ngoài nhóm; nhiều loại thường khớp thì hợp nhóm.
+  scopes:
+    - name: thiet_bi_chuan_mau
+      label: Thiết bị chuẩn mẫu (tài liệu kỹ thuật và hướng dẫn vận hành chuẩn đo lường)
+      question_pattern: '\bthiet bi chuan mau\b'
+      stem_pattern: '^A_'
+      priority: true
+    - name: huong_dan_van_hanh
+      label: Hướng dẫn vận hành / sử dụng thiết bị chuẩn
+      question_pattern: '\bhuong dan (?:van hanh|su dung)\b'
+      stem_pattern: '^A_'
+    - name: ap_suat
+      label: Đo áp suất (áp kế, bàn tạo áp, bình phân ly, van an toàn, chân không)
+      question_pattern: '\b(?:ap suat|ap ke|ap chan khong|chan khong ke|ban tao ap|binh phan ly|van an toan|pit ?tong|piston|khi tai lan)\b'
+      title_pattern: '\b(?:ap suat|ap ke|ap chan khong|ban tao ap|binh phan ly|van an toan|khi tai lan)\b'
+    - name: nhiet_do
+      label: Đo nhiệt độ (nhiệt kế, cặp nhiệt điện, chỉ thị nhiệt độ, lò / bình ổn nhiệt, nhiệt ẩm)
+      question_pattern: '\b(?:nhiet ke|cap nhiet|chi thi nhiet do|lo nhiet|binh on nhiet|thiet bi do nhiet do|do nhiet do - do am|nhiet am ke)\b'
+      title_pattern: '\bnhiet\b'
+    - name: dung_tich
+      label: Đo dung tích (bình định mức, buret, pipet, ống đong, bình chuẩn)
+      question_pattern: '\b(?:dung tich|binh dinh muc|buret|pipet|ong dong|binh chuan)\b'
+      title_pattern: '\bdung tich\b'
+    - name: luu_luong
+      label: Đo lưu lượng, xăng dầu, tiêu hao nhiên liệu
+      question_pattern: '\b(?:luu luong|xang dau|nhien lieu)\b'
+      title_pattern: '\b(?:luu luong|xang dau|nhien lieu)\b'
+    - name: toc_do_vong_quay
+      label: Đo tốc độ vòng quay (takhomet)
+      question_pattern: '\b(?:toc do vong quay|takhomet|tachometer|may do toc do)\b'
+      title_pattern: '\b(?:takhomet|toc do vong quay)\b'
+    - name: do_ph
+      label: Đo pH
+      question_pattern: '\b(?:do ph|ph ke|may do ph|gia tri ph|dung dich (?:chuan |dem )?ph)\b'
+      title_pattern: '\bdo ph\b'
+    - name: nang_luc_phong_thi_nghiem
+      label: Năng lực phòng thử nghiệm / hiệu chuẩn (TCVN ISO/IEC 17025)
+      question_pattern: '\b(?:phong thu nghiem|phong thi nghiem|phong hieu chuan|he thong quan ly|tinh khach quan|tinh bao mat|khieu nai|danh gia noi bo|xem xet cua lanh dao|cong viec khong phu hop)\b'
+      title_pattern: '\bphong thu nghiem\b'
+    - name: thuat_ngu
+      label: Thuật ngữ, định nghĩa đo lường (TCVN 6165 và mục thuật ngữ của QTKĐ)
+      question_pattern: '\b(?:thuat ngu|dinh nghia|khai niem|duoc hieu la|tu vung|giai thich tu ngu)\b'
+      title_pattern: '\bthuat ngu\b'
+      section_pattern: '\b(?:thuat ngu|giai thich tu ngu)\b'
+
 doc_summary:                              # tóm tắt tài liệu do LLM viết lúc nạp, người duyệt phê duyệt rồi chat mới dùng
   enabled: true
   generate_on_ingest: true                # nạp xong tài liệu thì xếp hàng sinh nháp tóm tắt (luồng nền, một việc mỗi lúc)

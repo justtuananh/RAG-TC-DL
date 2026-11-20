@@ -14,7 +14,7 @@ from __future__ import annotations
 
 import re
 
-from retrieval import doc_profile
+from retrieval import doc_profile, doc_scope
 from retrieval.normalize import fold
 from vectorstore import qdrant
 
@@ -197,8 +197,28 @@ def _ensure_profile_index() -> tuple[tuple[str, str | None, tuple[str, ...], str
                 digits = match.group(0) if match else None
             if digits or profile.keywords or profile.subject:
                 entries.append((stem, digits, profile.keywords, profile.subject))
-        _profile_index = tuple(entries)
+        _profile_index = tuple(_drop_family_names(entries))
     return _profile_index
+
+
+_FAMILY_NAME_MAX_WORDS = 2
+
+
+def _drop_family_names(entries: list[tuple[str, str | None, tuple[str, ...], str]]) -> list:
+    """Tên đối tượng ngắn ("áp kế" của 1.139 "Áp kế kiểu lò xo ...") mở đầu tên tài liệu khác ("áp kế pittông",
+    "áp kế đo chênh lệch áp suất") là tên HỌ thiết bị: khớp nó không đủ để ghim một tài liệu ("áp kế chênh áp
+    ПКУ-М" từng bị ghim sang 1.139). Tài liệu vẫn ghim được bằng số QTKĐ, kiểu, hoặc alias."""
+    subjects = {subject for *_, subject in entries if subject}
+
+    def is_family(subject: str) -> bool:
+        return len(subject.split()) <= _FAMILY_NAME_MAX_WORDS and any(
+            other.startswith(subject + " ") for other in subjects
+        )
+
+    return [
+        (stem, digits, keywords, "" if is_family(subject) else subject)
+        for stem, digits, keywords, subject in entries
+    ]
 
 
 def _profile_stems(folded_query: str, raw_query: str) -> tuple[set[str], list[set[str]]]:
@@ -208,15 +228,26 @@ def _profile_stems(folded_query: str, raw_query: str) -> tuple[set[str], list[se
     compact = doc_profile.normalize_keyword(raw_query)
     by_code: set[str] = set()
     by_keyword: list[set[str]] = []
+    keyword_subjects: list[str] = []
     by_subject: dict[str, set[str]] = {}
     for stem, digits, keywords, subject in _ensure_profile_index():
         if digits and re.search(rf"\b(?:tcvn|iso)\b[^0-9]{{0,20}}{digits}(?!\d)", folded_query):
             by_code.add(stem)
-        elif any(keyword in compact for keyword in keywords):
+        elif any(re.search(rf"{re.escape(keyword)}(?!\d)", compact) for keyword in keywords):
+            # Dừng ở ranh giới số: kiểu "mp6" (МП-6) không khớp câu hỏi về "MP-600".
             by_keyword.append({stem})
+            keyword_subjects.append(subject)
         elif subject and re.search(rf"(?<!\w){re.escape(subject)}(?!\w)", folded_query):
             by_subject.setdefault(subject, set()).add(stem)
-    return by_code, by_keyword + list(by_subject.values())
+    longer = list(by_subject) + [s for s in keyword_subjects if s]
+    named = [stems for subject, stems in by_subject.items() if not _extended_by(subject, longer)]
+    return by_code, by_keyword + named
+
+
+def _extended_by(subject: str, others: list[str]) -> bool:
+    """Tên họ thiết bị ("áp kế" của 1.139) mà câu hỏi đã nêu dài hơn ("áp kế pittông") hoặc đã ghim kiểu
+    cụ thể ("áp kế MP-6" → A_04 "áp kế pittông chuẩn ..."): chỉ là phần đầu của tên kia, không ghim thêm."""
+    return any(other != subject and other.startswith(subject + " ") for other in others)
 
 
 def _stem_number(stem: str) -> str | None:
@@ -232,6 +263,10 @@ def _stems_for_number(number: str, folded_query: str, mapping: dict[str, str]) -
     """
     candidates = {stem for stem in [mapping.get(number)] if stem}
     candidates |= {stem for stem in _ensure_extra_stems() if _stem_number(stem) == number}
+    if not candidates:
+        # Bảng procedure không có số này (dòng mã đọc nhầm, vd. 1.141 từng bị ghi 1.137 lấy từ danh sách viện
+        # dẫn): tài liệu mang số đó trong tên tệp.
+        candidates = {stem for stem in mapping.values() if _stem_number(stem) == number}
     year = re.search(rf"{re.escape(number)}\s*[:/_-]\s*(\d{{4}})", folded_query)
     if year and len(candidates) > 1:
         narrowed = {s for s in candidates if f"_{number}_{year.group(1)}" in fold(s)}
@@ -251,6 +286,7 @@ def invalidate() -> None:
     _device_aliases = None
     _extra_stems = None
     _profile_index = None
+    doc_scope.invalidate()
 
 
 def route_files(query: str) -> frozenset[str]:
@@ -264,20 +300,40 @@ def route_files(query: str) -> frozenset[str]:
     mapping = _ensure_mapping()
     q = fold(query)
 
+    by_code, named_groups = _profile_stems(q, query)
+    alias_groups = [
+        {mapping[n] for n in numbers if n in mapping}
+        for alias, numbers in _ensure_device_aliases().items()
+        if re.search(r"(?<!\w)" + re.escape(fold(alias)) + r"(?!\w)", q)
+    ]
     by_number: set[str] = set()
     for num in _NUMBER_RE.findall(q):
-        by_number |= _stems_for_number(num, q, mapping)
-    by_code, named_groups = _profile_stems(q, query)
+        candidates = _stems_for_number(num, q, mapping)
+        by_number |= _narrow_shared_number(candidates, alias_groups + named_groups)
     stems = by_number | by_code
-    for alias, numbers in _ensure_device_aliases().items():
-        if re.search(r"(?<!\w)" + re.escape(fold(alias)) + r"(?!\w)", q):
-            stems |= _unless_confirming({mapping[n] for n in numbers if n in mapping}, by_number)
+    for group in alias_groups:
+        stems |= _unless_confirming(group, by_number)
     if not by_number:
         # Tên lấy từ tên tài liệu ("áp kế pít tông" của 1.071) là tên loại thiết bị, không phải mã: câu đã nêu
         # số QTKĐ ("áp kế pít tông theo QTKĐ 1.159") thì số quyết định, tên không kéo thêm tài liệu khác.
         for group in named_groups:
             stems |= group
-    return frozenset(stems)
+    named = frozenset(stems)
+    # Mã nêu đích danh thắng mọi phạm vi theo loại câu hỏi. Không thì "thiết bị chuẩn mẫu ..." chỉ tìm trong
+    # nhóm tài liệu chuẩn mẫu dù câu nêu tên loại thiết bị của QTKĐ khác.
+    if by_number or by_code or not named or not doc_scope.asks_priority(query):
+        return named
+    return doc_scope.restrict_named(query, named, known_files())
+
+
+def _narrow_shared_number(by_number: set[str], named_groups: list[set[str]]) -> set[str]:
+    """Số QTKĐ dùng chung cho nhiều tài liệu (1.062: bàn tạo áp 2021 và cột đo xăng dầu 2016) mà câu hỏi nêu
+    tên thiết bị của MỘT trong số đó ("Điều kiện kiểm định bàn tạo áp QTKĐ 1.062"): giữ tài liệu khớp tên.
+    Tên không khớp tài liệu nào mang số đó (câu so sánh với thiết bị khác) thì giữ nguyên."""
+    if len(by_number) < 2:
+        return by_number
+    named = set().union(*named_groups) if named_groups else set()
+    return (by_number & named) or by_number
 
 
 def _unless_confirming(named: set[str], by_number: set[str]) -> set[str]:

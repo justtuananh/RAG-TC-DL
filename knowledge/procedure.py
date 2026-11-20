@@ -21,6 +21,11 @@ _HEADER_RE = re.compile(
     re.IGNORECASE,
 )
 _STOP_RE = re.compile(r"^(QUY TRÌNH KIỂM ĐỊNH|HÀ NỘI|HỒ CHÍ MINH)\b", re.IGNORECASE)
+# Mã của QTKĐ KHÁC: gạch đầu dòng / mục "[n]" của danh sách viện dẫn, câu "kiểm định theo QTKĐ ...".
+# QTKĐ 1.141 không có dòng mã ở bìa nên mã đầu tiên trong tệp là "- QTKĐ 1.137 : 2020 ..." (viện dẫn).
+_REFERENCE_RE = re.compile(
+    r"^(?:[-–•*+]|\[\d+\])|(?:theo|xem|tham khảo)\s+QTK[ĐD]\s*\d", re.IGNORECASE
+)
 _STEM_RE = re.compile(r"QTKD[_\s]*([0-9.]+)[_\s]+(\d{4})[_\s]+(.+)$", re.IGNORECASE)
 
 
@@ -42,7 +47,7 @@ def parse_procedure_header(text: str) -> ProcedureHeader | None:
     index = -1
     for i, line in enumerate(lines):
         match = _HEADER_RE.search(line)
-        if match:
+        if match and not _REFERENCE_RE.search(line):
             number, year = match.group(1), int(match.group(2))
             index = i
             break
@@ -154,7 +159,9 @@ def ensure_procedure(session, document, text: str):
         and procedure.document_id not in (None, document.id)
         and not same_subject(procedure.title, header.title)
     ):
-        return None  # trùng số với thiết bị khác: giữ nguyên chủ của dòng procedure, không giành lấy
+        return (
+            None  # trùng số với thiết bị khác: giữ nguyên chủ của dòng procedure, không giành lấy
+        )
     if procedure is None:
         procedure = Procedure(number=header.number)
         session.add(procedure)

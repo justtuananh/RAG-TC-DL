@@ -156,3 +156,18 @@ def test_build_procedure_plan_is_idempotent(session, md_dir):
     apply_procedure_plan(session, second)
     session.commit()
     assert session.query(Procedure).count() == len(EXPECTED)
+
+
+def test_header_ignores_codes_in_reference_lists():
+    # QTKĐ 1.141 không có dòng mã ở trang bìa; mã đầu tiên trong tệp nằm ở danh sách viện dẫn
+    # ("- QTKĐ 1.137 : 2020 Đồng hồ bấm giây ... - Quy trình kiểm định;"), không phải mã của nó.
+    md = (
+        "Thiết bị kiểm tra khí tài lặn ΠКУ-M\n"
+        "Tài liệu viện dẫn\n"
+        "- QTKĐ 1.137 : 2020 Đồng hồ bấm giây cơ khí - Quy trình kiểm định;\n"
+        "[3] QTKĐ 1.138 : 2020 Ca líp trụ - Quy trình kiểm định;\n"
+        "Đồng hồ bấm giây được kiểm định theo QTKĐ 1.137 : 2020 và kết quả ghi vào biên bản.\n"
+        "Phương pháp kiểm định: QTKĐ 1.141 : 2020\n"
+    )
+    header = parse_procedure_header(md)
+    assert header is not None and header.number == "1.141"

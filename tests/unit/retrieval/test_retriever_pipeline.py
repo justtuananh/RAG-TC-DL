@@ -290,7 +290,7 @@ def test_coverage_pool_counts_sections_and_keeps_late_anchors(monkeypatch, setti
         return []
 
     monkeypatch.setattr(R.reranker, 'rerank_hits', rerank)
-    R._retrieve_coverage('query', [], 'query', top_k=50)
+    R._retrieve_coverage('query', [], 'query', top_k=50, files={'A', 'B'})
     assert any(h['payload']['parent_id'] == 'target' for h in captured)
     assert any(h['payload']['chunk_id'] == 'last' for h in captured)
     assert not any(h['payload']['parent_id'] == 'third' for h in captured)

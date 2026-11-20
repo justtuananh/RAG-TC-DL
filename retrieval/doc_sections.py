@@ -11,6 +11,7 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from core import outline
 from retrieval.normalize import fold
 
 _HEADING_RE = re.compile(r"^(#+)\s*(.+?)\s*$")
@@ -27,6 +28,11 @@ _AGENCY_HEAD_LINES = 150
 _AGENCY_MAX_GAP = 4
 _TERM_COLON_RE = re.compile(r"^(?:\d+(?:\.\d+)+\.?\s+)?([^:|]{3,80}):\s*(.+)$")
 _TERM_NUMBERED_RE = re.compile(r"^(\d+\.\d+)\.?\s+([^:|]{3,80})$")
+# Dòng bảng thuật ngữ (TCVN 6165): "| 3.9. Độ không đảm bảo đo / A. uncertainty ... | định nghĩa |";
+# dòng sau có ô đầu "A. ..." / "P. ..." / trống là chú thích, tên tiếng Anh/Pháp của cùng mục từ.
+_TERM_ROW_RE = re.compile(r"^\|\s*(\d{1,2}\.\s?\d{1,2})\.?\s+([^|]{3,400}?)\s*\|\s*([^|]*?)\s*\|$")
+_TERM_ROW_NOTE_RE = re.compile(r"^\|\s*(?:[AP]\.?\s[^|]*)?\|\s*([^|]*?)\s*\|$")
+_TERM_LANGUAGE_SPLIT_RE = re.compile(r"\s+/\s+")
 _NOT_TERMS = ("cac thuat ngu", "trong quy trinh", "chu thich", "vi du", "ghi chu")
 
 
@@ -75,7 +81,12 @@ def _clean(lines: list[str]) -> str:
 
 
 def section_bodies(markdown: str) -> list[SectionBody]:
-    """Mọi mục đánh số có tiêu đề ``#`` kèm thân nguyên văn (gồm các mục con), theo thứ tự tài liệu."""
+    """Mọi mục đánh số có tiêu đề ``#`` kèm thân nguyên văn (gồm các mục con), theo thứ tự tài liệu.
+
+    Tài liệu không có ``#`` (TCVN 6165, TCVN ISO/IEC 17025, thiết bị chuẩn mẫu) dùng mục suy ra từ dòng đánh
+    số - cùng cách hiểu với chunker (``core.outline``)."""
+    if not outline.has_headings(markdown):
+        markdown = outline.promote_numbered_headings(markdown) or markdown
     lines = markdown.splitlines()
     heads = _heads(lines)
     bodies: list[SectionBody] = []
@@ -93,7 +104,9 @@ def section_bodies(markdown: str) -> list[SectionBody]:
 
 def find_section(markdown: str, title_pattern: str) -> SectionBody | None:
     """Mục có tiêu đề (đã bỏ dấu) khớp ``title_pattern``: ưu tiên cấp nông nhất, rồi thân dài nhất."""
-    matches = [b for b in section_bodies(markdown) if re.search(title_pattern, fold(b.title)) and b.text]
+    matches = [
+        b for b in section_bodies(markdown) if re.search(title_pattern, fold(b.title)) and b.text
+    ]
     if not matches:
         return None
     return min(matches, key=lambda b: (b.level, -len(b.text)))
@@ -138,11 +151,29 @@ def definitions(markdown: str) -> list[Definition]:
     if section is None:
         return []
     found: list[Definition] = []
-    lines = [line.strip() for line in section.text.splitlines()]
+    # Mục con trong thân được ``_clean`` in đậm ("**3.1 Tính khách quan**"): bỏ dấu in đậm để nhận mục từ.
+    lines = [line.strip().strip("*").strip() for line in section.text.splitlines()]
+    in_row = False  # mục từ vừa đọc là một dòng bảng: dòng chú thích kế tiếp thuộc về nó
     for i, line in enumerate(lines):
+        row = _TERM_ROW_RE.match(line)
+        if row and row.group(3):
+            term = _TERM_LANGUAGE_SPLIT_RE.split(row.group(2), maxsplit=1)[0].strip()
+            label = f"{section.label}, mục từ {row.group(1).replace(' ', '')}"
+            found.append(Definition(term, f"{row.group(1)} {term}: {row.group(3)}", label))
+            in_row = True
+            continue
+        note = _TERM_ROW_NOTE_RE.match(line) if in_row and not row else None
+        if note:
+            if note.group(1):
+                last = found[-1]
+                found[-1] = Definition(last.term, f"{last.text}\n\n{note.group(1)}", last.section)
+            continue
+        in_row = False
         colon = _TERM_COLON_RE.match(line)
         if colon and fold(colon.group(1)).startswith(_NOT_TERMS):
-            if found and fold(colon.group(1)).startswith("chu thich"):  # chú thích thuộc mục từ đứng trước
+            if found and fold(colon.group(1)).startswith(
+                "chu thich"
+            ):  # chú thích thuộc mục từ đứng trước
                 last = found[-1]
                 found[-1] = Definition(last.term, f"{last.text}\n\n{line}", last.section)
             continue
@@ -153,5 +184,7 @@ def definitions(markdown: str) -> list[Definition]:
         if numbered:
             body = next((nxt for nxt in lines[i + 1 :] if nxt), "")
             if body and not _TERM_NUMBERED_RE.match(body):
-                found.append(Definition(numbered.group(2).strip(), f"{line}\n{body}", section.label))
+                found.append(
+                    Definition(numbered.group(2).strip(), f"{line}\n{body}", section.label)
+                )
     return found

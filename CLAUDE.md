@@ -93,6 +93,14 @@ A lower layer never imports a higher one;
   After the first build, ingestion updates BM25 per file (`hybrid_index.refresh_files`) instead of re-scrolling the whole collection.
 - `retrieval/router.py` - pins a query to a file by QTKĐ number or device alias.
   The number → file map comes from the `procedure` table (the number is read from the document header, not the file name), with a deterministic Qdrant file-name scan only when Postgres is unreachable.
+- `retrieval/doc_scope.py` - question categories → document groups (`doc_scopes:` in settings): a question that names no document is searched only in the group of its category (thiết bị chuẩn mẫu → `A_*`, áp suất, nhiệt độ, dung tích, lưu lượng, tốc độ vòng quay, pH, ISO/IEC 17025, thuật ngữ).
+  Groups are selected by file name, document title or section title from the profile, so new documents join their group automatically.
+  A `priority` category ("thiết bị chuẩn mẫu") also overrides device names the router matched outside its group; an explicit QTKĐ number or TCVN code always wins.
+  The group is a preference: when its best rerank score is below `doc_scopes.fallback_min_score` the retriever searches the whole corpus.
+  A listing question for a whole group ("những thiết bị chuẩn mẫu nào có trong kho") is answered from the profiles by `query/doc_catalog.try_scope_listing`, not by the LLM.
+- `core/outline.py` - Markdown without `#` headings but with numbered sections (A_* equipment guides, TCVN ISO/IEC 17025, TCVN 6165) gets its numbered lines promoted to headings.
+  The chunker uses it (real sections with numbers for citations, oversized sections split into "(phần i)" on line boundaries) and so does `retrieval/doc_sections.py`.
+  Definition questions ("X là gì / được định nghĩa thế nào / Theo TCVN 6165, X ...") are answered verbatim from term sections and from the TCVN 6165 term table rows.
 - `ingestion/jobs.py` - upload accepts only `.docx`/`.doc`/`.pdf` (QTKĐ); older `.xlsx`/`.xls` already in the store stay viewable.
   A document whose Markdown header carries a QTKĐ code is treated as `qtkd` even when its file name does not say so.
   Each QTKĐ number keeps exactly one version in the index: the newer issue year wins (same year: the one processed later), the older one becomes `superseded` (removed from Qdrant, source file + Markdown kept), and deleting the current version re-indexes the newest superseded one.

@@ -98,3 +98,128 @@ def test_row_group_carries_nearest_group_heading(tmp_path):
     assert "| II | Lĩnh vực nhiệt độ |  |" in holder.text
     assert "| I | Lĩnh vực áp suất |  |" not in holder.text
     assert len({c.chunk_id for c in tables}) == len(tables)
+
+
+EQUIPMENT_MD = """TÀI LIỆU KỸ THUẬT VÀ HƯỚNG DẪN VẬN HÀNH CHUẨN ĐO LƯỜNG
+
+THIẾT BỊ: ÁP KẾ PÍTTÔNG CHUẨN МП-600 (SỐ HIỆU: 994)
+
+| Ký hiệu / Model: | МП-600 (MP-600) |
+| --- | --- |
+
+1. TỔNG QUAN
+
+1.1. Vai trò và phạm vi ứng dụng: Áp kế píttông chuẩn МП-600 dùng để kiểm định áp kế lò xo.
+
+2. ĐẶC TÍNH ĐO LƯỜNG
+
+2.1. Điều kiện vận hành tham chiếu và các yếu tố hiệu chính:
+
+Nhiệt độ phòng (20 ± 2) °C.
+
+3. HƯỚNG DẪN SỬ DỤNG NHANH
+
+Bước 1: Chuẩn bị thiết bị.
+"""
+
+
+def _parents(tmp_path, name, text):
+    path = tmp_path / f"{name}.md"
+    path.write_text(text, encoding="utf-8")
+    return [c for c in parse_file(path) if c.is_parent]
+
+
+def test_numbered_lines_become_sections_when_markdown_has_no_headings(tmp_path):
+    # Tài liệu thiết bị chuẩn mẫu (A_*) không có tiêu đề "#": mục "1. TỔNG QUAN"... phải thành mục thật,
+    # không bị cắt máy móc thành "(phần N)". Phần đầu (tên, bảng kiểu/số hiệu) giữ trong mục riêng.
+    paths = [c.section_path for c in _parents(tmp_path, "A_06", EQUIPMENT_MD)]
+    assert paths == [
+        "Thông tin chung",
+        "1. TỔNG QUAN",
+        "2. ĐẶC TÍNH ĐO LƯỜNG",  # "2.1. ... hiệu chính:" kết thúc bằng ":" nên ở trong mục 2
+        "3. HƯỚNG DẪN SỬ DỤNG NHANH",
+    ]
+    first = _parents(tmp_path, "A_06", EQUIPMENT_MD)[0]
+    assert "MP-600" in first.text and "THIẾT BỊ" in first.text
+
+
+def test_table_of_contents_is_skipped_and_body_numbering_is_used(tmp_path):
+    md = """TIÊU CHUẨN QUỐC GIA
+
+1 Phạm vi áp dụng
+
+2 Thuật ngữ
+
+2.1 Tính khách quan
+
+Lời nói đầu
+
+Nội dung lời nói đầu.
+
+1 Phạm vi áp dụng
+
+Tiêu chuẩn này quy định yêu cầu chung.
+
+2 Thuật ngữ
+
+2.1 Tính khách quan
+
+2.1.1 Hoạt động thí nghiệm phải được thực hiện một cách khách quan và được cơ cấu, quản lý để bảo vệ tính khách quan.
+
+2.2 Bảo mật
+"""
+    paths = [c.section_path for c in _parents(tmp_path, "TCVN", md)]
+    assert paths == [
+        "Thông tin chung",
+        "1 Phạm vi áp dụng",
+        "2 Thuật ngữ",
+        "2 Thuật ngữ > 2.1 Tính khách quan",
+        "2 Thuật ngữ > 2.2 Bảo mật",
+    ]
+
+
+def test_text_without_numbered_sections_still_gets_synthetic_windows(tmp_path):
+    paths = [
+        c.section_path for c in _parents(tmp_path, "pdf", "chỉ có văn bản trơn không đánh số mục")
+    ]
+    assert paths == ["pdf (phần 1)"]
+
+
+def test_clause_lines_are_not_headings_but_short_dotted_titles_and_appendices_are(tmp_path):
+    md = """1 Phạm vi áp dụng
+
+Nội dung.
+
+2 Yêu cầu
+
+2.1 Phòng thí nghiệm phải:
+
+a) có nhân sự.
+
+2.2 Đánh giá độ không đảm bảo đo.
+
+2.2.1 Phòng thí nghiệm phải nhận biết các thành phần độ không đảm bảo đo.
+
+Phụ lục A
+
+Thông tin bổ sung.
+"""
+    paths = [c.section_path for c in _parents(tmp_path, "TCVN", md)]
+    assert paths == [
+        "1 Phạm vi áp dụng",
+        "2 Yêu cầu",
+        "2 Yêu cầu > 2.2 Đánh giá độ không đảm bảo đo.",
+        "Phụ lục A",
+    ]
+
+
+def test_oversized_promoted_section_is_split_on_line_boundaries(tmp_path, settings_override):
+    settings_override({"chunking.synth_section_chars": 100})
+    rows = "\n".join(f"| 1.{i} Thuật ngữ số {i} | Định nghĩa {i} |" for i in range(1, 40))
+    md = f"1. Phạm vi áp dụng\n\nNội dung.\n\n2. Thuật ngữ\n\n{rows}\n"
+    parents = _parents(tmp_path, "TCVN", md)
+    paths = [c.section_path for c in parents]
+    assert paths[0] == "1. Phạm vi áp dụng"
+    assert paths[1:3] == ["2. Thuật ngữ (phần 1)", "2. Thuật ngữ (phần 2)"]
+    body = "\n".join(c.text for c in parents[1:])
+    assert all(f"| 1.{i} Thuật ngữ số {i} |" in body for i in range(1, 40))  # không cắt giữa dòng

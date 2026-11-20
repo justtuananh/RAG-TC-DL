@@ -143,3 +143,33 @@ def test_subject_is_the_device_name_before_qualifiers():
     )
     assert parse_subject("THIẾT BỊ ĐO TIÊU HAO NHIÊN LIỆU ĐỘNG CƠ KIỂU FC9531") == "thiet bi do tieu hao nhien lieu dong co"
     assert parse_subject("Takhomet") == ""  # một từ: quá mơ hồ để ghim tài liệu
+
+
+EQUIPMENT_DOC = """TÀI LIỆU KỸ THUẬT VÀ HƯỚNG DẪN VẬN HÀNH CHUẨN ĐO LƯỜNG
+
+THIẾT BỊ: ÁP KẾ PÍTTÔNG CHUẨN МП-600 (SỐ HIỆU: 994)
+
+
+| Tên chuẩn mẫu, phương tiện đo: | Áp kế píttông chuẩn (Nga) |
+| --- | --- |
+| Ký hiệu / Model: | МП-600 (MP-600) |
+| Số hiệu (Serial Number): | 994 |
+
+1. TỔNG QUAN
+"""
+
+
+def test_equipment_document_takes_title_and_latin_model_keywords():
+    # Tài liệu kỹ thuật thiết bị chuẩn mẫu (A_*): tên sau "THIẾT BỊ:", kiểu từ dòng "Ký hiệu / Model".
+    p = build_profile("A_06_Ap_ke_pittong_MP_600_994_2", EQUIPMENT_DOC, 1500)
+    assert p.title == "ÁP KẾ PÍTTÔNG CHUẨN МП-600 (SỐ HIỆU: 994)"
+    assert p.keywords == ("mp600",)  # bản Kirin "МП-600" không gõ được bằng chữ Latinh: bỏ
+
+
+def test_equipment_model_row_keeps_short_codes_and_drops_maker_names():
+    doc = EQUIPMENT_DOC.replace("МП-600 (MP-600)", "M2800 (WIKA / Desgranges & Huot)")
+    assert build_profile("A_08", doc, 1500).keywords == ("m2800",)
+    doc = EQUIPMENT_DOC.replace("МП-600 (MP-600)", "МП-6 (MP-6)")
+    assert build_profile("A_04", doc, 1500).keywords == ("mp6",)
+    doc = EQUIPMENT_DOC.replace("МП-600 (MP-600)", "PG 7601 (Fluke Calibration / DHI)")
+    assert build_profile("A_02", doc, 1500).keywords == ("pg7601",)

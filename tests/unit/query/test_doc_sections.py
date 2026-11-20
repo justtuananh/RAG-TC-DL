@@ -102,7 +102,9 @@ def test_structural_question_without_a_named_document_goes_to_rag(docs):
 def test_definition_found_in_named_or_any_document(docs):
     answer = doc_sections.try_section_answer("Áp suất chỉnh đặt là gì?")
     assert "> Áp suất chỉnh đặt (set pressure): là áp suất tại đó van bắt đầu mở ra." in answer.text
-    assert doc_sections.try_section_answer("Áp suất mở van là gì?") is None  # không có mục từ: để RAG
+    assert (
+        doc_sections.try_section_answer("Áp suất mở van là gì?") is None
+    )  # không có mục từ: để RAG
 
 
 def test_device_name_without_definition_quotes_the_scope(docs):
@@ -117,7 +119,10 @@ def test_comparison_facts_give_each_document_scope_and_cycle(docs):
     docs[question] = frozenset({"VAN", "LUU"})
     facts = doc_sections.comparison_facts(question)
     assert facts.startswith("THÔNG TIN CHÍNH CỦA TỪNG TÀI LIỆU")
-    assert "### QTKĐ 1.061:2021" in facts and "Chu kỳ kiểm định: Chu kỳ kiểm định của Van an toàn là 12 tháng." in facts
+    assert (
+        "### QTKĐ 1.061:2021" in facts
+        and "Chu kỳ kiểm định: Chu kỳ kiểm định của Van an toàn là 12 tháng." in facts
+    )
     assert "Điều kiện kiểm định (mục 4.1):\n- Nhiệt độ môi trường: (23 ± 5) oC;" in facts
     assert facts.index("1.061") < facts.index("1.213")
     one = "Van an toàn khác gì?"
@@ -128,3 +133,83 @@ def test_comparison_facts_give_each_document_scope_and_cycle(docs):
 def test_disabled_in_settings(docs, settings_override):
     settings_override({"doc_sections.enabled": False})
     assert doc_sections.try_section_answer("Áp suất chỉnh đặt là gì?") is None
+
+
+VIM = """TCVN 6165:1996
+ĐO LƯỜNG HỌC - THUẬT NGỮ CHUNG VÀ CƠ BẢN
+
+1. Phạm vi áp dụng
+
+Tiêu chuẩn này qui định các thuật ngữ chung.
+
+2. Thuật ngữ
+
+| Thuật ngữ | Định nghĩa và giải thích |
+| --- | --- |
+| 3 Kết quả đo |  |
+| 3.9. Độ không đảm bảo đo / A. uncertainty of measurement | Thông số gắn với kết quả của phép đo, đặc trưng cho sự phân tán của các giá trị. |
+| A. uncertainty | Chú thích / 1) Thông số có thể là độ lệch chuẩn. |
+| 5.21. Sai số cho phép lớn nhất (của phương tiện đo); giới hạn sai số cho phép (của phương tiện đo) / A. maximum permissible errors | Giá trị cực trị của sai số được quy định cho phương tiện đo. |
+"""
+LAB = """TCVN ISO/IEC 17025:2017
+
+1 Phạm vi áp dụng
+
+Tiêu chuẩn này quy định yêu cầu chung.
+
+2 Tài liệu viện dẫn
+
+Không có.
+
+3 Thuật ngữ và định nghĩa
+
+3.1 Tính khách quan
+
+Sự thể hiện không có xung đột lợi ích.
+
+3.2 Khiếu nại
+
+Sự bày tỏ không hài lòng của cá nhân hay tổ chức với phòng thí nghiệm.
+
+4 Yêu cầu chung
+"""
+
+
+@pytest.fixture
+def glossary(docs, tmp_path, monkeypatch):
+    files = {"VAN": VAN, "LUU": LUU, "CU": CU, "VIM": VIM, "LAB": LAB}
+    for stem in ("VIM", "LAB"):
+        (tmp_path / f"{stem}.md").write_text(files[stem], encoding="utf-8")
+    monkeypatch.setattr(doc_sections.router, "known_files", lambda: frozenset(files))
+    return docs
+
+
+@pytest.mark.parametrize(
+    "question",
+    [
+        "Độ không đảm bảo đo được định nghĩa thế nào?",
+        "Độ không đảm bảo đo là gì?",
+        "Theo TCVN 6165, độ không đảm bảo đo là gì?",
+        "TCVN 6165:1996 định nghĩa độ không đảm bảo đo như thế nào?",
+        "Định nghĩa độ không đảm bảo đo",
+    ],
+)
+def test_definition_from_vocabulary_table_rows(glossary, question):
+    # Bảng thuật ngữ TCVN 6165 (không có tiêu đề "#"): mỗi dòng bảng là một mục từ, kèm dòng chú thích sau nó.
+    answer = doc_sections.try_section_answer(question)
+    assert answer is not None
+    assert "đặc trưng cho sự phân tán" in answer.text and "độ lệch chuẩn" in answer.text
+    assert [h["payload"]["file_stem"] for h in answer.hits] == ["VIM"]
+
+
+def test_definition_term_with_parenthetical_and_trailing_qualifier(glossary):
+    answer = doc_sections.try_section_answer(
+        "Sai số cho phép lớn nhất của phương tiện đo nghĩa là gì?"
+    )
+    assert answer is not None and "Giá trị cực trị của sai số" in answer.text
+
+
+def test_definition_from_promoted_numbered_term_sections(glossary):
+    answer = doc_sections.try_section_answer("Khiếu nại được định nghĩa như thế nào?")
+    assert answer is not None and "không hài lòng" in answer.text
+    assert [h["payload"]["file_stem"] for h in answer.hits] == ["LAB"]

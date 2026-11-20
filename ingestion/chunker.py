@@ -8,15 +8,16 @@ Each child carries its parent_id so the retriever can fetch the full section.
 
 Output: list[Chunk] per file, with is_parent=True|False.
 """
+
 from __future__ import annotations
 
 import hashlib
 import re
 from pathlib import Path
 
+from core import outline
 from core.schema import Chunk
 from core.settings_loader import get_settings
-
 
 _HEADING_RE = re.compile(r"^(#{1,6})\s+(.+)$")
 _TABLE_ROW_RE = re.compile(r"^\|")
@@ -101,15 +102,17 @@ def _split_body_into_children(
             kind = "formula"
         parts = _split_table(text) if kind == "table" else [text]
         for part in parts:
-            children.append(Chunk(
-                chunk_id=_make_id(file_stem, section_path, part),
-                parent_id=parent_id,
-                is_parent=False,
-                kind=kind,
-                text=part,
-                section_path=section_path,
-                file_stem=file_stem,
-            ))
+            children.append(
+                Chunk(
+                    chunk_id=_make_id(file_stem, section_path, part),
+                    parent_id=parent_id,
+                    is_parent=False,
+                    kind=kind,
+                    text=part,
+                    section_path=section_path,
+                    file_stem=file_stem,
+                )
+            )
         buffer.clear()
 
     for line in lines:
@@ -168,9 +171,10 @@ def _synthesize_sections(text: str, file_stem: str) -> str:
         if window:
             windows.append(window)
         start = end
-    return "\n\n".join(
-        f"# {file_stem} (phần {i})\n\n{w}" for i, w in enumerate(windows, 1)
-    )
+    return "\n\n".join(f"# {file_stem} (phần {i})\n\n{w}" for i, w in enumerate(windows, 1))
+
+
+_OVERSIZED_SECTION_FACTOR = 3  # mục suy ra dài hơn (bảng thuật ngữ TCVN 6165) chia thành "(phần i)"
 
 
 def parse_file(md_path: Path) -> list[Chunk]:
@@ -178,16 +182,19 @@ def parse_file(md_path: Path) -> list[Chunk]:
     text = md_path.read_text(encoding="utf-8")
     file_stem = md_path.stem
     if not any(_HEADING_RE.match(line) for line in text.split("\n")):
-        text = _synthesize_sections(text, file_stem)
+        window = get_settings().chunking.synth_section_chars
+        promoted = outline.promote_numbered_headings(
+            text, split_limit=window * _OVERSIZED_SECTION_FACTOR, split_window=window
+        )
+        text = promoted or _synthesize_sections(text, file_stem)
     lines = text.split("\n")
 
     chunks: list[Chunk] = []
 
     # Track current section
-    current_level: int = 0
     current_heading: str = ""
     current_body_lines: list[str] = []
-    section_stack: list[str] = []   # heading texts by level
+    section_stack: list[str] = []  # heading texts by level
 
     def flush_section() -> None:
         nonlocal current_heading, current_body_lines
@@ -202,21 +209,21 @@ def parse_file(md_path: Path) -> list[Chunk]:
         parent_id = _make_id(file_stem, section_path, full_text)
 
         # Parent chunk (full section, for context expansion)
-        chunks.append(Chunk(
-            chunk_id=parent_id,
-            parent_id=None,
-            is_parent=True,
-            kind="section",
-            text=full_text,
-            section_path=section_path,
-            file_stem=file_stem,
-        ))
+        chunks.append(
+            Chunk(
+                chunk_id=parent_id,
+                parent_id=None,
+                is_parent=True,
+                kind="section",
+                text=full_text,
+                section_path=section_path,
+                file_stem=file_stem,
+            )
+        )
 
         # Child chunks
         if body:
-            children = _split_body_into_children(
-                body, section_path, file_stem, parent_id
-            )
+            children = _split_body_into_children(body, section_path, file_stem, parent_id)
             chunks.extend(children)
 
         current_body_lines.clear()
@@ -227,7 +234,6 @@ def parse_file(md_path: Path) -> list[Chunk]:
             flush_section()
             level = len(m.group(1))
             heading_text = m.group(2).strip()
-            current_level = level
             current_heading = line.strip()
 
             # Maintain section stack by level
@@ -256,6 +262,7 @@ def parse_directory(md_dir: Path) -> list[Chunk]:
 
 if __name__ == "__main__":
     import sys
+
     md_dir = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("build/spike_a")
     chunks = parse_directory(md_dir)
     parents = [c for c in chunks if c.is_parent]

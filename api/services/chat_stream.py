@@ -43,7 +43,7 @@ from query import (
     table_lookup,
     unit_convert,
 )
-from retrieval import doc_pages, doc_titles, retriever, router
+from retrieval import doc_pages, doc_scope, doc_titles, retriever, router
 from retrieval.context_builder import build_context_and_citations, filter_by_confidence
 from retrieval.quote import build_quote
 
@@ -102,8 +102,11 @@ def _build_sources_payload(results: list[dict]) -> list[dict]:
 def _detect_device_ambiguity(
     db: Session | None, question: str
 ) -> device_ambiguity.DeviceAmbiguity | None:
-    """Câu hỏi nêu loại thiết bị chung chung (khớp nhiều QTKĐ)? None nếu không/không đọc được DB."""
-    if db is None:
+    """Câu hỏi nêu loại thiết bị chung chung (khớp nhiều QTKĐ)? None nếu không/không đọc được DB.
+
+    Câu thuộc loại ưu tiên ("thiết bị chuẩn mẫu áp kế píttông") đã có nhóm tài liệu riêng: không ép về
+    các QTKĐ cùng tên loại thiết bị."""
+    if db is None or doc_scope.asks_priority(question):
         return None
     try:
         catalog = device_ambiguity.load_device_procedures(db)
@@ -312,6 +315,7 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     # để làm gì / nói về gì / mục lục): trích nguyên văn từ chính tài liệu, không qua LLM. Cụ thể trước, chung sau.
     for answerer in (
         doc_catalog.try_catalog_answer,
+        doc_catalog.try_scope_listing,  # "những thiết bị chuẩn mẫu nào có trong kho": đủ cả nhóm
         doc_sections.try_section_answer,
         doc_overview.try_document_answer,
     ):

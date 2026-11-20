@@ -138,8 +138,12 @@ class ContextSettings(_Section):
     quote_anchors: Positive
     formula_line_slack: Positive
     linearize_tables: bool = True
-    linearize_value_tables: bool = True   # bảng tra giá trị không có cột TT -> dòng 'nhãn hàng: nhãn cột = giá trị'
-    long_table_rows: Annotated[int, Field(ge=0)] = 12  # bảng dài hơn: chỉ giữ dòng khớp từ khóa câu hỏi (0 = tắt)
+    linearize_value_tables: bool = (
+        True  # bảng tra giá trị không có cột TT -> dòng 'nhãn hàng: nhãn cột = giá trị'
+    )
+    long_table_rows: Annotated[int, Field(ge=0)] = (
+        12  # bảng dài hơn: chỉ giữ dòng khớp từ khóa câu hỏi (0 = tắt)
+    )
     source_abs_floor: Annotated[float, Field(ge=0)]
     source_rel_floor: Annotated[float, Field(ge=0, le=1)]
 
@@ -165,21 +169,37 @@ class MultiDocumentSettings(_Section):
     evidence_max_candidates: Positive = 96
     evidence_min_score: Annotated[float, Field(ge=0, le=1)] = 0.35
     evidence_relative_floor: Annotated[float, Field(ge=0, le=1)] = 0.35
-    min_documents: Positive = 2           # ít hơn số tài liệu này thì trả lời một lượt như thường
-    max_documents: Positive = 6           # trần số tài liệu xét bổ sung
-    max_followups: Positive = 2           # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
-    max_followups_named: Positive = 4     # trần khi câu hỏi nêu rõ ≥ 2 QTKĐ (mọi tài liệu được nêu đều đáng hỏi)
-    min_followup_score: Annotated[float, Field(ge=0, le=1)] = 0.3  # câu chung: chỉ hỏi tài liệu có nguồn rerank_score ≥ mức này
-    time_budget_s: PositiveFloat = 6.0    # quá ngần này giây từ lúc bắt đầu sinh thì bỏ các lượt hỏi riêng còn lại
-    generic_device_words: tuple[str, ...] = ()  # từ đầu tên thiết bị quá chung, không tính là nêu một loại thiết bị
-    context_chars: Positive = 5000        # trần ngữ cảnh mỗi lượt (chỉ nguồn của một tài liệu)
-    num_predict: Positive = 90            # trần token mỗi lượt hỏi riêng
-    merge_identical: bool = True          # tài liệu cùng bộ số liệu gộp một dòng
-    merge_max_chars: Positive = 80        # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
-    grounding_min_coverage: Annotated[float, Field(ge=0, le=1)] = 0.6          # trích thay cho sinh: tỷ lệ từ khóa câu hỏi phải có trong đoạn trích
-    grounding_min_coverage_refusal: Annotated[float, Field(ge=0, le=1)] = 0.8  # trích thay cho câu từ chối: chặt hơn
-    grounding_absent_term_coverage: Annotated[float, Field(ge=0, le=1)] = 0.9  # có từ khóa vắng khỏi mọi nguồn thì cần phủ ≥ mức này
-    grounding_stop_words: tuple[str, ...] = ()  # từ hỏi/từ chức năng không tính là từ khóa đối tượng
+    min_documents: Positive = 2  # ít hơn số tài liệu này thì trả lời một lượt như thường
+    max_documents: Positive = 6  # trần số tài liệu xét bổ sung
+    max_followups: Positive = 2  # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)
+    max_followups_named: Positive = (
+        4  # trần khi câu hỏi nêu rõ ≥ 2 QTKĐ (mọi tài liệu được nêu đều đáng hỏi)
+    )
+    min_followup_score: Annotated[float, Field(ge=0, le=1)] = (
+        0.3  # câu chung: chỉ hỏi tài liệu có nguồn rerank_score ≥ mức này
+    )
+    time_budget_s: PositiveFloat = (
+        6.0  # quá ngần này giây từ lúc bắt đầu sinh thì bỏ các lượt hỏi riêng còn lại
+    )
+    generic_device_words: tuple[
+        str, ...
+    ] = ()  # từ đầu tên thiết bị quá chung, không tính là nêu một loại thiết bị
+    context_chars: Positive = 5000  # trần ngữ cảnh mỗi lượt (chỉ nguồn của một tài liệu)
+    num_predict: Positive = 90  # trần token mỗi lượt hỏi riêng
+    merge_identical: bool = True  # tài liệu cùng bộ số liệu gộp một dòng
+    merge_max_chars: Positive = 80  # giá trị dùng ở dòng gộp dài hơn mức này thì không gộp
+    grounding_min_coverage: Annotated[float, Field(ge=0, le=1)] = (
+        0.6  # trích thay cho sinh: tỷ lệ từ khóa câu hỏi phải có trong đoạn trích
+    )
+    grounding_min_coverage_refusal: Annotated[float, Field(ge=0, le=1)] = (
+        0.8  # trích thay cho câu từ chối: chặt hơn
+    )
+    grounding_absent_term_coverage: Annotated[float, Field(ge=0, le=1)] = (
+        0.9  # có từ khóa vắng khỏi mọi nguồn thì cần phủ ≥ mức này
+    )
+    grounding_stop_words: tuple[
+        str, ...
+    ] = ()  # từ hỏi/từ chức năng không tính là từ khóa đối tượng
 
 
 class NumberCheckSettings(_Section):
@@ -193,9 +213,11 @@ class CitationSettings(_Section):
     """Khối 'Nguồn:' dựng tất định từ các nguồn được [n] tham chiếu (llm/citations.py)."""
 
     enabled: bool = True
-    min_keyword_len: Positive = 5          # từ khóa của câu trả lời: chữ có ít nhất N ký tự
-    min_keyword_hits: Positive = 2         # số từ khóa tối thiểu có trong nguồn khi câu trả lời không có số
-    max_auto_sources: Positive = 1         # số nguồn tự gắn khi câu trả lời thiếu [n]
+    min_keyword_len: Positive = 5  # từ khóa của câu trả lời: chữ có ít nhất N ký tự
+    min_keyword_hits: Positive = (
+        2  # số từ khóa tối thiểu có trong nguồn khi câu trả lời không có số
+    )
+    max_auto_sources: Positive = 1  # số nguồn tự gắn khi câu trả lời thiếu [n]
 
 
 class LlmSettings(_Section):
@@ -256,19 +278,31 @@ class CalcSettings(_Section):
     min_variable_coverage: Annotated[float, Field(ge=0, le=1)] = 0.6
     num_predict: Positive = 300
     timeout_s: PositiveFloat = 60
-    convert_enabled: bool = True          # câu quy đổi đơn vị thuần túy: trả lời tất định bằng bảng UNITS, không qua LLM
-    convert_verbs: str = r"quy đổi|chuyển đổi|đổi|chuyển"  # động từ đứng trước "<số> <đv> sang <đv>"
+    convert_enabled: bool = (
+        True  # câu quy đổi đơn vị thuần túy: trả lời tất định bằng bảng UNITS, không qua LLM
+    )
+    convert_verbs: str = (
+        r"quy đổi|chuyển đổi|đổi|chuyển"  # động từ đứng trước "<số> <đv> sang <đv>"
+    )
 
 
 class ObjectScopeSettings(_Section):
     """Từ chối khi câu hỏi về quy trình/điều kiện kiểm định của một đối tượng không thuộc các QTKĐ trong kho."""
 
     enabled: bool = True
-    trigger_pattern: str = r"quy trình|trình tự|phép kiểm định|điều kiện|chu kỳ|phương pháp|yêu cầu|nội dung|thời hạn"
-    scope_section_pattern: str = r"phạm vi áp dụng"  # mục nguồn nêu đối tượng được kiểm định (ngoài tiêu đề tài liệu)
-    generic_words: tuple[str, ...] = ()   # từ chỉ loại chung ("thiết bị", "đo"...): không đủ để nhận diện đối tượng
-    ignore_words: tuple[str, ...] = ()    # từ chức năng/đại từ đứng sau "kiểm định" (này, lại, định kỳ...)
-    stop_words: tuple[str, ...] = ()      # từ kết thúc cụm tên đối tượng (gồm, là, có, cần...)
+    trigger_pattern: str = (
+        r"quy trình|trình tự|phép kiểm định|điều kiện|chu kỳ|phương pháp|yêu cầu|nội dung|thời hạn"
+    )
+    scope_section_pattern: str = (
+        r"phạm vi áp dụng"  # mục nguồn nêu đối tượng được kiểm định (ngoài tiêu đề tài liệu)
+    )
+    generic_words: tuple[
+        str, ...
+    ] = ()  # từ chỉ loại chung ("thiết bị", "đo"...): không đủ để nhận diện đối tượng
+    ignore_words: tuple[
+        str, ...
+    ] = ()  # từ chức năng/đại từ đứng sau "kiểm định" (này, lại, định kỳ...)
+    stop_words: tuple[str, ...] = ()  # từ kết thúc cụm tên đối tượng (gồm, là, có, cần...)
 
 
 class DocProfileSettings(_Section):
@@ -323,6 +357,35 @@ class LimitClarifySettings(_Section):
     max_tables: int = 8
 
 
+class DocScope(_Section):
+    """Một loại câu hỏi và nhóm tài liệu được tìm cho nó. Mẫu so trên chữ đã bỏ dấu, chữ thường.
+
+    Tài liệu thuộc nhóm khi khớp MỘT trong các bộ chọn: tên tệp (``stem_pattern``), tên tài liệu trong
+    hồ sơ (``title_pattern``) hoặc tên một mục cấp 1-2 (``section_pattern``). ``priority``: loại này thắng
+    cả tên thiết bị router nhận ra ngoài nhóm ("thiết bị chuẩn mẫu áp kế píttông" chỉ tìm trong A_*).
+    """
+
+    name: str
+    label: str = ""
+    question_pattern: str
+    stem_pattern: str = ""
+    title_pattern: str = ""
+    section_pattern: str = ""
+    priority: bool = False
+
+
+class DocScopesSettings(_Section):
+    """Câu hỏi không nêu đích danh tài liệu: chỉ tìm trong nhóm tài liệu của loại câu hỏi."""
+
+    enabled: bool = True
+    fallback_min_score: float = 0.1  # nguồn tốt nhất trong nhóm dưới mức này thì tìm lại toàn kho
+    # Câu liệt kê cả nhóm ("những thiết bị chuẩn mẫu nào có trong kho") trả lời tất định từ hồ sơ tài liệu;
+    # câu có điều kiện lọc (exclude) để RAG chọn tài liệu khớp.
+    list_pattern: str = r"\b(?:liet ke|danh sach|co bao nhieu)\b"
+    list_exclude_pattern: str = r"\d"
+    scopes: list[DocScope] = Field(default_factory=list)
+
+
 class QuerySynonym(_Section):
     term: str
     adds: str
@@ -365,6 +428,7 @@ class Settings(_Section):
     doc_catalog: DocCatalogSettings = Field(default_factory=DocCatalogSettings)
     query_synonyms: list[QuerySynonym] = Field(default_factory=list)
     limit_clarify: LimitClarifySettings = Field(default_factory=LimitClarifySettings)
+    doc_scopes: DocScopesSettings = Field(default_factory=DocScopesSettings)
 
     def llm_model(self, role: LlmRole) -> str:
         """Model chat (vai trò LLM duy nhất còn lại)."""

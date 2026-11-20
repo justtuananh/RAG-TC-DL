@@ -36,9 +36,16 @@ def title_for(file_stem: str) -> str:
     path = Path(get_settings().paths.markdown_dir) / f"{file_stem}.md"
     try:
         with path.open(encoding="utf-8") as f:
-            return parse_title([next(f, "") for _ in range(40)])
+            title = parse_title([next(f, "") for _ in range(40)])
     except OSError:
         return ""
+    if title:
+        return title
+    # Dạng khác QTKĐ mới (tài liệu thiết bị chuẩn mẫu "THIẾT BỊ: ...", QTKĐ cũ, TCVN): tên trong hồ sơ.
+    from retrieval import doc_profile
+
+    profile = doc_profile.profile_for(file_stem)
+    return profile.title[:_MAX] if profile is not None else ""
 
 
 def code_for(file_stem: str) -> str:

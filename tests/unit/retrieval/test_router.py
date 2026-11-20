@@ -66,6 +66,7 @@ def test_no_signal_returns_none(mapping):
 
 def test_device_aliases_match_without_accents_or_unicode_composition(mapping, monkeypatch):
     import unicodedata
+
     monkeypatch.setattr(router_mod, '_device_aliases', {'bình phân ly': ('1.063',)})
     assert route('BINH PHAN LY cần điều kiện gì') == mapping['1.063']
     assert route(unicodedata.normalize('NFD', 'bình phân ly')) == mapping['1.063']
@@ -274,7 +275,84 @@ def test_subject_from_document_title_pins_its_document(profiled):
 
 def test_name_shared_by_two_documents_confirms_the_explicit_number(profiled):
     # "bàn tạo áp" là cả 1.033 và 1.062: câu đã nêu 1.062:2021 thì không kéo thêm 1.033.
-    assert route("Điều kiện kiểm định bàn tạo áp theo QTKĐ 1.062:2021 là gì?") == "QTKD_1.062_2021_ND_2"
+    assert (
+        route("Điều kiện kiểm định bàn tạo áp theo QTKĐ 1.062:2021 là gì?")
+        == "QTKD_1.062_2021_ND_2"
+    )
     assert len(route_files("Điều kiện kiểm định bàn tạo áp")) == 2
     # Tên lấy từ tên tài liệu là tên loại thiết bị: số QTKĐ đã nêu quyết định ("áp kế pít tông theo 1.159").
     assert route("áp kế pít tông theo QTKĐ 1.061") == "QTKD_1.061_2021_ND_V2"
+
+
+def test_model_keyword_does_not_match_a_longer_model_number(profiled, monkeypatch):
+    # "mp6" (МП-6) là đầu của "mp600" (МП-600): khớp kiểu phải dừng ở ranh giới số.
+    index = (
+        ("A_04_Ap_ke_pittong_MP_6_5393_2", None, ("mp6",), ""),
+        ("A_06_Ap_ke_pittong_MP_600_994_2", None, ("mp600",), ""),
+    )
+    monkeypatch.setattr(router_mod, "_profile_index", index)
+    assert route("Cách vận hành MP-600") == "A_06_Ap_ke_pittong_MP_600_994_2"
+    assert route("MP-6 đo được tới bao nhiêu kPa") == "A_04_Ap_ke_pittong_MP_6_5393_2"
+
+
+def test_family_name_that_prefixes_other_subjects_does_not_pin(monkeypatch):
+    # 1.139 "Áp kế kiểu lò xo ..." cho tên đối tượng chỉ còn "áp kế": tên họ thiết bị chung, là phần đầu
+    # của tên tài liệu khác ("áp kế pittông ..."), nên không ghim 1.139 cho mọi câu có "áp kế".
+    monkeypatch.setattr(router_mod, "_number_to_stem", {})
+    monkeypatch.setattr(router_mod, "_extra_stems", frozenset())
+    monkeypatch.setattr(router_mod, "_device_aliases", {})
+    monkeypatch.setattr(
+        router_mod.doc_profile,
+        "profile_for",
+        lambda stem: router_mod.doc_profile.DocProfile(
+            stem, None, "", "", "", (), {"A_04": ("mp6",)}.get(stem, ()), SUBJECTS[stem]
+        ),
+    )
+    monkeypatch.setattr(router_mod, "known_files", lambda: frozenset(SUBJECTS))
+    monkeypatch.setattr(router_mod, "_profile_index", None)
+    assert route_files("Áp kế MP-6 đo được tới bao nhiêu kPa?") == {"A_04"}
+    assert route_files("chu kỳ kiểm định áp kế pittông") == {"QTKD_1.159"}
+
+
+SUBJECTS = {"QTKĐ_1.139": "ap ke", "QTKD_1.159": "ap ke pittong", "A_04": "ap ke pittong chuan"}
+
+
+def test_number_missing_from_procedure_table_falls_back_to_file_name(monkeypatch):
+    # Dòng procedure của QTKĐ_1.141 từng mang số 1.137 (đọc nhầm từ danh sách viện dẫn).
+    monkeypatch.setattr(router_mod, "_number_to_stem", {"1.137": "QTKĐ_1.141_2020_2"})
+    monkeypatch.setattr(router_mod, "_extra_stems", frozenset())
+    monkeypatch.setattr(router_mod, "_device_aliases", {})
+    monkeypatch.setattr(router_mod, "_profile_index", ())
+    assert route_files("QTKĐ 1.141 kiểm tra những gì") == {"QTKĐ_1.141_2020_2"}
+
+
+def test_two_word_family_name_never_pins_alone(monkeypatch):
+    # "áp kế" (1.139) mở đầu tên tài liệu khác: câu "áp kế chênh áp ПКУ-М" không được ghim sang 1.139.
+    subjects = {
+        "QTKĐ_1.139": "ap ke",
+        "QTKD_1.159": "ap ke pittong",
+        "QTKĐ_1.140": "ap ke do chenh lech ap suat",
+    }
+    monkeypatch.setattr(router_mod, "_number_to_stem", {})
+    monkeypatch.setattr(router_mod, "_extra_stems", frozenset())
+    monkeypatch.setattr(router_mod, "_device_aliases", {})
+    monkeypatch.setattr(
+        router_mod.doc_profile,
+        "profile_for",
+        lambda stem: router_mod.doc_profile.DocProfile(
+            stem, None, "", "", "", (), (), subjects[stem]
+        ),
+    )
+    monkeypatch.setattr(router_mod, "known_files", lambda: frozenset(subjects))
+    monkeypatch.setattr(router_mod, "_profile_index", None)
+    assert route_files("Kiểm tra độ kín của áp kế chênh áp ПКУ-М") == frozenset()
+    assert route_files("chu kỳ kiểm định áp kế pittông") == {"QTKD_1.159"}
+
+
+def test_device_name_picks_one_of_two_documents_sharing_a_number(collided, monkeypatch):
+    # 1.062 là cả bàn tạo áp (2021) và cột đo xăng dầu (2016): tên thiết bị trong câu chọn đúng tài liệu.
+    monkeypatch.setattr(router_mod, "_device_aliases", {"bàn tạo áp": ("1.062",)})
+    both = route_files("QTKĐ 1.062 là quy trình gì")
+    assert len(both) == 2
+    picked = route_files("Điều kiện kiểm định bàn tạo áp QTKĐ 1.062?")
+    assert len(picked) == 1 and picked < both

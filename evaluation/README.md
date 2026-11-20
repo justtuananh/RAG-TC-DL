@@ -4,7 +4,11 @@ Hệ có **hai** bộ đo, tách bạch hai thứ khác nhau:
 
 | | Đo gì | File | Lệnh | Cổng đạt |
 |---|---|---|---|---|
-| **Retrieval** | Section đúng có nằm trong top-k? (recall@k, nDCG, MRR) | `run_eval.py` + `eval_set.jsonl` (55 câu) | `make eval` | recall@5 ≥ 0.85 |
+| **Retrieval** | Section đúng có nằm trong top-k? (recall@k, nDCG, MRR) | `run_eval.py` + `eval_set.jsonl` (55 câu, 7 QTKĐ áp suất) | `make eval` | recall@5 ≥ 0.85 |
+| | Thiết bị chuẩn mẫu (A_*), TCVN ISO/IEC 17025, TCVN 6165 | `eval_set_chuan_mau_tcvn.jsonl` (45 câu, có `category`) | `python -m evaluation.run_eval --mode hybrid --eval-file evaluation/eval_set_chuan_mau_tcvn.jsonl` | recall@5 ≥ 0.85 |
+| | QTKĐ theo lĩnh vực: nhiệt độ, dung tích, lưu lượng, tốc độ, pH, áp suất (có `category`, `naming`) | `eval_set_linh_vuc.jsonl` (50 câu) | như trên với `--eval-file evaluation/eval_set_linh_vuc.jsonl` | recall@5 ≥ 0.85 |
+
+`file_stem` trong bộ eval khớp cả bản tải lên lại `<stem>_<n>` (`scoring.retrieval_metrics.same_document`).
 | **Answer quality** | Câu trả lời SINH RA có đúng/đủ/trích dẫn đúng/không bịa? | `answer_eval.py` + `answer_set.jsonl` | `make answer-eval` | xem dưới |
 
 > Trước đây chỉ có tầng retrieval → báo recall@5 = 0.909 ✅ trong khi câu trả lời thực tế

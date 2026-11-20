@@ -47,6 +47,12 @@ _NUMBERED_RE = re.compile(r"^(\d{1,2}(?:\.\d+)*)\.?\s+(.+)$")
 _APPENDIX_RE = re.compile(r"^(Phụ lục\s+[A-Z])\b\s*(.*)$", re.IGNORECASE)
 _PLAIN_SECTION_RE = re.compile(r"^#*\s*(\d{1,2})\.?\s+([A-ZĐÀ-Ỹa-zà-ỹ][^|]{2,120})$")
 _MODEL_RE = re.compile(r"\bkiểu\s+(.+?)(?:\s*,|\s+có\s|$)", re.IGNORECASE)
+# Tài liệu kỹ thuật thiết bị chuẩn mẫu: "THIẾT BỊ: <tên>" và bảng "| Ký hiệu / Model: | МП-600 (MP-600) |".
+_EQUIPMENT_TITLE_RE = re.compile(r"^THIẾT BỊ\s*:\s*(.+)$", re.IGNORECASE)
+_MODEL_ROW_RE = re.compile(r"^\|\s*Ký hiệu\s*/\s*Model\s*:?\s*\|\s*([^|]+?)\s*\|", re.IGNORECASE)
+_MODEL_PART_SPLIT_RE = re.compile(r"[()/&]")
+_ASCII_MODEL_RE = re.compile(r"[a-z0-9]*(?:[a-z][0-9]|[0-9][a-z])[a-z0-9]*")
+_MIN_MODEL_ROW_KEYWORD = 3  # "MP-6" → "mp6"; router chỉ khớp tới ranh giới số nên không trùng "mp600"
 _SKIPPED_HEADINGS = {"lời nói đầu", "mục lục", "lời giới thiệu"}
 # Cắt trên chữ CÒN DẤU: bỏ dấu thì "dùng"/"dung tích", "có"/"động cơ" trùng nhau.
 _SUBJECT_CUT_RE = re.compile(r"\s+(?:có|kiểu|dùng|loại|cấp|từ)\s+|,|\s+[-–]\s+|\(|:")
@@ -141,6 +147,10 @@ def parse_title(head: list[str], code: DocCode | None) -> str:
                     if not _CODE_LIKE_RE.search(following):
                         return following.strip()
                 break
+    for line in head:
+        equipment = _EQUIPMENT_TITLE_RE.match(line)
+        if equipment:
+            return equipment.group(1).strip()
     return ""
 
 
@@ -259,6 +269,26 @@ def parse_keywords(title: str) -> tuple[str, ...]:
     return tuple(dict.fromkeys(k for k in keywords if len(k) >= 4))
 
 
+def parse_model_row_keywords(head: list[str]) -> tuple[str, ...]:
+    """Từ khoá kiểu từ dòng "Ký hiệu / Model" của tài liệu thiết bị chuẩn mẫu.
+
+    "МП-600 (MP-600)" → mp600; "M2800 (WIKA / Desgranges & Huot)" → m2800. Chỉ giữ phần có cả chữ
+    lẫn số viết bằng chữ Latinh: người dùng gõ "MP-600", không gõ chữ Kirin "МП"; tên hãng thì không
+    phải kiểu.
+    """
+    for line in head:
+        match = _MODEL_ROW_RE.match(line)
+        if not match:
+            continue
+        keywords = []
+        for part in _MODEL_PART_SPLIT_RE.split(match.group(1)):
+            compact = "".join(c for c in part.lower() if c.isalnum())
+            if len(compact) >= _MIN_MODEL_ROW_KEYWORD and _ASCII_MODEL_RE.fullmatch(compact):
+                keywords.append(compact)
+        return tuple(dict.fromkeys(keywords))
+    return ()
+
+
 def parse_subject(title: str) -> str:
     """Tên đối tượng (bỏ dấu) ở đầu tên tài liệu, trước "có / kiểu / dùng / ," ...
 
@@ -285,7 +315,7 @@ def build_profile(file_stem: str, text: str, max_scope_chars: int) -> DocProfile
         scope_heading=scope_heading,
         scope_text=scope_text,
         sections=parse_sections(lines),
-        keywords=parse_keywords(title),
+        keywords=tuple(dict.fromkeys(parse_keywords(title) + parse_model_row_keywords(head))),
         subject=parse_subject(title),
     )
 

@@ -70,10 +70,10 @@ def main() -> None:
     ap.add_argument("--warmup", type=int, default=2)
     args = ap.parse_args()
 
+    import logging
+
     from retrieval import retriever
     from retrieval.context_builder import filter_by_confidence
-
-    import logging
 
     class _Count(logging.Handler):
         """Đếm lần reranker lỗi (rơi về thứ tự RRF) - số đo lúc đó không đại diện nên thử lại."""

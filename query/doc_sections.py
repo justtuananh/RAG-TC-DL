@@ -29,7 +29,15 @@ CYCLE = "cycle"
 AGENCY = "agency"
 _SECTION_TITLES = {EQUIPMENT: r"^phuong tien kiem dinh", CONDITIONS: r"^dieu kien"}
 _NO_CYCLE = "Tài liệu không quy định chu kỳ kiểm định."
-_SUBJECT_RE = re.compile(r"^(.+?)\s+(?:la gi|nghia la gi|duoc hieu la gi|duoc dinh nghia nhu the nao)$")
+_SUBJECT_RE = re.compile(
+    r"^(.+?)\s+(?:la gi|nghia la gi|duoc hieu la gi|duoc hieu (?:nhu )?the nao|la khai niem gi"
+    r"|duoc dinh nghia (?:nhu )?(?:the nao|ra sao))$"
+)
+# "TCVN 6165:1996 định nghĩa X như thế nào", "Định nghĩa X".
+_DEFINE_RE = re.compile(
+    r"^(?:[\w.:/ ]{0,40}\s)?dinh nghia (?:cua |ve )?(.+?)(?:\s+(?:nhu )?(?:the nao|ra sao))?$"
+)
+_SOURCE_PREFIX_RE = re.compile(r"^(?:theo|trong) [^,]{2,40},\s*")
 _SUBJECT_CUT_RE = re.compile(r"\s+(?:cua|trong|theo|o|tai)\s+|\s*\(")
 _PAREN_RE = re.compile(r"\s*\([^)]*\)")
 _MAX_TRAILING_TOKENS = 1  # "lượng cấp phát tối thiểu V_min": cho phép một ký hiệu sau thuật ngữ
@@ -77,7 +85,9 @@ def _block(intent: str, stem: str, markdown: str, ref: int) -> tuple[str, dict |
         section = doc_sections.find_section(markdown, _SECTION_TITLES[intent])
         if section is None or len(section.text) > get_settings().doc_sections.max_section_chars:
             return None
-        return f"Theo mục {section.label} [{ref}]:\n\n{section.text}", _hit(stem, section.label, section.text)
+        return f"Theo mục {section.label} [{ref}]:\n\n{section.text}", _hit(
+            stem, section.label, section.text
+        )
     if intent == CYCLE:
         lines = doc_sections.cycle_lines(markdown)
         if not lines:
@@ -87,10 +97,14 @@ def _block(intent: str, stem: str, markdown: str, ref: int) -> tuple[str, dict |
     lines = doc_sections.agency_lines(markdown)
     if not lines:
         return None
-    return "\n\n".join(lines) + f" [{ref}]", _hit(stem, "Cơ quan biên soạn, ban hành", "\n".join(lines))
+    return "\n\n".join(lines) + f" [{ref}]", _hit(
+        stem, "Cơ quan biên soạn, ban hành", "\n".join(lines)
+    )
 
 
-def _render(blocks: list[tuple[doc_profile.DocProfile, list[str]]], hits: list[dict]) -> SectionAnswer:
+def _render(
+    blocks: list[tuple[doc_profile.DocProfile, list[str]]], hits: list[dict]
+) -> SectionAnswer:
     parts = [f"{_header(profile)}\n\n" + "\n\n".join(texts) for profile, texts in blocks]
     lead = f"Có {len(parts)} tài liệu khớp với câu hỏi:\n\n" if len(parts) > 1 else ""
     return SectionAnswer(lead + "\n\n---\n\n".join(parts), hits)
@@ -120,18 +134,24 @@ def _structural_answer(intents: list[str], stems: list[str]) -> SectionAnswer | 
 
 
 def _question_subject(question: str) -> str | None:
-    """Phần đứng trước "là gì", bỏ phần chỉ tài liệu ("của cột đo...", "trong QTKĐ ...", "(...)")."""
-    match = _SUBJECT_RE.match(fold(question).strip(" ?."))
+    """Thuật ngữ được hỏi: phần trước "là gì / được định nghĩa thế nào", hoặc sau "định nghĩa"; bỏ phần chỉ
+    tài liệu ("của cột đo...", "trong QTKĐ ...", "(...)", "Theo TCVN 6165, ...")."""
+    q = _SOURCE_PREFIX_RE.sub("", fold(question).strip(" ?."))
+    match = _SUBJECT_RE.match(q) or _DEFINE_RE.match(q)
     if not match:
         return None
     return _SUBJECT_CUT_RE.split(match.group(1), maxsplit=1)[0].strip()
 
 
 def _term_matches(term: str, subject: str) -> bool:
-    folded = fold(_PAREN_RE.sub("", term)).strip()
-    if len(folded.split()) < 2 or not subject.startswith(folded):
-        return False
-    return len(subject[len(folded) :].split()) <= _MAX_TRAILING_TOKENS
+    """Câu hỏi nêu đúng thuật ngữ (hoặc một tên đồng nghĩa sau ";": "Sai số cho phép lớn nhất (...); giới
+    hạn sai số cho phép (...)"), cho phép thêm tối đa ``_MAX_TRAILING_TOKENS`` ký hiệu phía sau."""
+    for name in fold(_PAREN_RE.sub("", term)).split(";"):
+        folded = name.strip()
+        if len(folded.split()) >= 2 and subject.startswith(folded):
+            if len(subject[len(folded) :].split()) <= _MAX_TRAILING_TOKENS:
+                return True
+    return False
 
 
 def _definition_answer(subject: str, stems: list[str]) -> SectionAnswer | None:
@@ -145,8 +165,12 @@ def _definition_answer(subject: str, stems: list[str]) -> SectionAnswer | None:
         for definition in doc_sections.definitions(markdown):
             if _term_matches(definition.term, subject):
                 hits.append(_hit(stem, definition.section, definition.text))
-                quoted = "\n".join(f"> {line}" if line else ">" for line in definition.text.splitlines())
-                blocks.append((profile, [f"Theo mục {definition.section} [{len(hits)}]:\n\n{quoted}"]))
+                quoted = "\n".join(
+                    f"> {line}" if line else ">" for line in definition.text.splitlines()
+                )
+                blocks.append(
+                    (profile, [f"Theo mục {definition.section} [{len(hits)}]:\n\n{quoted}"])
+                )
                 break
     if not hits or len(hits) > get_settings().doc_sections.max_documents:
         return None
@@ -154,7 +178,7 @@ def _definition_answer(subject: str, stems: list[str]) -> SectionAnswer | None:
 
 
 def _device_scope_answer(subject: str, stems: list[str]) -> SectionAnswer | None:
-    """"Takhomet là gì?": không có mục từ, nhưng X là tên thiết bị của tài liệu → nói rõ và trích phạm vi."""
+    """ "Takhomet là gì?": không có mục từ, nhưng X là tên thiết bị của tài liệu → nói rõ và trích phạm vi."""
     if len(subject) < _MIN_DEVICE_CHARS:
         return None
     blocks: list[tuple[doc_profile.DocProfile, list[str]]] = []
@@ -200,7 +224,9 @@ def comparison_facts(question: str) -> str | None:
         if conditions is not None and len(conditions.text) <= cfg.max_fact_chars:
             lines.append(f"Điều kiện kiểm định (mục {conditions.number}):\n{conditions.text}")
         cycle = doc_sections.cycle_lines(markdown)
-        lines.append("Chu kỳ kiểm định: " + (" ".join(cycle) if cycle else "tài liệu không quy định."))
+        lines.append(
+            "Chu kỳ kiểm định: " + (" ".join(cycle) if cycle else "tài liệu không quy định.")
+        )
         parts.append("\n".join(lines))
     header = (
         "THÔNG TIN CHÍNH CỦA TỪNG TÀI LIỆU (trích nguyên văn từ chính tài liệu; điều gì có ở đây thì "
