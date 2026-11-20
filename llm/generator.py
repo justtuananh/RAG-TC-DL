@@ -7,11 +7,37 @@ Một chỗ duy nhất map URL OpenAI-compat sang native và đọc cấu hình 
 from __future__ import annotations
 
 import json
+import time
 from collections.abc import Iterator
 
 import requests
 
 from core.settings_loader import get_settings
+
+MAX_CHAT_ATTEMPTS = 2
+CHAT_RETRY_DELAY_S = 3.0
+
+
+def _open_chat_stream(url: str, body: dict, timeout_s: float, *, stream: bool = True):
+    """POST tới Ollama; lỗi 5xx (thường là llama-server bị kill/crash khi nạp lại model) thử lại có giới hạn.
+
+    Chỉ thử lại TRƯỚC khi có token đầu tiên (lỗi nằm ở ``raise_for_status``), nên
+    không bao giờ phát lặp nội dung. Lỗi 4xx là lỗi yêu cầu, không thử lại.
+    """
+    for attempt in range(1, MAX_CHAT_ATTEMPTS + 1):
+        resp = requests.post(url, json=body, stream=stream, timeout=timeout_s)
+        try:
+            resp.raise_for_status()
+            return resp
+        except requests.HTTPError as error:
+            status = getattr(error.response, "status_code", None)
+            close = getattr(resp, "close", None)
+            if close is not None:
+                close()
+            if status is None or status < 500 or attempt == MAX_CHAT_ATTEMPTS:
+                raise
+            time.sleep(CHAT_RETRY_DELAY_S)
+    raise AssertionError("unreachable")  # pragma: no cover
 
 
 def native_chat_url(url: str) -> str:
@@ -35,27 +61,22 @@ def stream_ollama(messages: list[dict], *, model: str | None = None) -> Iterator
     """
     settings = get_settings()
     chat = settings.llm.chat
-    resp = requests.post(
-        native_chat_url(settings.llm_url("chat")),
-        json={
-            "model": model or settings.llm_model("chat"),
-            "messages": messages,
-            "stream": True,
-            # Giữ model trong RAM giữa các request - mặc định 5m hay bị evict giữa
-            # phiên/lô dài; mỗi lần reload 7b dưới áp lực RAM là một cửa sổ dễ bị
-            # OOM-kill → Ollama 500 (đo: 42 lần 500/4h, log 'signal: killed').
-            "keep_alive": chat.keep_alive,
-            "options": {
-                "num_ctx": chat.num_ctx,
-                "num_predict": chat.max_new_tokens,
-                "temperature": chat.temperature,
-            },
+    body = {
+        "model": model or settings.llm_model("chat"),
+        "messages": messages,
+        "stream": True,
+        # Giữ model trong RAM giữa các request - mặc định 5m hay bị evict giữa
+        # phiên/lô dài; mỗi lần reload 7b dưới áp lực RAM là một cửa sổ dễ bị
+        # OOM-kill → Ollama 500 (đo: 42 lần 500/4h, log 'signal: killed').
+        "keep_alive": chat.keep_alive,
+        "options": {
+            "num_ctx": chat.num_ctx,
+            "num_predict": chat.max_new_tokens,
+            "temperature": chat.temperature,
         },
-        stream=True,
-        timeout=chat.timeout_s,
-    )
+    }
+    resp = _open_chat_stream(native_chat_url(settings.llm_url("chat")), body, chat.timeout_s)
     try:
-        resp.raise_for_status()
         for line in resp.iter_lines():
             if not line:
                 continue
@@ -96,6 +117,5 @@ def chat_once(
     }
     if json_mode:
         body["format"] = "json"
-    resp = requests.post(native_chat_url(settings.llm_url("chat")), json=body, timeout=timeout_s)
-    resp.raise_for_status()
+    resp = _open_chat_stream(native_chat_url(settings.llm_url("chat")), body, timeout_s, stream=False)
     return ((resp.json().get("message") or {}).get("content") or "").strip()

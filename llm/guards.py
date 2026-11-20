@@ -29,13 +29,28 @@ _CALC_IMPERATIVE_RE = re.compile(r"\btính\s+(giúp|hộ|dùm|thử|xem)\b", re.
 _CALC_WITH_VALUES_RE = re.compile(r"\btính\b", re.IGNORECASE)
 _ASSIGNED_VALUE_RE = re.compile(r"=\s*\d")
 
+# "Tính ..." đi cùng NHIỀU số liệu cho sẵn nhưng không có dấu "=" ("... 60 s, 12 cSt, 10 cSt. Tính ...").
+# Số hiệu QTKĐ (1.159, 1.062:2016), năm và số lần đo đơn lẻ là tham chiếu tra cứu nên không đếm:
+# chỉ khi còn từ hai số trở lên mới coi là bài toán có dữ kiện.
+_BARE_CALC_VERB_RE = re.compile(r"(?<!công thức )(?<!cách )(?<!các bước )\btính\b", re.IGNORECASE)
+_DOCUMENT_CODE_RE = re.compile(r"\b\d\.\d{3}(?:\s*:\s*\d{4})?|:\s*\d{4}\b")
+_VALUE_RE = re.compile(r"(?<![\d.,])\d+(?:[.,]\d+)?(?![\d])")
+_MIN_GIVEN_VALUES = 2
+
+
+def _has_given_values(query: str) -> bool:
+    without_codes = _DOCUMENT_CODE_RE.sub(" ", query)
+    return len(_VALUE_RE.findall(without_codes)) >= _MIN_GIVEN_VALUES
+
 
 def is_calculation_request(query: str) -> bool:
     """True nếu câu hỏi là yêu cầu tính toán với số liệu cho sẵn (ngoài phạm vi
     lookup-only). ui.gradio_app và api chặn trước khi retrieve; answer_eval mirror cùng hàm."""
     if _CALC_IMPERATIVE_RE.search(query):
         return True
-    return bool(_CALC_WITH_VALUES_RE.search(query) and _ASSIGNED_VALUE_RE.search(query))
+    if _CALC_WITH_VALUES_RE.search(query) and _ASSIGNED_VALUE_RE.search(query):
+        return True
+    return bool(_BARE_CALC_VERB_RE.search(query) and _has_given_values(query))
 
 
 def enforce_refusal_stop(text: str) -> str:

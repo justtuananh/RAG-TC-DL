@@ -92,3 +92,92 @@ def test_stream_ollama_uses_explicit_model_and_settings(monkeypatch, settings_ov
     assert seen["url"] == "http://o.test/api/chat"
     assert seen["body"]["model"] == "m-test"
     assert seen["body"]["options"]["num_ctx"] == 4096
+
+
+class _ServerErrorResp:
+    """Ollama trả 500 (OOM-kill khi nạp lại model dưới áp lực RAM)."""
+
+    status_code = 500
+
+    def raise_for_status(self):
+        raise generator.requests.HTTPError("500 Server Error", response=self)
+
+    def iter_lines(self):
+        return iter(())
+
+    def close(self):
+        pass
+
+
+def test_transient_500_is_retried_before_first_token(monkeypatch):
+    responses = [_ServerErrorResp(), _FakeResp([b'{"message":{"content":"OK"},"done":true}'])]
+    calls = []
+
+    def fake_post(*args, **kwargs):
+        calls.append(1)
+        return responses.pop(0)
+
+    monkeypatch.setattr(generator.requests, "post", fake_post)
+    monkeypatch.setattr(generator.time, "sleep", lambda s: None)
+    assert list(generator.stream_ollama([{"role": "user", "content": "hi"}])) == ["OK"]
+    assert len(calls) == 2
+
+
+def test_chat_once_retries_a_transient_500_without_streaming(monkeypatch):
+    class _JsonResp(_ServerErrorResp):
+        status_code = 200
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {"message": {"content": " Tóm tắt "}}
+
+    responses = [_ServerErrorResp(), _JsonResp()]
+    streams = []
+
+    def fake_post(*args, **kwargs):
+        streams.append(kwargs["stream"])
+        return responses.pop(0)
+
+    monkeypatch.setattr(generator.requests, "post", fake_post)
+    monkeypatch.setattr(generator.time, "sleep", lambda s: None)
+    assert generator.chat_once([], num_predict=10, timeout_s=5) == "Tóm tắt"
+    assert streams == [False, False]
+
+
+def test_persistent_500_raises_after_bounded_retries(monkeypatch):
+    calls = []
+
+    def fake_post(*args, **kwargs):
+        calls.append(1)
+        return _ServerErrorResp()
+
+    monkeypatch.setattr(generator.requests, "post", fake_post)
+    monkeypatch.setattr(generator.time, "sleep", lambda s: None)
+    try:
+        list(generator.stream_ollama([]))
+    except generator.requests.HTTPError:
+        pass
+    else:
+        raise AssertionError("phải ném HTTPError sau khi hết lần thử lại")
+    assert len(calls) == generator.MAX_CHAT_ATTEMPTS
+
+
+def test_client_error_4xx_is_not_retried(monkeypatch):
+    class _BadRequest(_ServerErrorResp):
+        status_code = 400
+
+    calls = []
+
+    def fake_post(*args, **kwargs):
+        calls.append(1)
+        return _BadRequest()
+
+    monkeypatch.setattr(generator.requests, "post", fake_post)
+    monkeypatch.setattr(generator.time, "sleep", lambda s: None)
+    try:
+        list(generator.stream_ollama([]))
+    except generator.requests.HTTPError:
+        pass
+    assert len(calls) == 1

@@ -2,8 +2,6 @@
 
 import json
 
-import pytest
-
 from formula_lab.engine import Invalid
 from llm import generator
 from query import chat_calc

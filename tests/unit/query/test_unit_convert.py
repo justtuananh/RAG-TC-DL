@@ -19,6 +19,20 @@ def test_pure_conversion(q, expected):
     assert out is not None and out.text.startswith(expected)
 
 
+@pytest.mark.parametrize(
+    "q",
+    [
+        "Đổi 1 400 bar sang MPa.",  # dấu cách ngăn nghìn như trong tài liệu QTKĐ
+        "Đổi 1 400 bar sang MPa.",
+        "Đổi 1400 bar sang MPa.",
+        "Đổi 1.400 bar sang MPa.",  # dấu chấm ngăn nghìn kiểu Việt Nam
+    ],
+)
+def test_thousands_separator_keeps_every_digit(q):
+    out = unit_convert.try_convert(q)
+    assert out is not None and out.text.startswith("1400 bar = 140 MPa")
+
+
 def test_dimension_mismatch_is_reported():
     out = unit_convert.try_convert("Quy đổi 5 bar sang mm")
     assert out is not None and "không cùng loại" in out.text
@@ -36,3 +50,12 @@ def test_dimension_mismatch_is_reported():
 )
 def test_not_a_pure_conversion(q):
     assert unit_convert.try_convert(q) is None
+
+
+def test_flow_rate_litre_per_minute_to_litre_per_hour():
+    # Bộ kiểm tra hệ thống: "Đổi 200 L/min sang L/h" từng bị từ chối "không tìm thấy".
+    assert "200 L/min = 12000 L/h" in unit_convert.try_convert("Đổi 200 L/min sang L/h.").text
+
+
+def test_flow_rate_is_not_convertible_to_a_pressure_unit():
+    assert "không cùng loại" in unit_convert.try_convert("Đổi 200 L/min sang bar.").text

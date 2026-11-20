@@ -14,15 +14,20 @@ from decimal import Decimal
 from core.settings_loader import get_settings
 from formula_lab.engine import UNITS
 from query.chat_calc import _fmt
+from query.numbers import NUMBER, normalize
 
 _NON_UNITS = {"1", "%", "delta_degC"}
-_BY_LOWER = {k.lower(): k for k in UNITS if k not in _NON_UNITS}
+# Lưu lượng chỉ phục vụ quy đổi nên để ở đây, không thêm vào bảng UNITS dùng chung của sổ công thức.
+# Gốc là L/h, hệ số nguyên để phép đổi không mất chữ số (1 L/min = 60 L/h).
+_FLOW_UNITS = {"L/h": ("flow", "1"), "L/min": ("flow", "60"), "m3/h": ("flow", "1000")}
+_TABLE = {**UNITS, **_FLOW_UNITS}
+_BY_LOWER = {k.lower(): k for k in _TABLE if k not in _NON_UNITS}
 _UNIT_ALIASES = {"phút": "min", "giây": "s", "giờ": "h"}
 _BY_LOWER |= {k: v for k, v in _UNIT_ALIASES.items() if v in UNITS}
 _UNIT = "|".join(re.escape(u) for u in sorted(_BY_LOWER, key=len, reverse=True))
-_NUM = r"(\d+(?:[.,]\d+)?)"
+_NUM = rf"({NUMBER})"
 _END = r"(?![\w/.]*\w)"  # đơn vị không được dính tiếp chữ/số/'/' (tránh "bar" trong "barrel", "m" trong "mm/s")
-_NUMBER_ANY = re.compile(r"\d+(?:[.,]\d+)?")
+_NUMBER_ANY = re.compile(NUMBER)
 
 
 @dataclass(frozen=True)
@@ -53,8 +58,8 @@ def try_convert(message: str) -> Conversion | None:
         if not m:
             continue
         value, src, dst = m.group(1), _canon(m.group(2)), _canon(m.group(3))
-        num = Decimal(value.replace(",", "."))
-        (cat_s, f_s), (cat_d, f_d) = UNITS[src], UNITS[dst]
+        num = Decimal(normalize(value))
+        (cat_s, f_s), (cat_d, f_d) = _TABLE[src], _TABLE[dst]
         if cat_s != cat_d:
             return Conversion(f"Không quy đổi được: {src} và {dst} không cùng loại đại lượng.")
         factor = Decimal(f_s) / Decimal(f_d)

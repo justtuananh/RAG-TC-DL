@@ -9,6 +9,7 @@ danh sách ứng viên; ``ensure_procedure`` là điểm ghi DB duy nhất ở �
 from __future__ import annotations
 
 import re
+import unicodedata
 from dataclasses import dataclass
 
 from knowledge.reference import device_type_aliases, normalize_alias
@@ -85,17 +86,42 @@ def infer_device_type(title: str, candidates) -> str | None:
     return best
 
 
+# Hai tiêu đề được coi là CÙNG đối tượng khi tỷ lệ từ chung (Jaccard) đạt ngưỡng này. Bản sửa đổi của
+# một QTKĐ chỉ đổi phạm vi/cấp chính xác nên vẫn chung phần lớn từ; "Bàn tạo áp" và "Cột đo xăng dầu" gần như không chung.
+_SUBJECT_MIN_OVERLAP = 0.3
+_WORD_RE = re.compile(r"[a-z]{3,}")
+
+
+def _subject_words(title: str | None) -> set[str]:
+    folded = unicodedata.normalize("NFD", (title or "").lower().replace("đ", "d"))
+    return set(_WORD_RE.findall("".join(c for c in folded if not unicodedata.combining(c))))
+
+
+def same_subject(title_a: str | None, title_b: str | None) -> bool:
+    """Hai tiêu đề QTKĐ có nói về cùng một loại thiết bị không.
+
+    Thiếu tiêu đề thì coi là cùng đối tượng, giữ nguyên hành vi cũ (xét theo số và năm).
+    """
+    a, b = _subject_words(title_a), _subject_words(title_b)
+    if not a or not b:
+        return True
+    return len(a & b) / len(a | b) >= _SUBJECT_MIN_OVERLAP
+
+
 def newer_version_document_id(session, document, header: ProcedureHeader) -> str | None:
     """``document_id`` của phiên bản MỚI HƠN đang giữ số QTKĐ này, nếu có.
 
     Mỗi số QTKĐ chỉ có một dòng ``procedure`` trỏ tới phiên bản hiện hành. Tài
     liệu có năm ban hành nhỏ hơn năm của bản đang giữ là bản cũ; cùng năm hoặc
     thiếu năm thì bản xử lý sau thắng (phiên bản sửa đổi trong năm).
+    Hai tài liệu trùng số nhưng khác thiết bị là hai quy trình riêng, không phải hai phiên bản.
     """
     from db.models import Procedure
 
     current = session.query(Procedure).filter(Procedure.number == header.number).one_or_none()
     if current is None or current.document_id in (None, document.id):
+        return None
+    if not same_subject(current.title, header.title):
         return None
     if current.year is not None and header.year is not None and current.year > header.year:
         return current.document_id
@@ -123,6 +149,12 @@ def ensure_procedure(session, document, text: str):
         return None
 
     procedure = session.query(Procedure).filter(Procedure.number == header.number).one_or_none()
+    if (
+        procedure is not None
+        and procedure.document_id not in (None, document.id)
+        and not same_subject(procedure.title, header.title)
+    ):
+        return None  # trùng số với thiết bị khác: giữ nguyên chủ của dòng procedure, không giành lấy
     if procedure is None:
         procedure = Procedure(number=header.number)
         session.add(procedure)
