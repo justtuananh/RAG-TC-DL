@@ -313,6 +313,16 @@ class DocCatalogSettings(_Section):
     max_documents: int = 10
 
 
+class LimitClarifySettings(_Section):
+    """Câu "có đạt không" mà giới hạn phải tra bảng theo thông số chưa nêu: hỏi lại thay vì kết luận.
+    Mẫu so trên câu hỏi / tên bảng đã bỏ dấu, chữ thường."""
+
+    enabled: bool = True
+    question_pattern: str = r"\b(?:co dat|dat khong)\b"
+    limit_pattern: str = r"\bsai so cho phep\b"
+    max_tables: int = 8
+
+
 class QuerySynonym(_Section):
     term: str
     adds: str
@@ -354,6 +364,7 @@ class Settings(_Section):
     doc_sections: DocSectionsSettings = Field(default_factory=DocSectionsSettings)
     doc_catalog: DocCatalogSettings = Field(default_factory=DocCatalogSettings)
     query_synonyms: list[QuerySynonym] = Field(default_factory=list)
+    limit_clarify: LimitClarifySettings = Field(default_factory=LimitClarifySettings)
 
     def llm_model(self, role: LlmRole) -> str:
         """Model chat (vai trò LLM duy nhất còn lại)."""

@@ -178,6 +178,12 @@ doc_catalog:                              # "những QTKĐ nào liên quan đế
   topic_prefix_pattern: '^(?:cac |nhung )?(?:viec |thiet bi |phuong tien (?:do )?)?(?:do |co )?'
   max_documents: 10
 
+limit_clarify:                            # "có đạt không" mà giới hạn tra bảng theo thông số chưa nêu: hỏi lại, không kết luận
+  enabled: true
+  question_pattern: '\b(?:co dat|dat khong|dat yeu cau|co phu hop|co duoc chap nhan|nam trong (?:gioi han|sai so cho phep))\b'
+  limit_pattern: '\b(?:sai so cho phep|gioi han cho phep)\b'   # bảng / cột giới hạn
+  max_tables: 8
+
 query_synonyms:                           # từ người dùng hay dùng nhưng tài liệu gọi khác: thêm tên trong tài liệu vào câu hỏi
   - {term: "độ kín", adds: "độ tụt áp"}
 

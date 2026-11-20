@@ -36,6 +36,7 @@ from query import (
     doc_sections,
     extractive,
     history_context,
+    limit_clarify,
     multi_document,
     object_scope,
     synonyms,
@@ -288,6 +289,12 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if basic is not None:
         answer, hits = basic
         yield _sse({"type": "done", "answer": answer, "sources": _build_sources_payload(hits)})
+        return
+    # "Có đạt không" mà giới hạn tra bảng theo thông số chưa nêu (loại, độ chia, kiểu nhúng...): hỏi lại.
+    turns = _history_to_prior(req.history)
+    clarify = limit_clarify.try_clarify(req.message, tuple(turns[-1]) if turns else None)
+    if clarify is not None:
+        yield _sse({"type": "done", "answer": clarify.text, "sources": _build_sources_payload(clarify.hits)})
         return
     # Tính toán chỉ bằng công thức ĐÃ DUYỆT (bộ tính Decimal), không để model tự tính.
     conv = unit_convert.try_convert(req.message)

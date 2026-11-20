@@ -177,6 +177,8 @@ A lower layer never imports a higher one;
   Comparison questions over named documents get a verbatim "thông tin chính" block (scope, conditions, cycle) prepended to the LLM context.
   `query/doc_catalog.py` answers "những QTKĐ nào liên quan đến X" from every profile; `query/synonyms.py` adds the document's own term to the question ("độ kín" → "độ tụt áp", `query_synonyms:`).
   Chat tries catalog → sections → overview before retrieval; each returns `None` to fall back to RAG.
+- `retrieval/doc_tables.py` + `query/limit_clarify.py` - "... có đạt không?" whose limit is looked up in a captioned table ("Bảng C.1: Sai số cho phép ...") asks back for the parameters the question leaves out (other columns, "(Theo ... và ...)" in the limit header, the differing part of the table names) instead of letting the LLM pick a cell.
+  Once the parameters narrow it to exactly one row of one simple table, it decides deterministically; a follow-up that only supplies the parameters is joined to the previous question (`limit_clarify:` in settings).
 - `retrieval/hybrid_retriever.filter_noise` keeps an appendix whose real title is content ("Bình định mức - Yêu cầu chung") even when `vectorstore/noise.py` flags its bare or "(Quy định)" path; appendices titled "Mẫu ..." stay filtered.
 - `knowledge/doc_summary.py` - LLM summary written after ingestion (background thread, table `document_summary`, migration 016).
   It stays a draft until an approver approves it in the "Tóm tắt và phê duyệt" tab (`api/routes/summaries.py`); only an approved summary answers "tóm tắt / nói về gì".
