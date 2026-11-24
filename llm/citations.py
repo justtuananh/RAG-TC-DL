@@ -40,6 +40,11 @@ def drop_invalid_refs(body: str, valid: set[int]) -> str:
 
     def repl(m: re.Match) -> str:
         keep = [n for n in re.split(r"\s*,\s*", m.group(1)) if int(n) in valid]
+        # [n] đứng riêng một dòng (sau công thức "$$") giữ chỗ xuống dòng: nối lên thành
+        # "$$ [1]" thì Markdown không còn nhận "$$" là dấu đóng công thức.
+        lead = m.group(0)[: m.start(1) - m.start(0) - 1]
+        if "\n" in lead:
+            return f"{lead}[{', '.join(keep)}]" if keep else lead
         return f" [{', '.join(keep)}]" if keep else ""
 
     return _CITE.sub(repl, body)

@@ -192,6 +192,17 @@ export async function renameDocument(fileStem: string, name: string): Promise<Do
 export function fixLatex(text: string): string {
   if (!text) return "";
   text = text.replace(/`(\$[^`]+?\$)`/g, "$1");
+  // Khối "$$" nhiều dòng mà dòng đóng còn chữ ("$$ [1]"): Markdown không nhận là dấu đóng,
+  // khối nuốt cả trích dẫn → gộp về một dòng "$$...$$ [1]" (mirror core/latex.py).
+  text = text.replace(
+    /^([ \t]*)\$\$[ \t]*\n((?:(?!\$\$)[\s\S])*?)\n[ \t]*\$\$[ \t]*(\S[^\n]*)$/gm,
+    (_, indent: string, body: string, tail: string) =>
+      `${indent}$$${body
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+        .join(" ")}$$ ${tail}`,
+  );
   text = text.replace(/\\\[([\s\S]+?)\\\]/g, (_, m) => "$$" + m.replace(/\\\\/g, "\\") + "$$");
   text = text.replace(/\\\(([\s\S]+?)\\\)/g, (_, m) => "$" + m.replace(/\\\\/g, "\\") + "$");
   text = text.replace(/\$\$([\s\S]+?)\$\$/g, (_, m) => "$$" + m.replace(/\\\\/g, "\\") + "$$");

@@ -13,6 +13,16 @@ _RE_CODE_MATH = re.compile(r'`(\$.*?\$)`')
 _RE_BACKSLASH_DISP = re.compile(r'\\\[(.*?)\\\]', re.DOTALL)  # \[...\] display
 _RE_BACKSLASH_INLINE = re.compile(r'\\\((.*?)\\\)')  # \(...\) inline
 _RE_BRACKET_DISP = re.compile(r'(?m)^\[$\n(.*?)\n^\]$', re.DOTALL)  # [ \n ... \n ] display
+# Khối "$$" nhiều dòng mà dòng đóng còn chữ phía sau ("$$ [1]"): Markdown chỉ nhận dấu đóng
+# đứng riêng một dòng, nên khối không đóng và nuốt cả trích dẫn sau nó.
+_RE_DISPLAY_TRAILING = re.compile(
+    r'(?m)^([ \t]*)\$\$[ \t]*\n((?:(?!\$\$).)*?)\n[ \t]*\$\$[ \t]*(\S[^\n]*)$', re.DOTALL
+)
+
+
+def _join_display(m: re.Match) -> str:
+    body = ' '.join(line.strip() for line in m.group(2).splitlines() if line.strip())
+    return f'{m.group(1)}$${body}$$ {m.group(3)}'
 
 
 def fix_latex(text: str) -> str:
@@ -21,6 +31,7 @@ def fix_latex(text: str) -> str:
     ``\\(...\\)`` → ``$...$``; gộp ``\\\\`` → ``\\`` bên trong ``$$...$$`` và ``$...$``.
     """
     text = _RE_CODE_MATH.sub(r'\1', text)
+    text = _RE_DISPLAY_TRAILING.sub(_join_display, text)
     text = _RE_BRACKET_DISP.sub(lambda m: '$$\n' + m.group(1).replace('\\\\', '\\') + '\n$$', text)
     text = _RE_BACKSLASH_DISP.sub(lambda m: '$$' + m.group(1).replace('\\\\', '\\') + '$$', text)
     text = _RE_BACKSLASH_INLINE.sub(lambda m: '$' + m.group(1).replace('\\\\', '\\') + '$', text)

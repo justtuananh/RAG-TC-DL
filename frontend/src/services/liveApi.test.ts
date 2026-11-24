@@ -21,6 +21,15 @@ describe("fixLatex", () => {
   it("gộp \\\\ thành \\ trong $$...$$", () => {
     expect(fixLatex("$$\\\\frac{a}{b}$$")).toBe("$$\\frac{a}{b}$$");
   });
+  it("khối $$ có trích dẫn sau dấu đóng → một dòng, trích dẫn nằm ngoài công thức", () => {
+    const formula = String.raw`\tau = \tau_{t} \times \frac{\eta_{t}}{\eta}`;
+    const answer = `- Trong QTKĐ 1.071:\n  $$\n  ${formula}\n  $$ [1]\n\nTiếp.`;
+    expect(fixLatex(answer)).toBe(`- Trong QTKĐ 1.071:\n  $$${formula}$$ [1]\n\nTiếp.`);
+  });
+  it("khối $$ đóng đúng chuẩn giữ nguyên", () => {
+    const answer = "Công thức:\n\n$$\n" + String.raw`\tau = \tau_{t}` + "\n$$\n\n[1]";
+    expect(fixLatex(answer)).toBe(answer);
+  });
 });
 
 // ── Đăng nhập bắt buộc: mọi route (đọc lẫn ghi, trừ health) gắn bearer token ──

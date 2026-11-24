@@ -27,6 +27,13 @@ def test_invalid_refs_removed_and_groups_trimmed():
     assert body == "A B [1]."
 
 
+def test_citation_on_its_own_line_after_display_formula_stays_on_its_line():
+    # "$$\n  [1]" nối thành "$$ [1]" thì Markdown không còn nhận "$$" là dấu đóng công thức.
+    body = "- Theo QTKĐ 1.071:\n  $$\n  " + r"\tau = \tau_{t}" + "\n  $$\n  [1]\n\nCả hai [1]."
+    out = citations.add_citations(body, [_src(1)])
+    assert out.split("\n\nNguồn:")[0] == body
+
+
 def test_own_block_replaced():
     out = citations.add_citations("Đáp [1].\n\nTrích dẫn:\n- [1] bịa", [_src(1)])
     assert "bịa" not in out and out.count("Nguồn:") == 1
