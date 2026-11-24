@@ -22,9 +22,14 @@ OTHER_MD = "# 1 Phạm vi áp dụng\n\n| Cấp | bar |\n| --- | --- |\n| 1 | 2 
 def corpus(tmp_path, monkeypatch):
     (tmp_path / "hoi_dap.md").write_text(FAQ_MD, encoding="utf-8")
     (tmp_path / "qtkd.md").write_text(OTHER_MD, encoding="utf-8")
+    # Bộ hỏi đáp nạp sẵn: chỉ đọc file khai báo, không quét kho tài liệu đã upload.
+    (tmp_path / "upload_khac.md").write_text(
+        FAQ_MD.replace("Liên kết chuẩn đo lường là gì?", "Câu trong tài liệu upload?"),
+        encoding="utf-8",
+    )
     settings = SimpleNamespace(
-        paths=SimpleNamespace(markdown_dir=str(tmp_path)),
         faq=SimpleNamespace(
+            files=[str(tmp_path / "hoi_dap.md"), str(tmp_path / "khong_ton_tai.md")],
             enabled=True,
             min_score=0.8,
             max_candidates=30,
@@ -37,9 +42,13 @@ def corpus(tmp_path, monkeypatch):
         ),
     )
     monkeypatch.setattr(faq, "get_settings", lambda: settings)
-    monkeypatch.setattr(faq.router, "known_files", lambda: frozenset({"hoi_dap", "qtkd"}))
     faq._cached_pairs.cache_clear()
     return settings
+
+
+def test_only_configured_files_are_used(corpus):
+    questions = [pair.question for pair in faq._all_pairs()]
+    assert questions == ["Liên kết chuẩn đo lường là gì?", "Hệ SI gồm những đơn vị cơ bản nào?"]
 
 
 def _scores(mapping):

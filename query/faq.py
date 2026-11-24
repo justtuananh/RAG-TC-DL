@@ -1,7 +1,8 @@
 """Bộ câu hỏi - đáp án (bảng "| STT | Câu hỏi | Đáp án |"): trả đúng đáp án của câu khớp, không qua LLM.
 
-Chạy trước mọi nhánh khác của chat. Mọi tài liệu đã nạp có bảng với cột câu hỏi và cột đáp án đều được
-dùng; câu hỏi của người dùng được cross-encoder so với từng câu hỏi trong bộ. Câu khớp nhất đạt
+Chạy trước mọi nhánh khác của chat. Bộ câu hỏi là các file Markdown khai báo trong ``faq.files``
+(có sẵn trong mã nguồn, không qua upload: không nằm trong kho tài liệu, không bị RAG truy xuất);
+câu hỏi của người dùng được cross-encoder so với từng câu hỏi trong bộ. Câu khớp nhất đạt
 ``faq.min_score`` thì trả nguyên văn đáp án của nó (văn bản thường, không phải bảng); không đạt thì
 trả ``None`` để pipeline RAG trả lời như thường.
 """
@@ -16,7 +17,6 @@ from pathlib import Path
 
 from core.settings_loader import get_settings
 from reranking import reranker
-from retrieval import router
 from retrieval.normalize import fold
 
 logger = logging.getLogger(__name__)
@@ -93,24 +93,19 @@ def _cached_pairs(
 
 
 def _all_pairs() -> list[FaqPair]:
-    settings = get_settings()
-    cfg = settings.faq
-    root = Path(settings.paths.markdown_dir)
-    try:
-        stems = sorted(router.known_files())
-    except Exception:
-        logger.warning("Không đọc được danh sách tài liệu cho bộ câu hỏi - đáp án", exc_info=True)
-        return []
+    """Các cặp hỏi - đáp của những file khai báo trong ``faq.files`` (nạp sẵn, không qua upload)."""
+    cfg = get_settings().faq
     pairs: list[FaqPair] = []
-    for stem in stems:
-        path = root / f"{stem}.md"
+    for name in cfg.files:
+        path = Path(name)
         try:
             mtime = path.stat().st_mtime
         except OSError:
+            logger.warning("Không thấy file bộ câu hỏi - đáp án: %s", path)
             continue
         pairs.extend(
             _cached_pairs(
-                str(path), mtime, stem, cfg.question_header_pattern, cfg.answer_header_pattern
+                str(path), mtime, path.stem, cfg.question_header_pattern, cfg.answer_header_pattern
             )
         )
     return pairs

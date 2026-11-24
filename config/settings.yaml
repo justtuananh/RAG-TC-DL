@@ -158,8 +158,12 @@ doc_profile:                              # "QTKĐ này để làm gì / nói v�
   # Câu hỏi về chi tiết khác (chu kỳ, sai số, điều kiện...) đi pipeline RAG dù có từ khoá ý định.
   exclude_pattern: '\b(?:chu ky|sai so|cong thuc|dieu kien|phuong tien kiem dinh|chuan bi|trinh tu|cac buoc|cach tinh|cach kiem|cach xac dinh|tinh toan|yeu cau|gioi han|bao lau|so sanh|khac nhau|khac gi|giong|ai|co quan|bien soan|ban hanh|thoi han|diem kiem tra|phep kiem dinh|liet ke|bang \d)\b'
 
-faq:                                      # bộ câu hỏi - đáp án đã nạp: câu hỏi khớp một câu trong bộ thì trả đúng đáp án đó, trước mọi nhánh khác
-  enabled: true
+faq:                                      # bộ câu hỏi - đáp án nạp sẵn: câu hỏi khớp một câu trong bộ thì trả đúng đáp án đó, trước mọi nhánh khác
+  enabled: true                           # false = tắt hẳn, không trả lời theo bộ nào nữa
+  # Bộ có sẵn trong mã nguồn (không upload: không hiện ở tab Tài liệu, không bị RAG truy xuất).
+  # Markdown trích từ .docx cùng tên bằng `python -m ingestion.spike_a`; bỏ một dòng = không dùng bộ đó.
+  files:
+    - config/faq/100_cau_hoi_va_dap_an.md
   min_score: 0.8                          # điểm cross-encoder (câu hỏi người dùng ↔ câu hỏi trong bộ) tối thiểu; thấp hơn thì RAG trả lời
   max_candidates: 30                      # số câu (lọc thô theo từ chung) đưa vào cross-encoder
   show_sources: false                     # TẠM TẮT trích dẫn nguồn ([1], "Nguồn:") của câu trả lời từ bộ; true để bật lại

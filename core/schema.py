@@ -326,10 +326,11 @@ class DocProfileSettings(_Section):
 
 
 class FaqSettings(_Section):
-    """Bộ câu hỏi - đáp án (bảng có cột câu hỏi và cột đáp án): câu khớp thì trả đúng đáp án, trước RAG.
-    Mẫu so trên tiêu đề cột đã bỏ dấu, chữ thường."""
+    """Bộ câu hỏi - đáp án nạp sẵn (bảng có cột câu hỏi và cột đáp án): câu khớp thì trả đúng đáp án,
+    trước RAG. Mẫu so trên tiêu đề cột đã bỏ dấu, chữ thường."""
 
     enabled: bool = True
+    files: list[str] = Field(default_factory=list)  # Markdown của các bộ, đường dẫn từ gốc dự án
     min_score: Annotated[float, Field(ge=0, le=1)] = 0.8
     max_candidates: Positive = 30
     show_sources: bool = True  # False: ẩn [1] và nguồn của câu trả lời từ bộ (tạm tắt, không xóa code)
