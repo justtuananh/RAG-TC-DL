@@ -35,6 +35,7 @@ from query import (
     doc_overview,
     doc_sections,
     extractive,
+    faq,
     history_context,
     limit_clarify,
     multi_document,
@@ -285,8 +286,35 @@ def _verify_numbers(
     return body, bad
 
 
+def _faq_events(known: faq.FaqAnswer) -> Iterator[str]:
+    """Đáp án từ bộ câu hỏi - đáp án: chờ một lúc rồi hiện dần từng cụm từ như câu trả lời sinh ra.
+
+    ``faq.show_sources`` tắt thì không gửi nguồn và không gắn [1] (giao diện ẩn cả nhãn lẫn chip nguồn).
+    """
+    cfg = get_settings().faq
+    if cfg.show_sources:
+        answer = f"{known.text} [1]"
+        sources = _build_sources_payload(known.hits)
+        yield _sse({"type": "sources", "sources": sources})
+    else:
+        answer, sources = known.text, []
+    yield _sse({"type": "status", "text": "⏳ Đang tra cứu tài liệu…"})
+    time.sleep(cfg.answer_delay_s)
+    words = re.split(r"(\s+)", answer)
+    step = cfg.stream_chunk_words * 2  # mỗi từ đi kèm khoảng trắng sau nó
+    for start in range(0, len(words), step):
+        yield _sse({"type": "delta", "text": "".join(words[start : start + step])})
+        time.sleep(cfg.stream_interval_s)
+    yield _sse({"type": "done", "answer": answer, "sources": sources})
+
+
 def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[str]:
     # "độ kín" → "độ kín (độ tụt áp)": tìm kiếm và LLM thấy đúng tên gọi trong tài liệu.
+    # Bộ câu hỏi - đáp án được ưu tiên trước mọi nhánh: câu khớp một câu trong bộ trả đúng đáp án đó.
+    known = faq.try_faq_answer(req.message)
+    if known is not None:
+        yield from _faq_events(known)
+        return
     req = req.model_copy(update={"message": synonyms.expand(req.message)})
     basic = basic_calc.try_basic_calc(req.message, retriever.retrieve)
     if basic is not None:

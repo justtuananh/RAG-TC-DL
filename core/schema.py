@@ -325,6 +325,21 @@ class DocProfileSettings(_Section):
     exclude_pattern: str = r"\b(?:chu ky|sai so|cong thuc|dieu kien)\b"
 
 
+class FaqSettings(_Section):
+    """Bộ câu hỏi - đáp án (bảng có cột câu hỏi và cột đáp án): câu khớp thì trả đúng đáp án, trước RAG.
+    Mẫu so trên tiêu đề cột đã bỏ dấu, chữ thường."""
+
+    enabled: bool = True
+    min_score: Annotated[float, Field(ge=0, le=1)] = 0.8
+    max_candidates: Positive = 30
+    show_sources: bool = True  # False: ẩn [1] và nguồn của câu trả lời từ bộ (tạm tắt, không xóa code)
+    answer_delay_s: Annotated[float, Field(ge=0)] = 0.0  # chờ trước khi trả lời (như đang tra cứu)
+    stream_chunk_words: Positive = 3  # số từ mỗi lần hiện chữ
+    stream_interval_s: Annotated[float, Field(ge=0)] = 0.0  # khoảng nghỉ giữa hai lần hiện chữ
+    question_header_pattern: str = r"\bcau hoi\b"
+    answer_header_pattern: str = r"\bdap an\b"
+
+
 class DocSectionsSettings(_Section):
     """Câu hỏi về một mục cấu trúc (phương tiện, điều kiện, chu kỳ, cơ quan, định nghĩa) của tài liệu chỉ
     đích danh: trả lời bằng nguyên văn mục đó. Mẫu so trên câu hỏi đã bỏ dấu, chữ thường."""
@@ -429,6 +444,7 @@ class Settings(_Section):
     doc_profile: DocProfileSettings = Field(default_factory=DocProfileSettings)
     doc_summary: DocSummarySettings = Field(default_factory=DocSummarySettings)
     doc_sections: DocSectionsSettings = Field(default_factory=DocSectionsSettings)
+    faq: FaqSettings = Field(default_factory=FaqSettings)
     doc_catalog: DocCatalogSettings = Field(default_factory=DocCatalogSettings)
     query_synonyms: list[QuerySynonym] = Field(default_factory=list)
     limit_clarify: LimitClarifySettings = Field(default_factory=LimitClarifySettings)

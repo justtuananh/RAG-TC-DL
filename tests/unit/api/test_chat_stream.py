@@ -16,6 +16,43 @@ from api.services import chat_stream
 from llm.guards import CALCULATION_GUIDE
 
 
+@pytest.fixture(autouse=True)
+def _no_faq(monkeypatch):
+    """Bộ câu hỏi - đáp án chỉ bật trong test riêng của nó."""
+    monkeypatch.setattr(chat_stream.faq, "try_faq_answer", lambda question: None)
+
+
+def test_faq_match_answers_first_without_retrieval_or_llm(monkeypatch):
+    from query.faq import FaqAnswer
+
+    hit = _hit("BO_HOI_DAP", "Câu hỏi: X là gì?\n\nĐáp án: X là Y.")
+    answer = "X là Y theo định nghĩa trong bộ câu hỏi."
+    monkeypatch.setattr(chat_stream.faq, "try_faq_answer", lambda q: FaqAnswer(answer, [hit]))
+    sleeps: list[float] = []
+    monkeypatch.setattr(chat_stream.time, "sleep", sleeps.append)
+
+    def fail(*args, **kwargs):
+        raise AssertionError("không được truy xuất hay gọi LLM")
+
+    monkeypatch.setattr("retrieval.retriever.retrieve", fail)
+    monkeypatch.setattr("llm.generator.stream_ollama", fail)
+
+    events = _events(list(chat_stream.chat_stream_events(ChatRequest(message="X là gì?"), None)))
+
+    faq_cfg = chat_stream.get_settings().faq
+    deltas = [e["text"] for e in events if e["type"] == "delta"]
+    assert len(deltas) > 1 and events[-1]["type"] == "done"
+    assert "".join(deltas) == events[-1]["answer"]
+    assert sleeps[0] == faq_cfg.answer_delay_s
+    if faq_cfg.show_sources:
+        assert events[-1]["answer"] == answer + " [1]"
+        assert events[-1]["sources"][0]["file_stem"] == "BO_HOI_DAP"
+    else:
+        assert events[-1]["answer"] == answer
+        assert events[-1]["sources"] == []
+        assert all(e["type"] != "sources" for e in events)
+
+
 def _events(events) -> list[dict]:
     return [json.loads(line[6:]) for line in events if line.startswith("data: ")]
 
