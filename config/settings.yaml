@@ -43,6 +43,7 @@ chunking:
   synth_section_chars: 4000
   max_table_rows: 15
   table_group_rows: 8
+  table_group_chars: 1500                 # trần ký tự mỗi nhóm dòng bảng (vừa cửa sổ reranker)
 
 retrieval:
   top_k: 50                               # ứng viên mỗi nhánh dense / BM25
@@ -103,6 +104,7 @@ llm:
     evidence_max_candidates: 96
     evidence_min_score: 0.35
     evidence_relative_floor: 0.35
+    evidence_table_chars: 1500              # bảng dài hơn: trích từng dòng kèm tiêu đề cột
     min_documents: 2                      # ít hơn thì trả lời một lượt như thường
     max_documents: 7                      # trần số tài liệu xét bổ sung
     max_followups: 2                      # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)

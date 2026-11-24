@@ -223,3 +223,38 @@ def test_oversized_promoted_section_is_split_on_line_boundaries(tmp_path, settin
     assert paths[1:3] == ["2. Thuật ngữ (phần 1)", "2. Thuật ngữ (phần 2)"]
     body = "\n".join(c.text for c in parents[1:])
     assert all(f"| 1.{i} Thuật ngữ số {i} |" in body for i in range(1, 40))  # không cắt giữa dòng
+
+
+QA_HEADER = ["| STT | Câu hỏi | Đáp án |", "| --- | --- | --- |"]
+
+
+def _qa_md(tmp_path, n_rows: int = 40):
+    """Bộ hỏi đáp: không có tiêu đề mục, một bảng dài các dòng nhiều chữ."""
+    rows = [
+        f"| {i} | Câu hỏi số {i} về độ nhạy, điều kiện, chuẩn bị? | "
+        + f"Đáp án số {i}: " + "nội dung trả lời dài " * 12 + "(nếu có). |"
+        for i in range(1, n_rows + 1)
+    ]
+    path = tmp_path / "hoi_dap.md"
+    path.write_text("\n".join(["BỘ CÂU HỎI VÀ ĐÁP ÁN", "", "", *QA_HEADER, *rows]) + "\n", encoding="utf-8")
+    return rows, [c for c in parse_file(path) if not c.is_parent]
+
+
+def test_headless_table_windows_never_cut_a_row_and_repeat_header(tmp_path):
+    rows, children = _qa_md(tmp_path)
+    tables = [c for c in children if c.kind == "table"]
+    assert all(c.text.split("\n")[:2] == QA_HEADER for c in tables)
+    data = [line for c in tables for line in c.text.split("\n")[2:]]
+    assert sorted(data) == sorted(rows)
+    # Không còn mảnh vụn của một dòng bị cắt ngang ("(nếu có). |").
+    assert all(c.kind == "table" or "|" not in c.text for c in children)
+
+
+def test_text_heavy_table_groups_fit_the_char_budget(tmp_path):
+    from core.settings_loader import get_settings
+
+    budget = get_settings().chunking.table_group_chars
+    _, children = _qa_md(tmp_path)
+    tables = [c for c in children if c.kind == "table"]
+    assert len(tables) > 1
+    assert all(len(c.text) <= budget for c in tables)

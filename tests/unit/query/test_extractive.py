@@ -15,6 +15,7 @@ def setup(monkeypatch, **overrides):
         evidence_max_candidates=96,
         evidence_min_score=0.35,
         evidence_relative_floor=0.35,
+        evidence_table_chars=1500,
         grounding_min_coverage=0.0,
         grounding_min_coverage_refusal=0.0,
         grounding_absent_term_coverage=0.0,
@@ -351,3 +352,24 @@ def test_answer_drops_ungrounded_quotes_and_keeps_grounded(monkeypatch):
     ok = extractive.answer('Chu kỳ van an toàn là bao nhiêu', results, groups, allow_single=True, replaces_refusal=True)
     assert ok and '12 tháng' in ok
     assert extractive.answer('Sai số của ca đong bình đong', results, groups, allow_single=True, replaces_refusal=True) is None
+
+
+def test_large_table_units_are_single_rows_with_header():
+    header = '| STT | Câu hỏi | Đáp án |\n| --- | --- | --- |'
+    rows = [f'| {i} | Câu hỏi {i}? | ' + f'Đáp án {i} ' * 40 + '|' for i in range(1, 11)]
+    units = extractive.evidence_units('BỘ CÂU HỎI\n\n' + header + '\n' + '\n'.join(rows))
+    holder = [u for u in units if '| 7 | Câu hỏi 7? |' in u]
+    assert len(holder) == 1
+    assert header in holder[0]
+    assert '| 6 |' not in holder[0] and '| 8 |' not in holder[0]
+
+
+def test_large_table_row_keeps_its_continuation_rows():
+    header = '| TT | Tên | Phạm vi |\n| --- | --- | --- |'
+    rows = []
+    for i in range(1, 9):
+        rows.append(f'| {i} | Thiết bị {i} ' + 'mô tả ' * 40 + '| 0-10 bar |')
+        rows.append('|  |  | 10-20 bar |')
+    units = extractive.evidence_units(header + '\n' + '\n'.join(rows))
+    holder = next(u for u in units if '| 3 | Thiết bị 3' in u)
+    assert holder.count('10-20 bar') == 1

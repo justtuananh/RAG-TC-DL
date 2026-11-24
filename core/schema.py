@@ -83,6 +83,8 @@ class ChunkingSettings(_Section):
     synth_section_chars: Positive
     max_table_rows: Positive
     table_group_rows: Positive
+    # Trần ký tự một nhóm dòng bảng: giữ chunk con trong cửa sổ reranker (max_length token).
+    table_group_chars: Positive = 1500
 
 
 class RetrievalSettings(_Section):
@@ -169,6 +171,8 @@ class MultiDocumentSettings(_Section):
     evidence_max_candidates: Positive = 96
     evidence_min_score: Annotated[float, Field(ge=0, le=1)] = 0.35
     evidence_relative_floor: Annotated[float, Field(ge=0, le=1)] = 0.35
+    # Bảng dài hơn mức này: mỗi dòng (kèm tiêu đề cột) là một đơn vị trích dẫn riêng.
+    evidence_table_chars: Positive = 1500
     min_documents: Positive = 2  # ít hơn số tài liệu này thì trả lời một lượt như thường
     max_documents: Positive = 6  # trần số tài liệu xét bổ sung
     max_followups: Positive = 2  # trần số lượt hỏi riêng sau câu trả lời chung (giữ p95)

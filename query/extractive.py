@@ -69,8 +69,17 @@ def _evidence_pairs(text: str) -> list[tuple[str, str]]:
             formulas[index] = '\n\n'.join(blocks[start:end])
     units = []
     seen = set()
+    table_limit = get_settings().llm.multi_document.evidence_table_chars
     for i, block in enumerate(blocks):
         if block.startswith('#') and '\n' not in block:
+            continue
+        row_units = _table_row_units(block) if len(block) > table_limit else []
+        if row_units:
+            # Bảng dài (bộ hỏi đáp, danh mục): trích đúng dòng khớp, không đổ cả bảng.
+            for unit in row_units:
+                if unit not in seen:
+                    units.append((unit, unit))
+                    seen.add(unit)
             continue
         if i in formulas:
             block = formulas[i]
@@ -102,6 +111,32 @@ def _evidence_pairs(text: str) -> list[tuple[str, str]]:
             units.append((ranking_text, block))
             seen.add(ranking_text)
     return units
+
+
+_TABLE_SEPARATOR = re.compile(r'^\|\s*:?-{3,}')
+
+
+def _table_row_units(block: str) -> list[str]:
+    """Each row of a pure Markdown table with its header rows and continuation rows.
+
+    A continuation row (first cell empty) belongs to the item above it. Returns ``[]``
+    when the block is not a table with a header, so the caller keeps the block whole."""
+    lines = block.split('\n')
+    if (
+        len(lines) < 3
+        or not _TABLE_SEPARATOR.match(lines[1])
+        or not all(line.lstrip().startswith('|') for line in lines)
+    ):
+        return []
+    header = '\n'.join(lines[:2])
+    items: list[list[str]] = []
+    for row in lines[2:]:
+        first_cell = row.strip().strip('|').split('|', 1)[0].strip()
+        if items and not first_cell:
+            items[-1].append(row)
+        else:
+            items.append([row])
+    return [header + '\n' + '\n'.join(item) for item in items]
 
 
 def _terms(text: str) -> list[str]:

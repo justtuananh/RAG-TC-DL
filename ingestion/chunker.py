@@ -59,22 +59,30 @@ def _split_table(text: str) -> list[str]:
         return [text]
     chunking = get_settings().chunking
     header, body = rows[:2], rows[2:]
-    if sum(not _GROUP_HEADING_RE.match(row) for row in body) <= chunking.max_table_rows:
+    data_rows = sum(not _GROUP_HEADING_RE.match(row) for row in body)
+    if data_rows <= chunking.max_table_rows and len(text) <= chunking.table_group_chars:
         return [text]
+    header_chars = sum(len(row) + 1 for row in header)
     groups: list[list[str]] = []
     current: list[str] = []
     heading: str | None = None
     count = 0
+    size = header_chars
     for row in body:
         if _GROUP_HEADING_RE.match(row):
             heading = row
             current.append(row)
+            size += len(row) + 1
             continue
-        if count == chunking.table_group_rows:
+        # Bảng nhiều chữ (bộ hỏi đáp): nhóm đầy theo ký tự trước khi đủ số dòng.
+        too_long = count > 0 and size + len(row) + 1 > chunking.table_group_chars
+        if count == chunking.table_group_rows or too_long:
             groups.append(current)
             current = [heading] if heading else []
             count = 0
+            size = header_chars + sum(len(r) + 1 for r in current)
         current.append(row)
+        size += len(row) + 1
         count += 1
     if current:
         groups.append(current)
@@ -154,24 +162,48 @@ def _synthesize_sections(text: str, file_stem: str) -> str:
     section to attach the body to and silently drops it, so parse_file()
     returns zero chunks for the whole file.
 
-    Break the raw text into fixed-size windows (at whitespace boundaries so
-    words aren't split) and prefix each with a synthetic heading, turning an
-    unbounded blob into a bounded number of indexable sections."""
-    windows: list[str] = []
-    n = len(text)
-    synth_section_chars = get_settings().chunking.synth_section_chars
-    start = 0
-    while start < n:
-        end = min(start + synth_section_chars, n)
-        if end < n:
-            ws = text.rfind(" ", start, end)
-            if ws > start:
-                end = ws
-        window = text[start:end].strip()
-        if window:
-            windows.append(window)
-        start = end
-    return "\n\n".join(f"# {file_stem} (phần {i})\n\n{w}" for i, w in enumerate(windows, 1))
+    Break the raw text into windows of about ``synth_section_chars`` on line
+    boundaries, so a table row is never cut in half; a window that starts
+    inside a table repeats the table's header rows (otherwise its rows are no
+    longer a Markdown table and cannot be split into row groups). Only a single
+    line longer than a window (PDF text without line breaks) is cut, at
+    whitespace, and prefix each window with a synthetic heading."""
+    size = get_settings().chunking.synth_section_chars
+    windows: list[list[str]] = []
+    current: list[str] = []
+    current_size = 0
+    table_header: list[str] = []
+    lines = text.split("\n")
+    for i, line in enumerate(lines):
+        if not _TABLE_ROW_RE.match(line):
+            table_header = []
+        elif not table_header and i + 1 < len(lines) and _TABLE_SEPARATOR_RE.match(lines[i + 1]):
+            table_header = [line, lines[i + 1]]
+        for piece in _wrap_long_line(line, size):
+            if current and current_size + len(piece) + 1 > size:
+                windows.append(current)
+                in_table_body = table_header and piece not in table_header
+                current = list(table_header) if in_table_body else []
+                current_size = sum(len(row) + 1 for row in current)
+            current.append(piece)
+            current_size += len(piece) + 1
+    if current:
+        windows.append(current)
+    texts = [w for w in ("\n".join(window).strip() for window in windows) if w]
+    return "\n\n".join(f"# {file_stem} (phần {i})\n\n{w}" for i, w in enumerate(texts, 1))
+
+
+def _wrap_long_line(line: str, size: int) -> list[str]:
+    """A line longer than ``size`` is cut at whitespace (words stay whole); others stay as is."""
+    pieces: list[str] = []
+    while len(line) > size:
+        cut = line.rfind(" ", 0, size)
+        if cut <= 0:
+            cut = size
+        pieces.append(line[:cut])
+        line = line[cut:].lstrip(" ")
+    pieces.append(line)
+    return pieces
 
 
 _OVERSIZED_SECTION_FACTOR = 3  # mục suy ra dài hơn (bảng thuật ngữ TCVN 6165) chia thành "(phần i)"
