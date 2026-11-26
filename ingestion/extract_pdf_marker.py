@@ -38,6 +38,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 from contextlib import contextmanager
@@ -143,15 +144,30 @@ _LIGHT_FLAGS = [
 ]
 
 
-def _marker_command(marker_exe: str, device: str, memory_max_mb: int, threads: int) -> list[str]:
-    """Lệnh chạy Marker trên ``device``, số luồng giới hạn; bọc trong cgroup giới hạn
-    RAM nếu có systemd-run (người dùng).
+def _marker_env(device: str, threads: int) -> dict[str, str]:
+    """Biến môi trường cho marker_single, không dùng lệnh ``env`` của POSIX.
 
-    Biến môi trường đặt qua `env` để không phải đọc biến môi trường của tiến trình
-    (chỉ core/ được đọc).
+    Trên Windows không có ``env``, nên biến phải truyền qua ``subprocess(env=...)``.
     """
-    cmd = ["env", f"TORCH_DEVICE={device}", f"OMP_NUM_THREADS={threads}", f"MKL_NUM_THREADS={threads}", marker_exe]
-    if memory_max_mb <= 0 or not shutil.which("systemd-run"):
+    return {
+        "TORCH_DEVICE": device,
+        "OMP_NUM_THREADS": str(threads),
+        "MKL_NUM_THREADS": str(threads),
+    }
+
+
+def _marker_command(marker_exe: str, memory_max_mb: int) -> list[str]:
+    """Lệnh chạy marker_single; bọc cgroup giới hạn RAM nếu có systemd-run (Linux).
+
+    Trần RAM chỉ áp trên Linux: Windows không có systemd-run, giới hạn bằng
+    ``ingestion.marker_memory_max_mb`` không có tác dụng ở đó.
+    """
+    cmd = [marker_exe]
+    if (
+        memory_max_mb <= 0
+        or not sys.platform.startswith("linux")
+        or not shutil.which("systemd-run")
+    ):
         return cmd
     return [
         "systemd-run", "--user", "--scope", "--quiet",
@@ -196,7 +212,7 @@ def _llm_off_gpu(device: str):
 def _run_marker(marker_exe: str, pdf_path: str, page_range: str, out_dir: Path, force_ocr: bool) -> str:
     cfg = get_settings().ingestion
     cmd = [
-        *_marker_command(marker_exe, cfg.marker_device, cfg.marker_memory_max_mb, cfg.marker_threads), pdf_path,
+        *_marker_command(marker_exe, cfg.marker_memory_max_mb), pdf_path,
         "--page_range", page_range,
         "--output_dir", str(out_dir),
         "--output_format", "markdown",
@@ -207,7 +223,14 @@ def _run_marker(marker_exe: str, pdf_path: str, page_range: str, out_dir: Path, 
     start, end = (int(p) for p in (page_range.split("-") if "-" in page_range else [page_range, page_range]))
     timeout = _run_timeout(start, end, force_ocr, cfg.marker_device)
     try:
-        subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=timeout)
+        subprocess.run(
+            cmd,
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            env={**os.environ.copy(), **_marker_env(cfg.marker_device, cfg.marker_threads)},
+        )
     except subprocess.TimeoutExpired as e:
         raise RuntimeError(
             f"Marker didn't finish pages {page_range} within {timeout}s - likely stuck "

@@ -42,6 +42,7 @@ class PathSettings(_Section):
     source_dir: Path
     markdown_dir: Path
     formula_registry_db: Path
+    frontend_dist: Path
 
 
 class ServiceSettings(_Section):
@@ -238,6 +239,7 @@ class LlmSettings(_Section):
 
 class IngestionSettings(_Section):
     soffice_bin: OptionalStr = None
+    ruby_bin: OptionalStr = None
     convert_timeout_s: PositiveFloat
     max_upload_bytes: Positive
     marker_python: OptionalStr = None

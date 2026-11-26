@@ -7,6 +7,9 @@ Luồng tính riêng nằm ở màn hình **Tài liệu → chọn DOCX → Côn
 Toàn bộ model chạy local, không gọi API đám mây.
 Lần cài đặt đầu cần mạng để tải thư viện và model, sau đó vận hành offline.
 
+Máy Windows có thể chạy **không cần Docker**: xem [hướng dẫn cài native](windows/README.md).
+Bộ cài native dùng một cổng `:8080`, Ruby/Postgres/Qdrant/Ollama chạy trực tiếp trên Windows, dữ liệu nằm trong `%LOCALAPPDATA%\QTKD-RAG\data`.
+
 LLM không tự tạo phép tính được phép chạy.
 Ingestion chỉ gợi ý biểu thức và metadata.
 Công thức chưa duyệt, sai phiên bản hoặc nguồn hết hiệu lực đều bị chặn.
@@ -358,7 +361,15 @@ API và indexer dùng cùng khóa, client Python cục bộ đọc `.env`.
 Cổng Qdrant chỉ mở tại `127.0.0.1:6333` và mọi thao tác dữ liệu cần khóa.
 Chi tiết: [báo cáo bảo vệ Qdrant](docs/evidence/qdrant-security-2026-11-06.md).
 
-## 6. Tham khảo
+## 6. Cài native trên Windows (không Docker)
+
+Xem hướng dẫn từng bước: [`windows/HUONG-DAN-CAI-DAT.md`](windows/HUONG-DAN-CAI-DAT.md).
+Tài liệu tham chiếu kỹ thuật: [`windows/README.md`](windows/README.md).
+Tóm tắt: dựng gói trên chính máy Windows bằng `python windows/build_bundle.py`, rồi chạy `CaiDat.bat` ngay trên máy đó.
+Bộ cài dùng Python/Postgres/Qdrant/Ollama/Ruby portable, tải model một lần, giữ dữ liệu trong `%LOCALAPPDATA%\QTKD-RAG\data`.
+Frontend do FastAPI phục vụ trên cùng cổng `:8080`, không cần nginx.
+
+## 7. Tham khảo
 
 - [Ollama](https://ollama.com) và [Qwen2.5](https://github.com/QwenLM/Qwen2.5): LLM sinh đáp án
 - [BGE - FlagEmbedding](https://github.com/FlagOpen/FlagEmbedding): `bge-m3` và `bge-reranker-v2-m3`

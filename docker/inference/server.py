@@ -176,4 +176,5 @@ def rerank(req: RerankRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", "8000")))
+    # Bản Docker cần 0.0.0.0; bản native đặt HOST=127.0.0.1 để không mở ra LAN.
+    uvicorn.run(app, host=os.getenv("HOST", "0.0.0.0"), port=int(os.getenv("PORT", "8000")))

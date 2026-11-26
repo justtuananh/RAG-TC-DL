@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from db import SessionLocal
 from db.models import Document, DocumentType, IngestStatus
 from ingestion.classify import classify_document
+from knowledge.procedure import ensure_procedure
 
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE_DIR = ROOT / "TC_DL"
@@ -41,22 +42,24 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def iter_sources():
-    for path in sorted(SOURCE_DIR.glob("*")):
+def iter_sources(source_dir: Path | None = None):
+    root = Path(source_dir) if source_dir is not None else SOURCE_DIR
+    for path in sorted(root.glob("*")):
         if path.suffix.lower() in {".docx", ".doc", ".pdf", ".xlsx", ".xls"}:
             yield path
 
 
-def migrate(apply: bool) -> int:
+def migrate(apply: bool, source_dir: Path | None = None, out_dir: Path | None = None) -> int:
+    out = Path(out_dir) if out_dir is not None else OUT_DIR
     db = SessionLocal()
     changed = 0
     try:
-        for path in iter_sources():
+        for path in iter_sources(source_dir):
             stem = _safe(path.stem)
             digest = _sha256(path)
             existing = db.query(Document).filter(Document.file_stem == stem).one_or_none()
             classification = classify_document(path)
-            md_exists = (OUT_DIR / f"{stem}.md").exists()
+            md_exists = (out / f"{stem}.md").exists()
 
             # Đã có dòng và nội dung không đổi: chỉ cập nhật lại doc_type khi phân
             # loại mới khác (ví dụ .xls NAS trước đây xếp "khac"), KHÔNG xóa dòng.
@@ -82,6 +85,11 @@ def migrate(apply: bool) -> int:
             row.ingest_status = IngestStatus.READY if md_exists else IngestStatus.PENDING
             row.ingest_error = None
             db.add(row)
+            db.flush()
+            if md_exists:
+                # Nạp bảng procedure từ Markdown đã có, để hồ sơ QTKĐ/router ghim được
+                # số hiệu mà không phải xử lý lại tài liệu.
+                ensure_procedure(db, row, (out / f"{stem}.md").read_text(encoding="utf-8"))
             changed += 1
             print(f"{'APPLY' if apply else 'PLAN'} {path.name} -> {classification.doc_type}")
         if apply:
@@ -96,5 +104,7 @@ def migrate(apply: bool) -> int:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--apply", action="store_true")
+    parser.add_argument("--source", help="thư mục tài liệu gốc (mặc định TC_DL/)")
+    parser.add_argument("--out", help="thư mục Markdown (mặc định build/spike_a/)")
     args = parser.parse_args()
-    raise SystemExit(0 if migrate(args.apply) >= 0 else 1)
+    raise SystemExit(0 if migrate(args.apply, args.source, args.out) >= 0 else 1)

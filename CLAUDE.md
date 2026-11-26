@@ -126,6 +126,8 @@ A lower layer never imports a higher one;
   `POST /api/chat/stream` (SSE). Reuses the SAME pipeline as `ui/gradio_app.py`
   (`retrieval.retriever` + `llm/`: `guards.is_calculation_request` → `retrieve` →
   `prompt.build_messages` → `generator.stream_ollama`).
+  `api/spa.py` serves the built React app from `paths.frontend_dist` (`frontend/dist`) with SPA
+  fallback, so a native install needs one port and no nginx; Docker still serves it via nginx.
   Login is mandatory (`auth.enabled`, default true): every route except `/api/health` and `/api/auth/login` needs a bearer token, and the React app shows only a full-page login screen until signed in.
   Create the first account with `python scripts/create_admin.py`.
   `GET /api/documents/{id}/download` returns the original upload (same format) as an attachment named after the display name.
@@ -195,6 +197,17 @@ A lower layer never imports a higher one;
 - `evaluation/run_eval.py` - Spike E regression harness. Computes recall@k + MRR for hybrid vs
   dense-only against `evaluation/eval_set.jsonl` (question → expected file_stem + section_path).
   Run this after any retrieval change. Pass goal is recall@5 ≥ 0.85.
+- `windows/` - native Windows bundle (no Docker): `build_bundle.py` creates a self-contained folder
+  (portable Python 3.12, qdrant.exe, Postgres, ollama.exe, Ruby 3.3, wheels for win_amd64/cp312,
+  frontend dist); `install.py` installs per-user under `%LOCALAPPDATA%\QTKD-RAG` with data in
+  `data/` (TC_DL, build, Postgres, Qdrant, registry), generates `.env`, initialises Postgres,
+  downloads models, runs migration/registration/index, and writes shortcuts + Apps & features entry.
+  `launcher.py` starts the stack in GPU-priority order (Ollama → reranker → embedding → API), hosts
+  one port (:8080), keeps children in a Windows Job Object, and exposes `setup|models|index|migrate|status`.
+  `scripts/migrate_documents.py --source/--out` lets the installer register the seeded corpus.
+  Settings: `paths.frontend_dist`, `ingestion.ruby_bin` (portable Ruby); `QTKD_SOURCE_DIR` /
+  `QTKD_MARKDOWN_DIR` point data outside the install tree.
+  `windows/README.md` is the operator guide.
 - `evaluation/answer_eval.py` - answer-quality harness (coverage / citation / refusal / hallucination)
   against `evaluation/answer_set.jsonl`; `make answer-eval` needs Ollama + services.
 
@@ -273,6 +286,9 @@ python -m api.main
 # Eval — retrieval regression (run after any retrieval change)
 python -m evaluation.run_eval                    # hybrid vs dense, recall@k + MRR
 python -m evaluation.run_eval --mode hybrid -v
+
+# Windows native bundle (no Docker; build once, install per machine)
+python windows/build_bundle.py --out dist/QTKD-RAG --zip
 ```
 
 Verification gates: `extraction_report.json` (Stage 1 formula fidelity), `evaluation/run_eval.py`

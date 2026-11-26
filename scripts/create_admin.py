@@ -1,6 +1,13 @@
 #!/usr/bin/env python
-"""Create the first admin user for QTKĐ RAG system."""
+"""Create the first admin user for QTKĐ RAG system.
 
+Chạy tương tác:      python scripts/create_admin.py
+Bộ cài Windows:      python scripts/create_admin.py --username admin --password-stdin --if-missing
+"""
+
+from __future__ import annotations
+
+import argparse
 import sys
 from getpass import getpass
 from pathlib import Path
@@ -14,8 +21,32 @@ from db import SessionLocal
 from db.models import AppUser, UserRole
 
 
-def create_admin():
+def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Tạo tài khoản quản trị đầu tiên")
+    parser.add_argument("--username", help="tên đăng nhập (bỏ trống để hỏi)")
+    parser.add_argument("--full-name", help="họ tên hiển thị")
+    parser.add_argument(
+        "--password-stdin",
+        action="store_true",
+        help="đọc mật khẩu từ stdin thay vì hỏi (dùng cho bộ cài tự động)",
+    )
+    parser.add_argument(
+        "--if-missing",
+        action="store_true",
+        help="thoát 0 nếu đã có quản trị viên (bộ cài chạy lại an toàn)",
+    )
+    return parser.parse_args(argv)
+
+
+def _read_password(use_stdin: bool) -> str:
+    if use_stdin:
+        return sys.stdin.readline().rstrip("\r\n")
+    return getpass("Password: ")
+
+
+def create_admin(args: argparse.Namespace | None = None) -> None:
     """Create a new admin user."""
+    args = args or _parse_args()
     db = SessionLocal()
 
     try:
@@ -28,11 +59,13 @@ def create_admin():
         )
         if existing_admin:
             print(f"❌ Admin user already exists: {existing_admin.username}")
+            if args.if_missing:
+                return
             sys.exit(1)
 
         print("=== Create First Admin User ===\n")
 
-        username = input("Username: ").strip()
+        username = (args.username or input("Username: ")).strip()
         if not username:
             print("❌ Username cannot be empty")
             sys.exit(1)
@@ -43,17 +76,22 @@ def create_admin():
             print(f"❌ Username '{username}' already exists")
             sys.exit(1)
 
-        full_name = input("Full Name (optional): ").strip() or None
+        full_name = args.full_name
+        if full_name is None:
+            # Không hỏi khi đã có --username: bộ cài chạy không tương tác.
+            full_name = None if args.username else input("Full Name (optional): ")
+        full_name = full_name.strip() or None
 
-        password = getpass("Password: ")
+        password = _read_password(args.password_stdin)
         if len(password) < 8:
             print("❌ Password must be at least 8 characters")
             sys.exit(1)
 
-        password_confirm = getpass("Confirm Password: ")
-        if password != password_confirm:
-            print("❌ Passwords do not match")
-            sys.exit(1)
+        if not args.password_stdin:
+            password_confirm = getpass("Confirm Password: ")
+            if password != password_confirm:
+                print("❌ Passwords do not match")
+                sys.exit(1)
 
         # Create user
         user = AppUser(
