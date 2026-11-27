@@ -70,7 +70,7 @@ test-qdrant:
 PY ?= .venv-dev/bin/python
 
 # Các package nguồn + tests được lint/định dạng.
-LINT_PATHS = tests scripts query evaluation core api embedding vectorstore reranking retrieval llm scoring ui formula_registry
+LINT_PATHS = tests scripts query evaluation core api embedding vectorstore reranking retrieval llm scoring ui formula_registry windows
 
 # Lint + format-check CHỈ code harness (không định dạng lại source hiện có).
 lint:

@@ -1,0 +1,8 @@
+# Gói Python của hai dịch vụ suy luận (không có trong requirements-app).
+# torch lấy wheel +cu128 từ https://download.pytorch.org/whl/cu128.
+
+torch==2.9.1
+sentence-transformers>=6.0,<7.0
+fastapi>=0.110
+uvicorn>=0.27
+pydantic>=2.5

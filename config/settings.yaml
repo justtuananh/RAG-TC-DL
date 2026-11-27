@@ -10,9 +10,10 @@ app:
   startup_checks: ${QTKD_STARTUP_CHECKS:-true}
 
 paths:
-  source_dir: TC_DL                       # tài liệu QTKĐ gốc (chỉ đọc + tải lên)
-  markdown_dir: build/spike_a             # Markdown + assets + extraction_report.json
+  source_dir: ${QTKD_SOURCE_DIR:-TC_DL}                       # tài liệu QTKĐ gốc (chỉ đọc + tải lên)
+  markdown_dir: ${QTKD_MARKDOWN_DIR:-build/spike_a}           # Markdown + assets + extraction_report.json
   formula_registry_db: ${FORMULA_REGISTRY_DB:-.formula-registry/registry.sqlite3}  # nháp/duyệt/tính công thức (SQLite)
+  frontend_dist: ${QTKD_FRONTEND_DIST:-frontend/dist}         # bản build React do API phục vụ (bản native, không nginx)
 
 services:
   embedding_url: ${EMBED_URL:-http://localhost:8010/v1/embeddings}
@@ -251,6 +252,7 @@ doc_summary:                              # tóm tắt tài liệu do LLM viết
 
 ingestion:
   soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH
+  ruby_bin: ${RUBY_BIN:-}                 # rỗng = tìm `ruby` trên PATH (bản Windows mang Ruby riêng)
   convert_timeout_s: 120
   max_upload_bytes: 52428800              # 50 MiB
   marker_python: ${MARKER_PYTHON:-}

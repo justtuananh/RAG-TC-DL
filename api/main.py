@@ -29,6 +29,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes import auth, chat, documents, summaries, system
+from api.spa import mount_spa
 from core.settings_loader import get_settings
 from core.startup import startup
 from formula_registry import api as formula_review
@@ -55,6 +56,8 @@ def create_app() -> FastAPI:
     )
     for module in _ROUTERS:
         app.include_router(module.router)
+    # Sau cùng: mọi đường dẫn còn lại là của SPA (một cổng duy nhất, không nginx).
+    mount_spa(app, settings.paths.frontend_dist)
     return app
 
 
