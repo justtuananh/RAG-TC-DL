@@ -45,12 +45,13 @@ def create_admin():
 
         full_name = input("Full Name (optional): ").strip() or None
 
-        password = getpass("Password: ")
+        # Nhập qua pipe từ PowerShell kết thúc dòng bằng CRLF; getpass chỉ bỏ "\n".
+        password = getpass("Password: ").rstrip("\r")
         if len(password) < 8:
             print("❌ Password must be at least 8 characters")
             sys.exit(1)
 
-        password_confirm = getpass("Confirm Password: ")
+        password_confirm = getpass("Confirm Password: ").rstrip("\r")
         if password != password_confirm:
             print("❌ Passwords do not match")
             sys.exit(1)
@@ -73,6 +74,14 @@ def create_admin():
         print(f"  Full Name: {user.full_name or '(none)'}")
         print(f"  Role: {user.role.value}")
 
+    except UnicodeDecodeError:
+        # Bộ gõ tiếng Việt (Unikey/EVKey) gửi phím vào terminal docker exec theo bảng mã của Windows, không phải UTF-8.
+        print(
+            "❌ Không đọc được ký tự vừa gõ (không phải UTF-8).\n"
+            "   Tắt bộ gõ tiếng Việt (chuyển Unikey/EVKey sang E) rồi chạy lại, hoặc nhập qua stdin:\n"
+            "   \"admin`n`n<mật khẩu>`n<mật khẩu>`n\" | docker compose exec -T api python scripts/create_admin.py"
+        )
+        sys.exit(1)
     except Exception as e:
         print(f"❌ Error: {e}")
         sys.exit(1)
