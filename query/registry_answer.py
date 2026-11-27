@@ -122,6 +122,13 @@ def _without_listed_procedures(entries: Sequence[Entry]) -> list[Entry]:
     return [e for e in entries if not (isinstance(e, ProcedureEntry) and e.code and e.code.base in bases)]
 
 
+def _names_procedure_number(question: str, procedures: Sequence[ProcedureEntry]) -> bool:
+    """Câu có số hiệu của một quy trình khớp ("áp kế pít tông 1.159 ...") dù không viết tiền tố QTKĐ."""
+    return any(
+        p.code and re.search(rf"(?<![\d.]){re.escape(p.code.number)}(?![\d.])", question) for p in procedures
+    )
+
+
 def _browse(question: str, q: str) -> list[Entry]:
     """Câu liệt kê / đếm không nêu tên ("những phương tiện đo áp suất nào", "chuẩn nào tạo được 600 bar"):
     chọn theo lĩnh vực, loại và đối tượng (năng lực, quy trình hay chuẩn mẫu)."""
@@ -163,7 +170,7 @@ def _resolve(question: str) -> _Resolved | None:
     entries, excluded, quantity_text = _quantity_filter(question, entries, strict=browsing)
     if not entries and not excluded:
         return None
-    if deep and found.explicit:
+    if deep and (found.explicit or _names_procedure_number(question, found.procedures)):
         # Câu nêu mã văn bản và hỏi nội dung văn bản: "những phương tiện kiểm định nào" là tên mục của văn bản,
         # không phải câu liệt kê / đếm dòng danh mục.
         general = tuple(name for name in general if name not in _LISTING_TYPES)
