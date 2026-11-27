@@ -569,6 +569,7 @@ def build_stack(root: str | None = None) -> Stack:
             "QTKD_MARKDOWN_DIR": str(layout.markdown_dir),
             "FORMULA_REGISTRY_DB": str(layout.data / "registry" / "registry.sqlite3"),
             "QTKD_APPROVAL_DIR": str(layout.data / "approval_copies"),
+            "QTKD_REGISTRY_DIR": str(layout.data / "registry_sources"),
             "QTKD_LOGGING_FILE": str(layout.logs / "app.log"),
             "HF_HOME": str(layout.hf_home),
             "HF_HUB_OFFLINE": "1",

@@ -180,9 +180,11 @@
   border-color: var(--c-accent);
 }
 
-/* ── Markdown "trang tài liệu" (serif Lora) ── */
+/* ── Markdown "trang tài liệu" (serif hệ thống như DocPage) ──
+   Không dùng Lora: font không được tự host nên rơi về Georgia, mà Georgia không có glyph tiếng Việt
+   dựng sẵn ("kế" hiện thành "kê´"). Times New Roman có đủ dấu tiếng Việt và chạy offline. */
 .md-doc {
-  font-family: "Lora", Georgia, serif;
+  font-family: "Times New Roman", "Liberation Serif", Tinos, serif;
   font-size: 13.5px;
   line-height: 1.65;
   color: var(--c-text);

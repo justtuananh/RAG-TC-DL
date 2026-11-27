@@ -71,3 +71,6 @@ backups/
 
 # Bản cứng phê duyệt tải lên (dữ liệu người dùng)
 /approval_copies/
+
+# File danh mục 877 đã nạp (sổ đăng ký)
+registry_sources/

@@ -155,6 +155,7 @@ def build_env(layout: Layout, ports: dict[str, int], existing: dict[str, str]) -
         "QTKD_MARKDOWN_DIR": layout.markdown_dir.as_posix(),
         "FORMULA_REGISTRY_DB": (layout.data / "registry" / "registry.sqlite3").as_posix(),
         "QTKD_APPROVAL_DIR": (layout.data / "approval_copies").as_posix(),
+        "QTKD_REGISTRY_DIR": (layout.data / "registry_sources").as_posix(),
         "QTKD_LOGGING_FILE": (layout.logs / "app.log").as_posix(),
     }
     if layout.ruby_exe.is_file():

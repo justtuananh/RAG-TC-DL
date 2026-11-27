@@ -7,6 +7,7 @@ import { STATUS_TAB_LABEL } from "./docStatus";
 import DocRow from "./DocRow";
 import DocTableRow from "./DocTableRow";
 import DocViewerPanel from "./DocViewerPanel";
+import RegistryPanel from "./RegistryPanel";
 
 type ViewMode = "table" | "cards";
 type StatusFilter = AppState["docStatusFilter"];
@@ -52,6 +53,7 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [view, setView] = useState<ViewMode>("table");
+  const [registryOpen, setRegistryOpen] = useState(false);
 
   const handleFiles = (files: FileList | null) => {
     const file = files?.[0];
@@ -114,6 +116,8 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
             onDirtyChange={actions.setFormulaDirty}
             onDownload={() => state.viewingDoc && actions.downloadDoc(state.viewingDoc.code)}
           />
+        ) : registryOpen ? (
+          <RegistryPanel role={state.auth.user?.role ?? null} onClose={() => setRegistryOpen(false)} />
         ) : (
           <>
             {/* thanh lọc theo trạng thái */}
@@ -163,6 +167,13 @@ export default function DocsTab({ state, actions }: { state: AppState; actions: 
                   );
                 })}
               </div>
+              <button
+                onClick={() => setRegistryOpen(true)}
+                title="Sổ đăng ký danh mục 877: nạp và duyệt danh mục quy trình, năng lực, chuẩn mẫu"
+                className="ml-auto h-8 px-[13px] border border-line rounded-[9px] bg-white font-sans text-[12.5px] font-semibold text-secondary cursor-pointer transition-colors hover:border-brand hover:text-brand focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
+              >
+                Danh mục 877
+              </button>
             </div>
 
             {/* khung tài liệu: toolbar + danh sách + phân trang */}

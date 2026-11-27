@@ -228,7 +228,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
               }}
             >
               <span>{src.file_stem}</span>
-              <span>{src.kind}</span>
+              <span>{src.kind === "registry" ? "danh mục 877" : src.kind}</span>
             </div>
 
             {/* đoạn trả lời (quote: đoạn con + công thức nó nói tới) - tô sáng */}
@@ -266,9 +266,7 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
 
             {/* ngữ cảnh đầy đủ (parent_text) */}
             <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px solid ${COLOR.border}` }}>
-              <div style={{ fontFamily: "Arial,sans-serif", fontSize: "11px", fontWeight: 600, color: COLOR.textMuted, marginBottom: 6 }}>
-                Ngữ cảnh đầy đủ
-              </div>
+              <div style={{ fontFamily: "Arial,sans-serif", fontSize: "11px", fontWeight: 600, color: COLOR.textMuted, marginBottom: 6 }}>Ngữ cảnh đầy đủ</div>
               <Markdown className="md-doc">{src.parent_text}</Markdown>
             </div>
           </div>
@@ -286,14 +284,17 @@ export default function SourcePanel({ state, actions }: { state: AppState; actio
             alignItems: "center",
           }}
         >
-          <button
-            onClick={actions.openSourceDoc}
-            className="inline-flex items-center gap-[7px] h-9 px-[13px] border border-line bg-white rounded-[9px] font-sans text-[12.5px] font-semibold text-secondary cursor-pointer hover:border-brand hover:text-brand-dark hover:bg-row-hover"
-          >
-            <IcExternal size={14} /> Mở tài liệu gốc
-          </button>
+          {/* Nguồn danh mục 877 (sổ đăng ký) không phải tài liệu trong kho: không có bản xem tài liệu gốc. */}
+          {src.kind !== "registry" && (
+            <button
+              onClick={actions.openSourceDoc}
+              className="inline-flex items-center gap-[7px] h-9 px-[13px] border border-line bg-white rounded-[9px] font-sans text-[12.5px] font-semibold text-secondary cursor-pointer hover:border-brand hover:text-brand-dark hover:bg-row-hover"
+            >
+              <IcExternal size={14} /> Mở tài liệu gốc
+            </button>
+          )}
           <div style={{ flex: 1 }} />
-          <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>{src.kind}</span>
+          <span style={{ fontSize: "11.5px", color: COLOR.textMuted }}>{src.kind === "registry" ? "danh mục 877" : src.kind}</span>
         </div>
       </aside>
     </>
