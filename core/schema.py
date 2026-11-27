@@ -43,6 +43,7 @@ class PathSettings(_Section):
     markdown_dir: Path
     formula_registry_db: Path
     frontend_dist: Path
+    approval_copies_dir: Path
 
 
 class ServiceSettings(_Section):

@@ -68,3 +68,6 @@ qdrant_storage/*
 
 # Bản dump CSDL của make db-backup (chứa dữ liệu thật, không commit)
 backups/
+
+# Bản cứng phê duyệt tải lên (dữ liệu người dùng)
+/approval_copies/

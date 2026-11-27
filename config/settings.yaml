@@ -14,6 +14,7 @@ paths:
   markdown_dir: ${QTKD_MARKDOWN_DIR:-build/spike_a}           # Markdown + assets + extraction_report.json
   formula_registry_db: ${FORMULA_REGISTRY_DB:-.formula-registry/registry.sqlite3}  # nháp/duyệt/tính công thức (SQLite)
   frontend_dist: ${QTKD_FRONTEND_DIST:-frontend/dist}         # bản build React do API phục vụ (bản native, không nginx)
+  approval_copies_dir: ${QTKD_APPROVAL_DIR:-approval_copies}  # bản cứng đã phê duyệt (PDF/ảnh) chỉ để xem, KHÔNG vào chatbot
 
 services:
   embedding_url: ${EMBED_URL:-http://localhost:8010/v1/embeddings}

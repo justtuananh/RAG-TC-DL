@@ -18,6 +18,9 @@ Endpoints:
   GET    /api/documents/{id}/download - tải xuống tệp gốc đúng định dạng đã tải lên
   DELETE /api/documents/{id}
   PATCH  /api/documents/{id}         - {"name": str} display-name override
+  GET|POST /api/documents/{id}/approval-copies         - bản cứng (PDF/ảnh) chỉ để xem
+  GET    /api/documents/{id}/approval-copies/{cid}/file
+  DELETE /api/documents/{id}/approval-copies/{cid}
 """
 
 from __future__ import annotations
@@ -28,14 +31,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import auth, chat, documents, summaries, system
+from api.routes import approval_copies, auth, chat, documents, summaries, system
 from api.spa import mount_spa
 from core.settings_loader import get_settings
 from core.startup import startup
 from formula_registry import api as formula_review
 from vectorstore import qdrant
 
-_ROUTERS = (system, auth, chat, documents, summaries, formula_review)
+_ROUTERS = (system, auth, chat, documents, summaries, approval_copies, formula_review)
 
 
 @asynccontextmanager

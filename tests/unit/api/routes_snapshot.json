@@ -154,6 +154,30 @@
   ]
  ],
  [
+  "/api/documents/{file_stem}/approval-copies",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/approval-copies",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/approval-copies/{copy_id}/file",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/approval-copies/{copy_id}",
+  [
+   "DELETE"
+  ]
+ ],
+ [
   "/api/documents/{document_id}/formula-drafts",
   [
    "GET"
