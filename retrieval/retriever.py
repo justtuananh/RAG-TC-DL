@@ -62,6 +62,36 @@ def retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> 
     return annotate_subsections(_retrieve(query, top_k, top_n))
 
 
+def retrieve_pinned(
+    query: str, stems: Iterable[str], top_k: int | None = None, top_n: int | None = None
+) -> list[dict]:
+    """Tìm sâu CHỈ trong các tài liệu sổ đăng ký danh mục chỉ ra (tầng 2, docs/KIEN_TRUC_DANH_MUC_877.md).
+
+    Mỗi tài liệu có phễu và ngân sách riêng như câu so sánh nhiều thiết bị. Nguồn tốt nhất dưới
+    ``registry.fallback_min_score`` (tài liệu đã chọn không chứa câu trả lời) thì tìm như cũ trên toàn kho.
+    """
+    pinned = frozenset(stems)
+    if not pinned:
+        return retrieve(query, top_k, top_n)
+    cfg = get_settings().retrieval
+    top_k = top_k or cfg.top_k
+    top_n = top_n or cfg.top_n
+    topic = semantic_query(query) if len(pinned) >= 2 else query
+    expanded = expand_query(topic)
+    ranking_query = expanded if fold(topic) == topic.lower() else topic
+    vec = embedder.embed_query(expanded)
+    if len(pinned) == 1:
+        hits = _retrieve_single(ranking_query, vec, expanded, next(iter(pinned)), top_k=top_k, top_n=top_n)
+    else:
+        hits = _retrieve_per_file(ranking_query, vec, expanded, pinned, top_k=top_k, top_n=top_n)
+    best = max((hit.get("rerank_score", 0.0) for hit in hits), default=0.0)
+    if best < get_settings().registry.fallback_min_score:
+        logger.info("Tài liệu theo danh mục %s không có nguồn đủ tin cậy (%.3f): tìm toàn kho", sorted(pinned), best)
+        return retrieve(query, top_k, top_n)
+    logger.info("Tìm sâu theo danh mục trong %d tài liệu", len(pinned))
+    return annotate_subsections(hits)
+
+
 def _retrieve(query: str, top_k: int | None = None, top_n: int | None = None) -> list[dict]:
     settings = get_settings()
     multi = settings.llm.multi_document

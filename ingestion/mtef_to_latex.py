@@ -16,15 +16,17 @@ Route:
   4. Return a bare LaTeX string (no $$…$$ delimiters — caller wraps as needed).
 
 The Ruby gem is invoked with GEM_PATH set so user-installed gems are visible.
+When Ruby is a bundled/portable install (Windows bundle), GEM_PATH is asked from
+Ruby itself instead of guessing a version-pinned directory.
 All exceptions are caught; the function returns None on any failure.
 """
 from __future__ import annotations
 
+import functools
 import os
+import platform as _platform
 import re
 import subprocess
-import sys
-from typing import Optional
 
 from lxml import etree
 
@@ -32,8 +34,8 @@ from lxml import etree
 # 1. Ruby gem invocation
 # ---------------------------------------------------------------------------
 
-import platform as _platform
-
+# Chỉ là phương án cuối khi không hỏi được Ruby (Ruby thiếu/hỏng). Bản cài portable
+# đặt gem ở thư mục riêng, nên đường dẫn cố định theo phiên bản không đủ tin cậy.
 if _platform.system() == "Windows":
     _GEM_PATHS = [
         r"C:\Ruby40-x64\lib\ruby\gems\4.0.0",
@@ -48,13 +50,44 @@ else:
     ]
     _GEM_PATH_SEP = ":"
 
-# Only override GEM_PATH with paths that actually exist on this machine — e.g.
-# a Docker container with a system-wide `gem install` (Debian's ruby-full) has
-# none of the paths above, and forcing GEM_PATH to a nonexistent path would
-# make `require 'mathtype_to_mathml'` fail even though the gem installed fine.
-# Leaving GEM_PATH unset lets Ruby fall back to its own correct default.
-_existing_gem_paths = [p for p in _GEM_PATHS if os.path.isdir(p)]
-_GEM_PATH_ENV = _GEM_PATH_SEP.join(_existing_gem_paths) if _existing_gem_paths else None
+
+@functools.lru_cache(maxsize=4)
+def _detect_gem_path(ruby_bin: str) -> str | None:
+    """Hỏi chính Ruby xem gem nằm ở đâu (đúng cho bản portable, mọi phiên bản)."""
+    try:
+        result = subprocess.run(
+            [ruby_bin, "-e", "print Gem.path.join(File::PATH_SEPARATOR)"],
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
+    except (subprocess.TimeoutExpired, FileNotFoundError, OSError):
+        return None
+    gem_path = result.stdout.strip()
+    return gem_path if result.returncode == 0 and gem_path else None
+
+
+def _ruby_env(ruby_bin: str) -> dict[str, str]:
+    """Môi trường cho tiến trình Ruby: ưu tiên GEM_PATH có sẵn, rồi hỏi Ruby."""
+    env = os.environ.copy()
+    gem_path = env.get("GEM_PATH") or _detect_gem_path(ruby_bin)
+    if not gem_path:
+        # Giữ hành vi cũ: chỉ đặt GEM_PATH khi đường dẫn thật sự tồn tại, để Ruby
+        # tự dùng mặc định đúng của nó (vd. gem cài system-wide trong container).
+        existing = [p for p in _GEM_PATHS if os.path.isdir(p)]
+        gem_path = _GEM_PATH_SEP.join(existing) if existing else None
+    if gem_path:
+        env["GEM_PATH"] = gem_path
+    return env
+
+
+def _ruby_bin(ruby_bin: str | None = None) -> str:
+    """Ruby của cấu hình (ingestion.ruby_bin) hoặc ``ruby`` trên PATH."""
+    if ruby_bin:
+        return ruby_bin
+    from core.settings_loader import get_settings
+
+    return get_settings().ingestion.ruby_bin or "ruby"
 
 # Bản vá gem khi chạy (căn thức tmROOT bị bỏ mất, ngoặc lồng nhau ghép sai khi gắn
 # chỉ số), nạp TRƯỚC khi tạo Converter; xem chú thích đầu file vá.
@@ -68,18 +101,18 @@ puts MathTypeToMathML::Converter.new(ARGV[0]).convert
 """
 
 
-def _bin_to_mathml(bin_path: str, timeout: int = 15) -> Optional[str]:
+def _bin_to_mathml(
+    bin_path: str, timeout: int = 15, ruby_bin: str | None = None
+) -> str | None:
     """Run Ruby gem and return MathML string, or None on error."""
-    env = os.environ.copy()
-    if _GEM_PATH_ENV:
-        env["GEM_PATH"] = _GEM_PATH_ENV
+    ruby = _ruby_bin(ruby_bin)
     try:
         result = subprocess.run(
-            ["ruby", "-e", _RUBY_SNIPPET, "--", bin_path, _GEM_PATCH],
+            [ruby, "-e", _RUBY_SNIPPET, "--", bin_path, _GEM_PATCH],
             capture_output=True,
             text=True,
             timeout=timeout,
-            env=env,
+            env=_ruby_env(ruby),
         )
         if result.returncode != 0:
             return None
@@ -409,7 +442,7 @@ def _node(el) -> str:  # noqa: C901
     return _seq(el)
 
 
-def mathml_to_latex(mathml_str: str) -> Optional[str]:
+def mathml_to_latex(mathml_str: str) -> str | None:
     """Parse MathML XML string and return a LaTeX string."""
     try:
         root = etree.fromstring(mathml_str.encode("utf-8"))
@@ -424,7 +457,7 @@ def mathml_to_latex(mathml_str: str) -> Optional[str]:
 # 3. Public API
 # ---------------------------------------------------------------------------
 
-def mtef_bin_to_latex(bin_path: str) -> Optional[str]:
+def mtef_bin_to_latex(bin_path: str) -> str | None:
     """Convert a MathType OLE .bin file to a LaTeX string.
 
     Returns None on any failure (gem crash, parse error, empty output).

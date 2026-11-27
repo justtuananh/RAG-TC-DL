@@ -18,6 +18,14 @@ Endpoints:
   GET    /api/documents/{id}/download - tải xuống tệp gốc đúng định dạng đã tải lên
   DELETE /api/documents/{id}
   PATCH  /api/documents/{id}         - {"name": str} display-name override
+  GET|POST /api/documents/{id}/approval-copies         - bản cứng (PDF/ảnh) chỉ để xem
+  GET    /api/documents/{id}/approval-copies/{cid}/file
+  DELETE /api/documents/{id}/approval-copies/{cid}
+  GET|POST /api/registry/sources                      - sổ đăng ký danh mục 877: nạp bản nháp, liệt kê
+  GET    /api/registry/sources/{id}                   - báo cáo lỗi, đối chiếu chéo, thay đổi so với bản đang dùng
+  POST   /api/registry/sources/{id}/approve|reject
+  DELETE /api/registry/sources/{id}
+  GET    /api/registry/gaps                           - quy trình có trong danh mục, kho chưa có văn bản
 """
 
 from __future__ import annotations
@@ -28,13 +36,14 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import auth, chat, documents, summaries, system
+from api.routes import approval_copies, auth, chat, documents, registry, summaries, system
+from api.spa import mount_spa
 from core.settings_loader import get_settings
 from core.startup import startup
 from formula_registry import api as formula_review
 from vectorstore import qdrant
 
-_ROUTERS = (system, auth, chat, documents, summaries, formula_review)
+_ROUTERS = (system, auth, chat, documents, summaries, approval_copies, registry, formula_review)
 
 
 @asynccontextmanager
@@ -55,6 +64,8 @@ def create_app() -> FastAPI:
     )
     for module in _ROUTERS:
         app.include_router(module.router)
+    # Sau cùng: mọi đường dẫn còn lại là của SPA (một cổng duy nhất, không nginx).
+    mount_spa(app, settings.paths.frontend_dist)
     return app
 
 

@@ -18,6 +18,7 @@ from sqlalchemy.orm import Session
 from api.schemas import ChatMessage, ChatRequest
 from core.latex import fix_latex, restore_formulas
 from core.settings_loader import get_settings
+from knowledge.catalog_codes import parse_codes
 from llm import citations, generator, number_check
 from llm.guards import (
     CALCULATION_GUIDE,
@@ -40,6 +41,7 @@ from query import (
     limit_clarify,
     multi_document,
     object_scope,
+    registry_answer,
     synonyms,
     table_lookup,
     unit_convert,
@@ -98,6 +100,56 @@ def _build_sources_payload(results: list[dict]) -> list[dict]:
             }
         )
     return out
+
+
+_CITATION_RE = re.compile(r"\[(\d+)\]")
+
+
+def _shift_citations(text: str, offset: int) -> str:
+    """Dời số [n] khi ghép hai danh sách nguồn (danh mục 877 sau nguồn RAG)."""
+    return _CITATION_RE.sub(lambda m: f"[{int(m.group(1)) + offset}]", text) if offset else text
+
+
+def _registry_plan(message: str, prior_questions: list[str]) -> registry_answer.RegistryPlan | None:
+    """Tầng 1: tra sổ đăng ký danh mục 877. Lỗi bất kỳ thì ``None``: chat chạy như cũ."""
+    try:
+        plan = registry_answer.plan(message, prior_questions)
+    except Exception as e:  # noqa: BLE001 - sổ đăng ký là lớp thêm, không được làm hỏng chat
+        logger.warning("Tra sổ đăng ký danh mục thất bại: %s", e)
+        return None
+    if plan is None or plan.mode == "answer" and not plan.no_document:
+        return plan
+    # Câu nêu mã tài liệu mà kho ghim được ("QTKĐ 1.061 nói về gì"): mã thắng. Số trong danh mục có thể là
+    # quy trình khác cùng số (danh mục: 1.061:2016 khí áp kế; kho: 1.061:2021 van an toàn).
+    if (plan.no_document or any(c.prefix for c in parse_codes(message))) and _routed(message):
+        return None
+    return plan
+
+
+def _routed(message: str) -> bool:
+    try:
+        return bool(router.route_files(message))
+    except Exception as e:  # noqa: BLE001 - không định tuyến được thì coi như câu không nêu tài liệu
+        logger.warning("Không định tuyến được câu hỏi: %s", e)
+        return False
+
+
+def _with_registry_hint(message: str, plan: registry_answer.RegistryPlan | None) -> str:
+    """Nối mã tài liệu sổ đăng ký đã chọn vào câu hỏi để các bộ trả lời nguyên văn (mục tài liệu, hồ sơ)
+    ghim đúng tài liệu; câu đã nêu mã thì giữ nguyên."""
+    if plan is None or not plan.routing_hint or _routed(message):
+        return message
+    return f"{message} ({plan.routing_hint})"
+
+
+def _registry_direct(plan: registry_answer.RegistryPlan, direct_text: str, direct_hits: list[dict]):
+    """Ghép phần trả lời chung từ danh mục với câu trả lời nguyên văn của tài liệu đã ghim."""
+    text = direct_text
+    if plan.text:
+        text = plan.text + "\n\n" + _shift_citations(direct_text, len(plan.hits))
+    if plan.note:
+        text += "\n\n" + plan.note
+    return text, plan.hits + direct_hits
 
 
 def _detect_device_ambiguity(
@@ -339,23 +391,34 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
     if calc is None and is_calculation_request(req.message):
         yield _sse({"type": "done", "answer": CALCULATION_GUIDE, "sources": []})
         return
+    # Tầng 1: sổ đăng ký danh mục 877. Câu hỏi chung trả lời xong ở đây (nguyên văn, không qua LLM);
+    # câu hỏi sâu nhận danh sách tài liệu cần tìm (docs/KIEN_TRUC_DANH_MUC_877.md).
+    registry_plan = _registry_plan(req.message, [u for u, _ in turns])
+    if registry_plan is not None and registry_plan.mode == "answer":
+        sources = _build_sources_payload(registry_plan.hits)
+        yield _sse({"type": "done", "answer": registry_plan.text, "sources": sources})
+        return
+    routed_message = _with_registry_hint(req.message, registry_plan)
     # Câu về cấu trúc tài liệu (liệt kê QTKĐ theo chủ đề; phương tiện, điều kiện, chu kỳ, cơ quan, định nghĩa;
     # để làm gì / nói về gì / mục lục): trích nguyên văn từ chính tài liệu, không qua LLM. Cụ thể trước, chung sau.
-    for answerer in (
-        doc_catalog.try_catalog_answer,
-        doc_catalog.try_scope_listing,  # "những thiết bị chuẩn mẫu nào có trong kho": đủ cả nhóm
-        doc_sections.try_section_answer,
-        doc_overview.try_document_answer,
+    for answerer, message in (
+        (doc_catalog.try_catalog_answer, req.message),
+        (doc_catalog.try_scope_listing, req.message),  # "những thiết bị chuẩn mẫu nào có trong kho": đủ cả nhóm
+        (doc_sections.try_section_answer, routed_message),
+        (doc_overview.try_document_answer, routed_message),
     ):
-        direct = answerer(req.message)
+        direct = answerer(message)
         if direct is not None:
-            yield _sse({"type": "done", "answer": direct.text, "sources": _build_sources_payload(direct.hits)})
+            text, hits = direct.text, direct.hits
+            if registry_plan is not None:
+                text, hits = _registry_direct(registry_plan, text, hits)
+            yield _sse({"type": "done", "answer": text, "sources": _build_sources_payload(hits)})
             return
     prior = _history_to_prior(req.history)
 
     # "Áp kế pít tông ..." khớp nhiều loại (kiểu H3000, tiêu chuẩn): không được trả lời
-    # bằng số liệu của một loại như câu trả lời chung.
-    ambiguity = _detect_device_ambiguity(db, req.message)
+    # bằng số liệu của một loại như câu trả lời chung. Sổ đăng ký đã chọn đúng dòng danh mục thì bỏ qua.
+    ambiguity = _detect_device_ambiguity(db, req.message) if registry_plan is None else None
 
     yield _sse({"type": "status", "text": "⏳ Đang nhúng câu hỏi (embedding)…"})
 
@@ -364,49 +427,71 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
         if ambiguity is not None
         else history_context.standalone_query(req.message, prior)
     )
+    # Câu hỏi tiếp "còn cái thứ 2 thì sao": tìm kiếm và LLM cần tên đối tượng, không phải "cái thứ 2".
+    llm_question = req.message
+    if registry_plan is not None and registry_plan.subject:
+        llm_question = f"{req.message} (đối tượng: {registry_plan.subject})"
+        retrieval_query = f"{registry_plan.subject}: {req.message}"
     try:
-        results = retriever.retrieve(retrieval_query)
+        if registry_plan is not None:
+            # Tầng 2: chỉ tìm trong tài liệu sổ đăng ký chỉ ra; điểm thấp thì tự tìm toàn kho.
+            results = retriever.retrieve_pinned(retrieval_query, registry_plan.stems)
+        else:
+            results = retriever.retrieve(retrieval_query)
     except Exception as e:
         yield _sse({"type": "error", "text": f"Lỗi tìm kiếm: {e}"})
         return
 
     if not results:
-        yield _sse(
-            {
-                "type": "done",
-                "answer": "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ.",
-                "sources": [],
-            }
-        )
+        answer = "Không tìm thấy thông tin liên quan trong tài liệu QTKĐ."
+        reg_sources: list[dict] = []
+        if registry_plan is not None and registry_plan.text:
+            answer = registry_plan.text + "\n\n" + answer
+            reg_sources = _build_sources_payload(registry_plan.hits)
+        yield _sse({"type": "done", "answer": answer, "sources": reg_sources})
         return
 
     # Cắt đuôi nguồn điểm thấp → panel + ngữ cảnh LLM chỉ còn nguồn uy tín ([n] khớp).
     results = filter_by_confidence(results)
-    if _object_out_of_scope(req.message, results):
+    # Đối tượng có trong danh mục 877 thì không từ chối vì "ngoài phạm vi kho".
+    if registry_plan is None and _object_out_of_scope(req.message, results):
         yield _sse({"type": "done", "answer": REFUSAL_SENTENCE, "sources": []})
         return
-    sources = _build_sources_payload(results)
+    # Nguồn danh mục 877 đứng SAU nguồn RAG để số [n] của LLM giữ nguyên; phần chung dời số theo.
+    registry_hits = registry_plan.hits if registry_plan is not None else []
+    sources = _build_sources_payload(results + registry_hits)
+    reg_pre = ""
+    reg_post = ""
+    if registry_plan is not None:
+        if registry_plan.text:
+            reg_pre = _shift_citations(registry_plan.text, len(results)) + "\n\n"
+        if registry_plan.note:
+            reg_post = "\n\n" + registry_plan.note
     yield _sse({"type": "sources", "sources": sources})
+    if reg_pre:
+        yield _sse({"type": "delta", "text": reg_pre})
 
     reference = extractive.reference_answer(results)
     if reference is not None:
         reference = citations.add_citations(reference, sources, doc_titles.title_for)
-        yield _sse({"type": "delta", "text": reference})
-        yield _sse({"type": "done", "answer": reference, "sources": sources})
+        yield _sse({"type": "delta", "text": reference + reg_post})
+        yield _sse({"type": "done", "answer": reg_pre + reference + reg_post, "sources": sources})
         return
 
     if calc is None and get_settings().llm.multi_document.extractive_enabled:
         cell_answer = table_lookup.answer(req.message, results)
         if cell_answer is not None:
             cell_answer = citations.add_citations(cell_answer, sources, doc_titles.title_for)
-            yield _sse({"type": "delta", "text": cell_answer})
-            yield _sse({"type": "done", "answer": cell_answer, "sources": sources})
+            yield _sse({"type": "delta", "text": cell_answer + reg_post})
+            yield _sse({"type": "done", "answer": reg_pre + cell_answer + reg_post, "sources": sources})
             return
 
     context_str, _ = build_context_and_citations(results, question=retrieval_query)
     facts = doc_sections.comparison_facts(req.message)
     if facts is not None:
         context_str = facts + "\n\n---\n\n" + context_str
+    if registry_plan is not None and registry_plan.catalog_block:
+        context_str = registry_plan.catalog_block + "\n\n---\n\n" + context_str
     if calc is not None and calc.kind == "answer":
         context_str = calc.block + "\n\n---\n\n" + context_str
     guidance = device_ambiguity.ambiguity_guidance(ambiguity) if ambiguity is not None else None
@@ -424,8 +509,8 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
                 )
             # Exact quotations retain their original source index; no LLM rewrite.
             quoted = citations.add_citations(quoted, sources, doc_titles.title_for)
-            yield _sse({"type": "delta", "text": quoted})
-            yield _sse({"type": "done", "answer": quoted, "sources": sources})
+            yield _sse({"type": "delta", "text": quoted + reg_post})
+            yield _sse({"type": "done", "answer": reg_pre + quoted + reg_post, "sources": sources})
             return
     if calc is not None and calc.kind == "answer":
         # Model nhỏ bám lượt người dùng cuối hơn system prompt: đặt kết quả đã xác minh ở đây.
@@ -436,7 +521,7 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
             "trích từ nguồn [n] nếu câu hỏi cần kết luận."
         )
         guidance = f"{guidance}\n\n{calc_note}" if guidance else calc_note
-    messages = build_messages(req.message, context_str, prior, guidance=guidance)
+    messages = build_messages(llm_question, context_str, prior, guidance=guidance)
 
     yield _sse({"type": "status", "text": "💭 Đang tổng hợp câu trả lời…"})
 
@@ -500,5 +585,7 @@ def chat_stream_events(req: ChatRequest, db: Session | None = None) -> Iterator[
         body = "Kết quả tính bằng công thức đã được phê duyệt:\n" + calc.summary
     else:
         body = citations.add_citations(body, sources, doc_titles.title_for)
-    answer = preface + body + closing
+    if reg_post:
+        yield _sse({"type": "delta", "text": reg_post})
+    answer = reg_pre + preface + body + closing + reg_post
     yield _sse({"type": "done", "answer": answer, "sources": sources})

@@ -16,6 +16,7 @@ from auth import get_current_user, require_role
 from db import get_db
 from db.models import AppUser, UserRole
 from ingestion import jobs as ingestion_jobs
+from knowledge import approval_copies
 
 router = APIRouter(dependencies=[Depends(get_current_user)])
 
@@ -141,6 +142,7 @@ def delete_document(
             status_code=503,
             detail=f"Không ghi được sổ công thức, tài liệu chưa bị xoá ({exc}).",
         ) from exc
+    approval_copies.delete_all(file_stem)
     if before is not None:
         record_audit(db, user, "delete", "document", file_stem, before=document_snapshot(before))
 

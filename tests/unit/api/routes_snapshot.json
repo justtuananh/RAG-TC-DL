@@ -154,6 +154,72 @@
   ]
  ],
  [
+  "/api/documents/{file_stem}/approval-copies",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/approval-copies",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/approval-copies/{copy_id}/file",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/documents/{file_stem}/approval-copies/{copy_id}",
+  [
+   "DELETE"
+  ]
+ ],
+ [
+  "/api/registry/sources",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/registry/sources/{source_id}",
+  [
+   "GET"
+  ]
+ ],
+ [
+  "/api/registry/sources",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/registry/sources/{source_id}/approve",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/registry/sources/{source_id}/reject",
+  [
+   "POST"
+  ]
+ ],
+ [
+  "/api/registry/sources/{source_id}",
+  [
+   "DELETE"
+  ]
+ ],
+ [
+  "/api/registry/gaps",
+  [
+   "GET"
+  ]
+ ],
+ [
   "/api/documents/{document_id}/formula-drafts",
   [
    "GET"
@@ -193,6 +259,12 @@
   "/api/formula-drafts/{id}/calculate",
   [
    "POST"
+  ]
+ ],
+ [
+  "/{full_path:path}",
+  [
+   "GET"
   ]
  ]
 ]

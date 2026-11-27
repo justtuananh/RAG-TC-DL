@@ -10,9 +10,12 @@ app:
   startup_checks: ${QTKD_STARTUP_CHECKS:-true}
 
 paths:
-  source_dir: TC_DL                       # tài liệu QTKĐ gốc (chỉ đọc + tải lên)
-  markdown_dir: build/spike_a             # Markdown + assets + extraction_report.json
+  source_dir: ${QTKD_SOURCE_DIR:-TC_DL}                       # tài liệu QTKĐ gốc (chỉ đọc + tải lên)
+  markdown_dir: ${QTKD_MARKDOWN_DIR:-build/spike_a}           # Markdown + assets + extraction_report.json
   formula_registry_db: ${FORMULA_REGISTRY_DB:-.formula-registry/registry.sqlite3}  # nháp/duyệt/tính công thức (SQLite)
+  frontend_dist: ${QTKD_FRONTEND_DIST:-frontend/dist}         # bản build React do API phục vụ (bản native, không nginx)
+  approval_copies_dir: ${QTKD_APPROVAL_DIR:-approval_copies}  # bản cứng đã phê duyệt (PDF/ảnh) chỉ để xem, KHÔNG vào chatbot
+  registry_dir: ${QTKD_REGISTRY_DIR:-registry_sources}        # file danh mục 877 đã nạp vào sổ đăng ký, KHÔNG vào Qdrant
 
 services:
   embedding_url: ${EMBED_URL:-http://localhost:8010/v1/embeddings}
@@ -268,6 +271,7 @@ doc_summary:                              # tóm tắt tài liệu do LLM viết
 
 ingestion:
   soffice_bin: ${SOFFICE_BIN:-}           # rỗng = tìm `soffice` trên PATH
+  ruby_bin: ${RUBY_BIN:-}                 # rỗng = tìm `ruby` trên PATH (bản Windows mang Ruby riêng)
   convert_timeout_s: 120
   max_upload_bytes: 52428800              # 50 MiB
   marker_python: ${MARKER_PYTHON:-}
@@ -298,3 +302,39 @@ api:
     - http://localhost:5174
     - http://localhost:3000
     - http://127.0.0.1:5173
+
+# Sổ đăng ký danh mục 877 (docs/KIEN_TRUC_DANH_MUC_877.md). Mọi câu hỏi tra sổ đăng ký trước:
+# câu hỏi chung trả lời tất định từ 4 file danh mục, câu hỏi sâu chỉ tìm trong tài liệu sổ đăng ký chỉ ra.
+# Mẫu *_pattern so trên chữ đã bỏ dấu, chữ thường; followup_pattern so trên chữ CÓ dấu ("đó" ≠ "đo" ≠ "độ").
+registry:
+  enabled: true
+  max_upload_mb: 20               # file danh mục tải lên lớn hơn thì từ chối
+  cache_ttl_s: 60                 # đọc lại bản danh mục đã duyệt sau khoảng này
+  min_match_chars: 5              # tên khớp ngắn hơn (bỏ dấu, bỏ khoảng trắng) thì bỏ qua
+  min_coverage: 0.5               # phần đầu tên khớp / độ dài tên tối thiểu để ghim tài liệu ("cặp nhiệt điện" / "cặp nhiệt điện kỹ thuật")
+  fuzzy_min_ratio: 0.9            # khớp gần đúng khi gõ sai chính tả
+  max_list: 40                    # câu liệt kê dài hơn thì nêu số lượng + gợi ý thu hẹp
+  fallback_min_score: 0.1         # tìm sâu trong tài liệu đã ghim mà nguồn tốt nhất dưới mức này: tìm toàn kho
+  followup_max_words: 10          # câu hỏi tiếp ngắn không nêu đối tượng thì dùng tiêu điểm của lượt trước
+  # Phần tên khớp chỉ gồm các từ này ("thiết bị đo") thì không tính là khớp tên.
+  generic_words: [thiet, bi, phuong, tien, do, cac, loai, nhung, may, bo, he, thong, dung, cu, kieu, va]
+  general_patterns:
+    exists: '\b(?:co|duoc) (?:kiem dinh|hieu chuan|nang luc|lam)\b.*\bkhong\b|\bco nang luc\b|\bco (?:the )?(?:kiem dinh|hieu chuan) .*\bduoc khong\b'
+    count: '\b(?:bao nhieu|may (?:loai|chuan|quy trinh|phuong tien|thiet bi))\b'
+    list: '\b(?:liet ke|danh sach|gom (?:nhung|cac)|(?:nhung|cac) (?:\w+ ){0,8}nao|(?:chuan|phuong tien|thiet bi) (?:mau )?nao)\b'
+    procedure: '\b(?:(?:quy trinh|qtkd|qthc|van ban) (?:nao|gi)|theo (?:quy trinh|qtkd|qthc) nao|ap dung (?:quy trinh|qtkd|qthc) nao)\b'
+    range: '\b(?:dai do|dai tao|pham vi do|pham vi lam viec|cap chinh xac|ccx|do chinh xac|tham so do luong|dac tinh do luong)\b'
+    interval: '\bchu ky\b'
+  deep_pattern: '\b(?:cach|the nao|ra sao|nhu nao|dieu kien|cac buoc|trinh tu|cong thuc|sai so cho phep|xu ly ket qua|danh gia|yeu cau ky thuat|phuong tien kiem dinh|can (?:nhung )?(?:chuan|thiet bi|phuong tien) gi|dung (?:nhung )?(?:chuan|thiet bi) gi|su dung|thao tac|do kin|do tut ap|bien ban|de lam gi|noi ve gi|tom tat)\b'
+  standard_pattern: '(?<!tieu )(?<!hieu )\bchuan(?: mau)?\b(?! (?:bi|muc|hoa|xac))'   # không bắt "tiêu chuẩn", "hiệu chuẩn"
+  procedure_pattern: '\b(?:quy trinh|qtkd|qthc|dlvn|van ban)\b'
+  followup_pattern: '\b(?:đó|này|kia|trên|nó|ấy)\b|\b(?:thứ|mục|cái)\s+(?:\d+|nhất|hai|ba|tư|bốn|năm|sáu|bảy|tám|chín|mười)\b|^\s*(?:còn|thế còn|vậy còn)\b'
+  aliases:
+    - name: ta kho met
+      aliases: [toc do ke, may do toc do vong quay]
+    - name: khi ap ke
+      aliases: [baromet, barometer]
+    - name: huyet ap ke
+      aliases: [may do huyet ap]
+    - name: nhiet am ke
+      aliases: [am ke, may do nhiet do do am]

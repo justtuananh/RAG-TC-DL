@@ -53,7 +53,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 PYTHONUTF8=1 PYTHONIOENCODING=utf-8
 # Toàn bộ code backend; .dockerignore loại TC_DL/, build/, frontend/, venv, dữ liệu Qdrant.
 COPY . .
 
-RUN mkdir -p /app/.formula-registry /app/TC_DL /app/build/spike_a
+RUN mkdir -p /app/.formula-registry /app/TC_DL /app/build/spike_a /app/approval_copies /app/registry_sources
 # Container api chạy bằng UID của người dùng host (docker-compose.yml `user:`),
 # nên thư mục log (config/logging.yaml: logs/app.log) phải ghi được với mọi UID.
 RUN mkdir -p /app/logs && chmod 1777 /app/logs

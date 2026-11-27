@@ -42,6 +42,9 @@ class PathSettings(_Section):
     source_dir: Path
     markdown_dir: Path
     formula_registry_db: Path
+    frontend_dist: Path
+    approval_copies_dir: Path
+    registry_dir: Path = Path("registry_sources")  # file danh mục 877 đã nạp (sổ đăng ký), không vào Qdrant
 
 
 class ServiceSettings(_Section):
@@ -242,6 +245,7 @@ class LlmSettings(_Section):
 
 class IngestionSettings(_Section):
     soffice_bin: OptionalStr = None
+    ruby_bin: OptionalStr = None
     convert_timeout_s: PositiveFloat
     max_upload_bytes: Positive
     marker_python: OptionalStr = None
@@ -411,6 +415,39 @@ class QuerySynonym(_Section):
     adds: str
 
 
+class RegistryAlias(_Section):
+    """Tên gọi khác của một phương tiện / chuẩn trong sổ đăng ký: ``name`` là một đoạn tên (đã bỏ dấu)."""
+
+    name: str
+    aliases: list[str] = Field(default_factory=list)
+
+
+class RegistrySettings(_Section):
+    """Sổ đăng ký danh mục 877 (docs/KIEN_TRUC_DANH_MUC_877.md): tra trước mọi câu hỏi.
+
+    Câu hỏi chung trả lời tất định từ bảng; câu hỏi sâu chỉ tìm trong tài liệu sổ đăng ký chỉ ra.
+    Mẫu ``*_pattern`` so trên chữ đã bỏ dấu, chữ thường; riêng ``followup_pattern`` so trên chữ CÓ dấu
+    (bỏ dấu thì "đó" trùng "đo"/"độ").
+    """
+
+    enabled: bool = True
+    max_upload_mb: Positive = 20  # file danh mục tải lên lớn hơn thì từ chối
+    cache_ttl_s: PositiveFloat = 60  # đọc lại bản đã duyệt sau khoảng này (duyệt từ tiến trình khác, CLI)
+    min_match_chars: Positive = 5  # tên khớp ngắn hơn (đã bỏ dấu và khoảng trắng) thì bỏ qua
+    min_coverage: float = Field(default=0.5, ge=0, le=1)  # phần đầu tên khớp / độ dài tên, để ghim tài liệu
+    fuzzy_min_ratio: float = Field(default=0.9, ge=0, le=1)  # khớp gần đúng khi gõ sai chính tả
+    generic_words: list[str] = Field(default_factory=list)  # từ chung chung: phần khớp chỉ gồm chúng thì bỏ
+    max_list: Positive = 40  # câu liệt kê dài hơn thì chỉ nêu số lượng + gợi ý thu hẹp
+    fallback_min_score: NonNegativeFloat = 0.1  # tìm sâu trong tài liệu đã ghim mà điểm rerank thấp hơn: tìm toàn kho
+    followup_max_words: Positive = 10  # câu hỏi tiếp ngắn không nêu đối tượng thì dùng tiêu điểm lượt trước
+    general_patterns: dict[str, str] = Field(default_factory=dict)  # loại câu chung → mẫu
+    deep_pattern: str = r"\b(?:cach|the nao|ra sao|dieu kien|cac buoc|cong thuc)\b"
+    standard_pattern: str = r"\bchuan mau\b"
+    procedure_pattern: str = r"\b(?:quy trinh|qtkd|qthc|dlvn|van ban)\b"
+    followup_pattern: str = r"\b(?:đó|này|kia|trên|nó)\b|\bthứ\s+\d+\b"
+    aliases: list[RegistryAlias] = Field(default_factory=list)
+
+
 class DocSummarySettings(_Section):
     """Bản tóm tắt tài liệu do LLM viết lúc nạp; chat chỉ dùng bản người duyệt đã phê duyệt.
 
@@ -450,6 +487,7 @@ class Settings(_Section):
     query_synonyms: list[QuerySynonym] = Field(default_factory=list)
     limit_clarify: LimitClarifySettings = Field(default_factory=LimitClarifySettings)
     doc_scopes: DocScopesSettings = Field(default_factory=DocScopesSettings)
+    registry: RegistrySettings = Field(default_factory=RegistrySettings)
 
     def llm_model(self, role: LlmRole) -> str:
         """Model chat (vai trò LLM duy nhất còn lại)."""

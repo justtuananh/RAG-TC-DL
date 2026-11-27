@@ -287,6 +287,9 @@ def invalidate() -> None:
     _extra_stems = None
     _profile_index = None
     doc_scope.invalidate()
+    from retrieval import registry_match  # registry_match dùng router.known_files: import muộn tránh vòng
+
+    registry_match.invalidate()
 
 
 def route_files(query: str) -> frozenset[str]:

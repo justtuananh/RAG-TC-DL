@@ -230,6 +230,10 @@ services:
       - ./TC_DL:/app/TC_DL
       # Nháp/duyệt công thức phải sống qua lần dựng lại container: sao lưu cùng TC_DL/.
       - ${FORMULA_REGISTRY_DIR:-./.formula-registry}:/app/.formula-registry
+      # Bản cứng đã phê duyệt (PDF/ảnh, chỉ để xem, không vào chatbot): sao lưu cùng TC_DL/.
+      - ./approval_copies:/app/approval_copies
+      # File danh mục 877 đã nạp vào sổ đăng ký (paths.registry_dir): sao lưu cùng TC_DL/.
+      - ./registry_sources:/app/registry_sources
     environment:
       FORMULA_REGISTRY_DB: /app/.formula-registry/registry.sqlite3
       HOME: /tmp   # UID host không có thư mục nhà trong image

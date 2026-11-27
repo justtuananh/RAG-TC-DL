@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import type { UserRole, ViewingDoc } from "../../types";
+import ApprovalCopiesPanel from "./ApprovalCopiesPanel";
 import FormulaReviewPanel from "./FormulaReviewPanel";
 import SummaryReviewPanel from "./SummaryReviewPanel";
 import { COLOR } from "../../theme";
@@ -8,7 +9,7 @@ import DocInfoPanel from "./DocInfoPanel";
 import DownloadButton from "./DownloadButton";
 import { IcArrowRight, IcFile, IcFolder } from "../common/icons";
 
-type ViewerTab = "document" | "summary" | "formulas";
+type ViewerTab = "document" | "summary" | "formulas" | "approvals";
 
 const tabClass = (active: boolean) =>
   `px-3 py-2 rounded-lg border font-sans text-[12.5px] font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${active ? "border-primary-container bg-primary-container text-brand" : "border-line text-secondary hover:border-brand hover:text-brand"}`;
@@ -118,6 +119,9 @@ export default function DocViewerPanel({
         >
           Công thức và phê duyệt
         </button>
+        <button role="tab" aria-selected={tab === "approvals"} className={tabClass(tab === "approvals")} onClick={() => setTab("approvals")}>
+          Tài liệu phê duyệt
+        </button>
       </div>
       {summaryOpened && (
         <div style={{ flex: 1, minHeight: 0, overflow: "auto", display: tab === "summary" ? "block" : "none" }}>
@@ -134,6 +138,7 @@ export default function DocViewerPanel({
           />
         </div>
       )}
+      {tab === "approvals" && <ApprovalCopiesPanel key={viewingDoc.code} documentId={viewingDoc.code} role={role} />}
       {tab === "document" && (
         /* body - khung tài liệu tự cuộn (thanh cuộn riêng), đầu trang + panel thông tin đứng yên */
         <div style={{ flex: 1, minHeight: 0, display: "flex" }}>
