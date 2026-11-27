@@ -30,6 +30,8 @@ _ORDINALS = {"nhat": 1, "hai": 2, "ba": 3, "tu": 4, "bon": 4, "nam": 5, "sau": 6
 _ORDINAL_RE = re.compile(r"\b(?:thứ|mục|cái)\s+(\d+|nhất|hai|ba|tư|bốn|năm|sáu|bảy|tám|chín|mười)\b", re.IGNORECASE)
 # Loại câu chung đi cùng câu sâu vẫn được trả lời trước ("dùng quy trình nào và kiểm tra độ kín ra sao").
 _GENERAL_WITH_DEEP = {"procedure", "range", "count", "list"}
+# Loại câu chung chỉ có nghĩa khi duyệt danh mục, không phải khi hỏi nội dung một văn bản đã nêu mã.
+_LISTING_TYPES = frozenset({"list", "count"})
 _MAX_FOCUS_TURNS = 6
 _MAX_EXCLUDED_NAMES = 8
 
@@ -161,6 +163,10 @@ def _resolve(question: str) -> _Resolved | None:
     entries, excluded, quantity_text = _quantity_filter(question, entries, strict=browsing)
     if not entries and not excluded:
         return None
+    if deep and found.explicit:
+        # Câu nêu mã văn bản và hỏi nội dung văn bản: "những phương tiện kiểm định nào" là tên mục của văn bản,
+        # không phải câu liệt kê / đếm dòng danh mục.
+        general = tuple(name for name in general if name not in _LISTING_TYPES)
     return _Resolved(tuple(entries), general, deep, confident, tuple(excluded), quantity_text, mismatch)
 
 
